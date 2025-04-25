@@ -1,0 +1,121 @@
+<?php
+require_once 'modelo/config.php';
+
+class Usuarios extends BD {
+    
+    private $conex;
+    private $id;
+    private $username;
+    private $clave;
+    private $rango="usuario";
+    private $activo=1;
+    private $tableusuarios = 'tbl_usuarios';
+
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::conexion();
+    }
+
+    // Getters y Setters
+    public function getUsername() {
+        return $this->username;
+    }
+
+    public function setUsername($username) {
+        $this->username = $username;
+    }
+
+    public function getClave() {
+        return $this->clave;
+    }
+
+    public function setClave($clave) {
+        $this->clave = $clave;
+    }
+    public function getRango() {
+        return $this->rango;
+    }
+
+    public function setRango($rango) {
+        $this->rango = $rango;
+    }
+
+        public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+    
+
+     // Método para guardar el proveedor
+
+     public function validarUsuario() {
+        $sql = "SELECT COUNT(*) FROM tbl_usuarios WHERE username = :username";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':username', $this->username);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+    
+        // Retorna true si no existe un producto con el mismo nombre
+        return $count == 0;
+    }
+
+    public function ingresarUsuario() {
+        $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`)
+                VALUES (:nombre, :clave, :rango)";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':nombre', $this->username);
+        $stmt->bindParam(':clave', $this->clave);
+        $stmt->bindParam(':rango', $this->rango);
+        
+        return $stmt->execute();
+    }
+
+    // Obtener Producto por ID
+    public function obtenerUsuarioPorId($id) {
+        $query = "SELECT * FROM tbl_usuarios WHERE id_usuario = ?";
+        $stmt = $this->conex->prepare($query);
+        $stmt->execute([$id]);
+        $usuarios = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $usuarios;
+    }
+
+    // Modificar Producto
+    public function modificarUsuario($id) {
+        $sql = "UPDATE tbl_usuarios SET username = :nombre, `password` = :clave, rango = :rango WHERE id_usuario = :id_usuario";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':id_usuario', $id);
+        $stmt->bindParam(':nombre', $this->username);
+        $stmt->bindParam(':clave', $this->clave);
+        $stmt->bindParam(':rango', $this->rango);
+        
+        return $stmt->execute();
+    }
+
+    // Eliminar Producto
+    public function eliminarUsuario($id) {
+        $sql = "DELETE FROM tbl_usuarios WHERE id_usuario = :id";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+    public function getusuarios() {
+        // Punto de depuración: Iniciando getmarcas
+        //echo "Iniciando getmarcas.<br>";
+        
+        // Primera consulta para obtener datos de marcas
+        $queryusuarios = 'SELECT `id_usuario`, `username`, `password`, `rango` FROM ' . $this->tableusuarios;
+        
+        // Punto de depuración: Query de marcas preparada
+        //echo "Query de marcas preparada: " . $querymarcas . "<br>";
+        
+        $stmtusuarios = $this->conex->prepare($queryusuarios);
+        $stmtusuarios->execute();
+        $usuarios = $stmtusuarios->fetchAll(PDO::FETCH_ASSOC);
+
+        return $usuarios;
+    }
+}

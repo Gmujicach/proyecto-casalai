@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+.container {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-wrapper {
+    background-color: rgba(201, 195, 195, 0.99);
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+input,
+select {
+    margin-bottom: 15px;
+}
+
+button:hover {
+    background-color: rgb(211, 88, 6); /* Color de fondo para el botón */
+}
+
+.oval-button {
+    border-radius: 50px; /* Bordes ovalados */
+    background-color: rgb(255, 106, 6); /* Color de fondo para el botón */
+    color: rgb(255, 255, 255); /* Color del texto */
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    width: 230px;
+    height: 50px; /* Se ajustará según el contenido */
+    font-size: 20px; /* Tamaño del texto */
+}
+.centered-button {
+    display: flex;
+    justify-content: center;
+}
+.button-text {
+    font-size: inherit; /* Hereda el tamaño del texto del botón */
+}
+
+
+.oval-button1 {
+    border-radius: 50px; /* Bordes ovalados */
+    background-color: rgb(255, 106, 6); /* Color de fondo para el botón */
+    color: rgb(255, 255, 255); /* Color del texto */
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    width: 170px;
+    height: 50px; /* Se ajustará según el contenido */
+    font-size: 10px; /* Tamaño del texto */
+}
+.centered-button1 {
+    display: flex;
+    justify-content: center;
+}
+.button-text1 {
+    font-size: inherit; /* Hereda el tamaño del texto del botón */
+}

@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #05212e;
+  }
+  
+  .menu {
+    display: flex;
+    flex-wrap: wrap; /* Para que los botones se ajusten automáticamente en varias líneas */
+    justify-content:first baseline; /* Ajusta el espacio entre los botones */
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  
+  .menu-btn {
+    padding: 20px 40px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    position: relative;
+  }
+  
+  .btn-color1 { background-color: #ff5733; }
+  .btn-color2 { background-color: #33ff57; }
+  .btn-color3 { background-color: #5733ff; }
+  .btn-color4 { background-color: #33fff5; }
+  .btn-color5 { background-color: #f533ff; }
+  .btn-color6 { background-color: #a09c9c; }
+  .registro-count {
+    position: center ; /* Para posicionar el número de registro */
+   
+    font-size: 20px;
+  }
+
+  #btn-color-andres{ background-color: #ff5733;
+    padding: 15px 30px;
+  }
+  .municipios-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+.menu-btn:hover {
+  background-color: #ffffff;
+}
+#btn-color-andres:hover {
+  background-color: #ffffff;
+}
+#btn-Municipios{
+  padding: 80px 40px;
+}
+#Arriba{
+  padding: 20px 90px;
+}
+.contenedor-lista {
+  width: 95%; /* Ancho del contenedor */
+  height: 300px; /* Altura del contenedor */
+  overflow-y: auto; /* Habilitar la barra de desplazamiento vertical */
+  border: 3px solid #ccc; /* Borde del contenedor */
+  padding: 10px; /* Espaciado interno */
+  margin-left: 10px;
+  margin-top: 12%;
+}
+
+.seleccionado {
+  background-color: #674cc7; /* Color de fondo cuando está seleccionado */
+}
+
+/* Eliminar el espacio y el punto de las listas */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Estilo para los elementos de la lista */
+ul li {
+  padding: 5px; /* Espaciado interno */
+}

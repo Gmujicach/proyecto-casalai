@@ -1,0 +1,99 @@
+/*
+    Diseñador: Darckort
+    Mejoramiento de Navegador
+    Actualizacion 30/06/24
+*/
+
+.navbar{
+    background-color: #fff;
+    height: 80px;
+    margin: 20px;
+    border-radius: 15px;
+    padding: 0.5rem;
+}
+
+.navbar-brand{
+    font-weight: 500;
+    color: #2c74f2;
+    font-size: 24px;
+    transition: 0.3s color;
+}
+
+.login-button{
+    background-color: #4481eb;
+    color: #fff;
+    font-size: 14px;
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: 0.3s background-color;
+}
+
+.login-button:hover{
+    background-color: #4ac6ef;
+}
+
+.navbar-toggler{
+    border: none;
+    font-size: 1.25em;
+}
+
+.navbar-toggler:focus, .btn-close:focus{
+    box-shadow: none;
+    outline: none;
+}
+
+.nav-link{
+    color: #3e3e40;
+    font-weight: 500;
+    position: relative;
+    text-align: center;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: black;
+}
+
+
+/*RESPONSIVE PARA EL MENU LATERAL (eliminar animacion)*/
+@media(min-width:991px){
+
+            .nav-link::before{
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 2px;
+                background-color: #4481eb;
+                visibility: hidden;
+                transition: 0.3s ease-in-out;
+            }
+
+            .nav-link:hover::before, .nav-link.active::before{
+                width: 100%;
+                visibility: visible;
+            }
+}
+
+
+/** DASHBOARD **/
+
+.dashboard-section{
+    background: url(IMG/LogoNew.png) no-repeat center;
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
+}
+
+.dashboard-section::before{
+    background-color: rgba(0, 0, 0, 0.244);
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+}
