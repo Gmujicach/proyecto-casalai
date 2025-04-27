@@ -44,10 +44,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
         
         case 'consultar_cuentas':
-            $conciliacion = new Conciliacion();
-            $cuentas = $conciliacion->consultarConciliacion();
-            //var_dump($cuentas);
-            echo json_encode($cuentas);
+            try {
+                $conciliacion = new Conciliacion();
+                $cuentas = $conciliacion->consultarConciliacion();
+                echo json_encode($cuentas);
+            } catch (Exception $e) {
+                echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+            }
             exit;
 
         case 'modificar':
