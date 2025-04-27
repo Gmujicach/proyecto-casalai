@@ -58,10 +58,10 @@
                             <label for="rif_cuenta">RIF</label>
                             <input type="text" class="form-control" id="rif_cuenta" required>
                         </div>
-                        <div class="form-group">
+                        <"form-group">
                             <label for="telefono_cuenta">Teléfono</label>
                             <input type="text" class="form-control" id="telefono_cuenta" required>
-                        </div>
+                        </>
                         <div class="form-group">
                             <label for="correo_cuenta">Correo</label>
                             <input type="email" class="form-control" id="correo_cuenta" required>
@@ -83,7 +83,6 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
                 <div class="modal-body">
                     <form id="formModificar">
                         <input type="hidden" id="id_cuenta_modificar">
