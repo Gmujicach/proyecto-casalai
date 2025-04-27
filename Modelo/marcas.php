@@ -30,7 +30,7 @@ class marca extends Conexion {
     }
 
     public function validarmarca() {
-        $sql = "SELECT COUNT(*) FROM tbl_marcas WHERE descripcion_ma = :descripcion_ma";
+        $sql = "SELECT COUNT(*) FROM marcas WHERE descripcion_ma = :descripcion_ma";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':descripcion_ma', $this->descripcion_ma);
         $stmt->execute();

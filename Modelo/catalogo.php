@@ -90,7 +90,7 @@ class Catalogo extends Conexion {
 
     // Function to create a new combo and return its ID
     public function crearNuevoCombo() {
-        $sql = "INSERT INTO combos (fecha_creacion) VALUES (NOW())"; // 'combos' table for general combo info
+        $sql = "INSERT INTO tbl_combo (fecha_creacion) VALUES (NOW())"; // 'combos' table for general combo info
         $stmt = $this->conex->prepare($sql);
         if($stmt->execute()) {
             return $this->conex->lastInsertId();
