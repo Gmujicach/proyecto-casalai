@@ -90,7 +90,7 @@ class Conciliacion extends Conexion {
         return $this->cuentaporid($id_cuenta); 
     }
     private function cuentaporid($id_cuenta) {
-        $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta 
+        $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta, estado 
         FROM tbl_cuentas WHERE id_cuenta = :id_cuenta";
 
         $stmt = $this->conex->prepare($sql);
@@ -106,7 +106,7 @@ class Conciliacion extends Conexion {
         return $this->c_conciliacion(); 
     }
     private function c_conciliacion() {
-        $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta 
+        $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta, estado 
         FROM tbl_cuentas";
 
         $stmt = $this->conex->prepare($sql);

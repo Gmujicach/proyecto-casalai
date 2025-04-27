@@ -3,13 +3,13 @@ $(document).ready(function () {
 
     // Cargar datos de cuentas en la tabla
     cargarCuentas();
-    
+
     // Registrar nueva cuenta
     $("#formRegistrar").on('submit', function(e) {
         e.preventDefault();
         $.ajax({
-            type: "POST",
-            url: "Controlador/conciliacion.php",
+            type: 'POST',
+            url: '',
             data: {
                 accion: 'registrar',
                 nombre_banco: $("#nombre_banco").val(),
@@ -29,8 +29,8 @@ $(document).ready(function () {
     // Función para cargar las cuentas en la tabla
     function cargarCuentas() {
         $.ajax({
-            type: "POST",
-            url: "Controlador/conciliacion.php",
+            type: 'POST',
+            url: '',
             data: { accion: 'consultar_cuentas' },
             success: function(response) {
                 let cuentas = JSON.parse(response);
