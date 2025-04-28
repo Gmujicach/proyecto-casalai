@@ -435,7 +435,7 @@ $("#Stock_Maximo").on("keypress",function(e){
 });
 
 $("#Stock_Maximo").on("keyup",function(){
-    validarkeyup(/^[1-9]{4,10}$/,$(this),
+    validarkeyup(/^[0-9]{4,10}$/,$(this),
     $("#sStock_Maximo"),"Se permite de 4 a 10 carácteres");
 });
 
@@ -446,7 +446,7 @@ $("#Stock_Minimo").on("keypress",function(e){
 });
 
 $("#Stock_Minimo").on("keyup",function(){
-    validarkeyup(/^[1-9]{4,10}$/,$(this),
+    validarkeyup(/^[0-9]{4,10}$/,$(this),
     $("#sStock_Minimo"),"Se permite de 4 a 10 carácteres");
 });
 

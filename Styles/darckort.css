@@ -11,7 +11,7 @@ body{
 .formulario-1{
   max-width: 80em;
   padding: 2.5em;
-  margin: 0 auto;
+  margin-top: 50em;
   background-color: rgba(228, 228, 234, 0.849); /*Color del Cuadro transparente*/
   font-weight: bold;
   border-radius: 0.5em;
@@ -19,7 +19,7 @@ body{
 }
 
 .container{
-  margin-top: 7rem;
+  
   display: flex;
   justify-content: center;
   align-items: center;

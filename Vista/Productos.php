@@ -1,7 +1,4 @@
 <?php
-
-
-
 if (!isset($_SESSION['name'])) {
 
  	header('Location: .');
@@ -25,7 +22,7 @@ if (!isset($_SESSION['name'])) {
 <?php include 'NewNavBar.php'; ?>
 
 <section class="container"> 
-<div class="d-flex justify-content-center">
+<div class="">
         <button class="btn btn-primary btn-lg" style="width: 7cm;">Registrar Producto</button>
     <button class="btn btn-primary btn-lg" style="width: 7cm;">Listar Productos</button>
 <button class="btn btn-primary btn-lg" style="width: 7cm;"><a href="?pagina=factura" style="text-decoration: none; color: inherit; /* Usa el color del texto del contenedor */
@@ -37,21 +34,21 @@ if (!isset($_SESSION['name'])) {
             <h3 class="display-4 text-center">INCLUIR PRODUCTOS</h3>
                 <div class="row">
                     <div class="form-group col">
-                        <label for="Nombre_P">Nombre del producto</label>
-                        <input type="text" maxlength="15" class="form-control" id="Nombre_P" name="Nombre_P" required>
-                        <span id="sNombre_P"></span>
+                        <label for="nombre_producto">Nombre del producto</label>
+                        <input type="text" maxlength="15" class="form-control" id="nombre_producto" name="nombre_producto" required>
+                        <span id="snombre_producto"></span>
                     </div>
                     <div class="form-group col">
-                        <label for="Descripcion_P">Descripcion del producto</label>
-                        <input type="text" maxlength="50" class="form-control" id="Descripcion_P" name="Descripcion_P" required>
-                        <span id="sDescripcion_P"></span>
+                        <label for="descripcion_producto">Descripcion del producto</label>
+                        <input type="text" maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" required>
+                        <span id="sdescripcion_producto"></span>
                     </div>
                     <div class="col">
                         <label for="Modelo">Modelo</label>
                         <select class="form-select" id="Modelo" name="Modelo">
                         <option value="">Seleccionar Modelo</option>
                         <?php foreach ($modelos as $modelo): ?>
-                            <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['descripcion_mo']; ?></option>
+                            <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -76,28 +73,6 @@ if (!isset($_SESSION['name'])) {
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3">
-            <label for="Peso">Peso</label>
-            <input type="text" maxlength="6" class="form-control" id="Peso" name="Peso" required>
-            <span id="sPeso"></span>
-        </div>
-        <div class="col-md-3">
-            <label for="Largo">Largo</label>
-            <input type="text" maxlength="6" class="form-control" id="Largo" name="Largo" required>
-            <span id="sLargo"></span>
-        </div>
-        <div class="col-md-3">
-            <label for="Alto">Alto</label>
-            <input type="text" maxlength="6" class="form-control" id="Alto" name="Alto" required>
-            <span id="sAlto"></span>
-        </div>
-        <div class="col-md-3">
-            <label for="Ancho">Ancho</label>
-            <input type="text" maxlength="6" class="form-control" id="Ancho" name="Ancho" required>
-            <span id="sAncho"></span>
-        </div>
-    </div>
 
     <div class="form-group">
         <label for="Clausula_de_garantia">Clausula de garantia</label>
@@ -108,54 +83,22 @@ if (!isset($_SESSION['name'])) {
 
     <div class="row">
         <div class="col-md-4">
-            <label for="Codigo_Interno">Codigo Interno</label>
-            <input type="number" maxlength="10" class="form-control" id="Codigo_Interno" name="Codigo_Interno" required>
-            <span id="sCodigo_Interno"></span>
-        </div>
-        <div class="col-md-4">
-            <label for="Servicio">¿Tiene Servicio?</label>
-            <select class="form-select" id="Servicio" name="Servicio">
-                <option value="1">Sí</option>
-                <option value="0">No</option>
-            </select>
+            <label for="Seriales">Codigo Serial</label>
+            <input type="text" maxlength="10" class="form-control" id="Seriales" name="Seriales" required>
+            <span id="sSeriales"></span>
         </div>
 
         <div class="form-group col-md-4">
             <label for="Categoria">Categorias</label>
             <select class="custom-select" id="Categoria" name="Categoria">
-            <option value="CARTUCHO">CARTUCHO</option>
-                                <option value="CABEZAL">CABEZAL</option>
-                                <option value="CHIP">CHIP</option>
-                                <option value="MOTOR">MOTOR</option>
-                                <option value="FIXING FILM">FIXING FILM</option>
-                                <option value="FIRMWARE">FIRMWARE</option>
-                                <option value="TONER">TONER</option>
-                                <option value="IMPRESORA">IMPRESORA</option>
-                                <option value="TINTA">TINTA</option>
-                                <option value="ESCANER">ESCANER</option>
-                                <option value="PAPEL">PAPEL</option>
-                                <option value="PROTECTOR">PROTECTOR</option>
-                                <option value="CINTA">CINTA</option>
-                                <option value="UNIDAD DE IMAGEN">UNIDAD DE IMAGEN</option>     
+                                <option value="impresora">IMPRESORA</option>
+                                <option value="tinta">TINTA</option>
+                                <option value="cartucho_tinta">CARTUCHO DE TINTA</option>
+                                <option value="protector_voltaje">PROTECTOR DE VOLTAJE</option>
+                                <option value="otros">OTROS</option>     
             </select>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3">
-            <label for="Seriales">¿Tiene Seriales?</label>
-            <select class="form-select" id="Seriales" name="Seriales">
-                <option value="1">Sí</option>
-                <option value="0">No</option>
-            </select>
-        </div>
-
-        <div class="col-md-3">
-            <label for="Lote">¿Tiene Lote?</label>
-            <select class="form-select" id="Lote" name="Lote">
-                <option value="1">Sí</option>
-                <option value="0">No</option>
-            </select>
-        </div>
 
         
     </div>
@@ -191,10 +134,10 @@ if (!isset($_SESSION['name'])) {
                         <!-- Botón Eliminar -->
                         <a href="#" data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>" class="btn btn-eliminar">Eliminar</a>
                     </td>
-                    <td><?php echo htmlspecialchars($producto['nombre_p']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
                     <td><?php echo htmlspecialchars($producto['stock']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['descripcion_mo']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['codigo']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['nombre_modelo']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['serial']); ?></td>
                     
                 </tr>
             <?php endforeach; ?>
@@ -235,7 +178,7 @@ if (!isset($_SESSION['name'])) {
                             <select class="custom-select" id="modificarModelo" name="Modelo">
                                 <option value="">Seleccionar Modelo</option>
                                 <?php foreach ($modelos as $modelo): ?>
-                                    <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['descripcion_mo']; ?></option>
+                                    <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -252,58 +195,25 @@ if (!isset($_SESSION['name'])) {
                             <input type="text" class="form-control" id="modificarStockMinimo" name="Stock_Minimo" required>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="modificarPeso">Peso</label>
-                            <input type="text" class="form-control" id="modificarPeso" name="Peso" required>
-                            <span id="sPeso"></span>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="modificarLargo">Largo</label>
-                            <input type="text" class="form-control" id="modificarLargo" name="Largo" required>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="modificarAlto">Alto</label>
-                            <input type="text" class="form-control" id="modificarAlto" name="Alto" required>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="modificarAncho">Ancho</label>
-                            <input type="text" class="form-control" id="modificarAncho" name="Ancho" required>
-                        </div>
-                    </div>
+
                     <div class="form-group">
                         <label for="modificarClausulaGarantia">Clausula de garantia</label>
                         <textarea class="form-control" id="modificarClausulaGarantia" name="Clausula_de_garantia" rows="3"></textarea>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="modificarCodigoInterno">Código Interno</label>
-                            <input type="number" class="form-control" id="modificarCodigoInterno" name="Codigo_Interno" required>
+                            <label for="modificarCodigoInterno">Codigo Serial</label>
+                            <input type="number" class="form-control" id="modificarCodigoInterno" name="Seriales" required>
                         </div>
-                        <div class="form-group col-md-4">
-                            <label for="modificarServicio">¿Tiene Servicio?</label>
-                            <select class="custom-select" id="modificarServicio" name="Servicio">
-                                <option value="1">Sí</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
+
                         <div class="form-group col-md-4">
                                     <label for="Categoria">Categorias</label>
                                     <select class="custom-select" id="Categoria" name="Categoria">
-                                    <option value="CARTUCHO">CARTUCHO</option>
-                                                        <option value="CABEZAL">CABEZAL</option>
-                                                        <option value="CHIP">CHIP</option>
-                                                        <option value="MOTOR">MOTOR</option>
-                                                        <option value="FIXING FILM">FIXING FILM</option>
-                                                        <option value="FIRMWARE">FIRMWARE</option>
-                                                        <option value="TONER">TONER</option>
-                                                        <option value="IMPRESORA">IMPRESORA</option>
-                                                        <option value="TINTA">TINTA</option>
-                                                        <option value="ESCANER">ESCANER</option>
-                                                        <option value="PAPEL">PAPEL</option>
-                                                        <option value="PROTECTOR">PROTECTOR</option>
-                                                        <option value="CINTA">CINTA</option>
-                                                        <option value="UNIDAD DE IMAGEN">UNIDAD DE IMAGEN</option>     
+                                    <option value="impresora">IMPRESORA</option>
+                                    <option value="tinta">TINTA</option>
+                                    <option value="cartucho_tinta">CARTUCHO DE TINTA</option>
+                                    <option value="protector_voltaje">PROTECTOR DE VOLTAJE</option>
+                                    <option value="otros">OTROS</option>        
                                     </select>
                                 </div>
                     </div>

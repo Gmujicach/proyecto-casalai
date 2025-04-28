@@ -10,7 +10,7 @@ class BD{
 		function __construct(){
 
 			$this->host = 'localhost';
-			$this->base = 'casalai';
+			$this->base = 'prueba';
 			$this->usu = 'root';
 			$this->clave = '';
 
