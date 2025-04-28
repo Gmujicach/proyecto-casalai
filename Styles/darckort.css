@@ -9,8 +9,8 @@ body{
 }
 
 .formulario-1{
-  max-width: 60em;
-  padding: 1.5em;
+  max-width: 80em;
+  padding: 2.5em;
   margin: 0 auto;
   background-color: rgba(228, 228, 234, 0.849); /*Color del Cuadro transparente*/
   font-weight: bold;
@@ -19,7 +19,12 @@ body{
 }
 
 .container{
-margin-top: 7em;
+  margin-top: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
 }
 
 
@@ -202,11 +207,16 @@ align-items: center;
 justify-content: space-evenly;
 }
 
+section {
+  display: flex;
+  justify-content: center;  /* Centrado horizontal */
+  align-items: center;     /* Centrado vertical */
+  height: 300px;          /* Altura del contenedor (ajusta según necesites) */
+}
+
 section img {
-height: 60%;
-font-size: 50px;
-font-weight: 500;
-margin-bottom: 5px;
+  max-width: 60%;        /* Tamaño de la imagen relativo al contenedor */
+  max-height: 80%;       /* Puedes ajustar esto también */
 }
 section p {
 margin-bottom: 15px;
@@ -349,27 +359,6 @@ transform: translateY(0%);
   font-size: 18px;
 }
 
-.sidebar {
-  width: 250px;
-  height: 100vh;
-  position: fixed;
-  top: 50px;
-  left: 0;
-  background: #343a40;
-  padding-top: 20px;
-  transition: all 0.3s;
-}
-
-.sidebar a {
-  padding: 10px 20px;
-  display: block;
-  color: white;
-  text-decoration: none;
-}
-
-.sidebar a:hover {
-  background: #007bff;
-}
 
 .content {
   margin-top: 50px;

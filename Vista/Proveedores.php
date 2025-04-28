@@ -23,7 +23,7 @@ if (!isset($_SESSION['name'])) {
 <body>
 
 
-    <?php include 'NavBar.php'; ?>
+    <?php include 'NewNavBar.php'; ?>
 
 
 <div class="container">

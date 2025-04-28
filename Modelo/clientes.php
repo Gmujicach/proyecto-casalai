@@ -1,23 +1,20 @@
 <?php
-require_once 'Conexion.php';
+require_once 'config.php';
 
-class cliente extends Conexion {
+class cliente extends BD {
     private $tableclientes = 'tbl_clientes';
     private $conex;
     private $nombre;
-    private $persona;
     private $direccion;
-    private $telefono_1;
-    private $telefono_2;
-    private $rif;
+    private $telefono;
+    private $cedula;
     private $correo;
-    private $observacion;
     private $activo = 1;
     private $id;
 
-    public function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::conexion();
     }
 
     // Getters y Setters
@@ -29,14 +26,6 @@ class cliente extends Conexion {
         return $this->nombre;
     }
 
-    public function setpersona($persona) {
-        $this->persona = $persona;
-    }
-
-    public function getpersona() {
-        return $this->persona;
-    }
-
     public function setdireccion($direccion) {
         $this->direccion = $direccion;
     }
@@ -45,28 +34,21 @@ class cliente extends Conexion {
         return $this->direccion;
     }
 
-    public function settelefono_1($telefono_1) {
-        $this->telefono_1 = $telefono_1;
+    public function settelefono($telefono) {
+        $this->telefono = $telefono;
     }
 
-    public function gettelefono_1() {
-        return $this->telefono_1;
+    public function gettelefono() {
+        return $this->telefono;
     }
 
-    public function settelefono_2($telefono_2) {
-        $this->telefono_2 = $telefono_2;
+
+    public function setcedula($cedula) {
+        $this->cedula = $cedula;
     }
 
-    public function gettelefono_2() {
-        return $this->telefono_2;
-    }
-
-    public function setrif($rif) {
-        $this->rif = $rif;
-    }
-
-    public function getrif() {
-        return $this->rif;
+    public function getcedula() {
+        return $this->cedula;
     }
 
     public function setcorreo($correo) {
@@ -77,14 +59,6 @@ class cliente extends Conexion {
         return $this->correo;
     }
 
-    public function setobservacion($observacion) {
-        $this->observacion = $observacion;
-    }
-
-    public function getobservacion() {
-        return $this->observacion;
-    }
-
     
     public function getId() {
         return $this->id;
@@ -93,10 +67,10 @@ class cliente extends Conexion {
         $this->id = $id;
     }
 
-    public function validaRifCliente() {
-        $sql = "SELECT COUNT(*) FROM tbl_clientes WHERE rif = :rif";
+    public function validaCedulaCliente() {
+        $sql = "SELECT COUNT(*) FROM tbl_clientes WHERE cedula = :cedula";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':rif', $this->rif);
+        $stmt->bindParam(':cedula', $this->cedula);
         $stmt->execute();
         $count = $stmt->fetchColumn();
     
@@ -105,18 +79,15 @@ class cliente extends Conexion {
     }
 
     public function ingresarclientes() {
-        $sql = "INSERT INTO tbl_clientes (nombre, persona_contacto, direccion, telefono, telefono_secundario, rif, correo, observaciones, activo)
-                VALUES (:nombre, :persona, :direccion, :telefono_1, :telefono_2, :rif, :correo, :observacion, :activo)";
+        $sql = "INSERT INTO tbl_clientes (`nombre`, `cedula`, `direccion`, `telefono`, `correo`, `activo`)
+                VALUES (:nombre, :cedula :direccion, :telefono, :correo, :activo)";
         $stmt = $this->conex->prepare($sql);
         // Asignar valores a los parámetros
         $stmt->bindParam(':nombre', $this->nombre);
-        $stmt->bindParam(':persona', $this->persona);
         $stmt->bindParam(':direccion', $this->direccion);
-        $stmt->bindParam(':telefono_1', $this->telefono_1);
-        $stmt->bindParam(':telefono_2', $this->telefono_2);
-        $stmt->bindParam(':rif', $this->rif);
+        $stmt->bindParam(':telefono', $this->telefono);
+        $stmt->bindParam(':cedula', $this->cedula);
         $stmt->bindParam(':correo', $this->correo);
-        $stmt->bindParam(':observacion', $this->observacion);
         $stmt->bindParam(':activo', $this->activo);
         
         return $stmt->execute();
@@ -133,17 +104,14 @@ class cliente extends Conexion {
 
     // Modificar Producto
     public function modificarclientes($id) {
-    $sql = "UPDATE tbl_clientes SET nombre = :nombre, persona_contacto = :persona_contacto, direccion = :direccion, telefono = :telefono_1, telefono_secundario = :telefono_2, rif = :rif, correo = :correo, observaciones = :observacion, activo = :activo WHERE id_clientes = :id_clientes";
+    $sql = "UPDATE tbl_clientes SET nombre = :nombre, cedula = :cedula, direccion = :direccion, telefono = :telefono, correo = :correo, activo = :activo WHERE id_clientes = :id_clientes";
     $stmt = $this->conex->prepare($sql);
     $stmt->bindParam(':id_clientes', $id);
     $stmt->bindParam(':nombre', $this->nombre);
-    $stmt->bindParam(':persona_contacto', $this->persona);
     $stmt->bindParam(':direccion', $this->direccion);
-    $stmt->bindParam(':telefono_1', $this->telefono_1);
-    $stmt->bindParam(':telefono_2', $this->telefono_2);
-    $stmt->bindParam(':rif', $this->rif);
+    $stmt->bindParam(':telefono', $this->telefono);
+    $stmt->bindParam(':cedula', $this->cedula);
     $stmt->bindParam(':correo', $this->correo);
-    $stmt->bindParam(':observacion', $this->observacion);
     $stmt->bindParam(':activo', $this->activo);
     
     return $stmt->execute();
@@ -170,7 +138,7 @@ class cliente extends Conexion {
         //echo "Iniciando getclientes.<br>";
         
         // Primera consulta para obtener datos de marcas
-        $queryclientes = 'SELECT id_clientes, nombre, persona_contacto, direccion, telefono, telefono_secundario, rif, correo, observaciones, activo FROM ' . $this->tableclientes;
+        $queryclientes = 'SELECT * FROM ' . $this->tableclientes;
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";

@@ -36,6 +36,9 @@
 
     <?php include 'footer.php'; ?>
         <!-- Bootstrap JS -->
+    <script src='Public/bootstrap/js/bootstrap.bundle.min.js'></script>
+    <script src='Public/bootstrap/css/bootstrap.min.css'></script>
+    <script src="Javascript/validaciones.js"></script>
 
 
 

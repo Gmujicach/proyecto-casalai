@@ -4,11 +4,11 @@ $(document).ready(function(){
 	
 //VALIDACION DE CLIENTES
 
-    $("#rif").on("keypress",function(e){
+    $("#cedula").on("keypress",function(e){
         validarkeypress(/^[VEJGPU\-\0-9]*$/,e);
     });
     
-    $("#rif").on("keyup",function(){
+    $("#cedula").on("keyup",function(){
         validarkeyup(/^[VEJGPU]{1}[-]{1}[0-9]{9,10}$/,
         $(this),$("#srif"),"El Formato debe ser V-999999999");
     });		
@@ -21,15 +21,6 @@ $(document).ready(function(){
 		validarkeyup(/^[A-Za-z\b\s\u00f1\u00d1\u00E0-\u00FC]{3,15}$/,
 		$(this),$("#snombre"),"Solo letras entre 3 y 15 caracteres");
 	});
-
-    $("#persona").on("keypress",function(e){
-        validarkeypress(/^[A-Za-z\b\s\u00f1\u00d1\u00E0-\u00FC]*$/,e);
-    });
-    
-    $("#persona").on("keyup",function(){
-        validarkeyup(/^[A-Za-z\b\s\u00f1\u00d1\u00E0-\u00FC]{3,15}$/,
-        $(this),$("#spersona"),"Solo letras entre 3 y 15 caracteres");
-    });
 	
 	$("#direccion").on("keypress",function(e){
 		validarkeypress(/^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]*$/,e);
@@ -52,41 +43,24 @@ $(document).ready(function(){
 	});
 	
 	
-	$("#telefono_1").on("keypress",function(e){
+	$("#telefono").on("keypress",function(e){
 		validarkeypress(/^[0-9\b-]*$/,e);
 	});
 	
-	$("#telefono_1").on("keyup",function(){
+	$("#telefono").on("keyup",function(){
 	    validarkeyup(/^[0-9]{4}[-]{1}[0-9]{7,8}$/,$(this),$("#stelefono_1"),"El formato debe ser 9999-9999999");
 	});
-
-    $("#telefono_2").on("keypress",function(e){
-        validarkeypress(/^[0-9\b-]*$/,e);
-    });
-    
-    $("#telefono_2").on("keyup",function(){
-        validarkeyup(/^[0-9]{4}[-]{1}[0-9]{7,8}$/,$(this),$("#stelefono_2"),"El formato debe ser 9999-9999999");
-    });
-
-    $("#observacion").on("keypress",function(e){
-        validarkeypress(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]*$/,e);
-    });
-    
-    $("#observacion").on("keyup",function(){
-        validarkeyup(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]{6,50}$/,
-        $(this),$("#sobservacion"),"Solo letras y/o numeros y Simbolos entre 6 y 50 caracteres");
-    });
 
 
 
     //MODIFICAR CLIENTES VALIDACIONES
-    $("#modificarrif").on("keypress",function(e){
+    $("#modificarcedula").on("keypress",function(e){
         validarkeypress(/^[VEJGPU\-\0-9]*$/,e);
     });
     
-    $("#modificarrif").on("keyup",function(){
+    $("#modificarcedula").on("keyup",function(){
         validarkeyup(/^[VEJGPU]{1}[-]{1}[0-9]{9,10}$/,
-        $(this),$("#smodificarrif"),"El Formato debe ser V-999999999");
+        $(this),$("#smodificarcedula"),"El Formato debe ser V-999999999");
     });     
     
     $("#modificarnombre").on("keypress",function(e){
@@ -98,15 +72,6 @@ $(document).ready(function(){
         $(this),$("#smodificarnombre"),"Solo letras entre 3 y 15 caracteres");
     });
 
-    $("#modificarpersona_contacto").on("keypress",function(e){
-        validarkeypress(/^[A-Za-z\b\s\u00f1\u00d1\u00E0-\u00FC]*$/,e);
-    });
-    
-    $("#modificarpersona_contacto").on("keyup",function(){
-        validarkeyup(/^[A-Za-z\b\s\u00f1\u00d1\u00E0-\u00FC]{3,15}$/,
-        $(this),$("#smodificarpersona_contacto"),"Solo letras entre 3 y 15 caracteres");
-    });
-    
     $("#modificardireccion").on("keypress",function(e){
         validarkeypress(/^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]*$/,e);
     });
@@ -134,23 +99,6 @@ $(document).ready(function(){
     
     $("#modificartelefono").on("keyup",function(){
         validarkeyup(/^[0-9]{4}[-]{1}[0-9]{7,8}$/,$(this),$("#smodificartelefono"),"El formato debe ser 9999-9999999");
-    });
-
-    $("#modificartelefono_secundario").on("keypress",function(e){
-        validarkeypress(/^[0-9\b-]*$/,e);
-    });
-    
-    $("#modificartelefono_secundario").on("keyup",function(){
-        validarkeyup(/^[0-9]{4}[-]{1}[0-9]{7,8}$/,$(this),$("#smodificartelefono_secundario"),"El formato debe ser 9999-9999999");
-    });
-
-    $("#modificarobservaciones").on("keypress",function(e){
-        validarkeypress(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]*$/,e);
-    });
-    
-    $("#modificarobservaciones").on("keyup",function(){
-        validarkeyup(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]{6,50}$/,
-        $(this),$("#smodificarobservaciones"),"Solo letras y/o numeros y Simbolos entre 6 y 50 caracteres");
     });
 	
 	
@@ -540,7 +488,7 @@ $("#Alto").on("keyup",function(){
 $("#Ancho").on("keypress",function(e){
     validarkeypress(/^[0-9]+(\.[0-9])?$/,e);
 });
-Ancho
+
 $("#Ancho").on("keyup",function(){
     validarkeyup(/^[0-9]+(\.[0-9]{1,2})?$/,$(this),
     $("#sAncho"),"Se permite de 4 a 10 carácteres");

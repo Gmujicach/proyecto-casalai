@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     switch ($accion) {
         case 'ingresar':
             $modelo = new modelo();
-            $modelo->setdescripcion_mo($_POST['descripcion_mo']);
+            $modelo->setnombre_modelo($_POST['nombre_modelo']);
             $modelo->setid_marca($_POST['id_marca']);
 
             if (!$modelo->validarmodelo()) {
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['id_modelo'];
             $modelo = new modelo();
             $modelo->setId($id);
-            $modelo->setdescripcion_mo($_POST['descripcion_mo']);
+            $modelo->setnombre_modelo($_POST['nombre_modelo']);
             
             if ($modelo->modificarmodelos($id)) {
                 echo json_encode(['status' => 'success']);

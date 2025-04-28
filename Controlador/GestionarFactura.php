@@ -12,10 +12,9 @@ if (is_file("vista/GestionarFactura.php")) {
     
     // Consultar todas las facturas al cargar la página
     $respuestaFacturas = $factura->facturaTransaccion('Consultar');
-$accion = 'consultar';
-    
+
     if (!empty($_POST)) {
-        $accion = $_POST['accion'];
+        $accion = 'consultar';
 
         switch ($accion) {
 
@@ -29,6 +28,13 @@ $accion = 'consultar';
                 $factura->setCantidad($_POST['cantidad']);
                 
                 $respuesta = $factura->facturaTransaccion('Ingresar');
+                echo json_encode($respuesta);
+                break;
+
+            case 'consultar':
+                // Consultar factura por ID
+                $factura->setId(1);
+                $respuesta = $factura->facturaTransaccion('Consultar');
                 echo json_encode($respuesta);
                 break;
 
@@ -47,13 +53,11 @@ $accion = 'consultar';
                 break;
 
             default:
-            $factura->setId(1);
-            $respuesta = $factura->facturaTransaccion('Consultar');
-            echo json_encode($respuesta);
+                echo json_encode(['error' => 'Acción no válida']);
                 break;
         }
         exit;
-    };
+    }
 
     require_once("vista/GestionarFactura.php");
 

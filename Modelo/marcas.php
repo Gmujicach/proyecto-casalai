@@ -1,24 +1,24 @@
 <?php
-require_once 'Conexion.php';
+require_once 'Modelo/config.php';
 
-class marca extends Conexion {
-    private $tablemarcas = 'tbl_marcas';
+class marca extends BD {
+    private $tablemarcas = 'marca';
     private $conex;
-    private $descripcion_ma;
+    private $nombre_marca;
     private $id;
 
-    public function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::conexion();
     }
 
     // Getters y Setters
-    public function getdescripcion_ma() {
-        return $this->descripcion_ma;
+    public function getnombre_marca() {
+        return $this->nombre_marca;
     }
 
-    public function setdescripcion_ma($descripcion_ma) {
-        $this->descripcion_ma = $descripcion_ma;
+    public function setnombre_marca($nombre_marca) {
+        $this->nombre_marca = $nombre_marca;
     }
 
     
@@ -30,9 +30,9 @@ class marca extends Conexion {
     }
 
     public function validarmarca() {
-        $sql = "SELECT COUNT(*) FROM marcas WHERE descripcion_ma = :descripcion_ma";
+        $sql = "SELECT COUNT(*) FROM marca WHERE nombre_marca = :nombre_marca";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':descripcion_ma', $this->descripcion_ma);
+        $stmt->bindParam(':nombre_marca', $this->nombre_marca);
         $stmt->execute();
         $count = $stmt->fetchColumn();
     
@@ -41,17 +41,17 @@ class marca extends Conexion {
     }
 
     public function ingresarmarcas() {
-        $sql = "INSERT INTO tbl_marcas (descripcion_ma)
-                VALUES (:descripcion_ma)";
+        $sql = "INSERT INTO marca (nombre_marca)
+                VALUES (:nombre_marca)";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':descripcion_ma', $this->descripcion_ma);
+        $stmt->bindParam(':nombre_marca', $this->nombre_marca);
         
         return $stmt->execute();
     }
 
     // Obtener Producto por ID
     public function obtenermarcasPorId($id) {
-        $query = "SELECT * FROM tbl_marcas WHERE id_marca = ?";
+        $query = "SELECT * FROM marca WHERE id_marca = ?";
         $stmt = $this->conex->prepare($query);
         $stmt->execute([$id]);
         $marcas = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -60,17 +60,17 @@ class marca extends Conexion {
 
     // Modificar Producto
     public function modificarmarcas($id) {
-        $sql = "UPDATE tbl_marcas SET descripcion_ma = :descripcion_ma WHERE id_marca = :id_marca";
+        $sql = "UPDATE marca SET nombre_marca = :nombre_marca WHERE id_marca = :id_marca";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_marca', $id);
-        $stmt->bindParam(':descripcion_ma', $this->descripcion_ma);
+        $stmt->bindParam(':nombre_marca', $this->nombre_marca);
         
         return $stmt->execute();
     }
 
     // Eliminar Producto
     public function eliminarmarcas($id) {
-        $sql = "DELETE FROM tbl_marcas WHERE id_marca = :id";
+        $sql = "DELETE FROM marca WHERE id_marca = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
@@ -81,7 +81,7 @@ class marca extends Conexion {
         //echo "Iniciando getmarcas.<br>";
         
         // Primera consulta para obtener datos de marcas
-        $querymarcas = 'SELECT id_marca, descripcion_ma FROM ' . $this->tablemarcas;
+        $querymarcas = 'SELECT id_marca, nombre_marca FROM ' . $this->tablemarcas;
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";

@@ -15,7 +15,7 @@ $(document).ready(function () {
             success: function(modelos) {
                 console.log('Datos de la Marca obtenidos:', modelos);
                 // Llenar los campos del formulario con los datos obtenidos del modelos
-                $('#modificardescripcion_mo').val(modelos.descripcion_mo);
+                $('#modificarnombre_modelo').val(modelos.nombre_modelo);
                 
                 // Ajustar la imagen si se maneja la carga de imágenes
                 // $('#modificarImagen').val(modelos.imagen);

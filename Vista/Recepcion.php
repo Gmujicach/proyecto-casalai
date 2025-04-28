@@ -16,14 +16,12 @@ if (!isset($_SESSION['name'])) {
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'header.php'; ?>
-    <link rel="stylesheet" href="Styles/darckort.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Gestionar Recepcion</title>
 </head>
 
 <body>
 
-	<?php require_once("vista/NavBar.php"); ?>
+<?php include 'NewNavBar.php'; ?>
 
 	<div class="container">
 		

@@ -1,8 +1,8 @@
 <?php
 
-require_once('datos.php');
+require_once('config.php');
 
-class Login extends conexion
+class Login extends BD
 {
 
 
@@ -32,7 +32,7 @@ class Login extends conexion
 
 
     function existe(){
-        $co = $this->conecta();
+        $co = $this->conexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $r = array();
         try {

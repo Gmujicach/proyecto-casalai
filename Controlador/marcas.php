@@ -1,7 +1,7 @@
 <?php
 ob_start();
 
-require_once 'Modelo/Marcas.php';
+require_once 'Modelo/marcas.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     switch ($accion) {
         case 'ingresar':
             $marca = new marca();
-            $marca->setdescripcion_ma($_POST['descripcion_ma']);
+            $marca->setnombre_marca($_POST['nombre_marca']);
             
             if (!$marca->validarmarca()) {
                 echo json_encode(['status' => 'error', 'message' => 'Esta Marca ya existe']);
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['id_marca'];
             $marca = new marca();
             $marca->setId($id);
-            $marca->setdescripcion_ma($_POST['descripcion_ma']);
+            $marca->setnombre_marca($_POST['nombre_marca']);
             
             if ($marca->modificarmarcas($id)) {
                 echo json_encode(['status' => 'success']);

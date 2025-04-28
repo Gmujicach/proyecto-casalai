@@ -15,15 +15,12 @@ if (!isset($_SESSION['name'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestionar Marcas</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="Public/bootstrap/css/bootstrap.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="Styles/darckort.css">
+  <?php include 'header.php'; ?>
   
 </head>
 <body>
 
-<?php include 'NavBar.php'; ?>
+<?php include 'NewNavBar.php'; ?>
 
 <div class="container"> 
 <form id="incluirmarcas" action="" method="POST" class="formulario-1">
@@ -31,9 +28,9 @@ if (!isset($_SESSION['name'])) {
     <h3 class="display-4 text-center">INCLUIR MARCA</h3>
     <div class="form-row">
         <div class="form-group col-md-12">
-            <label for="descripcion_ma">Nombre de la Marca</label>
-            <input type="text" maxlength="15" class="form-control" id="descripcion_ma" name="descripcion_ma" required>
-            <span id="sdescripcion_ma"></span>
+            <label for="nombre_marca">Nombre de la Marca</label>
+            <input type="text" maxlength="15" class="form-control" id="nombre_marca" name="nombre_marca" required>
+            <span id="snombre_marca"></span>
         </div>
     </div>
     <div class="form-group d-flex justify-content-center">
@@ -64,7 +61,7 @@ if (!isset($_SESSION['name'])) {
                         <!-- Botón Eliminar -->
                         <a href="#" data-id="<?php echo htmlspecialchars($marcas['id_marca']); ?>" class="btn btn-eliminar">Eliminar</a>
                     </td>
-                    <td><?php echo htmlspecialchars($marcas['descripcion_ma']); ?></td>
+                    <td><?php echo htmlspecialchars($marcas['nombre_marca']); ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -87,9 +84,9 @@ if (!isset($_SESSION['name'])) {
                     <!-- Campos del formulario de modificación -->
                     <input type="hidden" id="modificar_id_marcas" name="id_marca">
                     <div class="form-group">
-                        <label for="modificardescripcion_ma">Nombre de la Marca</label>
-                        <input type="text" class="form-control" id="modificardescripcion_ma" name="descripcion_ma" required>
-                        <span id="smodificardescripcion_ma"></span>
+                        <label for="modificarnombre_marca">Nombre de la Marca</label>
+                        <input type="text" class="form-control" id="modificarnombre_marca" name="nombre_marca" required>
+                        <span id="smodificarnombre_marca"></span>
                     </div>
                     
                     </div>

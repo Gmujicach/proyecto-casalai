@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php include 'header.php'; ?>
-    <link rel="stylesheet" href="Styles/darckort.css">
     <title>Consultar Cuentas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-    <?php require_once("public/modal.php"); ?>
-    <?php include 'NavBar.php'; ?>
-
     <div class="container mt-5">
         <h2>Consultar Cuentas</h2>
         <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#registrarModal">Registrar Cuenta</button>
@@ -58,10 +56,10 @@
                             <label for="rif_cuenta">RIF</label>
                             <input type="text" class="form-control" id="rif_cuenta" required>
                         </div>
-                        <"form-group">
+                        <div class="form-group">
                             <label for="telefono_cuenta">Teléfono</label>
                             <input type="text" class="form-control" id="telefono_cuenta" required>
-                        </>
+                        </div>
                         <div class="form-group">
                             <label for="correo_cuenta">Correo</label>
                             <input type="email" class="form-control" id="correo_cuenta" required>
@@ -83,6 +81,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
                 <div class="modal-body">
                     <form id="formModificar">
                         <input type="hidden" id="id_cuenta_modificar">
@@ -113,7 +112,6 @@
         </div>
     </div>
 
-    <?php include 'footer.php'; ?>
     <script src="Javascript/conciliacion.js"></script>
 </body>
 </html>
