@@ -4,7 +4,7 @@ require_once 'Conexion.php';
 class Productos {
     private $conex;
     private $id_centro;
-    private $nombre_p;
+    private $nombre_producto;
     private $descripcion_p;
     private $id_modelo;
     private $stock_actual;
@@ -30,11 +30,11 @@ class Productos {
 
     // Getters y Setters
     public function getNombreP() {
-        return $this->nombre_p;
+        return $this->nombre_producto;
     }
 
-    public function setNombreP($nombre_p) {
-        $this->nombre_p = $nombre_p;
+    public function setNombreP($nombre_producto) {
+        $this->nombre_producto = $nombre_producto;
     }
 
     public function getDescripcionP() {
@@ -164,9 +164,9 @@ class Productos {
     }
 
     public function validarNombreProducto() {
-        $sql = "SELECT COUNT(*) FROM tbl_productos WHERE nombre_p = :Nombre_P";
+        $sql = "SELECT COUNT(*) FROM productos WHERE nombre_producto = :nombre_producto";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':Nombre_P', $this->nombre_p);
+        $stmt->bindParam(':nombre_producto', $this->nombre_producto);
         $stmt->execute();
         $count = $stmt->fetchColumn();
     
@@ -175,7 +175,7 @@ class Productos {
     }
     
     public function validarCodigoProducto() {
-        $sql = "SELECT COUNT(*) FROM tbl_productos WHERE codigo = :Codigo_Interno";
+        $sql = "SELECT COUNT(*) FROM productos WHERE codigo = :Codigo_Interno";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':Codigo_Interno', $this->codigo);
         $stmt->execute();
@@ -185,10 +185,10 @@ class Productos {
         return $count == 0;
     }
         public function ingresarProducto() {
-        $sql = "INSERT INTO tbl_productos (nombre_p, descripcion_p, id_modelo, stock, stock_max, stock_min, peso, largo, alto, ancho, clausula_de_garantia, servicio, codigo, activo, lleva_lote, lleva_serial, categoria)
-                VALUES (:Nombre_P, :Descripcion_P, :Modelo, :Stock_Actual, :Stock_Maximo, :Stock_Minimo, :Peso, :Largo, :Alto, :Ancho, :Clausula_de_garantia, :Servicio, :Codigo_Interno, 1, :Lote, :Serial, :Categoria)";
+        $sql = "INSERT INTO productos (nombre_producto, descripcion_p, id_modelo, stock, stock_max, stock_min, peso, largo, alto, ancho, clausula_de_garantia, servicio, codigo, activo, lleva_lote, lleva_serial, categoria)
+                VALUES (:nombre_producto, :Descripcion_P, :Modelo, :Stock_Actual, :Stock_Maximo, :Stock_Minimo, :Peso, :Largo, :Alto, :Ancho, :Clausula_de_garantia, :Servicio, :Codigo_Interno, 1, :Lote, :Serial, :Categoria)";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':Nombre_P', $this->nombre_p);
+        $stmt->bindParam(':nombre_producto', $this->nombre_producto);
         $stmt->bindParam(':Descripcion_P', $this->descripcion_p);
         $stmt->bindParam(':Modelo', $this->id_modelo);
         $stmt->bindParam(':Stock_Actual', $this->stock_actual);
@@ -208,7 +208,7 @@ class Productos {
     }
 
     public function obtenerProductoPorId($id) {
-        $query = "SELECT nombre_p, descripcion_p, id_modelo, stock, stock_max, stock_min, peso, largo, alto, ancho, clausula_de_garantia, servicio, codigo, activo, lleva_lote, lleva_serial, categoria FROM tbl_productos WHERE id_producto = ?";
+        $query = "SELECT nombre_producto, descripcion_p, id_modelo, stock, stock_max, stock_min, peso, largo, alto, ancho, clausula_de_garantia, servicio, codigo, activo, lleva_lote, lleva_serial, categoria FROM productos WHERE id_producto = ?";
         $stmt = $this->conex->prepare($query);
         $stmt->execute([$id]);
         $producto = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -216,7 +216,7 @@ class Productos {
     }
 
     public function obtenerProductoStock() {
-        $queryProductos = 'SELECT id_producto, nombre_p, stock, id_modelo, codigo FROM tbl_productos';
+        $queryProductos = 'SELECT id_producto, nombre_producto, stock, id_modelo, codigo FROM productos';
         $stmtProductos = $this->conex->prepare($queryProductos);
         $stmtProductos->execute();
         $productos = $stmtProductos->fetchAll(PDO::FETCH_ASSOC);
@@ -224,10 +224,10 @@ class Productos {
     }
 
     public function modificarProducto($id) {
-        $sql = "UPDATE tbl_productos SET nombre_p = :Nombre_P, descripcion_p = :Descripcion_P, id_modelo = :Modelo, stock = :Stock_Actual, stock_max = :Stock_Maximo, stock_min = :Stock_Minimo, peso = :Peso, largo = :Largo, alto = :Alto, ancho = :Ancho, clausula_de_garantia = :Clausula_de_garantia, servicio = :Servicio, codigo = :Codigo_Interno, lleva_lote = :Lote, lleva_serial = :Serial, categoria = :Categoria WHERE id_producto = :id_producto";
+        $sql = "UPDATE productos SET nombre_producto = :nombre_producto, descripcion_p = :Descripcion_P, id_modelo = :Modelo, stock = :Stock_Actual, stock_max = :Stock_Maximo, stock_min = :Stock_Minimo, peso = :Peso, largo = :Largo, alto = :Alto, ancho = :Ancho, clausula_de_garantia = :Clausula_de_garantia, servicio = :Servicio, codigo = :Codigo_Interno, lleva_lote = :Lote, lleva_serial = :Serial, categoria = :Categoria WHERE id_producto = :id_producto";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_producto', $id);
-        $stmt->bindParam(':Nombre_P', $this->nombre_p);
+        $stmt->bindParam(':nombre_producto', $this->nombre_producto);
         $stmt->bindParam(':Descripcion_P', $this->descripcion_p);
         $stmt->bindParam(':Modelo', $this->id_modelo);
         $stmt->bindParam(':Stock_Actual', $this->stock_actual);
@@ -249,13 +249,13 @@ class Productos {
 
 
     public function eliminarProducto($id) {
-        $sql = "UPDATE tbl_productos SET activo = 0 WHERE id_producto = :id";
+        $sql = "UPDATE productos SET activo = 0 WHERE id_producto = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
     public function obtenerModelos() {
-        $query = "SELECT id_modelo, descripcion_mo FROM tbl_modelos";
+        $query = "SELECT id_modelo, nombre_modelo FROM modelo";
         $stmt = $this->conex->query($query);
 
         if ($stmt) {
@@ -272,11 +272,11 @@ class Productos {
 
 class Producto {
     private $conex;
-    private $tableProductos = 'tbl_productos';
-    private $tableModelos = 'tbl_modelos';
+    private $tableProductos = 'productos';
+    private $tableModelos = 'modelo';
     public $id_producto;
     public $id_modelo;
-    public $nombre_p;
+    public $nombre_producto;
     public $stock_actual;
     public $codigo;
 
@@ -289,7 +289,7 @@ class Producto {
 
     public function obtenerProductos() {
        
-        $queryProductos = 'SELECT id_producto, nombre_p, stock, id_modelo, codigo FROM ' . $this->tableProductos . ' WHERE Activo = 1';
+        $queryProductos = 'SELECT id_producto, nombre_producto, stock, id_modelo, serial FROM ' . $this->tableProductos . ' WHERE estado = 1';
        
         $stmtProductos = $this->conex->prepare($queryProductos);
         $stmtProductos->execute();
@@ -300,26 +300,26 @@ class Producto {
         if (!empty($idsModelos)) {
             $idsModelos = implode(',', $idsModelos);
 
-            $queryModelos = 'SELECT id_modelo, descripcion_mo FROM ' . $this->tableModelos . ' WHERE id_modelo IN (' . $idsModelos . ')';
+            $queryModelos = 'SELECT id_modelo, nombre_modelo FROM ' . $this->tableModelos . ' WHERE id_modelo IN (' . $idsModelos . ')';
 
             $stmtModelos = $this->conex->prepare($queryModelos);
             $stmtModelos->execute();
             $modelos = $stmtModelos->fetchAll(PDO::FETCH_ASSOC);
             $descripcionModelos = [];
             foreach ($modelos as $modelo) {
-                $descripcionModelos[$modelo['id_modelo']] = $modelo['descripcion_mo'];
+                $descripcionModelos[$modelo['id_modelo']] = $modelo['nombre_modelo'];
             }
             foreach ($productos as &$producto) {
                 if (isset($descripcionModelos[$producto['id_modelo']])) {
-                    $producto['descripcion_mo'] = $descripcionModelos[$producto['id_modelo']];
+                    $producto['nombre_modelo'] = $descripcionModelos[$producto['id_modelo']];
                 } else {
-                    $producto['descripcion_mo'] = null;
+                    $producto['nombre_modelo'] = null;
                 }
             }
         } else {
 
             foreach ($productos as &$producto) {
-                $producto['descripcion_mo'] = null;
+                $producto['nombre_modelo'] = null;
             }
         }
 

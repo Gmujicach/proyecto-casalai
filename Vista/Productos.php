@@ -25,7 +25,7 @@ if (!isset($_SESSION['name'])) {
 </head>
 <body>
 
-<?php include 'NavBar.php'; ?>
+<?php include 'NewNavBar.php'; ?>
 
 <section class="container"> 
 <div class="d-flex justify-content-center">
