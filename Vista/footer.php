@@ -17,14 +17,15 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
     <!-- Bootstrap JS -->
-  <script src='Public/bootstrap/js/bootstrap.bundle.min.js'></script>
+  <script src='Public/bootstrap/css/bootstrap.min.css'></script>
   <script src="Javascript/validaciones.js"></script>
-  <script src="Public/bootstrap/js/sidebar.js"></script>
-  <script src="Public/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src='Javascript/js/bootstrap.bundle.min.js'></script>
+  <script src="Javascript/validaciones.js"></script>
   <script src="Public/js/jquery-3.7.1.min.js"></script>
   <script src="Public/js/jquery.dataTables.min.js"></script>
   <script src="Public/js/dataTables.bootstrap5.min.js"></script>
-  <script src="Public/js/datatable.js"></script>
+  <script src="Public/js/datatables.min.js"></script>
+  <script src="Javascript/js/bootstrap.min.js"></script>
   <script src="Public/js/sweetalert2.js"></script>
   <script src="Javascript/sweetalert2.all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -164,10 +164,24 @@ JOIN marca mar ON mar.id_marca = m.id_marca;";
     
             // 🖨️ Botónes
             $contenido .= '<div style="margin-top:15px;">';
-            $contenido .= '<button value="' . $idFactura . '" id="Descargar" onclick="accionFactura(this)" target="_blank" class="btn btn-sm btn-primary"><strong>Descargar Factura</strong></button>';
-            $contenido .= ' <button value="' . $idFactura . '" id="Cancelar" onclick="accionFactura(this)" class="btn btn-sm btn-danger"><strong>Cancelar</strong></button>';  // Botón de Cancelar
-            $contenido .= ' <button value="' . $idFactura . '" id="Pagar" onclick="accionFactura(this)" class="btn btn-sm btn-success"><strong>Pagar</strong></button>';  // Botón de Pagar
+
+            $contenido .= '<form method="POST" style="display:inline-block; margin-right:5px;">';
+            $contenido .= '<input type="hidden" name="idFactura" value="' . $idFactura . '">';
+            $contenido .= '<button type="submit" name="accion" value="Descargar" class="btn btn-sm btn-primary"><strong>Descargar Factura</strong></button>';
+            $contenido .= '</form>';
+            
+            $contenido .= '<form method="POST" style="display:inline-block; margin-right:5px;">';
+            $contenido .= '<input type="hidden" name="idFactura" value="' . $idFactura . '">';
+            $contenido .= '<button type="submit" name="accion" value="Cancelar" class="btn btn-sm btn-danger"><strong>Cancelar</strong></button>';
+            $contenido .= '</form>';
+            
+            $contenido .= '<form method="POST" style="display:inline-block;">';
+            $contenido .= '<input type="hidden" name="idFactura" value="' . $idFactura . '">';
+            $contenido .= '<button type="submit" name="accion" value="Pagar" class="btn btn-sm btn-success"><strong>Pagar</strong></button>';
+            $contenido .= '</form>';
+            
             $contenido .= '</div>';
+            
     
             // 🔽 Estructura del acordeón
             $html .= '

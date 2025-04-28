@@ -186,8 +186,7 @@ function enviaAjax(datos) {
             try {
                 var lee = JSON.parse(respuesta);
                 if (lee.resultado === 'listado') {
-                    // Aquí llenamos la tabla con los productos recibidos
-                    alert("Hola");
+
                     $('#listado').html(lee.mensaje);
                     // Luego filtramos los productos con stock > 0
                     filtrarProductosPorStock();
