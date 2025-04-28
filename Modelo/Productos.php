@@ -22,6 +22,8 @@ class Productos {
     private $lleva_serial;
     private $categoria;
     private $id;
+
+    private $precio;
     
     public function __construct() {
         $this->conex = new Conexion();
@@ -110,11 +112,11 @@ class Productos {
     }
 
     public function getClausulaDeGarantia() {
-        return $this->clausula_de_garantia;
+        return $this->clausula_garantia;
     }
 
-    public function setClausulaDeGarantia($clausula_de_garantia) {
-        $this->clausula_de_garantia = $clausula_de_garantia;
+    public function setClausulaDeGarantia($clausula_garantia) {
+        $this->clausula_garantia = $clausula_garantia;
     }
 
     public function getServicio() {
@@ -162,6 +164,16 @@ class Productos {
     public function setId($id) {
         $this->id = $id;
     }
+    // Setter para $precio
+public function setPrecio($precio) {
+    $this->precio = $precio;
+}
+
+// Getter para $precio
+public function getPrecio() {
+    return $this->precio;
+}
+
 
     public function validarNombreProducto() {
         $sql = "SELECT COUNT(*) FROM productos WHERE nombre_producto = :nombre_producto";
@@ -184,24 +196,29 @@ class Productos {
         // Retorna true si no existe un producto con el mismo código interno
         return $count == 0;
     }
-        public function ingresarProducto() {
-        $sql = "INSERT INTO productos (`serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, clausula_garantia, `precio`, `estado`)
-                VALUES (:serial_p, :nombre_producto, :descripcion_producto, :modelo, :categoria, :stock_actual, :stock_maximo, :stock_minimo, :clausula_garantia, :precio, 1)";
+    public function ingresarProducto() {
+        $sql = "INSERT INTO productos (`serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`)
+                VALUES (:serial_p, :nombre_producto, :descripcion_producto, :modelo, :categoria, :stock_actual, :stock_minimo, :stock_maximo, :clausula_garantia, :precio, 1)";
+        
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':nombre_producto', $this->nombre_producto);
-        $stmt->bindParam(':descripcion_producto', $this->descripcion_p);
-        $stmt->bindParam(':modelo', $this->id_modelo);
-        $stmt->bindParam(':stock_actual', $this->stock_actual);
-        $stmt->bindParam(':stock_maximo', $this->stock_max);
-        $stmt->bindParam(':stock_minimo', $this->stock_min);
-        $stmt->bindParam(':clausula_garantia', $this->clausula_garantia);
+    
         $stmt->bindParam(':serial_p', $this->serial);
-        $stmt->bindParam(':categoria', $this->categoria);       
+        $stmt->bindParam(':nombre_producto', $this->nombre_producto);
+        $stmt->bindParam(':descripcion_producto', $this->descripcion_p); // CORREGIDO aquí
+        $stmt->bindParam(':modelo', $this->id_modelo);
+        $stmt->bindParam(':categoria', $this->categoria);
+        $stmt->bindParam(':stock_actual', $this->stock_actual);
+        $stmt->bindParam(':stock_minimo', $this->stock_min); // CORREGIDO: stock mínimo
+        $stmt->bindParam(':stock_maximo', $this->stock_max); // CORREGIDO: stock máximo
+        $stmt->bindParam(':clausula_garantia', $this->clausula_garantia);
+        $stmt->bindParam(':precio', $this->precio); // AÑADIDO: bind de precio
+    
         return $stmt->execute();
     }
+    
 
     public function obtenerProductoPorId($id) {
-        $query = "SELECT nombre_producto, descripcion_p, id_modelo, stock, stock_max, stock_min, peso, largo, alto, ancho, clausula_de_garantia, servicio, serial, estado, lleva_lote, lleva_serial, categoria FROM productos WHERE id_producto = ?";
+        $query = "SELECT nombre_producto, descripcion_p, id_modelo, stock, stock_max, stock_min, peso, largo, alto, ancho, clausula_garantia, servicio, serial, estado, lleva_lote, lleva_serial, categoria FROM productos WHERE id_producto = ?";
         $stmt = $this->conex->prepare($query);
         $stmt->execute([$id]);
         $producto = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -217,28 +234,41 @@ class Productos {
     }
 
     public function modificarProducto($id) {
-        $sql = "UPDATE productos SET nombre_producto = :nombre_producto, descripcion_p = :Descripcion_P, id_modelo = :Modelo, stock = :Stock_Actual, stock_max = :Stock_Maximo, stock_min = :Stock_Minimo, peso = :Peso, largo = :Largo, alto = :Alto, ancho = :Ancho, clausula_de_garantia = :Clausula_de_garantia, servicio = :Servicio, serial = :serial_Interno, lleva_lote = :Lote, lleva_serial = :Serial, categoria = :Categoria WHERE id_producto = :id_producto";
+        $sql = "UPDATE productos 
+                SET serial = :serial_p,
+                    nombre_producto = :nombre_producto,
+                    descripcion_producto = :descripcion_producto,
+                    id_modelo = :modelo,
+                    id_categoria = :categoria,
+                    stock = :stock_actual,
+                    stock_minimo = :stock_minimo,
+                    stock_maximo = :stock_maximo,
+                    clausula_garantia = :clausula_garantia,
+                    precio = :precio
+                WHERE id_producto = :id_producto";
+    
         $stmt = $this->conex->prepare($sql);
+    
         $stmt->bindParam(':id_producto', $id);
+        $stmt->bindParam(':serial_p', $this->serial);
         $stmt->bindParam(':nombre_producto', $this->nombre_producto);
-        $stmt->bindParam(':Descripcion_P', $this->descripcion_p);
-        $stmt->bindParam(':Modelo', $this->id_modelo);
-        $stmt->bindParam(':Stock_Actual', $this->stock_actual);
-        $stmt->bindParam(':Stock_Maximo', $this->stock_max);
-        $stmt->bindParam(':Stock_Minimo', $this->stock_min);
-        $stmt->bindParam(':Peso', $this->peso);
-        $stmt->bindParam(':Largo', $this->largo);
-        $stmt->bindParam(':Alto', $this->alto);
-        $stmt->bindParam(':Ancho', $this->ancho);
-        $stmt->bindParam(':Clausula_de_garantia', $this->clausula_de_garantia);
-        $stmt->bindParam(':Servicio', $this->servicio);
-        $stmt->bindParam(':serial_Interno', $this->serial);
-        $stmt->bindParam(':Lote', $this->lleva_lote);
-        $stmt->bindParam(':Serial', $this->lleva_serial);
-        $stmt->bindParam(':Categoria', $this->categoria);
-        
-        return $stmt->execute();
+        $stmt->bindParam(':descripcion_producto', $this->descripcion_p);
+        $stmt->bindParam(':modelo', $this->id_modelo);
+        $stmt->bindParam(':categoria', $this->categoria);
+        $stmt->bindParam(':stock_actual', $this->stock_actual);
+        $stmt->bindParam(':stock_minimo', $this->stock_min);
+        $stmt->bindParam(':stock_maximo', $this->stock_max);
+        $stmt->bindParam(':clausula_garantia', $this->clausula_garantia);
+        $stmt->bindParam(':precio', $this->precio);
+    
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            $errorInfo = $stmt->errorInfo();
+            throw new Exception('Error al modificar producto: ' . $errorInfo[2]);
+        }
     }
+    
 
 
     public function eliminarProducto($id) {
@@ -282,7 +312,18 @@ class Producto {
 
     public function obtenerProductos() {
        
-        $queryProductos = 'SELECT id_producto, nombre_producto, stock, id_modelo, serial FROM ' . $this->tableProductos . ' WHERE estado = 1';
+        $queryProductos = 'SELECT 
+    productos.*, 
+    modelo.nombre_modelo, 
+    categoria.nombre_caracteristicas
+FROM 
+    productos
+INNER JOIN 
+    modelo ON productos.id_modelo = modelo.id_modelo
+INNER JOIN 
+    categoria ON productos.id_categoria = categoria.id_categoria
+ where estado = 1;
+';
        
         $stmtProductos = $this->conex->prepare($queryProductos);
         $stmtProductos->execute();
