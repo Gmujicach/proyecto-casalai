@@ -18,7 +18,7 @@ if (!isset($_SESSION['name'])) {
 </head>
 <body>
 
-<?php include 'NavBar.php'; ?>
+<?php include 'NewNavBar.php'; ?>
 
 <div class="container"> 
             <form id="incluirusuario" action="" method="POST" class="formulario-1">

@@ -21,7 +21,7 @@ require_once 'Controlador/Despacho.php';
     <?php require_once("public/modal.php"); ?>
 
 
-    <?php include 'NavBar.php'; ?>
+    <?php include 'NewNavBar.php'; ?>
 
 
     <div class="container"> <!-- todo el contenido ira dentro de esta etiqueta-->

@@ -17,7 +17,7 @@ class Despacho extends BD
         try {
            
             $fecha = date('Y-m-d H:i:s');
-            $exist = $co->query("SELECT id_producto, stock FROM tbl_productos ");
+            $exist = $co->query("SELECT id_producto, stock FROM productos ");
             $stock = [];
 
             while ($row = $exist->fetch(PDO::FETCH_ASSOC)
@@ -31,7 +31,7 @@ class Despacho extends BD
                 $idProd = $id_producto[$i];
                 $cantidadActual = isset($stock[$idProd]['cantidad']) ? $stock[$idProd]['cantidad'] : 0;
                 $Total = $cantidadActual - $cantidad[$i];
-                $co->query("UPDATE tbl_productos SET stock = $Total WHERE id_producto = $idProd");
+                $co->query("UPDATE productos SET stock = $Total WHERE id_producto = $idProd");
             }
             
                 $guarda = $co->query("INSERT INTO tbl_despachos(id_clientes,fecha_despacho ,correlativo)
@@ -70,7 +70,7 @@ class Despacho extends BD
         $r = array();
         try {
 
-            $resultado = $co->query("SELECT * FROM tbl_productos");
+            $resultado = $co->query("SELECT * FROM productos");
 
             if ($resultado) {
 

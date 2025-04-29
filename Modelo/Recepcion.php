@@ -103,7 +103,7 @@ class Recepcion extends BD{
 		$r = array();
 		try{
 			
-			$resultado = $co->query("Select * from tbl_productos");
+			$resultado = $co->query("Select * from productos");
 			
 			if($resultado){
 				
@@ -114,10 +114,10 @@ class Recepcion extends BD{
 							$respuesta = $respuesta.$r['id_producto'];
 						$respuesta = $respuesta."</td>";
 						$respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['codigo'];
+							$respuesta = $respuesta.$r['serial'];
 						$respuesta = $respuesta."</td>";
 						$respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['nombre_p'];
+							$respuesta = $respuesta.$r['nombre_producto'];
 						$respuesta = $respuesta."</td>";
 					$respuesta = $respuesta."</tr>";
 				}
