@@ -18,7 +18,7 @@ body{
   box-shadow: inset 1px 1px 22px 4px rgba(0, 0, 0, 0.187); /*Sombreado de los bordes*/
 }
 
-.container{
+.contenedor{
   
   display: flex;
   justify-content: center;

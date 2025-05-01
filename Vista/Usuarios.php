@@ -8,19 +8,60 @@ if (!isset($_SESSION['name'])) {
  	exit();
  }
 ?>
-<?php include 'header.php'; ?>
+
   <title>Gestionar Usuarios</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="Public/bootstrap/css/bootstrap.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="Styles/darckort.css">
-  
+  <?php include 'header.php'; ?>
 </head>
 <body>
 
 <?php include 'NewNavBar.php'; ?>
 
-<div class="container"> 
+
+<div class="formulario-responsivo">
+    <div class="fondo-form">
+    <form id="incluirusuario" action="" method="POST" action="">
+        <input type="hidden" name="accion" value="ingresar">
+        <h3 class="titulo-form">INCLUIR USUARIO</h3>
+
+        <div class="grupo-form">
+            <input type="text" placeholder="Nombre" class="control-form" id="nombre" name="nombre" required>
+            <span id="snombre"></span>
+
+            <input type="text" placeholder="Apellido" class="control-form" id="nombre" name="nombre" required>
+            <span id="sapellido"></span>
+        </div>
+        <div class="envolver-form">
+            <input type="text" placeholder="Nombre de Usuario" class="control-form" id="nombre_usuario" name="nombre_usuario" required>
+            <span id="snombre_usuario"></span>
+        </div>
+        <div class="envolver-form">
+            <input type="text" placeholder="CorreoEjemplo@gmail.com" class="control-form" id="correo_usuario" name="correo_usuario" required>
+            <span id="scorreo_usuario"></span>
+        </div>
+
+        <div class="envolver-form">
+            <input type="password" placeholder="contraseña" class="control-form" id="clave_usuario" name="clave_usuario" required>
+            <span id="sclave_usuario"></span>
+        </div>
+        <div class="envolver-form">
+            <input type="password" placeholder="Confirmar Contraseña" class="control-form" id="clave_confirmar" name="clave_confirmar" required>
+            <span id="sclave_confirmar"></span>
+        </div>
+        <!-- <div class="envolver-form">
+            <select name="" id="" class="control-form">
+                <option value="" disabled selected>Seleccionar</option>
+                <option value=""></option>
+                <option value=""></option>
+                <option value=""></option>
+            </select>
+        </div> -->
+
+        <button class="boton-form" type="submit">Registrar</button>
+    </form>
+    </div>
+</div>
+
+<!-- <div class="container"> 
             <form id="incluirusuario" action="" method="POST" class="formulario-1">
                 <input type="hidden" name="accion" value="ingresar">
                 <h3 class="display-4 text-center">INCLUIR USUARIO</h3>
@@ -40,7 +81,7 @@ if (!isset($_SESSION['name'])) {
                     <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
                 </div>
             </form>
-    </div>
+    </div> -->
 
 
     <div class="table-container">
