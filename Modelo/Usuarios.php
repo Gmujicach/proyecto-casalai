@@ -10,6 +10,11 @@ class Usuarios extends BD {
     private $rango="usuario";
     private $activo=1;
     private $tableusuarios = 'tbl_usuarios';
+    private $nombre;
+    private $apellido;
+    private $correo;
+    private $telefono;
+
 
     function __construct() {
         parent::__construct();
@@ -47,6 +52,33 @@ class Usuarios extends BD {
     public function setId($id) {
         $this->id = $id;
     }
+
+    public function getNombre() {
+        return $this->nombre;
+    }
+
+    public function setNombre($nombre) {
+        $this->nombre = $nombre;
+    }
+
+    public function getApellido() {
+        return $this->apellido;
+    }
+    public function setApellido($apellido) {
+        $this->apellido = $apellido;
+    }
+    public function getCorreo() {
+        return $this->correo;
+    }
+    public function setCorreo($correo) {
+        $this->correo = $correo;
+    }
+    public function getTelefono() {
+        return $this->telefono;
+    }
+    public function setTelefono($telefono) {
+        $this->telefono = $telefono;
+    }
     
 
      // Método para guardar el proveedor
@@ -63,12 +95,16 @@ class Usuarios extends BD {
     }
 
     public function ingresarUsuario() {
-        $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`)
+        $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`)
                 VALUES (:nombre, :clave, :rango)";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre', $this->username);
         $stmt->bindParam(':clave', $this->clave);
         $stmt->bindParam(':rango', $this->rango);
+        $stmt->bindParam(':correo', $this->correo);
+        $stmt->bindParam(':nombres', $this->nombre);
+        $stmt->bindParam(':apellidos', $this->apellido);
+        $stmt->bindParam(':telefono', $this->telefono);
         
         return $stmt->execute();
     }
@@ -107,7 +143,7 @@ class Usuarios extends BD {
         //echo "Iniciando getmarcas.<br>";
         
         // Primera consulta para obtener datos de marcas
-        $queryusuarios = 'SELECT `id_usuario`, `username`, `password`, `rango` FROM ' . $this->tableusuarios;
+        $queryusuarios = 'SELECT * FROM ' . $this->tableusuarios;
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";

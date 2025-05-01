@@ -1,6 +1,7 @@
 
   <link rel="stylesheet" href="Styles/new_menu.css">
   <link rel="stylesheet" href="Styles/formulario.css">
+  <link rel="stylesheet" href="Styles/tabla_consulta.css">
  
   <!-- Bootstrap 5 CSS -->
 
