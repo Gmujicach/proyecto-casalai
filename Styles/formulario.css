@@ -120,3 +120,22 @@ select option[value=""] [disabled]{
 .boton-form:hover {
     background-color: #4d84e2;
   }
+
+  /* Estilos para el Responsive del Formulario*/
+
+  @media screen and (max-width: 750px){
+    .fondo-form{
+        display: block;
+    }
+
+    .fondo-form form{
+        width: 100%;
+        padding: 40px 0 30px;
+    }
+
+    .boton-form{
+        margin-top: 60px;
+    }
+
+    
+    }
