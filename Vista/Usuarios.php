@@ -78,6 +78,7 @@ if (!isset($_SESSION['name'])) {
                 <th>Rango</th>
                 <th>Estatus</th>
                 <th>Precio</th>
+                <th></th>
                 <th><i class="vertical">
                         <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
                     </i>
@@ -109,7 +110,9 @@ if (!isset($_SESSION['name'])) {
                     </span>
                 </td>
                 <td>
-                    <span class="estatus-usuario <?php echo ($usuario['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>">
+                    <span class="estatus-usuario <?php echo ($usuario['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+                        onclick="cambiarEstatus(<?php echo $usuario['id_usuario']; ?>, '<?php echo $usuario['estatus']; ?>')"
+                        style="cursor: pointer;">
                         <?php echo htmlspecialchars($usuario['estatus']); ?>
                     </span>
                 </td>
@@ -119,23 +122,31 @@ if (!isset($_SESSION['name'])) {
                     </span>
                     <span class="moneda">USD</span>
                 </td>
-                <td><a href="#" data-id="<?php echo htmlspecialchars($usuario['id_usuario']); ?>" class="btn btn-eliminar">Ver Mas</a></td>
+                <td>
+                    <span>
+                        <a href="#"class="">Ver Mas</a>
+                    </span>
+                </td>
                 <td>
                     <span>
                         <div class="acciones-boton">
                         <i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                            <div class="acciones">
-                                <a href="#" data-id="<?php echo htmlspecialchars($usuario['id_usuario']); ?>" class="btn btn-modificar">Modificar</a>
-                                <a href="#" data-id="<?php echo htmlspecialchars($usuario['id_usuario']); ?>" class="btn btn-eliminar">Eliminar</a>
-                            </div>
+                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                        </i>
                         </div>
                     </span>
                 </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
+        <tfoot>
+            <tr>
+                <td>Filas por Pagina: 10 <span><a href=""><i class="flecha"><img src="IMG/flecha.svg" alt="icono" width="16" height="16"></i></a></span></td>
+                <td>1-10 de 24</td>
+                <td><a href=""><i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="" width="16" height="16"></i></a></td>
+                <td><a href=""><i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="" width="16" height="16"></i></a></td>
+            </tr>
+        </tfoot>
     </table>
 
 

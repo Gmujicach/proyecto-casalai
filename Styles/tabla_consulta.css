@@ -167,3 +167,36 @@ table tbody tr td .moneda{
     font-weight: 400;
     text-align: right;
 }
+
+table tbody tr td .acciones-boton{
+    text-decoration: none;
+    color: var(--tbody-text-color);
+    cursor: pointer;
+}
+
+table tbody tr td .acciones-boton i{
+    font-size: 25px;
+}
+
+table tbody tr td .acciones-boton i:hover{
+    color: var(--primary);
+}
+
+table tfoot{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: var(--light-primary);
+    height: 45px;
+}
+
+table tfoot tr td{
+    color: var(--active);
+    font-size: 15px;
+    padding: 4px 15px;
+    justify-content: center;
+}
+
+table tfoot tr td span a i{
+    font-size: 25px;
+}

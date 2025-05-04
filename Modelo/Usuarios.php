@@ -14,6 +14,7 @@ class Usuarios extends BD {
     private $apellido;
     private $correo;
     private $telefono;
+    private $estatus=1;
 
 
     function __construct() {
@@ -28,6 +29,13 @@ class Usuarios extends BD {
 
     public function setUsername($username) {
         $this->username = $username;
+    }
+
+    public function getEstatus() {
+        return $this->estatus;
+    }
+    public function setEstatus($estatus) {
+        $this->estatus = $estatus;
     }
 
     public function getClave() {
@@ -136,6 +144,20 @@ class Usuarios extends BD {
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
+    }
+
+    public function cambiarEstatus($nuevoEstatus) {
+        try {
+            $sql = "UPDATE tbl_usuarios SET estatus = :estatus WHERE id_usuario = :id";
+            $stmt = $this->conex->prepare($sql);
+            $stmt->bindParam(':estatus', $nuevoEstatus);
+            $stmt->bindParam(':id', $this->id);
+            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error al cambiar estatus: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function getusuarios() {
