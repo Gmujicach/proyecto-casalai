@@ -3,13 +3,13 @@
 
 :root{
     --light-primary: #f4f2ff;
-    --primary: #6d5bd0;
-    --active: #6e6893;
+    --primary: #1f66df;
+    --active: #5b91d8;
     --secundary: #25213b;
     --primary-800: #6e689330;
-    --header-font-color: #6e6893;
-    --tbody-text-color: #6e6893;
-    --tbody-text-color-600: #6e6893;
+    --header-font-color: #5b91d8;
+    --tbody-text-color: #5b91d8;
+    --tbody-text-color-600: #5b91d8;
     --primary-bg-color: #e6e6f2;
     --primary-accent-color: #6d5bd0;
     --success-bg-color: #cdffcd;
@@ -26,12 +26,144 @@
 }
 
 .contenedor-tabla {
+    box-sizing: border-box;
     position: relative;
     display: flex;
+    flex-direction: column; /* Cambia la dirección del flex a columna */
     align-items: center;
-    justify-content: center;
-    padding: 20px 0px 0px 0px;
+    justify-content: flex-start; /* Alinea el contenido al inicio (arriba) */
+    padding: 20px; /* Añade padding en todos los lados */
     background: #fff;
     border-radius: 6px;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    height: 100vh; /* Mantienes la altura si es necesario */
+}
+
+.contenedor-tabla h3 {
+    color: var(--primary);
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 25px;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+}
+
+table{
+    display: block;
+    text-align: left;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+table thead{
+    background: var(--light-primary);
+    height: 50px;
+    text-transform: uppercase;
+    color: var(--header-font-color);
+    border-top: 1px solid var(--primary-800 );
+    border-bottom: 1px solid var(--primary-800 );
+    font-weight: 400;
+    font-size: 14px;
+}
+
+table tr th{
+    padding: 10px 15px;
+}
+
+table thead tr th i{
+    font-size: 24   px;
+}
+
+table tbody tr td{
+    position: relative;
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--primary-800 ); 
+}
+
+table thead tr th input,
+table tbody tr td input{
+    scale: 1.25;
+    cursor: pointer;
+}
+
+table tbody tr td .nombre-usuario{
+    display: block;
+    color: var(--secundary);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+table tbody tr td .correo-usuario{
+    display: block;
+    color: var(--tbody-text-color);
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 3px;
+}
+
+table tbody tr td .rango-usuario{
+    position: relative;
+    display: inline-block;
+    padding: 3px 15px;
+    color: var(--tbody-text-color);
+    background: var(--light-primary);
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+/* Estilo base para el span */
+table tbody tr td .estatus-usuario {
+    position: relative;
+    display: inline-block;
+    padding: 3px 15px 3px 25px; /* Más padding a la izquierda para el círculo */
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+/* Círculo indicador (base) */
+table tbody tr td .estatus-usuario::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    border-radius: 100%;
+    top: 8px;
+    left: 10px;
+}
+
+/* Estilo para "habilitado" */
+table tbody tr td .estatus-usuario.habilitado {
+    color: var(--success-accent-color);
+    background: var(--success-bg-color);
+}
+table tbody tr td .estatus-usuario.habilitado::before {
+    background: var(--success-accent-color);
+}
+
+/* Estilo para "deshabilitado" */
+table tbody tr td .estatus-usuario.inhabilitado {
+    color: var(--danger-accent-color);
+    background: var(--danger-bg-color);
+}
+table tbody tr td .estatus-usuario.inhabilitado::before {
+    background: var(--danger-accent-color);
+}
+
+/* Estilo para Precios */
+
+table tbody tr td .precio{
+    display: block;
+    color: var(--secundary);
+    font-size: 16px;
+    font-weight: 500;
+    text-align: right;
+}
+
+table tbody tr td .moneda{
+    display: block;
+    color: var(--tbody-text-color);
+    font-size: 16px;
+    font-weight: 400;
+    text-align: right;
 }
