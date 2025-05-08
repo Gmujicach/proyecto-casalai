@@ -80,14 +80,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         case 'cambiar_estado':
             $id_cuenta = $_POST['id_cuenta'];
+            $nuevoEstado = $_POST['estado'];
+            
+            if (!in_array($nuevoEstado, ['habilitado', 'inhabilitado'])) {
+                echo json_encode(['status' => 'error', 'message' => 'Estado no válido']);
+                exit;
+            }
+            
             $cuentabanco = new Cuentabanco();
-
-            if ($cuentabanco->estadoCuenta($id_cuenta)) {
+            $cuentabanco->setId($id_cuenta);
+            
+            if ($cuentabanco->estadoCuenta($nuevoEstado)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estado de la cuenta']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estado']);
             }
-            exit;
+            break;
 
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
@@ -95,11 +103,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+function consultarCuentabanco() {
+    $cuentabanco = new Cuentabanco();
+    return $cuentabanco->consultarCuentabanco();
+}
+
 $pagina = "cuentas";
 if (is_file("Vista/" . $pagina . ".php")) {
+
+    $cunetabancos = consultarCuentabanco();
     require_once("Vista/" . $pagina . ".php");
 } else {
-    echo "La página no existe"; // Mensaje si la vista no existe
+    echo "Página en construcción";
 }
 
 ob_end_flush();

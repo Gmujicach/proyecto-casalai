@@ -150,27 +150,21 @@ class Cuentabanco extends BD {
     }
 
     // Habilitar o Deshabilitar Cuenta
-    public function estadoCuenta($id_cuenta) {
-        return $this->etd_cuenta($id_cuenta); 
+    public function estadoCuenta($nuevoEstado) {
+        return $this->etd_cuenta($nuevoEstado); 
     }
-    private function etd_cuenta($id_cuenta) {
-        $sql = "SELECT estado FROM tbl_cuentas WHERE id_cuenta = :id_cuenta";
-        
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_cuenta', $id_cuenta);
-        
-        $stmt->execute();
-
-        $estado_actual = $stmt->fetchColumn();
-        $nuevo_estado = $estado_actual ? 0 : 1; // Invertimos el estado
-
-        $sql_update = "UPDATE tbl_cuentas SET estado = :nuevo_estado WHERE id_cuenta = :id_cuenta";
-        
-        $stmt_update = $this->conex->prepare($sql_update);
-        $stmt_update->bindParam(':nuevo_estado', $nuevo_estado);
-        $stmt_update->bindParam(':id_cuenta', $id_cuenta);
-        
-        return $stmt_update->execute();
+    private function etd_cuenta($nuevoEstado) {
+        try {
+            $sql = "UPDATE tbl_cuentas SET estado = :estado WHERE id_cuenta = :id_cuenta";
+            $stmt = $this->conex->prepare($sql);
+            $stmt->bindParam(':id_cuenta', $this->id_cuenta);
+            $stmt->bindParam(':estado', $nuevoEstado);
+            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error al cambiar estado: " . $e->getMessage());
+            return false;
+        }
     }
 }
 ?>
