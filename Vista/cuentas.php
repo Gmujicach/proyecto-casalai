@@ -112,6 +112,6 @@
         </div>
     </div>
 
-    <script src="Javascript/conciliacion.js"></script>
+    <script src="Javascript/cuentas.js"></script>
 </body>
 </html>

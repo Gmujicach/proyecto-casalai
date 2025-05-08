@@ -1,13 +1,14 @@
 <?php
-require_once('config.php');
+require_once 'Conexion.php';
 
 class rol extends BD {
     private $id_rol;
     private $nombre_rol;
+    private $conex;
 
     function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
+        parent::__construct();
+        $this->conex = parent::conexion();
     }
 
     // Getters y Setters

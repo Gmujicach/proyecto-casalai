@@ -1,6 +1,6 @@
 <?php
 ob_start();
-require_once 'Modelo/conciliacion.php';
+require_once 'Modelo/cuentas.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -12,14 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     switch ($accion) {
         case 'registrar':
-            $conciliacion = new Conciliacion();
-            $conciliacion->setNombreBanco($_POST['nombre_banco']);
-            $conciliacion->setNumeroCuenta($_POST['numero_cuenta']);
-            $conciliacion->setRifCuenta($_POST['rif_cuenta']);
-            $conciliacion->setTelefonoCuenta($_POST['telefono_cuenta']);
-            $conciliacion->setCorreoCuenta($_POST['correo_cuenta']);
+            $cuentabanco = new Cuentabanco();
+            $cuentabanco->setNombreBanco($_POST['nombre_banco']);
+            $cuentabanco->setNumeroCuenta($_POST['numero_cuenta']);
+            $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
+            $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
+            $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
 
-            if ($conciliacion->registrarConciliacion()) {
+            if ($cuentabanco->registrarCuentabanco()) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al registrar la cuenta']);
@@ -30,10 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_cuenta = $_POST['id_cuenta'];
 
             if ($id_cuenta !== null) {
-                $conciliacion = new Conciliacion();
-                $cuenta = $conciliacion->obtenerCuentaPorId($id_cuenta);
+                $cuentabanco = new Cuentabanco();
+                $cuenta_obt = $cuentabanco->obtenerCuentaPorId($id_cuenta);
 
-                if ($cuenta !== null) {
+                if ($cuenta_obt !== null) {
                     echo json_encode($cuenta);
                 } else {
                     echo json_encode(['status' => 'error', 'message' => 'Cuenta no encontrado']);
@@ -44,23 +44,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
         
         case 'consultar_cuentas':
-            $conciliacion = new Conciliacion();
-            $cuentas = $conciliacion->consultarConciliacion();
-            //var_dump($cuentas);
-            echo json_encode($cuentas);
+            $cuentabanco = new Cuentabanco();
+            $cuentas_obt = $cuentabanco->consultarCuentabanco();
+
+            echo json_encode($cuentas_obt);
             exit;
 
         case 'modificar':
             $id_cuenta = $_POST['id_cuenta'];
-            $conciliacion = new Conciliacion();
-            $conciliacion->setIdCuenta($id_cuenta); // Establecer el ID de la cuenta
-            $conciliacion->setNombreBanco($_POST['nombre_banco']);
-            $conciliacion->setNumeroCuenta($_POST['numero_cuenta']);
-            $conciliacion->setRifCuenta($_POST['rif_cuenta']);
-            $conciliacion->setTelefonoCuenta($_POST['telefono_cuenta']);
-            $conciliacion->setCorreoCuenta($_POST['correo_cuenta']);
+            $cuentabanco = new Cuentabanco();
+            $cuentabanco->setIdCuenta($id_cuenta); // Establecer el ID de la cuenta
+            $cuentabanco->setNombreBanco($_POST['nombre_banco']);
+            $cuentabanco->setNumeroCuenta($_POST['numero_cuenta']);
+            $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
+            $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
+            $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
             
-            if ($conciliacion->modificarConciliacion($id_cuenta)) {
+            if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar la cuenta']);
@@ -69,9 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         case 'eliminar':
             $id_cuenta = $_POST['id_cuenta'];
-            $conciliacion = new Conciliacion();
+            $cuentabanco = new Cuentabanco();
 
-            if ($conciliacion->eliminarConciliacion($id_cuenta)) {
+            if ($cuentabanco->eliminarCuentabanco($id_cuenta)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la cuenta']);
@@ -80,9 +80,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         case 'cambiar_estado':
             $id_cuenta = $_POST['id_cuenta'];
-            $conciliacion = new Conciliacion();
+            $cuentabanco = new Cuentabanco();
 
-            if ($conciliacion->estadoCuenta($id_cuenta)) {
+            if ($cuentabanco->estadoCuenta($id_cuenta)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estado de la cuenta']);
@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$pagina = "conciliacion";
+$pagina = "cuentas";
 if (is_file("Vista/" . $pagina . ".php")) {
     require_once("Vista/" . $pagina . ".php");
 } else {
