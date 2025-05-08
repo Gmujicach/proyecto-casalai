@@ -69,7 +69,7 @@ if (!isset($_SESSION['name'])) {
 <div class="contenedor-tabla">
     <h3>LISTA DE USUARIOS</h3>
 
-    <table>
+    <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
                 <th><input type="checkbox"></th>
@@ -133,6 +133,13 @@ if (!isset($_SESSION['name'])) {
                         <i class="vertical">
                             <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
                         </i>
+                            <div class="desplegable">
+                                <ul>
+                                    <li><a href="#">Ver</a></li>
+                                    <li><a href="#" class="modificar" data-toggle="modal" data-target="#modificar_usuario_modal" onclick="obtenerUsuario(<?php echo $usuario['id_usuario']; ?>)">Modificar</a></li>
+                                    <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $usuario['id_usuario']; ?>)">Eliminar</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </span>
                 </td>
@@ -141,12 +148,35 @@ if (!isset($_SESSION['name'])) {
         </tbody>
         <tfoot>
             <tr>
+                <td>Filas por Página: 
+                    <select id="filasPorPagina" onchange="cambiarFilasPorPagina(this.value)">
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </td>
+                <td><?php echo "$inicio-$fin de $totalUsuarios"; ?></td>
+                <td>
+                    <a href="?pagina=<?php echo max(1, $paginaActual - 1); ?>">
+                        <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
+                    </a>
+                </td>
+                <td>
+                    <a href="?pagina=<?php echo min(ceil($totalUsuarios / $filasPorPagina), $paginaActual + 1); ?>">
+                        <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
+                    </a>
+                </td>
+            </tr>
+        </tfoot>
+        <!-- <tfoot>
+            <tr>
                 <td>Filas por Pagina: 10 <span><a href=""><i class="flecha"><img src="IMG/flecha.svg" alt="icono" width="16" height="16"></i></a></span></td>
                 <td>1-10 de 24</td>
                 <td><a href=""><i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="" width="16" height="16"></i></a></td>
                 <td><a href=""><i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="" width="16" height="16"></i></a></td>
             </tr>
-        </tfoot>
+        </tfoot> -->
     </table>
 
 
@@ -200,7 +230,7 @@ if (!isset($_SESSION['name'])) {
 
 
 <!-- Modal de eliminación -->
-
+<?php include 'footer.php'; ?>
 <script src="public/bootstrap/js/sidebar.js"></script>
   <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="public/js/jquery-3.7.1.min.js"></script>
@@ -211,4 +241,6 @@ if (!isset($_SESSION['name'])) {
 <script src="Javascript/usuario.js"></script>
 <script src="Javascript/validaciones.js"></script>
 </body>
+
+
 </html>

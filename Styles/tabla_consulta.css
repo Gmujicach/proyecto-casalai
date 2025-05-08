@@ -81,6 +81,10 @@ table tbody tr td{
     border-bottom: 1px solid var(--primary-800 ); 
 }
 
+table tbody tr:hover{
+    background: var(--light-primary);
+}
+
 table thead tr th input,
 table tbody tr td input{
     scale: 1.25;
@@ -180,6 +184,41 @@ table tbody tr td .acciones-boton i{
 
 table tbody tr td .acciones-boton i:hover{
     color: var(--primary);
+}
+
+table tbody tr td .acciones-boton .desplegable{
+    background: #fff;
+    width: 120px;
+    border-radius: 6px;
+    padding: 4px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    position: absolute;
+    top: 0px;
+    left: 54px;
+    display: none;
+}
+table tbody tr td .acciones-boton.active .desplegable{
+    display: block;
+}
+
+table tbody tr td .acciones-boton .desplegable ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+table tbody tr td .acciones-boton .desplegable ul li{
+    padding: 10px 15px;
+    color: var(--tbody-text-color);
+    font-size: 14px;
+    cursor: pointer;
+}
+table tbody tr td .acciones-boton .desplegable ul li:hover{
+    background: var(--light-primary);
+    color: var(--primary);
+}
+table tbody tr td .acciones-boton .desplegable ul li a{
+    text-decoration: none;
+    color: var(--tbody-text-color);
 }
 
 table tfoot{

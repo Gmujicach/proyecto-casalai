@@ -15,6 +15,7 @@ class Usuarios extends BD {
     private $correo;
     private $telefono;
     private $estatus=1;
+    private $usuarios;
 
 
     function __construct() {
@@ -29,6 +30,19 @@ class Usuarios extends BD {
 
     public function setUsername($username) {
         $this->username = $username;
+    }
+
+    public function getActivo() {
+        return $this->activo;
+    }
+    public function setActivo($activo) {
+        $this->activo = $activo;
+    }
+    public function getUsuario() {
+        return $this->usuarios;
+    }
+    public function setUsuario($usuario) {
+        $this->usuario = $usuario;
     }
 
     public function getEstatus() {
@@ -175,5 +189,26 @@ class Usuarios extends BD {
         $usuarios = $stmtusuarios->fetchAll(PDO::FETCH_ASSOC);
 
         return $usuarios;
+    }
+
+    public function getUsuariosPaginados($pagina = 1, $filasPorPagina = 10) {
+        $inicio = ($pagina - 1) * $filasPorPagina;
+        
+        // Consulta para los datos paginados
+        $sql = "SELECT * FROM tbl_usuarios ORDER BY id_usuario ASC LIMIT :inicio, :filasPorPagina";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindValue(':inicio', $inicio, PDO::PARAM_INT);
+        $stmt->bindValue(':filasPorPagina', $filasPorPagina, PDO::PARAM_INT);
+        $stmt->execute();
+        $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Consulta para el total de registros
+        $sqlTotal = "SELECT COUNT(*) as total FROM tbl_usuarios";
+        $total = $this->conex->query($sqlTotal)->fetch(PDO::PARAM_INT);
+        
+        return [
+            'usuarios' => $usuarios,
+            'total' => $total['total']
+        ];
     }
 }

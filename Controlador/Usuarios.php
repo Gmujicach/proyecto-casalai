@@ -105,10 +105,25 @@ function getusuarios() {
     return $usuario->getusuarios();
 }
 
+// Obtener parámetros de paginación
+$paginaActual = isset($_GET['pagina']) ? max(1, intval($_GET['pagina'])) : 1;
+$filasPorPagina = 10; // Puedes hacerlo configurable
+
+// Obtener usuarios paginados
+$datosUsuarios = $usuario->getUsuariosPaginados($paginaActual, $filasPorPagina);
+$usuarios = $datosUsuarios['usuarios'];
+$totalUsuarios = $datosUsuarios['total'];
+
+// Calcular información para el pie de tabla
+$inicio = ($paginaActual - 1) * $filasPorPagina + 1;
+$fin = min($paginaActual * $filasPorPagina, $totalUsuarios);
+
 $pagina = "Usuarios";
 if (is_file("Vista/" . $pagina . ".php")) {
 
     $usuarios = getusuarios();
+    $totalUsuarios = count($usuarios);
+    $totalPaginas = ceil($totalUsuarios / $filasPorPagina);
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
