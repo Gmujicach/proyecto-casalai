@@ -7,7 +7,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: "Controlador/conciliacion.php",
+            url: "",
             data: {
                 accion: 'registrar',
                 nombre_banco: $("#nombre_banco").val(),
@@ -31,7 +31,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "Controlador/conciliacion.php",
+            url: "",
             data: {
                 accion: 'obtener_cuenta',
                 id_cuenta: id_cuenta
@@ -56,7 +56,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: "Controlador/conciliacion.php",
+            url: "",
             data: {
                 accion: 'modificar',
                 id_cuenta: $("#id_cuenta_modificar").val(),
@@ -82,7 +82,7 @@ $(document).ready(function () {
         if (confirm("¿Estás seguro de que deseas eliminar esta cuenta?")) {
             $.ajax({
                 type: "POST",
-                url: "Controlador/conciliacion.php",
+                url: "",
                 data: {
                     accion: 'eliminar',
                     id_cuenta: id_cuenta
@@ -103,7 +103,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "Controlador/conciliacion.php",
+            url: "",
             data: {
                 accion: 'cambiar_estado',
                 id_cuenta: id_cuenta
@@ -122,7 +122,7 @@ $(document).ready(function () {
 function cargarCuentas() {
     $.ajax({
         type: "POST",
-        url: "Controlador/conciliacion.php",
+        url: "",
         data: { accion: 'consultar_cuentas' },
         success: function(response) {
             var datos = JSON.parse(response);
