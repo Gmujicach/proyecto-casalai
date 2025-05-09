@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Modelo/config.php';
+require_once 'config.php';
 
 
 

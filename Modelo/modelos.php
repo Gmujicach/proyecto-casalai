@@ -1,5 +1,5 @@
 <?php
-require_once 'Modelo/config.php';
+require_once 'config.php';
 
 class modelo extends BD{
     private $id_marca;

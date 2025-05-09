@@ -1,5 +1,5 @@
 <?php
-require_once 'Modelo/config.php';
+require_once 'config.php';
 
 class marca extends BD {
     private $tablemarcas = 'marca';

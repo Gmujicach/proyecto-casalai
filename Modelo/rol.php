@@ -1,5 +1,5 @@
 <?php
-require_once 'Conexion.php';
+require_once 'config.php';
 
 class rol extends BD {
     private $id_rol;

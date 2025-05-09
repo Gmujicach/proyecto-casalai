@@ -1,7 +1,7 @@
 <?php
-require_once 'Conexion.php';
+require_once 'config.php';
 
-class Carrito {
+class Carrito extends BD{
     private $conex;
 
     public function __construct() {

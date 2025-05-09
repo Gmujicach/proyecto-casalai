@@ -1,7 +1,7 @@
 <?php
-require_once 'Conexion.php';
+require_once 'config.php';
 
-class Factura extends Conexion
+class Factura extends BD
 {
     private $id;
     private $fecha;

@@ -1,5 +1,5 @@
 <?php
-require_once 'modelo/config.php';
+require_once 'config.php';
 
 class Usuarios extends BD {
     

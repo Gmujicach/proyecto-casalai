@@ -1,7 +1,7 @@
 <?php
-require_once 'Conexion.php';
+require_once 'config.php';
 
-class Catalogo extends Conexion {
+class Catalogo extends BD {
     private $tablaCombo = 'tbl_combo';
     private $conex;
     private $cantidad;

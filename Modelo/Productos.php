@@ -1,7 +1,7 @@
 <?php
-require_once 'Conexion.php';
+require_once 'config.php';
 
-class Productos {
+class Productos extends BD{
     private $conex;
     private $id_centro;
     private $nombre_producto;
