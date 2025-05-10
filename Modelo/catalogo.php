@@ -40,9 +40,9 @@ class Catalogo extends BD {
 
     public function obtenerProductos() {
         $sql = "SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, c.nombre_caracteristicas AS categoria, p.stock, p.precio
-                FROM productos p
-                INNER JOIN modelo m ON p.id_modelo = m.id_modelo
-                INNER JOIN categoria c ON p.id_categoria = c.id_categoria
+                FROM tbl_productos p
+                INNER JOIN tbl_modelos m ON p.id_modelo = m.id_modelo
+                INNER JOIN tbl_categoria c ON p.id_categoria = c.id_categoria
                 WHERE p.estado = 1";
         $stmt = $this->conex->prepare($sql);
         $stmt->execute();
@@ -63,7 +63,7 @@ class Catalogo extends BD {
         $sql = "SELECT c.id_combo, GROUP_CONCAT(p.nombre_producto SEPARATOR ', ') AS productos,
                 SUM(p.precio * c.cantidad) AS precio_total
                 FROM tbl_combo c
-                INNER JOIN productos p ON c.id_producto = p.id_producto
+                INNER JOIN tbl_productos p ON c.id_producto = p.id_producto
                 GROUP BY c.id_combo
                 ORDER BY c.id_combo DESC";
         $stmt = $this->conex->prepare($sql);

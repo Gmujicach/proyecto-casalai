@@ -37,7 +37,7 @@ class Carrito extends BD{
     public function obtenerProductosDelCarrito($id_carrito) {
         $sql = "SELECT cd.id_carrito_detalle, p.nombre_producto AS nombre, cd.cantidad, p.precio, (cd.cantidad * p.precio) AS subtotal
                 FROM tbl_carritodetalle cd
-                INNER JOIN productos p ON cd.id_producto = p.id_producto
+                INNER JOIN tbl_productos p ON cd.id_producto = p.id_producto
                 WHERE cd.id_carrito = :id_carrito";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_carrito', $id_carrito);

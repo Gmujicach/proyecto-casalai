@@ -61,13 +61,13 @@ class Factura extends BD
             $pdo->beginTransaction();
 
             // Insertar en tabla factura
-            $stmt = $pdo->prepare("INSERT INTO facturas (fecha, cliente, descuento, estatus) VALUES (?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO tbl_facturas (fecha, cliente, descuento, estatus) VALUES (?, ?, ?, ?)");
             $stmt->execute([$this->fecha, $this->cliente, $this->descuento, $this->estatus]);
 
             $factura_id = $pdo->lastInsertId();
 
             // Insertar en factura_detalle
-            $stmt2 = $pdo->prepare("INSERT INTO factura_detalle (factura_id, id_producto, cantidad) VALUES (?, ?, ?)");
+            $stmt2 = $pdo->prepare("INSERT INTO tbl_factura_detalle (factura_id, id_producto, cantidad) VALUES (?, ?, ?)");
             $stmt2->execute([$factura_id, $this->id_producto, $this->cantidad]);
 
             $pdo->commit();
@@ -85,14 +85,14 @@ class Factura extends BD
     
         // Obtener detalles de la factura
         $sqlDetalles = "SELECT f.id_factura, f.fecha, c.nombre, c.cedula, c.telefono, c.direccion,
-       p.nombre_producto AS producto, m.nombre_modelo, mar.nombre_marca,
+       p.nombre_producto AS tbl_producto, m.nombre_modelo, mar.nombre_marca,
        p.precio, df.cantidad, f.descuento, f.estatus
-FROM factura_detalle df
-JOIN facturas f ON f.id_factura = df.factura_id
+FROM tbl_factura_detalle df
+JOIN tbl_facturas f ON f.id_factura = df.factura_id
 JOIN tbl_clientes c ON c.id_clientes = f.cliente
-JOIN productos p ON df.id_producto = p.id_producto
-JOIN modelo m ON m.id_modelo = p.id_modelo
-JOIN marca mar ON mar.id_marca = m.id_marca;";
+JOIN tbl_productos p ON df.id_producto = p.id_producto
+JOIN tbl_modelos m ON m.id_modelo = p.id_modelo
+JOIN tbl_marcas mar ON mar.id_marca = m.id_marca;";
     
         $stmt = $conexion->prepare($sqlDetalles);
         $stmt->execute();
@@ -205,14 +205,14 @@ JOIN marca mar ON mar.id_marca = m.id_marca;";
     // Marcar factura como Cancelada
     public function facturaCancelar($id) {
         $pdo = $this->Conex();
-        $stmt = $pdo->prepare("UPDATE facturas SET estatus = 'Cancelada' WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE tbl_facturas SET estatus = 'Cancelada' WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
     // Marcar factura como Procesada
     public function facturaProcesar($id) {
         $pdo = $this->Conex();
-        $stmt = $pdo->prepare("UPDATE facturas SET estatus = 'Procesada' WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE tbl_facturas SET estatus = 'Procesada' WHERE id = ?");
         return $stmt->execute([$id]);
     }
 }

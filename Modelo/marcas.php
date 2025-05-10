@@ -2,7 +2,7 @@
 require_once 'config.php';
 
 class marca extends BD {
-    private $tablemarcas = 'marca';
+    private $tablemarcas = 'tbl_marcas';
     private $conex;
     private $nombre_marca;
     private $id;
@@ -30,7 +30,7 @@ class marca extends BD {
     }
 
     public function validarmarca() {
-        $sql = "SELECT COUNT(*) FROM marca WHERE nombre_marca = :nombre_marca";
+        $sql = "SELECT COUNT(*) FROM tbl_marcas WHERE nombre_marca = :nombre_marca";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre_marca', $this->nombre_marca);
         $stmt->execute();
@@ -41,7 +41,7 @@ class marca extends BD {
     }
 
     public function ingresarmarcas() {
-        $sql = "INSERT INTO marca (nombre_marca)
+        $sql = "INSERT INTO tbl_marcas (nombre_marca)
                 VALUES (:nombre_marca)";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre_marca', $this->nombre_marca);
@@ -51,7 +51,7 @@ class marca extends BD {
 
     // Obtener Producto por ID
     public function obtenermarcasPorId($id) {
-        $query = "SELECT * FROM marca WHERE id_marca = ?";
+        $query = "SELECT * FROM tbl_marcas WHERE id_marca = ?";
         $stmt = $this->conex->prepare($query);
         $stmt->execute([$id]);
         $marcas = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -60,7 +60,7 @@ class marca extends BD {
 
     // Modificar Producto
     public function modificarmarcas($id) {
-        $sql = "UPDATE marca SET nombre_marca = :nombre_marca WHERE id_marca = :id_marca";
+        $sql = "UPDATE tbl_marcas SET nombre_marca = :nombre_marca WHERE id_marca = :id_marca";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_marca', $id);
         $stmt->bindParam(':nombre_marca', $this->nombre_marca);
@@ -70,7 +70,7 @@ class marca extends BD {
 
     // Eliminar Producto
     public function eliminarmarcas($id) {
-        $sql = "DELETE FROM marca WHERE id_marca = :id";
+        $sql = "DELETE FROM tbl_marcas WHERE id_marca = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();

@@ -38,7 +38,7 @@ class modelo extends BD{
     }
 
     public function validarmodelo() {
-        $sql = "SELECT COUNT(*) FROM modelo WHERE nombre_modelo = :nombre_modelo";
+        $sql = "SELECT COUNT(*) FROM tbl_modelos WHERE nombre_modelo = :nombre_modelo";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
         $stmt->execute();
@@ -49,7 +49,7 @@ class modelo extends BD{
     }
 
     public function ingresarmodelos() {
-        $sql = "INSERT INTO modelo (nombre_modelo, id_marca)
+        $sql = "INSERT INTO tbl_modelos (nombre_modelo, id_marca)
                 VALUES (:nombre_modelo, :id_marca)";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
@@ -60,7 +60,7 @@ class modelo extends BD{
 
     // Obtener Producto por ID
     public function obtenermodelosPorId($id) {
-        $query = "SELECT * FROM modelo WHERE id_modelo = ?";
+        $query = "SELECT * FROM tbl_modelos WHERE id_modelo = ?";
         $stmt = $this->conex->prepare($query);
         $stmt->execute([$id]);
         $modelos = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -68,7 +68,7 @@ class modelo extends BD{
     }
 
     public function getmarcas() {
-        $query = "SELECT id_marca, nombre_marca FROM marca";
+        $query = "SELECT id_marca, nombre_marca FROM tbl_marcas";
         $stmt = $this->conex->query($query);
 
         if ($stmt) {
@@ -82,7 +82,7 @@ class modelo extends BD{
 
     // Modificar Producto
     public function modificarmodelos($id) {
-        $sql = "UPDATE modelo SET nombre_modelo = :nombre_modelo WHERE id_modelo = :id_modelo";
+        $sql = "UPDATE tbl_modelos SET nombre_modelo = :nombre_modelo WHERE id_modelo = :id_modelo";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_modelo', $id);
         $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
@@ -92,7 +92,7 @@ class modelo extends BD{
 
     // Eliminar Producto
     public function eliminarmodelos($id) {
-        $sql = "DELETE FROM modelo WHERE id_modelo = :id";
+        $sql = "DELETE FROM tbl_modelos WHERE id_modelo = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
@@ -106,8 +106,8 @@ class modelo extends BD{
         $querymodelos = 'SELECT mo.id_modelo,
                                 mo.nombre_modelo,
                                 ma.nombre_marca 
-                                FROM modelo AS mo
-                                INNER JOIN marca AS ma ON mo.id_marca = ma.id_marca';
+                                FROM tbl_modelos AS mo
+                                INNER JOIN tbl_marcas AS ma ON mo.id_marca = ma.id_marca';
         
         
         
