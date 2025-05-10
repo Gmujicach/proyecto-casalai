@@ -91,14 +91,14 @@ table tbody tr td input{
     cursor: pointer;
 }
 
-table tbody tr td .nombre-usuario{
+table tbody tr td .campo-nombres{
     display: block;
     color: var(--secundary);
     font-size: 16px;
     font-weight: 500;
 }
 
-table tbody tr td .correo-usuario{
+table tbody tr td .campo-correo{
     display: block;
     color: var(--tbody-text-color);
     font-size: 16px;
@@ -106,7 +106,7 @@ table tbody tr td .correo-usuario{
     margin-top: 3px;
 }
 
-table tbody tr td .rango-usuario{
+table tbody tr td .campo-rango{
     position: relative;
     display: inline-block;
     padding: 3px 15px;
@@ -117,7 +117,7 @@ table tbody tr td .rango-usuario{
 }
 
 /* Estilo base para el span */
-table tbody tr td .estatus-usuario {
+table tbody tr td .campo-estatus{
     position: relative;
     display: inline-block;
     padding: 3px 15px 3px 25px; /* Más padding a la izquierda para el círculo */
@@ -126,7 +126,7 @@ table tbody tr td .estatus-usuario {
 }
 
 /* Círculo indicador (base) */
-table tbody tr td .estatus-usuario::before {
+table tbody tr td .campo-estatus::before {
     content: '';
     width: 8px;
     height: 8px;
@@ -137,20 +137,20 @@ table tbody tr td .estatus-usuario::before {
 }
 
 /* Estilo para "habilitado" */
-table tbody tr td .estatus-usuario.habilitado {
+table tbody tr td .campo-estatus.habilitado {
     color: var(--success-accent-color);
     background: var(--success-bg-color);
 }
-table tbody tr td .estatus-usuario.habilitado::before {
+table tbody tr td .campo-estatus.habilitado::before {
     background: var(--success-accent-color);
 }
 
 /* Estilo para "deshabilitado" */
-table tbody tr td .estatus-usuario.inhabilitado {
+table tbody tr td .campo-estatus.inhabilitado {
     color: var(--danger-accent-color);
     background: var(--danger-bg-color);
 }
-table tbody tr td .estatus-usuario.inhabilitado::before {
+table tbody tr td .campo-estatus.inhabilitado::before {
     background: var(--danger-accent-color);
 }
 

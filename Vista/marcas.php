@@ -40,54 +40,116 @@ if (!isset($_SESSION['name'])) {
     </div>
 
 
-    <div class="table-container">
-    <h1 class="titulo-tabla display-5 text-center">LISTA DE MARCAS</h1>
-    <table class="tabla">
+    <div class="contenedor-tabla">
+    <h3>LISTA DE USUARIOS</h3>
+
+    <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th>Acciones</th>
-                <th>Nombre de la Marca</th>
+                <th><input type="checkbox"></th>
+                <th>Nombre Marca</th>
+                <th></th>
+                <th><i class="vertical">
+                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                    </i>
+                </th>
             </tr>
         </thead>
+
         <tbody>
-            <?php foreach ($marcas as $marcas): ?>
-                <tr>
-                    <td>
-                        <!-- Botón Modificar que abre el modal -->
-                        <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarProductoModal" data-id="<?php echo htmlspecialchars($marcas['id_marca']); ?>">
-                        Modificar
-                        </button>
-                        <br>
-                        <!-- Botón Eliminar -->
-                        <a href="#" data-id="<?php echo htmlspecialchars($marcas['id_marca']); ?>" class="btn btn-eliminar">Eliminar</a>
-                    </td>
-                    <td><?php echo htmlspecialchars($marcas['nombre_marca']); ?></td>
-                </tr>
-            <?php endforeach; ?>
+        <?php foreach ($marcas as $marcas): ?>
+            <tr>
+                <td><input type="checkbox"></td>
+                <td>
+                    <span class="nombre-usuario">
+                    <?php echo htmlspecialchars($marcas['nombre_marca']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span>
+                        <a href="#"class="">Ver Mas</a>
+                    </span>
+                </td>
+                <td>
+                    <span>
+                        <div class="acciones-boton">
+                        <i class="vertical">
+                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                        </i>
+                            <div class="desplegable">
+                                <ul>
+                                    <li><a href="#">Ver</a></li>
+                                    <li><a href="#" class="modificar" data-toggle="modal" data-target="#modificar_usuario_modal" onclick="obtenerUsuario(<?php echo $usuario['id_marca']; ?>)">Modificar</a></li>
+                                    <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $usuario['id_marca']; ?>)">Eliminar</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </span>
+                </td>
+            </tr>
+        <?php endforeach; ?>
         </tbody>
+        <tfoot>
+    <tr>
+        <td>Filas por Página: 
+            <select id="filasPorPagina" onchange="cambiarFilasPorPagina(this.value)">
+                <option value="10" <?= $filasPorPagina == 10 ? 'selected' : '' ?>>10</option>
+                <option value="20" <?= $filasPorPagina == 20 ? 'selected' : '' ?>>20</option>
+                <option value="50" <?= $filasPorPagina == 50 ? 'selected' : '' ?>>50</option>
+                <option value="100" <?= $filasPorPagina == 100 ? 'selected' : '' ?>>100</option>
+            </select>
+        </td>
+        <td><?= "$inicio-$fin de $totalMarcas" ?></td>
+        <td>
+            <a href="?pagina=<?= max(1, $paginaActual - 1) ?>&filas=<?= $filasPorPagina ?>">
+                <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
+            </a>
+        </td>
+        <td>
+            <a href="?pagina=<?= min(ceil($totalMarcas / $filasPorPagina), $paginaActual + 1) ?>&filas=<?= $filasPorPagina ?>">
+                <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
+            </a>
+        </td>
+    </tr>
+</tfoot>
     </table>
 
-    
+
+
 
 <!-- Modal de modificación -->
-<div class="modal fade" id="modificar_marcas_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_marcas_modal_label" aria-hidden="true">
+    <div class="modal fade" id="modificar_usuario_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="modificarmarcas" method="POST" enctype="multipart/form-data">
+            <form id="modificarusuario" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_marcas_modal_label">Modificar Marcas</h5>
+                    <h5 class="modal-title" id="modificar_usuario_modal_label">Modificar Usuario</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
                 <div class="modal-body">
                     <!-- Campos del formulario de modificación -->
-                    <input type="hidden" id="modificar_id_marcas" name="id_marca">
+                    <input type="hidden" id="modificar_id_usuario" name="id_usuario">
                     <div class="form-group">
-                        <label for="modificarnombre_marca">Nombre de la Marca</label>
-                        <input type="text" class="form-control" id="modificarnombre_marca" name="nombre_marca" required>
-                        <span id="smodificarnombre_marca"></span>
+                        <label for="modificarnombre_usuario">Nombre del Usuario</label>
+                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="15" required>
+                        <span id="smodificarnombre_usuario"></span>
                     </div>
+                    <div class="form-group">
+                        <label for="modificarclave_usuario">Contraseña del Usuario</label>
+                        <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario" required>
+                        <span id="smodificarclave_usuario"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                                    <label for="rango">Categorias</label>
+                                    <select class="custom-select" id="rango" name="rango">
+                                    <option value="USUARIO">Usuario</option>
+                                                        <option value="admin">Administrador</option>
+                                                        <option value="almacen">Almacen</option>    
+                                    </select>
+                                </div>
                     
                     </div>
                     <div class="modal-footer">
@@ -99,23 +161,16 @@ if (!isset($_SESSION['name'])) {
             </form>
         </div>
     </div>
-    <div class="containera"> <!-- todo el contenido ira dentro de esta etiqueta-->
-
-<form method="post" action="" id="f" target="_blank">
-<div class="containera">
-    <div class="row">
-        <div class="col">
-               <button type="button" class="btn btn-primary" id="pdfmarcas" name="pdfmarcas"><a href="?pagina=pdfmarcas">GENERAR REPORTE</button>
-        </div>
-        
-    </div>
-</div>
-</form>
-    
-</div> <!-- fin de container -->
 </div>
 
-
+<script>
+function cambiarFilasPorPagina(filas) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('filas', filas);
+    url.searchParams.set('pagina', 1); // Resetear a primera página
+    window.location.href = url.toString();
+}
+</script>
 <script src="public/bootstrap/js/sidebar.js"></script>
   <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="public/js/jquery-3.7.1.min.js"></script>
