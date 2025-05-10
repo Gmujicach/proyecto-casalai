@@ -17,10 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
--- Creación de la base de datos: `seguridad`
+-- Creación de la base de datos: `seguridad_cl`
 
-CREATE DATABASE IF NOT EXISTS `seguridad` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `seguridad`;
+CREATE DATABASE IF NOT EXISTS `seguridad_cl` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `seguridad_cl`;
 
 -- --------------------------------------------------------
 
