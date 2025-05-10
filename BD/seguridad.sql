@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `modulos`
+-- Estructura de tabla para la tabla `tbl_modulos`
 --
 
 CREATE TABLE `tbl_modulos` (
@@ -128,9 +128,9 @@ INSERT INTO `tbl_usuarios` (`id_usuario`, `username`, `password`, `rango`, `corr
 --
 
 --
--- Indices de la tabla `modulos`
+-- Indices de la tabla `tbl_modulos`
 --
-ALTER TABLE `modulos`
+ALTER TABLE `tbl_modulos`
   ADD PRIMARY KEY (`id_modulo`);
 
 --
@@ -178,9 +178,9 @@ ALTER TABLE `tbl_usuarios`
 --
 
 --
--- AUTO_INCREMENT de la tabla `modulos`
+-- AUTO_INCREMENT de la tabla `tbl_modulos`
 --
-ALTER TABLE `modulos`
+ALTER TABLE `tbl_modulos`
   MODIFY `id_modulo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -216,14 +216,14 @@ ALTER TABLE `tbl_alertas`
 --
 ALTER TABLE `tbl_bitacora`
   ADD CONSTRAINT `tbl_bitacora_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_bitacora_ibfk_2` FOREIGN KEY (`id_modulo`) REFERENCES `modulos` (`id_modulo`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_bitacora_ibfk_2` FOREIGN KEY (`id_modulo`) REFERENCES `tbl_modulos` (`id_modulo`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_permisos`
 --
 ALTER TABLE `tbl_permisos`
   ADD CONSTRAINT `tbl_permisos_ibfk_1` FOREIGN KEY (`id_rango`) REFERENCES `tbl_rango` (`id_rango`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_permisos_ibfk_2` FOREIGN KEY (`id_modulo`) REFERENCES `modulos` (`id_modulo`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_permisos_ibfk_2` FOREIGN KEY (`id_modulo`) REFERENCES `tbl_modulos` (`id_modulo`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_recuperar`
