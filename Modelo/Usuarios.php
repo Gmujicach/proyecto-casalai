@@ -102,6 +102,18 @@ class Usuarios extends BD {
         $this->telefono = $telefono;
     }
     
+    private function verificarCampoEstatus() {
+        $sql = "SHOW COLUMNS FROM tbl_usuarios LIKE 'estatus'";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute();
+        
+        if ($stmt->rowCount() == 0) {
+            $alterSql = "ALTER TABLE tbl_usuarios 
+                         ADD estatus ENUM('habilitado','deshabilitado') NOT NULL DEFAULT 'habilitado'";
+            $this->conex->exec($alterSql);
+        }
+    }
+
 
      // Método para guardar el proveedor
 
@@ -174,6 +186,9 @@ class Usuarios extends BD {
         }
     }
 
+    
+
+
     public function getusuarios() {
         // Punto de depuración: Iniciando getmarcas
         //echo "Iniciando getmarcas.<br>";
@@ -189,26 +204,5 @@ class Usuarios extends BD {
         $usuarios = $stmtusuarios->fetchAll(PDO::FETCH_ASSOC);
 
         return $usuarios;
-    }
-
-    public function getUsuariosPaginados($pagina = 1, $filasPorPagina = 10) {
-        $inicio = ($pagina - 1) * $filasPorPagina;
-        
-        // Consulta para los datos paginados
-        $sql = "SELECT * FROM tbl_usuarios ORDER BY id_usuario ASC LIMIT :inicio, :filasPorPagina";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindValue(':inicio', $inicio, PDO::PARAM_INT);
-        $stmt->bindValue(':filasPorPagina', $filasPorPagina, PDO::PARAM_INT);
-        $stmt->execute();
-        $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        // Consulta para el total de registros
-        $sqlTotal = "SELECT COUNT(*) as total FROM tbl_usuarios";
-        $total = $this->conex->query($sqlTotal)->fetch(PDO::PARAM_INT);
-        
-        return [
-            'usuarios' => $usuarios,
-            'total' => $total['total']
-        ];
     }
 }

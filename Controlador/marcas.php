@@ -2,6 +2,7 @@
 ob_start();
 
 require_once 'Modelo/marcas.php';
+require_once 'Modelo/Paginador.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -75,7 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 
-
 function getmarcas() {
     $marca = new marca();
     return $marca->getmarcas();
@@ -83,6 +83,34 @@ function getmarcas() {
 
 $pagina = "Marcas";
 if (is_file("Vista/" . $pagina . ".php")) {
+
+    $paginaActual = $_GET['pagina'] ?? 1;
+    $filasPorPagina = $_GET['filas'] ?? 10;
+    
+    // Crear instancia del paginador
+    $paginador = new Paginador(); // Asegúrate de tener $this->conex disponible
+    
+    // Obtener datos paginados
+    $resultados = $paginador->paginar(
+        'marca', // Cambia por 'tbl_marcas' si es necesario
+        $paginaActual,
+        $filasPorPagina
+    );
+    
+    // Calcular valores para la vista
+    $inicio = ($paginaActual - 1) * $filasPorPagina + 1;
+    $fin = min($paginaActual * $filasPorPagina, $resultados['total']);
+    $totalMarcas = $resultados['total'];
+    
+    // Pasar a la vista
+    $datosVista = [
+        'marcas' => $resultados['datos'], // Cambia por 'marcas' si es necesario
+        'inicio' => $inicio,
+        'fin' => $fin,
+        'totalUsuarios' => $totalMarcas, // Cambia por 'totalMarcas' si es necesario
+        'paginaActual' => $paginaActual,
+        'filasPorPagina' => $filasPorPagina
+    ];
 
     $marcas = getmarcas();
     require_once("Vista/" . $pagina . ".php");

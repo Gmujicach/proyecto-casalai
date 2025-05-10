@@ -91,26 +91,26 @@ if (!isset($_SESSION['name'])) {
             <tr>
                 <td><input type="checkbox"></td>
                 <td>
-                    <span class="nombre-usuario">
+                    <span class="campo-nombres">
                     <?php echo htmlspecialchars($usuario['nombres']); ?> <?php echo htmlspecialchars($usuario['apellidos']); ?>
                     </span>
-                    <span class="correo-usuario">
+                    <span class="campo-correo">
                     <?php echo htmlspecialchars($usuario['correo']); ?>
                     </span>
                 </td>
                 
                 <td>
-                    <span class="telefono-usuario">
+                    <span class="campo-telefono">
                     <?php echo htmlspecialchars($usuario['telefono']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="rango-usuario">
+                    <span class="campo-rango">
                     <?php echo htmlspecialchars($usuario['rango']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="estatus-usuario <?php echo ($usuario['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+                    <span class="campo-estatus <?php echo ($usuario['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
                         onclick="cambiarEstatus(<?php echo $usuario['id_usuario']; ?>, '<?php echo $usuario['estatus']; ?>')"
                         style="cursor: pointer;">
                         <?php echo htmlspecialchars($usuario['estatus']); ?>
@@ -146,7 +146,7 @@ if (!isset($_SESSION['name'])) {
             </tr>
         <?php endforeach; ?>
         </tbody>
-        <tfoot>
+        <!-- <tfoot>
             <tr>
                 <td>Filas por Página: 
                     <select id="filasPorPagina" onchange="cambiarFilasPorPagina(this.value)">
@@ -156,25 +156,17 @@ if (!isset($_SESSION['name'])) {
                         <option value="100">100</option>
                     </select>
                 </td>
-                <td><?php echo "$inicio-$fin de $totalUsuarios"; ?></td>
+                <td><?php //echo "$inicio-$fin de $totalUsuarios"; ?></td>
                 <td>
-                    <a href="?pagina=<?php echo max(1, $paginaActual - 1); ?>">
+                    <a href="?pagina=<?php //echo max(1, $paginaActual - 1); ?>">
                         <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
                     </a>
                 </td>
                 <td>
-                    <a href="?pagina=<?php echo min(ceil($totalUsuarios / $filasPorPagina), $paginaActual + 1); ?>">
+                    <a href="?pagina<?php //echo min(ceil($totalUsuarios / $filasPorPagina), $paginaActual + 1); ?>">
                         <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
                     </a>
                 </td>
-            </tr>
-        </tfoot>
-        <!-- <tfoot>
-            <tr>
-                <td>Filas por Pagina: 10 <span><a href=""><i class="flecha"><img src="IMG/flecha.svg" alt="icono" width="16" height="16"></i></a></span></td>
-                <td>1-10 de 24</td>
-                <td><a href=""><i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="" width="16" height="16"></i></a></td>
-                <td><a href=""><i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="" width="16" height="16"></i></a></td>
             </tr>
         </tfoot> -->
     </table>
