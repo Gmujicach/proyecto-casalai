@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-04-2025 a las 00:15:32
+-- Tiempo de generación: 10-05-2025 a las 04:03:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -71,6 +71,14 @@ CREATE TABLE `facturas` (
   `estatus` varchar(20) NOT NULL DEFAULT 'Borrador'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `facturas`
+--
+
+INSERT INTO `facturas` (`id_factura`, `fecha`, `cliente`, `descuento`, `estatus`) VALUES
+(0, '2024-07-18', 1, 1, 'Borrador'),
+(1, '2024-07-18', 1, 1, 'Borrador');
+
 -- --------------------------------------------------------
 
 --
@@ -83,6 +91,15 @@ CREATE TABLE `factura_detalle` (
   `id_producto` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `factura_detalle`
+--
+
+INSERT INTO `factura_detalle` (`id`, `factura_id`, `id_producto`, `cantidad`) VALUES
+(1, 1, 3, 1),
+(2, 0, 3, 10),
+(3, 0, 3, 10);
 
 -- --------------------------------------------------------
 
@@ -105,19 +122,6 @@ CREATE TABLE `impresoras` (
 
 INSERT INTO `impresoras` (`id_impresora`, `id_producto`, `peso`, `alto`, `ancho`, `largo`) VALUES
 (4, 3, 20.00, 20.00, 20.00, 20.00);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ingresos_egresos`
---
-
-CREATE TABLE `ingresos_egresos` (
-  `id` int(11) NOT NULL,
-  `transaccion` int(11) NOT NULL,
-  `fecha` date NOT NULL,
-  `descripcion` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -150,6 +154,7 @@ INSERT INTO `marca` (`id_marca`, `nombre_marca`) VALUES
 (13, 'CDP'),
 (14, 'Koblenz'),
 (15, 'Epson'),
+(16, 'HP'),
 (17, 'Canon'),
 (18, 'Inktec'),
 (19, 'TexPrint'),
@@ -160,7 +165,9 @@ INSERT INTO `marca` (`id_marca`, `nombre_marca`) VALUES
 (24, 'Brother'),
 (25, 'Forza'),
 (26, 'Tripp Lite'),
-(27, 'CDP');
+(27, 'CDP'),
+(28, 'Koblenz'),
+(29, 'Pokemon');
 
 -- --------------------------------------------------------
 
@@ -257,7 +264,7 @@ INSERT INTO `modelo` (`id_modelo`, `nombre_modelo`, `id_marca`) VALUES
 (76, '1000VA', 13),
 (77, 'AVR-1000', 14),
 (78, '520 Joules', 14),
-(79, 'R2284', 13);
+(79, 'Ejemplo', 7);
 
 -- --------------------------------------------------------
 
@@ -287,16 +294,18 @@ CREATE TABLE `productos` (
   `stock` int(3) DEFAULT NULL,
   `stock_minimo` int(3) DEFAULT NULL,
   `stock_maximo` int(3) DEFAULT NULL,
+  `clausula_garantia` varchar(150) NOT NULL,
   `precio` float(10,2) DEFAULT NULL,
-  `estado` binary(1) DEFAULT NULL
+  `estado` int(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `precio`, `estado`) VALUES
-(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 10, 5, 20, 200.00, 0x01);
+INSERT INTO `productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`) VALUES
+(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 10, 5, 20, 'Devolución dentro de un plazo de 30 días', 200.00, 1),
+(10, '1231', 'Colormedia', 'Tinta Profesional', 8, 3, 0, 1000, 10000, 'Sin devoluciones', 10.00, 0);
 
 -- --------------------------------------------------------
 
@@ -362,6 +371,14 @@ CREATE TABLE `tbl_clientes` (
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_clientes`
+--
+
+INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `telefono`, `correo`, `activo`) VALUES
+(0, 'Simon Freitezww', '30335416', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1),
+(1, 'Simon Freitez', '30335417', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -386,8 +403,17 @@ CREATE TABLE `tbl_cuentas` (
   `numero_cuenta` varchar(200) DEFAULT NULL,
   `rif_cuenta` varchar(20) NOT NULL,
   `telefono_cuenta` varchar(11) DEFAULT NULL,
-  `correo_cuenta` varchar(100) DEFAULT NULL
+  `correo_cuenta` varchar(100) DEFAULT NULL,
+  `estado` enum('Habilitado','Inhabilitado') NOT NULL DEFAULT 'Habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_cuentas`
+--
+
+INSERT INTO `tbl_cuentas` (`id_cuenta`, `nombre_banco`, `numero_cuenta`, `rif_cuenta`, `telefono_cuenta`, `correo_cuenta`, `estado`) VALUES
+(0, 'BNC', '1247862444444435555', '143123423442', '24141243241', 'EJEMPLO@GMAIL.COM', 'Habilitado'),
+(1, 'BNC', '1247862444444435555', '143123423442', '24141243241', 'EJEMPLO@GMAIL.COM', 'Habilitado');
 
 -- --------------------------------------------------------
 
@@ -436,6 +462,20 @@ CREATE TABLE `tbl_detalle_recepcion_productos` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tbl_ingresos_egresos`
+--
+
+CREATE TABLE `tbl_ingresos_egresos` (
+  `id_finanzas` int(11) NOT NULL,
+  `id_despacho` int(11) NOT NULL,
+  `id_recepcion` int(11) NOT NULL,
+  `monto` float(6,2) NOT NULL,
+  `estado` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tbl_proveedores`
 --
 
@@ -457,7 +497,7 @@ CREATE TABLE `tbl_proveedores` (
 --
 
 INSERT INTO `tbl_proveedores` (`id_proveedor`, `nombre`, `presona_contacto`, `telefono`, `correo`, `direccion`, `rif_representante`, `rif_proveedor`, `telefono_secundario`, `observaciones`) VALUES
-(0, 'Proveedor Test', 'Carlos', '04241587101', 'ejemplo@gmail.com', 'calle 4', '65955584', '284562871', '226455069', 'asdasda');
+(1, 'Servicios Técnicos', 'Brayan Medina', '04145555555', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo');
 
 -- --------------------------------------------------------
 
@@ -493,6 +533,7 @@ CREATE TABLE `tbl_usuarios` (
 --
 
 INSERT INTO `tbl_usuarios` (`id_usuario`, `username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`) VALUES
+(0, 'Diego', '0510', 'almacen', NULL, NULL, NULL, NULL),
 (1, 'Admin', '12345', 'Administrador', 'ejemplo@gmail.com', 'Administrador', 'Administrador', '04145753363'),
 (2, 'Despachador', '12345', 'Despachador', 'ejemplo@gmail.com', 'Despachador', 'Despachador', '04145753363'),
 (3, 'Cliente', '12345', 'Cliente', 'ejemplo@gmail.com', 'Cliente', 'Cliente', '04145753363');
@@ -552,13 +593,6 @@ ALTER TABLE `impresoras`
   ADD KEY `id_producto` (`id_producto`);
 
 --
--- Indices de la tabla `ingresos_egresos`
---
-ALTER TABLE `ingresos_egresos`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `transaccion` (`transaccion`);
-
---
 -- Indices de la tabla `marca`
 --
 ALTER TABLE `marca`
@@ -583,7 +617,6 @@ ALTER TABLE `otros`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id_producto`),
-  ADD UNIQUE KEY `serial` (`serial`),
   ADD KEY `fk_producto_categoria` (`id_categoria`),
   ADD KEY `fk_producto_modelo` (`id_modelo`);
 
@@ -653,6 +686,14 @@ ALTER TABLE `tbl_detalle_recepcion_productos`
   ADD KEY `fk_detalle_producto` (`id_producto`);
 
 --
+-- Indices de la tabla `tbl_ingresos_egresos`
+--
+ALTER TABLE `tbl_ingresos_egresos`
+  ADD PRIMARY KEY (`id_finanzas`),
+  ADD KEY `id_despacho` (`id_despacho`,`id_recepcion`),
+  ADD KEY `id_recepcion` (`id_recepcion`);
+
+--
 -- Indices de la tabla `tbl_proveedores`
 --
 ALTER TABLE `tbl_proveedores`
@@ -707,12 +748,6 @@ ALTER TABLE `impresoras`
   MODIFY `id_impresora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `ingresos_egresos`
---
-ALTER TABLE `ingresos_egresos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `marca`
 --
 ALTER TABLE `marca`
@@ -734,7 +769,7 @@ ALTER TABLE `otros`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `protector_voltaje`
@@ -753,6 +788,12 @@ ALTER TABLE `tbl_carrito`
 --
 ALTER TABLE `tbl_carritodetalle`
   MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_ingresos_egresos`
+--
+ALTER TABLE `tbl_ingresos_egresos`
+  MODIFY `id_finanzas` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tintas`
@@ -788,12 +829,6 @@ ALTER TABLE `factura_detalle`
 --
 ALTER TABLE `impresoras`
   ADD CONSTRAINT `impresoras_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`);
-
---
--- Filtros para la tabla `ingresos_egresos`
---
-ALTER TABLE `ingresos_egresos`
-  ADD CONSTRAINT `ingresos_egresos_ibfk_1` FOREIGN KEY (`transaccion`) REFERENCES `tbl_despachos` (`id_despachos`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `modelo`
@@ -856,6 +891,13 @@ ALTER TABLE `tbl_detalle_recepcion_productos`
   ADD CONSTRAINT `fk_detalle_producto` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`),
   ADD CONSTRAINT `fk_detalle_recepcion` FOREIGN KEY (`id_recepcion`) REFERENCES `tbl_recepcion_productos` (`id_recepcion`),
   ADD CONSTRAINT `tbl_detalles_recepcion_productos` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `tbl_ingresos_egresos`
+--
+ALTER TABLE `tbl_ingresos_egresos`
+  ADD CONSTRAINT `tbl_ingresos_egresos_ibfk_1` FOREIGN KEY (`id_despacho`) REFERENCES `tbl_despachos` (`id_despachos`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_ingresos_egresos_ibfk_2` FOREIGN KEY (`id_recepcion`) REFERENCES `tbl_recepcion_productos` (`id_recepcion`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_recepcion_productos`
