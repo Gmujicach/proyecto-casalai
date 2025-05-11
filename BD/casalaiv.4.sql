@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-04-2025 a las 00:15:32
+-- Tiempo de generación: 10-05-2025 a las 04:03:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -17,17 +17,18 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Base de datos: `casalai`
---
+-- Creación de la base de datos: `casalai`
+
+CREATE DATABASE IF NOT EXISTS `casalai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `casalai`;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cartucho_tinta`
+-- Estructura de tabla para la tabla `tbl_cartucho_tinta`
 --
 
-CREATE TABLE `cartucho_tinta` (
+CREATE TABLE `tbl_cartucho_tinta` (
   `id_cartucho` int(11) NOT NULL,
   `id_producto` int(11) DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
@@ -38,32 +39,32 @@ CREATE TABLE `cartucho_tinta` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `categoria`
+-- Estructura de tabla para la tabla `tbl_categoria`
 --
 
-CREATE TABLE `categoria` (
+CREATE TABLE `tbl_categoria` (
   `id_categoria` int(2) NOT NULL,
   `nombre_caracteristicas` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `categoria`
+-- Volcado de datos para la tabla `tbl_categoria`
 --
 
-INSERT INTO `categoria` (`id_categoria`, `nombre_caracteristicas`) VALUES
+INSERT INTO `tbl_categoria` (`id_categoria`, `nombre_caracteristicas`) VALUES
 (1, 'Impresora'),
 (2, 'Protector de Voltaje'),
 (3, 'Tinta'),
 (4, 'Cartucho'),
-(5, 'Otros');
+(5, 'tbl_otros');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `facturas`
+-- Estructura de tabla para la tabla `tbl_facturas`
 --
 
-CREATE TABLE `facturas` (
+CREATE TABLE `tbl_facturas` (
   `id_factura` int(11) NOT NULL,
   `fecha` date NOT NULL,
   `cliente` int(11) NOT NULL,
@@ -71,26 +72,43 @@ CREATE TABLE `facturas` (
   `estatus` varchar(20) NOT NULL DEFAULT 'Borrador'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_facturas`
+--
+
+INSERT INTO `tbl_facturas` (`id_factura`, `fecha`, `cliente`, `descuento`, `estatus`) VALUES
+(0, '2024-07-18', 1, 1, 'Borrador'),
+(1, '2024-07-18', 1, 1, 'Borrador');
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `factura_detalle`
+-- Estructura de tabla para la tabla `tbl_factura_detalle`
 --
 
-CREATE TABLE `factura_detalle` (
+CREATE TABLE `tbl_factura_detalle` (
   `id` int(11) NOT NULL,
   `factura_id` int(11) NOT NULL,
   `id_producto` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_factura_detalle`
+--
+
+INSERT INTO `tbl_factura_detalle` (`id`, `factura_id`, `id_producto`, `cantidad`) VALUES
+(1, 1, 3, 1),
+(2, 0, 3, 10),
+(3, 0, 3, 10);
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `impresoras`
+-- Estructura de tabla para la tabla `tbl_impresoras`
 --
 
-CREATE TABLE `impresoras` (
+CREATE TABLE `tbl_impresoras` (
   `id_impresora` int(11) NOT NULL,
   `id_producto` int(11) DEFAULT NULL,
   `peso` decimal(10,2) DEFAULT NULL,
@@ -100,41 +118,28 @@ CREATE TABLE `impresoras` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `impresoras`
+-- Volcado de datos para la tabla `tbl_impresoras`
 --
 
-INSERT INTO `impresoras` (`id_impresora`, `id_producto`, `peso`, `alto`, `ancho`, `largo`) VALUES
+INSERT INTO `tbl_impresoras` (`id_impresora`, `id_producto`, `peso`, `alto`, `ancho`, `largo`) VALUES
 (4, 3, 20.00, 20.00, 20.00, 20.00);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ingresos_egresos`
+-- Estructura de tabla para la tabla `tbl_marcas`
 --
 
-CREATE TABLE `ingresos_egresos` (
-  `id` int(11) NOT NULL,
-  `transaccion` int(11) NOT NULL,
-  `fecha` date NOT NULL,
-  `descripcion` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `marca`
---
-
-CREATE TABLE `marca` (
+CREATE TABLE `tbl_marcas` (
   `id_marca` int(11) NOT NULL,
   `nombre_marca` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `marca`
+-- Volcado de datos para la tabla `tbl_marcas`
 --
 
-INSERT INTO `marca` (`id_marca`, `nombre_marca`) VALUES
+INSERT INTO `tbl_marcas` (`id_marca`, `nombre_marca`) VALUES
 (1, 'Epson'),
 (2, 'HP'),
 (3, 'Canon'),
@@ -150,6 +155,7 @@ INSERT INTO `marca` (`id_marca`, `nombre_marca`) VALUES
 (13, 'CDP'),
 (14, 'Koblenz'),
 (15, 'Epson'),
+(16, 'HP'),
 (17, 'Canon'),
 (18, 'Inktec'),
 (19, 'TexPrint'),
@@ -160,25 +166,27 @@ INSERT INTO `marca` (`id_marca`, `nombre_marca`) VALUES
 (24, 'Brother'),
 (25, 'Forza'),
 (26, 'Tripp Lite'),
-(27, 'CDP');
+(27, 'CDP'),
+(28, 'Koblenz'),
+(29, 'Pokemon');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `modelo`
+-- Estructura de tabla para la tabla `tbl_modelos`
 --
 
-CREATE TABLE `modelo` (
+CREATE TABLE `tbl_modelos` (
   `id_modelo` int(11) NOT NULL,
   `nombre_modelo` varchar(255) NOT NULL,
   `id_marca` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `modelo`
+-- Volcado de datos para la tabla `tbl_modelos`
 --
 
-INSERT INTO `modelo` (`id_modelo`, `nombre_modelo`, `id_marca`) VALUES
+INSERT INTO `tbl_modelos` (`id_modelo`, `nombre_modelo`, `id_marca`) VALUES
 (1, 'L3250', 1),
 (2, 'L3210', 1),
 (3, 'L805', 1),
@@ -257,15 +265,15 @@ INSERT INTO `modelo` (`id_modelo`, `nombre_modelo`, `id_marca`) VALUES
 (76, '1000VA', 13),
 (77, 'AVR-1000', 14),
 (78, '520 Joules', 14),
-(79, 'R2284', 13);
+(79, 'Ejemplo', 7);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `otros`
+-- Estructura de tabla para la tabla `tbl_otros`
 --
 
-CREATE TABLE `otros` (
+CREATE TABLE `tbl_otros` (
   `id_otros` int(11) NOT NULL,
   `id_producto` int(11) DEFAULT NULL,
   `descripcion` varchar(255) DEFAULT NULL
@@ -274,10 +282,10 @@ CREATE TABLE `otros` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productos`
+-- Estructura de tabla para la tabla `tbl_productos`
 --
 
-CREATE TABLE `productos` (
+CREATE TABLE `tbl_productos` (
   `id_producto` int(11) NOT NULL,
   `serial` varchar(20) NOT NULL,
   `nombre_producto` varchar(20) NOT NULL,
@@ -287,24 +295,26 @@ CREATE TABLE `productos` (
   `stock` int(3) DEFAULT NULL,
   `stock_minimo` int(3) DEFAULT NULL,
   `stock_maximo` int(3) DEFAULT NULL,
+  `clausula_garantia` varchar(150) NOT NULL,
   `precio` float(10,2) DEFAULT NULL,
-  `estado` binary(1) DEFAULT NULL
+  `estado` int(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `productos`
+-- Volcado de datos para la tabla `tbl_productos`
 --
 
-INSERT INTO `productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `precio`, `estado`) VALUES
-(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 10, 5, 20, 200.00, 0x01);
+INSERT INTO `tbl_productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`) VALUES
+(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 10, 5, 20, 'Devolución dentro de un plazo de 30 días', 200.00, 1),
+(10, '1231', 'Colormedia', 'Tinta Profesional', 8, 3, 0, 1000, 10000, 'Sin devoluciones', 10.00, 0);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `protector_voltaje`
+-- Estructura de tabla para la tabla `tbl_protector_voltaje`
 --
 
-CREATE TABLE `protector_voltaje` (
+CREATE TABLE `tbl_protector_voltaje` (
   `id_protector` int(11) NOT NULL,
   `id_producto` int(11) DEFAULT NULL,
   `voltaje_entrada` varchar(50) DEFAULT NULL,
@@ -362,6 +372,14 @@ CREATE TABLE `tbl_clientes` (
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_clientes`
+--
+
+INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `telefono`, `correo`, `activo`) VALUES
+(0, 'Simon Freitezww', '30335416', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1),
+(1, 'Simon Freitez', '30335417', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -386,8 +404,17 @@ CREATE TABLE `tbl_cuentas` (
   `numero_cuenta` varchar(200) DEFAULT NULL,
   `rif_cuenta` varchar(20) NOT NULL,
   `telefono_cuenta` varchar(11) DEFAULT NULL,
-  `correo_cuenta` varchar(100) DEFAULT NULL
+  `correo_cuenta` varchar(100) DEFAULT NULL,
+  `estado` enum('Habilitado','Inhabilitado') NOT NULL DEFAULT 'Habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_cuentas`
+--
+
+INSERT INTO `tbl_cuentas` (`id_cuenta`, `nombre_banco`, `numero_cuenta`, `rif_cuenta`, `telefono_cuenta`, `correo_cuenta`, `estado`) VALUES
+(0, 'BNC', '1247862444444435555', '143123423442', '24141243241', 'EJEMPLO@GMAIL.COM', 'Habilitado'),
+(1, 'BNC', '1247862444444435555', '143123423442', '24141243241', 'EJEMPLO@GMAIL.COM', 'Habilitado');
 
 -- --------------------------------------------------------
 
@@ -436,6 +463,20 @@ CREATE TABLE `tbl_detalle_recepcion_productos` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tbl_ingresos_egresos`
+--
+
+CREATE TABLE `tbl_ingresos_egresos` (
+  `id_finanzas` int(11) NOT NULL,
+  `id_despacho` int(11) NOT NULL,
+  `id_recepcion` int(11) NOT NULL,
+  `monto` float(6,2) NOT NULL,
+  `estado` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tbl_proveedores`
 --
 
@@ -457,7 +498,7 @@ CREATE TABLE `tbl_proveedores` (
 --
 
 INSERT INTO `tbl_proveedores` (`id_proveedor`, `nombre`, `presona_contacto`, `telefono`, `correo`, `direccion`, `rif_representante`, `rif_proveedor`, `telefono_secundario`, `observaciones`) VALUES
-(0, 'Proveedor Test', 'Carlos', '04241587101', 'ejemplo@gmail.com', 'calle 4', '65955584', '284562871', '226455069', 'asdasda');
+(1, 'Servicios Técnicos', 'Brayan Medina', '04145555555', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo');
 
 -- --------------------------------------------------------
 
@@ -493,6 +534,7 @@ CREATE TABLE `tbl_usuarios` (
 --
 
 INSERT INTO `tbl_usuarios` (`id_usuario`, `username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`) VALUES
+(0, 'Diego', '0510', 'almacen', NULL, NULL, NULL, NULL),
 (1, 'Admin', '12345', 'Administrador', 'ejemplo@gmail.com', 'Administrador', 'Administrador', '04145753363'),
 (2, 'Despachador', '12345', 'Despachador', 'ejemplo@gmail.com', 'Despachador', 'Despachador', '04145753363'),
 (3, 'Cliente', '12345', 'Cliente', 'ejemplo@gmail.com', 'Cliente', 'Cliente', '04145753363');
@@ -500,10 +542,10 @@ INSERT INTO `tbl_usuarios` (`id_usuario`, `username`, `password`, `rango`, `corr
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tintas`
+-- Estructura de tabla para la tabla `tbl_tintas`
 --
 
-CREATE TABLE `tintas` (
+CREATE TABLE `tbl_tintas` (
   `id_tinta` int(11) NOT NULL,
   `id_producto` int(11) DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
@@ -517,80 +559,72 @@ CREATE TABLE `tintas` (
 --
 
 --
--- Indices de la tabla `cartucho_tinta`
+-- Indices de la tabla `tbl_cartucho_tinta`
 --
-ALTER TABLE `cartucho_tinta`
+ALTER TABLE `tbl_cartucho_tinta`
   ADD PRIMARY KEY (`id_cartucho`),
   ADD KEY `id_producto` (`id_producto`);
 
 --
--- Indices de la tabla `categoria`
+-- Indices de la tabla `tbl_categoria`
 --
-ALTER TABLE `categoria`
+ALTER TABLE `tbl_categoria`
   ADD PRIMARY KEY (`id_categoria`);
 
 --
--- Indices de la tabla `facturas`
+-- Indices de la tabla `tbl_facturas`
 --
-ALTER TABLE `facturas`
+ALTER TABLE `tbl_facturas`
   ADD PRIMARY KEY (`id_factura`),
   ADD KEY `cliente` (`cliente`);
 
 --
--- Indices de la tabla `factura_detalle`
+-- Indices de la tabla `tbl_factura_detalle`
 --
-ALTER TABLE `factura_detalle`
+ALTER TABLE `tbl_factura_detalle`
   ADD PRIMARY KEY (`id`),
   ADD KEY `factura_id` (`factura_id`),
-  ADD KEY `factura_detalle` (`id_producto`);
+  ADD KEY `tbl_factura_detalle` (`id_producto`);
 
 --
--- Indices de la tabla `impresoras`
+-- Indices de la tabla `tbl_impresoras`
 --
-ALTER TABLE `impresoras`
+ALTER TABLE `tbl_impresoras`
   ADD PRIMARY KEY (`id_impresora`),
   ADD KEY `id_producto` (`id_producto`);
 
 --
--- Indices de la tabla `ingresos_egresos`
+-- Indices de la tabla `tbl_marcas`
 --
-ALTER TABLE `ingresos_egresos`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `transaccion` (`transaccion`);
-
---
--- Indices de la tabla `marca`
---
-ALTER TABLE `marca`
+ALTER TABLE `tbl_marcas`
   ADD PRIMARY KEY (`id_marca`);
 
 --
--- Indices de la tabla `modelo`
+-- Indices de la tabla `tbl_modelos`
 --
-ALTER TABLE `modelo`
+ALTER TABLE `tbl_modelos`
   ADD PRIMARY KEY (`id_modelo`),
   ADD KEY `fk_modelo_marca` (`id_marca`);
 
 --
--- Indices de la tabla `otros`
+-- Indices de la tabla `tbl_otros`
 --
-ALTER TABLE `otros`
+ALTER TABLE `tbl_otros`
   ADD PRIMARY KEY (`id_otros`),
   ADD KEY `id_producto` (`id_producto`);
 
 --
--- Indices de la tabla `productos`
+-- Indices de la tabla `tbl_productos`
 --
-ALTER TABLE `productos`
+ALTER TABLE `tbl_productos`
   ADD PRIMARY KEY (`id_producto`),
-  ADD UNIQUE KEY `serial` (`serial`),
   ADD KEY `fk_producto_categoria` (`id_categoria`),
   ADD KEY `fk_producto_modelo` (`id_modelo`);
 
 --
--- Indices de la tabla `protector_voltaje`
+-- Indices de la tabla `tbl_protector_voltaje`
 --
-ALTER TABLE `protector_voltaje`
+ALTER TABLE `tbl_protector_voltaje`
   ADD PRIMARY KEY (`id_protector`),
   ADD KEY `id_producto` (`id_producto`);
 
@@ -653,6 +687,14 @@ ALTER TABLE `tbl_detalle_recepcion_productos`
   ADD KEY `fk_detalle_producto` (`id_producto`);
 
 --
+-- Indices de la tabla `tbl_ingresos_egresos`
+--
+ALTER TABLE `tbl_ingresos_egresos`
+  ADD PRIMARY KEY (`id_finanzas`),
+  ADD KEY `id_despacho` (`id_despacho`,`id_recepcion`),
+  ADD KEY `id_recepcion` (`id_recepcion`);
+
+--
 -- Indices de la tabla `tbl_proveedores`
 --
 ALTER TABLE `tbl_proveedores`
@@ -672,9 +714,9 @@ ALTER TABLE `tbl_usuarios`
   ADD PRIMARY KEY (`id_usuario`);
 
 --
--- Indices de la tabla `tintas`
+-- Indices de la tabla `tbl_tintas`
 --
-ALTER TABLE `tintas`
+ALTER TABLE `tbl_tintas`
   ADD PRIMARY KEY (`id_tinta`),
   ADD KEY `id_producto` (`id_producto`);
 
@@ -683,63 +725,57 @@ ALTER TABLE `tintas`
 --
 
 --
--- AUTO_INCREMENT de la tabla `cartucho_tinta`
+-- AUTO_INCREMENT de la tabla `tbl_cartucho_tinta`
 --
-ALTER TABLE `cartucho_tinta`
+ALTER TABLE `tbl_cartucho_tinta`
   MODIFY `id_cartucho` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `categoria`
+-- AUTO_INCREMENT de la tabla `tbl_categoria`
 --
-ALTER TABLE `categoria`
+ALTER TABLE `tbl_categoria`
   MODIFY `id_categoria` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `factura_detalle`
+-- AUTO_INCREMENT de la tabla `tbl_factura_detalle`
 --
-ALTER TABLE `factura_detalle`
+ALTER TABLE `tbl_factura_detalle`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `impresoras`
+-- AUTO_INCREMENT de la tabla `tbl_impresoras`
 --
-ALTER TABLE `impresoras`
+ALTER TABLE `tbl_impresoras`
   MODIFY `id_impresora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `ingresos_egresos`
+-- AUTO_INCREMENT de la tabla `tbl_marcas`
 --
-ALTER TABLE `ingresos_egresos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `marca`
---
-ALTER TABLE `marca`
+ALTER TABLE `tbl_marcas`
   MODIFY `id_marca` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT de la tabla `modelo`
+-- AUTO_INCREMENT de la tabla `tbl_modelos`
 --
-ALTER TABLE `modelo`
+ALTER TABLE `tbl_modelos`
   MODIFY `id_modelo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
--- AUTO_INCREMENT de la tabla `otros`
+-- AUTO_INCREMENT de la tabla `tbl_otros`
 --
-ALTER TABLE `otros`
+ALTER TABLE `tbl_otros`
   MODIFY `id_otros` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `productos`
+-- AUTO_INCREMENT de la tabla `tbl_productos`
 --
-ALTER TABLE `productos`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `tbl_productos`
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT de la tabla `protector_voltaje`
+-- AUTO_INCREMENT de la tabla `tbl_protector_voltaje`
 --
-ALTER TABLE `protector_voltaje`
+ALTER TABLE `tbl_protector_voltaje`
   MODIFY `id_protector` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -755,9 +791,15 @@ ALTER TABLE `tbl_carritodetalle`
   MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `tintas`
+-- AUTO_INCREMENT de la tabla `tbl_ingresos_egresos`
 --
-ALTER TABLE `tintas`
+ALTER TABLE `tbl_ingresos_egresos`
+  MODIFY `id_finanzas` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_tintas`
+--
+ALTER TABLE `tbl_tintas`
   MODIFY `id_tinta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -765,97 +807,98 @@ ALTER TABLE `tintas`
 --
 
 --
--- Filtros para la tabla `cartucho_tinta`
+-- Filtros para la tabla `tbl_cartucho_tinta`
 --
-ALTER TABLE `cartucho_tinta`
-  ADD CONSTRAINT `cartucho_tinta_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`);
+ALTER TABLE `tbl_cartucho_tinta`
+  ADD CONSTRAINT `tbl_cartucho_tinta_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
 
 --
--- Filtros para la tabla `facturas`
+-- Filtros para la tabla `tbl_facturas`
 --
-ALTER TABLE `facturas`
+ALTER TABLE `tbl_facturas`
   ADD CONSTRAINT `facturas_ibfk_1` FOREIGN KEY (`cliente`) REFERENCES `tbl_clientes` (`id_clientes`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `factura_detalle`
+-- Filtros para la tabla `tbl_factura_detalle`
 --
-ALTER TABLE `factura_detalle`
-  ADD CONSTRAINT `factura_detalle` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`) ON DELETE CASCADE,
-  ADD CONSTRAINT `factura_detalle_ibfk_1` FOREIGN KEY (`factura_id`) REFERENCES `facturas` (`id_factura`) ON DELETE CASCADE;
+ALTER TABLE `tbl_factura_detalle`
+  ADD CONSTRAINT `tbl_factura_detalle` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`) ON DELETE CASCADE,
+  ADD CONSTRAINT `factura_detalle_ibfk_1` FOREIGN KEY (`factura_id`) REFERENCES `tbl_facturas` (`id_factura`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `impresoras`
+-- Filtros para la tabla `tbl_impresoras`
 --
-ALTER TABLE `impresoras`
-  ADD CONSTRAINT `impresoras_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`);
+ALTER TABLE `tbl_impresoras`
+  ADD CONSTRAINT `impresoras_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
 
 --
--- Filtros para la tabla `ingresos_egresos`
+-- Filtros para la tabla `tbl_modelos`
 --
-ALTER TABLE `ingresos_egresos`
-  ADD CONSTRAINT `ingresos_egresos_ibfk_1` FOREIGN KEY (`transaccion`) REFERENCES `tbl_despachos` (`id_despachos`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `tbl_modelos`
+  ADD CONSTRAINT `fk_modelo_marca` FOREIGN KEY (`id_marca`) REFERENCES `tbl_marcas` (`id_marca`),
+  ADD CONSTRAINT `modelo_ibfk_1` FOREIGN KEY (`id_marca`) REFERENCES `tbl_marcas` (`id_marca`);
 
 --
--- Filtros para la tabla `modelo`
+-- Filtros para la tabla `tbl_otros`
 --
-ALTER TABLE `modelo`
-  ADD CONSTRAINT `fk_modelo_marca` FOREIGN KEY (`id_marca`) REFERENCES `marca` (`id_marca`),
-  ADD CONSTRAINT `modelo_ibfk_1` FOREIGN KEY (`id_marca`) REFERENCES `marca` (`id_marca`);
+ALTER TABLE `tbl_otros`
+  ADD CONSTRAINT `otros_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
 
 --
--- Filtros para la tabla `otros`
+-- Filtros para la tabla `tbl_productos`
 --
-ALTER TABLE `otros`
-  ADD CONSTRAINT `otros_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`);
+ALTER TABLE `tbl_productos`
+  ADD CONSTRAINT `fk_producto_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `tbl_categoria` (`id_categoria`),
+  ADD CONSTRAINT `fk_producto_modelo` FOREIGN KEY (`id_modelo`) REFERENCES `tbl_modelos` (`id_modelo`),
+  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_modelo`) REFERENCES `tbl_modelos` (`id_modelo`),
+  ADD CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`id_categoria`) REFERENCES `tbl_categoria` (`id_categoria`);
 
 --
--- Filtros para la tabla `productos`
+-- Filtros para la tabla `tbl_protector_voltaje`
 --
-ALTER TABLE `productos`
-  ADD CONSTRAINT `fk_producto_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`),
-  ADD CONSTRAINT `fk_producto_modelo` FOREIGN KEY (`id_modelo`) REFERENCES `modelo` (`id_modelo`),
-  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_modelo`) REFERENCES `modelo` (`id_modelo`),
-  ADD CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`);
-
---
--- Filtros para la tabla `protector_voltaje`
---
-ALTER TABLE `protector_voltaje`
-  ADD CONSTRAINT `protector_voltaje_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`);
+ALTER TABLE `tbl_protector_voltaje`
+  ADD CONSTRAINT `protector_voltaje_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
 
 --
 -- Filtros para la tabla `tbl_carritodetalle`
 --
 ALTER TABLE `tbl_carritodetalle`
   ADD CONSTRAINT `tbl_carritodetalle_ibfk_1` FOREIGN KEY (`id_carrito`) REFERENCES `tbl_carrito` (`id_carrito`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_carritodetalle_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_carritodetalle_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_combo`
 --
 ALTER TABLE `tbl_combo`
-  ADD CONSTRAINT `tbl_detalles_combo1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`);
+  ADD CONSTRAINT `tbl_detalles_combo1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
 
 --
 -- Filtros para la tabla `tbl_despachos`
 --
 ALTER TABLE `tbl_despachos`
-  ADD CONSTRAINT `fk_despacho_factura` FOREIGN KEY (`id_factura`) REFERENCES `facturas` (`id_factura`);
+  ADD CONSTRAINT `fk_despacho_factura` FOREIGN KEY (`id_factura`) REFERENCES `tbl_facturas` (`id_factura`);
 
 --
 -- Filtros para la tabla `tbl_detalles_pago`
 --
 ALTER TABLE `tbl_detalles_pago`
   ADD CONSTRAINT `fk_id_cuenta` FOREIGN KEY (`id_cuenta`) REFERENCES `tbl_cuentas` (`id_cuenta`),
-  ADD CONSTRAINT `fk_id_factura` FOREIGN KEY (`id_factura`) REFERENCES `facturas` (`id_factura`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_id_factura` FOREIGN KEY (`id_factura`) REFERENCES `tbl_facturas` (`id_factura`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_detalle_recepcion_productos`
 --
 ALTER TABLE `tbl_detalle_recepcion_productos`
-  ADD CONSTRAINT `fk_detalle_producto` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`),
+  ADD CONSTRAINT `fk_detalle_producto` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`),
   ADD CONSTRAINT `fk_detalle_recepcion` FOREIGN KEY (`id_recepcion`) REFERENCES `tbl_recepcion_productos` (`id_recepcion`),
-  ADD CONSTRAINT `tbl_detalles_recepcion_productos` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`) ON DELETE CASCADE;
+  ADD CONSTRAINT `tbl_detalles_recepcion_productos` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `tbl_ingresos_egresos`
+--
+ALTER TABLE `tbl_ingresos_egresos`
+  ADD CONSTRAINT `tbl_ingresos_egresos_ibfk_1` FOREIGN KEY (`id_despacho`) REFERENCES `tbl_despachos` (`id_despachos`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_ingresos_egresos_ibfk_2` FOREIGN KEY (`id_recepcion`) REFERENCES `tbl_recepcion_productos` (`id_recepcion`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_recepcion_productos`
@@ -865,10 +908,10 @@ ALTER TABLE `tbl_recepcion_productos`
   ADD CONSTRAINT `tbl_recepcion_productos` FOREIGN KEY (`id_proveedor`) REFERENCES `tbl_proveedores` (`id_proveedor`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `tintas`
+-- Filtros para la tabla `tbl_tintas`
 --
-ALTER TABLE `tintas`
-  ADD CONSTRAINT `tintas_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`);
+ALTER TABLE `tbl_tintas`
+  ADD CONSTRAINT `tintas_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

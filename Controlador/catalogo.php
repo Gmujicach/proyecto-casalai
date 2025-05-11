@@ -155,12 +155,13 @@ case 'filtrar_por_marca':
 }
 
 // Función para obtener productos
+/*
 function obtenerProductos() {
     $producto = new Productos();
     return $producto->obtenerTodos();
 }
 
-
+*/
 
 // Función para obtener las marcas
 function obtenerMarcas() {

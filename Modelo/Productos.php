@@ -25,9 +25,9 @@ class Productos extends BD{
 
     private $precio;
     
-    public function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::conexion();
     }
 
     // Getters y Setters
@@ -176,7 +176,7 @@ public function getPrecio() {
 
 
     public function validarNombreProducto() {
-        $sql = "SELECT COUNT(*) FROM productos WHERE nombre_producto = :nombre_producto";
+        $sql = "SELECT COUNT(*) FROM tbl_productos WHERE nombre_producto = :nombre_producto";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre_producto', $this->nombre_producto);
         $stmt->execute();
@@ -187,7 +187,7 @@ public function getPrecio() {
     }
     
     public function validarCodigoProducto() {
-        $sql = "SELECT COUNT(*) FROM productos WHERE serial = :serial_Interno";
+        $sql = "SELECT COUNT(*) FROM tbl_productos WHERE serial = :serial_Interno";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':serial_Interno', $this->serial);
         $stmt->execute();
@@ -197,7 +197,7 @@ public function getPrecio() {
         return $count == 0;
     }
     public function ingresarProducto() {
-        $sql = "INSERT INTO productos (`serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`)
+        $sql = "INSERT INTO tbl_productos (`serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`)
                 VALUES (:serial_p, :nombre_producto, :descripcion_producto, :modelo, :categoria, :stock_actual, :stock_minimo, :stock_maximo, :clausula_garantia, :precio, 1)";
         
         $stmt = $this->conex->prepare($sql);
@@ -218,7 +218,7 @@ public function getPrecio() {
     
 
     public function obtenerProductoPorId($id) {
-        $query = "SELECT nombre_producto, descripcion_p, id_modelo, stock, stock_max, stock_min, peso, largo, alto, ancho, clausula_garantia, servicio, serial, estado, lleva_lote, lleva_serial, categoria FROM productos WHERE id_producto = ?";
+        $query = "SELECT nombre_producto, descripcion_p, id_modelo, stock, stock_max, stock_min, peso, largo, alto, ancho, clausula_garantia, servicio, serial, estado, lleva_lote, lleva_serial, categoria FROM tbl_productos WHERE id_producto = ?";
         $stmt = $this->conex->prepare($query);
         $stmt->execute([$id]);
         $producto = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -226,7 +226,7 @@ public function getPrecio() {
     }
 
     public function obtenerProductoStock() {
-        $queryProductos = 'SELECT id_producto, nombre_producto, stock, id_modelo, serial FROM productos';
+        $queryProductos = 'SELECT id_producto, nombre_producto, stock, id_modelo, serial FROM tbl_productos';
         $stmtProductos = $this->conex->prepare($queryProductos);
         $stmtProductos->execute();
         $productos = $stmtProductos->fetchAll(PDO::FETCH_ASSOC);
@@ -234,7 +234,7 @@ public function getPrecio() {
     }
 
     public function modificarProducto($id) {
-        $sql = "UPDATE productos 
+        $sql = "UPDATE tbl_productos 
                 SET serial = :serial_p,
                     nombre_producto = :nombre_producto,
                     descripcion_producto = :descripcion_producto,
@@ -272,13 +272,13 @@ public function getPrecio() {
 
 
     public function eliminarProducto($id) {
-        $sql = "UPDATE productos SET estado = 0 WHERE id_producto = :id";
+        $sql = "UPDATE tbl_productos SET estado = 0 WHERE id_producto = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
     public function obtenerModelos() {
-        $query = "SELECT id_modelo, nombre_modelo FROM modelo";
+        $query = "SELECT id_modelo, nombre_modelo FROM tbl_modelos";
         $stmt = $this->conex->query($query);
 
         if ($stmt) {
@@ -293,36 +293,31 @@ public function getPrecio() {
 
 
 
-class Producto {
+class Producto extends Productos{
     private $conex;
-    private $tableProductos = 'productos';
-    private $tableModelos = 'modelo';
+    private $tableProductos = 'tbl_productos';
+    private $tableModelos = 'tbl_modelos';
     public $id_producto;
     public $id_modelo;
     public $nombre_producto;
     public $stock_actual;
     public $serial;
 
-    public function __construct() {
-        
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
-
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::conexion();
     }
 
     public function obtenerProductos() {
        
-        $queryProductos = 'SELECT 
-    productos.*, 
-    modelo.nombre_modelo, 
-    categoria.nombre_caracteristicas
-FROM 
-    productos
-INNER JOIN 
-    modelo ON productos.id_modelo = modelo.id_modelo
-INNER JOIN 
-    categoria ON productos.id_categoria = categoria.id_categoria
- where estado = 1;
+        $queryProductos = 
+        'SELECT tbl_productos.*, tbl_modelos.nombre_modelo, tbl_categoria.nombre_caracteristicas 
+        FROM tbl_productos 
+        INNER JOIN tbl_modelos 
+        ON tbl_productos.id_modelo = tbl_modelos.id_modelo 
+        INNER JOIN tbl_categoria 
+        ON tbl_productos.id_categoria = tbl_categoria.id_categoria 
+        where estado = 1;
 ';
        
         $stmtProductos = $this->conex->prepare($queryProductos);

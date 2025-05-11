@@ -92,12 +92,13 @@ if (is_file("Vista/" . $pagina . ".php")) {
     
     // Obtener datos paginados
     $resultados = $paginador->paginar(
-        'marca', // Cambia por 'tbl_marcas' si es necesario
+        'tbl_marcas', // Cambia por 'tbl_marcas' si es necesario
         $paginaActual,
         $filasPorPagina
     );
     
     // Calcular valores para la vista
+    $paginaActual = intval($paginaActual); // Asegura que sea un número entero
     $inicio = ($paginaActual - 1) * $filasPorPagina + 1;
     $fin = min($paginaActual * $filasPorPagina, $resultados['total']);
     $totalMarcas = $resultados['total'];

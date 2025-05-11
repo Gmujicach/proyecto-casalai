@@ -1,6 +1,7 @@
 <?php
 require_once 'config.php';
 
+
 class Factura extends BD
 {
     private $id;
@@ -12,8 +13,9 @@ class Factura extends BD
     private $cantidad;
 
     // Constructor
-    public function __construct() {
+    function __construct() {
         parent::__construct();
+        $this->conex = parent::conexion();
     }
 
     // Getters y Setters
@@ -56,18 +58,18 @@ class Factura extends BD
 
     // Crear factura
     private function facturaIngresar() {
-        $pdo = $this->Conex(); // Obtener conexión
+        $pdo = $this->conex;
         try {
             $pdo->beginTransaction();
 
             // Insertar en tabla factura
-            $stmt = $pdo->prepare("INSERT INTO facturas (fecha, cliente, descuento, estatus) VALUES (?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO tbl_facturas (fecha, cliente, descuento, estatus) VALUES (?, ?, ?, ?)");
             $stmt->execute([$this->fecha, $this->cliente, $this->descuento, $this->estatus]);
 
             $factura_id = $pdo->lastInsertId();
 
             // Insertar en factura_detalle
-            $stmt2 = $pdo->prepare("INSERT INTO factura_detalle (factura_id, id_producto, cantidad) VALUES (?, ?, ?)");
+            $stmt2 = $pdo->prepare("INSERT INTO tbl_factura_detalle (factura_id, id_producto, cantidad) VALUES (?, ?, ?)");
             $stmt2->execute([$factura_id, $this->id_producto, $this->cantidad]);
 
             $pdo->commit();
@@ -81,145 +83,78 @@ class Factura extends BD
 
     // Obtener factura
     public function facturaConsultar($id_factura) {
-        $conexion = $this->Conex();
-    
-        // Obtener detalles de la factura
+        $conexion = $this->conex;
+
         $sqlDetalles = "SELECT f.id_factura, f.fecha, c.nombre, c.cedula, c.telefono, c.direccion,
-       p.nombre_producto AS producto, m.nombre_modelo, mar.nombre_marca,
-       p.precio, df.cantidad, f.descuento, f.estatus
-FROM factura_detalle df
-JOIN facturas f ON f.id_factura = df.factura_id
-JOIN tbl_clientes c ON c.id_clientes = f.cliente
-JOIN productos p ON df.id_producto = p.id_producto
-JOIN modelo m ON m.id_modelo = p.id_modelo
-JOIN marca mar ON mar.id_marca = m.id_marca;";
-    
+            p.nombre_producto AS producto, m.nombre_modelo, mar.nombre_marca,
+            p.precio, df.cantidad, f.descuento, f.estatus
+        FROM tbl_factura_detalle df
+        JOIN tbl_facturas f ON f.id_factura = df.factura_id
+        JOIN tbl_clientes c ON c.id_clientes = f.cliente
+        JOIN tbl_productos p ON df.id_producto = p.id_producto
+        JOIN tbl_modelos m ON m.id_modelo = p.id_modelo
+        JOIN tbl_marcas mar ON mar.id_marca = m.id_marca
+        WHERE f.id_factura = ?";
+
         $stmt = $conexion->prepare($sqlDetalles);
-        $stmt->execute();
+        $stmt->execute([$id_factura]);
         $detalles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
+        if (!$detalles) return ['resultado' => 'error', 'mensaje' => 'Factura no encontrada.'];
+
         $html = '<div class="accordion" id="accordionFacturas">';
-        $agrupado = [];
-    
-        foreach ($detalles as $fila) {
-            $agrupado[$fila['id_factura']]['info'][] = $fila;
-            $agrupado[$fila['id_factura']]['fecha'] = $fila['fecha'];
-            $agrupado[$fila['id_factura']]['cliente'] = [
-                'nombre' => $fila['nombre'],
-                'cedula' => $fila['cedula'],
-                'telefono' => $fila['telefono'],
-                'direccion' => $fila['direccion'],
-                'descuento' => $fila['descuento'],
-                'estatus' => $fila['estatus']
-            ];
+
+        $fila = $detalles[0];
+        $contenido = '<div><p><strong>Cliente:</strong> ' . htmlspecialchars($fila['nombre']) . '</p>';
+        $contenido .= '<p><strong>Cédula:</strong> ' . htmlspecialchars($fila['cedula']) . '</p>';
+        $contenido .= '<p><strong>Teléfono:</strong> ' . htmlspecialchars($fila['telefono']) . '</p>';
+        $contenido .= '<p><strong>Dirección:</strong> ' . htmlspecialchars($fila['direccion']) . '</p>';
+        $contenido .= '<p><strong>Descuento:</strong> ' . htmlspecialchars($fila['descuento']) . '%</p>';
+        $contenido .= '<p><strong>Estatus:</strong> ' . htmlspecialchars($fila['estatus']) . '</p></div>';
+
+        $contenido .= '<table><thead><tr><th>Producto</th><th>Modelo</th><th>Marca</th><th>Cantidad</th><th>Precio</th></tr></thead><tbody>';
+
+        $total = 0;
+        foreach ($detalles as $item) {
+            $subtotal = $item['precio'] * $item['cantidad'];
+            $total += $subtotal;
+            $contenido .= '<tr><td>' . htmlspecialchars($item['producto']) . '</td>';
+            $contenido .= '<td>' . htmlspecialchars($item['nombre_modelo']) . '</td>';
+            $contenido .= '<td>' . htmlspecialchars($item['nombre_marca']) . '</td>';
+            $contenido .= '<td>' . $item['cantidad'] . '</td>';
+            $contenido .= '<td>' . number_format($item['precio'], 2) . '</td></tr>';
         }
-    
-        foreach ($agrupado as $idFactura => $data) {
-            $fecha = $data['fecha'];
-            $cliente = $data['cliente'];
-            $descuento = $cliente['descuento'];
-            $contenido = '';
-            $total = 0;
-    
-            // 🧾 Información del cliente
-            $contenido .= '<div style="margin-bottom: 15px; font-family: Arial, sans-serif;">';
-            $contenido .= '<p><strong>Cliente:</strong> ' . htmlspecialchars($cliente['nombre']) . '</p>';
-            $contenido .= '<p><strong>Cédula:</strong> ' . htmlspecialchars($cliente['cedula']) . '</p>';
-            $contenido .= '<p><strong>Teléfono:</strong> ' . htmlspecialchars($cliente['telefono']) . '</p>';
-            $contenido .= '<p><strong>Dirección:</strong> ' . htmlspecialchars($cliente['direccion']) . '</p>';
-            $contenido .= '<p><strong>Descuento:</strong> ' . htmlspecialchars($cliente['descuento']) . '%</p>';
-            $contenido .= '<p><strong>Estatus:</strong> ' . htmlspecialchars($cliente['estatus']) . '</p>';
-            $contenido .= '</div>';
-    
-            // 🧮 Tabla de productos
-            $contenido .= '<table style="width:100%; border-collapse: collapse; font-family: Arial, sans-serif;">';
-            $contenido .= '<thead>';
-            $contenido .= '<tr style="background-color: #f2f2f2;">';
-            $contenido .= '<th style="border: 1px solid #ddd; padding: 8px;">Producto</th>';
-            $contenido .= '<th style="border: 1px solid #ddd; padding: 8px;">Modelo</th>';
-            $contenido .= '<th style="border: 1px solid #ddd; padding: 8px;">Marca</th>';
-            $contenido .= '<th style="border: 1px solid #ddd; padding: 8px;">Cantidad</th>';
-            $contenido .= '<th style="border: 1px solid #ddd; padding: 8px;">Precio</th>';
-            $contenido .= '</tr>';
-            $contenido .= '</thead><tbody>';
-    
-            foreach ($data['info'] as $fila) {
-                $subtotal = $fila['precio'] * $fila['cantidad'];
-                $total += $subtotal;
-    
-                $contenido .= '<tr>';
-                $contenido .= '<td style="border: 1px solid #ddd; padding: 8px;">' . htmlspecialchars($fila['producto']) . '</td>';
-                $contenido .= '<td style="border: 1px solid #ddd; padding: 8px;">' . htmlspecialchars($fila['nombre_modelo']) . '</td>';
-                $contenido .= '<td style="border: 1px solid #ddd; padding: 8px;">' . htmlspecialchars($fila['nombre_marca']) . '</td>';
-                $contenido .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $fila['cantidad'] . '</td>';
-                $contenido .= '<td style="border: 1px solid #ddd; padding: 8px;">' . number_format($fila['precio'], 2) . '</td>';
-                $contenido .= '</tr>';
-            }
-    
-            $contenido .= '<tr style="font-weight:bold; background-color:#dff0d8">';
-            $contenido .= '<td colspan="4" style="border: 1px solid #ddd; padding: 8px; text-align:right;">Total con Impuestos:</td>';
-            $contenido .= '<td style="border: 1px solid #ddd; padding: 8px;">' . number_format($total+($total*0.16)-($total*$descuento/100), 2) . '</td>';
-            $contenido .= '</tr>';
-            $contenido .= '</tbody></table>';
-    
-            // 🖨️ Botónes
-            $contenido .= '<div style="margin-top:15px;">';
-            $contenido .= '<button value="' . $idFactura . '" id="Descargar" onclick="accionFactura(this)" target="_blank" class="btn btn-sm btn-primary"><strong>Descargar Factura</strong></button>';
-            $contenido .= ' <button value="' . $idFactura . '" id="Cancelar" onclick="accionFactura(this)" class="btn btn-sm btn-danger"><strong>Cancelar</strong></button>';  // Botón de Cancelar
-            $contenido .= ' <button value="' . $idFactura . '" id="Pagar" onclick="accionFactura(this)" class="btn btn-sm btn-success"><strong>Pagar</strong></button>';  // Botón de Pagar
-            $contenido .= '</div>';
-    
-            // 🔽 Estructura del acordeón
-            $html .= '
-            <div class="accordion-item" style="border: 1px solid #ccc; margin-bottom:10px;">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' . $idFactura . '" aria-expanded="false" aria-controls="collapse' . $idFactura . '">
-                        Factura #' . $idFactura . ' - Fecha: ' . $fecha . '
-                    </button>
-                </h2>
-                <div id="collapse' . $idFactura . '" class="accordion-collapse collapse" data-bs-parent="#accordionFacturas">
-                    <div class="accordion-body">' . $contenido . '</div>
-                </div>
-            </div>';
-        }
-    
+
+        $montoTotal = $total + ($total * 0.16) - ($total * $fila['descuento'] / 100);
+
+        $contenido .= '<tr><td colspan="4">Total con Impuestos:</td><td>' . number_format($montoTotal, 2) . '</td></tr>';
+        $contenido .= '</tbody></table>';
+
+        $html .= '<div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' . $id_factura . '">Factura #' . $id_factura . ' - Fecha: ' . $fila['fecha'] . '</button></h2>';
+        $html .= '<div id="collapse' . $id_factura . '" class="accordion-collapse collapse"><div class="accordion-body">' . $contenido . '</div></div></div>';
+
         $html .= '</div>';
-        $html .= "<script> <!-- Bootstrap CSS -->
-   <link href='Public/bootstrap/bootstrap/css/bootstrap.min.css' rel='stylesheet'>
-   <!-- Bootstrap Bundle con Popper -->
-   <script src='Public/bootstrap/bootstrap/js/bootstrap.bundle.min.js'></script></script>";
-    
+
         return [
             'resultado' => 'listado',
             'mensaje' => $html
         ];
     }
-    
-
-    
-    
-       
-    
-    
 
     // Marcar factura como Cancelada
     public function facturaCancelar($id) {
-        $pdo = $this->Conex();
-        $stmt = $pdo->prepare("UPDATE facturas SET estatus = 'Cancelada' WHERE id = ?");
+        $pdo = $this->conex;
+        $stmt = $pdo->prepare("UPDATE tbl_facturas SET estatus = 'Cancelada' WHERE id_factura = ?");
         return $stmt->execute([$id]);
     }
 
     // Marcar factura como Procesada
     public function facturaProcesar($id) {
-        $pdo = $this->Conex();
-        $stmt = $pdo->prepare("UPDATE facturas SET estatus = 'Procesada' WHERE id = ?");
+        $pdo = $this->conex;
+        $stmt = $pdo->prepare("UPDATE tbl_facturas SET estatus = 'Procesada' WHERE id_factura = ?");
         return $stmt->execute([$id]);
     }
 }
-
-
-
-
 
 
 
