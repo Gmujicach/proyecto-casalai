@@ -14,11 +14,12 @@ if (!isset($_SESSION['name'])) {
 </head>
 <body>
 
+
 <?php include 'NewNavBar.php'; ?>
 
 <div class="formulario-responsivo">
     <div class="fondo-form">
-    <form id="incluirordendepacho" action="" method="POST" action="">
+    <form id="incluirordendepacho" action="" method="POST">
         <input type="hidden" name="accion" value="ingresar">
         <h3 class="titulo-form">Generar órdenes de despacho</h3>
 
@@ -72,46 +73,36 @@ if (!isset($_SESSION['name'])) {
         <tbody>
         <?php foreach ($ordendespacho as $orden): ?>
             <tr>
-                <td><input type="checkbox"></td>
-                <td>
-                    <span class="campo-nombres">
-                    <?php echo htmlspecialchars($orden['correlativo']); ?>
-                    </span>
-                </td>
-                
-                <td>
-                    <span class="campo-telefono">
-                    <?php echo htmlspecialchars($orden['fecha_despacho']); ?>
-                    </span>
-                </td>
-                <td>
-                    <span class="campo-rango">
-                    <?php echo htmlspecialchars($orden['activo']); ?>
-                    </span>
-                </td>
-                
-                <td>
-                    <span>
-                        <a href="#"class="">Ver Mas</a>
-                    </span>
-                </td>
-                <td>
-                    <span>
-                        <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                            <div class="desplegable">
-                                <ul>
-                                    <li><a href="#">Ver</a></li>
-                                    <li><a href="#" class="modificar" data-toggle="modal" data-target="#modificar_usuario_modal" onclick="obtenerOrdenPorId(<?php echo $orden['id_despachos']; ?>)">Modificar</a></li>
-                                    <li><a href="#" class="eliminar" onclick="eliminarOrdenDespacho(<?php echo $orden['id_despachos']; ?>)">Eliminar</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </span>
-                </td>
-            </tr>
+    <td><input type="checkbox"></td>
+    <td><span class="campo-correlativo"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
+    <td><span class="campo-fecha"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
+    <td><span class="campo-factura"><?php echo htmlspecialchars($orden['activo']); ?></span></td>
+    <td><span><a href="#" class="">Ver Mas</a></span></td>
+    <td>
+        <div class="acciones-boton">
+            <i class="vertical">
+                <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+            </i>
+            <div class="desplegable">
+                <ul>
+                    <li><a href="#">Ver</a></li>
+                    <li>
+                    <a href="#" class="modificar" 
+                        data-id="<?php echo $orden['id_despachos']; ?>" 
+                        data-fecha="<?php echo $orden['fecha_despacho']; ?>"
+                        data-correlativo="<?php echo $orden['correlativo']; ?>"
+                        data-factura="<?php echo $orden['id_factura']; ?>"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#modificar_orden_modal">Modificar
+                    </a>
+                    </li>
+                    <li><a href="#" class="eliminar" data-id="<?php echo $orden['id_despachos']; ?>">Eliminar</a></li>
+                </ul>
+            </div>
+        </div>
+    </td>
+</tr>
+
         <?php endforeach; ?>
         </tbody>
         <!-- <tfoot>
@@ -143,54 +134,55 @@ if (!isset($_SESSION['name'])) {
 
 
 <!-- Modal de modificación -->
-    <div class="modal fade" id="modificar_usuario_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="modificarusuario" method="POST" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_usuario_modal_label">Modificar Usuario</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <!-- Campos del formulario de modificación -->
-                    <input type="hidden" id="modificar_id_usuario" name="id_usuario">
-                    <div class="form-group">
-                        <label for="modificarnombre_usuario">Nombre del Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="15" required>
-                        <span id="smodificarnombre_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarclave_usuario">Contraseña del Usuario</label>
-                        <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario" required>
-                        <span id="smodificarclave_usuario"></span>
-                    </div>
-                    <div class="form-group col-md-4">
-                                    <label for="rango">Categorias</label>
-                                    <select class="custom-select" id="rango" name="rango">
-                                    <option value="USUARIO">Usuario</option>
-                                                        <option value="admin">Administrador</option>
-                                                        <option value="almacen">Almacen</option>    
-                                    </select>
-                                </div>
-                    
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-cerrar" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Modificar</button>
-                </div>
-                </div>
-                
-            </form>
+    <!-- Modal de modificación de orden de despacho -->
+<div class="modal fade" id="modificar_orden_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_orden_modal_label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="modificarorden" method="POST">
+      <input type="hidden" name="accion" value="modificar">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modificar_orden_modal_label">Modificar Orden de Despacho</h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+
+        <div class="modal-body">
+          <input type="hidden" id="modificar_id_orden" name="id_despachos">
+          <div class="form-group">
+            <label for="modificar_fecha">Fecha</label>
+            <input type="date" class="form-control" id="modificar_fecha" name="fecha_despacho" required>
+          </div>
+          <div class="form-group">
+            <label for="modificar_correlativo">Correlativo</label>
+            <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" required>
+          </div>
+          <div class="form-group">
+            <label for="modificar_factura">Factura</label>
+            <select name="factura" id="modificar_factura" class="form-control">
+              <?php foreach ($facturas as $factura): ?>
+                <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
+                  <?php echo htmlspecialchars($factura['fecha']); ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Modificar</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
+
 
 
 <!-- Modal de eliminación -->
 <?php include 'footer.php'; ?>
+
 <script src="public/bootstrap/js/sidebar.js"></script>
   <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="public/js/jquery-3.7.1.min.js"></script>
@@ -200,6 +192,7 @@ if (!isset($_SESSION['name'])) {
   <script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/usuario.js"></script>
 <script src="Javascript/validaciones.js"></script>
+<script src="Javascript/ordendespacho.js"></script>
 </body>
 
 

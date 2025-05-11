@@ -81,7 +81,7 @@ class Despacho extends BD
                     $respuesta = $respuesta . $r['id_producto'];
                     $respuesta = $respuesta . "</td>";
                     $respuesta = $respuesta . "<td>";
-                    $respuesta = $respuesta . $r['nombre_p'];
+                    $respuesta = $respuesta . $r['nombre_producto'];
                     $respuesta = $respuesta . "</td>";
                     $respuesta = $respuesta . "<td>";
                     $respuesta = $respuesta . $r['stock'];

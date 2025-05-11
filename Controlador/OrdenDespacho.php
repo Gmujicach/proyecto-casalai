@@ -21,37 +21,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // Validar que el correlativo no exista
             if (!$ordendespacho->validarCorrelativo()) {
+
                 echo json_encode(['status' => 'error', 'message' => 'Este correlativo ya existe']);
             } else {
                 if ($ordendespacho->ingresarOrdenDespacho()) {
-                    echo json_encode(['status' => 'success']);
+                    echo json_encode(['status' => 'success', 'message' => 'Orden ingresada correctamente']);
+
+                    exit;
                 } else {
                     echo json_encode(['status' => 'error', 'message' => 'Error al ingresar la orden de despacho']);
                 }
             }
             break;
 
-        case 'obtener_orden':
-            $id = $_POST['id_despachos'];
-            if ($id !== null) {
-                $ordendespacho = new OrdenDespacho();
-                $ordendespacho = $ordendespacho->obtenerOrdenPorId($id);
-                if ($ordendespacho !== null) {
-                    echo json_encode($ordendespacho);
+            case 'obtenerOrden':
+                $id = $_POST['id'] ?? null; // Usa 'id' para que coincida con el JS
+            
+                if ($id !== null) {
+                    $ordenModel = new OrdenDespacho();
+                    $orden = $ordenModel->obtenerOrdenPorId($id);
+            
+                    if ($orden !== null) {
+                        echo json_encode([
+                            'status' => 'success',
+                            'datos' => $orden
+                        ]);
+                    } else {
+                        echo json_encode([
+                            'status' => 'error',
+                            'message' => 'Orden de despacho no encontrada'
+                        ]);
+                    }
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Usuario no encontrado']);
+                    echo json_encode([
+                        'status' => 'error',
+                        'message' => 'ID de la orden no proporcionado'
+                    ]);
                 }
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'ID del Usuario no proporcionado']);
-            }
-            break;
+                break;
+            
 
         case 'modificar':
             $id = $_POST['id_despachos'];
             $ordendespacho = new OrdenDespacho();
             $ordendespacho->setId($id);
-            $ordendespacho->setFecha($_POST['fecha']);
-            
+            $ordendespacho->setFecha($_POST['fecha_despacho']);
+            $ordendespacho->setFactura($_POST['factura']);
+            $ordendespacho->setCorrelativo($_POST['correlativo']);
             if ($ordendespacho->modificarOrdenDespacho($id)) {
                 echo json_encode(['status' => 'success']);
             } else {
@@ -70,8 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
 
         default:
-            echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
-            break;
+        echo json_encode(['status' => 'error', 'message' => 'Acción no válida', 'accion' => $accion]);
+        break;
+
 
         // Cambiar estatus
         case 'cambiar_estatus':
@@ -119,5 +136,4 @@ if (is_file("Vista/" . $pagina . ".php")) {
     echo "Página en construcción";
 }
 
-ob_end_flush();
-?>
+ob_end_flush();?>

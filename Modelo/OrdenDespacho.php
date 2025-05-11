@@ -56,7 +56,7 @@ class OrdenDespacho extends BD {
     // Método para obtener las facturas disponibles
 
     public function obtenerFacturasDisponibles() {
-    $sql = "SELECT id_factura, fecha, cliente FROM facturas WHERE estatus = 'Borrador'";
+    $sql = "SELECT id_factura, fecha, cliente FROM tbl_facturas WHERE estatus = 'Borrador'";
     $stmt = $this->conex->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -100,11 +100,12 @@ class OrdenDespacho extends BD {
 
     // Método para modificar una orden de despacho
     public function modificarOrdenDespacho($id) {
-        $sql = "UPDATE tbl_despachos SET fecha_despacho = :fecha WHERE id_despachos = :id_despacho";
+        $sql = "UPDATE tbl_despachos SET fecha_despacho = :fecha, correlativo=:correlativo, id_factura=:factura  WHERE id_despachos = :id_despacho";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_despacho', $id);
         $stmt->bindParam(':fecha', $this->fecha);
-        
+        $stmt->bindParam(':correlativo', $this->correlativo);
+        $stmt->bindParam(':factura', $this->factura);
         
         return $stmt->execute();
     }
