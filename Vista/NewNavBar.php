@@ -142,7 +142,7 @@
                       </a>
                 </li>
                 <li>
-                    <a href="?pagina=ordenesdespacho">
+                    <a href="?pagina=OrdenDespacho">
                         <span class="simbolo">
                           <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Ordenes de Despacho
