@@ -4,11 +4,10 @@ require_once 'config.php';
 class Carrito extends BD{
     private $conex;
 
-    public function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::conexion();
     }
-
     // Métodos para el carrito
     public function crearCarrito($id_cliente) {
         $sql = "INSERT INTO tbl_carrito (id_cliente) VALUES (:id_cliente)";

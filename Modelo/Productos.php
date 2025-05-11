@@ -25,9 +25,9 @@ class Productos extends BD{
 
     private $precio;
     
-    public function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::conexion();
     }
 
     // Getters y Setters
@@ -278,7 +278,7 @@ public function getPrecio() {
         return $stmt->execute();
     }
     public function obtenerModelos() {
-        $query = "SELECT id_modelo, nombre_modelo FROM modelo";
+        $query = "SELECT id_modelo, nombre_modelo FROM tbl_modelos";
         $stmt = $this->conex->query($query);
 
         if ($stmt) {
@@ -293,36 +293,31 @@ public function getPrecio() {
 
 
 
-class Producto {
+class Producto extends Productos{
     private $conex;
-    private $tableProductos = 'productos';
-    private $tableModelos = 'modelo';
+    private $tableProductos = 'tbl_productos';
+    private $tableModelos = 'tbl_modelos';
     public $id_producto;
     public $id_modelo;
     public $nombre_producto;
     public $stock_actual;
     public $serial;
 
-    public function __construct() {
-        
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
-
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::conexion();
     }
 
     public function obtenerProductos() {
        
-        $queryProductos = 'SELECT 
-    tbl_productos.*, 
-    tbl_modelo.nombre_modelo, 
-    tbl_categoria.nombre_caracteristicas
-FROM 
-    tbl_productos
-INNER JOIN 
-    tbl_modelo ON tbl_productos.id_modelo = tbl_modelo.id_modelo
-INNER JOIN 
-    tbl_categoria ON tbl_productos.id_categoria = tbl_categoria.id_categoria
- where estado = 1;
+        $queryProductos = 
+        'SELECT tbl_productos.*, tbl_modelos.nombre_modelo, tbl_categoria.nombre_caracteristicas 
+        FROM tbl_productos 
+        INNER JOIN tbl_modelos 
+        ON tbl_productos.id_modelo = tbl_modelos.id_modelo 
+        INNER JOIN tbl_categoria 
+        ON tbl_productos.id_categoria = tbl_categoria.id_categoria 
+        where estado = 1;
 ';
        
         $stmtProductos = $this->conex->prepare($queryProductos);

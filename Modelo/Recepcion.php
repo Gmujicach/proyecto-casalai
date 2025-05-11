@@ -103,7 +103,7 @@ class Recepcion extends BD{
 		$r = array();
 		try{
 			
-			$resultado = $co->query("Select * from productos");
+			$resultado = $co->query("Select * from tbl_productos");
 			
 			if($resultado){
 				
