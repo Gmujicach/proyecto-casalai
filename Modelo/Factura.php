@@ -1,7 +1,6 @@
 <?php
 require_once 'config.php';
 
-
 class Factura extends BD
 {
     private $id;
@@ -11,6 +10,7 @@ class Factura extends BD
     private $estatus;
     private $id_producto;
     private $cantidad;
+    private $conex;
 
     // Constructor
     function __construct() {
@@ -83,7 +83,7 @@ class Factura extends BD
 
     // Obtener factura
     public function facturaConsultar($id_factura) {
-        $conexion = $this->conex;
+       
 
         $sqlDetalles = "SELECT f.id_factura, f.fecha, c.nombre, c.cedula, c.telefono, c.direccion,
             p.nombre_producto AS producto, m.nombre_modelo, mar.nombre_marca,
@@ -96,7 +96,7 @@ class Factura extends BD
         JOIN tbl_marcas mar ON mar.id_marca = m.id_marca
         WHERE f.id_factura = ?";
 
-        $stmt = $conexion->prepare($sqlDetalles);
+        $stmt = $this->conex->prepare($sqlDetalles);
         $stmt->execute([$id_factura]);
         $detalles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -143,8 +143,7 @@ class Factura extends BD
 
     // Marcar factura como Cancelada
     public function facturaCancelar($id) {
-        $pdo = $this->conex;
-        $stmt = $pdo->prepare("UPDATE tbl_facturas SET estatus = 'Cancelada' WHERE id_factura = ?");
+        $stmt = $this->conex->prepare("UPDATE tbl_facturas SET estatus = 'Cancelada' WHERE id_factura = ?");
         return $stmt->execute([$id]);
     }
 
@@ -155,6 +154,7 @@ class Factura extends BD
         return $stmt->execute([$id]);
     }
 }
+
 
 
 
