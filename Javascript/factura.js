@@ -16,6 +16,73 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('click', '#cancelar', function (e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+        cancelarFactura(id);
+    });
+    
+    function cancelarFactura(id) {
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log("ID de la factura a cancelar: ", id); 
+                var datos = new FormData();
+                datos.append('accion', 'cancelar');
+                datos.append('id_factura', id);
+                
+                enviarAjax(datos, function (respuesta) {
+                    if (respuesta.status === 'success') {
+                        Swal.fire(
+                            'Eliminado!',
+                            'La factura ha sido cancelada.',
+                            'success'
+                        ).then(function() {
+                            location.reload(); 
+                        });
+                    } else {
+                        muestraMensaje(respuesta.message);
+                    }
+                });
+            }
+        });
+    }
+
+    function enviarAjax(datos, callback) {
+        console.log("Enviando datos AJAX: ", datos);
+        $.ajax({
+            url: '', 
+            type: 'POST',
+            contentType: false,
+            data: datos,
+            processData: false,
+            cache: false,
+            success: function (respuesta) {
+                console.log("Respuesta del servidor: ", respuesta); 
+                callback(JSON.parse(respuesta));
+            },
+            error: function () {
+                console.error('Error en la solicitud AJAX');
+                muestraMensaje('Error en la solicitud AJAX');
+            }
+        });
+    }
+
+    function muestraMensaje(mensaje) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: mensaje
+        });
+    }
+
     // Evento click de botón registrar
     $("#registrar").on("click", function () {
         var datos = new FormData($('#f')[0]);
@@ -186,8 +253,7 @@ function enviaAjax(datos) {
             try {
                 var lee = JSON.parse(respuesta);
                 if (lee.resultado === 'listado') {
-                    // Aquí llenamos la tabla con los productos recibidos
-                    alert("Hola");
+
                     $('#listado').html(lee.mensaje);
                     // Luego filtramos los productos con stock > 0
                     filtrarProductosPorStock();
