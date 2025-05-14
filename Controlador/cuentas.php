@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case 'modificar':
             $id_cuenta = $_POST['id_cuenta'];
             $cuentabanco = new Cuentabanco();
-            $cuentabanco->setIdCuenta($id_cuenta); // Establecer el ID de la cuenta
+            $cuentabanco->setIdCuenta($id_cuenta);
             $cuentabanco->setNombreBanco($_POST['nombre_banco']);
             $cuentabanco->setNumeroCuenta($_POST['numero_cuenta']);
             $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_cuenta = $_POST['id_cuenta'];
             $nuevoEstado = $_POST['estado'];
             
-            if (!in_array($nuevoEstado, ['habilitado', 'inhabilitado'])) {
+            if (!in_array($nuevoEstado, ['Habilitado', 'Inhabilitado'])) {
                 echo json_encode(['status' => 'error', 'message' => 'Estado no válido']);
                 exit;
             }
@@ -111,7 +111,7 @@ function consultarCuentabanco() {
 $pagina = "cuentas";
 if (is_file("Vista/" . $pagina . ".php")) {
 
-    $cunetabancos = consultarCuentabanco();
+    $cuentabancos = consultarCuentabanco();
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
