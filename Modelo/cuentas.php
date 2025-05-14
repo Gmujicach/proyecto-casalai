@@ -149,6 +149,21 @@ class Cuentabanco extends BD {
         return $stmt->execute();
     }
 
+    public function verificarEstado() {
+        return $this->v_estadoCuenta(); 
+    }
+    private function v_estadoCuenta() {
+        $sql = "SHOW COLUMNS FROM tbl_cuentas LIKE 'estado'";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute();
+        
+        if ($stmt->rowCount() == 0) {
+            $alterSql = "ALTER TABLE tbl_cuentas 
+            ADD estado ENUM('Habilitado','Deshabilitado') NOT NULL DEFAULT 'Habilitado'";
+            $this->conex->exec($alterSql);
+        }
+    }
+
     // Habilitar o Deshabilitar Cuenta
     public function estadoCuenta($nuevoEstado) {
         return $this->etd_cuenta($nuevoEstado); 
