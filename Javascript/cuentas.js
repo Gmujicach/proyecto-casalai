@@ -141,6 +141,52 @@ $(document).ready(function () {
             }
         });
     });
+
+    // Función para cambiar el estado de la cuenta
+    $(document).on('click', '.btn-cambiar-estado', function() {
+        const id_cuenta = $(this).data('id');
+        const span = $(this).closest('td').find('.estado');
+        const estadoActual = span.text().trim().toLowerCase();
+        const nuevoEstado = estadoActual === 'Habilitado' ? 'Inhabilitado' : 'Habilitado';
+
+        // Feedback visual inmediato
+        span.addClass('cambiando');
+        $.ajax({
+            url: '',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                accion: 'cambiar_estado',
+                id_cuenta: id_cuenta,
+                nuevo_estado: estado
+            },
+            success: function(data) {
+                span.removeClass('cambiando');
+                if (data.status === 'success') {
+                    span.text(nuevoEstado);
+                    span.removeClass('Habilitado Inhabilitado').addClass(nuevoEstado);
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Estado actualizado!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    // Revertir visualmente
+                    span.text(estadoActual);
+                    span.removeClass('Habilitado Inhabilitado').addClass(estadoActual);
+                    Swal.fire('Error', data.message || 'Error al cambiar el estado', 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                span.removeClass('cambiando');
+                // Revertir visualmente
+                span.text(estadoActual);
+                span.removeClass('Habilitado Inhabilitado').addClass(estadoActual);
+                Swal.fire('Error', 'Error en la conexión', 'error');
+            }
+        });
+    });
 });
 
 // Función para agregar una nueva fila a la tabla
@@ -204,3 +250,4 @@ function muestraMensaje(mensaje) {
         text: mensaje
     });
 }
+

@@ -111,7 +111,7 @@ function consultarCuentabanco() {
 $pagina = "cuentas";
 if (is_file("Vista/" . $pagina . ".php")) {
 
-    $cunetabancos = consultarCuentabanco();
+    $cuentabancos = consultarCuentabanco();
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
