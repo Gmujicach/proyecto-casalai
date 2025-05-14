@@ -60,7 +60,7 @@
 <div class="modal fade" id="registrarCuentaModal" tabindex="-1" role="dialog" aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="registrarCuenta" method="POST">
+            <form id="registrarCuenta" method="POST" action="Controlador/cuentas.php">
                 <div class="modal-header">
                     <h5 class="modal-title" id="registrarCuentaModalLabel">Registrar Cuenta Bancaria</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
