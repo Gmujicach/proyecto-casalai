@@ -127,7 +127,13 @@ class Factura extends BD
             if ($estatus === 'Procesada') {
                 $form .= '<button type="button" data-id="' . $id_factura . '" class="btn btn-primary btn-lg descargar" name="accion" value="descargar">Descargar</button>';
             } elseif ($estatus !== 'Cancelada') {
-                $form .= '<a href="?pagina=PasareladePago"><button type="button" data-id="' . $id_factura . '" class="btn btn-success btn-lg procesar" name="accion" value="procesar">Procesar</button></a>';
+                $form .= '
+                <form action="?pagina=PasareladePago&accion=procesar" method="POST" style="display:inline;">
+                    <input type="hidden" name="factura" value="' . $id_factura . '">
+                    <input type="hidden" name="accion" value="procesar">
+                    <button type="submit" class="btn btn-success btn-lg">Procesar</button>
+                </form>';
+                ;
                 $form .= '<button type="button" data-id="' . $id_factura . '" class="btn btn-danger btn-lg cancelar" name="accion" id="cancelar" value="cancelar">Cancelar</button>';
             }
     
@@ -151,8 +157,11 @@ class Factura extends BD
                 $contenido .= '</tr>';
             }
     
-            $montoTotal = $total + ($total * 0.16) - ($total * $fila['descuento'] / 100);
-            $contenido .= '<tr><td colspan="4"><strong>Total con Impuestos:</strong></td><td>' . number_format($montoTotal, 2) . '</td></tr>';
+            $descuento = $total * $fila['descuento'] / 100;
+            $subtotalConDescuento = $total - $descuento;
+            $impuesto = $subtotalConDescuento * 0.16;
+            $montoTotal = $subtotalConDescuento + $impuesto;
+            $contenido .= '<tr><td colspan="4"><strong>Total con Impuestos:</strong></td><td>' . number_format($montoTotal, 2) . '</td></tr>';            
             $contenido .= '</tbody></table></div>' . $form . '</div>';
     
             // Acordeón
@@ -193,6 +202,29 @@ class Factura extends BD
         $stmt = $pdo->prepare("UPDATE tbl_facturas SET estatus = 'Procesada' WHERE id_factura = ?");
         return $stmt->execute([$id]);
     }
+
+    public function obtenerMontoTotalFactura($id_factura) {
+        $sql = "SELECT 
+                    ROUND(
+                        (
+                            SUM(p.precio * df.cantidad) * (1 - (f.descuento / 100))
+                        ) * 1.16, 2
+                    ) AS total_con_impuesto
+                FROM tbl_factura_detalle df
+                JOIN tbl_facturas f ON f.id_factura = df.factura_id
+                JOIN tbl_productos p ON df.id_producto = p.id_producto
+                WHERE f.id_factura = :id_factura
+                GROUP BY f.id_factura";
+    
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':id_factura', $id_factura, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $resultado['total_con_impuesto'] ?? 0;
+    }
+    
+    
 }
 
 

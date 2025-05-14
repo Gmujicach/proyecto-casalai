@@ -4,14 +4,6 @@ require_once 'Modelo/PasareladePago.php';
 require_once 'Modelo/cuentas.php';
 require_once 'Modelo/Factura.php';
 
-$id_factura = $_POST['factura'];
-$factura = new Factura();
-$cuenta = new Cuentabanco();
-$listadocuentas = $cuenta->consultarCuentabanco();
-$monto = $factura->obtenerMontoTotalFactura($id_factura);
-
-
-
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Obtiene la acción enviada en la solicitud POST
@@ -103,7 +95,7 @@ $monto = $factura->obtenerMontoTotalFactura($id_factura);
 
 
 
-$pagina = "PasareladePago";
+$pagina = "pasarela";
 if (is_file("Vista/" . $pagina . ".php")) {
     require_once("Vista/" . $pagina . ".php");
 } else {
