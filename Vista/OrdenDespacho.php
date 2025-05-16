@@ -177,7 +177,7 @@ if (!isset($_SESSION['name'])) {
     </div>
   </div>
 </div>
-
+</div>
 
 
 <!-- Modal de eliminación -->

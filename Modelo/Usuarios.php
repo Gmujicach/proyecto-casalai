@@ -130,7 +130,7 @@ class Usuarios extends BD {
 
     public function ingresarUsuario() {
         $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`)
-                VALUES (:nombre, :clave, :rango)";
+                VALUES (:nombre, :clave, :rango, :correo, :nombres, :apellidos, :telefono)";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre', $this->username);
         $stmt->bindParam(':clave', $this->clave);

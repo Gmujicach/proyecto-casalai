@@ -29,12 +29,12 @@ if (!isset($_SESSION['name'])) {
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="nombre_marca">Nombre de la Marca</label>
-            <input type="text" maxlength="15" class="form-control" id="nombre_marca" name="nombre_marca" required>
+            <input type="text" placeholder="Escriba el nombre de la marca que desee Registrar" maxlength="15" class="form-control" id="nombre_marca" name="nombre_marca" required>
             <span id="snombre_marca"></span>
         </div>
     </div>
     <div class="form-group d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
+        <button type="submit" class="btn btn-primary btn-lg">Registrar Marca</button>
     </div>
 </form>
     </div>

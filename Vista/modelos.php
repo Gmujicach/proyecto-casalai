@@ -51,7 +51,7 @@ if (!isset($_SESSION['name'])) {
     </div>
 
 
-    <div class="table-container">
+    <div class="contenedor-tabla">
     <h1 class="titulo-tabla display-5 text-center">LISTA DE MODELOS</h1>
     <table class="tabla">
         <thead>

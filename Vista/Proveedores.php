@@ -96,7 +96,7 @@ if (!isset($_SESSION['name'])) {
 
     <!--== LISTADO DE CONSULTA ==-->
 
-    <div class="table-container">
+    <div class="contenedor-tabla">
     <h1 class="titulo-tabla display-5 text-center">LISTA DE PROVEEDORES</h1>
     <table class="tabla">
         <thead>

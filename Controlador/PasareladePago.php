@@ -4,17 +4,18 @@ require_once 'Modelo/PasareladePago.php';
 require_once 'Modelo/cuentas.php';
 require_once 'Modelo/Factura.php';
 
-$id_factura = $_POST['factura'];
-$factura = new Factura();
-$cuenta = new Cuentabanco();
-$listadocuentas = $cuenta->consultarCuentabanco();
-$monto = $factura->obtenerMontoTotalFactura($id_factura);
+
 
 
 
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Obtiene la acción enviada en la solicitud POST
+        $id_factura = $_POST['factura'];
+        $factura = new Factura();
+        $cuenta = new Cuentabanco();
+        $listadocuentas = $cuenta->consultarCuentabanco();
+        $monto = $factura->obtenerMontoTotalFactura($id_factura);
         if (isset($_POST['accion'])) {
             $accion = $_POST['accion'];
         } else {
@@ -91,7 +92,7 @@ $monto = $factura->obtenerMontoTotalFactura($id_factura);
     
             default:
                 // Respuesta de error si la acción no es válida
-                echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
+                echo json_encode(['status' => 'error', 'message' => 'Acción no válida'.$accion]);
                 break;
         }
         // Termina el script para evitar seguir procesando código innecesario

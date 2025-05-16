@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <footer class="footer text-center text-lg-start bg-light text-muted">
   <div class="text-center p-4" style="background-color: #f1f1f1;">
     © 2023 Copyright: CasaLai C.A/ Paula R - Braynt M - Simon C - Diego C - Gabriel C
+  </div>
     <!-- Bootstrap JS -->
   <script src='Public/bootstrap/js/bootstrap.bundle.min.js'></script>
   <script src="Javascript/validaciones.js"></script>

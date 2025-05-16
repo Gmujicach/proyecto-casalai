@@ -22,12 +22,7 @@ if (!isset($_SESSION['name'])) {
 <?php include 'NewNavBar.php'; ?>
 
 <section class="container"> 
-<div class="">
-        <button class="btn btn-primary btn-lg" style="width: 7cm;">Registrar Producto</button>
-    <button class="btn btn-primary btn-lg" style="width: 7cm;">Listar Productos</button>
-<button class="btn btn-primary btn-lg" style="width: 7cm;"><a href="?pagina=factura" style="text-decoration: none; color: inherit; /* Usa el color del texto del contenedor */
-    background: none;">Generar Factura</a></button>
-</div>
+
 <form id="incluirProductoForm" action="" method="POST" class="formulario-1">
     <input type="hidden" name="accion" value="ingresar">
     <h3 class="display-4 text-center">INCLUIR PRODUCTOS</h3>

@@ -24,12 +24,12 @@ if (!isset($_SESSION['name'])) {
 <body>
   <?php include 'NewNavBar.php'; ?>
 
-  <section class="dashboard-section">
+  <section style=" height: 100vh;" class="dashboard-section">
     <img class="dashboard-section" src="IMG/BannerCasaLai.png" alt="">
   </section>
 
-  <?php include 'footer.php'; ?>
-  ?>
+  
+  
 </body>
-
+<?php include 'footer.php'; ?>
 </html>

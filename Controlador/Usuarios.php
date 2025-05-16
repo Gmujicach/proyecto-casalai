@@ -17,6 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario = new Usuarios();
             $usuario->setUsername($_POST['nombre_usuario']);
             $usuario->setClave($_POST['clave_usuario']);
+            $usuario->setNombre($_POST['nombre']);
+            $usuario->setApellido($_POST['apellido_usuario']);
+            $usuario->setCorreo($_POST['correo_usuario']);
+            $usuario->setTelefono($_POST['telefono_usuario']);
+
             
             if (!$usuario->validarUsuario()) {
                 echo json_encode(['status' => 'error', 'message' => 'Este Usuario ya existe']);

@@ -27,7 +27,7 @@ if (!isset($_SESSION['name'])) {
             <input type="text" placeholder="Nombre" class="control-form" id="nombre" name="nombre" required>
             <span id="snombre"></span>
 
-            <input type="text" placeholder="Apellido" class="control-form" id="nombre" name="nombre" required>
+            <input type="text" placeholder="Apellido" class="control-form" id="apellido_usuario" name="apellido_usuario" required>
             <span id="sapellido"></span>
         </div>
         <div class="envolver-form">
@@ -77,8 +77,7 @@ if (!isset($_SESSION['name'])) {
                 <th>Telefono</th>
                 <th>Rango</th>
                 <th>Estatus</th>
-                <th>Precio</th>
-                <th></th>
+                <!-- <th></th> -->
                 <th><i class="vertical">
                         <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
                     </i>
@@ -116,17 +115,17 @@ if (!isset($_SESSION['name'])) {
                         <?php echo htmlspecialchars($usuario['estatus']); ?>
                     </span>
                 </td>
-                <td>
+                <!-- <td>
                     <span class="precio">200
-                    <!-- <//?php //echo htmlspecialchars($usuario['precio']); ?> -->
-                    </span>
+                     <//?php //echo htmlspecialchars($usuario['precio']); ?> -->
+                    <!-- </span>
                     <span class="moneda">USD</span>
-                </td>
-                <td>
+                </td> -->
+                <!-- <td>
                     <span>
                         <a href="#"class="">Ver Mas</a>
                     </span>
-                </td>
+                </td> -->
                 <td>
                     <span>
                         <div class="acciones-boton">
