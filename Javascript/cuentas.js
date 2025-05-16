@@ -1,28 +1,25 @@
 $(document).ready(function () {
 
     // Cargar datos de la cuenta en el modal al abrir
-    $(document).on('click', '.btn-modificar', function() {
-        var id_cuenta = $(this).data('id');
-        $('#modificar_id_cuenta').val(id_cuenta);
-        $.ajax({
-            url: '',
-            type: 'POST',
-            dataType: 'json',
-            data: { id_cuenta: id_cuenta, accion: 'obtener_cuenta' },
-            success: function(cuenta) {
-                $('#modificar_nombre_banco').val(cuenta.nombre_banco);
-                $('#modificar_numero_cuenta').val(cuenta.numero_cuenta);
-                $('#modificar_rif_cuenta').val(cuenta.rif_cuenta);
-                $('#modificar_telefono_cuenta').val(cuenta.telefono_cuenta);
-                $('#modificar_correo_cuenta').val(cuenta.correo_cuenta);
-                $('#modificarCuentaModal').modal('show');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error en la solicitud AJAX:', textStatus, errorThrown);
-                muestraMensaje('Error al cargar los datos de la Cuenta.');
-            }
-        });
+    $(document).on('click', '.btn-modificar', function () {
+        // Obtener la fila de la tabla (padre del botón)
+        var fila = $(this).closest('tr');
+    
+        // Obtener todas las celdas de esa fila
+        var celdas = fila.find('td');
+    
+        // Rellenar los campos del formulario del modal con los valores de las celdas
+        $('#modificar_id_cuenta').val(celdas.eq(0).text().trim());
+        $('#modificar_nombre_banco').val(celdas.eq(1).text().trim());
+        $('#modificar_numero_cuenta').val(celdas.eq(2).text().trim());
+        $('#modificar_rif_cuenta').val(celdas.eq(3).text().trim());
+        $('#modificar_telefono_cuenta').val(celdas.eq(4).text().trim());
+        $('#modificar_correo_cuenta').val(celdas.eq(5).text().trim());
+    
+        // Mostrar el modal
+        $('#modificarCuentaModal').modal('show');
     });
+    
 
     // Enviar datos de modificación por AJAX al controlador PHP
     $('#modificarCuenta').on('submit', function(e) {
@@ -32,12 +29,12 @@ $(document).ready(function () {
         $.ajax({
             url: '',
             type: 'POST',
+            data: formData,
             processData: false,
             contentType: false,
             cache: false,
-            data: formData,
+            dataType: 'json', // 🔥 jQuery lo convierte automáticamente en objeto JS
             success: function(response) {
-                response = JSON.parse(response);
                 if (response.status === 'success') {
                     $('#modificarCuentaModal').modal('hide');
                     Swal.fire({
@@ -45,17 +42,45 @@ $(document).ready(function () {
                         title: 'Modificado',
                         text: 'La Cuenta se ha modificado correctamente'
                     });
-                    // Actualizar la fila correspondiente en la tabla
-                    actualizarFilaCuenta(response.cuenta);
+            
+                    // Obtener los datos del formulario
+                    const id = $('#modificar_id_cuenta').val();
+                    const nombre = $('#modificar_nombre_banco').val();
+                    const numero = $('#modificar_numero_cuenta').val();
+                    const rif = $('#modificar_rif_cuenta').val();
+                    const telefono = $('#modificar_telefono_cuenta').val();
+                    const correo = $('#modificar_correo_cuenta').val();
+            
+                    // Buscar la fila correspondiente en la tabla
+                    const fila = $('tr[data-id="' + id + '"]');
+            
+                    // Actualizar las celdas de la fila
+                    fila.find('td').eq(1).text(nombre);
+                    fila.find('td').eq(2).text(numero);
+                    fila.find('td').eq(3).text(rif);
+                    fila.find('td').eq(4).text(telefono);
+                    fila.find('td').eq(5).text(correo);
+            
+                    // Actualizar los atributos del botón "Modificar" con los nuevos datos
+                    const botonModificar = fila.find('.btn-modificar');
+                    botonModificar.data('nombre', nombre);
+                    botonModificar.data('numero', numero);
+                    botonModificar.data('rif', rif);
+                    botonModificar.data('telefono', telefono);
+                    botonModificar.data('correo', correo);
+            
                 } else {
                     muestraMensaje(response.message);
                 }
-            },
+            }
+            ,
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Error al modificar la Cuenta:', textStatus, errorThrown);
                 muestraMensaje('Error al modificar la Cuenta.');
             }
         });
+        
+        
     });
 
     // Función para eliminar la cuenta
