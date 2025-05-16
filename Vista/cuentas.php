@@ -10,12 +10,7 @@
 <body>
 <?php include 'NewNavBar.php'; ?>
 
-<div class="formulario-responsivo">
-    <div class="fondo-form">
-        <h3 class="titulo-form">INCLUIR CUENTA BANCARIA</h3>
-        <button class="boton-form" data-toggle="modal" data-target="#registrarCuentaModal">Registrar Cuenta</button>
-    </div>
-</div>
+<button class="boton-form" data-toggle="modal" data-target="#registrarCuentaModal">Registrar Cuenta</button>
 
 <div class="contenedor-tabla">
     <h3>LISTA DE CUENTAS BANCARIAS</h3>
