@@ -72,8 +72,8 @@ class Cuentabanco extends BD {
     }
     private function r_cuentabanco() {
         $sql = "INSERT INTO tbl_cuentas 
-        (nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta)
-        VALUES (:nombre_banco, :numero_cuenta, :rif_cuenta, :telefono_cuenta, :correo_cuenta)";
+        (id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta)
+        VALUES (3, :nombre_banco, :numero_cuenta, :rif_cuenta, :telefono_cuenta, :correo_cuenta)";
         
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre_banco', $this->nombre_banco);
@@ -106,7 +106,7 @@ class Cuentabanco extends BD {
         return $this->c_cuentabanco(); 
     }
     private function c_cuentabanco() {
-        $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta 
+        $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta, estado 
         FROM tbl_cuentas";
 
         $stmt = $this->conex->prepare($sql);

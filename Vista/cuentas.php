@@ -33,7 +33,7 @@
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($cuentas as $cuenta): ?>
+        <?php foreach ($cuentabancos as $cuenta): ?>
             <tr>
                 <td><?php echo htmlspecialchars($cuenta['id_cuenta']); ?></td>
                 <td><?php echo htmlspecialchars($cuenta['nombre_banco']); ?></td>
@@ -42,7 +42,7 @@
                 <td><?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?></td>
                 <td><?php echo htmlspecialchars($cuenta['correo_cuenta']); ?></td>
                 <td>
-                    <span class="campo-estado <?php echo ($cuenta['estado'] == 'Habilitado') ? 'habilitado' : 'inhabilitado'; ?>">
+                    <span class="campo-estado <?php echo ($cuenta['estado'] == 'Habilitado') ? 'Habilitado' : 'inhabilitado'; ?>">
                         <?php echo htmlspecialchars($cuenta['estado']); ?>
                     </span>
                 </td>
@@ -60,7 +60,7 @@
 <div class="modal fade" id="registrarCuentaModal" tabindex="-1" role="dialog" aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="registrarCuenta" method="POST" action="Controlador/cuentas.php">
+            <form id="registrarCuenta" method="POST" action="">
                 <div class="modal-header">
                     <h5 class="modal-title" id="registrarCuentaModalLabel">Registrar Cuenta Bancaria</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
