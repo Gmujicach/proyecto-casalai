@@ -96,8 +96,9 @@ $(document).ready(function () {
     $('#registrarCuenta').on('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(this);
+    
         $.ajax({
-            url: '',
+            url: '', // Asegúrate de que esta URL esté definida correctamente
             type: 'POST',
             data: formData,
             contentType: false,
@@ -105,42 +106,60 @@ $(document).ready(function () {
             success: function(response) {
                 try {
                     const data = JSON.parse(response);
+    
                     if (data.status === 'success') {
                         Swal.fire({
                             title: 'Éxito',
-                            text: 'Cuenta ingresada exitosamente',
+                            text: data.message || 'Cuenta ingresada exitosamente',
                             icon: 'success',
                             confirmButtonText: 'Aceptar'
                         });
-                        // Agregar la nueva cuenta a la tabla
+    
                         agregarFilaCuenta(data.cuenta);
                     } else {
                         Swal.fire({
-                            title: 'Error',
-                            text: data.message || 'Error al ingresar la Cuenta',
+                            title: 'Error del servidor',
+                            html: `<strong>Mensaje:</strong> ${data.message || 'Error al ingresar la cuenta'}<br>
+                                   <strong>Detalle:</strong> ${data.detail || 'No se proporcionó detalle adicional'}`,
                             icon: 'error',
                             confirmButtonText: 'Aceptar'
                         });
                     }
                 } catch (e) {
                     Swal.fire({
-                        title: 'Error',
-                        text: 'Error al procesar la respuesta del servidor',
+                        title: 'Error inesperado',
+                        html: `<strong>Respuesta no válida del servidor.</strong><br><code>${response}</code>`,
                         icon: 'error',
                         confirmButtonText: 'Aceptar'
                     });
+                    console.error('Respuesta no válida:', response);
                 }
             },
             error: function(xhr, status, error) {
+                let mensajeError = `Error en la solicitud AJAX: ${status} - ${error}`;
+    
+                // Si el servidor devuelve algo útil en el cuerpo
+                if (xhr.responseText) {
+                    mensajeError += `<br><strong>Respuesta del servidor:</strong><br><code>${xhr.responseText}</code>`;
+                }
+    
                 Swal.fire({
-                    title: 'Error',
-                    text: 'Error en la solicitud AJAX: ' + error,
+                    title: 'Error en la conexión',
+                    html: mensajeError,
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
+                });
+    
+                console.error('Detalles del error AJAX:', {
+                    status: xhr.status,
+                    responseText: xhr.responseText,
+                    readyState: xhr.readyState,
+                    errorThrown: error
                 });
             }
         });
     });
+    
 
     // Función para cambiar el estado de la cuenta
     $(document).on('click', '.btn-cambiar-estado', function() {

@@ -72,8 +72,8 @@ class Cuentabanco extends BD {
     }
     private function r_cuentabanco() {
         $sql = "INSERT INTO tbl_cuentas 
-        (id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta)
-        VALUES (3, :nombre_banco, :numero_cuenta, :rif_cuenta, :telefono_cuenta, :correo_cuenta)";
+        (nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta)
+        VALUES (:nombre_banco, :numero_cuenta, :rif_cuenta, :telefono_cuenta, :correo_cuenta)";
         
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre_banco', $this->nombre_banco);
@@ -85,6 +85,19 @@ class Cuentabanco extends BD {
         return $stmt->execute();
     }
 
+    public function obtenerUltimaCuenta() {
+        try {
+            $sql = "SELECT * FROM tbl_cuentas ORDER BY id_cuenta DESC LIMIT 1";
+            $stmt = $this->conexion()->prepare($sql);
+            $stmt->execute();
+            $cuenta = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $cuenta ? $cuenta : null;
+        } catch (PDOException $e) {
+            error_log("Error al obtener la última cuenta: " . $e->getMessage());
+            return null;
+        }
+    }
+    
     // Obtener Cuenta por ID
     public function obtenerCuentaPorId($id_cuenta) {
         return $this->cuentaporid($id_cuenta); 

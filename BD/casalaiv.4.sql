@@ -730,6 +730,8 @@ ALTER TABLE `tbl_tintas`
 ALTER TABLE `tbl_cartucho_tinta`
   MODIFY `id_cartucho` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `tbl_cuentas`
+  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `tbl_categoria`
 --

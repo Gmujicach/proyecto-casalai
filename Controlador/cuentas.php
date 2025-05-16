@@ -20,10 +20,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
 
             if ($cuentabanco->registrarCuentabanco()) {
-                echo json_encode(['status' => 'success']);
+                // Suponiendo que puedes obtener los datos luego de registrar
+                $cuentaRegistrada = $cuentabanco->obtenerUltimaCuenta(); // <-- deberías tener este método o algo similar
+            
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Cuenta registrada correctamente',
+                    'cuenta' => $cuentaRegistrada
+                ]);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al registrar la cuenta']);
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Error al registrar la cuenta'
+                ]);
             }
+            
             exit;
         
         case 'obtener_cuenta':
