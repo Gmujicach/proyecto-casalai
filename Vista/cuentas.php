@@ -1,8 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php
+if (!isset($_SESSION['name'])) {
+    header('Location: .');
+    exit();
+}
+?>
     <title>Gestionar Cuentas Bancarias</title>
     <?php include 'header.php'; ?>
 </head>
@@ -12,32 +13,32 @@
 
 <div class="formulario-responsivo">
     <div class="fondo-form">
-        <form id="registrarCuenta">
+        <form id="registrarCuenta" action="" method="POST">
             <input type="hidden" name="accion" value="registrar">
             <h3 class="titulo-form">INCLUIR CUENTA BANCARIA</h3>
             
             <div class="envolver-form">
-                <label for="nombre_banco">Nombre del Banco</label>
-                <input type="text" class="form-control" id="nombre_banco" name="nombre_banco" required>
+                <input type="text" placeholder="Nombre del banco" class="control-form" id="nombre_banco" name="nombre_banco" required>
+                <span id="snombre_banco"></span>
             </div>
             <div class="envolver-form">
-                <label for="numero_cuenta">Número de Cuenta</label>
-                <input type="text" class="form-control" id="numero_cuenta" name="numero_cuenta" required>
+                <input type="text" placeholder="Número de cuenta" class="control-form" id="numero_cuenta" name="numero_cuenta" required>
+                <span id="snumero_cuenta"></span>
             </div>
             <div class="envolver-form">
-                <label for="rif_cuenta">RIF</label>
-                <input type="text" class="form-control" id="rif_cuenta" name="rif_cuenta" required>
+                <input type="text" placeholder="RIF" class="control-form" id="rif_cuenta" name="rif_cuenta" required>
+                <span id="srof_cuenta"></span>
             </div>
             <div class="envolver-form">
-                <label for="telefono_cuenta">Teléfono</label>
-                <input type="text" class="form-control" id="telefono_cuenta" name="telefono_cuenta" required>
+                <input type="text" placeholder="Número de teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" required>
+                <span id="stelefono_cuenta"></span>
             </div>
             <div class="envolver-form">
-                <label for="correo_cuenta">Correo</label>
-                <input type="email" class="form-control" id="correo_cuenta" name="correo_cuenta" required>
+                <input type="email" placeholder="Correo electrónico" class="control-form" id="correo_cuenta" name="correo_cuenta" required>
+                <span id="scorreo_cuenta"></span>
             </div>
 
-            <button class="boton-form" type="submit">Registrar Cuenta</button>
+            <button class="boton-form" type="submit">Registrar</button>
 
         </form>
     </div>
