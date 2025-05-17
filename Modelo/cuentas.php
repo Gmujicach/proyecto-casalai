@@ -181,10 +181,10 @@ class Cuentabanco extends BD {
     }
 
     // Habilitar o Deshabilitar Cuenta
-    public function estadoCuenta($nuevoEstado) {
-        return $this->etd_cuenta($nuevoEstado); 
+    public function cambiarEstado($nuevoEstado) {
+        return $this->estadoCuenta($nuevoEstado); 
     }
-    private function etd_cuenta($nuevoEstado) {
+    private function estadoCuenta($nuevoEstado) {
         try {
             $sql = "UPDATE tbl_cuentas SET estado = :estado WHERE id_cuenta = :id_cuenta";
             $stmt = $this->conex->prepare($sql);

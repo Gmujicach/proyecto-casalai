@@ -300,3 +300,43 @@ function muestraMensaje(mensaje) {
     });
 }
 
+$(document).ready(function() {
+    // Manejar clic en flechas
+    $(document).on('click', '.flecha-izquierda, .flecha-derecha', function(e) {
+        e.preventDefault();
+        const url = $(this).closest('a').attr('href');
+        if(url) {
+            cambiarPagina(url.split('pagina=')[1]);
+        }
+    });
+
+    // Manejar cambio en filas por página
+    $('#filasPorPagina').change(function() {
+        cambiarFilasPorPagina(this.value);
+    });
+});
+
+function cambiarPagina(pagina) {
+    const filas = $('#filasPorPagina').val();
+    
+    $.ajax({
+        url: '',
+        type: 'GET',
+        data: {
+            pagina: pagina,
+            filas: filas,
+            ajax: true
+        },
+        success: function(data) {
+            $('#tabla-usuarios').replaceWith($(data).find('#tabla-usuarios'));
+            actualizarParametrosURL(pagina, filas);
+        }
+    });
+}
+
+function actualizarParametrosURL(pagina, filas) {
+    const url = new URL(window.location);
+    url.searchParams.set('pagina', pagina);
+    url.searchParams.set('filas', filas);
+    window.history.pushState({}, '', url);
+}
