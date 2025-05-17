@@ -16,13 +16,10 @@ $(document).ready(function () {
                 console.log('Datos del Cliente obtenidos:', clientes);
                 // Llenar los campos del formulario con los datos obtenidos del clientes
                 $('#modificarnombre').val(clientes.nombre);
-                $('#modificarpersona_contacto').val(clientes.persona_contacto);
                 $('#modificardireccion').val(clientes.direccion);
                 $('#modificartelefono').val(clientes.telefono);
-                $('#modificartelefono_secundario').val(clientes.telefono_secundario);
-                $('#modificarrif').val(clientes.rif);
+                $('#modificarcedula').val(clientes.cedula);
                 $('#modificarcorreo').val(clientes.correo);
-                $('#modificarobservaciones').val(clientes.observaciones);
                 $('#modificaractivo').val(clientes.activo);
                 
                 // Ajustar la imagen si se maneja la carga de imágenes

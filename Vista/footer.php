@@ -16,16 +16,25 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+
+<script src="Javascript/tabla.js"></script>
+
+<!-- Footer de la página -->
+<footer class="footer text-center text-lg-start bg-light text-muted">
+  <div class="text-center p-4" style="background-color: #f1f1f1;">
+    © 2023 Copyright: CasaLai C.A/ Paula R - Braynt M - Simon C - Diego C - Gabriel C
+  </div>
     <!-- Bootstrap JS -->
   <script src='Public/bootstrap/js/bootstrap.bundle.min.js'></script>
   <script src="Javascript/validaciones.js"></script>
-  <script src="Public/bootstrap/js/sidebar.js"></script>
   <script src="Public/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="Public/js/jquery-3.7.1.min.js"></script>
   <script src="Public/js/jquery.dataTables.min.js"></script>
   <script src="Public/js/dataTables.bootstrap5.min.js"></script>
-  <script src="Public/js/datatable.js"></script>
+  <script src="Public/js/datatables.min.js"></script>
   <script src="Public/js/sweetalert2.js"></script>
   <script src="Javascript/sweetalert2.all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -1,7 +1,4 @@
 <?php
-
-
-
 if (!isset($_SESSION['name'])) {
 
  	header('Location: .');
@@ -17,192 +14,183 @@ if (!isset($_SESSION['name'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestionar Productos</title>
   
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="Public/bootstrap/css/bootstrap.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="Styles/darckort.css">
+  <?php include 'header.php'; ?>
   
 </head>
 <body>
 
-<?php include 'NavBar.php'; ?>
+<?php include 'NewNavBar.php'; ?>
 
 <section class="container"> 
-<div class="d-flex justify-content-center">
-        <button class="btn btn-primary btn-lg" style="width: 7cm;">Registrar Producto</button>
-    <button class="btn btn-primary btn-lg" style="width: 7cm;">Listar Productos</button>
-<button class="btn btn-primary btn-lg" style="width: 7cm;"><a href="?pagina=factura" style="text-decoration: none; color: inherit; /* Usa el color del texto del contenedor */
-    background: none;">Generar Factura</a></button>
-</div>
 
-    <form id="incluirProductoForm" action="" method="POST" class="formulario-1" >
-            <input type="hidden" name="accion" value="ingresar">
-            <h3 class="display-4 text-center">INCLUIR PRODUCTOS</h3>
-                <div class="row">
-                    <div class="form-group col">
-                        <label for="Nombre_P">Nombre del producto</label>
-                        <input type="text" maxlength="15" class="form-control" id="Nombre_P" name="Nombre_P" required>
-                        <span id="sNombre_P"></span>
-                    </div>
-                    <div class="form-group col">
-                        <label for="Descripcion_P">Descripcion del producto</label>
-                        <input type="text" maxlength="50" class="form-control" id="Descripcion_P" name="Descripcion_P" required>
-                        <span id="sDescripcion_P"></span>
-                    </div>
-                    <div class="col">
-                        <label for="Modelo">Modelo</label>
-                        <select class="form-select" id="Modelo" name="Modelo">
-                        <option value="">Seleccionar Modelo</option>
-                        <?php foreach ($modelos as $modelo): ?>
-                            <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['descripcion_mo']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
+<form id="incluirProductoForm" action="" method="POST" class="formulario-1">
+    <input type="hidden" name="accion" value="ingresar">
+    <h3 class="display-4 text-center">INCLUIR PRODUCTOS</h3>
 
     <div class="row">
-        
+        <div class="form-group col">
+            <label for="nombre_producto">Nombre del producto</label>
+            <input type="text" maxlength="15" class="form-control" id="nombre_producto" name="nombre_producto" required>
+            <span id="snombre_producto"></span>
+        </div>
+
+        <div class="form-group col">
+            <label for="descripcion_producto">Descripción del producto</label>
+            <input type="text" maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" required>
+            <span id="sdescripcion_producto"></span>
+        </div>
+
+        <div class="col">
+            <label for="Modelo">Modelo</label>
+            <select class="form-select" id="Modelo" name="Modelo" required>
+                <option value="">Seleccionar Modelo</option>
+                <?php foreach ($modelos as $modelo): ?>
+                    <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="row my-2">
             <div class="col" style="display:none">
                 <label for="Stock_Actual">Stock Actual</label>
                 <input type="text" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" required>
             </div>
             <div class="col">
-                <label for="Stock_Maximo">Stock Maximo</label>
+                <label for="Stock_Maximo">Stock Máximo</label>
                 <input type="text" maxlength="10" class="form-control" id="Stock_Maximo" name="Stock_Maximo" required>
                 <span id="sStock_Maximo"></span>
             </div>
             <div class="col">
-                <label for="Stock_Minimo">Stock Minimo</label>
+                <label for="Stock_Minimo">Stock Mínimo</label>
                 <input type="text" maxlength="10" class="form-control" id="Stock_Minimo" name="Stock_Minimo" required>
                 <span id="sStock_Minimo"></span>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3">
-            <label for="Peso">Peso</label>
-            <input type="text" maxlength="6" class="form-control" id="Peso" name="Peso" required>
-            <span id="sPeso"></span>
-        </div>
-        <div class="col-md-3">
-            <label for="Largo">Largo</label>
-            <input type="text" maxlength="6" class="form-control" id="Largo" name="Largo" required>
-            <span id="sLargo"></span>
-        </div>
-        <div class="col-md-3">
-            <label for="Alto">Alto</label>
-            <input type="text" maxlength="6" class="form-control" id="Alto" name="Alto" required>
-            <span id="sAlto"></span>
-        </div>
-        <div class="col-md-3">
-            <label for="Ancho">Ancho</label>
-            <input type="text" maxlength="6" class="form-control" id="Ancho" name="Ancho" required>
-            <span id="sAncho"></span>
-        </div>
-    </div>
 
     <div class="form-group">
-        <label for="Clausula_de_garantia">Clausula de garantia</label>
-        <textarea class="form-control" maxlength="50" id="Clausula_de_garantia" name="Clausula_de_garantia" rows="3"></textarea>
-        <span id="sClausula_de_garantia"></span>
+        <label for="Clausula_garantia">Cláusula de garantía</label>
+        <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="3"></textarea>
+        <span id="sClausula_garantia"></span>
     </div>
-
 
     <div class="row">
         <div class="col-md-4">
-            <label for="Codigo_Interno">Codigo Interno</label>
-            <input type="number" maxlength="10" class="form-control" id="Codigo_Interno" name="Codigo_Interno" required>
-            <span id="sCodigo_Interno"></span>
-        </div>
-        <div class="col-md-4">
-            <label for="Servicio">¿Tiene Servicio?</label>
-            <select class="form-select" id="Servicio" name="Servicio">
-                <option value="1">Sí</option>
-                <option value="0">No</option>
-            </select>
+            <label for="Seriales">Código Serial</label>
+            <input type="text" maxlength="10" class="form-control" id="Seriales" name="Seriales" required>
+            <span id="sSeriales"></span>
         </div>
 
         <div class="form-group col-md-4">
-            <label for="Categoria">Categorias</label>
-            <select class="custom-select" id="Categoria" name="Categoria">
-            <option value="CARTUCHO">CARTUCHO</option>
-                                <option value="CABEZAL">CABEZAL</option>
-                                <option value="CHIP">CHIP</option>
-                                <option value="MOTOR">MOTOR</option>
-                                <option value="FIXING FILM">FIXING FILM</option>
-                                <option value="FIRMWARE">FIRMWARE</option>
-                                <option value="TONER">TONER</option>
-                                <option value="IMPRESORA">IMPRESORA</option>
-                                <option value="TINTA">TINTA</option>
-                                <option value="ESCANER">ESCANER</option>
-                                <option value="PAPEL">PAPEL</option>
-                                <option value="PROTECTOR">PROTECTOR</option>
-                                <option value="CINTA">CINTA</option>
-                                <option value="UNIDAD DE IMAGEN">UNIDAD DE IMAGEN</option>     
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <label for="Seriales">¿Tiene Seriales?</label>
-            <select class="form-select" id="Seriales" name="Seriales">
-                <option value="1">Sí</option>
-                <option value="0">No</option>
+            <label for="Categoria">Categorías</label>
+            <select class="custom-select" id="Categoria" name="Categoria" required>
+                <option value="">Seleccionar Categoría</option>
+                <option value="1">IMPRESORA</option>
+                <option value="3">TINTA</option>
+                <option value="4">CARTUCHO DE TINTA</option>
+                <option value="2">PROTECTOR DE VOLTAJE</option>
+                <option value="5">OTROS</option>     
             </select>
         </div>
 
-        <div class="col-md-3">
-            <label for="Lote">¿Tiene Lote?</label>
-            <select class="form-select" id="Lote" name="Lote">
-                <option value="1">Sí</option>
-                <option value="0">No</option>
-            </select>
+        <!-- Campo faltante de PRECIO -->
+        <div class="form-group col-md-4">
+            <label for="Precio">Precio</label>
+            <input type="text" maxlength="10" class="form-control" id="Precio" name="Precio" required>
+            <span id="sPrecio"></span>
         </div>
-
-        
     </div>
+
     <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
     </div>
 </form>
+
     </div>
 
 
     <div class="table-container">
     <h1 class="titulo-tabla display-5 text-center">LISTA DE PRODUCTOS</h1>
     <table class="tabla">
-        <thead>
+    <thead>
+        <tr>
+            <th>Acciones</th>
+            <th>Id Producto</th>
+            <th>Nombre del Producto</th>
+            <th>Descripción</th>
+            <th>Modelo</th> <!-- CAMBIO: antes decía id_modelo -->
+            <th>Stock Actual</th>
+            <th>Stock Máximo</th>
+            <th>Stock Mínimo</th>
+            <th>Serial</th>
+            <th>Cláusula de Garantía</th>
+            <th>Categoría</th> <!-- CAMBIO: antes decía id_categoria -->
+            <th>Precio</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($productos as $producto): ?>
             <tr>
-                <th>Acciones</th>
-                <th>Nombre del Producto</th>
-                <th>Stock Actual</th>
-                <th>Modelo</th>
-                <th>Código</th>
+                <td>
+                    <!-- Botón Modificar -->
+                    <button 
+                        type="button" 
+                        class="btn btn-modificar" 
+                        data-toggle="modal" 
+                        data-target="#modificarProductoModal" 
+                        data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
+                        data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
+                        data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
+                        data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
+                        data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
+                        data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
+                        data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
+                        data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
+                        data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
+                        data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
+                        data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
+                    >
+                        Modificar
+                    </button>
+                    <br>
+                    <!-- Botón Eliminar -->
+                    <a href="#" 
+                        data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>" 
+                        class="btn btn-eliminar"
+                    >
+                        Eliminar
+                    </a>
+                </td>
+                <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
+                <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
+                <td><?php echo htmlspecialchars($producto['descripcion_producto']); ?></td>
+
+                <!-- AQUÍ cambia: mostramos el nombre del modelo -->
+                <td>
+                    <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
+                </td>
+
+                <td><?php echo htmlspecialchars($producto['stock']); ?></td>
+                <td><?php echo htmlspecialchars($producto['stock_maximo']); ?></td>
+                <td><?php echo htmlspecialchars($producto['stock_minimo']); ?></td>
+                <td><?php echo htmlspecialchars($producto['serial']); ?></td>
+                <td><?php echo htmlspecialchars($producto['clausula_garantia']); ?></td>
+
+                <!-- AQUÍ cambia: mostramos el nombre de la categoría -->
+                <td>
+                    <?php echo htmlspecialchars($producto['nombre_caracteristicas']); ?>
+                </td>
+
+                <td><?php echo htmlspecialchars($producto['precio']); ?></td>
                 
             </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($productos as $producto): ?>
-                <tr>
-                    <td>
-                        <!-- Botón Modificar que abre el modal -->
-                        <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarProductoModal" data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>">
-    Modificar
-</button>
-                        <br>
-                        <!-- Botón Eliminar -->
-                        <a href="#" data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>" class="btn btn-eliminar">Eliminar</a>
-                    </td>
-                    <td><?php echo htmlspecialchars($producto['nombre_p']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['stock']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['descripcion_mo']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['codigo']); ?></td>
-                    
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+
                     <div class="row">
                         <div class="col">
                             <button class="btn" name="" type="button" id="pdfproductos" name="pdfproductos"><a href="?pagina=pdfproductos">GENERAR REPORTE</a></button>
@@ -212,129 +200,95 @@ if (!isset($_SESSION['name'])) {
 
 <!-- Modal de modificación -->
 <div class="modal fade" id="modificarProductoModal" tabindex="-1" role="dialog" aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modificarProductoModalLabel">Modificar Producto</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!-- Campos del formulario de modificación -->
-                    <input type="hidden" id="modificarIdProducto" name="id_producto">
-                    <div class="form-group">
-                        <label for="modificarNombreP">Nombre del producto</label>
-                        <input type="text" class="form-control" id="modificarNombreP" name="Nombre_P" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarDescripcionP">Descripción del producto</label>
-                        <input type="text" class="form-control" id="modificarDescripcionP" name="Descripcion_P" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="modificarModelo">Modelo</label>
-                            <select class="custom-select" id="modificarModelo" name="Modelo">
-                                <option value="">Seleccionar Modelo</option>
-                                <?php foreach ($modelos as $modelo): ?>
-                                    <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['descripcion_mo']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="modificarStockActual">Stock Actual</label>
-                            <input type="text" class="form-control" id="modificarStockActual" name="Stock_Actual" required>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="modificarStockMaximo">Stock Máximo</label>
-                            <input type="text" class="form-control" id="modificarStockMaximo" name="Stock_Maximo" required>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="modificarStockMinimo">Stock Mínimo</label>
-                            <input type="text" class="form-control" id="modificarStockMinimo" name="Stock_Minimo" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="modificarPeso">Peso</label>
-                            <input type="text" class="form-control" id="modificarPeso" name="Peso" required>
-                            <span id="sPeso"></span>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="modificarLargo">Largo</label>
-                            <input type="text" class="form-control" id="modificarLargo" name="Largo" required>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="modificarAlto">Alto</label>
-                            <input type="text" class="form-control" id="modificarAlto" name="Alto" required>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="modificarAncho">Ancho</label>
-                            <input type="text" class="form-control" id="modificarAncho" name="Ancho" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarClausulaGarantia">Clausula de garantia</label>
-                        <textarea class="form-control" id="modificarClausulaGarantia" name="Clausula_de_garantia" rows="3"></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="modificarCodigoInterno">Código Interno</label>
-                            <input type="number" class="form-control" id="modificarCodigoInterno" name="Codigo_Interno" required>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="modificarServicio">¿Tiene Servicio?</label>
-                            <select class="custom-select" id="modificarServicio" name="Servicio">
-                                <option value="1">Sí</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4">
-                                    <label for="Categoria">Categorias</label>
-                                    <select class="custom-select" id="Categoria" name="Categoria">
-                                    <option value="CARTUCHO">CARTUCHO</option>
-                                                        <option value="CABEZAL">CABEZAL</option>
-                                                        <option value="CHIP">CHIP</option>
-                                                        <option value="MOTOR">MOTOR</option>
-                                                        <option value="FIXING FILM">FIXING FILM</option>
-                                                        <option value="FIRMWARE">FIRMWARE</option>
-                                                        <option value="TONER">TONER</option>
-                                                        <option value="IMPRESORA">IMPRESORA</option>
-                                                        <option value="TINTA">TINTA</option>
-                                                        <option value="ESCANER">ESCANER</option>
-                                                        <option value="PAPEL">PAPEL</option>
-                                                        <option value="PROTECTOR">PROTECTOR</option>
-                                                        <option value="CINTA">CINTA</option>
-                                                        <option value="UNIDAD DE IMAGEN">UNIDAD DE IMAGEN</option>     
-                                    </select>
-                                </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="modificarSeriales">¿Tiene Seriales?</label>
-                            <select class="custom-select" id="modificarSeriales" name="Seriales">
-                                <option value="1">Sí</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="modificarLote">¿Tiene Lote?</label>
-                            <select class="custom-select" id="modificarLote" name="Lote">
-                                <option value="1">Sí</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Modificar</button>
-                </div>
-            </form>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modificarProductoModalLabel">Modificar Producto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+
+          <!-- Acciones ocultas -->
+          <input type="hidden" name="accion" value="modificar">
+          <input type="hidden" id="modificarIdProducto" name="id_producto">
+
+          <!-- Campos -->
+          <div class="form-group">
+            <label for="modificarNombreProducto">Nombre del producto</label>
+            <input type="text" maxlength="15" class="form-control" id="modificarNombreProducto" name="nombre_producto" required>
+          </div>
+
+          <div class="form-group">
+            <label for="modificarDescripcionProducto">Descripción del producto</label>
+            <input type="text" maxlength="50" class="form-control" id="modificarDescripcionProducto" name="descripcion_producto" required>
+          </div>
+
+          <div class="form-group">
+            <label for="modificarModelo">Modelo</label>
+            <select class="form-select" id="modificarModelo" name="Modelo" required>
+              <option value="">Seleccionar Modelo</option>
+              <?php foreach ($modelos as $modelo): ?>
+                <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="modificarStockActual">Stock Actual</label>
+              <input type="number" min="0" class="form-control" id="modificarStockActual" name="Stock_Actual" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="modificarStockMaximo">Stock Máximo</label>
+              <input type="number" min="0" class="form-control" id="modificarStockMaximo" name="Stock_Maximo" required>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="modificarStockMinimo">Stock Mínimo</label>
+              <input type="number" min="0" class="form-control" id="modificarStockMinimo" name="Stock_Minimo" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="modificarClausulaGarantia">Cláusula de Garantía</label>
+            <textarea class="form-control" maxlength="50" id="modificarClausulaGarantia" name="Clausula_garantia" rows="3"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="modificarSeriales">Código Serial</label>
+              <input type="text" maxlength="10" class="form-control" id="modificarSeriales" name="Seriales" required>
+            </div>
+            <div class="form-group col-md-4">
+            <label for="modificarPrecio">Precio</label>
+            <input type="number" min="0" class="form-control" id="modificarPrecio" name="Precio" required>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="modificarCategoria">Categoría</label>
+              <select class="form-select" id="modificarCategoria" name="Categoria" required>
+                <option value="">Seleccionar Categoría</option>
+                <option value="1">IMPRESORA</option>
+                <option value="3">TINTA</option>
+                <option value="4">CARTUCHO DE TINTA</option>
+                <option value="2">PROTECTOR DE VOLTAJE</option>
+                <option value="5">OTROS</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Modificar</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
+
 <script src="public/bootstrap/js/sidebar.js"></script>
   <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="public/js/jquery-3.7.1.min.js"></script>
@@ -344,5 +298,26 @@ if (!isset($_SESSION['name'])) {
   <script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/Productos.js"></script>
 <script src="Javascript/validaciones.js"></script>
+<script>
+document.getElementById('incluirProductoForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita que el formulario se envíe inmediatamente
+
+    // Crear un objeto FormData para capturar los datos
+    var formData = new FormData(this);
+
+    // Preparar el mensaje
+    var mensaje = "Datos enviados:\n\n";
+    formData.forEach(function(valor, clave) {
+        mensaje += clave + ": " + valor + "\n";
+    });
+
+    // Mostrar todos los datos en un alert
+    alert(mensaje);
+
+    // Opcional: después del alert, puedes enviar realmente el formulario
+    // this.submit();
+});
+</script>
+
 </body>
 </html>

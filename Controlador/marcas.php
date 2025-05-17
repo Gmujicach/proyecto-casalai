@@ -1,7 +1,8 @@
 <?php
 ob_start();
 
-require_once 'Modelo/Marcas.php';
+require_once 'Modelo/marcas.php';
+require_once 'Modelo/Paginador.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -15,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     switch ($accion) {
         case 'ingresar':
             $marca = new marca();
-            $marca->setdescripcion_ma($_POST['descripcion_ma']);
+            $marca->setnombre_marca($_POST['nombre_marca']);
             
             if (!$marca->validarmarca()) {
                 echo json_encode(['status' => 'error', 'message' => 'Esta Marca ya existe']);
@@ -48,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['id_marca'];
             $marca = new marca();
             $marca->setId($id);
-            $marca->setdescripcion_ma($_POST['descripcion_ma']);
+            $marca->setnombre_marca($_POST['nombre_marca']);
             
             if ($marca->modificarmarcas($id)) {
                 echo json_encode(['status' => 'success']);
@@ -75,7 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 
-
 function getmarcas() {
     $marca = new marca();
     return $marca->getmarcas();
@@ -83,6 +83,35 @@ function getmarcas() {
 
 $pagina = "Marcas";
 if (is_file("Vista/" . $pagina . ".php")) {
+
+    $paginaActual = $_GET['pagina'] ?? 1;
+    $filasPorPagina = $_GET['filas'] ?? 10;
+    
+    // Crear instancia del paginador
+    $paginador = new Paginador(); // Asegúrate de tener $this->conex disponible
+    
+    // Obtener datos paginados
+    $resultados = $paginador->paginar(
+        'tbl_marcas', // Cambia por 'tbl_marcas' si es necesario
+        $paginaActual,
+        $filasPorPagina
+    );
+    
+    // Calcular valores para la vista
+    $paginaActual = intval($paginaActual); // Asegura que sea un número entero
+    $inicio = ($paginaActual - 1) * $filasPorPagina + 1;
+    $fin = min($paginaActual * $filasPorPagina, $resultados['total']);
+    $totalMarcas = $resultados['total'];
+    
+    // Pasar a la vista
+    $datosVista = [
+        'marcas' => $resultados['datos'], // Cambia por 'marcas' si es necesario
+        'inicio' => $inicio,
+        'fin' => $fin,
+        'totalUsuarios' => $totalMarcas, // Cambia por 'totalMarcas' si es necesario
+        'paginaActual' => $paginaActual,
+        'filasPorPagina' => $filasPorPagina
+    ];
 
     $marcas = getmarcas();
     require_once("Vista/" . $pagina . ".php");

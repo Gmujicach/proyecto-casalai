@@ -15,7 +15,7 @@ $(document).ready(function () {
             success: function(marcas) {
                 console.log('Datos de la Marca obtenidos:', marcas);
                 // Llenar los campos del formulario con los datos obtenidos del marcas
-                $('#modificardescripcion_ma').val(marcas.descripcion_ma);
+                $('#modificarnombre_marca').val(marcas.nombre_marca);
                 
                 // Ajustar la imagen si se maneja la carga de imágenes
                 // $('#modificarImagen').val(marcas.imagen);

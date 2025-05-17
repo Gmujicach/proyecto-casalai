@@ -186,3 +186,91 @@ function muestraMensaje(mensaje) {
         text: mensaje
     });
 }
+
+function cambiarEstatus(idUsuario) {
+    const span = $(`span[onclick*="cambiarEstatus(${idUsuario}"]`);
+    const estatusActual = span.text().trim().toLowerCase();
+    const nuevoEstatus = estatusActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
+    
+    // Feedback visual inmediato
+    span.addClass('cambiando');
+    
+    $.ajax({
+        url: '',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            accion: 'cambiar_estatus',
+            id_usuario: idUsuario,
+            nuevo_estatus: nuevoEstatus
+        },
+        success: function(data) {
+            span.removeClass('cambiando');
+            
+            if (data.status === 'success') {
+                span.text(nuevoEstatus);
+                span.removeClass('habilitado inhabilitado').addClass(nuevoEstatus);
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Estatus actualizado!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                // Revertir visualmente
+                span.text(estatusActual);
+                span.removeClass('habilitado inhabilitado').addClass(estatusActual);
+                Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
+            }
+        },
+        error: function(xhr, status, error) {
+            span.removeClass('cambiando');
+            // Revertir visualmente
+            span.text(estatusActual);
+            span.removeClass('habilitado inhabilitado').addClass(estatusActual);
+            Swal.fire('Error', 'Error en la conexión', 'error');
+        }
+    });
+}
+
+$(document).ready(function() {
+    // Manejar clic en flechas
+    $(document).on('click', '.flecha-izquierda, .flecha-derecha', function(e) {
+        e.preventDefault();
+        const url = $(this).closest('a').attr('href');
+        if(url) {
+            cambiarPagina(url.split('pagina=')[1]);
+        }
+    });
+
+    // Manejar cambio en filas por página
+    $('#filasPorPagina').change(function() {
+        cambiarFilasPorPagina(this.value);
+    });
+});
+
+function cambiarPagina(pagina) {
+    const filas = $('#filasPorPagina').val();
+    
+    $.ajax({
+        url: '',
+        type: 'GET',
+        data: {
+            pagina: pagina,
+            filas: filas,
+            ajax: true
+        },
+        success: function(data) {
+            $('#tabla-usuarios').replaceWith($(data).find('#tabla-usuarios'));
+            actualizarParametrosURL(pagina, filas);
+        }
+    });
+}
+
+function actualizarParametrosURL(pagina, filas) {
+    const url = new URL(window.location);
+    url.searchParams.set('pagina', pagina);
+    url.searchParams.set('filas', filas);
+    window.history.pushState({}, '', url);
+}

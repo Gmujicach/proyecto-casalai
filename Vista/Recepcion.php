@@ -16,20 +16,16 @@ if (!isset($_SESSION['name'])) {
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'header.php'; ?>
-    <link rel="stylesheet" href="Styles/darckort.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Gestionar Recepcion</title>
 </head>
 
 <body>
 
-	<?php require_once("vista/NavBar.php"); ?>
+<?php include 'NewNavBar.php'; ?>
 
 	<div class="container">
 		
 	<section class="container">
-
-		<div class="container"> 
 			<form method="post" action="" id="f" class="formulario-1">
 				<input type="text" name="accion" id="accion" style="display:none" />
 				<h3 class="display-4 text-center">Gestionar Recepcion</h3>
@@ -108,7 +104,6 @@ if (!isset($_SESSION['name'])) {
 						<button type="button" class="btn btn-primary" id="registrar" name="registrar">Registrar Recepcion</button>
 					</div>
 				</div>
-		</div>
 		</form>
 		
         <div class="modal fade" tabindex="-1" role="dialog" id="modalp">

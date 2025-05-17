@@ -5,7 +5,7 @@
 $DB_HOST = 'localhost';
 $DB_USER = 'root';
 $DB_PASS = '';
-$DB_NAME = 'prueba';
+$DB_NAME = 'casalai';
 
 // Conexión a la base de datos
 $mysqli = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);

@@ -16,17 +16,15 @@ if (!isset($_SESSION['name'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'header.php'; ?>
-    <link rel="stylesheet" href="Styles/darckort.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Gestionar Proveedores</title>
 </head>
 <body>
 
 
-    <?php include 'NavBar.php'; ?>
+    <?php include 'NewNavBar.php'; ?>
 
 
-<div class="container">
+<div class="contenedor">
     <!--== INICIO DEL CONTENIDO ==-->
     <section class="container">
         <div class="row my-5">
@@ -98,7 +96,7 @@ if (!isset($_SESSION['name'])) {
 
     <!--== LISTADO DE CONSULTA ==-->
 
-    <div class="table-container">
+    <div class="contenedor-tabla">
     <h1 class="titulo-tabla display-5 text-center">LISTA DE PROVEEDORES</h1>
     <table class="tabla">
         <thead>

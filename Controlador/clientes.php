@@ -1,7 +1,7 @@
 <?php
 ob_start();
 
-require_once 'Modelo/Clientes.php';
+require_once 'Modelo/clientes.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -16,21 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case 'ingresar':
             $cliente = new cliente();
             $cliente->setnombre($_POST['nombre']);
-            $cliente->setpersona($_POST['persona']);
             $cliente->setdireccion($_POST['direccion']);
-            $cliente->settelefono_1($_POST['telefono_1']);
-            $cliente->settelefono_2($_POST['telefono_2']);
-            $cliente->setrif($_POST['rif']);
+            $cliente->settelefono($_POST['telefono']);
+            $cliente->setcedula($_POST['cedula']);
             $cliente->setcorreo($_POST['correo']);
-            $cliente->setobservacion($_POST['observacion']);
             
-            // if ($cliente->ingresarclientes()) {
-            //     echo json_encode(['status' => 'success']);
-            // } else {
-            //     echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el Cliente']);
-            // }
+            // Validar si el cliente ya existe
 
-            if (!$cliente->validaRifCliente()) {
+            if (!$cliente->validaCedulaCliente()) {
                 echo json_encode(['status' => 'error', 'message' => 'Este Cliente ya existe']);
             }
             else {
@@ -62,13 +55,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cliente = new cliente();
             $cliente->setId($id);
             $cliente->setnombre($_POST['nombre']);
-            $cliente->setpersona($_POST['persona']);
             $cliente->setdireccion($_POST['direccion']);
-            $cliente->settelefono_1($_POST['telefono_1']);
-            $cliente->settelefono_2($_POST['telefono_2']);
-            $cliente->setrif($_POST['rif']);
+            $cliente->settelefono($_POST['telefono']);
+            $cliente->setcedula($_POST['cedula']);
             $cliente->setcorreo($_POST['correo']);
-            $cliente->setobservacion($_POST['observacion']);
             
             if ($cliente->modificarclientes($id)) {
                 echo json_encode(['status' => 'success']);
@@ -80,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case 'eliminar':
             $id = $_POST['id'];
             $clientesModel = new cliente();
-            if ($clientesModel->eliminarclientes($id)) {
+            if ($clientesModel->eliminar_l($id)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Cliente']);

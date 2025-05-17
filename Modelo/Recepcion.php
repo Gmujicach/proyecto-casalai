@@ -1,7 +1,7 @@
 <?php
-require_once 'Modelo/datos.php';
+require_once 'config.php';
 
-class Recepcion extends Conexion{
+class Recepcion extends BD{
     private $idproveedor;
     private $correlativo;
     private $desc;
@@ -34,7 +34,7 @@ class Recepcion extends Conexion{
 	public function registrar($idproducto, $cantidad) {
         $d = array();
         if (!$this->buscar()) {  // Asegúrate de que `buscar()` esté bien definido
-            $co = $this->conecta();  // Asegúrate de que `conecta()` esté bien definido y retorne una conexión válida
+            $co = $this->conexion();  // Asegúrate de que `conecta()` esté bien definido y retorne una conexión válida
             $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             try {
@@ -86,7 +86,7 @@ class Recepcion extends Conexion{
 	
 	
 	public function obtenerproveedor(){
-        $co = $this->conecta();
+        $co = $this->conexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $p = $co->prepare("SELECT id_proveedor,nombre FROM tbl_proveedores ");
         $p->execute();
@@ -98,7 +98,7 @@ class Recepcion extends Conexion{
 	
 	
 	function listadoproductos(){
-		$co = $this->conecta();
+		$co = $this->conexion();
 		$co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$r = array();
 		try{
@@ -114,10 +114,10 @@ class Recepcion extends Conexion{
 							$respuesta = $respuesta.$r['id_producto'];
 						$respuesta = $respuesta."</td>";
 						$respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['codigo'];
+							$respuesta = $respuesta.$r['serial'];
 						$respuesta = $respuesta."</td>";
 						$respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['nombre_p'];
+							$respuesta = $respuesta.$r['nombre_producto'];
 						$respuesta = $respuesta."</td>";
 					$respuesta = $respuesta."</tr>";
 				}
@@ -145,7 +145,7 @@ class Recepcion extends Conexion{
     // }
 
 	function buscar() {
-        $co = $this->conecta();
+        $co = $this->conexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $r = array();
         try {
@@ -158,7 +158,7 @@ class Recepcion extends Conexion{
             
             // Verificar si se encontró un resultado
             if ($fila) {
-                $r['resultado'] = 'encontro';
+                $r['resultado'] = 'encontró';
                 $r['mensaje'] = 'El número de el correlativo ya existe!';
             } 
         } catch (Exception $e) {
@@ -179,7 +179,7 @@ class Recepcion extends Conexion{
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";
         
-        $stmtrecepciones = $this->conecta()->prepare($queryrecepciones);
+        $stmtrecepciones = $this->conexion()->prepare($queryrecepciones);
         $stmtrecepciones->execute();
         $recepciones = $stmtrecepciones->fetchAll(PDO::FETCH_ASSOC);
 

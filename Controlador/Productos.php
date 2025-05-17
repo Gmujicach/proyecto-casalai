@@ -19,23 +19,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Crear una nueva instancia del modelo Productos
             $Producto = new Productos();
             // Asigna los valores del formulario a las propiedades del producto
-            $Producto->setNombreP($_POST['Nombre_P']);
-            $Producto->setDescripcionP($_POST['Descripcion_P']);
+            $Producto->setNombreP($_POST['nombre_producto']);
+            $Producto->setDescripcionP($_POST['descripcion_producto']);
             $Producto->setIdModelo($_POST['Modelo']);
             $Producto->setStockActual($_POST['Stock_Actual']);
             $Producto->setStockMax($_POST['Stock_Maximo']);
             $Producto->setStockMin($_POST['Stock_Minimo']);
-            $Producto->setPeso($_POST['Peso']);
-            $Producto->setLargo($_POST['Largo']);
-            $Producto->setAlto($_POST['Alto']);
-            $Producto->setAncho($_POST['Ancho']);
-            $Producto->setClausulaDeGarantia($_POST['Clausula_de_garantia']);
-            $Producto->setServicio($_POST['Servicio']);
-            $Producto->setCodigo($_POST['Codigo_Interno']);
-            $Producto->setLlevaLote($_POST['Lote']);
-            $Producto->setLlevaSerial($_POST['Seriales']);
+            $Producto->setClausulaDeGarantia($_POST['Clausula_garantia']);
+            $Producto->setCodigo($_POST['Seriales']);
             $Producto->setCategoria($_POST['Categoria']);
-        
+            $Producto->setPrecio($_POST['Precio']);
+            
             // Validación del nombre del producto
             if (!$Producto->validarNombreProducto()) {
                 echo json_encode(['status' => 'error', 'message' => 'Este Producto ya existe']);
@@ -78,22 +72,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['id_producto'];
             $Producto = new Productos();
             $Producto->setId($id);
-            $Producto->setNombreP($_POST['Nombre_P']);
-            $Producto->setDescripcionP($_POST['Descripcion_P']);
+            $Producto->setNombreP($_POST['nombre_producto']);
+            $Producto->setDescripcionP($_POST['descripcion_producto']);
             $Producto->setIdModelo($_POST['Modelo']);
             $Producto->setStockActual($_POST['Stock_Actual']);
             $Producto->setStockMax($_POST['Stock_Maximo']);
             $Producto->setStockMin($_POST['Stock_Minimo']);
-            $Producto->setPeso($_POST['Peso']);
-            $Producto->setLargo($_POST['Largo']);
-            $Producto->setAlto($_POST['Alto']);
-            $Producto->setAncho($_POST['Ancho']);
-            $Producto->setClausulaDeGarantia($_POST['Clausula_de_garantia']);
-            $Producto->setServicio($_POST['Servicio']);
-            $Producto->setCodigo($_POST['Codigo_Interno']);
-            $Producto->setLlevaLote($_POST['Lote']);
-            $Producto->setLlevaSerial($_POST['Seriales']);
+            $Producto->setClausulaDeGarantia($_POST['Clausula_garantia']);
+            $Producto->setCodigo($_POST['Seriales']);
             $Producto->setCategoria($_POST['Categoria']);
+            $Producto->setPrecio($_POST['Precio']);
             
             // Intento de modificar el producto y devuelve una respuesta en formato JSON
             if ($Producto->modificarProducto($id)) {

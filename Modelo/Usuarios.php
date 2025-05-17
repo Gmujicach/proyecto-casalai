@@ -1,5 +1,5 @@
 <?php
-require_once 'modelo/config.php';
+require_once 'config.php';
 
 class Usuarios extends BD {
     
@@ -10,6 +10,13 @@ class Usuarios extends BD {
     private $rango="usuario";
     private $activo=1;
     private $tableusuarios = 'tbl_usuarios';
+    private $nombre;
+    private $apellido;
+    private $correo;
+    private $telefono;
+    private $estatus=1;
+    private $usuarios;
+
 
     function __construct() {
         parent::__construct();
@@ -23,6 +30,26 @@ class Usuarios extends BD {
 
     public function setUsername($username) {
         $this->username = $username;
+    }
+
+    public function getActivo() {
+        return $this->activo;
+    }
+    public function setActivo($activo) {
+        $this->activo = $activo;
+    }
+    public function getUsuario() {
+        return $this->usuarios;
+    }
+    public function setUsuario($usuario) {
+        $this->usuario = $usuario;
+    }
+
+    public function getEstatus() {
+        return $this->estatus;
+    }
+    public function setEstatus($estatus) {
+        $this->estatus = $estatus;
     }
 
     public function getClave() {
@@ -47,7 +74,46 @@ class Usuarios extends BD {
     public function setId($id) {
         $this->id = $id;
     }
+
+    public function getNombre() {
+        return $this->nombre;
+    }
+
+    public function setNombre($nombre) {
+        $this->nombre = $nombre;
+    }
+
+    public function getApellido() {
+        return $this->apellido;
+    }
+    public function setApellido($apellido) {
+        $this->apellido = $apellido;
+    }
+    public function getCorreo() {
+        return $this->correo;
+    }
+    public function setCorreo($correo) {
+        $this->correo = $correo;
+    }
+    public function getTelefono() {
+        return $this->telefono;
+    }
+    public function setTelefono($telefono) {
+        $this->telefono = $telefono;
+    }
     
+    private function verificarCampoEstatus() {
+        $sql = "SHOW COLUMNS FROM tbl_usuarios LIKE 'estatus'";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute();
+        
+        if ($stmt->rowCount() == 0) {
+            $alterSql = "ALTER TABLE tbl_usuarios 
+                         ADD estatus ENUM('habilitado','deshabilitado') NOT NULL DEFAULT 'habilitado'";
+            $this->conex->exec($alterSql);
+        }
+    }
+
 
      // Método para guardar el proveedor
 
@@ -63,12 +129,16 @@ class Usuarios extends BD {
     }
 
     public function ingresarUsuario() {
-        $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`)
-                VALUES (:nombre, :clave, :rango)";
+        $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`)
+                VALUES (:nombre, :clave, :rango, :correo, :nombres, :apellidos, :telefono)";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre', $this->username);
         $stmt->bindParam(':clave', $this->clave);
         $stmt->bindParam(':rango', $this->rango);
+        $stmt->bindParam(':correo', $this->correo);
+        $stmt->bindParam(':nombres', $this->nombre);
+        $stmt->bindParam(':apellidos', $this->apellido);
+        $stmt->bindParam(':telefono', $this->telefono);
         
         return $stmt->execute();
     }
@@ -102,12 +172,29 @@ class Usuarios extends BD {
         return $stmt->execute();
     }
 
+    public function cambiarEstatus($nuevoEstatus) {
+        try {
+            $sql = "UPDATE tbl_usuarios SET estatus = :estatus WHERE id_usuario = :id";
+            $stmt = $this->conex->prepare($sql);
+            $stmt->bindParam(':estatus', $nuevoEstatus);
+            $stmt->bindParam(':id', $this->id);
+            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error al cambiar estatus: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    
+
+
     public function getusuarios() {
         // Punto de depuración: Iniciando getmarcas
         //echo "Iniciando getmarcas.<br>";
         
         // Primera consulta para obtener datos de marcas
-        $queryusuarios = 'SELECT `id_usuario`, `username`, `password`, `rango` FROM ' . $this->tableusuarios;
+        $queryusuarios = 'SELECT * FROM ' . $this->tableusuarios;
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";

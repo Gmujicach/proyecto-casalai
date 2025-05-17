@@ -17,6 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario = new Usuarios();
             $usuario->setUsername($_POST['nombre_usuario']);
             $usuario->setClave($_POST['clave_usuario']);
+            $usuario->setNombre($_POST['nombre']);
+            $usuario->setApellido($_POST['apellido_usuario']);
+            $usuario->setCorreo($_POST['correo_usuario']);
+            $usuario->setTelefono($_POST['telefono_usuario']);
+
             
             if (!$usuario->validarUsuario()) {
                 echo json_encode(['status' => 'error', 'message' => 'Este Usuario ya existe']);
@@ -73,9 +78,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
             break;
+
+        // Cambiar estatus
+        case 'cambiar_estatus':
+            $id = $_POST['id_usuario'];
+            $nuevoEstatus = $_POST['nuevo_estatus'];
+            
+            // Validación básica
+            if (!in_array($nuevoEstatus, ['habilitado', 'inhabilitado'])) {
+                echo json_encode(['status' => 'error', 'message' => 'Estatus no válido']);
+                exit;
+            }
+            
+            $usuario = new Usuarios();
+            $usuario->setId($id);
+            
+            if ($usuario->cambiarEstatus($nuevoEstatus)) {
+                echo json_encode(['status' => 'success']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
+            }
+            break;
     }
     exit;
 }
+
 
 
 

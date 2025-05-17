@@ -1,24 +1,24 @@
 <?php
-require_once 'Conexion.php';
+require_once 'config.php';
 
-class modelo extends Conexion{
+class modelo extends BD{
     private $id_marca;
     private $conex;
-    private $descripcion_mo;
+    private $nombre_modelo;
     private $id;
 
-    public function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::conexion();
     }
 
     // Getters y Setters
-    public function getdescripcion_mo() {
-        return $this->descripcion_mo;
+    public function getnombre_modelo() {
+        return $this->nombre_modelo;
     }
 
-    public function setdescripcion_mo($descripcion_mo) {
-        $this->descripcion_mo = $descripcion_mo;
+    public function setnombre_modelo($nombre_modelo) {
+        $this->nombre_modelo = $nombre_modelo;
     }
 
     public function getid_marca() {
@@ -38,9 +38,9 @@ class modelo extends Conexion{
     }
 
     public function validarmodelo() {
-        $sql = "SELECT COUNT(*) FROM tbl_modelos WHERE descripcion_mo = :descripcion_mo";
+        $sql = "SELECT COUNT(*) FROM tbl_modelos WHERE nombre_modelo = :nombre_modelo";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':descripcion_mo', $this->descripcion_mo);
+        $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
         $stmt->execute();
         $count = $stmt->fetchColumn();
     
@@ -49,10 +49,10 @@ class modelo extends Conexion{
     }
 
     public function ingresarmodelos() {
-        $sql = "INSERT INTO tbl_modelos (descripcion_mo, id_marca)
-                VALUES (:descripcion_mo, :id_marca)";
+        $sql = "INSERT INTO tbl_modelos (nombre_modelo, id_marca)
+                VALUES (:nombre_modelo, :id_marca)";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':descripcion_mo', $this->descripcion_mo);
+        $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
         $stmt->bindParam(':id_marca', $this->id_marca);
         
         return $stmt->execute();
@@ -68,7 +68,7 @@ class modelo extends Conexion{
     }
 
     public function getmarcas() {
-        $query = "SELECT id_marca, descripcion_ma FROM tbl_marcas";
+        $query = "SELECT id_marca, nombre_marca FROM tbl_marcas";
         $stmt = $this->conex->query($query);
 
         if ($stmt) {
@@ -82,10 +82,10 @@ class modelo extends Conexion{
 
     // Modificar Producto
     public function modificarmodelos($id) {
-        $sql = "UPDATE tbl_modelos SET descripcion_mo = :descripcion_mo WHERE id_modelo = :id_modelo";
+        $sql = "UPDATE tbl_modelos SET nombre_modelo = :nombre_modelo WHERE id_modelo = :id_modelo";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_modelo', $id);
-        $stmt->bindParam(':descripcion_mo', $this->descripcion_mo);
+        $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
         
         return $stmt->execute();
     }
@@ -104,8 +104,8 @@ class modelo extends Conexion{
         
         // Primera consulta para obtener datos de marcas
         $querymodelos = 'SELECT mo.id_modelo,
-                                mo.descripcion_mo,
-                                ma.descripcion_ma 
+                                mo.nombre_modelo,
+                                ma.nombre_marca 
                                 FROM tbl_modelos AS mo
                                 INNER JOIN tbl_marcas AS ma ON mo.id_marca = ma.id_marca';
         

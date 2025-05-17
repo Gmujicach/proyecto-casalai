@@ -1,41 +1,25 @@
 $(document).ready(function () {
     $(document).on('click', '.btn-modificar', function() {
-        var idProducto = $(this).data('id');
-
-        $('#modificarIdProducto').val(idProducto);
-
-        $.ajax({
-            url: '', 
-            type: 'POST',
-            dataType: 'json',
-            data: { id_producto: idProducto, accion: 'obtener_producto' },
-            success: function(producto) {
-                console.log('Datos del producto obtenidos:', producto);
-                
-                $('#modificarNombreP').val(producto.nombre_p);
-                $('#modificarDescripcionP').val(producto.descripcion_p);
-                $('#modificarModelo').val(producto.id_modelo);
-                $('#modificarStockActual').val(producto.stock);
-                $('#modificarStockMaximo').val(producto.stock_max);
-                $('#modificarStockMinimo').val(producto.stock_min);
-                $('#modificarPeso').val(producto.peso);
-                $('#modificarLargo').val(producto.largo);
-                $('#modificarAlto').val(producto.alto);
-                $('#modificarAncho').val(producto.ancho);
-                $('#modificarClausulaGarantia').val(producto.clausula_de_garantia);
-                $('#modificarCodigoInterno').val(producto.codigo);
-                $('#modificarServicio').val(producto.servicio);
-                $('#modificarCategoria').val(producto.categoria);
-                $('#modificarSeriales').val(producto.lleva_serial);
-                $('#modificarLote').val(producto.lleva_lote);
-                $('#modificarProductoModal').modal('show');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error en la solicitud AJAX:', textStatus, errorThrown);
-                muestraMensaje('Error al cargar los datos del producto.');
-            }
-        });
+        var boton = $(this);
+    
+        // Llenar los campos del formulario con los datos del botón
+        $('#modificarIdProducto').val(boton.data('id'));
+        $('#modificarNombreProducto').val(boton.data('nombre'));
+        $('#modificarDescripcionProducto').val(boton.data('descripcion'));
+        $('#modificarModelo').val(boton.data('modelo'));
+        $('#modificarStockActual').val(boton.data('stockactual'));
+        $('#modificarStockMaximo').val(boton.data('stockmaximo'));
+        $('#modificarStockMinimo').val(boton.data('stockminimo'));
+        $('#modificarPrecio').val(boton.data('precio'));
+        $('#modificarSeriales').val(boton.data('seriales'));
+        $('#modificarClausulaGarantia').val(boton.data('clausula'));
+        $('#modificarCategoria').val(boton.data('categoria'));
+    
+        // Mostrar el modal
+        $('#modificarProductoModal').modal('show');
     });
+    
+    
 
     
     $('#modificarProductoForm').on('submit', function(e) {

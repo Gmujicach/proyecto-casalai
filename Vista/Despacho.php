@@ -21,7 +21,7 @@ require_once 'Controlador/Despacho.php';
     <?php require_once("public/modal.php"); ?>
 
 
-    <?php include 'NavBar.php'; ?>
+    <?php include 'NewNavBar.php'; ?>
 
 
     <div class="container"> <!-- todo el contenido ira dentro de esta etiqueta-->
@@ -212,11 +212,8 @@ require_once 'Controlador/Despacho.php';
         
     </div>
     <!--fin de seccion modal-->
-    <script src="Javascript/despacho.js"></script>
-
-
-
 
     <?php include 'footer.php'; ?>
+    <script src="Javascript/despacho.js"></script>
     <script src="Javascript/validaciones.js"></script>
 </body>
