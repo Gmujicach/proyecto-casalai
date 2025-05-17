@@ -1,15 +1,16 @@
 <?php
 ob_start();
 //session_start();
-require_once './Modelo/combos.php';
+require_once './Modelo/Productos.php';
+require_once './Modelo/Combos.php';
 //require_once './Modelo/productos.php';
 
 //$productoModel = new Productos();
-$comboModel = new Combo();
+//$comboModel = new Combo();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['accion'] === 'crear_combo') {
     try {
-        $combo = new Combo();
+       // $combo = new Combo();
         $productos = json_decode($_POST['productos'], true);
 
         if (!is_array($productos) || empty($productos)) {

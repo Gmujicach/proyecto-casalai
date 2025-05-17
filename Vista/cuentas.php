@@ -10,7 +10,38 @@
 <body>
 <?php include 'NewNavBar.php'; ?>
 
-<button class="boton-form" data-toggle="modal" data-target="#registrarCuentaModal">Registrar Cuenta</button>
+<div class="formulario-responsivo">
+    <div class="fondo-form">
+        <form id="registrarCuenta">
+            <input type="hidden" name="accion" value="registrar">
+            <h3 class="titulo-form">INCLUIR CUENTA BANCARIA</h3>
+            
+            <div class="envolver-form">
+                <label for="nombre_banco">Nombre del Banco</label>
+                <input type="text" class="form-control" id="nombre_banco" name="nombre_banco" required>
+            </div>
+            <div class="envolver-form">
+                <label for="numero_cuenta">Número de Cuenta</label>
+                <input type="text" class="form-control" id="numero_cuenta" name="numero_cuenta" required>
+            </div>
+            <div class="envolver-form">
+                <label for="rif_cuenta">RIF</label>
+                <input type="text" class="form-control" id="rif_cuenta" name="rif_cuenta" required>
+            </div>
+            <div class="envolver-form">
+                <label for="telefono_cuenta">Teléfono</label>
+                <input type="text" class="form-control" id="telefono_cuenta" name="telefono_cuenta" required>
+            </div>
+            <div class="envolver-form">
+                <label for="correo_cuenta">Correo</label>
+                <input type="email" class="form-control" id="correo_cuenta" name="correo_cuenta" required>
+            </div>
+
+            <button class="boton-form" type="submit">Registrar Cuenta</button>
+
+        </form>
+    </div>
+</div>
 
 <div class="contenedor-tabla">
     <h3>LISTA DE CUENTAS BANCARIAS</h3>
@@ -50,56 +81,15 @@
                 data-telefono="<?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?>"
                 data-correo="<?php echo htmlspecialchars($cuenta['correo_cuenta']); ?>"
             >Modificar</button>
-            <button class="btn btn-danger btn-eliminar">Eliminar</button>
+            <button class="btn btn-danger btn-eliminar"
+                data-id="<?php echo $cuenta['id_cuenta']; ?>"
+            >Eliminar</button>
         </td>
     </tr>
 <?php endforeach; ?>
 </tbody>
 
     </table>
-</div>
-
-<!-- Modal para registrar cuenta -->
-<div class="modal fade" id="registrarCuentaModal" tabindex="-1" role="dialog" aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="registrarCuenta">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="registrarCuentaModalLabel">Registrar Cuenta Bancaria</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="accion" value="registrar">
-                    <div class="form-group">
-                        <label for="nombre_banco">Nombre del Banco</label>
-                        <input type="text" class="form-control" id="nombre_banco" name="nombre_banco" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="numero_cuenta">Número de Cuenta</label>
-                        <input type="text" class="form-control" id="numero_cuenta" name="numero_cuenta" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="rif_cuenta">RIF</label>
-                        <input type="text" class="form-control" id="rif_cuenta" name="rif_cuenta" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="telefono_cuenta">Teléfono</label>
-                        <input type="text" class="form-control" id="telefono_cuenta" name="telefono_cuenta" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="correo_cuenta">Correo</label>
-                        <input type="email" class="form-control" id="correo_cuenta" name="correo_cuenta" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Registrar</button>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
 
 <!-- Modal para modificar cuenta -->

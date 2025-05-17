@@ -11,7 +11,7 @@
     
 </head>
 <body>
-    <?php include 'NewNavBar.php'; ?>
+    <?php include 'NavBar.php'; ?>
     <br>
 
     <section class="container mt-5">

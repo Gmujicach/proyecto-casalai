@@ -121,9 +121,12 @@ $(document).ready(function () {
     $('#registrarCuenta').on('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(this);
-    
+
+        // Asegúrate de enviar la acción correcta
+        formData.set('accion', 'registrar');
+
         $.ajax({
-            url: '', // Asegúrate de que esta URL esté definida correctamente
+            url: '',
             type: 'POST',
             data: formData,
             contentType: false,
@@ -131,7 +134,7 @@ $(document).ready(function () {
             success: function(response) {
                 try {
                     const data = JSON.parse(response);
-    
+
                     if (data.status === 'success') {
                         Swal.fire({
                             title: 'Éxito',
@@ -139,13 +142,14 @@ $(document).ready(function () {
                             icon: 'success',
                             confirmButtonText: 'Aceptar'
                         });
-    
+
                         agregarFilaCuenta(data.cuenta);
+                        document.getElementById('registrarCuenta').reset(); // Limpia el formulario
                     } else {
                         Swal.fire({
                             title: 'Error del servidor',
                             html: `<strong>Mensaje:</strong> ${data.message || 'Error al ingresar la cuenta'}<br>
-                                   <strong>Detalle:</strong> ${data.detail || 'No se proporcionó detalle adicional'}`,
+                                <strong>Detalle:</strong> ${data.detail || 'No se proporcionó detalle adicional'}`,
                             icon: 'error',
                             confirmButtonText: 'Aceptar'
                         });
@@ -162,19 +166,18 @@ $(document).ready(function () {
             },
             error: function(xhr, status, error) {
                 let mensajeError = `Error en la solicitud AJAX: ${status} - ${error}`;
-    
-                // Si el servidor devuelve algo útil en el cuerpo
+
                 if (xhr.responseText) {
                     mensajeError += `<br><strong>Respuesta del servidor:</strong><br><code>${xhr.responseText}</code>`;
                 }
-    
+
                 Swal.fire({
                     title: 'Error en la conexión',
                     html: mensajeError,
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
-    
+
                 console.error('Detalles del error AJAX:', {
                     status: xhr.status,
                     responseText: xhr.responseText,
@@ -184,7 +187,6 @@ $(document).ready(function () {
             }
         });
     });
-    
 
     // Función para cambiar el estado de la cuenta
     $(document).on('click', '.btn-cambiar-estado', function() {
@@ -255,7 +257,7 @@ function agregarFilaCuenta(cuenta) {
 
 // Función para actualizar una fila existente en la tabla
 function actualizarFilaCuenta(cuenta) {
-    const fila = $(`#tablaConsultas tbody tr:has(td:contains(${cuenta.id_cuenta}))`);
+    const fila = $(`#tablaConsultas tbody tr[data-id="${cuenta.id_cuenta}"]`);
     fila.find('td:nth-child(2)').text(cuenta.nombre_banco);
     fila.find('td:nth-child(3)').text(cuenta.numero_cuenta);
     fila.find('td:nth-child(4)').text(cuenta.rif_cuenta);
@@ -266,8 +268,9 @@ function actualizarFilaCuenta(cuenta) {
 
 // Función para eliminar una fila de la tabla
 function eliminarFilaCuenta(id_cuenta) {
-    $(`#tablaConsultas tbody tr:has(td:contains(${id_cuenta}))`).remove();
+    $(`#tablaConsultas tbody tr[data-id="${id_cuenta}"]`).remove();
 }
+
 // Función genérica para enviar AJAX
 function enviarAjax(datos, callback) {
     $.ajax({
