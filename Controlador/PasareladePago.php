@@ -4,111 +4,59 @@ require_once 'Modelo/PasareladePago.php';
 require_once 'Modelo/cuentas.php';
 require_once 'Modelo/Factura.php';
 
+// Si se recibe una acción (AJAX), procesarla primero
+if (!empty($_POST['accion'])) {
+    header('Content-Type: application/json'); // Asegura tipo JSON
 
+    $accion = $_POST['accion'];
 
+    switch ($accion) {
+        case 'ingresar':
+            $pasarela = new PasareladePago();
+            $pasarela->setCuenta($_POST['cuenta']);
+            $pasarela->setReferencia($_POST['referencia']);
+            $pasarela->setFecha($_POST['fecha']);
+            $pasarela->setTipo($_POST['tipo']);
+            $pasarela->setFactura($_POST['id_factura']);
+            $pasarela->setObservaciones('');
 
-
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Obtiene la acción enviada en la solicitud POST
-        $id_factura = $_POST['factura'];
-        $factura = new Factura();
-        $cuenta = new Cuentabanco();
-        $listadocuentas = $cuenta->consultarCuentabanco();
-        $monto = $factura->obtenerMontoTotalFactura($id_factura);
-        if (isset($_POST['accion'])) {
-            $accion = $_POST['accion'];
-        } else {
-            $accion = '';
-        }
-    
-        // Switch para manejar diferentes acciones
-        switch ($accion) {
-            case 'ingresar':
-                // Crear una nueva instancia del modelo Productos
-                $pasarela = new PasareladePago();
-                $cuenta = $_POST['cuenta'];
-                $referencia = $_POST['referencia'];
-                $fecha = $_POST['fecha'];
-                $tipo = $_POST['tipo'];
-                $factura = $_POST['id_factura'];
-                $pasarela->setCuenta($cuenta);
-                $pasarela->setReferencia($referencia);
-                $pasarela->setFecha($fecha);
-                $pasarela->setTipo($tipo);
-                $pasarela->setFactura($factura);
-                $pasarela->setObservaciones('');
-                
-                // Validación del nombre del producto
-
-                // Validación del código interno del producto
-                if (!$pasarela->validarCodigoReferencia()) {
-                    echo json_encode(['status' => 'error', 'message' => 'Este Código Interno ya existe']);
-                }
-                // Si ambas validaciones pasan, se intenta ingresar el producto
-                else {
-                    if ($pasarela->pasarelaTransaccion('Ingresar')) {
-                        echo json_encode(['status' => 'success']);
-                    } else {
-                        echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el producto']);
-                    }
-                }
-                break;
-    
-            case 'modificar':
-                /* Obtiene el ID del producto y asigna los valores del formulario a las propiedades del producto
-                $id = $_POST['id_producto'];
-                $Producto = new Productos();
-                $Producto->setId($id);
-                $Producto->setNombreP($_POST['nombre_producto']);
-                $Producto->setDescripcionP($_POST['descripcion_producto']);
-                $Producto->setIdModelo($_POST['Modelo']);
-                $Producto->setStockActual($_POST['Stock_Actual']);
-                $Producto->setStockMax($_POST['Stock_Maximo']);
-                $Producto->setStockMin($_POST['Stock_Minimo']);
-                $Producto->setClausulaDeGarantia($_POST['Clausula_garantia']);
-                $Producto->setCodigo($_POST['Seriales']);
-                $Producto->setCategoria($_POST['Categoria']);
-                $Producto->setPrecio($_POST['Precio']);
-                
-                // Intento de modificar el producto y devuelve una respuesta en formato JSON
-                if ($Producto->modificarProducto($id)) {
+            if (!$pasarela->validarCodigoReferencia()) {
+                echo json_encode(['status' => 'error', 'message' => 'Este Código Interno ya existe']);
+            } else {
+                if ($pasarela->pasarelaTransaccion('Ingresar')) {
                     echo json_encode(['status' => 'success']);
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
-                }*/
-                break;
-    
-            case 'eliminar':
-                /* Obtiene el ID del producto y llama al método para eliminarlo
-                $id = $_POST['id'];
-                $productoModel = new Productos();
-                if ($productoModel->eliminarProducto($id)) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
-                }*/
-                break;
-    
-            default:
-                // Respuesta de error si la acción no es válida
-                echo json_encode(['status' => 'error', 'message' => 'Acción no válida'.$accion]);
-                break;
-        }
-        // Termina el script para evitar seguir procesando código innecesario
-        exit;
+                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el producto']);
+                }
+            }
+            exit;
+
+        default:
+            echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
+            exit;
     }
-
-
-
-
-
-
-$pagina = "PasareladePago";
-if (is_file("Vista/" . $pagina . ".php")) {
-    require_once("Vista/" . $pagina . ".php");
-} else {
-    echo "Página en construcción";
 }
 
-ob_end_flush();?>
+// Código para cargar datos si se accede a la vista normalmente
+if (isset($_POST['id_factura'])) {
+    $idFactura = $_POST['id_factura'];
+    $facturaModel = new Factura();
+    $cuentaModel = new Cuentabanco();
+    $listadocuentas = $cuentaModel->consultarCuentabanco();
+    $monto = $facturaModel->obtenerMontoTotalFactura($idFactura);
+
+    // Cargar vista solo si no es AJAX
+    $pagina = "PasareladePago";
+    if (is_file("Vista/" . $pagina . ".php")) {
+        require_once("Vista/" . $pagina . ".php");
+    } else {
+        echo "Página en construcción";
+    }
+} else {
+    // 🔁 Si no viene con POST id_factura (por ejemplo al retroceder), redirigir
+    header("Location: ?pagina=GestionarFactura");
+    exit;
+}
+
+ob_end_flush();
+?>

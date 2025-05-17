@@ -75,7 +75,7 @@ if (!isset($_SESSION['name'])) {
     <span id="smonto"></span>
   </div>
 
-  <input type="text" name="id_factura" value="<?php echo $id_factura; ?>" hidden>
+  <input type="text" name="id_factura" value="<?php echo $idFactura; ?>" hidden>
   <button class="boton-form" type="submit">Registrar</button>
 </form>
 

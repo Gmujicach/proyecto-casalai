@@ -115,32 +115,34 @@ public function validarCodigoReferencia() {
         }
     }
 
-    private function pagoIngresar() {
     
-        try {
+        private function pagoIngresar() {
+    try {
+        // Insertar detalles del pago
+        $stmt = $this->conexion()->prepare("INSERT INTO `tbl_detalles_pago`
+            (`id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`)
+            VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $this->factura,
+            $this->cuenta,
+            $this->observaciones,
+            $this->tipo,
+            $this->referencia,
+            $this->fecha
+        ]);
 
+        // Actualizar estatus de la factura a 'Procesada'
+        $updateStmt = $this->conexion()->prepare("UPDATE `tbl_facturas` SET `estatus` = 'En Proceso' WHERE `id_factura` = ?");
+        $updateStmt->execute([$this->factura]);
 
-            $stmt = $this->conexion()->prepare("INSERT INTO `tbl_detalles_pago`
-                (`id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`)
-                VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([
-                $this->factura,
-                $this->cuenta,
-                $this->observaciones,
-                $this->tipo,
-                $this->referencia,
-                $this->fecha
-            ]);
+        return true;
 
- 
-            return true;
-
-        } catch (PDOException $e) {
-        
-            echo "Error: " . $e->getMessage();
-            return false;
-        }
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+        return false;
     }
+    }
+
 
     private function pagoConsultar() {
         $sql = "SELECT `id_detalles`, `id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`, `estatus` FROM `tbl_detalles_pago`";

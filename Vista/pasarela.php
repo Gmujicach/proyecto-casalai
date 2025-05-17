@@ -31,6 +31,25 @@ if (!isset($_SESSION['name'])) {
 <script src="Javascript/usuario.js"></script>
 <script src="Javascript/validaciones.js"></script>
 <script src="Javascript/pasarela.js"></script>
+<script>
+  // Este bloque impide el retroceso y redirige al usuario
+  (function () {
+    const redirectURL = '?pagina=pasarela'; // <-- cambia esto si quieres otra página
+
+    // Empuja una entrada adicional en el historial
+    history.pushState(null, '', location.href);
+
+    // Al presionar el botón atrás (popstate), se redirige
+    window.addEventListener('popstate', function () {
+      window.location.href = redirectURL;
+    });
+
+    // También evita el botón de retroceso en móviles Android
+    window.history.forward();
+  })();
+</script>
+
+
 
 </body>
 

@@ -123,19 +123,22 @@ class Factura extends BD
     
             // Botones de acción según estatus
             $form = '<input type="hidden" name="id_factura" value="' . $id_factura . '">';
-    
+            
+            if ($estatus != 'En Proceso') {
             if ($estatus === 'Procesada') {
                 $form .= '<button type="button" data-id="' . $id_factura . '" class="btn btn-primary btn-lg descargar" name="accion" value="descargar">Descargar</button>';
             } elseif ($estatus !== 'Cancelada') {
                 $form .= '
-                <form action="?pagina=PasareladePago&accion=procesar" method="POST" style="display:inline;">
-                    <input type="hidden" name="factura" value="' . $id_factura . '">
-                    <input type="hidden" name="accion" value="procesar">
+                <form action="?pagina=PasareladePago" method="POST" style="display:inline;">
+                    <input type="hidden" name="id_factura" value="' . $id_factura . '">
                     <button type="submit" class="btn btn-success btn-lg">Procesar</button>
                 </form>';
                 ;
                 $form .= '<button type="button" data-id="' . $id_factura . '" class="btn btn-danger btn-lg cancelar" name="accion" id="cancelar" value="cancelar">Cancelar</button>';
             }
+        }else{
+            $form .= '<div class="alert alert-info"><strong>En proceso:</strong> El pago está siendo validado por un administrador. Por favor, espere la confirmación.</div>';
+        };
     
             // Tabla de productos
             $contenido = '<div class="w-100">' . $datosCliente;
