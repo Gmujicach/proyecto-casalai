@@ -86,6 +86,9 @@ class Cuentabanco extends BD {
     }
 
     public function obtenerUltimaCuenta() {
+        return $this->obtUltimaCuenta(); 
+    }
+    private function obtUltimaCuenta() {
         try {
             $sql = "SELECT * FROM tbl_cuentas ORDER BY id_cuenta DESC LIMIT 1";
             $stmt = $this->conexion()->prepare($sql);
