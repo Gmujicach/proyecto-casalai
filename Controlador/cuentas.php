@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'ID de cuenta no proporcionado']);
             }
-            break;
+            exit;
         
         case 'consultar_cuentas':
             $cuentabanco = new Cuentabanco();
@@ -61,28 +61,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo json_encode($cuentas_obt);
             exit;
 
-            case 'modificar':
-                ob_clean(); // limpia cualquier salida previa
-                header('Content-Type: application/json; charset=utf-8');
-            
-                $id_cuenta = $_POST['id_cuenta'];
-                $cuentabanco = new Cuentabanco();
-                $cuentabanco->setIdCuenta($id_cuenta);
-                $cuentabanco->setNombreBanco($_POST['nombre_banco']);
-                $cuentabanco->setNumeroCuenta($_POST['numero_cuenta']);
-                $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
-                $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
-                $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
-            
-                if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al modificar la cuenta']);
-                }
-            
-                exit; // detiene el script para evitar salida extra
-             // Finaliza el script para evitar salidas extra
-            
+        case 'modificar':
+            ob_clean(); // limpia cualquier salida previa
+            header('Content-Type: application/json; charset=utf-8');
+        
+            $id_cuenta = $_POST['id_cuenta'];
+            $cuentabanco = new Cuentabanco();
+            $cuentabanco->setIdCuenta($id_cuenta);
+            $cuentabanco->setNombreBanco($_POST['nombre_banco']);
+            $cuentabanco->setNumeroCuenta($_POST['numero_cuenta']);
+            $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
+            $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
+            $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
+        
+            if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
+                echo json_encode(['status' => 'success']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Error al modificar la cuenta']);
+            }
+            exit;
 
         case 'eliminar':
             $id_cuenta = $_POST['id_cuenta'];
@@ -112,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estado']);
             }
-            break;
+            exit;
 
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
