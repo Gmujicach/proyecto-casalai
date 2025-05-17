@@ -187,54 +187,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    // Función para cambiar el estado de la cuenta
-    function cambiarEstado(id_cuenta) {
-        const span = $(`span[onclick*="cambiarEstado(${id_cuenta}"]`);
-        const estadoActual = span.text().trim().toLowerCase();
-        const nuevoEstado = estadoActual === 'Habilitado' ? 'Inhabilitado' : 'Habilitado';
-        
-        // Feedback visual inmediato
-        span.addClass('cambiando');
-        
-        $.ajax({
-            url: '',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                accion: 'cambiar_estato',
-                id_cuenta: id_cuenta,
-                nuevo_estado: nuevoEstado
-            },
-            success: function(data) {
-                span.removeClass('cambiando');
-                
-                if (data.status === 'success') {
-                    span.text(nuevoEstado);
-                    span.removeClass('Habilitado Inhabilitado').addClass(nuevoEstado);
-                    
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Estatus actualizado!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                } else {
-                    // Revertir visualmente
-                    span.text(estadoActual);
-                    span.removeClass('Habilitado Inhabilitado').addClass(estadoActual);
-                    Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
-                }
-            },
-            error: function(xhr, status, error) {
-                span.removeClass('cambiando');
-                // Revertir visualmente
-                span.text(estadoActual);
-                span.removeClass('Habilitado Inhabilitado').addClass(estadoActual);
-                Swal.fire('Error', 'Error en la conexión', 'error');
-            }
-        });
-    }
 });
 
 // Función para agregar una nueva fila a la tabla
@@ -287,6 +239,54 @@ function enviarAjax(datos, callback) {
         },
         error: function () {
             muestraMensaje('Error en la solicitud AJAX');
+        }
+    });
+}
+
+// Función para cambiar el estado de la cuenta
+function cambiarEstado(id_cuenta) {
+    const span = $(`span[onclick*="cambiarEstado(${id_cuenta}"]`);
+    const estadoActual = span.text().trim().toLowerCase();
+    const nuevoEstado = estadoActual === 'Habilitado' ? 'Inhabilitado' : 'Habilitado';
+    
+    // Feedback visual inmediato
+    span.addClass('cambiando');
+        
+    $.ajax({
+        url: '',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            accion: 'cambiar_estato',
+            id_cuenta: id_cuenta,
+            nuevo_estado: nuevoEstado
+        },
+        success: function(data) {
+            span.removeClass('cambiando');
+            
+            if (data.status === 'success') {
+                span.text(nuevoEstado);
+                span.removeClass('Habilitado Inhabilitado').addClass(nuevoEstado);
+                // Actualizar el estado en la tabla                
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Estatus actualizado!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                // Revertir visualmente
+                span.text(estadoActual);
+                span.removeClass('Habilitado Inhabilitado').addClass(estadoActual);
+                Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
+            }
+        },
+        error: function(xhr, status, error) {
+            span.removeClass('cambiando');
+            // Revertir visualmente
+            span.text(estadoActual);
+            span.removeClass('Habilitado Inhabilitado').addClass(estadoActual);
+            Swal.fire('Error', 'Error en la conexión', 'error');
         }
     });
 }
