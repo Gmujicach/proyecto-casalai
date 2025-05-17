@@ -1,106 +1,236 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const modalCrearCombo = new bootstrap.Modal(document.getElementById('modalCrearCombo'));
-    const modalSeleccionarProducto = new bootstrap.Modal(document.getElementById('modalSeleccionarProducto'));
-    const productosSeleccionados = document.getElementById('productosSeleccionados');
-    const btnCrearCombo = document.getElementById('btnCrearCombo');
-    const btnAgregarProducto = document.getElementById('btnAgregarProducto');
-    let listaProductos = [];
+$(document).ready(function() {
 
-    function renderProductos() {
-        productosSeleccionados.innerHTML = '';
-        listaProductos.forEach((p, index) => {
-            productosSeleccionados.innerHTML += `
-                <div class="mb-2">
-                    <strong>${p.nombre}</strong>
-                    <button type="button" class="btn btn-sm btn-danger ms-2" onclick="eliminarProducto(${index})">X</button><br>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="cambiarCantidad(${index}, -1)">-</button>
-                    <input type="number" value="${p.cantidad}" class="mx-1" min="1" onchange="actualizarCantidad(${index}, this.value)">
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="cambiarCantidad(${index}, 1)">+</button>
-                </div>`;
-        });
-    }
-
-    window.cambiarCantidad = function (index, cambio) {
-        listaProductos[index].cantidad = Math.max(1, listaProductos[index].cantidad + cambio);
-        renderProductos();
-    }
-
-    window.actualizarCantidad = function (index, valor) {
-        listaProductos[index].cantidad = Math.max(1, parseInt(valor) || 1);
-        renderProductos();
-    }
-
-    window.eliminarProducto = function (index) {
-        listaProductos.splice(index, 1);
-        renderProductos();
-    }
-
-    document.querySelectorAll(".seleccionar-producto").forEach(btn => {
-        btn.addEventListener("click", function () {
-            const id = this.dataset.id;
-            const nombre = this.dataset.nombre;
-            listaProductos = [{ id, nombre, cantidad: 1 }];
-            renderProductos();
-            modalCrearCombo.show();
-        });
-    });
-
-    btnAgregarProducto.addEventListener("click", function () {
-        modalSeleccionarProducto.show();
-    });
-
-    document.querySelectorAll(".seleccionar-producto-modal").forEach(btn => {
-        btn.addEventListener("click", function () {
-            const id = this.dataset.id;
-            const nombre = this.dataset.nombre;
-            if (!listaProductos.some(p => p.id === id)) {
-                listaProductos.push({ id, nombre, cantidad: 1 });
-                renderProductos();
-            } else {
-                Swal.fire('Advertencia', 'El producto ya está agregado al combo', 'warning');
-            }
-            modalSeleccionarProducto.hide();
-        });
-    });
-
-    document.getElementById("formCrearCombo").addEventListener("submit", function (e) {
-        e.preventDefault();
+    
+    // Manejar el cambio en el filtro de marcas
+    $('#filtroMarca').on('change', function() {
+        const idMarca = $(this).val();
 
         $.ajax({
-            url: "./Controlador/combos.php",
-            type: "POST",
+            url: '?pagina=catalogo',
+            type: 'POST',
             data: {
-                accion: "crear_combo",
-                productos: JSON.stringify(listaProductos)
+                accion: 'filtrar_por_marca',
+                id_marca: idMarca
             },
-            dataType: "json",
-            success: function (res) {
-                if (res.status === "success") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Combo creado exitosamente',
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-
-                    let combo = res.combo;
-                    let html = `
+            beforeSend: function() {
+                $('#tablaProductos').html(`
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </td>
+                    </tr>
+                `);
+            },
+            success: function(response) {
+                try {
+                    const data = typeof response === 'object' ? response : JSON.parse(response);
+                    
+                    if (data.status === 'success') {
+                        $('#tablaProductos').html(data.html);
+                    } else {
+                        $('#tablaProductos').html(`
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <i class="bi bi-exclamation-circle"></i> ${data.message || 'Error al filtrar productos'}
+                                </td>
+                            </tr>
+                        `);
+                    }
+                } catch (e) {
+                    console.error('Error parsing response:', e);
+                    $('#tablaProductos').html(`
                         <tr>
-                            <td>${combo.id_combo}</td>
-                            <td>${combo.productos}</td>
-                            <td>${combo.precio_total}</td>
-                        </tr>`;
-                    document.querySelector("#tablaCombo tbody").innerHTML += html;
-                    modalCrearCombo.hide();
-                    listaProductos = [];
-                    renderProductos();
-                } else {
-                    Swal.fire('Error', res.message || 'Error desconocido', 'error');
+                            <td colspan="6" class="text-center py-4">
+                                <i class="bi bi-exclamation-triangle"></i> Error al procesar la respuesta
+                            </td>
+                        </tr>
+                    `);
                 }
             },
-            error: function () {
-                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                console.error('Response:', xhr.responseText);
+
+                let errorMessage = 'Error de conexión';
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.message) {
+                        errorMessage = response.message;
+                    }
+                } catch (e) {
+                    console.error('Error parsing response:', e);
+                }
+
+                $('#tablaProductos').html(`
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <i class="bi bi-exclamation-triangle"></i> ${errorMessage}
+                        </td>
+                    </tr>
+                `);
+            }
+        });
+    });
+
+    // Delegación de eventos para agregar producto al carrito
+    $(document).on('click', '.btn-agregar-carrito', function() {
+        const idProducto = $(this).data('id-producto');
+        const button = $(this);
+        
+        button.prop('disabled', true);
+        button.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...');
+        
+        $.ajax({
+            url: '?pagina=carrito',
+            type: 'POST',
+            data: {
+                accion: 'agregar_al_carrito',
+                id_producto: idProducto
+            },
+            success: function(response) {
+                try {
+                    const data = typeof response === 'object' ? response : JSON.parse(response);
+                    
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Éxito!',
+                            text: data.message || 'Producto agregado al carrito',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            if (typeof updateCartCount === 'function') {
+                                updateCartCount();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message || 'Error al agregar producto'
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error parsing response:', e);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al procesar la respuesta del servidor'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                console.error('Response:', xhr.responseText);
+
+                let errorMessage = 'Error de conexión';
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.message) {
+                        errorMessage = response.message;
+                    }
+                } catch (e) {
+                    console.error('Error parsing response:', e);
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorMessage
+                });
+            },
+            complete: function() {
+                button.prop('disabled', false);
+                button.html('<i class="bi bi-cart-plus"></i> <span class="btn-text">Agregar</span>');
+            }
+        });
+    });
+
+    // Delegación de eventos para agregar combo al carrito
+    $(document).on('click', '.btn-agregar-combo', function() {
+        const button = $(this);
+        const idCombo = button.data('id-combo');
+
+        button.prop('disabled', true);
+        button.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...');
+
+        Swal.fire({
+            title: 'Agregando combo',
+            html: 'Por favor espere mientras se agregan los productos...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: '?pagina=catalogo',
+            type: 'POST',
+            data: {
+                accion: 'agregar_combo_al_carrito',
+                id_combo: idCombo
+            },
+            success: function(response) {
+                try {
+                    const data = typeof response === 'object' ? response : JSON.parse(response);
+
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Éxito!',
+                            text: data.message || 'Combo agregado al carrito',
+                            footer: `Se agregaron ${data.productos_agregados || 'varios'} productos al carrito`,
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            if (typeof updateCartCount === 'function') {
+                                updateCartCount();
+                            }
+                            // Recargar la página para actualizar los stocks
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message || 'Error al agregar combo'
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error parsing response:', e);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al procesar la respuesta del servidor'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                let errorMessage = 'Error de conexión';
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.message) {
+                        errorMessage = response.message;
+                    }
+                } catch (e) {
+                    console.error('Error parsing response:', e);
+                }
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorMessage
+                });
+            },
+            complete: function() {
+                button.prop('disabled', false);
+                button.html('<i class="bi bi-cart-plus"></i> Agregar Combo');
             }
         });
     });
 });
+
+// Función para actualizar el contador del carrito

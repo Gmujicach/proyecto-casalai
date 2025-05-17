@@ -1,62 +1,235 @@
 $(document).ready(function() {
-    // Función para inicializar los botones de agregar al carrito
-    function inicializarBotonesCarrito() {
-        $('.form-agregar-carrito').submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                url: '', // La misma página
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    response = JSON.parse(response);
-                    if (response.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Éxito',
-                            text: response.message
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message
-                        });
-                    }
-                },
-                error: function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al agregar el producto al carrito'
-                    });
-                }
-            });
-        });
-    }
-
-    // Inicializar los botones al cargar la página
-    inicializarBotonesCarrito();
-
     // Manejar el cambio en el filtro de marcas
     $('#filtroMarca').on('change', function() {
-        var idMarca = $(this).val();
-
-        // Enviar la solicitud AJAX para filtrar los productos
+        const idMarca = $(this).val();
+        
         $.ajax({
-            url: '', // La misma página
+            url: '',
             type: 'POST',
             data: {
                 accion: 'filtrar_por_marca',
                 id_marca: idMarca
             },
             success: function(response) {
+                try {
+                    const data = JSON.parse(response);
+                    if (data.status === 'success') {
+                        $('#tablaProductos').html(data.html);
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error parsing JSON:', e);
+                }
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error en la solicitud AJAX: ' + error
+                });
+            }
+        });
+    });
+
+    // Manejar cambio de cantidad en el carrito
+    $(document).on('change', '.cantidad', function() {
+        const idCarritoDetalle = $(this).data('id-carrito-detalle');
+        const cantidad = $(this).val();
+
+        if (cantidad < 1) {
+            $(this).val(1);
+            return;
+        }
+
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: {
+                accion: 'actualizar_cantidad',
+                id_carrito_detalle: idCarritoDetalle,
+                cantidad: cantidad
+            },
+            success: function(response) {
                 response = JSON.parse(response);
                 if (response.status === 'success') {
-                    // Actualizar la tabla de productos
-                    $('#tablaProductos').html(response.html);
-                    // Reinicializar los botones después de actualizar la tabla
-                    inicializarBotonesCarrito();
+                    location.reload();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message
+                    });
+                }
+            }
+        });
+    });
+
+    // Manejar eliminación de producto del carrito
+    $(document).on('click', '.btn-eliminar', function() {
+        const idCarritoDetalle = $(this).data('id');
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esta acción!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: {
+                        accion: 'eliminar_del_carrito',
+                        id_carrito_detalle: idCarritoDetalle
+                    },
+                    success: function(response) {
+                        response = JSON.parse(response);
+                        if (response.status === 'success') {
+                            Swal.fire(
+                                'Eliminado!',
+                                response.message,
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    // Manejar vaciado completo del carrito
+    $('#eliminar-todo-carrito').on('click', function() {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡Se eliminarán todos los productos del carrito!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, vaciar carrito',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: {
+                        accion: 'eliminar_todo_carrito'
+                    },
+                    success: function(response) {
+                        response = JSON.parse(response);
+                        if (response.status === 'success') {
+                            Swal.fire(
+                                'Carrito vaciado!',
+                                response.message,
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    // Manejar registro de compra
+    $('#registrar-compra').on('click', function() {
+        Swal.fire({
+            title: '¿Confirmar compra?',
+            text: "¡Se registrará la compra con los productos actuales en el carrito!",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, registrar compra',
+            cancelButtonText: 'Cancelar',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                return $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: {
+                        accion: 'registrar_compra'
+                    }
+                }).then(response => {
+                    return JSON.parse(response);
+                }).catch(error => {
+                    Swal.showValidationMessage(
+                        `Error en la solicitud: ${error}`
+                    );
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (result.value.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Compra registrada!',
+                        text: result.value.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.value.message
+                    });
+                }
+            }
+        });
+    });
+
+    // Delegación de eventos para los botones de agregar al carrito
+    $(document).on('click', '.btn-agregar-carrito', function() {
+        const idProducto = $(this).data('id-producto');
+        
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: {
+                accion: 'agregar_al_carrito',
+                id_producto: idProducto
+            },
+            success: function(response) {
+                response = JSON.parse(response);
+                if (response.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: response.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -73,228 +246,5 @@ $(document).ready(function() {
                 });
             }
         });
-    });
-});
-// Resto del código para manejar el carrito...
-$('.cantidad').on('change', function () {
-    const idCarritoDetalle = $(this).data('id-carrito-detalle');
-    const cantidad = $(this).val();
-
-    $.ajax({
-        url: '',
-        type: 'POST',
-        data: {
-            accion: 'actualizar_cantidad',
-            id_carrito_detalle: idCarritoDetalle,
-            cantidad: cantidad
-        },
-        success: function (response) {
-            response = JSON.parse(response);
-            if (response.status === 'success') {
-                location.reload();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message
-                });
-            }
-        }
-    });
-});
-
-$('.btn-eliminar').on('click', function () {
-    const idCarritoDetalle = $(this).data('id');
-
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminarlo!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '',
-                type: 'POST',
-                data: {
-                    accion: 'eliminar_del_carrito',
-                    id_carrito_detalle: idCarritoDetalle
-                },
-                success: function (response) {
-                    response = JSON.parse(response);
-                    if (response.status === 'success') {
-                        Swal.fire(
-                            'Eliminado!',
-                            response.message,
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message
-                        });
-                    }
-                }
-            });
-        }
-    });
-});
-
-$('#eliminar-todo-carrito').on('click', function () {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡Se eliminarán todos los productos del carrito!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, vaciar carrito!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '',
-                type: 'POST',
-                data: {
-                    accion: 'eliminar_todo_carrito'
-                },
-                success: function (response) {
-                    response = JSON.parse(response);
-                    if (response.status === 'success') {
-                        Swal.fire(
-                            'Carrito vaciado!',
-                            response.message,
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message
-                        });
-                    }
-                }
-            });
-        }
-    });
-});
-
-$('#registrar-compra').on('click', function () {
-    Swal.fire({
-        title: '¿Confirmar compra?',
-        text: "¡Se registrará la compra con los productos actuales en el carrito!",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, registrar compra!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '',
-                type: 'POST',
-                data: {
-                    accion: 'registrar_compra'
-                },
-                success: function (response) {
-                    response = JSON.parse(response);
-                    if (response.status === 'success') {
-                        Swal.fire(
-                            'Compra registrada!',
-                            response.message,
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message
-                        });
-                    }
-                }
-            });
-        }
-    });
-});
-
-$('#filtroMarca').on('change', function() {
-    var idMarca = $(this).val();
-
-    // Enviar la solicitud AJAX para filtrar los productos
-    $.ajax({
-        url: '', // La misma página
-        type: 'POST',
-        data: {
-            accion: 'filtrar_por_marca',
-            id_marca: idMarca
-        },
-        success: function(response) {
-            response = JSON.parse(response);
-            if (response.status === 'success') {
-                // Actualizar la tabla de productos
-                $('#tablaProductos').html(response.html);
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message
-                });
-            }
-        },
-        error: function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error en la solicitud AJAX'
-            });
-        }
-    });
-});
-
-// Delegación de eventos para los botones de agregar al carrito
-$(document).on('click', '.btn-agregar-carrito', function() {
-    var idProducto = $(this).data('id-producto');
-    
-    $.ajax({
-        url: '',
-        type: 'POST',
-        data: {
-            accion: 'agregar_al_carrito',
-            id_producto: idProducto
-        },
-        success: function(response) {
-            response = JSON.parse(response);
-            if (response.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: response.message
-                }).then(() => {
-                    location.reload(); // Recargar la página para actualizar el carrito
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message
-                });
-            }
-        },
-        error: function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Error en la solicitud AJAX'
-            });
-        }
     });
 });

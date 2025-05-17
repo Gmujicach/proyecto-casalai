@@ -9,7 +9,7 @@ class Carrito {
         $this->conex = $this->conex->Conex();
     }
 
-    // Métodos para el carrito
+    // Métodos básicos del carrito
     public function crearCarrito($id_cliente) {
         $sql = "INSERT INTO tbl_carrito (id_cliente) VALUES (:id_cliente)";
         $stmt = $this->conex->prepare($sql);
@@ -25,17 +25,40 @@ class Carrito {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function agregarProductoAlCarrito($id_carrito, $id_producto, $cantidad) {
-        $sql = "INSERT INTO tbl_carritodetalle (id_carrito, id_producto, cantidad) VALUES (:id_carrito, :id_producto, :cantidad)";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_carrito', $id_carrito);
-        $stmt->bindParam(':id_producto', $id_producto);
-        $stmt->bindParam(':cantidad', $cantidad);
-        return $stmt->execute();
+    public function agregarProductoAlCarrito($id_carrito, $id_producto, $cantidad = 1) {
+        // Verificar si el producto ya está en el carrito
+        $sqlCheck = "SELECT id_carrito_detalle, cantidad FROM tbl_carritodetalle 
+                     WHERE id_carrito = :id_carrito AND id_producto = :id_producto";
+        $stmtCheck = $this->conex->prepare($sqlCheck);
+        $stmtCheck->bindParam(':id_carrito', $id_carrito);
+        $stmtCheck->bindParam(':id_producto', $id_producto);
+        $stmtCheck->execute();
+        $existente = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+        if ($existente) {
+            // Actualizar cantidad si ya existe
+            $nuevaCantidad = $existente['cantidad'] + $cantidad;
+            $sqlUpdate = "UPDATE tbl_carritodetalle SET cantidad = :cantidad 
+                          WHERE id_carrito_detalle = :id_carrito_detalle";
+            $stmtUpdate = $this->conex->prepare($sqlUpdate);
+            $stmtUpdate->bindParam(':cantidad', $nuevaCantidad);
+            $stmtUpdate->bindParam(':id_carrito_detalle', $existente['id_carrito_detalle']);
+            return $stmtUpdate->execute();
+        } else {
+            // Insertar nuevo producto en el carrito
+            $sqlInsert = "INSERT INTO tbl_carritodetalle (id_carrito, id_producto, cantidad) 
+                          VALUES (:id_carrito, :id_producto, :cantidad)";
+            $stmtInsert = $this->conex->prepare($sqlInsert);
+            $stmtInsert->bindParam(':id_carrito', $id_carrito);
+            $stmtInsert->bindParam(':id_producto', $id_producto);
+            $stmtInsert->bindParam(':cantidad', $cantidad);
+            return $stmtInsert->execute();
+        }
     }
 
     public function obtenerProductosDelCarrito($id_carrito) {
-        $sql = "SELECT cd.id_carrito_detalle, p.nombre_p AS nombre, cd.cantidad, p.precio, (cd.cantidad * p.precio) AS subtotal
+        $sql = "SELECT cd.id_carrito_detalle, p.id_producto, p.nombre_producto AS nombre, 
+                       cd.cantidad, p.precio, (cd.cantidad * p.precio) AS subtotal
                 FROM tbl_carritodetalle cd
                 INNER JOIN productos p ON cd.id_producto = p.id_producto
                 WHERE cd.id_carrito = :id_carrito";
@@ -46,7 +69,8 @@ class Carrito {
     }
 
     public function actualizarCantidadProducto($id_carrito_detalle, $cantidad) {
-        $sql = "UPDATE tbl_carritodetalle SET cantidad = :cantidad WHERE id_carrito_detalle = :id_carrito_detalle";
+        $sql = "UPDATE tbl_carritodetalle SET cantidad = :cantidad 
+                WHERE id_carrito_detalle = :id_carrito_detalle";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':cantidad', $cantidad);
         $stmt->bindParam(':id_carrito_detalle', $id_carrito_detalle);
@@ -67,41 +91,82 @@ class Carrito {
         return $stmt->execute();
     }
 
+    // Métodos para combos
+    public function agregarComboAlCarrito($id_carrito, $id_combo) {
+        try {
+            $this->conex->beginTransaction();
+            
+            // Obtener los detalles del combo
+            $sqlDetalles = "SELECT id_producto, cantidad FROM combo_detalle WHERE id_combo = :id_combo";
+            $stmtDetalles = $this->conex->prepare($sqlDetalles);
+            $stmtDetalles->bindParam(':id_combo', $id_combo);
+            $stmtDetalles->execute();
+            $detalles = $stmtDetalles->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Agregar cada producto del combo al carrito
+            foreach ($detalles as $detalle) {
+                $this->agregarProductoAlCarrito($id_carrito, $detalle['id_producto'], $detalle['cantidad']);
+            }
+            
+            $this->conex->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->conex->rollBack();
+            error_log("Error al agregar combo al carrito: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Métodos para compras
     public function registrarCompra($id_carrito, $id_cliente) {
-        // Obtener los detalles del carrito
-        $detallesCarrito = $this->obtenerProductosDelCarrito($id_carrito);
-
-        // Calcular el total de la compra
-        $total = 0;
-        foreach ($detallesCarrito as $detalle) {
-            $total += $detalle['subtotal'];
+        try {
+            $this->conex->beginTransaction();
+            
+            // Obtener los detalles del carrito
+            $detallesCarrito = $this->obtenerProductosDelCarrito($id_carrito);
+            
+            // Calcular el total de la compra
+            $total = 0;
+            foreach ($detallesCarrito as $detalle) {
+                $total += $detalle['subtotal'];
+            }
+            
+            // Insertar la compra
+            $sqlCompra = "INSERT INTO facturas (fecha, cliente, descuento, estatus) 
+                          VALUES (NOW(), :id_cliente, 0, 'Completada')";
+            $stmtCompra = $this->conex->prepare($sqlCompra);
+            $stmtCompra->bindParam(':id_cliente', $id_cliente);
+            $stmtCompra->execute();
+            $id_factura = $this->conex->lastInsertId();
+            
+            // Insertar los detalles de la compra
+            foreach ($detallesCarrito as $detalle) {
+                $sqlDetalle = "INSERT INTO factura_detalle (factura_id, id_producto, cantidad) 
+                               VALUES (:id_factura, :id_producto, :cantidad)";
+                $stmtDetalle = $this->conex->prepare($sqlDetalle);
+                $stmtDetalle->bindParam(':id_factura', $id_factura);
+                $stmtDetalle->bindParam(':id_producto', $detalle['id_producto']);
+                $stmtDetalle->bindParam(':cantidad', $detalle['cantidad']);
+                $stmtDetalle->execute();
+                
+                // Actualizar stock del producto
+                $sqlUpdateStock = "UPDATE productos SET stock = stock - :cantidad 
+                                   WHERE id_producto = :id_producto";
+                $stmtUpdateStock = $this->conex->prepare($sqlUpdateStock);
+                $stmtUpdateStock->bindParam(':cantidad', $detalle['cantidad']);
+                $stmtUpdateStock->bindParam(':id_producto', $detalle['id_producto']);
+                $stmtUpdateStock->execute();
+            }
+            
+            // Vaciar el carrito
+            $this->eliminarTodoElCarrito($id_carrito);
+            
+            $this->conex->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->conex->rollBack();
+            error_log("Error al registrar compra: " . $e->getMessage());
+            return false;
         }
-
-        // Insertar la compra en la tabla tbl_compra
-        $sqlCompra = "INSERT INTO tbl_compra (id_cliente, total) VALUES (:id_cliente, :total)";
-        $stmtCompra = $this->conex->prepare($sqlCompra);
-        $stmtCompra->bindParam(':id_cliente', $id_cliente);
-        $stmtCompra->bindParam(':total', $total);
-        $stmtCompra->execute();
-
-        // Obtener el ID de la compra recién insertada
-        $id_compra = $this->conex->lastInsertId();
-
-        // Insertar los detalles de la compra en la tabla tbl_detallecompra
-        foreach ($detallesCarrito as $detalle) {
-            $sqlDetalle = "INSERT INTO tbl_detallecompra (id_compra, id_producto, cantidad, precio_unitario)
-                           VALUES (:id_compra, :id_producto, :cantidad, :precio_unitario)";
-            $stmtDetalle = $this->conex->prepare($sqlDetalle);
-            $stmtDetalle->bindParam(':id_compra', $id_compra);
-            $stmtDetalle->bindParam(':id_producto', $detalle['id_producto']);
-            $stmtDetalle->bindParam(':cantidad', $detalle['cantidad']);
-            $stmtDetalle->bindParam(':precio_unitario', $detalle['precio']);
-            $stmtDetalle->execute();
-        }
-
-        // Eliminar los productos del carrito después de registrar la compra
-        $this->eliminarTodoElCarrito($id_carrito);
-
-        return true;
     }
 }
