@@ -180,7 +180,7 @@ class Cuentabanco extends BD {
         }
     }
 
-    // Habilitar o Deshabilitar Cuenta
+    // Habilitar e Inhabilitar Cuenta
     public function cambiarEstado($nuevoEstado) {
         return $this->estadoCuenta($nuevoEstado); 
     }
@@ -188,8 +188,8 @@ class Cuentabanco extends BD {
         try {
             $sql = "UPDATE tbl_cuentas SET estado = :estado WHERE id_cuenta = :id_cuenta";
             $stmt = $this->conex->prepare($sql);
-            $stmt->bindParam(':id_cuenta', $this->id_cuenta);
             $stmt->bindParam(':estado', $nuevoEstado);
+            $stmt->bindParam(':id_cuenta', $this->id_cuenta);
             
             return $stmt->execute();
         } catch (PDOException $e) {

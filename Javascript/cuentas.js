@@ -187,6 +187,12 @@ $(document).ready(function () {
             }
         });
     });
+
+    // Manejador de clic para cambiar el estado de la cuenta
+    $(document).on('click', '.campo-estado', function() {
+        const id_cuenta = $(this).data('id');
+        cambiarEstado(id_cuenta);
+    });
 });
 
 // Función para agregar una nueva fila a la tabla
@@ -245,8 +251,8 @@ function enviarAjax(datos, callback) {
 
 // Función para cambiar el estado de la cuenta
 function cambiarEstado(id_cuenta) {
-    const span = $(`span[onclick*="cambiarEstado(${id_cuenta}"]`);
-    const estadoActual = span.text().trim().toLowerCase();
+    const span = $(`span.campo-estado[data-id="${id_cuenta}"]`);
+    const estadoActual = span.text().trim();
     const nuevoEstado = estadoActual === 'Habilitado' ? 'Inhabilitado' : 'Habilitado';
     
     // Feedback visual inmediato
@@ -257,9 +263,9 @@ function cambiarEstado(id_cuenta) {
         type: 'POST',
         dataType: 'json',
         data: {
-            accion: 'cambiar_estato',
+            accion: 'cambiar_estado',
             id_cuenta: id_cuenta,
-            nuevo_estado: nuevoEstado
+            estado: nuevoEstado
         },
         success: function(data) {
             span.removeClass('cambiando');

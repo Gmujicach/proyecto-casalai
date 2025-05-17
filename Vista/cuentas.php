@@ -73,8 +73,9 @@ if (!isset($_SESSION['name'])) {
         <td><?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?></td>
         <td><?php echo htmlspecialchars($cuenta['correo_cuenta']); ?></td>
         <td>
-            <span class="campo-estado <?php echo ($cuenta['estado'] == 'Habilitado') ? 'Habilitado' : 'Inhabilitado'; ?>"
-                onclick="cambiarEstado(<?php echo $cuenta['id_cuenta']; ?>, '<?php echo $cuenta['estado']; ?>')"
+            <span 
+                class="campo-estado <?php echo ($cuenta['estado'] == 'Habilitado') ? 'Habilitado' : 'Inhabilitado'; ?>" 
+                data-id="<?php echo $cuenta['id_cuenta']; ?>" 
                 style="cursor: pointer;">
                 <?php echo htmlspecialchars($cuenta['estado']); ?>
             </span>
