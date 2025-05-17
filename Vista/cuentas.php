@@ -50,13 +50,17 @@ if (!isset($_SESSION['name'])) {
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Nombre Banco</th>
+                <th>Nombre del Banco</th>
                 <th>Número de Cuenta</th>
                 <th>RIF</th>
                 <th>Teléfono</th>
                 <th>Correo</th>
-                <th>Estado</th>
-                <th>Acciones</th>
+                <th>Estatus</th>
+                <th>
+                    <i class="vertical">
+                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                    </i>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -69,7 +73,9 @@ if (!isset($_SESSION['name'])) {
         <td><?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?></td>
         <td><?php echo htmlspecialchars($cuenta['correo_cuenta']); ?></td>
         <td>
-            <span class="campo-estado <?php echo ($cuenta['estado'] == 'Habilitado') ? 'Habilitado' : 'inhabilitado'; ?>">
+            <span class="campo-estado <?php echo ($cuenta['estado'] == 'Habilitado') ? 'Habilitado' : 'Inhabilitado'; ?>"
+                onclick="cambiarEstado(<?php echo $cuenta['id_cuenta']; ?>, '<?php echo $cuenta['estado']; ?>')"
+                style="cursor: pointer;">
                 <?php echo htmlspecialchars($cuenta['estado']); ?>
             </span>
         </td>

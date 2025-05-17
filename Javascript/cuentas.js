@@ -189,31 +189,33 @@ $(document).ready(function () {
     });
 
     // Función para cambiar el estado de la cuenta
-    $(document).on('click', '.btn-cambiar-estado', function() {
-        const id_cuenta = $(this).data('id');
-        const span = $(this).closest('td').find('.estado');
+    function cambiarEstado(id_cuenta) {
+        const span = $(`span[onclick*="cambiarEstado(${id_cuenta}"]`);
         const estadoActual = span.text().trim().toLowerCase();
         const nuevoEstado = estadoActual === 'Habilitado' ? 'Inhabilitado' : 'Habilitado';
-
+        
         // Feedback visual inmediato
         span.addClass('cambiando');
+        
         $.ajax({
             url: '',
             type: 'POST',
             dataType: 'json',
             data: {
-                accion: 'cambiar_estado',
+                accion: 'cambiar_estato',
                 id_cuenta: id_cuenta,
-                nuevo_estado: estado
+                nuevo_estado: nuevoEstado
             },
             success: function(data) {
                 span.removeClass('cambiando');
+                
                 if (data.status === 'success') {
                     span.text(nuevoEstado);
                     span.removeClass('Habilitado Inhabilitado').addClass(nuevoEstado);
+                    
                     Swal.fire({
                         icon: 'success',
-                        title: '¡Estado actualizado!',
+                        title: '¡Estatus actualizado!',
                         showConfirmButton: false,
                         timer: 1500
                     });
@@ -221,7 +223,7 @@ $(document).ready(function () {
                     // Revertir visualmente
                     span.text(estadoActual);
                     span.removeClass('Habilitado Inhabilitado').addClass(estadoActual);
-                    Swal.fire('Error', data.message || 'Error al cambiar el estado', 'error');
+                    Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
                 }
             },
             error: function(xhr, status, error) {
@@ -232,7 +234,7 @@ $(document).ready(function () {
                 Swal.fire('Error', 'Error en la conexión', 'error');
             }
         });
-    });
+    }
 });
 
 // Función para agregar una nueva fila a la tabla
