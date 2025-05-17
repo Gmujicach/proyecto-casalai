@@ -50,7 +50,9 @@
                 data-telefono="<?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?>"
                 data-correo="<?php echo htmlspecialchars($cuenta['correo_cuenta']); ?>"
             >Modificar</button>
-            <button class="btn btn-danger btn-eliminar">Eliminar</button>
+            <button class="btn btn-danger btn-eliminar"
+                data-id="<?php echo $cuenta['id_cuenta']; ?>"
+            >Eliminar</button>
         </td>
     </tr>
 <?php endforeach; ?>

@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             
             $cuentabanco = new Cuentabanco();
-            $cuentabanco->setId($id_cuenta);
+            $cuentabanco->setIdCuenta($id_cuenta);
             
             if ($cuentabanco->estadoCuenta($nuevoEstado)) {
                 echo json_encode(['status' => 'success']);

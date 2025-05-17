@@ -255,7 +255,7 @@ function agregarFilaCuenta(cuenta) {
 
 // Función para actualizar una fila existente en la tabla
 function actualizarFilaCuenta(cuenta) {
-    const fila = $(`#tablaConsultas tbody tr:has(td:contains(${cuenta.id_cuenta}))`);
+    const fila = $(`#tablaConsultas tbody tr[data-id="${cuenta.id_cuenta}"]`);
     fila.find('td:nth-child(2)').text(cuenta.nombre_banco);
     fila.find('td:nth-child(3)').text(cuenta.numero_cuenta);
     fila.find('td:nth-child(4)').text(cuenta.rif_cuenta);
@@ -266,8 +266,9 @@ function actualizarFilaCuenta(cuenta) {
 
 // Función para eliminar una fila de la tabla
 function eliminarFilaCuenta(id_cuenta) {
-    $(`#tablaConsultas tbody tr:has(td:contains(${id_cuenta}))`).remove();
+    $(`#tablaConsultas tbody tr[data-id="${id_cuenta}"]`).remove();
 }
+
 // Función genérica para enviar AJAX
 function enviarAjax(datos, callback) {
     $.ajax({
