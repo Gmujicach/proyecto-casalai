@@ -27,7 +27,7 @@ if (!isset($_SESSION['name'])) {
             </div>
             <div class="envolver-form">
                 <input type="text" placeholder="RIF" class="control-form" id="rif_cuenta" name="rif_cuenta" required>
-                <span id="srof_cuenta"></span>
+                <span id="srif_cuenta"></span>
             </div>
             <div class="envolver-form">
                 <input type="text" placeholder="Número de teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" required>
