@@ -189,7 +189,7 @@ $(document).ready(function () {
     });
 
     // Manejador de clic para cambiar el estado de la cuenta
-    $(document).on('click', '.campo-estado', function() {
+    $(document).on('click', '.campo-estatus', function() {
         const id_cuenta = $(this).data('id');
         cambiarEstado(id_cuenta);
     });
@@ -220,7 +220,7 @@ function agregarFilaCuenta(cuenta) {
             <td>${cuenta.correo_cuenta}</td>
             <td>
                 <span 
-                    class="campo-estado ${cuenta.estado === 'Habilitado' ? 'Habilitado' : 'Inhabilitado'}" 
+                    class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
                     data-id="${cuenta.id_cuenta}" 
                     style="cursor: pointer;">
                     ${cuenta.estado}
@@ -295,9 +295,9 @@ function enviarAjax(datos, callback) {
 
 // Función para cambiar el estado de la cuenta
 function cambiarEstado(id_cuenta) {
-    const span = $(`span.campo-estado[data-id="${id_cuenta}"]`);
+    const span = $(`span.campo-estatus[data-id="${id_cuenta}"]`);
     const estadoActual = span.text().trim();
-    const nuevoEstado = estadoActual === 'Habilitado' ? 'Inhabilitado' : 'Habilitado';
+    const nuevoEstado = estadoActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
     
     // Feedback visual inmediato
     span.addClass('cambiando');
@@ -316,7 +316,7 @@ function cambiarEstado(id_cuenta) {
             
             if (data.status === 'success') {
                 span.text(nuevoEstado);
-                span.removeClass('Habilitado Inhabilitado').addClass(nuevoEstado);
+                span.removeClass('habilitado inhabilitado').addClass(nuevoEstado);
                 // Actualizar el estado en la tabla                
                 Swal.fire({
                     icon: 'success',
@@ -327,7 +327,7 @@ function cambiarEstado(id_cuenta) {
             } else {
                 // Revertir visualmente
                 span.text(estadoActual);
-                span.removeClass('Habilitado Inhabilitado').addClass(estadoActual);
+                span.removeClass('habilitado inhabilitado').addClass(estadoActual);
                 Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
             }
         },
@@ -335,7 +335,7 @@ function cambiarEstado(id_cuenta) {
             span.removeClass('cambiando');
             // Revertir visualmente
             span.text(estadoActual);
-            span.removeClass('Habilitado Inhabilitado').addClass(estadoActual);
+            span.removeClass('habilitado inhabilitado').addClass(estadoActual);
             Swal.fire('Error', 'Error en la conexión', 'error');
         }
     });

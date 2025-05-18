@@ -70,7 +70,7 @@ if (!isset($_SESSION['name'])) {
                     <td><?php echo htmlspecialchars($cuenta['correo_cuenta']); ?></td>
                     <td>
                         <span 
-                            class="campo-estado <?php echo ($cuenta['estado'] == 'Habilitado') ? 'Habilitado' : 'Inhabilitado'; ?>" 
+                            class="campo-estatus <?php echo ($cuenta['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
                             data-id="<?php echo $cuenta['id_cuenta']; ?>" 
                             style="cursor: pointer;">
                             <?php echo htmlspecialchars($cuenta['estado']); ?>
