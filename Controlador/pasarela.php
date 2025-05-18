@@ -4,6 +4,7 @@ require_once 'Modelo/PasareladePago.php';
 require_once 'Modelo/cuentas.php';
 require_once 'Modelo/Factura.php';
 
+$pasarela = new PasareladePago();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Obtiene la acción enviada en la solicitud POST
@@ -80,6 +81,27 @@ require_once 'Modelo/Factura.php';
                     echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
                 }*/
                 break;
+
+                        // Cambiar estatus
+        case 'cambiar_estatus':
+            $id = $_POST['id_usuario'];
+            $nuevoEstatus = $_POST['nuevo_estatus'];
+            
+            // Validación básica
+            if (!in_array($nuevoEstatus, ['habilitado', 'inhabilitado'])) {
+                echo json_encode(['status' => 'error', 'message' => 'Estatus no válido']);
+                exit;
+            }
+            
+
+            $pasarela->setIdDetalles($id);
+            
+            if ($pasarela->cambiarEstatus($nuevoEstatus)) {
+                echo json_encode(['status' => 'success']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
+            }
+            break;
     
             default:
                 // Respuesta de error si la acción no es válida
@@ -92,7 +114,7 @@ require_once 'Modelo/Factura.php';
 
 
 
-$pasarela = new PasareladePago();
+
 $datos = $pasarela->pasarelaTransaccion('Consultar');
 
 

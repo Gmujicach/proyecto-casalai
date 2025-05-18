@@ -180,5 +180,19 @@ public function validarCodigoReferencia() {
         $stmt->bindParam(':id_detalles', $this->id_detalles);
         return $stmt->execute();
     }
+
+        public function cambiarEstatus($nuevoEstatus) {
+        try {
+            $sql = "UPDATE tbl_detalles_pago SET estatus = :estatus WHERE id_detalles = :id";
+            $stmt = $this->conexion()->prepare($sql);
+            $stmt->bindParam(':estatus', $nuevoEstatus);
+            $stmt->bindParam(':id', $this->id_detalles);
+            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error al cambiar estatus: " . $e->getMessage());
+            return false;
+        }
+    }
 }
 ?>

@@ -37,6 +37,7 @@ if (!empty($_POST['accion'])) {
     }
 }
 
+
 // Código para cargar datos si se accede a la vista normalmente
 if (isset($_POST['id_factura'])) {
     $idFactura = $_POST['id_factura'];

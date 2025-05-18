@@ -16,7 +16,7 @@ if (!isset($_SESSION['name'])) {
 <?php include 'NewNavBar.php'; ?>
 
 <div class="contenedor-tabla">
-    <h3>LISTA DE PAGOS</h3>
+    <h3>LISTA DE PAGOS DE PAGOS REALIZADOS</h3>
 
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
@@ -24,7 +24,7 @@ if (!isset($_SESSION['name'])) {
                 <th><input type="checkbox"></th>
                 <th>ID Factura</th>
                 <th>ID Cuenta</th>
-                <th>Tipo</th>
+                <th>Tipo de Pago</th>
                 <th>Referencia</th>
                 <th>Fecha</th>
                 <th>Estatus</th>
