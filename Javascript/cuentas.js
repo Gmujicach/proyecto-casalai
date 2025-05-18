@@ -40,7 +40,7 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'success',
                         title: 'Modificado',
-                        text: 'La Cuenta se ha modificado correctamente'
+                        text: 'La cuenta se ha modificado correctamente'
                     });
             
                     // Obtener los datos del formulario
