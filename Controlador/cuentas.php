@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_cuenta = $_POST['id_cuenta'];
             $nuevoEstado = $_POST['estado'];
             
-            if (!in_array($nuevoEstado, ['Habilitado', 'Inhabilitado'])) {
+            if (!in_array($nuevoEstado, ['habilitado', 'inhabilitado'])) {
                 echo json_encode(['status' => 'error', 'message' => 'Estado no válido']);
                 exit;
             }

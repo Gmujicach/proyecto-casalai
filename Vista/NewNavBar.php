@@ -129,7 +129,7 @@
                     <a href="?pagina=cuentas">
                         <span class="simbolo">
                           <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
-                          Gestionar Consiliacion de Cuentas
+                          Gestionar Cuentas Bancarias
                         </span>
                       </a>
                 </li>

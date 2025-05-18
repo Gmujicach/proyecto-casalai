@@ -17,9 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Base de datos: `casalai`
---
+-- Creación de la base de datos: `casalai`
+
+CREATE DATABASE IF NOT EXISTS `casalai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `casalai`;
 
 -- --------------------------------------------------------
 
@@ -139,7 +140,7 @@ CREATE TABLE `tbl_cuentas` (
   `rif_cuenta` varchar(20) NOT NULL,
   `telefono_cuenta` varchar(11) DEFAULT NULL,
   `correo_cuenta` varchar(100) DEFAULT NULL,
-  `estado` enum('Habilitado','Inhabilitado') NOT NULL DEFAULT 'Habilitado'
+  `estado` enum('habilitado','inhabilitado') NOT NULL DEFAULT 'habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -147,10 +148,10 @@ CREATE TABLE `tbl_cuentas` (
 --
 
 INSERT INTO `tbl_cuentas` (`id_cuenta`, `nombre_banco`, `numero_cuenta`, `rif_cuenta`, `telefono_cuenta`, `correo_cuenta`, `estado`) VALUES
-(1, 'BNC', '1247862', '143123423442', '24141243241', 'EJEMPLO@GMAIL.COM', 'Habilitado'),
-(8, 'Banesco', '1234567890', '0123456789', '0990812808', 'ejemplo@gmail.com', 'Habilitado'),
-(9, 'Bancamiga', '1234567890', '0123456789', '0990812808', 'ejemplo@gmail.com68', 'Habilitado'),
-(10, 'Venezuela', '87654321', '0123456789', '04141580151', 'ejemplo@gmail.com', 'Habilitado');
+(1, 'BNC', '1247862', '143123423442', '24141243241', 'EJEMPLO@GMAIL.COM', 'habilitado'),
+(8, 'Banesco', '1234567890', '0123456789', '0990812808', 'ejemplo@gmail.com', 'habilitado'),
+(9, 'Bancamiga', '1234567890', '0123456789', '0990812808', 'ejemplo@gmail.com68', 'habilitado'),
+(10, 'Venezuela', '87654321', '0123456789', '04141580151', 'ejemplo@gmail.com', 'habilitado');
 
 -- --------------------------------------------------------
 

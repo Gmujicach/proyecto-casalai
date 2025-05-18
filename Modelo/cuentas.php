@@ -175,7 +175,7 @@ class Cuentabanco extends BD {
         
         if ($stmt->rowCount() == 0) {
             $alterSql = "ALTER TABLE tbl_cuentas 
-            ADD estado ENUM('Habilitado','Deshabilitado') NOT NULL DEFAULT 'Habilitado'";
+            ADD estado ENUM('habilitado','inhabilitado') NOT NULL DEFAULT 'habilitado'";
             $this->conex->exec($alterSql);
         }
     }
