@@ -13,13 +13,67 @@ if (!isset($_SESSION['name'])) {
   <?php include 'header.php'; ?>
 </head>
 <body>
-
-
 <?php include 'NewNavBar.php'; ?>
 
-<h1>Hola</h1>
+<div class="contenedor-tabla">
+    <h3>LISTA DE PAGOS</h3>
 
-<!-- Modal de eliminación -->
+    <table class="tablaConsultas" id="tablaConsultas">
+        <thead>
+            <tr>
+                <th><input type="checkbox"></th>
+                <th>ID Factura</th>
+                <th>ID Cuenta</th>
+                <th>Tipo</th>
+                <th>Referencia</th>
+                <th>Fecha</th>
+                <th>Estatus</th>
+                <th><i class="vertical">
+                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                    </i>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+        <?php foreach ($datos as $dato): ?>
+            <tr>
+                <td><input type="checkbox" value="<?php echo htmlspecialchars($dato['id_detalles']); ?>"></td>
+                
+                <td><?php echo htmlspecialchars($dato['id_factura']); ?></td>
+                <td><?php echo htmlspecialchars($dato['id_cuenta']); ?></td>
+                <td><?php echo htmlspecialchars($dato['tipo']); ?></td>
+                <td><?php echo htmlspecialchars($dato['referencia']); ?></td>
+                <td><?php echo htmlspecialchars($dato['fecha']); ?></td>
+                <td>
+                    <span class="campo-estatus <?php echo ($dato['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+                        onclick="cambiarEstatus(<?php echo $dato['id_detalles']; ?>, '<?php echo $dato['estatus']; ?>')"
+                        style="cursor: pointer;">
+                        <?php echo htmlspecialchars($dato['estatus']); ?>
+                    </span>
+                </td>
+
+                <td>
+                    <div class="acciones-boton">
+                        <i class="vertical">
+                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                        </i>
+                        <div class="desplegable">
+                            <ul>
+                                <li><a href="#">Ver</a></li>
+                                <li><a href="#" class="modificar" onclick="obtenerPago(<?php echo $dato['id_detalles']; ?>)">Modificar</a></li>
+                                <li><a href="#" class="eliminar" onclick="eliminarPago(<?php echo $dato['id_detalles']; ?>)">Eliminar</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+
 <?php include 'footer.php'; ?>
 <script src="public/bootstrap/js/sidebar.js"></script>
   <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>

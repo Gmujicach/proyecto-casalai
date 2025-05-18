@@ -92,7 +92,8 @@ require_once 'Modelo/Factura.php';
 
 
 
-
+$pasarela = new PasareladePago();
+$datos = $pasarela->pasarelaTransaccion('Consultar');
 
 
 $pagina = "pasarela";
