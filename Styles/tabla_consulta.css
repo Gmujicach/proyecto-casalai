@@ -202,7 +202,7 @@ table tbody tr td .acciones-boton i:hover{
 table tbody tr td .acciones-boton .desplegable {
     background: #fff;
     min-width: 120px;
-    width: 120%;
+    width: 100%;
     border-radius: 6px;
     padding: 0;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
