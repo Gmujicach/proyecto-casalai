@@ -1,66 +1,70 @@
 $(document).ready(function () {
-    $(document).on('click', '.btn-modificar', function() {
-        var boton = $(this);
-    
-        // Llenar los campos del formulario con los datos del botón
-        $('#modificarIdProducto').val(boton.data('id'));
-        $('#modificarNombreProducto').val(boton.data('nombre'));
-        $('#modificarDescripcionProducto').val(boton.data('descripcion'));
-        $('#modificarModelo').val(boton.data('modelo'));
-        $('#modificarStockActual').val(boton.data('stockactual'));
-        $('#modificarStockMaximo').val(boton.data('stockmaximo'));
-        $('#modificarStockMinimo').val(boton.data('stockminimo'));
-        $('#modificarPrecio').val(boton.data('precio'));
-        $('#modificarSeriales').val(boton.data('seriales'));
-        $('#modificarClausulaGarantia').val(boton.data('clausula'));
-        $('#modificarCategoria').val(boton.data('categoria'));
-    
-        // Mostrar el modal
-        $('#modificarProductoModal').modal('show');
-    });
-    
-    
+// Abrir modal y llenar campos
+$('#modificarPago').length
+$(document).on('click', '.modificar', function() {
+    console.log("Click en botón modificar");
+    var boton = $(this);
 
-    
-    $('#modificarProductoForm').on('submit', function(e) {
-        e.preventDefault();
+    $('#modificarIdDetalles').val(boton.data('id'));
+    $('#modificarCuenta').val(boton.data('cuenta'));
+    $('#modificarReferencia').val(boton.data('referencia'));
+    $('#modificarFecha').val(boton.data('fecha'));
 
-       
-        var formData = new FormData(this);
-        formData.append('accion', 'modificar');
+    $('#modificarPago').modal('show');
+});
 
-       
-        $.ajax({
-            url: '', 
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: formData,
-            success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                response = JSON.parse(response); 
+// Enviar datos por AJAX
+$('#modificarPagoForm').on('submit', function(e) {
+    e.preventDefault();
+
+    var formData = new FormData(this);
+    formData.append('accion', 'modificar');
+
+    $.ajax({
+        url: '', // Cambia esto si tienes un archivo separado para manejar la petición
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(response) {
+            try {
+                response = JSON.parse(response);
                 if (response.status === 'success') {
-                    $('#modificarProductoModal').modal('hide');
+                    $('#modificarPago').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Modificado',
-                        text: 'El producto se ha modificado correctamente'
+                        text: 'El pago se ha modificado correctamente'
                     }).then(function() {
                         location.reload();
                     });
                 } else {
                     muestraMensaje(response.message);
                 }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar el producto:', textStatus, errorThrown);
-                muestraMensaje('Error al modificar el producto.');
+            } catch (e) {
+                console.error('Error en la respuesta JSON', e);
+                muestraMensaje('Error en la respuesta del servidor.');
             }
-        });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error al modificar el pago:', textStatus, errorThrown);
+            muestraMensaje('Error al modificar el pago.');
+        }
     });
+});
 
-   
+
+     $(document).on('click', '.validar', function() {
+
+        alert('hola mundo')
+
+    });
+    
+    
+
+    
+  
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault(); 
         Swal.fire({

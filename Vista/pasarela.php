@@ -23,11 +23,12 @@ if (!isset($_SESSION['name'])) {
             <tr>
                 <th><input type="checkbox"></th>
                 <th>ID Factura</th>
-                <th>ID Cuenta</th>
+                <th>Cuenta</th>
                 <th>Tipo de Pago</th>
                 <th>Referencia</th>
                 <th>Fecha</th>
                 <th>Estatus</th>
+                <th>Observaciones</th>
                 <th><i class="vertical">
                         <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
                     </i>
@@ -41,7 +42,7 @@ if (!isset($_SESSION['name'])) {
                 <td><input type="checkbox" value="<?php echo htmlspecialchars($dato['id_detalles']); ?>"></td>
                 
                 <td><?php echo htmlspecialchars($dato['id_factura']); ?></td>
-                <td><?php echo htmlspecialchars($dato['id_cuenta']); ?></td>
+                <td><?php echo htmlspecialchars($dato['tbl_cuentas']); ?></td>
                 <td><?php echo htmlspecialchars($dato['tipo']); ?></td>
                 <td><?php echo htmlspecialchars($dato['referencia']); ?></td>
                 <td><?php echo htmlspecialchars($dato['fecha']); ?></td>
@@ -52,6 +53,7 @@ if (!isset($_SESSION['name'])) {
                         <?php echo htmlspecialchars($dato['estatus']); ?>
                     </span>
                 </td>
+                <td><?php echo htmlspecialchars($dato['observaciones']); ?></td>
 
                 <td>
                     <div class="acciones-boton">
@@ -60,8 +62,21 @@ if (!isset($_SESSION['name'])) {
                         </i>
                         <div class="desplegable">
                             <ul>
-                                <li><a href="#">Ver</a></li>
-                                <li><a href="#" class="modificar" onclick="obtenerPago(<?php echo $dato['id_detalles']; ?>)">Modificar</a></li>
+                                <li><a href="#" class="validar">Validar Pago</a></li>
+                                <li>
+  <a href="#"
+   class="modificar"
+   data-id="<?php echo $dato['id_detalles']; ?>"
+   data-cuenta="<?php echo htmlspecialchars($dato['id_cuenta']); ?>"
+   data-referencia="<?php echo htmlspecialchars($dato['referencia']); ?>"
+   data-fecha="<?php echo htmlspecialchars($dato['fecha']); ?>"
+   data-tipo="<?php echo htmlspecialchars($dato['tipo']); ?>"
+   data-factura="<?php echo htmlspecialchars($dato['id_factura']); ?>">
+   Modificar
+</a>
+
+</li>
+
                                 <li><a href="#" class="eliminar" onclick="eliminarPago(<?php echo $dato['id_detalles']; ?>)">Eliminar</a></li>
                             </ul>
                         </div>
@@ -72,6 +87,70 @@ if (!isset($_SESSION['name'])) {
         </tbody>
     </table>
 </div>
+
+<!-- Modal de modificación -->
+<div class="modal fade" id="modificarPago" tabindex="-1" role="dialog" aria-labelledby="modificarPagoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content shadow-lg rounded-4">
+      <form id="modificarPagoForm" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="accion" value="modificar">
+        <input type="hidden" name="id_detalles" id="modificarIdDetalles">
+
+        <div class="modal-header bg-primary text-white rounded-top">
+          <h5 class="modal-title" id="modificarPagoLabel">Modificar Pago</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <div class="mb-3">
+            <label for="modificarCuenta" class="form-label">Cuenta a la cual pagó</label>
+            <select class="form-select" id="modificarCuenta" name="cuenta" required>
+              <option value="" disabled selected>Seleccione una cuenta</option>
+              <?php foreach ($listadocuentas as $cuenta): ?>
+                <option value="<?php echo $cuenta['id_cuenta']; ?>">
+                  <?php echo $cuenta['nombre_banco'] . " - " . $cuenta['numero_cuenta']; ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+            <div class="form-text text-danger" id="scuenta"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="modificarReferencia" class="form-label">Referencia</label>
+            <input type="text" class="form-control" id="modificarReferencia" name="referencia" placeholder="Número de referencia" required>
+            <div class="form-text text-danger" id="sreferencia"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="modificarFecha" class="form-label">Fecha de pago</label>
+            <input type="date" class="form-control" id="modificarFecha" name="fecha" required>
+            <div class="form-text text-danger" id="sfecha"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="modificarTipo" class="form-label">Tipo de pago</label>
+            <select id="modificarTipo" name="tipo" class="form-select" required>
+              <option value="" disabled selected>Seleccionar</option>
+              <option value="Transferencia">Transferencia</option>
+              <option value="Pago móvil">Pago móvil</option>
+              <option value="Depósito">Depósito</option>
+              <option value="Otro">Otro</option>
+            </select>
+            <div class="form-text text-danger" id="stipo"></div>
+          </div>
+
+          <input type="hidden" name="id_factura" id="modificarFactura" value="">
+        </div>
+
+        <div class="modal-footer bg-light border-top">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary" type="submit">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 
 <?php include 'footer.php'; ?>
@@ -101,6 +180,28 @@ if (!isset($_SESSION['name'])) {
     // También evita el botón de retroceso en móviles Android
     window.history.forward();
   })();
+</script>
+
+<script>
+$(document).ready(function () {
+  $('.modificar').on('click', function (e) {
+    e.preventDefault();
+
+    const id = $(this).data('id');
+    const cuenta = $(this).data('cuenta');
+    const referencia = $(this).data('referencia');
+    const fecha = $(this).data('fecha');
+    const tipo = $(this).data('tipo'); // Asegúrate de agregarlo en el HTML
+    const factura = $(this).data('factura');
+    $('#modificarIdDetalles').val(id);
+    $('#modificarCuenta').val(cuenta);
+    $('#modificarReferencia').val(referencia);
+    $('#modificarFecha').val(fecha);
+    $('#modificarTipo').val(tipo);
+    $('#modificarFactura').val(factura);
+    $('#modificarPago').modal('show');
+  });
+});
 </script>
 
 

@@ -106,7 +106,7 @@ public function validarCodigoReferencia() {
                 return $this->pagoIngresar();                 
             case 'Consultar':
                 return $this->pagoConsultar();
-            case 'Cancelar':
+            case 'Modificar':
                 return $this->pagoModificar();
             case 'Procesar':
                 return $this->pagoProcesar();
@@ -145,7 +145,18 @@ public function validarCodigoReferencia() {
 
 
     private function pagoConsultar() {
-        $sql = "SELECT `id_detalles`, `id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`, `estatus` FROM `tbl_detalles_pago`";
+        $sql = "SELECT 
+    dp.id_detalles,
+    dp.id_factura,
+    dp.id_cuenta,
+    c.nombre_banco AS tbl_cuentas,
+    dp.observaciones,
+    dp.tipo,
+    dp.referencia,
+    dp.fecha,
+    dp.estatus
+FROM tbl_detalles_pago dp
+INNER JOIN tbl_cuentas c ON dp.id_cuenta = c.id_cuenta;";
         $stmt = $this->conexion()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -155,7 +166,6 @@ public function validarCodigoReferencia() {
         $sql = "UPDATE `tbl_detalles_pago` 
                 SET `id_factura` = :id_factura,
                     `id_cuenta` = :id_cuenta,
-                    `observaciones` = :observaciones,
                     `tipo` = :tipo,
                     `referencia` = :referencia,
                     `fecha` = :fecha 
@@ -164,7 +174,6 @@ public function validarCodigoReferencia() {
         $stmt->bindParam(':id_detalles', $this->id_detalles);
         $stmt->bindParam(':id_factura', $this->factura);
         $stmt->bindParam(':id_cuenta', $this->cuenta);
-        $stmt->bindParam(':observaciones', $this->observaciones);
         $stmt->bindParam(':tipo', $this->tipo);
         $stmt->bindParam(':referencia', $this->referencia);
         $stmt->bindParam(':fecha', $this->fecha);
