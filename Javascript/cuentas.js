@@ -211,17 +211,48 @@ $(document).ready(function () {
 // Función para agregar una nueva fila a la tabla
 function agregarFilaCuenta(cuenta) {
     const nuevaFila = `
-        <tr>
+        <tr data-id="${cuenta.id_cuenta}">
             <td>${cuenta.id_cuenta}</td>
             <td>${cuenta.nombre_banco}</td>
             <td>${cuenta.numero_cuenta}</td>
             <td>${cuenta.rif_cuenta}</td>
             <td>${cuenta.telefono_cuenta}</td>
             <td>${cuenta.correo_cuenta}</td>
-            <td>${cuenta.estado}</td>
             <td>
-                <button class="btn btn-primary btn-modificar" data-id="${cuenta.id_cuenta}">Modificar</button>
-                <button class="btn btn-danger btn-eliminar" data-id="${cuenta.id_cuenta}">Eliminar</button>
+                <span 
+                    class="campo-estado ${cuenta.estado === 'Habilitado' ? 'Habilitado' : 'Inhabilitado'}" 
+                    data-id="${cuenta.id_cuenta}" 
+                    style="cursor: pointer;">
+                    ${cuenta.estado}
+                </span>
+            </td>
+            <td>
+                <div class="acciones-boton">
+                    <i class="vertical">
+                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                    </i>
+                    <div class="desplegable">
+                        <ul>
+                            <li>
+                                <button class="btn btn-primary btn-modificar"
+                                    data-id="${cuenta.id_cuenta}"
+                                    data-nombre="${cuenta.nombre_banco}"
+                                    data-numero="${cuenta.numero_cuenta}"
+                                    data-rif="${cuenta.rif_cuenta}"
+                                    data-telefono="${cuenta.telefono_cuenta}"
+                                    data-correo="${cuenta.correo_cuenta}">
+                                    Modificar
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn btn-danger btn-eliminar"
+                                    data-id="${cuenta.id_cuenta}">
+                                    Eliminar
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </td>
         </tr>
     `;
