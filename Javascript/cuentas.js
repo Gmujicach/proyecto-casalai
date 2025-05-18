@@ -1,36 +1,81 @@
 $(document).ready(function () {
 
-    // Validación para registro y modificación de cuentas
-    function validarCuenta(datos) {
-        let errores = [];
-
-        // Validar nombre del banco
-        if (!datos.nombre_banco || datos.nombre_banco.trim().length < 3) {
-            errores.push("El nombre del banco es obligatorio y debe tener al menos 3 caracteres.");
-        }
-
-        // Validar número de cuenta (20 dígitos numéricos)
-        if (!/^\d{20}$/.test(datos.numero_cuenta)) {
-            errores.push("El número de cuenta debe tener exactamente 20 dígitos numéricos.");
-        }
-
-        // Validar RIF (ejemplo: J-12345678-9)
-        if (!/^[VEJPG]-\d{8}-\d$/.test(datos.rif_cuenta)) {
-            errores.push("El RIF debe tener el formato correcto (ej: J-12345678-9).");
-        }
-
-        // Validar teléfono (11 dígitos numéricos)
-        if (!/^\d{11}$/.test(datos.telefono_cuenta)) {
-            errores.push("El teléfono debe tener exactamente 11 dígitos numéricos.");
-        }
-
-        // Validar correo electrónico
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo_cuenta)) {
-            errores.push("El correo electrónico no es válido.");
-        }
-
-        return errores;
+    // MENSAJE //
+    if($.trim($("#mensajes").text()) != ""){
+        mensajes("warning", 4000, "Atención", $("#mensajes").html());
     }
+
+    // NOMBRE DEL BANCO
+    $("#nombre_banco").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        let nombre = document.getElementById("nombre_banco");
+        nombre.value = Espacios(nombre.value);
+    });
+
+    $("#nombre_banco").on("keyup", function(){
+        validarKeyUp(
+        /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/,
+        $(this),
+        $("#snombre_banco"),
+        "* El nombre debe tener al menos 3 letras y solo letras *"
+        );
+    });
+
+    // NÚMERO DE CUENTA
+    $("#numero_cuenta").on("keypress", function(e){
+        validarKeyPress(/^[0-9]*$/, e);
+    });
+
+    $("#numero_cuenta").on("keyup", function(){
+        validarKeyUp(
+        /^\d{20}$/,
+        $(this),
+        $("#snumero_cuenta"),
+        "* El número de cuenta debe tener exactamente 20 dígitos *"
+        );
+    });
+
+    // RIF
+    $("#rif_cuenta").on("keypress", function(e){
+        validarKeyPress(/^[VEJPG0-9-\b]*$/, e);
+    });
+
+    $("#rif_cuenta").on("keyup", function(){
+        validarKeyUp(
+        /^[VEJPG]-\d{8}-\d$/,
+        $(this),
+        $("#srif_cuenta"),
+        "* Formato válido: J-12345678-9 *"
+        );
+    });
+
+    // TELÉFONO
+    $("#telefono_cuenta").on("keypress", function(e){
+        validarKeyPress(/^[0-9]*$/, e);
+    });
+
+    $("#telefono_cuenta").on("keyup", function(){
+        validarKeyUp(
+        /^\d{11}$/,
+        $(this),
+        $("#stelefono_cuenta"),
+        "* El teléfono debe tener exactamente 11 dígitos *"
+        );
+    });
+
+    // CORREO ELECTRÓNICO
+    $("#correo_cuenta").on("keypress", function(e){
+        // Permite cualquier caracter, validación real en keyup
+    });
+
+    $("#correo_cuenta").on("keyup", function(){
+        validarKeyUp(
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        $(this),
+        $("#scorreo_cuenta"),
+        "* El correo electrónico no es válido *"
+        );
+    });
 
     // Cargar datos de la cuenta en el modal al abrir
     $(document).on('click', '.btn-modificar', function () {
@@ -263,6 +308,59 @@ $(document).ready(function () {
         $('.acciones-boton').removeClass('active');
     });
 });
+
+    // Función para validar antes de enviar
+    function validarEnvioCuenta(){
+        let nombre = document.getElementById("nombre_banco");
+        nombre.value = Espacios(nombre.value).trim();
+
+        if(validarKeyUp(
+        /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/,
+        $("#nombre_banco"),
+        $("#snombre_banco"),
+        "* El nombre debe tener al menos 3 letras y solo letras *"
+        )==0){
+        mensajes('error',4000,'Verifique el nombre del banco','Debe tener al menos 3 letras');
+        return false;
+        }
+        else if(validarKeyUp(
+        /^\d{20}$/,
+        $("#numero_cuenta"),
+        $("#snumero_cuenta"),
+        "* El número de cuenta debe tener exactamente 20 dígitos *"
+        )==0){
+        mensajes('error',4000,'Verifique el número de cuenta','Debe tener 20 dígitos');
+        return false;
+        }
+        else if(validarKeyUp(
+        /^[VEJPG]-\d{8}-\d$/,
+        $("#rif_cuenta"),
+        $("#srif_cuenta"),
+        "* Formato válido: J-12345678-9 *"
+        )==0){
+        mensajes('error',4000,'Verifique el RIF','Formato incorrecto');
+        return false;
+        }
+        else if(validarKeyUp(
+        /^\d{11}$/,
+        $("#telefono_cuenta"),
+        $("#stelefono_cuenta"),
+        "* El teléfono debe tener exactamente 11 dígitos *"
+        )==0){
+        mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
+        return false;
+        }
+        else if(validarKeyUp(
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        $("#correo_cuenta"),
+        $("#scorreo_cuenta"),
+        "* El correo electrónico no es válido *"
+        )==0){
+        mensajes('error',4000,'Verifique el correo','Correo no válido');
+        return false;
+        }
+        return true;
+    }
 
 // Función para agregar una nueva fila a la tabla
 function agregarFilaCuenta(cuenta) {
