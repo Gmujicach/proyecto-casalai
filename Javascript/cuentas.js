@@ -193,6 +193,19 @@ $(document).ready(function () {
         const id_cuenta = $(this).data('id');
         cambiarEstado(id_cuenta);
     });
+
+    $(document).on('click', '.acciones-boton .vertical', function(e) {
+        e.stopPropagation();
+        // Cierra otros menús abiertos
+        $('.acciones-boton').removeClass('active');
+        // Abre el menú de este botón
+        $(this).closest('.acciones-boton').toggleClass('active');
+    });
+
+    // Cierra el menú si haces clic fuera
+    $(document).on('click', function() {
+        $('.acciones-boton').removeClass('active');
+    });
 });
 
 // Función para agregar una nueva fila a la tabla
