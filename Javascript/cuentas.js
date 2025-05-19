@@ -6,75 +6,104 @@ $(document).ready(function () {
     }
 
     // NOMBRE DEL BANCO
-    $("#nombre_banco").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+    $("#nombre_banco").on("keypress", function(event){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, event);
         let nombre = document.getElementById("nombre_banco");
         nombre.value = Espacios(nombre.value);
     });
 
     $("#nombre_banco").on("keyup", function(){
         validarKeyUp(
-        /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/,
-        $(this),
-        $("#snombre_banco"),
-        "* El nombre debe tener al menos 3 letras y solo letras *"
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/,
+            $(this),
+            $("#snombre_banco"),
+            "* El nombre debe tener solo letras *"
         );
     });
 
     // NÚMERO DE CUENTA
-    $("#numero_cuenta").on("keypress", function(e){
-        validarKeyPress(/^[0-9]*$/, e);
+    $("#numero_cuenta").on("keypress", function(event){
+        validarKeyPress(/^[0-9]*$/, event);
     });
 
     $("#numero_cuenta").on("keyup", function(){
         validarKeyUp(
-        /^\d{20}$/,
-        $(this),
-        $("#snumero_cuenta"),
-        "* El número de cuenta debe tener exactamente 20 dígitos *"
+            /^\d{20}$/,
+            $(this),
+            $("#snumero_cuenta"),
+            "* El número de cuenta debe tener exactamente 20 dígitos *"
         );
     });
 
     // RIF
-    $("#rif_cuenta").on("keypress", function(e){
-        validarKeyPress(/^[VEJPG0-9-\b]*$/, e);
+    $("#rif_cuenta").on("keypress", function(event){
+        validarKeyPress(/^[VEJPG0-9-\b]*$/, event);
     });
 
     $("#rif_cuenta").on("keyup", function(){
         validarKeyUp(
-        /^[VEJPG]-\d{8}-\d$/,
-        $(this),
-        $("#srif_cuenta"),
-        "* Formato válido: J-12345678-9 *"
+            /^[VEJPG]-\d{8}-\d$/,
+            $(this),
+            $("#srif_cuenta"),
+            "* Formato válido: J-12345678-9 *"
         );
     });
 
     // TELÉFONO
-    $("#telefono_cuenta").on("keypress", function(e){
-        validarKeyPress(/^[0-9]*$/, e);
+    $("#telefono_cuenta").on("keypress", function(event){
+        validarKeyPress(/^[0-9]*$/, event);
     });
 
     $("#telefono_cuenta").on("keyup", function(){
         validarKeyUp(
-        /^\d{11}$/,
-        $(this),
-        $("#stelefono_cuenta"),
-        "* El teléfono debe tener exactamente 11 dígitos *"
+            /^\d{11}$/,
+            $(this),
+            $("#stelefono_cuenta"),
+            "* El teléfono debe tener exactamente 11 dígitos *"
         );
     });
 
     // CORREO ELECTRÓNICO
-    $("#correo_cuenta").on("keypress", function(e){
-        // Permite cualquier caracter, validación real en keyup
-    });
-
     $("#correo_cuenta").on("keyup", function(){
         validarKeyUp(
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        $(this),
-        $("#scorreo_cuenta"),
-        "* El correo electrónico no es válido *"
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $(this),
+            $("#scorreo_cuenta"),
+            "* El correo electrónico no es válido *"
         );
+    });
+
+    // Enviar formulario de registro
+    $('#registrarCuenta').on('submit', function(event) {
+        event.preventDefault();
+
+        if(validarEnvioCuenta()){
+            var datos = {
+                nombre_banco: $("#nombre_banco").val(),
+                numero_cuenta: $("#numero_cuenta").val(),
+                rif_cuenta: $("#rif_cuenta").val(),
+                telefono_cuenta: $("#telefono_cuenta").val(),
+                correo_cuenta: $("#correo_cuenta").val(),
+                accion: "registrar"
+            };
+            enviarAjax(datos, function(respuesta){
+                if(respuesta.status === "success" || respuesta.resultado === "success"){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: respuesta.message || respuesta.msg || 'Cuenta registrada correctamente'
+                    });
+                    agregarFilaCuenta(respuesta.cuenta);
+                    resetCuenta();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la cuenta'
+                    });
+                }
+            });
+        }
     });
 
     // Cargar datos de la cuenta en el modal al abrir
@@ -91,8 +120,8 @@ $(document).ready(function () {
     });
 
     // Enviar datos de modificación por AJAX al controlador PHP
-    $('#modificarCuenta').on('submit', function(e) {
-        e.preventDefault();
+    $('#modificarCuenta').on('submit', function(event) {
+        event.preventDefault();
 
         const datos = {
             nombre_banco: $('#modificar_nombre_banco').val(),
@@ -116,11 +145,11 @@ $(document).ready(function () {
         var formData = new FormData(this);
         formData.append('accion', 'modificar');
         $.ajax({
-            url: '',
+            url: '', // Coloca aquí la URL de tu controlador PHP
             type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
+            data: datos,
+            /*processData: false,
+            contentType: false,*/
             cache: false,
             dataType: 'json',
             success: function(response) {
@@ -164,9 +193,9 @@ $(document).ready(function () {
         });
     });
 
-    // Función para eliminar la cuenta
-    $(document).on('click', '.btn-eliminar', function (e) {
-        e.preventDefault();
+    // Eliminar cuenta
+    $(document).on('click', '.btn-eliminar', function (event) {
+        event.preventDefault();
         Swal.fire({
             title: '¿Está seguro?',
             text: "¡No podrás revertir esto!",
@@ -197,103 +226,15 @@ $(document).ready(function () {
         });
     });
 
-    // Función para incluir una nueva cuenta
-    $('#registrarCuenta').on('submit', function(event) {
-        event.preventDefault();
-
-        const datos = {
-            nombre_banco: $('#nombre_banco').val(),
-            numero_cuenta: $('#numero_cuenta').val(),
-            rif_cuenta: $('#rif_cuenta').val(),
-            telefono_cuenta: $('#telefono_cuenta').val(),
-            correo_cuenta: $('#correo_cuenta').val()
-        };
-
-        const errores = validarCuenta(datos);
-
-        if (errores.length > 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Errores de validación',
-                html: errores.join('<br>')
-            });
-            return;
-        }
-
-        const formData = new FormData(this);
-        formData.set('accion', 'registrar');
-
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                try {
-                    const data = JSON.parse(response);
-
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            title: 'Éxito',
-                            text: data.message || 'Cuenta ingresada exitosamente',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar'
-                        });
-
-                        agregarFilaCuenta(data.cuenta);
-                        document.getElementById('registrarCuenta').reset();
-                    } else {
-                        Swal.fire({
-                            title: 'Error del servidor',
-                            html: `<strong>Mensaje:</strong> ${data.message || 'Error al ingresar la cuenta'}<br>
-                                <strong>Detalle:</strong> ${data.detail || 'No se proporcionó detalle adicional'}`,
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    }
-                } catch (e) {
-                    Swal.fire({
-                        title: 'Error inesperado',
-                        html: `<strong>Respuesta no válida del servidor.</strong><br><code>${response}</code>`,
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                    console.error('Respuesta no válida:', response);
-                }
-            },
-            error: function(xhr, status, error) {
-                let mensajeError = `Error en la solicitud AJAX: ${status} - ${error}`;
-
-                if (xhr.responseText) {
-                    mensajeError += `<br><strong>Respuesta del servidor:</strong><br><code>${xhr.responseText}</code>`;
-                }
-
-                Swal.fire({
-                    title: 'Error en la conexión',
-                    html: mensajeError,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-
-                console.error('Detalles del error AJAX:', {
-                    status: xhr.status,
-                    responseText: xhr.responseText,
-                    readyState: xhr.readyState,
-                    errorThrown: error
-                });
-            }
-        });
-    });
-
-    // Manejador de clic para cambiar el estado de la cuenta
+    // Cambio de estado
     $(document).on('click', '.campo-estatus', function() {
         const id_cuenta = $(this).data('id');
         cambiarEstado(id_cuenta);
     });
 
-    $(document).on('click', '.acciones-boton .vertical', function(e) {
-        e.stopPropagation();
+    // Menú de acciones (mostrar/ocultar)
+    $(document).on('click', '.acciones-boton .vertical', function(event) {
+        event.stopPropagation();
         const $acciones = $(this).closest('.acciones-boton');
         if ($acciones.hasClass('active')) {
             $acciones.removeClass('active');
@@ -307,235 +248,256 @@ $(document).ready(function () {
     $(document).on('click', function() {
         $('.acciones-boton').removeClass('active');
     });
-});
 
-    // Función para validar antes de enviar
+    // Resetear formulario
+    function resetCuenta() {
+        $('#nombre_banco').val('');
+        $('#numero_cuenta').val('');
+        $('#rif_cuenta').val('');
+        $('#telefono_cuenta').val('');
+        $('#correo_cuenta').val('');
+        $('#snombre_banco').text('');
+        $('#snumero_cuenta').text('');
+        $('#srif_cuenta').text('');
+        $('#stelefono_cuenta').text('');
+        $('#scorreo_cuenta').text('');
+    }
+
+    // Validación antes de enviar (registro)
     function validarEnvioCuenta(){
         let nombre = document.getElementById("nombre_banco");
         nombre.value = Espacios(nombre.value).trim();
 
         if(validarKeyUp(
-        /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/,
-        $("#nombre_banco"),
-        $("#snombre_banco"),
-        "* El nombre debe tener al menos 3 letras y solo letras *"
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/,
+            $("#nombre_banco"),
+            $("#snombre_banco"),
+            "* El nombre debe tener al menos 3 letras y solo letras *"
         )==0){
-        mensajes('error',4000,'Verifique el nombre del banco','Debe tener al menos 3 letras');
-        return false;
+            mensajes('error',4000,'Verifique el nombre del banco','Debe tener al menos 3 letras');
+            return false;
         }
         else if(validarKeyUp(
-        /^\d{20}$/,
-        $("#numero_cuenta"),
-        $("#snumero_cuenta"),
-        "* El número de cuenta debe tener exactamente 20 dígitos *"
+            /^\d{20}$/,
+            $("#numero_cuenta"),
+            $("#snumero_cuenta"),
+            "* El número de cuenta debe tener exactamente 20 dígitos *"
         )==0){
-        mensajes('error',4000,'Verifique el número de cuenta','Debe tener 20 dígitos');
-        return false;
+            mensajes('error',4000,'Verifique el número de cuenta','Debe tener 20 dígitos');
+            return false;
         }
         else if(validarKeyUp(
-        /^[VEJPG]-\d{8}-\d$/,
-        $("#rif_cuenta"),
-        $("#srif_cuenta"),
-        "* Formato válido: J-12345678-9 *"
+            /^[VEJPG]-\d{8}-\d$/,
+            $("#rif_cuenta"),
+            $("#srif_cuenta"),
+            "* Formato válido: J-12345678-9 *"
         )==0){
-        mensajes('error',4000,'Verifique el RIF','Formato incorrecto');
-        return false;
+            mensajes('error',4000,'Verifique el RIF','Formato incorrecto');
+            return false;
         }
         else if(validarKeyUp(
-        /^\d{11}$/,
-        $("#telefono_cuenta"),
-        $("#stelefono_cuenta"),
-        "* El teléfono debe tener exactamente 11 dígitos *"
+            /^\d{11}$/,
+            $("#telefono_cuenta"),
+            $("#stelefono_cuenta"),
+            "* El teléfono debe tener exactamente 11 dígitos *"
         )==0){
-        mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
-        return false;
+            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
+            return false;
         }
         else if(validarKeyUp(
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        $("#correo_cuenta"),
-        $("#scorreo_cuenta"),
-        "* El correo electrónico no es válido *"
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $("#correo_cuenta"),
+            $("#scorreo_cuenta"),
+            "* El correo electrónico no es válido *"
         )==0){
-        mensajes('error',4000,'Verifique el correo','Correo no válido');
-        return false;
+            mensajes('error',4000,'Verifique el correo','Correo no válido');
+            return false;
         }
         return true;
     }
 
-// Función para agregar una nueva fila a la tabla
-function agregarFilaCuenta(cuenta) {
-    const nuevaFila = `
-        <tr data-id="${cuenta.id_cuenta}">
-            <td>${cuenta.id_cuenta}</td>
-            <td>${cuenta.nombre_banco}</td>
-            <td>${cuenta.numero_cuenta}</td>
-            <td>${cuenta.rif_cuenta}</td>
-            <td>${cuenta.telefono_cuenta}</td>
-            <td>${cuenta.correo_cuenta}</td>
-            <td>
-                <span 
-                    class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
-                    data-id="${cuenta.id_cuenta}" 
-                    style="cursor: pointer;">
-                    ${cuenta.estado}
-                </span>
-            </td>
-            <td>
-                <div class="acciones-boton">
-                    <i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                    <div class="desplegable">
-                        <ul>
-                            <li>
-                                <button class="btn btn-primary btn-modificar"
-                                    data-id="${cuenta.id_cuenta}"
-                                    data-nombre="${cuenta.nombre_banco}"
-                                    data-numero="${cuenta.numero_cuenta}"
-                                    data-rif="${cuenta.rif_cuenta}"
-                                    data-telefono="${cuenta.telefono_cuenta}"
-                                    data-correo="${cuenta.correo_cuenta}">
-                                    Modificar
-                                </button>
-                            </li>
-                            <li>
-                                <button class="btn btn-danger btn-eliminar"
-                                    data-id="${cuenta.id_cuenta}">
-                                    Eliminar
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    `;
-    $('#tablaConsultas tbody').append(nuevaFila);
-}
-
-// Función para actualizar una fila existente en la tabla
-function actualizarFilaCuenta(cuenta) {
-    const fila = $(`#tablaConsultas tbody tr[data-id="${cuenta.id_cuenta}"]`);
-    fila.find('td:nth-child(2)').text(cuenta.nombre_banco);
-    fila.find('td:nth-child(3)').text(cuenta.numero_cuenta);
-    fila.find('td:nth-child(4)').text(cuenta.rif_cuenta);
-    fila.find('td:nth-child(5)').text(cuenta.telefono_cuenta);
-    fila.find('td:nth-child(6)').text(cuenta.correo_cuenta);
-    fila.find('td:nth-child(7)').text(cuenta.estado);
-}
-
-// Función para eliminar una fila de la tabla
-function eliminarFilaCuenta(id_cuenta) {
-    $(`#tablaConsultas tbody tr[data-id="${id_cuenta}"]`).remove();
-}
-
-// Función genérica para enviar AJAX
-function enviarAjax(datos, callback) {
-    $.ajax({
-        url: '',
-        type: 'POST',
-        contentType: false,
-        data: datos,
-        processData: false,
-        cache: false,
-        success: function (respuesta) {
-            callback(JSON.parse(respuesta));
-        },
-        error: function () {
-            muestraMensaje('Error en la solicitud AJAX');
+    // Validación para modificar (puedes mejorarla igual que la de registro)
+    function validarCuenta(datos) {
+        let errores = [];
+        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/.test(datos.nombre_banco)) {
+            errores.push("El nombre debe tener al menos 3 letras y solo letras.");
         }
-    });
-}
+        if (!/^\d{20}$/.test(datos.numero_cuenta)) {
+            errores.push("El número de cuenta debe tener exactamente 20 dígitos.");
+        }
+        if (!/^[VEJPG]-\d{8}-\d$/.test(datos.rif_cuenta)) {
+            errores.push("Formato de RIF inválido (ej: J-12345678-9).");
+        }
+        if (!/^\d{11}$/.test(datos.telefono_cuenta)) {
+            errores.push("El teléfono debe tener exactamente 11 dígitos.");
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo_cuenta)) {
+            errores.push("El correo electrónico no es válido.");
+        }
+        return errores;
+    }
 
-// Función para cambiar el estado de la cuenta
-function cambiarEstado(id_cuenta) {
-    const span = $(`span.campo-estatus[data-id="${id_cuenta}"]`);
-    const estadoActual = span.text().trim();
-    const nuevoEstado = estadoActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
-    
-    span.addClass('cambiando');
+    // Función genérica para enviar AJAX
+    function enviarAjax(datos, callback) {
+        $.ajax({
+            url: '', // Coloca aquí la URL de tu controlador PHP
+            type: 'POST',
+            data: datos,
+            /*processData: false,
+            contentType: false,*/
+            cache: false,
+            success: function (respuesta) {
+                try {
+                    var respuesta = typeof respuesta === "object" ? respuesta : JSON.parse(respuesta);
+                    if(callback) callback(respuesta);
+                } catch(event) {
+                    Swal.fire('Error', 'Respuesta inválida del servidor', 'error');
+                }
+            },
+            error: function () {
+                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
+            }
+        });
+    }
+
+    // Función para agregar una nueva fila a la tabla
+    function agregarFilaCuenta(cuenta) {
+        const nuevaFila = `
+            <tr data-id="${cuenta.id_cuenta}">
+                <td>${cuenta.id_cuenta}</td>
+                <td>${cuenta.nombre_banco}</td>
+                <td>${cuenta.numero_cuenta}</td>
+                <td>${cuenta.rif_cuenta}</td>
+                <td>${cuenta.telefono_cuenta}</td>
+                <td>${cuenta.correo_cuenta}</td>
+                <td>
+                    <span 
+                        class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
+                        data-id="${cuenta.id_cuenta}" 
+                        style="cursor: pointer;">
+                        ${cuenta.estado}
+                    </span>
+                </td>
+                <td>
+                    <div class="acciones-boton">
+                        <i class="vertical">
+                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                        </i>
+                        <div class="desplegable">
+                            <ul>
+                                <li>
+                                    <button class="btn btn-primary btn-modificar"
+                                        data-id="${cuenta.id_cuenta}"
+                                        data-nombre="${cuenta.nombre_banco}"
+                                        data-numero="${cuenta.numero_cuenta}"
+                                        data-rif="${cuenta.rif_cuenta}"
+                                        data-telefono="${cuenta.telefono_cuenta}"
+                                        data-correo="${cuenta.correo_cuenta}">
+                                        Modificar
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-danger btn-eliminar"
+                                        data-id="${cuenta.id_cuenta}">
+                                        Eliminar
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+        $('#tablaConsultas tbody').append(nuevaFila);
+    }
+
+    // Función para eliminar una fila de la tabla
+    function eliminarFilaCuenta(id_cuenta) {
+        $(`#tablaConsultas tbody tr[data-id="${id_cuenta}"]`).remove();
+    }
+
+    // Función para cambiar el estado de la cuenta
+    function cambiarEstado(id_cuenta) {
+        const span = $(`span.campo-estatus[data-id="${id_cuenta}"]`);
+        const estadoActual = span.text().trim();
+        const nuevoEstado = estadoActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
         
-    $.ajax({
-        url: '',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            accion: 'cambiar_estado',
-            id_cuenta: id_cuenta,
-            estado: nuevoEstado
-        },
-        success: function(data) {
-            span.removeClass('cambiando');
-            if (data.status === 'success') {
-                span.text(nuevoEstado);
-                span.removeClass('habilitado inhabilitado').addClass(nuevoEstado);
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Estatus actualizado!',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            } else {
+        span.addClass('cambiando');
+            
+        $.ajax({
+            url: '', // Coloca aquí la URL de tu controlador PHP
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                accion: 'cambiar_estado',
+                id_cuenta: id_cuenta,
+                estado: nuevoEstado
+            },
+            success: function(data) {
+                span.removeClass('cambiando');
+                if (data.status === 'success') {
+                    span.text(nuevoEstado);
+                    span.removeClass('habilitado inhabilitado').addClass(nuevoEstado);
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Estatus actualizado!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    span.text(estadoActual);
+                    span.removeClass('habilitado inhabilitado').addClass(estadoActual);
+                    Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                span.removeClass('cambiando');
                 span.text(estadoActual);
                 span.removeClass('habilitado inhabilitado').addClass(estadoActual);
-                Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
+                Swal.fire('Error', 'Error en la conexión', 'error');
             }
-        },
-        error: function(xhr, status, error) {
-            span.removeClass('cambiando');
-            span.text(estadoActual);
-            span.removeClass('habilitado inhabilitado').addClass(estadoActual);
-            Swal.fire('Error', 'Error en la conexión', 'error');
+        });
+    }
+
+    // Función genérica para mostrar mensajes
+    function mensajes(icono, tiempo, titulo, mensaje){
+        Swal.fire({
+            icon: icono,
+            timer: tiempo,
+            title: titulo,
+            text: mensaje,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        });
+    }
+
+    // Utilidades de validación
+    function validarKeyPress(er, event) {
+        key = event.keyCode;
+        tecla = String.fromCharCode(key);
+        a = er.test(tecla);
+
+        if (!a) {
+            event.preventDefault();
         }
-    });
-}
+    }
 
-// Función genérica para mostrar mensajes
-function muestraMensaje(mensaje) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje
-    });
-}
+    function validarKeyUp(er, etiqueta, etiquetamensaje, mensaje) {
+        a = er.test(etiqueta.val());
 
-$(document).ready(function() {
-    // Manejar clic en flechas
-    $(document).on('click', '.flecha-izquierda, .flecha-derecha', function(e) {
-        e.preventDefault();
-        const url = $(this).closest('a').attr('href');
-        if(url) {
-            cambiarPagina(url.split('pagina=')[1]);
+        if (a) {
+            etiquetamensaje.text("");
+            return 1;
+        } else {
+            etiquetamensaje.text(mensaje);
+            return 0;
         }
-    });
+    }
 
-    // Manejar cambio en filas por página
-    $('#filasPorPagina').change(function() {
-        cambiarFilasPorPagina(this.value);
-    });
+    function Espacios(str) {
+        const regex = /\s{2,}/g;
+        var str = str.replace(regex, ' ');
+        return str;
+    }
+
 });
-
-function cambiarPagina(pagina) {
-    const filas = $('#filasPorPagina').val();
-    
-    $.ajax({
-        url: '',
-        type: 'GET',
-        data: {
-            pagina: pagina,
-            filas: filas,
-            ajax: true
-        },
-        success: function(data) {
-            $('#tabla-usuarios').replaceWith($(data).find('#tabla-usuarios'));
-            actualizarParametrosURL(pagina, filas);
-        }
-    });
-}
-
-function actualizarParametrosURL(pagina, filas) {
-    const url = new URL(window.location);
-    url.searchParams.set('pagina', pagina);
-    url.searchParams.set('filas', filas);
-    window.history.pushState({}, '', url);
-}
