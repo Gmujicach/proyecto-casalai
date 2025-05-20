@@ -147,7 +147,6 @@ if (!isset($_SESSION['name'])) {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Modificar</button>
                 </div>
             </form>
@@ -160,8 +159,5 @@ if (!isset($_SESSION['name'])) {
 <script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="Javascript/cuentas.js"></script>
 
-<script>
-
-</script>
 </body>
 </html>
