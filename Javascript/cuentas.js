@@ -196,7 +196,7 @@ $(document).ready(function () {
         if (errores.length > 0) {
             Swal.fire({
                 icon: 'error',
-                title: 'Errores de validación',
+                title: 'Error de validación',
                 html: errores.join('<br>')
             });
             return;
