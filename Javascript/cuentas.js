@@ -14,24 +14,24 @@ $(document).ready(function () {
 
     $("#nombre_banco").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/,
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/,
             $(this),
             $("#snombre_banco"),
-            "* El nombre debe tener solo letras *"
+            "*El formato solo permite letras*"
         );
     });
 
     // NÚMERO DE CUENTA
     $("#numero_cuenta").on("keypress", function(e){
-        validarKeyPress(/^[0-9]*$/, e);
+        validarKeyPress(/^[0-9-]*$/, e);
     });
 
     $("#numero_cuenta").on("keyup", function(){
         validarKeyUp(
-            /^\d{20}$/,
+            /^\d{4}-\d{4}-\d{2}-\d{10}$/,
             $(this),
             $("#snumero_cuenta"),
-            "* El número de cuenta debe tener exactamente 20 dígitos *"
+            "*Formato válido: 01XX-XXXX-XX-XXXXXXXXXX*"
         );
     });
 
@@ -45,21 +45,21 @@ $(document).ready(function () {
             /^[VEJPG]-\d{8}-\d$/,
             $(this),
             $("#srif_cuenta"),
-            "* Formato válido: J-12345678-9 *"
+            "*Formato válido: J-12345678-9*"
         );
     });
 
     // TELÉFONO
     $("#telefono_cuenta").on("keypress", function(e){
-        validarKeyPress(/^[0-9]*$/, e);
+        validarKeyPress(/^[0-9-]*$/, e);
     });
 
     $("#telefono_cuenta").on("keyup", function(){
         validarKeyUp(
-            /^\d{11}$/,
+            /^\d{4}-\d{3}-\d{4}$/,
             $(this),
             $("#stelefono_cuenta"),
-            "* El teléfono debe tener exactamente 11 dígitos *"
+            "*Formato válido: 04XX-XXX-XXXX*"
         );
     });
 
@@ -69,29 +69,9 @@ $(document).ready(function () {
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             $(this),
             $("#scorreo_cuenta"),
-            "* El correo electrónico no es válido *"
+            "*Formato válido: example@gmail.com*"
         );
     });
-
-$(document).on('click', '.vertical', function(e) {
-    e.preventDefault();
-    const $acciones = $(this).closest('.acciones-boton');
-
-    // Cerrar si ya está activo
-    if ($acciones.hasClass('active')) {
-        $acciones.removeClass('active');
-    } else {
-        $('.acciones-boton').removeClass('active');
-        $acciones.addClass('active');
-    }
-});
-
-// Cierra el menú si haces clic fuera
-$(document).on('click', function(e) {
-    if (!$(e.target).closest('.acciones-boton').length) {
-        $('.acciones-boton').removeClass('active');
-    }
-});
 
     // Enviar formulario de registro
     $('#registrarCuenta').on('submit', function(e) {
@@ -167,8 +147,9 @@ $(document).on('click', function(e) {
         $.ajax({
             url: '',
             type: 'POST',
-            data: datos,
-            cache: false,
+            data: formData,
+            processData: false,
+            contentType: false,
             dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
@@ -228,16 +209,27 @@ $(document).on('click', function(e) {
                 var datos = new FormData();
                 datos.append('accion', 'eliminar');
                 datos.append('id_cuenta', id_cuenta);
-                enviarAjax(datos, function (respuesta) {
-                    if (respuesta.status === 'success') {
-                        Swal.fire(
-                            'Eliminada!',
-                            'La Cuenta ha sido eliminada.',
-                            'success'
-                        );
-                        eliminarFilaCuenta(id_cuenta);
-                    } else {
-                        muestraMensaje(respuesta.message);
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: datos,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function (respuesta) {
+                        if (respuesta.status === 'success') {
+                            Swal.fire(
+                                'Eliminada!',
+                                'La cuenta ha sido eliminada.',
+                                'success'
+                            );
+                            eliminarFilaCuenta(id_cuenta);
+                        } else {
+                            muestraMensaje(respuesta.message);
+                        }
+                    },
+                    error: function () {
+                        muestraMensaje('Error en la solicitud AJAX');
                     }
                 });
             }
@@ -248,20 +240,6 @@ $(document).on('click', function(e) {
     $(document).on('click', '.campo-estatus', function() {
         const id_cuenta = $(this).data('id');
         cambiarEstado(id_cuenta);
-    });
-
-    // Menú de acciones
-    $(document).on('click', '.acciones-boton .vertical', function(e) {
-        e.stopPropagation();
-        // Cierra otros menús abiertos
-        $('.acciones-boton').removeClass('active');
-        // Abre el menú de este botón
-        $(this).closest('.acciones-boton').toggleClass('active');
-    });
-
-    // Cierra el menú si haces clic fuera
-    $(document).on('click', function() {
-        $('.acciones-boton').removeClass('active');
     });
 
     // Resetear formulario
@@ -284,46 +262,46 @@ $(document).on('click', function(e) {
         nombre.value = space(nombre.value).trim();
 
         if(validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/,
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/,
             $("#nombre_banco"),
             $("#snombre_banco"),
-            "* El nombre debe tener al menos 3 letras y solo letras *"
+            "*El nombre debe tener solo letras*"
         )==0){
-            mensajes('error',4000,'Verifique el nombre del banco','Debe tener al menos 3 letras');
+            mensajes('error',4000,'Verifique el nombre del banco','Debe tener solo letras');
             return false;
         }
         else if(validarKeyUp(
-            /^\d{20}$/,
+            /^\d{4}-\d{4}-\d{2}-\d{10}$/,
             $("#numero_cuenta"),
             $("#snumero_cuenta"),
-            "* El número de cuenta debe tener exactamente 20 dígitos *"
+            "*Formato correcto: 01XX-XXXX-XX-XXXXXXXXXX*"
         )==0){
-            mensajes('error',4000,'Verifique el número de cuenta','Debe tener 20 dígitos');
+            mensajes('error',4000,'Verifique el número de cuenta','Debe tener 20 dígitos separados por "-"');
             return false;
         }
         else if(validarKeyUp(
             /^[VEJPG]-\d{8}-\d$/,
             $("#rif_cuenta"),
             $("#srif_cuenta"),
-            "* Formato válido: J-12345678-9 *"
+            "*Formato correcto: J-12345678-9*"
         )==0){
             mensajes('error',4000,'Verifique el RIF','Formato incorrecto');
             return false;
         }
         else if(validarKeyUp(
-            /^\d{11}$/,
+            /^\d{4}-\d{3}-\d{4}$/,
             $("#telefono_cuenta"),
             $("#stelefono_cuenta"),
-            "* El teléfono debe tener exactamente 11 dígitos *"
+            "*Formato correcto: 04XX-XXX-XXXX*"
         )==0){
-            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
+            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos separados por "-"');
             return false;
         }
         else if(validarKeyUp(
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             $("#correo_cuenta"),
             $("#scorreo_cuenta"),
-            "* El correo electrónico no es válido *"
+            "*Formato correcto: example@gmail.com*"
         )==0){
             mensajes('error',4000,'Verifique el correo','Correo no válido');
             return false;
@@ -334,38 +312,36 @@ $(document).on('click', function(e) {
     // Validación para modificar (puedes mejorarla igual que la de registro)
     function validarCuenta(datos) {
         let errores = [];
-        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/.test(datos.nombre_banco)) {
-            errores.push("El nombre debe tener al menos 3 letras y solo letras.");
+        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/.test(datos.nombre_banco)) {
+            errores.push("El nombre debe tener solo letras.");
         }
-        if (!/^\d{20}$/.test(datos.numero_cuenta)) {
-            errores.push("El número de cuenta debe tener exactamente 20 dígitos.");
+        if (!/^\d{4}-\d{4}-\d{2}-\d{10}$/.test(datos.numero_cuenta)) {
+            errores.push("Formato correcto: 01XX-XXXX-XX-XXXXXXXXXX.");
         }
         if (!/^[VEJPG]-\d{8}-\d$/.test(datos.rif_cuenta)) {
             errores.push("Formato de RIF inválido (ej: J-12345678-9).");
         }
-        if (!/^\d{11}$/.test(datos.telefono_cuenta)) {
-            errores.push("El teléfono debe tener exactamente 11 dígitos.");
+        if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono_cuenta)) {
+            errores.push("Formato correcto: 04XX-XXX-XXXX.");
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo_cuenta)) {
-            errores.push("El correo electrónico no es válido.");
+            errores.push("Formato correcto: example@gmail.com.");
         }
         return errores;
     }
 
     // Función genérica para enviar AJAX
     function enviarAjax(datos, callback) {
+        let esFormData = (typeof datos === "object" && typeof datos.append === "function");
         $.ajax({
-            url: '', // Coloca aquí la URL de tu controlador PHP
+            url: '',
             type: 'POST',
             data: datos,
-            cache: false,
+            processData: !esFormData ? true : false,
+            contentType: !esFormData ? 'application/x-www-form-urlencoded; charset=UTF-8' : false,
+            dataType: 'json',
             success: function (respuesta) {
-                try {
-                    var respuesta = typeof respuesta === "object" ? respuesta : JSON.parse(respuesta);
-                    if(callback) callback(respuesta);
-                } catch(e) {
-                    Swal.fire('Error', 'Respuesta inválida del servidor', 'error');
-                }
+                if(callback) callback(respuesta);
             },
             error: function () {
                 Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
@@ -438,7 +414,7 @@ $(document).on('click', function(e) {
         span.addClass('cambiando');
             
         $.ajax({
-            url: '', // Coloca aquí la URL de tu controlador PHP
+            url: '',
             type: 'POST',
             dataType: 'json',
             data: {
