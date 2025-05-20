@@ -53,13 +53,6 @@ $('#modificarPagoForm').on('submit', function(e) {
         }
     });
 });
-
-
-     $(document).on('click', '.validar', function() {
-
-        alert('hola mundo')
-
-    });
     
     
 
@@ -98,6 +91,20 @@ $('#modificarPagoForm').on('submit', function(e) {
             }
         });
     });
+
+$(document).on('click', '.modificarEstado', function (e) {
+  e.preventDefault();
+
+  const idPago = $(this).data('id');
+  const estatus = $(this).data('estatus');
+  const observaciones = $(this).data('observaciones');
+
+  $('#estadoIdPago').val(idPago);
+  $('#estatus').val(estatus);
+  $('#observaciones').val(observaciones);
+
+  $('#modificarEstadoModal').modal('show');
+});
 
    
     $('#incluirProductoForm').on('submit', function(event) {
