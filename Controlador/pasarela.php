@@ -12,6 +12,7 @@ $listadocuentas = $cuentaModel->consultarCuentabanco();
         // Obtiene la acción enviada en la solicitud POST
         if (isset($_POST['accion'])) {
             $accion = $_POST['accion'];
+
         } else {
             $accion = '';
         }
