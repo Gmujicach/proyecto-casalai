@@ -78,7 +78,7 @@ $listadocuentas = $cuentaModel->consultarCuentabanco();
                         // Cambiar estatus
         case 'modificar_estado':
             error_log("Acción recibida: " . $accion);
-            $id = $_POST['id_pago'];
+            $id = $_POST['id_detalles'];
             $nuevoEstatus = $_POST['estatus'];
             $observaciones = $_POST['observaciones'];
             

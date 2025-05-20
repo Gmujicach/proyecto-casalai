@@ -75,7 +75,7 @@ $('#formModificarEstado').on('submit', function(e) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Modificado',
-                        text: 'El pago se ha modificado correctamente'
+                        text: 'El estado del pago se ha modificado correctamente'
                     }).then(function() {
                         location.reload();
                     });
@@ -144,6 +144,29 @@ $(document).on('click', '.modificarEstado', function (e) {
 
   $('#modificarEstadoModal').modal('show');
 });
+
+
+    function estatusAClase(estatus) {
+        return estatus
+            .toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // elimina tildes
+            .replace(/\s+/g, '-') // espacios por guiones
+            .replace(/[^a-z\-]/g, ''); // elimina caracteres no válidos
+    }
+
+    function aplicarClasesEstatus() {
+        const elementos = document.querySelectorAll('.campo-estatus');
+
+        elementos.forEach(el => {
+            const estatus = el.dataset.estatus;
+            const clase = estatusAClase(estatus);
+            el.classList.add(clase);
+        });
+    }
+
+    // Ejecutar al cargar la página
+    document.addEventListener('DOMContentLoaded', aplicarClasesEstatus);
+
 
    
     $('#incluirProductoForm').on('submit', function(event) {

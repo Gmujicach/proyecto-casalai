@@ -134,8 +134,8 @@ table tbody tr td .campo-estatus::before {
     height: 8px;
     position: absolute;
     border-radius: 100%;
-    top: 8px;
-    left: 10px;
+    top: 11px;
+    left: 0px;
 }
 
 /* Estilo para "habilitado" */
@@ -155,6 +155,83 @@ table tbody tr td .campo-estatus.inhabilitado {
 table tbody tr td .campo-estatus.inhabilitado::before {
     background: var(--danger-accent-color);
 }
+
+/* POR REVISIÓN */
+:root {
+    --success-accent-color: #28a745;  /* Verde */
+    --success-bg-color: #d4edda;
+
+    --danger-accent-color: #dc3545;   /* Rojo */
+    --danger-bg-color: #f8d7da;
+
+    --warning-accent-color: #6c757d;  /* Gris para "En Proceso" */
+    --warning-bg-color: #e2e3e5;
+
+    --info-accent-color: #007bff;     /* Azul para "Pago Incompleto" */
+    --info-bg-color: #d1ecf1;
+}
+
+/* EN PROCESO */
+table tbody tr td .campo-estatus.en-proceso {
+    color: var(--warning-accent-color);
+    background: var(--warning-bg-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+table tbody tr td .campo-estatus.en-proceso::before {
+    background: var(--warning-accent-color);
+}
+
+/* PAGO PROCESADO */
+table tbody tr td .campo-estatus.pago-procesado {
+    color: var(--success-accent-color);
+    background: var(--success-bg-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+table tbody tr td .campo-estatus.pago-procesado::before {
+    background: var(--success-accent-color);
+}
+
+/* PAGO NO ENCONTRADO */
+table tbody tr td .campo-estatus.pago-no-encontrado {
+    color: var(--danger-accent-color);
+    background: var(--danger-bg-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+table tbody tr td .campo-estatus.pago-no-encontrado::before {
+    background: var(--danger-accent-color);
+}
+
+/* PAGO INCOMPLETO */
+table tbody tr td .campo-estatus.pago-incompleto {
+    color: var(--info-accent-color);
+    background: var(--info-bg-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+table tbody tr td .campo-estatus.pago-incompleto::before {
+    background: var(--info-accent-color);
+}
+
+
 
 /* Estilo para Precios */
 

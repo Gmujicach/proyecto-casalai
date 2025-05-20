@@ -47,11 +47,12 @@ if (!isset($_SESSION['name'])) {
                 <td><?php echo htmlspecialchars($dato['referencia']); ?></td>
                 <td><?php echo htmlspecialchars($dato['fecha']); ?></td>
                 <td>
-                    <span class="campo-estatus <?php echo ($dato['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
-                        onclick="cambiarEstatus(<?php echo $dato['id_detalles']; ?>, '<?php echo $dato['estatus']; ?>')"
-                        style="cursor: pointer;">
-                        <?php echo htmlspecialchars($dato['estatus']); ?>
-                    </span>
+<span class="campo-estatus" 
+      data-estatus="<?php echo htmlspecialchars($dato['estatus']); ?>" 
+      style="cursor: pointer;">
+    <?php echo htmlspecialchars($dato['estatus']); ?>
+</span>
+
                 </td>
                 <td><?php echo htmlspecialchars($dato['observaciones']); ?></td>
 
@@ -63,7 +64,7 @@ if (!isset($_SESSION['name'])) {
                         <div class="desplegable">
                             <ul>
                                 <li><a href="#" class="modificarEstado" 
-   data-id="1"
+   data-id="<?php echo htmlspecialchars($dato['id_detalles']); ?>"
    data-estatus="Pago No Encontrado"
    data-observaciones="Pago no verificado aún">
    Cambiar Estatus
@@ -170,7 +171,7 @@ if (!isset($_SESSION['name'])) {
       <form id="formModificarEstado" method="POST" enctype="multipart/form-data">
         <div class="modal-body">
 
-          <input type="hidden" id="estadoIdPago" name="id_pago">
+          <input type="hidden" id="estadoIdPago" name="id_detalles">
           <input type="hidden" name="accion" value="modificar_estado">
           <div class="mb-3">
             <label for="estatus" class="form-label">Estatus</label>
@@ -260,6 +261,30 @@ $(document).ready(function () {
     $('#modificarPago').modal('show');
   });
 });
+</script>
+<script>
+    function estatusAClase(estatus) {
+        return estatus
+            .toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // elimina tildes
+            .replace(/\s+/g, '-') // reemplaza espacios con guiones
+            .replace(/[^a-z\-]/g, ''); // elimina cualquier otro carácter extraño
+    }
+
+    function aplicarClasesEstatus() {
+        const elementos = document.querySelectorAll('.campo-estatus');
+
+        elementos.forEach(el => {
+            const estatus = el.dataset.estatus;
+            const clase = estatusAClase(estatus);
+            if (estatus && clase) {
+                el.classList.add(clase);
+            }
+        });
+    }
+
+    // Ejecutar automáticamente al cargar la página
+    document.addEventListener('DOMContentLoaded', aplicarClasesEstatus);
 </script>
 
 
