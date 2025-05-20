@@ -192,6 +192,11 @@ $(document).ready(function () {
         });
     });
 
+    // Cerrar modal de modificación
+    $(document).on('click', '#modificarCuentaModal .close', function() {
+        $('#modificarCuentaModal').modal('hide');
+    });
+
     // Eliminar cuenta
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault();
