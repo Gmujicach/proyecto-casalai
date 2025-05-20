@@ -6,8 +6,8 @@ $(document).ready(function () {
     }
 
     // NOMBRE DEL BANCO
-    $("#nombre_banco").on("keypress", function(event){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, event);
+    $("#nombre_banco").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("nombre_banco");
         nombre.value = Espacios(nombre.value);
     });
@@ -22,8 +22,8 @@ $(document).ready(function () {
     });
 
     // NÚMERO DE CUENTA
-    $("#numero_cuenta").on("keypress", function(event){
-        validarKeyPress(/^[0-9]*$/, event);
+    $("#numero_cuenta").on("keypress", function(e){
+        validarKeyPress(/^[0-9]*$/, e);
     });
 
     $("#numero_cuenta").on("keyup", function(){
@@ -36,8 +36,8 @@ $(document).ready(function () {
     });
 
     // RIF
-    $("#rif_cuenta").on("keypress", function(event){
-        validarKeyPress(/^[VEJPG0-9-\b]*$/, event);
+    $("#rif_cuenta").on("keypress", function(e){
+        validarKeyPress(/^[VEJPG0-9-\b]*$/, e);
     });
 
     $("#rif_cuenta").on("keyup", function(){
@@ -50,8 +50,8 @@ $(document).ready(function () {
     });
 
     // TELÉFONO
-    $("#telefono_cuenta").on("keypress", function(event){
-        validarKeyPress(/^[0-9]*$/, event);
+    $("#telefono_cuenta").on("keypress", function(e){
+        validarKeyPress(/^[0-9]*$/, e);
     });
 
     $("#telefono_cuenta").on("keyup", function(){
@@ -74,8 +74,8 @@ $(document).ready(function () {
     });
 
     // Enviar formulario de registro
-    $('#registrarCuenta').on('submit', function(event) {
-        event.preventDefault();
+    $('#registrarCuenta').on('submit', function(e) {
+        e.preventDefault();
 
         if(validarEnvioCuenta()){
             var datos = {
@@ -120,8 +120,8 @@ $(document).ready(function () {
     });
 
     // Enviar datos de modificación por AJAX al controlador PHP
-    $('#modificarCuenta').on('submit', function(event) {
-        event.preventDefault();
+    $('#modificarCuenta').on('submit', function(e) {
+        e.preventDefault();
 
         const datos = {
             nombre_banco: $('#modificar_nombre_banco').val(),
@@ -145,11 +145,9 @@ $(document).ready(function () {
         var formData = new FormData(this);
         formData.append('accion', 'modificar');
         $.ajax({
-            url: '', // Coloca aquí la URL de tu controlador PHP
+            url: '',
             type: 'POST',
             data: datos,
-            /*processData: false,
-            contentType: false,*/
             cache: false,
             dataType: 'json',
             success: function(response) {
@@ -194,8 +192,8 @@ $(document).ready(function () {
     });
 
     // Eliminar cuenta
-    $(document).on('click', '.btn-eliminar', function (event) {
-        event.preventDefault();
+    $(document).on('click', '.btn-eliminar', function (e) {
+        e.preventDefault();
         Swal.fire({
             title: '¿Está seguro?',
             text: "¡No podrás revertir esto!",
@@ -232,16 +230,13 @@ $(document).ready(function () {
         cambiarEstado(id_cuenta);
     });
 
-    // Menú de acciones (mostrar/ocultar)
-    $(document).on('click', '.acciones-boton .vertical', function(event) {
-        event.stopPropagation();
-        const $acciones = $(this).closest('.acciones-boton');
-        if ($acciones.hasClass('active')) {
-            $acciones.removeClass('active');
-        } else {
-            $('.acciones-boton').removeClass('active');
-            $acciones.addClass('active');
-        }
+    // Menú de acciones
+    $(document).on('click', '.acciones-boton .vertical', function(e) {
+        e.stopPropagation();
+        // Cierra otros menús abiertos
+        $('.acciones-boton').removeClass('active');
+        // Abre el menú de este botón
+        $(this).closest('.acciones-boton').toggleClass('active');
     });
 
     // Cierra el menú si haces clic fuera
@@ -343,14 +338,12 @@ $(document).ready(function () {
             url: '', // Coloca aquí la URL de tu controlador PHP
             type: 'POST',
             data: datos,
-            /*processData: false,
-            contentType: false,*/
             cache: false,
             success: function (respuesta) {
                 try {
                     var respuesta = typeof respuesta === "object" ? respuesta : JSON.parse(respuesta);
                     if(callback) callback(respuesta);
-                } catch(event) {
+                } catch(e) {
                     Swal.fire('Error', 'Respuesta inválida del servidor', 'error');
                 }
             },
@@ -472,13 +465,13 @@ $(document).ready(function () {
     }
 
     // Utilidades de validación
-    function validarKeyPress(er, event) {
-        key = event.keyCode;
+    function validarKeyPress(er, e) {
+        key = e.keyCode;
         tecla = String.fromCharCode(key);
         a = er.test(tecla);
 
         if (!a) {
-            event.preventDefault();
+            e.preventDefault();
         }
     }
 
