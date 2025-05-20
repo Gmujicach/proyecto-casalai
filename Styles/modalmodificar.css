@@ -103,6 +103,13 @@
     color: #fff;
 }
 
+.span-value-modal{
+    color:#ff0000c7;
+    font-style: italic;
+    margin-top: 3px;
+    margin-bottom: 7px;
+}
+
 /* Responsive */
 @media (max-width: 576px) {
     #modificarCuentaModal .modal-content {
