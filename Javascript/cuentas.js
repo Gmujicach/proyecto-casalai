@@ -147,8 +147,9 @@ $(document).ready(function () {
         $.ajax({
             url: '',
             type: 'POST',
-            data: datos,
-            cache: false,
+            data: formData,
+            processData: false,
+            contentType: false,
             dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
@@ -208,16 +209,27 @@ $(document).ready(function () {
                 var datos = new FormData();
                 datos.append('accion', 'eliminar');
                 datos.append('id_cuenta', id_cuenta);
-                enviarAjax(datos, function (respuesta) {
-                    if (respuesta.status === 'success') {
-                        Swal.fire(
-                            'Eliminada!',
-                            'La Cuenta ha sido eliminada.',
-                            'success'
-                        );
-                        eliminarFilaCuenta(id_cuenta);
-                    } else {
-                        muestraMensaje(respuesta.message);
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: datos,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function (respuesta) {
+                        if (respuesta.status === 'success') {
+                            Swal.fire(
+                                'Eliminada!',
+                                'La Cuenta ha sido eliminada.',
+                                'success'
+                            );
+                            eliminarFilaCuenta(id_cuenta);
+                        } else {
+                            muestraMensaje(respuesta.message);
+                        }
+                    },
+                    error: function () {
+                        muestraMensaje('Error en la solicitud AJAX');
                     }
                 });
             }
@@ -320,18 +332,16 @@ $(document).ready(function () {
 
     // Función genérica para enviar AJAX
     function enviarAjax(datos, callback) {
+        let esFormData = (typeof datos === "object" && typeof datos.append === "function");
         $.ajax({
             url: '',
             type: 'POST',
             data: datos,
-            cache: false,
+            processData: !esFormData ? true : false,
+            contentType: !esFormData ? 'application/x-www-form-urlencoded; charset=UTF-8' : false,
+            dataType: 'json',
             success: function (respuesta) {
-                try {
-                    var respuesta = typeof respuesta === "object" ? respuesta : JSON.parse(respuesta);
-                    if(callback) callback(respuesta);
-                } catch(e) {
-                    Swal.fire('Error', 'Respuesta inválida del servidor', 'error');
-                }
+                if(callback) callback(respuesta);
             },
             error: function () {
                 Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
