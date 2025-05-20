@@ -220,7 +220,7 @@ $(document).ready(function () {
                         if (respuesta.status === 'success') {
                             Swal.fire(
                                 'Eliminada!',
-                                'La Cuenta ha sido eliminada.',
+                                'La cuenta ha sido eliminada.',
                                 'success'
                             );
                             eliminarFilaCuenta(id_cuenta);
