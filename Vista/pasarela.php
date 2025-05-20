@@ -171,11 +171,11 @@ if (!isset($_SESSION['name'])) {
         <div class="modal-body">
 
           <input type="hidden" id="estadoIdPago" name="id_pago">
-
+          <input type="hidden" name="accion" value="modificar_estado">
           <div class="mb-3">
             <label for="estatus" class="form-label">Estatus</label>
             <select class="form-select" id="estatus" name="estatus" required>
-              <option value="">Seleccione una opción</option>
+              <option value="" disabled selected>Seleccione una opción</option>
               <option value="Pago Procesado">Pago Procesado</option>
               <option value="Pago No Encontrado">Pago No Encontrado</option>
               <option value="Pago Incompleto">Pago Incompleto</option>
@@ -230,6 +230,17 @@ if (!isset($_SESSION['name'])) {
 </script>
 
 <script>
+  document.getElementById('formModificarEstado').addEventListener('submit', function(e) {
+    e.preventDefault(); // evita el envío tradicional del formulario
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    console.log("🔍 Valores enviados:");
+    for (let [name, value] of formData.entries()) {
+        console.log(`name: ${name}, value: ${value}`);
+    }
+  });
 $(document).ready(function () {
   $('.modificar').on('click', function (e) {
     e.preventDefault();

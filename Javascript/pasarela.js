@@ -53,7 +53,46 @@ $('#modificarPagoForm').on('submit', function(e) {
         }
     });
 });
-    
+
+$('#formModificarEstado').on('submit', function(e) {
+    e.preventDefault();
+
+    var formData = new FormData(this);
+    formData.append('accion', 'modificar_estado');
+
+    $.ajax({
+        url: '', // Cambia esto si tienes un archivo separado para manejar la petición
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(response) {
+            try {
+                response = JSON.parse(response);
+                if (response.status === 'success') {
+                    $('#modificarEstadoModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: 'El pago se ha modificado correctamente'
+                    }).then(function() {
+                        location.reload();
+                    });
+                } else {
+                    muestraMensaje(response.message);
+                }
+            } catch (e) {
+                console.error('Error en la respuesta JSON', e);
+                muestraMensaje('Error en la respuesta del servidor.');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error al modificar el pago:', textStatus, errorThrown);
+            muestraMensaje('Error al modificar el pago.');
+        }
+    });
+});
     
 
     

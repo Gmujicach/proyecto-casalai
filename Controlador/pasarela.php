@@ -15,7 +15,9 @@ $listadocuentas = $cuentaModel->consultarCuentabanco();
         } else {
             $accion = '';
         }
-    
+
+
+
         // Switch para manejar diferentes acciones
         switch ($accion) {
             case 'ingresar':
@@ -50,7 +52,8 @@ $listadocuentas = $cuentaModel->consultarCuentabanco();
                 break;
     
             case 'modificar':
-            
+            error_log("Acción recibida: " . $accion);
+
                 $id = $_POST['id_detalles'];
 
                 $pasarela->setIdDetalles($id);
@@ -70,32 +73,19 @@ $listadocuentas = $cuentaModel->consultarCuentabanco();
                 }
                 break;
     
-            case 'eliminar':
-                /* Obtiene el ID del producto y llama al método para eliminarlo
-                $id = $_POST['id'];
-                $productoModel = new Productos();
-                if ($productoModel->eliminarProducto($id)) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
-                }*/
-                break;
 
                         // Cambiar estatus
-        case 'cambiar_estatus':
-            $id = $_POST['id_usuario'];
-            $nuevoEstatus = $_POST['nuevo_estatus'];
+        case 'modificar_estado':
+            error_log("Acción recibida: " . $accion);
+            $id = $_POST['id_pago'];
+            $nuevoEstatus = $_POST['estatus'];
+            $observaciones = $_POST['observaciones'];
             
-            // Validación básica
-            if (!in_array($nuevoEstatus, ['habilitado', 'inhabilitado'])) {
-                echo json_encode(['status' => 'error', 'message' => 'Estatus no válido']);
-                exit;
-            }
-            
-
             $pasarela->setIdDetalles($id);
-            
-            if ($pasarela->cambiarEstatus($nuevoEstatus)) {
+            $pasarela->setObservaciones($observaciones);
+            $pasarela->setEstatus($nuevoEstatus);
+
+            if ($pasarela->pasarelaTransaccion('Procesar')) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);

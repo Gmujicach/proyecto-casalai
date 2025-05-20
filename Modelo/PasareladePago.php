@@ -182,10 +182,11 @@ INNER JOIN tbl_cuentas c ON dp.id_cuenta = c.id_cuenta;";
 
     private function pagoProcesar() {
         $sql = "UPDATE `tbl_detalles_pago` 
-                SET `estatus` = :estatus 
+                SET `estatus` = :estatus, `observaciones` = :observaciones
                 WHERE id_detalles = :id_detalles";
         $stmt = $this->conexion()->prepare($sql);
         $stmt->bindParam(':estatus', $this->estatus);
+        $stmt->bindParam(':observaciones', $this->observaciones);
         $stmt->bindParam(':id_detalles', $this->id_detalles);
         return $stmt->execute();
     }
