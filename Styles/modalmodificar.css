@@ -56,7 +56,6 @@
     font-size: 1rem;
     color: #222;
     background: #f7f9fa;
-    margin-bottom: 12px;
     transition: border-color 0.2s;
 }
 
@@ -72,6 +71,7 @@
     font-size: 0.97rem;
     color: #1976d2;
     font-weight: 500;
+    margin-top: 12px;
     margin-bottom: 4px;
 }
 
