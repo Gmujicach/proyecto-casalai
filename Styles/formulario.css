@@ -141,7 +141,7 @@ select option[value=""] [disabled]{
     background-color: #4d84e288;
 }
 
-span{
+.span-value{
     color:#ff0000c7;
     font-style: italic;
     margin-top: 3px;

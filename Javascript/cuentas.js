@@ -192,6 +192,11 @@ $(document).ready(function () {
         });
     });
 
+    // Cerrar modal de modificación
+    $(document).on('click', '#modificarCuentaModal .close', function() {
+        $('#modificarCuentaModal').modal('hide');
+    });
+
     // Eliminar cuenta
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault();
@@ -309,7 +314,7 @@ $(document).ready(function () {
         return true;
     }
 
-    // Validación para modificar (puedes mejorarla igual que la de registro)
+    // Validación para modificar
     function validarCuenta(datos) {
         let errores = [];
         if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/.test(datos.nombre_banco)) {

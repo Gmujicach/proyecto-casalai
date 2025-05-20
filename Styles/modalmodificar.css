@@ -1,0 +1,117 @@
+/* Fondo del modal */
+#modificarCuentaModal .modal-content {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    border: none;
+    padding: 0;
+}
+
+/* Header del modal */
+#modificarCuentaModal .modal-header {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 20px 24px 12px 24px;
+    position: relative;
+}
+
+/* Título centrado */
+#modificarCuentaModal .modal-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+}
+
+/* Botón cerrar (X) */
+#modificarCuentaModal .close {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    font-size: 1.7rem;
+    color: #1976d2;
+    opacity: 1;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+    z-index: 2;
+}
+#modificarCuentaModal .close:hover {
+    color: #0d47a1;
+    opacity: 0.8;
+    text-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
+}
+
+/* Cuerpo del modal */
+#modificarCuentaModal .modal-body {
+    padding: 18px 24px 8px 24px;
+}
+
+/* Inputs igual que el formulario de registro */
+#modificarCuentaModal .form-control {
+    border: 1px solid #bdbdbd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 1rem;
+    color: #222;
+    background: #f7f9fa;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+}
+
+#modificarCuentaModal .form-control:focus {
+    border-color: #1976d2;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.08);
+}
+
+/* Etiquetas */
+#modificarCuentaModal .form-group label {
+    font-size: 0.97rem;
+    color: #1976d2;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+/* Footer del modal */
+#modificarCuentaModal .modal-footer {
+    border-top: none;
+    padding: 16px 24px 20px 24px;
+    display: flex;
+    justify-content: flex-end;
+    background: transparent;
+}
+
+/* Botón Modificar igual que el botón Registrar */
+#modificarCuentaModal .btn-primary {
+    background-color: #1976d2;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 28px;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+}
+
+#modificarCuentaModal .btn-primary:hover,
+#modificarCuentaModal .btn-primary:focus {
+    background-color: #1251a3;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    #modificarCuentaModal .modal-content {
+        padding: 0;
+    }
+    #modificarCuentaModal .modal-header,
+    #modificarCuentaModal .modal-body,
+    #modificarCuentaModal .modal-footer {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
