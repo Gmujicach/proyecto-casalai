@@ -18,23 +18,23 @@ if (!isset($_SESSION['name'])) {
             <h3 class="titulo-form">INCLUIR CUENTA BANCARIA</h3>
             
             <div class="envolver-form">
-                <input type="text" placeholder="Nombre del banco" class="control-form" id="nombre_banco" name="nombre_banco" required>
+                <input type="text" placeholder="Nombre del banco" class="control-form" id="nombre_banco" name="nombre_banco" maxlength="20" required>
                 <span id="snombre_banco"></span>
             </div>
             <div class="envolver-form">
-                <input type="text" placeholder="Número de cuenta" class="control-form" id="numero_cuenta" name="numero_cuenta" required>
+                <input type="text" placeholder="Número de cuenta" class="control-form" id="numero_cuenta" name="numero_cuenta" maxlength="23" required>
                 <span id="snumero_cuenta"></span>
             </div>
             <div class="envolver-form">
-                <input type="text" placeholder="RIF" class="control-form" id="rif_cuenta" name="rif_cuenta" required>
+                <input type="text" placeholder="RIF" class="control-form" id="rif_cuenta" name="rif_cuenta" maxlength="12" required>
                 <span id="srif_cuenta"></span>
             </div>
             <div class="envolver-form">
-                <input type="text" placeholder="Número de teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" required>
+                <input type="text" placeholder="Número de teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" maxlength="13" required>
                 <span id="stelefono_cuenta"></span>
             </div>
             <div class="envolver-form">
-                <input type="email" placeholder="Correo electrónico" class="control-form" id="correo_cuenta" name="correo_cuenta" required>
+                <input type="email" placeholder="Correo electrónico" class="control-form" id="correo_cuenta" name="correo_cuenta" maxlength="50" required>
                 <span id="scorreo_cuenta"></span>
             </div>
 

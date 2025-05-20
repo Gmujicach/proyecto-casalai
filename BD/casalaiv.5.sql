@@ -137,8 +137,8 @@ CREATE TABLE `tbl_cuentas` (
   `id_cuenta` int(11) NOT NULL,
   `nombre_banco` varchar(200) NOT NULL,
   `numero_cuenta` varchar(200) DEFAULT NULL,
-  `rif_cuenta` varchar(20) NOT NULL,
-  `telefono_cuenta` varchar(11) DEFAULT NULL,
+  `rif_cuenta` varchar(25) NOT NULL,
+  `telefono_cuenta` varchar(15) DEFAULT NULL,
   `correo_cuenta` varchar(100) DEFAULT NULL,
   `estado` enum('habilitado','inhabilitado') NOT NULL DEFAULT 'habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
