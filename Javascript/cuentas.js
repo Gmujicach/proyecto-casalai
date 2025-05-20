@@ -116,7 +116,7 @@ $(document).ready(function () {
         validarKeyUp(
             /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/,
             $(this),
-            $("#snombre_banco"),
+            $("#smnombre_banco"),
             "*El formato solo permite letras y mínimo 3 caracteres*"
         );
     });
@@ -128,7 +128,7 @@ $(document).ready(function () {
         validarKeyUp(
             /^\d{4}-\d{4}-\d{2}-\d{10}$/,
             $(this),
-            $("#snumero_cuenta"),
+            $("#smnumero_cuenta"),
             "*Formato válido: 01XX-XXXX-XX-XXXXXXXXXX*"
         );
     });
@@ -140,7 +140,7 @@ $(document).ready(function () {
         validarKeyUp(
             /^[VEJPG]-\d{8}-\d$/,
             $(this),
-            $("#srif_cuenta"),
+            $("#smrif_cuenta"),
             "*Formato válido: J-12345678-9*"
         );
     });
@@ -152,7 +152,7 @@ $(document).ready(function () {
         validarKeyUp(
             /^\d{11}$/,
             $(this),
-            $("#stelefono_cuenta"),
+            $("#smtelefono_cuenta"),
             "*El teléfono debe tener exactamente 11 dígitos*"
         );
     });
@@ -161,7 +161,7 @@ $(document).ready(function () {
         validarKeyUp(
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             $(this),
-            $("#scorreo_cuenta"),
+            $("#smcorreo_cuenta"),
             "*El correo electrónico no es válido*"
         );
     });
