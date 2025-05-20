@@ -9,7 +9,7 @@ $(document).ready(function () {
     $("#nombre_banco").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("nombre_banco");
-        nombre.value = Espacios(nombre.value);
+        nombre.value = space(nombre.value);
     });
 
     $("#nombre_banco").on("keyup", function(){
@@ -261,7 +261,7 @@ $(document).ready(function () {
     // Validación antes de enviar (registro)
     function validarEnvioCuenta(){
         let nombre = document.getElementById("nombre_banco");
-        nombre.value = Espacios(nombre.value).trim();
+        nombre.value = space(nombre.value).trim();
 
         if(validarKeyUp(
             /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,50}$/,
@@ -487,7 +487,7 @@ $(document).ready(function () {
         }
     }
 
-    function Espacios(str) {
+    function space(str) {
         const regex = /\s{2,}/g;
         var str = str.replace(regex, ' ');
         return str;
