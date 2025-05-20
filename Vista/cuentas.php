@@ -127,23 +127,28 @@ if (!isset($_SESSION['name'])) {
                     <input type="hidden" name="accion" value="modificar">
                     <div class="form-group">
                         <label for="modificar_nombre_banco">Nombre del Banco</label>
-                        <input type="text" class="form-control" id="modificar_nombre_banco" name="nombre_banco" required>
+                        <input type="text" class="form-control" id="modificar_nombre_banco" name="nombre_banco" maxlength="20" required>
+                        <span class="span-value" id="snombre_banco"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificar_numero_cuenta">Número de Cuenta</label>
-                        <input type="text" class="form-control" id="modificar_numero_cuenta" name="numero_cuenta" required>
+                        <input type="text" class="form-control" id="modificar_numero_cuenta" name="numero_cuenta" maxlength="23" required>
+                        <span class="span-value" id="snumero_cuenta"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificar_rif_cuenta">RIF</label>
-                        <input type="text" class="form-control" id="modificar_rif_cuenta" name="rif_cuenta" required>
+                        <input type="text" class="form-control" id="modificar_rif_cuenta" name="rif_cuenta" maxlength="12" required>
+                        <span class="span-value" id="srif_cuenta"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificar_telefono_cuenta">Teléfono</label>
-                        <input type="text" class="form-control" id="modificar_telefono_cuenta" name="telefono_cuenta" required>
+                        <input type="text" class="form-control" id="modificar_telefono_cuenta" name="telefono_cuenta" maxlength="13" required>
+                        <span class="span-value" id="stelefono_cuenta"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificar_correo_cuenta">Correo</label>
-                        <input type="email" class="form-control" id="modificar_correo_cuenta" name="correo_cuenta" required>
+                        <input type="email" class="form-control" id="modificar_correo_cuenta" name="correo_cuenta" maxlength="50" required>
+                        <span class="span-value" id="scorreo_cuenta"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
