@@ -62,7 +62,13 @@ if (!isset($_SESSION['name'])) {
                         </i>
                         <div class="desplegable">
                             <ul>
-                                <li><a href="#" class="validar">Validar Pago</a></li>
+                                <li><a href="#" class="modificarEstado" 
+   data-id="1"
+   data-estatus="Pago No Encontrado"
+   data-observaciones="Pago no verificado aún">
+   Cambiar Estatus
+</a>
+</li>
                                 <li>
   <a href="#"
    class="modificar"
@@ -151,6 +157,47 @@ if (!isset($_SESSION['name'])) {
   </div>
 </div>
 
+<!-- Modal para modificar estatus y observaciones -->
+<div class="modal fade" id="modificarEstadoModal" tabindex="-1" aria-labelledby="modificarEstadoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="modificarEstadoLabel">Modificar Estatus del Pago</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      
+      <form id="formModificarEstado">
+        <div class="modal-body">
+
+          <input type="hidden" id="estadoIdPago" name="id_pago">
+
+          <div class="mb-3">
+            <label for="estatus" class="form-label">Estatus</label>
+            <select class="form-select" id="estatus" name="estatus" required>
+              <option value="">Seleccione una opción</option>
+              <option value="Pago Procesado">Pago Procesado</option>
+              <option value="Pago No Encontrado">Pago No Encontrado</option>
+              <option value="Pago Incompleto">Pago Incompleto</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <textarea class="form-control" id="observaciones" name="observaciones" rows="3"></textarea>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
 
 
 <?php include 'footer.php'; ?>
