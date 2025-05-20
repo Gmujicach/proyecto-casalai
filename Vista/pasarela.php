@@ -167,7 +167,7 @@ if (!isset($_SESSION['name'])) {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       
-      <form id="formModificarEstado">
+      <form id="formModificarEstado" method="POST" enctype="multipart/form-data">
         <div class="modal-body">
 
           <input type="hidden" id="estadoIdPago" name="id_pago">
