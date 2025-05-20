@@ -39,6 +39,7 @@ if (!isset($_SESSION['name'])) {
             </div>
 
             <button class="boton-form" type="submit">Registrar</button>
+            <button class="boton-reset" type="reset">Reset</button>
 
         </form>
     </div>
