@@ -73,6 +73,26 @@ $(document).ready(function () {
         );
     });
 
+$(document).on('click', '.vertical', function(e) {
+    e.preventDefault();
+    const $acciones = $(this).closest('.acciones-boton');
+
+    // Cerrar si ya está activo
+    if ($acciones.hasClass('active')) {
+        $acciones.removeClass('active');
+    } else {
+        $('.acciones-boton').removeClass('active');
+        $acciones.addClass('active');
+    }
+});
+
+// Cierra el menú si haces clic fuera
+$(document).on('click', function(e) {
+    if (!$(e.target).closest('.acciones-boton').length) {
+        $('.acciones-boton').removeClass('active');
+    }
+});
+
     // Enviar formulario de registro
     $('#registrarCuenta').on('submit', function(e) {
         e.preventDefault();
@@ -493,4 +513,35 @@ $(document).ready(function () {
         return str;
     }
 
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Delegación de eventos para cada botón
+    document.querySelectorAll('.acciones-boton i').forEach(function (icono) {
+        icono.addEventListener('click', function (e) {
+            e.stopPropagation(); // Prevenir que se cierre inmediatamente por el click global
+
+            // Cerrar todos los menús primero
+            document.querySelectorAll('.desplegable').forEach(function (menu) {
+                if (menu !== icono.nextElementSibling) {
+                    menu.style.display = 'none';
+                }
+            });
+
+            // Alternar el menú actual
+            const menuActual = icono.nextElementSibling;
+            if (menuActual.style.display === 'block') {
+                menuActual.style.display = 'none';
+            } else {
+                menuActual.style.display = 'block';
+            }
+        });
+    });
+
+    // Cerrar el menú si se hace clic fuera
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.desplegable').forEach(function (menu) {
+            menu.style.display = 'none';
+        });
+    });
 });
