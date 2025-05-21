@@ -81,10 +81,11 @@ $listadocuentas = $cuentaModel->consultarCuentabanco();
             $id = $_POST['id_detalles'];
             $nuevoEstatus = $_POST['estatus'];
             $observaciones = $_POST['observaciones'];
-            
+            $factura = $_POST['id_factura'];
             $pasarela->setIdDetalles($id);
             $pasarela->setObservaciones($observaciones);
             $pasarela->setEstatus($nuevoEstatus);
+            $pasarela->setFactura($factura);
 
             if ($pasarela->pasarelaTransaccion('Procesar')) {
                 echo json_encode(['status' => 'success']);

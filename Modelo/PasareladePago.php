@@ -1,7 +1,8 @@
 <?php
 require_once 'config.php';
+require_once 'Factura.php';
 
-class PasareladePago extends BD {
+class PasareladePago extends Factura {
     private $id_detalles;
     private $cuenta;
     private $factura;
@@ -11,10 +12,7 @@ class PasareladePago extends BD {
     private $fecha;
     private $estatus;
 
-    function __construct() {
-        parent::__construct();
-        $this->conex = parent::conexion();
-    }
+
 
     // Setters y Getters
 
@@ -180,16 +178,26 @@ INNER JOIN tbl_cuentas c ON dp.id_cuenta = c.id_cuenta;";
         return $stmt->execute();
     }
 
-    private function pagoProcesar() {
-        $sql = "UPDATE `tbl_detalles_pago` 
-                SET `estatus` = :estatus, `observaciones` = :observaciones
-                WHERE id_detalles = :id_detalles";
-        $stmt = $this->conexion()->prepare($sql);
-        $stmt->bindParam(':estatus', $this->estatus);
-        $stmt->bindParam(':observaciones', $this->observaciones);
-        $stmt->bindParam(':id_detalles', $this->id_detalles);
-        return $stmt->execute();
+private function pagoProcesar() {
+    $sql = "UPDATE `tbl_detalles_pago` 
+            SET `estatus` = :estatus, `observaciones` = :observaciones
+            WHERE id_detalles = :id_detalles";
+    
+    $stmt = $this->conexion()->prepare($sql);
+    $stmt->bindParam(':estatus', $this->estatus);
+    $stmt->bindParam(':observaciones', $this->observaciones);
+    $stmt->bindParam(':id_detalles', $this->id_detalles);
+    
+    $resultado = $stmt->execute();
+
+    // Verifica si el estatus es "Pago Procesado" y ejecuta facturaProcesar
+    if ($resultado && $this->estatus === 'Pago Procesado') {
+        $this->facturaProcesar($this->factura);
     }
+
+    return $resultado;
+}
+
 
         public function cambiarEstatus($nuevoEstatus) {
         try {

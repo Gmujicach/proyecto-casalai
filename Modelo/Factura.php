@@ -125,7 +125,7 @@ class Factura extends BD
             $form = '<input type="hidden" name="id_factura" value="' . $id_factura . '">';
             
             if ($estatus != 'En Proceso') {
-            if ($estatus === 'Procesada') {
+            if ($estatus === 'Pagada') {
                 $form .= '<button type="button" data-id="' . $id_factura . '" class="btn btn-primary btn-lg descargar" name="accion" value="descargar">Descargar</button>';
             } elseif ($estatus !== 'Cancelada') {
                 $form .= '
@@ -202,7 +202,7 @@ class Factura extends BD
     // Marcar factura como Procesada
     public function facturaProcesar($id) {
         $pdo = $this->conex;
-        $stmt = $pdo->prepare("UPDATE tbl_facturas SET estatus = 'Procesada' WHERE id_factura = ?");
+        $stmt = $pdo->prepare("UPDATE tbl_facturas SET estatus = 'Pagada' WHERE id_factura = ?");
         return $stmt->execute([$id]);
     }
 

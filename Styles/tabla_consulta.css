@@ -134,10 +134,28 @@ table tbody tr td .campo-estatus::before {
     height: 8px;
     position: absolute;
     border-radius: 100%;
+    top: 8px;
+    left: 10px;
+}
+
+table tbody tr td .campo-estatus-pagos{
+    position: relative;
+    display: inline-block;
+    padding: 3px 15px 3px 25px; /* Más padding a la izquierda para el círculo */
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+/* Círculo indicador (base) */
+table tbody tr td .campo-estatus-pagos::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    border-radius: 100%;
     top: 11px;
     left: 0px;
 }
-
 /* Estilo para "habilitado" */
 table tbody tr td .campo-estatus.habilitado {
     color: var(--success-accent-color);
@@ -172,7 +190,7 @@ table tbody tr td .campo-estatus.inhabilitado::before {
 }
 
 /* EN PROCESO */
-table tbody tr td .campo-estatus.en-proceso {
+table tbody tr td .campo-estatus-pagos.en-proceso {
     color: var(--warning-accent-color);
     background: var(--warning-bg-color);
     font-weight: 600;
@@ -182,12 +200,12 @@ table tbody tr td .campo-estatus.en-proceso {
     display: inline-block;
     text-transform: capitalize;
 }
-table tbody tr td .campo-estatus.en-proceso::before {
+table tbody tr td .campo-estatus-pagos.en-proceso::before {
     background: var(--warning-accent-color);
 }
 
 /* PAGO PROCESADO */
-table tbody tr td .campo-estatus.pago-procesado {
+table tbody tr td .campo-estatus-pagos.pago-procesado {
     color: var(--success-accent-color);
     background: var(--success-bg-color);
     font-weight: 600;
@@ -197,12 +215,12 @@ table tbody tr td .campo-estatus.pago-procesado {
     display: inline-block;
     text-transform: capitalize;
 }
-table tbody tr td .campo-estatus.pago-procesado::before {
+table tbody tr td .campo-estatus-pagos.pago-procesado::before {
     background: var(--success-accent-color);
 }
 
 /* PAGO NO ENCONTRADO */
-table tbody tr td .campo-estatus.pago-no-encontrado {
+table tbody tr td .campo-estatus-pagos.pago-no-encontrado {
     color: var(--danger-accent-color);
     background: var(--danger-bg-color);
     font-weight: 600;
@@ -212,12 +230,12 @@ table tbody tr td .campo-estatus.pago-no-encontrado {
     display: inline-block;
     text-transform: capitalize;
 }
-table tbody tr td .campo-estatus.pago-no-encontrado::before {
+table tbody tr td .campo-estatus-pagos.pago-no-encontrado::before {
     background: var(--danger-accent-color);
 }
 
 /* PAGO INCOMPLETO */
-table tbody tr td .campo-estatus.pago-incompleto {
+table tbody tr td .campo-estatus-pagos.pago-incompleto {
     color: var(--info-accent-color);
     background: var(--info-bg-color);
     font-weight: 600;
@@ -227,7 +245,7 @@ table tbody tr td .campo-estatus.pago-incompleto {
     display: inline-block;
     text-transform: capitalize;
 }
-table tbody tr td .campo-estatus.pago-incompleto::before {
+table tbody tr td .campo-estatus-pagos.pago-incompleto::before {
     background: var(--info-accent-color);
 }
 

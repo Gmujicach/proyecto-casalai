@@ -135,10 +135,12 @@ $(document).on('click', '.modificarEstado', function (e) {
   e.preventDefault();
 
   const idPago = $(this).data('id');
+  const idFactura = $(this).data('factura');
   const estatus = $(this).data('estatus');
   const observaciones = $(this).data('observaciones');
 
   $('#estadoIdPago').val(idPago);
+  $('#modificarIdFactura').val(idFactura);
   $('#estatus').val(estatus);
   $('#observaciones').val(observaciones);
 
@@ -155,7 +157,7 @@ $(document).on('click', '.modificarEstado', function (e) {
     }
 
     function aplicarClasesEstatus() {
-        const elementos = document.querySelectorAll('.campo-estatus');
+        const elementos = document.querySelectorAll('.campo-estatus-pagos');
 
         elementos.forEach(el => {
             const estatus = el.dataset.estatus;

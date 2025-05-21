@@ -47,7 +47,7 @@ if (!isset($_SESSION['name'])) {
                 <td><?php echo htmlspecialchars($dato['referencia']); ?></td>
                 <td><?php echo htmlspecialchars($dato['fecha']); ?></td>
                 <td>
-<span class="campo-estatus" 
+<span class="campo-estatus-pagos" 
       data-estatus="<?php echo htmlspecialchars($dato['estatus']); ?>" 
       style="cursor: pointer;">
     <?php echo htmlspecialchars($dato['estatus']); ?>
@@ -65,6 +65,7 @@ if (!isset($_SESSION['name'])) {
                             <ul>
                                 <li><a href="#" class="modificarEstado" 
    data-id="<?php echo htmlspecialchars($dato['id_detalles']); ?>"
+   data-factura="<?php echo htmlspecialchars($dato['id_factura']); ?>"
    data-estatus="Pago No Encontrado"
    data-observaciones="Pago no verificado aún">
    Cambiar Estatus
@@ -102,6 +103,7 @@ if (!isset($_SESSION['name'])) {
       <form id="modificarPagoForm" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="accion" value="modificar">
         <input type="hidden" name="id_detalles" id="modificarIdDetalles">
+        
 
         <div class="modal-header bg-primary text-white rounded-top">
           <h5 class="modal-title" id="modificarPagoLabel">Modificar Pago</h5>
@@ -172,6 +174,7 @@ if (!isset($_SESSION['name'])) {
         <div class="modal-body">
 
           <input type="hidden" id="estadoIdPago" name="id_detalles">
+          <input type="hidden" name="id_factura" id="modificarIdFactura">
           <input type="hidden" name="accion" value="modificar_estado">
           <div class="mb-3">
             <label for="estatus" class="form-label">Estatus</label>
@@ -272,7 +275,7 @@ $(document).ready(function () {
     }
 
     function aplicarClasesEstatus() {
-        const elementos = document.querySelectorAll('.campo-estatus');
+        const elementos = document.querySelectorAll('.campo-estatus-pagos');
 
         elementos.forEach(el => {
             const estatus = el.dataset.estatus;
