@@ -106,6 +106,66 @@ $(document).ready(function () {
         }
     });
 
+    // Validaciones en tiempo real para el modal de modificar
+    $("#modificar_nombre_banco").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        let nombre = document.getElementById("modificar_nombre_banco");
+        nombre.value = Espacios(nombre.value);
+    });
+    $("#modificar_nombre_banco").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/,
+            $(this),
+            $("#smnombre_banco"),
+            "*El formato solo permite letras y mínimo 3 caracteres*"
+        );
+    });
+
+    $("#modificar_numero_cuenta").on("keypress", function(e){
+        validarKeyPress(/^[0-9-]*$/, e);
+    });
+    $("#modificar_numero_cuenta").on("keyup", function(){
+        validarKeyUp(
+            /^\d{4}-\d{4}-\d{2}-\d{10}$/,
+            $(this),
+            $("#smnumero_cuenta"),
+            "*Formato válido: 01XX-XXXX-XX-XXXXXXXXXX*"
+        );
+    });
+
+    $("#modificar_rif_cuenta").on("keypress", function(e){
+        validarKeyPress(/^[VEJPG0-9-\b]*$/, e);
+    });
+    $("#modificar_rif_cuenta").on("keyup", function(){
+        validarKeyUp(
+            /^[VEJPG]-\d{8}-\d$/,
+            $(this),
+            $("#smrif_cuenta"),
+            "*Formato válido: J-12345678-9*"
+        );
+    });
+
+    $("#modificar_telefono_cuenta").on("keypress", function(e){
+        validarKeyPress(/^[0-9]*$/, e);
+    });
+    $("#modificar_telefono_cuenta").on("keyup", function(){
+        validarKeyUp(
+            /^\d{11}$/,
+            $(this),
+            $("#smtelefono_cuenta"),
+            "*El teléfono debe tener exactamente 11 dígitos*"
+        );
+    });
+
+    $("#modificar_correo_cuenta").on("keyup", function(){
+        validarKeyUp(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $(this),
+            $("#smcorreo_cuenta"),
+            "*El correo electrónico no es válido*"
+        );
+    });
+
     // Cargar datos de la cuenta en el modal al abrir
     $(document).on('click', '.btn-modificar', function () {
         var fila = $(this).closest('tr');
@@ -136,7 +196,7 @@ $(document).ready(function () {
         if (errores.length > 0) {
             Swal.fire({
                 icon: 'error',
-                title: 'Errores de validación',
+                title: 'Error de validación',
                 html: errores.join('<br>')
             });
             return;
