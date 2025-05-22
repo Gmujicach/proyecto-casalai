@@ -293,6 +293,7 @@ CREATE TABLE `tbl_ingresos_egresos` (
   `id_despacho` int(11) NOT NULL,
   `id_detalle_recepcion_productos` int(11) NOT NULL,
   `monto` float(6,2) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
   `fecha` date NOT NULL,
   `estado` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
