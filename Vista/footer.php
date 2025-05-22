@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 <script src="Javascript/tabla.js"></script>
+<script src="Javascript/new_menu.js"></script>
 
 <!-- Footer de la página -->
 <footer class="footer text-center text-lg-start bg-light text-muted">
