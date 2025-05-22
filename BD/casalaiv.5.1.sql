@@ -212,6 +212,7 @@ CREATE TABLE `tbl_detalle_recepcion_productos` (
   `id_detalle_recepcion_productos` int(11) NOT NULL,
   `id_recepcion` int(11) NOT NULL,
   `id_producto` int(11) NOT NULL,
+  `costo` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -290,8 +291,9 @@ INSERT INTO `tbl_impresoras` (`id_impresora`, `id_producto`, `peso`, `alto`, `an
 CREATE TABLE `tbl_ingresos_egresos` (
   `id_finanzas` int(11) NOT NULL,
   `id_despacho` int(11) NOT NULL,
-  `id_recepcion` int(11) NOT NULL,
+  `id_detalle_recepcion_productos` int(11) NOT NULL,
   `monto` float(6,2) NOT NULL,
+  `fecha` date NOT NULL,
   `estado` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -678,8 +680,8 @@ ALTER TABLE `tbl_impresoras`
 --
 ALTER TABLE `tbl_ingresos_egresos`
   ADD PRIMARY KEY (`id_finanzas`),
-  ADD KEY `id_despacho` (`id_despacho`,`id_recepcion`),
-  ADD KEY `id_recepcion` (`id_recepcion`);
+  ADD KEY `id_despacho` (`id_despacho`,`id_detalle_recepcion_productos`),
+  ADD KEY `id_detalle_recepcion_productos` (`id_detalle_recepcion_productos`);
 
 --
 -- Indices de la tabla `tbl_marcas`
@@ -910,7 +912,7 @@ ALTER TABLE `tbl_impresoras`
 --
 ALTER TABLE `tbl_ingresos_egresos`
   ADD CONSTRAINT `tbl_ingresos_egresos_ibfk_1` FOREIGN KEY (`id_despacho`) REFERENCES `tbl_despachos` (`id_despachos`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tbl_ingresos_egresos_ibfk_2` FOREIGN KEY (`id_recepcion`) REFERENCES `tbl_recepcion_productos` (`id_recepcion`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tbl_ingresos_egresos_ibfk_2` FOREIGN KEY (`id_detalle_recepcion_productos`) REFERENCES `tbl_detalle_recepcion_productos` (`id_detalle_recepcion_productos`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_modelos`
