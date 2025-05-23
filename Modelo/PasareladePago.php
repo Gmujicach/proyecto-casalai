@@ -190,13 +190,13 @@ private function pagoProcesar() {
     
     $resultado = $stmt->execute();
 
-    // Verifica si el estatus es "Pago Procesado" y ejecuta facturaProcesar
-    if ($resultado && $this->estatus === 'Pago Procesado') {
-        $this->facturaProcesar($this->factura);
+    if ($resultado) {
+        $this->facturaProcesar($this->factura, $this->estatus);
     }
 
     return $resultado;
 }
+
 
 
         public function cambiarEstatus($nuevoEstatus) {
