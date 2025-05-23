@@ -3,6 +3,22 @@
             <img src="img/LOGO.png" alt="logo">
             <h2><span>Casa Lai</span></h2>
         </div>
+        <div class="campana" onclick="toggleNotification()">
+            <img src="IMG/campana.svg" alt="">
+            <span class="campana">3</span>
+        </div>
+
+        <div class="notificacion" id="contenedor-notificacion">
+            <h2>Notificaciones <span>3</span></h2>
+            <div class="item-notificacion">
+                <div class="texto">
+                  <img src="IMG/usuario_circulo.svg" alt="img">
+                  <h4>Diego</h4>
+                   <p>Hola, ¿Cómo estás?</p>
+              </div>
+            </div>
+            
+        </div>
         <div>
             <ul class="menu-link">
                 <h4>
