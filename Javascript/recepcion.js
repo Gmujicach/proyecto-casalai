@@ -14,7 +14,7 @@ $(document).ready(function(){
     });
     
     $("#correlativo").on("keyup",function(){
-        validarkeyup(/^[1-9]{4,10}$/,$(this),
+        validarkeyup(/^[0-9]{4,10}$/,$(this),
         $("#scorrelativo"),"Se permite de 4 a 10 carácteres");
         if ($("#correlativo").val().length <= 9) {
 			var datos = new FormData();
@@ -80,7 +80,7 @@ $(document).ready(function(){
             muestraMensaje("info",4000,"Por favor, seleccione un proveedor!"); 
             return false;
         }
-        else if(validarkeyup(/^[1-9]{4,10}$/,$("#correlativo"),
+        else if(validarkeyup(/^[0-9]{4,10}$/,$("#correlativo"),
             $("#scorrelativo"),"Se permite de 4 a 10 carácteres")==0){
             muestraMensaje("info",4000,"el correlativo debe coincidir con el formato");
                            

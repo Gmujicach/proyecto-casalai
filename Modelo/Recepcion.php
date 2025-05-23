@@ -42,7 +42,7 @@ class Recepcion extends BD{
                 $tiempo = date('Y-m-d');
     
                 // Asegúrate de que `$this->idproveedor` y `$this->correlativo` estén definidos
-                $sql = "INSERT INTO tbl_recepcion_productos (id_proveedor, fecha_recepcion, correlativo) 
+                $sql = "INSERT INTO tbl_recepcion_productos (id_proveedor, fecha, correlativo) 
                         VALUES (:idproveedor, :fecha_recepcion, :correlativo)";
                 
                 $stmt = $co->prepare($sql);
@@ -103,7 +103,10 @@ class Recepcion extends BD{
 		$r = array();
 		try{
 			
-			$resultado = $co->query("Select * from tbl_productos");
+			$resultado = $co->query("SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial
+            FROM tbl_productos AS p 
+            INNER JOIN tbl_modelos AS m ON p.id_modelo = m.id_modelo 
+            INNER JOIN tbl_marcas AS mar ON m.id_marca = mar.id_marca;");
 			
 			if($resultado){
 				
@@ -114,10 +117,19 @@ class Recepcion extends BD{
 							$respuesta = $respuesta.$r['id_producto'];
 						$respuesta = $respuesta."</td>";
 						$respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['serial'];
+							$respuesta = $respuesta.$r['id_producto'];
 						$respuesta = $respuesta."</td>";
 						$respuesta = $respuesta."<td>";
 							$respuesta = $respuesta.$r['nombre_producto'];
+						$respuesta = $respuesta."</td>";
+                        $respuesta = $respuesta."<td>";
+							$respuesta = $respuesta.$r['nombre_modelo'];
+						$respuesta = $respuesta."</td>";
+                        $respuesta = $respuesta."<td>";
+							$respuesta = $respuesta.$r['nombre_marca'];
+						$respuesta = $respuesta."</td>";
+                        $respuesta = $respuesta."<td>";
+							$respuesta = $respuesta.$r['serial'];
 						$respuesta = $respuesta."</td>";
 					$respuesta = $respuesta."</tr>";
 				}
