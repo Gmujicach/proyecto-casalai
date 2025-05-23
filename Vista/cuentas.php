@@ -22,7 +22,7 @@ if (!isset($_SESSION['name'])) {
     <div class="fondo-form">
         <form id="registrarCuenta" action="" method="POST">
             <input type="hidden" name="accion" value="registrar">
-            <h3 class="titulo-form">INCLUIR CUENTA BANCARIA</h3>
+            <h3 class="titulo-form">Incluir Cuenta Bancaria</h3>
             
             <div class="envolver-form">
                 <input type="text" placeholder="Nombre del banco" class="control-form" id="nombre_banco" name="nombre_banco" maxlength="20" required>
@@ -53,7 +53,7 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 <div class="contenedor-tabla">
-    <h3>LISTA DE CUENTAS BANCARIAS</h3>
+    <h3>Lista de Cuentas Bancarias</h3>
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
