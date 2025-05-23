@@ -292,6 +292,7 @@ CREATE TABLE `tbl_ingresos_egresos` (
   `id_finanzas` int(11) NOT NULL,
   `id_despacho` int(11) NOT NULL,
   `id_detalle_recepcion_productos` int(11) NOT NULL,
+  `tipo` ENUM('ingreso','egreso') NOT NULL,
   `monto` float(6,2) NOT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
   `fecha` date NOT NULL,
