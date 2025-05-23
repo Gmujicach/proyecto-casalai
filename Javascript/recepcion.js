@@ -170,10 +170,21 @@ $(document).ready(function(){
                <td>`+
                         $(linea).find("td:eq(2)").text()+
                `</td>
+               <td>`+
+                        $(linea).find("td:eq(3)").text()+
+               `</td>
+                <td>`+
+                        $(linea).find("td:eq(4)").text()+
+               `</td>
+               <td>`+
+                        $(linea).find("td:eq(5)").text()+
+               `</td>
                <td>
                   <input type="text" value="1" name="cantidad[]" "/>
                </td>
-               
+                <td>
+                  <input type="number" min="1" value="1" name="costo[]" "/>
+               </td>               
                
                </tr>`;
             $("#recepcion1").append(l);
