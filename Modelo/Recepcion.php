@@ -199,7 +199,8 @@ class Recepcion extends BD{
         FROM tbl_recepcion_productos AS r 
         INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
         INNER JOIN tbl_proveedores AS pr ON pr.id_proveedor = r.id_proveedor 
-        INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto;';
+        INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto
+        ORDER BY r.correlativo ASC';
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";
