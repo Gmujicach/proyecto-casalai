@@ -169,15 +169,8 @@ if (!isset($_SESSION['name'])) {
 
 	</div>
 
-	
-	
-
-
-	
     <?php include 'footer.php'; ?>
-
-
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
-</body>
 
+</body>
 </html>
