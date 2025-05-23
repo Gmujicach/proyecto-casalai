@@ -170,7 +170,7 @@
                     <div class="menu-separador"></div>
                 </h4>
                 <li>
-                    <a href="?pagina=ordenesdespacho">
+                    <a href="?pagina=finanza">
                         <span class="simbolo">
                           <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Ingresos y Egresos
