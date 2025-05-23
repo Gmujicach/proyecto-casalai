@@ -141,7 +141,7 @@ if (!isset($_SESSION['name'])) {
 				<th>PROVEEDOR</th>
 				<th>PRODUCTO</th>
 				<th>CANTIDAD</th>
-				<th>COSTO DE INVERSION</th>
+				<th>COSTOS DE INVERSION</th>
             </tr>
         </thead>
 <tbody>
