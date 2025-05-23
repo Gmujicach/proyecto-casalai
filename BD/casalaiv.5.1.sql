@@ -22,11 +22,7 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `casalai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `casalai`;
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `tbl_carrito`
---
 
 CREATE TABLE `tbl_carrito` (
   `id_carrito` int(11) NOT NULL,
@@ -200,7 +196,7 @@ INSERT INTO `tbl_detalles_pago` (`id_detalles`, `id_factura`, `id_cuenta`, `obse
 (18, 1, 1, '', 'Transferencia', '1234561212', '2025-05-16', 'En Proceso'),
 (19, 1, 1, '', 'Transferencia', '4444', '2025-05-09', 'En Proceso'),
 (20, 1, 1, '', 'Transferencia', '12345671212', '2025-05-16', 'En Proceso'),
-(21, 0, 1, '', 'Transferencia', '354364343', '2025-05-15', 'En Proceso');
+(21, 0, 1, 'Pago Verificado con Éxito', 'Transferencia', '354364343', '2025-05-15', 'Pago Procesado');
 
 -- --------------------------------------------------------
 
@@ -215,6 +211,17 @@ CREATE TABLE `tbl_detalle_recepcion_productos` (
   `costo` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_detalle_recepcion_productos`
+--
+
+INSERT INTO `tbl_detalle_recepcion_productos` (`id_detalle_recepcion_productos`, `id_recepcion`, `id_producto`, `costo`, `cantidad`) VALUES
+(1, 3, 3, 10, 3),
+(2, 4, 3, 10, 30),
+(3, 4, 10, 2, 10),
+(4, 5, 3, 8, 1),
+(5, 5, 10, 10, 12);
 
 -- --------------------------------------------------------
 
@@ -235,7 +242,7 @@ CREATE TABLE `tbl_facturas` (
 --
 
 INSERT INTO `tbl_facturas` (`id_factura`, `fecha`, `cliente`, `descuento`, `estatus`) VALUES
-(0, '2024-07-18', 1, 1, 'En Proceso'),
+(0, '2024-07-18', 1, 1, 'Pago Procesado'),
 (1, '2024-07-18', 1, 1, 'Borrador');
 
 -- --------------------------------------------------------
@@ -292,7 +299,7 @@ CREATE TABLE `tbl_ingresos_egresos` (
   `id_finanzas` int(11) NOT NULL,
   `id_despacho` int(11) NOT NULL,
   `id_detalle_recepcion_productos` int(11) NOT NULL,
-  `tipo` ENUM('ingreso','egreso') NOT NULL,
+  `tipo` enum('ingreso','egreso') NOT NULL,
   `monto` float(6,2) NOT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
   `fecha` date NOT NULL,
@@ -523,7 +530,7 @@ CREATE TABLE `tbl_proveedores` (
 --
 
 INSERT INTO `tbl_proveedores` (`id_proveedor`, `nombre`, `presona_contacto`, `telefono`, `correo`, `direccion`, `rif_representante`, `rif_proveedor`, `telefono_secundario`, `observaciones`) VALUES
-(1, 'Servicios Técnicos', 'Brayan Medina', '04145555555', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo');
+(1, 'Servicios Técnicos', 'Brayan Mendoza', '04145555555', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo');
 
 -- --------------------------------------------------------
 
@@ -534,8 +541,20 @@ INSERT INTO `tbl_proveedores` (`id_proveedor`, `nombre`, `presona_contacto`, `te
 CREATE TABLE `tbl_recepcion_productos` (
   `id_recepcion` int(11) NOT NULL,
   `id_proveedor` int(11) NOT NULL,
-  `fecha` date NOT NULL
+  `fecha` date NOT NULL,
+  `correlativo` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_recepcion_productos`
+--
+
+INSERT INTO `tbl_recepcion_productos` (`id_recepcion`, `id_proveedor`, `fecha`, `correlativo`) VALUES
+(1, 1, '2025-05-23', '0000'),
+(2, 1, '2025-05-23', '0001'),
+(3, 1, '2025-05-23', '0002'),
+(4, 1, '2025-05-24', '0004'),
+(5, 1, '2025-05-24', '0005');
 
 -- --------------------------------------------------------
 
@@ -787,6 +806,12 @@ ALTER TABLE `tbl_detalles_pago`
   MODIFY `id_detalles` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
+-- AUTO_INCREMENT de la tabla `tbl_detalle_recepcion_productos`
+--
+ALTER TABLE `tbl_detalle_recepcion_productos`
+  MODIFY `id_detalle_recepcion_productos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de la tabla `tbl_factura_detalle`
 --
 ALTER TABLE `tbl_factura_detalle`
@@ -833,6 +858,12 @@ ALTER TABLE `tbl_productos`
 --
 ALTER TABLE `tbl_protector_voltaje`
   MODIFY `id_protector` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_recepcion_productos`
+--
+ALTER TABLE `tbl_recepcion_productos`
+  MODIFY `id_recepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_tintas`
