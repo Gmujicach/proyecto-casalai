@@ -1,12 +1,8 @@
 <?php
-
-
-
 if (!isset($_SESSION['name'])) {
-
- 	header('Location: .');
- 	exit();
- }
+	header('Location: .');
+	exit();
+}
 ?>
 
 <!DOCTYPE html>
