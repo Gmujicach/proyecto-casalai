@@ -19,7 +19,7 @@ if (!isset($_SESSION['name'])) {
 <?php include 'NewNavBar.php'; ?>
 
 <div class="contenedor-tabla">
-    <h3>INGRESOS DE LA EMPRESA</h3>
+    <h3>Ingresos de la Empresa</h3>
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
@@ -49,7 +49,7 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 <div class="contenedor-tabla">
-    <h3>EGRESOS DE LA EMPRESA</h3>
+    <h3>Egresos de la Empresa</h3>
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
