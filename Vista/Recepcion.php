@@ -18,7 +18,8 @@ if (!isset($_SESSION['name'])) {
 <body>
 <?php include 'NewNavBar.php'; ?>
 
-	<div class="container">
+	<div class="formulario-responsivo">
+    <div class="fondo-form">
 		<section class="container">
 			<form method="post" action="" id="f" class="formulario-1">
 				<input type="text" name="accion" id="accion" style="display:none" />
@@ -117,10 +118,13 @@ if (!isset($_SESSION['name'])) {
 				</div>
 			</div>
 		</section>
+	</div>
+	</div>
+							
 
-		<div class="table-container">
-			<h1 class="titulo-tabla display-5 text-center">LISTA DE RECEPCIONES</h1>
-			<table class="tabla">
+		<div class="contenedor-tabla">
+			<h1 class="titulo-tabla display-5 text-center ">LISTA DE RECEPCIONES</h1>
+			<table class="tablaConsultas">
 				<thead>
 					<tr>
 						<th>FECHA</th>
@@ -181,6 +185,8 @@ if (!isset($_SESSION['name'])) {
 						</div>
 		</div>
 	</div>
+
+	
 
     <?php include 'footer.php'; ?>
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
