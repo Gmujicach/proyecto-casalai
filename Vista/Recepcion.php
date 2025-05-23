@@ -16,11 +16,9 @@ if (!isset($_SESSION['name'])) {
 </head>
 
 <body>
-
 <?php include 'NewNavBar.php'; ?>
 
 	<div class="container">
-		
 		<section class="container">
 			<form method="post" action="" id="f" class="formulario-1">
 				<input type="text" name="accion" id="accion" style="display:none" />
@@ -44,16 +42,12 @@ if (!isset($_SESSION['name'])) {
 						</div>
 					</div>
 				</div>
-
-				
-			
-
 		
                 <div class="row">
                     <div class="col-md-8 input-group">
                     <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
                     <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
-                    <button type="button" class="btn btn-primary" id="listado" name="listado">LISTA DEPRODUCTOS</button>
+                    <button type="button" class="btn btn-primary" id="listado" name="listado">LISTA DE PRODUCTOS</button>
                     </div>
                 </div>
 			
