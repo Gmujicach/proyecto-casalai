@@ -236,7 +236,7 @@ CREATE TABLE `tbl_facturas` (
 
 INSERT INTO `tbl_facturas` (`id_factura`, `fecha`, `cliente`, `descuento`, `estatus`) VALUES
 (0, '2024-07-18', 1, 1, 'En Proceso'),
-(1, '2024-07-18', 1, 1, 'Cancelada');
+(1, '2024-07-18', 1, 1, 'Borrador');
 
 -- --------------------------------------------------------
 

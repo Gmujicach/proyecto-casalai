@@ -169,8 +169,10 @@ public function facturaConsultar() {
                 case 'Pago Procesado':
                     $mensajePago = '<div class="alert alert-success"><strong>Pago procesado correctamente.</strong></div>';
                     $botones = '
-                    <form action="?pagina=PasareladePago" method="POST" style="display:inline;">
-                    <button type="submit" name="descargarFactura" value="' . $id_factura . '" class="btn btn-primary btn-lg descargar">Descargar</button>
+                    <form action="" method="POST" target="_blank" style="display:inline;">
+                    
+                    <input type="hidden" name="descargarFactura" value="' . $id_factura . '">
+                    <button type="submit" class="btn btn-primary btn-lg descargar">Descargar</button>
                     </form>';
                     break;
 
