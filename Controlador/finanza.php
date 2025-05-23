@@ -1,8 +1,14 @@
 <?php
+ob_start();
 require_once 'Modelo/finanza.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
+    
+    if (isset($_POST['accion'])) {
+        $accion = $_POST['accion'];
+    } else {
+        $accion = '';
+    }
 
     switch ($accion) {
         case 'registrar_ingreso':
@@ -20,9 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         case 'anular':
-            $id = $_POST['id_finanzas'];
+            $id_finanzas = $_POST['id_finanzas'];
             $finanza = new Finanza();
-            $ok = $finanza->anular($id);
+            $ok = $finanza->anularRegistro($id_finanzas);
             echo json_encode(['status' => $ok ? 'success' : 'error']);
             exit;
 
