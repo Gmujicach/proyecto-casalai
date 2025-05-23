@@ -48,7 +48,7 @@ if (!isset($_SESSION['name'])) {
                     <div class="col-md-8 input-group">
                     <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
                     <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
-                    <button type="button" class="btn btn-primary" id="listado" name="listado">LISTA DE PRODUCTOS</button>
+                    <button type="button" class="btn btn-primary" id="listado" name="listado">Lista de Productos</button>
                     </div>
                 </div>
 			
@@ -120,19 +120,17 @@ if (!isset($_SESSION['name'])) {
 		</section>
 	</div>
 	</div>
-							
-
 		<div class="contenedor-tabla">
-			<h1 class="titulo-tabla display-5 text-center ">LISTA DE RECEPCIONES</h1>
+			<h1 class="titulo-tabla display-5 text-center ">Lista de Recepciones</h1>
 			<table class="tablaConsultas">
 				<thead>
 					<tr>
-						<th>FECHA</th>
-						<th>CORRELATIVO</th>
-						<th>PROVEEDOR</th>
-						<th>PRODUCTO</th>
-						<th>CANTIDAD</th>
-						<th>COSTOS DE INVERSION</th>
+						<th>Fecha</th>
+						<th>Correlativo</th>
+						<th>Proveedor</th>
+						<th>Producto</th>
+						<th>Cantidad</th>
+						<th>Costo de Inversion</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -185,8 +183,6 @@ if (!isset($_SESSION['name'])) {
 						</div>
 		</div>
 	</div>
-
-	
 
     <?php include 'footer.php'; ?>
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
