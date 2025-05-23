@@ -25,7 +25,7 @@ if (!isset($_SESSION['name'])) {
 
 	<div class="container">
 		
-	<section class="container">
+		<section class="container">
 			<form method="post" action="" id="f" class="formulario-1">
 				<input type="text" name="accion" id="accion" style="display:none" />
 				<h3 class="display-4 text-center">Gestionar Recepcion</h3>
@@ -87,7 +87,7 @@ if (!isset($_SESSION['name'])) {
 									</tr>
 								</thead>
 								<tbody class="" id="recepcion1">
-                                   
+                                
 								</tbody>
 							</table>
 						</div>
@@ -99,104 +99,97 @@ if (!isset($_SESSION['name'])) {
 						<button type="button" class="btn btn-primary" id="registrar" name="registrar">Registrar Recepcion</button>
 					</div>
 				</div>
-		</form>
-		
-        <div class="modal fade" tabindex="-1" role="dialog" id="modalp">
-		<div class="modal-dialog " role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Listado de productos</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-					</button>
-				</div>
-				<div class="modal-body">
-					<table class="table table-striped table-hover">
-						<thead class="text-center">
-							<tr>
-								<th style="display:none">Id</th>
-								<th>Codigo</th>
-								<th>Nombre</th>
-							</tr>
-						</thead>
-						<tbody class="text-center" id="listadop">
+			</form>
+			
+			<div class="modal fade" tabindex="-1" role="dialog" id="modalp">
+				<div class="modal-dialog " role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Listado de productos</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+							</button>
+						</div>
+						<div class="modal-body">
+							<table class="table table-striped table-hover">
+								<thead class="text-center">
+									<tr>
+										<th style="display:none">Id</th>
+										<th>Codigo</th>
+										<th>Nombre</th>
+									</tr>
+								</thead>
+								<tbody class="text-center" id="listadop">
 
-						</tbody>
-					</table>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
+		</section>
+
+		<div class="table-container">
+			<h1 class="titulo-tabla display-5 text-center">LISTA DE RECEPCIONES</h1>
+			<table class="tabla">
+				<thead>
+					<tr>
+						<th>FECHA</th>
+						<th>CORRELATIVO</th>
+						<th>PROVEEDOR</th>
+						<th>PRODUCTO</th>
+						<th>CANTIDAD</th>
+						<th>COSTOS DE INVERSION</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					// Agrupar por correlativo para calcular cuántas filas debe ocupar rowspan
+					$rowspans = [];
+
+					foreach ($recepciones as $recepcion) {
+						$key = $recepcion['correlativo']; // agrupamos por correlativo
+						if (!isset($rowspans[$key])) {
+							$rowspans[$key] = 1;
+						} else {
+							$rowspans[$key]++;
+						}
+					}
+
+					$rendered = []; // Para evitar repetir la fecha/correlativo/proveedor
+
+					foreach ($recepciones as $recepcion):
+						$correlativo = $recepcion['correlativo'];
+					?>
+						<tr>
+							<?php if (!in_array($correlativo, $rendered)): ?>
+								<td rowspan="<?= $rowspans[$correlativo] ?>">
+									<?= htmlspecialchars($recepcion['fecha']) ?>
+								</td>
+								<td rowspan="<?= $rowspans[$correlativo] ?>">
+									<?= htmlspecialchars($recepcion['correlativo']) ?>
+								</td>
+								<td rowspan="<?= $rowspans[$correlativo] ?>">
+									<?= htmlspecialchars($recepcion['nombre']) ?>
+								</td>
+								<?php $rendered[] = $correlativo; ?>
+							<?php endif; ?>
+							<td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
+							<td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
+							<td><?= htmlspecialchars($recepcion['costo']); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
 		</div>
-		
-	</div>
-    
-	
-	</section>
 
-	<div class="table-container">
-    <h1 class="titulo-tabla display-5 text-center">LISTA DE RECEPCIONES</h1>
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th>FECHA</th>
-                <th>CORRELATIVO</th>
-				<th>PROVEEDOR</th>
-				<th>PRODUCTO</th>
-				<th>CANTIDAD</th>
-				<th>COSTOS DE INVERSION</th>
-            </tr>
-        </thead>
-<tbody>
-    <?php
-    // Agrupar por correlativo para calcular cuántas filas debe ocupar rowspan
-    $rowspans = [];
-
-    foreach ($recepciones as $recepcion) {
-        $key = $recepcion['correlativo']; // agrupamos por correlativo
-        if (!isset($rowspans[$key])) {
-            $rowspans[$key] = 1;
-        } else {
-            $rowspans[$key]++;
-        }
-    }
-
-    $rendered = []; // Para evitar repetir la fecha/correlativo/proveedor
-
-    foreach ($recepciones as $recepcion):
-        $correlativo = $recepcion['correlativo'];
-    ?>
-        <tr>
-            <?php if (!in_array($correlativo, $rendered)): ?>
-                <td rowspan="<?= $rowspans[$correlativo] ?>">
-                    <?= htmlspecialchars($recepcion['fecha']) ?>
-                </td>
-                <td rowspan="<?= $rowspans[$correlativo] ?>">
-                    <?= htmlspecialchars($recepcion['correlativo']) ?>
-                </td>
-                <td rowspan="<?= $rowspans[$correlativo] ?>">
-                    <?= htmlspecialchars($recepcion['nombre']) ?>
-                </td>
-                <?php $rendered[] = $correlativo; ?>
-            <?php endif; ?>
-            <td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
-            <td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
-            <td><?= htmlspecialchars($recepcion['costo']); ?></td>
-        </tr>
-    <?php endforeach; ?>
-</tbody>
-
-    </table>
- 
-    </div>
-
-	<div class="table-container">
-                   
-                    <div class="row">
-                        <div class="col">
-                            <button class="btn" name="" type="button" id="pdfrepecion" name="pdfrecepcion"><a href="?pagina=pdfrecepcion">GENERAR REPORTE</a></button>
-                        </div>
-                    </div>
-
-    </div>
-
+		<div class="table-container">
+						
+						<div class="row">
+							<div class="col">
+								<button class="btn" name="" type="button" id="pdfrepecion" name="pdfrecepcion"><a href="?pagina=pdfrecepcion">GENERAR REPORTE</a></button>
+							</div>
+						</div>
+		</div>
 	</div>
 
     <?php include 'footer.php'; ?>
