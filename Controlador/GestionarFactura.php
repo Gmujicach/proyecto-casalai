@@ -10,7 +10,13 @@ require_once("modelo/Factura.php");
 if (is_file("vista/GestionarFactura.php")) {
     $factura = new Factura();
     
-
+    if (isset($_POST['descargarFactura'])) {
+    $id_factura = $_POST['descargarFactura'];
+    $factura->setId($id_factura);
+    $res = $factura->facturaTransaccion('DescargarFactura');
+    require_once("vista/descargarFactura.php");
+    exit; // para evitar que se ejecute el resto
+}
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Obtiene la acción enviada en la solicitud POST
@@ -54,12 +60,6 @@ if (is_file("vista/GestionarFactura.php")) {
         exit;
     }
 
-    if (isset($_POST['descargarFactura'])) {
-        $id_factura = $_POST['descargarFactura'];
-        $factura->setId($id_factura);
-        $factura->facturaTransaccion('DescargarFactura');
-        require_once("vista/descargarFactura.php");      
-    } 
     
 
     require_once("vista/GestionarFactura.php");
