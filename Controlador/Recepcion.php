@@ -22,13 +22,14 @@ if (is_file("vista/" . $pagina . ".php")) {
             echo json_encode($respuesta);
         } elseif ($accion == 'registrar') {
             $k->setidproveedor($_POST['proveedor']);
-            $k->setdesc($_POST['descripcion']);
             $k->setcorrelativo( $_POST['correlativo']);
             $respuesta = $k->registrar(
 
                 $_POST['producto'],
                 
-                $_POST['cantidad']
+                $_POST['cantidad'],
+
+                $_POST['costo']
                
             );
             echo json_encode($respuesta);

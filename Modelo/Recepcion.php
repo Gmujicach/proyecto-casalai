@@ -5,6 +5,8 @@ class Recepcion extends BD{
     private $idproveedor;
     private $correlativo;
     private $desc;
+
+    private $costo;
     private $tablerecepcion = 'tbl_recepcion_productos';
 
 
@@ -17,8 +19,14 @@ class Recepcion extends BD{
    public function setidproveedor($idproveedor) {
         $this->idproveedor = $idproveedor;
     } 
+    public function setcosto($costo) {
+        $this->costo = $costo;
+    }
     public function getdesc() {
         return $this->desc;
+    }
+    public function getcosto() {
+        return $this->costo;
     }
 
    public function setdesc($desc) {
@@ -31,7 +39,7 @@ class Recepcion extends BD{
     public function setcorrelativo($correlativo) {
         $this->correlativo = $correlativo;
     }
-	public function registrar($idproducto, $cantidad) {
+	public function registrar($idproducto, $cantidad, $costo) {
         $d = array();
         if (!$this->buscar()) {  // Asegúrate de que `buscar()` esté bien definido
             $co = $this->conexion();  // Asegúrate de que `conecta()` esté bien definido y retorne una conexión válida
@@ -58,14 +66,14 @@ class Recepcion extends BD{
                 // Insertar en tbl_detalle_recepcion_productos
                 for ($i = 0; $i < $cap; $i++) {
                     // Asegúrate de que `$this->desc` esté definido correctamente como una propiedad de la clase
-                    $sqlDetalle = "INSERT INTO tbl_detalle_recepcion_productos (id_recepcion, id_producto, descripcion_producto, cantidad) 
-                                   VALUES (:idRecepcion, :idProducto, :descripcion, :cantidad)";
+                    $sqlDetalle = "INSERT INTO tbl_detalle_recepcion_productos (id_recepcion, id_producto, cantidad, costo) 
+                                   VALUES (:idRecepcion, :idProducto, :cantidad, :costo)";
                     
                     $stmtDetalle = $co->prepare($sqlDetalle);
                     $stmtDetalle->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
-                    $stmtDetalle->bindParam(':idProducto', $idproducto[$i], PDO::PARAM_INT);
-                    $stmtDetalle->bindParam(':descripcion', $this->desc, PDO::PARAM_STR);  // Define $this->desc antes
+                    $stmtDetalle->bindParam(':idProducto', $idproducto[$i], PDO::PARAM_INT); // Define $this->desc antes
                     $stmtDetalle->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
+                    $stmtDetalle->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
                     $stmtDetalle->execute();
                 }
     
@@ -186,7 +194,12 @@ class Recepcion extends BD{
         //echo "Iniciando getmarcas.<br>";
         
         // Primera consulta para obtener datos de marcas
-        $queryrecepciones = 'SELECT * FROM ' . $this->tablerecepcion;
+        $queryrecepciones = 
+        'SELECT r.fecha, r.correlativo, pr.nombre, pro.nombre_producto, d.cantidad, d.costo
+        FROM tbl_recepcion_productos AS r 
+        INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
+        INNER JOIN tbl_proveedores AS pr ON pr.id_proveedor = r.id_proveedor 
+        INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto;';
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";

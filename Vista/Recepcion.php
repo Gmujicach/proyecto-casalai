@@ -46,14 +46,6 @@ if (!isset($_SESSION['name'])) {
 								} ?>
 							</select>
 						</div>
-						<div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label for="descripcion" class="form-label">Descripción:</label>
-                                    <textarea class="form-control" maxlength="50" id="descripcion" name="descripcion" rows="3" required></textarea>
-                                    <span id="sdescripcion"></span>
-                                </div>
-                            </div>
-
 					</div>
 				</div>
 
@@ -87,8 +79,11 @@ if (!isset($_SESSION['name'])) {
 										<th style="display:none">Cl</th>
 										<th>Codigo</th>
 										<th>Nombre</th>
+										<th>Modelo</th>
+										<th>Marca</th>
+										<th>Serial</th>
 										<th>Cantidad</th>
-										
+										<th>Costo</th>
 									</tr>
 								</thead>
 								<tbody class="" id="recepcion1">
@@ -143,16 +138,51 @@ if (!isset($_SESSION['name'])) {
             <tr>
                 <th>FECHA</th>
                 <th>CORRELATIVO</th>
+				<th>PROVEEDOR</th>
+				<th>PRODUCTO</th>
+				<th>CANTIDAD</th>
+				<th>COSTO DE INVERSION</th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach ($recepciones as $recepcion): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($recepcion['fecha_recepcion']); ?></td>
-                    <td><?php echo htmlspecialchars($recepcion['correlativo']); ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+<tbody>
+    <?php
+    // Agrupar por correlativo para calcular cuántas filas debe ocupar rowspan
+    $rowspans = [];
+
+    foreach ($recepciones as $recepcion) {
+        $key = $recepcion['correlativo']; // agrupamos por correlativo
+        if (!isset($rowspans[$key])) {
+            $rowspans[$key] = 1;
+        } else {
+            $rowspans[$key]++;
+        }
+    }
+
+    $rendered = []; // Para evitar repetir la fecha/correlativo/proveedor
+
+    foreach ($recepciones as $recepcion):
+        $correlativo = $recepcion['correlativo'];
+    ?>
+        <tr>
+            <?php if (!in_array($correlativo, $rendered)): ?>
+                <td rowspan="<?= $rowspans[$correlativo] ?>">
+                    <?= htmlspecialchars($recepcion['fecha']) ?>
+                </td>
+                <td rowspan="<?= $rowspans[$correlativo] ?>">
+                    <?= htmlspecialchars($recepcion['correlativo']) ?>
+                </td>
+                <td rowspan="<?= $rowspans[$correlativo] ?>">
+                    <?= htmlspecialchars($recepcion['nombre']) ?>
+                </td>
+                <?php $rendered[] = $correlativo; ?>
+            <?php endif; ?>
+            <td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
+            <td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
+            <td><?= htmlspecialchars($recepcion['costo']); ?></td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+
     </table>
  
     </div>
