@@ -122,9 +122,7 @@ if (!isset($_SESSION['name'])) {
 			</div>
 		</section>
 	</div>
-	</div>
-<<<<<<< HEAD
-							
+	</div>					
 
 	<div class="contenedor-tabla">
   <h1 class="titulo-tabla display-5 text-center">LISTA DE RECEPCIONES</h1>
