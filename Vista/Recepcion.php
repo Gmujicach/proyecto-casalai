@@ -19,16 +19,21 @@ if (!isset($_SESSION['name'])) {
 <?php include 'NewNavBar.php'; ?>
 
 	<div class="formulario-responsivo">
-		<div class="fondo-form">
-			<section class="container">
-				<form method="post" action="" id="f">
-					<input type="hidden" name="accion" id="accion"/>
-					<h3 class="titulo-form">Incluir Recepción</h3>
-						<div class="grupo-form">
-							<input type="text" placeholder="Correlativo del producto" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
+    <div class="fondo-form">
+		<section class="container">
+			<form method="post" action="" id="f" class="formulario-1">
+				<input type="text" name="accion" id="accion" style="display:none" />
+				<h3 class="titulo-form">Incluir Recepción</h3>
+				<div class="">
+					<div class="row">
+						<div class="col">
+							<label class="form-label mt-4" for="correlativo">Correlativo del producto</label>
+							<input class="form-control" maxlength="10" type="text" id="correlativo" name="correlativo" />
 							<span id="scorrelativo"></span>
-						
-							<select class="control-form" name="proveedor" id="proveedor">
+						</div>
+						<div class="col">
+							<label class="form-label mt-4" for="proveedor">Proveedor</label>
+							<select class="form-select" name="proveedor" id="proveedor">
 								<option value='disabled' disabled selected>Seleccione un Proveedor</option>
 								<?php
 								foreach ($proveedores  as $proveedor) {
@@ -36,7 +41,18 @@ if (!isset($_SESSION['name'])) {
 								} ?>
 							</select>
 						</div>
+					</div>
+				</div>
+		
+                <div class="row">
+                    <div class="col-md-8 input-group">
+                    <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
+                    <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
+                    <button type="button" class="btn btn-primary" id="listado" name="listado">Lista de Productos</button>
+                    </div>
+                </div>
 			
+<<<<<<< HEAD
 						<div class="envolver-form">
 							<input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
 							<input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
@@ -73,38 +89,81 @@ if (!isset($_SESSION['name'])) {
 						<button type="button" class="boton-form" id="registrar" name="registrar">Registrar Recepcion</button>
 					</div>
 				</form>
+=======
+				<div class="row">
+					<div class="col">
+						<hr />
+					</div>
+				</div>
+>>>>>>> 1cd78d79ec817127917216b4d11f7dcd9441cf0a
 				
-				<div class="modal fade" tabindex="-1" role="dialog" id="modalp">
-					<div class="modal-dialog " role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title">Listado de productos</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-								</button>
-							</div>
-							<div class="modal-body">
-								<table class="table table-striped table-hover">
-									<thead class="text-center">
-										<tr>
-											<th style="display:none">Id</th>
-											<th>Codigo</th>
-											<th>Nombre</th>
-											<th>Modelo</th>
-											<th>Marca</th>
-											<th>Serial</th>
-										</tr>
-									</thead>
-									<tbody class="text-center" id="listadop">
 
-									</tbody>
-								</table>
-							</div>
+				<div class="table-responsive card shadow">
+
+					<div class="row">
+						<div class="">
+							<table class="tabla" id="tablarecepcion">
+								<thead class="">
+									<tr>
+										<th>Acción</th>
+										<th style="display:none">Cl</th>
+										<th>Codigo</th>
+										<th>Nombre</th>
+										<th>Modelo</th>
+										<th>Marca</th>
+										<th>Serial</th>
+										<th>Costo</th>
+										<th>Cantidad</th>
+									</tr>
+								</thead>
+								<tbody class="" id="recepcion1">
+                                
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
-			</section>
-		</div>
-	</div>				
+
+				<div class="row">
+					<div>
+						<button type="button" class="btn btn-primary" id="registrar" name="registrar">Registrar Recepcion</button>
+					</div>
+				</div>
+			</form>
+			
+			<div class="modal fade" tabindex="-1" role="dialog" id="modalp">
+				<div class="modal-dialog " role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Listado de productos</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+							</button>
+						</div>
+						<div class="modal-body">
+							<table class="table table-striped table-hover">
+								<thead class="text-center">
+									<tr>
+										<th style="display:none">Id</th>
+										<th>Codigo</th>
+										<th>Nombre</th>
+										<th>Modelo</th>
+										<th>Marca</th>
+										<th>Serial</th>
+									</tr>
+								</thead>
+								<tbody class="text-center" id="listadop">
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	</div>
+							
+	</div>					
 
 	<div class="contenedor-tabla">
 	<h3>Lista de Recepciones</h3>
@@ -193,9 +252,9 @@ if (!isset($_SESSION['name'])) {
       <div class="modal-body">
         <form id="formularioEdicion">
 		
-    	<input type="hidden" name="id_detalles" id="modificarIdDetalles">
+        	<input type="hidden" name="id_detalles" id="modificarIdDetalles">
           <div class="mb-3">
-	       <label for="modalFecha" class="form-label">Fecha:</label>
+            <label for="modalFecha" class="form-label">Fecha:</label>
             <input type="date" class="form-control" name="fecha" id="modalFecha" required>
           </div>
 		  	<div class="mb-3">
@@ -236,7 +295,7 @@ if (!isset($_SESSION['name'])) {
     <?php include 'footer.php'; ?>
 	<script type="text/javascript" src="Javascript/recepcion.js">
 
-	</script>
+	<script>
 	document.getElementById('btnAgregarProducto').addEventListener('click', () => {
   const productosContainer = document.getElementById('productosContainer');
   const index = productosContainer.children.length + 1;
@@ -267,9 +326,73 @@ if (!isset($_SESSION['name'])) {
         <button type="button" class="btn btn-danger btn-sm btnEliminarProducto">×</button>
       </div>
     </div>
+  `;
+
+  productosContainer.appendChild(fieldset);
+});
+
+// Delegación de evento para eliminar productos
+document.getElementById('productosContainer').addEventListener('click', function (e) {
+  if (e.target.classList.contains('btnEliminarProducto')) {
+    e.target.closest('fieldset').remove();
+  }
+});
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const botonesModificar = document.querySelectorAll('.boton-form.modificar');
+
+  botonesModificar.forEach(boton => {
+    boton.addEventListener('click', function () {
+      const correlativo = this.getAttribute('data-correlativo');
+      const producto = this.getAttribute('data-producto');
+      const cantidad = this.getAttribute('data-cantidad');
+      const costo = this.getAttribute('data-costo');
+
+      document.getElementById('modalCorrelativo').value = correlativo;
+
+      // También podrías establecer la fecha si la incluyes como data-fecha
+      // document.getElementById('modalFecha').value = this.getAttribute('data-fecha');
+
+      // Limpiar el contenedor antes de agregar nuevos campos
+      const contenedor = document.getElementById('productosContainer');
+      contenedor.innerHTML = '';
+
+      const fieldset = document.createElement('fieldset');
+      fieldset.classList.add('border', 'p-3', 'mb-2');
+      fieldset.innerHTML = `
+        <legend class="fs-6">Producto 1</legend>
+        <div class="row g-2">
+          <div class="col-md-5">
+            <label class="form-label">Producto:</label>
+            <select class="form-select select-producto" name="producto[]">
+              <option value="">Seleccione...</option>
+              <option value="${producto}" selected>${producto}</option>
+              <option value="Producto A">Producto A</option>
+              <option value="Producto B">Producto B</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Cantidad:</label>
+            <input type="number" class="form-control" name="cantidad[]" value="${cantidad}" min="1" required>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Costo:</label>
+            <input type="number" class="form-control" name="costo[]" value="${costo}" min="0.01" step="0.01" required>
+          </div>
+          <div class="col-md-1 d-flex align-items-end">
+            <button type="button" class="btn btn-danger btn-sm btnEliminarProducto">×</button>
+          </div>
+        </div>
+      `;
+
+      contenedor.appendChild(fieldset);
+    });
+  });
+});
 
 
-
+</script>
 
 <script>
   // Preparar datos agrupados por correlativo para JS
