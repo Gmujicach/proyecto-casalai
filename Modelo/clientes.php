@@ -1,5 +1,5 @@
 <?php
-require_once 'config.php';
+require_once 'Config/config.php';
 
 class cliente extends BD {
     private $tableclientes = 'tbl_clientes';
