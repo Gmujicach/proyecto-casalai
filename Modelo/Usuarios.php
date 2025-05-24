@@ -129,11 +129,14 @@ class Usuarios extends BD {
     }
 
     public function ingresarUsuario() {
+
+        $claveEncriptada = password_hash($this->clave, PASSWORD_BCRYPT);
+
         $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`)
                 VALUES (:nombre, :clave, :rango, :correo, :nombres, :apellidos, :telefono)";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre', $this->username);
-        $stmt->bindParam(':clave', $this->clave);
+        $stmt->bindParam(':clave',$claveEncriptada);
         $stmt->bindParam(':rango', $this->rango);
         $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':nombres', $this->nombre);
@@ -154,11 +157,19 @@ class Usuarios extends BD {
 
     // Modificar Producto
     public function modificarUsuario($id) {
-        $sql = "UPDATE tbl_usuarios SET username = :nombre, `password` = :clave, rango = :rango WHERE id_usuario = :id_usuario";
+
+        $claveEncriptada = !empty($this->clave) ? password_hash($this->clave, PASSWORD_BCRYPT) : null;
+
+        $sql = "UPDATE tbl_usuarios SET username = :nombre, " . 
+           (!empty($this->clave) ? "`password` = :clave, " : "") . 
+           "rango = :rango WHERE id_usuario = :id_usuario";
+
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_usuario', $id);
         $stmt->bindParam(':nombre', $this->username);
-        $stmt->bindParam(':clave', $this->clave);
+        if (!empty($this->clave)) {
+                $stmt->bindParam(':clave', $claveEncriptada);
+            }
         $stmt->bindParam(':rango', $this->rango);
         
         return $stmt->execute();
