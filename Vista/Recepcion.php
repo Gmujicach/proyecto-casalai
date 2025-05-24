@@ -23,7 +23,7 @@ if (!isset($_SESSION['name'])) {
 		<section class="container">
 			<form method="post" action="" id="f" class="formulario-1">
 				<input type="text" name="accion" id="accion" style="display:none" />
-				<h3 class="titulo-form">Gestionar Recepcion</h3>
+				<h3 class="titulo-form">Incluir Recepción</h3>
 				<div class="">
 					<div class="row">
 						<div class="col">
@@ -122,76 +122,76 @@ if (!isset($_SESSION['name'])) {
 			</div>
 		</section>
 	</div>
+	</div>
+							
 	</div>					
 
 	<div class="contenedor-tabla">
-  <h1 class="titulo-tabla display-5 text-center">LISTA DE RECEPCIONES</h1>
-  <table class="tablaConsultas">
-    <thead>
-      <tr>
-        <th>FECHA</th>
-        <th>CORRELATIVO</th>
-        <th>PROVEEDOR</th>
-        <th>PRODUCTO</th>
-        <th>CANTIDAD</th>
-        <th>COSTOS DE INVERSION</th>
-        <th>MODIFICACION</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      $rowspans = [];
-      foreach ($recepciones as $recepcion) {
-          $key = $recepcion['correlativo'];
-          if (!isset($rowspans[$key])) {
-              $rowspans[$key] = 1;
-          } else {
-              $rowspans[$key]++;
-          }
-      }
+	<h3>Lista de Recepciones</h3>
+		<table class="tablaConsultas" id="tablaConsultas">
+			<thead>
+			<tr>
+				<th>FECHA</th>
+				<th>CORRELATIVO</th>
+				<th>PROVEEDOR</th>
+				<th>PRODUCTO</th>
+				<th>CANTIDAD</th>
+				<th>COSTOS DE INVERSION</th>
+				<th>MODIFICACION</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php
+			$rowspans = [];
+			foreach ($recepciones as $recepcion) {
+				$key = $recepcion['correlativo'];
+				if (!isset($rowspans[$key])) {
+					$rowspans[$key] = 1;
+				} else {
+					$rowspans[$key]++;
+				}
+			}
 
 
-      $rendered = [];
+			$rendered = [];
 
-      foreach ($recepciones as $recepcion):
-          $correlativo = $recepcion['correlativo'];
-      ?>
-        <tr>
-          <?php if (!in_array($correlativo, $rendered)): ?>
-            <td rowspan="<?= $rowspans[$correlativo] ?>">
-              <?= htmlspecialchars($recepcion['fecha']) ?>
-            </td>
-            <td rowspan="<?= $rowspans[$correlativo] ?>">
-              <?= htmlspecialchars($recepcion['correlativo']) ?>
-            </td>
-            <td rowspan="<?= $rowspans[$correlativo] ?>">
-              <?= htmlspecialchars($recepcion['nombre']) ?>
-            </td>
-          <?php endif; ?>
+			foreach ($recepciones as $recepcion):
+				$correlativo = $recepcion['correlativo'];
+			?>
+				<tr>
+				<?php if (!in_array($correlativo, $rendered)): ?>
+					<td rowspan="<?= $rowspans[$correlativo] ?>">
+					<?= htmlspecialchars($recepcion['fecha']) ?>
+					</td>
+					<td rowspan="<?= $rowspans[$correlativo] ?>">
+					<?= htmlspecialchars($recepcion['correlativo']) ?>
+					</td>
+					<td rowspan="<?= $rowspans[$correlativo] ?>">
+					<?= htmlspecialchars($recepcion['nombre']) ?>
+					</td>
+				<?php endif; ?>
 
-          <td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
-          <td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
-          <td><?= htmlspecialchars($recepcion['costo']); ?></td>
+				<td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
+				<td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
+				<td><?= htmlspecialchars($recepcion['costo']); ?></td>
 
-          <?php if (!in_array($correlativo, $rendered)): ?>
-            <td rowspan="<?= $rowspans[$correlativo] ?>">
-              <button class="boton-form modificar"
-                data-bs-toggle="modal"
-                data-bs-target="#modalModificar"
-                data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
-                data-producto="<?= htmlspecialchars($recepcion['nombre_producto']) ?>"
-                data-cantidad="<?= htmlspecialchars($recepcion['cantidad']) ?>"
-                data-costo="<?= htmlspecialchars($recepcion['costo']) ?>">
-                Modificar
-              </button>
-            </td>
-            <?php $rendered[] = $correlativo; ?>
-          <?php endif; ?>
-        </tr>
-      <?php endforeach; ?>
-    </tbody>
-  </table>
-</div>
+				<?php if (!in_array($correlativo, $rendered)): ?>
+					<td rowspan="<?= $rowspans[$correlativo] ?>">
+					<button class="boton-form modificar"
+    data-bs-toggle="modal"
+    data-bs-target="#modalModificar"
+    data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>">
+    Modificar
+</button>
+
+					</td>
+					<?php $rendered[] = $correlativo; ?>
+				<?php endif; ?>
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
 
 		<div class="table-container">
 						
@@ -202,10 +202,8 @@ if (!isset($_SESSION['name'])) {
 						</div>
 		</div>
 	</div>
-
 	
-<!-- Modal para modificación -->
-<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
+	<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg"> <!-- modal-lg para más espacio -->
     <div class="modal-content">
       <div class="modal-header">
@@ -214,20 +212,39 @@ if (!isset($_SESSION['name'])) {
       </div>
       <div class="modal-body">
         <form id="formularioEdicion">
+		
+    	<input type="hidden" name="id_detalles" id="modificarIdDetalles">
           <div class="mb-3">
-            <label for="modalFecha" class="form-label">Fecha:</label>
-            <input type="date" class="form-control" name="fecha" id="modalFecha">
+	       <label for="modalFecha" class="form-label">Fecha:</label>
+            <input type="date" class="form-control" name="fecha" id="modalFecha" required>
           </div>
+		  	<div class="mb-3">
+			<label class="form-label mt-4" for="proveedor">Proveedor</label>
+			<select class="form-select" name="proveedor" id="proveedor">
+				<option value='disabled' disabled selected>Seleccione un Proveedor</option>
+				<?php
+				foreach ($proveedores  as $proveedor) {
+					echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre'] . "</option>";
+				} ?>
+			</select>
+		</div>
           <div class="mb-3">
             <label for="modalCorrelativo" class="form-label">Correlativo:</label>
             <input type="text" class="form-control" name="correlativo" id="modalCorrelativo" readonly>
           </div>
 
+          <hr>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0">Productos</h6>
+            <button type="button" class="btn btn-success btn-sm" id="btnAgregarProducto">+ Incluir producto</button>
+          </div>
+
           <div id="productosContainer">
-            <!-- Aquí se agregarán los productos dinámicamente con JS -->
+            <!-- JS insertará aquí los productos -->
           </div>
         </form>
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         <button type="submit" form="formularioEdicion" class="btn btn-primary">Guardar Cambios</button>
@@ -236,68 +253,117 @@ if (!isset($_SESSION['name'])) {
   </div>
 </div>
 
-
     <?php include 'footer.php'; ?>
-	<script type="text/javascript" src="Javascript/recepcion.js"></script>
-	<script>
-  const recepciones = <?= json_encode($recepciones); ?>;
-  const modal = document.getElementById('modalEdicion');
-  const cerrar = document.querySelector('.cerrar');
+	<script type="text/javascript" src="Javascript/recepcion.js">
+
+	</script>
+	document.getElementById('btnAgregarProducto').addEventListener('click', () => {
   const productosContainer = document.getElementById('productosContainer');
+  const index = productosContainer.children.length + 1;
 
-  document.querySelectorAll('.modificar').forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-      const correlativo = recepciones[index].correlativo;
-      const grupo = recepciones.filter(r => r.correlativo === correlativo);
-
-      document.getElementById('modalFecha').value = grupo[0].fecha;
-      document.getElementById('modalCorrelativo').value = grupo[0].correlativo;
-
-      productosContainer.innerHTML = ''; // limpiar antes de agregar
-
-grupo.forEach((item, i) => {
-  productosContainer.innerHTML += `
-    <fieldset style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
-      <legend style="font-weight: bold; padding: 0 10px;">Producto ${i + 1}</legend>
-
-      <div style="margin-bottom: 10px;">
-        <label style="display: block; margin-bottom: 4px;">Producto:</label>
-        <input type="text" name="producto[]" value="${item.nombre_producto}" required
-          style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+  const fieldset = document.createElement('fieldset');
+  fieldset.classList.add('border', 'p-3', 'mb-2');
+  fieldset.innerHTML = `
+    <legend class="fs-6">Producto ${index}</legend>
+    <div class="row g-2">
+      <div class="col-md-5">
+        <label class="form-label">Producto:</label>
+        <select class="form-select select-producto" name="producto[]">
+          <option value="">Seleccione...</option>
+          <!-- Opciones serán insertadas dinámicamente si lo deseas -->
+          <option value="Producto A">Producto A</option>
+          <option value="Producto B">Producto B</option>
+        </select>
       </div>
-
-      <div style="margin-bottom: 10px;">
-        <label style="display: block; margin-bottom: 4px;">Cantidad:</label>
-        <input type="number" name="cantidad[]" value="${item.cantidad}" required
-          style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+      <div class="col-md-3">
+        <label class="form-label">Cantidad:</label>
+        <input type="number" class="form-control" name="cantidad[]" min="1" value="1" required>
       </div>
-
-      <div>
-        <label style="display: block; margin-bottom: 4px;">Costo:</label>
-        <input type="number" step="0.01" name="costo[]" value="${item.costo}" required
-          style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+      <div class="col-md-3">
+        <label class="form-label">Costo:</label>
+        <input type="number" class="form-control" name="costo[]" min="0.01" step="0.01" value="0.00" required>
       </div>
-    </fieldset>
-  `;
-});
+      <div class="col-md-1 d-flex align-items-end">
+        <button type="button" class="btn btn-danger btn-sm btnEliminarProducto">×</button>
+      </div>
+    </div>
 
 
-      modal.style.display = 'block';
-    });
-  });
 
-  cerrar.onclick = function () {
-    modal.style.display = 'none';
-  };
 
-  window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = 'none';
+<script>
+  // Preparar datos agrupados por correlativo para JS
+  const recepcionesPorCorrelativo = <?php 
+    $data = [];
+    foreach ($recepciones as $recepcion) {
+        $key = $recepcion['correlativo'];
+        if (!isset($data[$key])) $data[$key] = [];
+        $data[$key][] = [
+          'producto' => $recepcion['nombre_producto'],
+          'cantidad' => $recepcion['cantidad'],
+          'costo' => $recepcion['costo'],
+          'fecha' => $recepcion['fecha'], // para mostrar fecha en el modal si quieres
+        ];
     }
-  };
+    echo json_encode($data);
+  ?>;
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const botonesModificar = document.querySelectorAll('.boton-form.modificar');
 
+  botonesModificar.forEach(boton => {
+    boton.addEventListener('click', function () {
+      const correlativo = this.getAttribute('data-correlativo');
+
+      // Setear correlativo en el modal
+      document.getElementById('modalCorrelativo').value = correlativo;
+
+      // Limpiar contenedor de productos
+      const contenedor = document.getElementById('productosContainer');
+      contenedor.innerHTML = '';
+
+      // Buscar productos para este correlativo en el objeto JS
+      const productos = recepcionesPorCorrelativo[correlativo] || [];
+
+      productos.forEach((producto, index) => {
+        const fieldset = document.createElement('fieldset');
+        fieldset.classList.add('border', 'p-3', 'mb-2');
+        fieldset.innerHTML = `
+          <legend class="fs-6">Producto ${index + 1}</legend>
+          <div class="row g-2">
+            <div class="col-md-5">
+              <label class="form-label">Producto:</label>
+              <select class="form-select select-producto" name="producto[]">
+                <option value="">Seleccione...</option>
+                <option value="${producto.producto}" selected>${producto.producto}</option>
+                <option value="Producto A">Producto A</option>
+                <option value="Producto B">Producto B</option>
+                <!-- Añade más opciones si quieres -->
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Cantidad:</label>
+              <input type="number" class="form-control" name="cantidad[]" value="${producto.cantidad}" min="1" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Costo:</label>
+              <input type="number" class="form-control" name="costo[]" value="${producto.costo}" min="0.01" step="0.01" required>
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+              <button type="button" class="btn btn-danger btn-sm btnEliminarProducto">×</button>
+            </div>
+          </div>
+        `;
+
+        contenedor.appendChild(fieldset);
+      });
+    });
+  });
+});
+
+</script>
 
 
 </body>
