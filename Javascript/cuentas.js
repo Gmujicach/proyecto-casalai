@@ -150,7 +150,7 @@ $(document).ready(function () {
     });
     $("#modificar_telefono_cuenta").on("keyup", function(){
         validarKeyUp(
-            /^\d{11}$/,
+            /^\d{4}-\d{3}-\d{4}$/,
             $(this),
             $("#smtelefono_cuenta"),
             "*El teléfono debe tener exactamente 11 dígitos*"
