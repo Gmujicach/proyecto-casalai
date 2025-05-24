@@ -70,7 +70,7 @@ if (!isset($_SESSION['name'])) {
 						</div>
 
 					<div>
-						<button type="button" class="boton-form" id="registrar" name="registrar">Registrar Recepcion</button>
+						<button type="button" class="boton-form" id="registrar" name="registrar">Registrar Recepción</button>
 					</div>
 				</form>
 			
