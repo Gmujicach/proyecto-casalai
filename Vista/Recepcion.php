@@ -49,8 +49,7 @@ if (!isset($_SESSION['name'])) {
 							</div>
 						</div>
 					
-
-					<div class="table-responsive card shadow">
+						<div class="table-responsive card shadow">
 
 						<div class="row">
 							<div class="">
@@ -76,10 +75,8 @@ if (!isset($_SESSION['name'])) {
 						</div>
 					</div>
 
-					<div class="row">
-						<div>
-							<button type="button" class="btn btn-primary" id="registrar" name="registrar">Registrar Recepcion</button>
-						</div>
+					<div>
+						<button type="button" class="boton-form" id="registrar" name="registrar">Registrar Recepcion</button>
 					</div>
 				</form>
 				
@@ -113,9 +110,7 @@ if (!isset($_SESSION['name'])) {
 				</div>
 			</section>
 		</div>
-	</div>
-							
-	</div>					
+	</div>				
 
 	<div class="contenedor-tabla">
 	<h3>Lista de Recepciones</h3>
