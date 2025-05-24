@@ -19,21 +19,16 @@ if (!isset($_SESSION['name'])) {
 <?php include 'NewNavBar.php'; ?>
 
 	<div class="formulario-responsivo">
-    <div class="fondo-form">
-		<section class="container">
-			<form method="post" action="" id="f" class="formulario-1">
-				<input type="text" name="accion" id="accion" style="display:none" />
-				<h3 class="titulo-form">Incluir Recepción</h3>
-				<div class="">
-					<div class="row">
-						<div class="col">
-							<label class="form-label mt-4" for="correlativo">Correlativo del producto</label>
-							<input class="form-control" maxlength="10" type="text" id="correlativo" name="correlativo" />
+		<div class="fondo-form">
+			<section class="container">
+				<form method="post" action="" id="f">
+					<input type="hidden" name="accion" id="accion"/>
+					<h3 class="titulo-form">Incluir Recepción</h3>
+						<div class="grupo-form">
+							<input type="text" placeholder="Correlativo del producto" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
 							<span id="scorrelativo"></span>
-						</div>
-						<div class="col">
-							<label class="form-label mt-4" for="proveedor">Proveedor</label>
-							<select class="form-select" name="proveedor" id="proveedor">
+						
+							<select class="control-form" name="proveedor" id="proveedor">
 								<option value='disabled' disabled selected>Seleccione un Proveedor</option>
 								<?php
 								foreach ($proveedores  as $proveedor) {
@@ -41,87 +36,83 @@ if (!isset($_SESSION['name'])) {
 								} ?>
 							</select>
 						</div>
-					</div>
-				</div>
-		
-                <div class="row">
-                    <div class="col-md-8 input-group">
-                    <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
-                    <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
-                    <button type="button" class="btn btn-primary" id="listado" name="listado">Lista de Productos</button>
-                    </div>
-                </div>
 			
-				<div class="row">
-					<div class="col">
-						<hr />
-					</div>
-				</div>
-				
+						<div class="envolver-form">
+							<input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
+							<input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
+							<button type="button" class="boton-form" id="listado" name="listado">Lista de Productos</button>
+						</div>
+					
+						<div class="row">
+							<div class="col">
+								<hr />
+							</div>
+						</div>
+					
 
-				<div class="table-responsive card shadow">
+					<div class="table-responsive card shadow">
+
+						<div class="row">
+							<div class="">
+								<table class="tabla" id="tablarecepcion">
+									<thead class="">
+										<tr>
+											<th>Acción</th>
+											<th style="display:none">Cl</th>
+											<th>Codigo</th>
+											<th>Nombre</th>
+											<th>Modelo</th>
+											<th>Marca</th>
+											<th>Serial</th>
+											<th>Costo</th>
+											<th>Cantidad</th>
+										</tr>
+									</thead>
+									<tbody class="" id="recepcion1">
+									
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
 
 					<div class="row">
-						<div class="">
-							<table class="tabla" id="tablarecepcion">
-								<thead class="">
-									<tr>
-										<th>Acción</th>
-										<th style="display:none">Cl</th>
-										<th>Codigo</th>
-										<th>Nombre</th>
-										<th>Modelo</th>
-										<th>Marca</th>
-										<th>Serial</th>
-										<th>Costo</th>
-										<th>Cantidad</th>
-									</tr>
-								</thead>
-								<tbody class="" id="recepcion1">
-                                
-								</tbody>
-							</table>
+						<div>
+							<button type="button" class="btn btn-primary" id="registrar" name="registrar">Registrar Recepcion</button>
 						</div>
 					</div>
-				</div>
+				</form>
+				
+				<div class="modal fade" tabindex="-1" role="dialog" id="modalp">
+					<div class="modal-dialog " role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Listado de productos</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+								</button>
+							</div>
+							<div class="modal-body">
+								<table class="table table-striped table-hover">
+									<thead class="text-center">
+										<tr>
+											<th style="display:none">Id</th>
+											<th>Codigo</th>
+											<th>Nombre</th>
+											<th>Modelo</th>
+											<th>Marca</th>
+											<th>Serial</th>
+										</tr>
+									</thead>
+									<tbody class="text-center" id="listadop">
 
-				<div class="row">
-					<div>
-						<button type="button" class="btn btn-primary" id="registrar" name="registrar">Registrar Recepcion</button>
-					</div>
-				</div>
-			</form>
-			
-			<div class="modal fade" tabindex="-1" role="dialog" id="modalp">
-				<div class="modal-dialog " role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Listado de productos</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-							</button>
-						</div>
-						<div class="modal-body">
-							<table class="table table-striped table-hover">
-								<thead class="text-center">
-									<tr>
-										<th style="display:none">Id</th>
-										<th>Codigo</th>
-										<th>Nombre</th>
-										<th>Modelo</th>
-										<th>Marca</th>
-										<th>Serial</th>
-									</tr>
-								</thead>
-								<tbody class="text-center" id="listadop">
-
-								</tbody>
-							</table>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</section>
-	</div>
+			</section>
+		</div>
 	</div>
 							
 	</div>					
