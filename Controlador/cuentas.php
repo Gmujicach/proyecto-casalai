@@ -70,9 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         case 'modificar':
-            ob_clean(); // limpia cualquier salida previa
+            ob_clean();
             header('Content-Type: application/json; charset=utf-8');
-        
             $id_cuenta = $_POST['id_cuenta'];
             $cuentabanco = new Cuentabanco();
             $cuentabanco->setIdCuenta($id_cuenta);
@@ -81,8 +80,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
             $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
             $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
-        
-            //$id_cuenta = $_POST['id_cuenta'];
+
+            // Validar que el número de cuenta no exista en otra cuenta
             if ($cuentabanco->existeNumeroCuenta($_POST['numero_cuenta'], $id_cuenta)) {
                 echo json_encode([
                     'status' => 'error',
