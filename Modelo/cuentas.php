@@ -85,13 +85,29 @@ class Cuentabanco extends BD {
         return $stmt->execute();
     }
 
+    // Verificar si existe el número de cuenta
+    public function existeNumeroCuenta($numero_cuenta, $excluir_id = null) {
+        return $this->existeNumCuenta($numero_cuenta, $excluir_id = null); 
+    }
+    private function existeNumCuenta($numero_cuenta, $excluir_id = null) {
+        $sql = "SELECT COUNT(*) FROM tbl_cuentas WHERE numero_cuenta = ?";
+        $params = [$numero_cuenta];
+        if ($excluir_id) {
+            $sql .= " AND id_cuenta != ?";
+            $params[] = $excluir_id;
+        }
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchColumn() > 0;
+    }
+
     public function obtenerUltimaCuenta() {
         return $this->obtUltimaCuenta(); 
     }
     private function obtUltimaCuenta() {
         try {
             $sql = "SELECT * FROM tbl_cuentas ORDER BY id_cuenta DESC LIMIT 1";
-            $stmt = $this->conexion()->prepare($sql);
+            $stmt = $this->conex->prepare($sql);
             $stmt->execute();
             $cuenta = $stmt->fetch(PDO::FETCH_ASSOC);
             return $cuenta ? $cuenta : null;
