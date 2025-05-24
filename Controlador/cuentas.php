@@ -19,6 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
             $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
 
+            if ($cuentabanco->existeNumeroCuenta($_POST['numero_cuenta'])) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El número de cuenta ya existe'
+                ]);
+                exit;
+            }
+
             if ($cuentabanco->registrarCuentabanco()) {
                 // Suponiendo que puedes obtener los datos luego de registrar
                 $cuentaRegistrada = $cuentabanco->obtenerUltimaCuenta(); // <-- deberías tener este método o algo similar
@@ -74,6 +82,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
             $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
         
+            //$id_cuenta = $_POST['id_cuenta'];
+            if ($cuentabanco->existeNumeroCuenta($_POST['numero_cuenta'], $id_cuenta)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El número de cuenta ya existe'
+                ]);
+                exit;
+            }
+
             if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
                 echo json_encode(['status' => 'success']);
             } else {
