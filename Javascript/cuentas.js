@@ -251,7 +251,11 @@ $(document).ready(function () {
                     botonModificar.data('correo', correo);
 
                 } else {
-                    muestraMensaje(response.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'No se pudo modificar la cuenta'
+                    });
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
