@@ -64,6 +64,10 @@ $(document).ready(function () {
     });
 
     // CORREO ELECTRÓNICO
+    $("#correo_cuenta").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
+    });
+
     $("#correo_cuenta").on("keyup", function(){
         validarKeyUp(
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -155,6 +159,11 @@ $(document).ready(function () {
             $("#smtelefono_cuenta"),
             "*El teléfono debe tener exactamente 11 dígitos*"
         );
+    });
+
+    // CORREO ELECTRÓNICO
+    $("#modificar_correo_cuenta").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
     });
 
     $("#modificar_correo_cuenta").on("keyup", function(){
