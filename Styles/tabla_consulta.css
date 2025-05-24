@@ -372,3 +372,24 @@ table tfoot tr td{
 table tfoot tr td span a i{
     font-size: 25px;
 }
+
+.btn-modificar{
+    border-radius: 10px;
+    border: none;
+    width: 165px;
+    height: 50px;
+    margin: auto;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 0;
+    background: #5995fd;
+    font-size: 15px;
+    color: #fff;
+    transition: 0.5s;
+}
+
+.btn-modificar:hover {
+    background-color: #4d84e2;
+}

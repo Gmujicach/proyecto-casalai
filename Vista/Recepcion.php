@@ -159,7 +159,7 @@ if (!isset($_SESSION['name'])) {
 
 				<?php if (!in_array($correlativo, $rendered)): ?>
 					<td rowspan="<?= $rowspans[$correlativo] ?>">
-					<button class="boton-form modificar"
+					<button class="btn-modificar"
     data-bs-toggle="modal"
     data-bs-target="#modalModificar"
     data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>">
