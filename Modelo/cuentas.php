@@ -87,9 +87,9 @@ class Cuentabanco extends BD {
 
     // Verificar si existe el número de cuenta
     public function existeNumeroCuenta($numero_cuenta, $excluir_id = null) {
-        return $this->existeNumCuenta($numero_cuenta, $excluir_id = null); 
+        return $this->existeNumCuenta($numero_cuenta, $excluir_id); 
     }
-    private function existeNumCuenta($numero_cuenta, $excluir_id = null) {
+    private function existeNumCuenta($numero_cuenta, $excluir_id) {
         $sql = "SELECT COUNT(*) FROM tbl_cuentas WHERE numero_cuenta = ?";
         $params = [$numero_cuenta];
         if ($excluir_id) {
