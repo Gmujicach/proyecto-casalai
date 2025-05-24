@@ -31,36 +31,40 @@ class Login extends BD
     }
 
 
-    function existe(){
-        $co = $this->conexion();
-        $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $r = array();
-        try {
+    function existe() {
+    $co = $this->conexion();
+    $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $r = array();
+    
+    try {
+        // Consultar el hash de la contraseña almacenada
+        $p = $co->prepare("SELECT id_usuario, rango, username, password FROM tbl_usuarios 
+                          WHERE username = :username");
+        $p->bindParam(':username', $this->username);
+        $p->execute();
 
-			
-            $p = $co->prepare("SELECT rango,username FROM tbl_usuarios
-			WHERE 
-			username=:username
-			AND 
-			password=:password"); // se cambio el rango por username
-            $p->bindParam(':username', $this->username);
-            $p->bindParam(':password', $this->password);
-            $p->execute();
+        $fila = $p->fetch(PDO::FETCH_ASSOC); // Usar fetch() en lugar de fetchAll()
 
-            $fila = $p->fetchAll(PDO::FETCH_BOTH);
-            if ($fila) {
-
+        if ($fila) {
+            // Verificar la contraseña ingresada contra el hash almacenado
+            if (password_verify($this->password, $fila['password'])) {
                 $r['resultado'] = 'existe';
-                $r['mensaje'] = $fila[0]['username']; // Asumiendo que quieres el username
-                $r['rango'] = $fila[0]['rango'];
+                $r['mensaje'] = $fila['username'];
+                $r['rango'] = $fila['rango'];
+                $r['id_usuario'] = $fila['id_usuario']; // Opcional: útil para sesiones
             } else {
                 $r['resultado'] = 'noexiste';
-                $r['mensaje'] =  "Error en usuario o contraseña!!!";
+                $r['mensaje'] = "Error en usuario o contraseña!!!";
             }
-        } catch (Exception $e) {
-            $r['resultado'] = 'error';
-            $r['mensaje'] =  $e->getMessage();
+        } else {
+            $r['resultado'] = 'noexiste';
+            $r['mensaje'] = "Error en usuario o contraseña!!!";
         }
-        return $r;
+    } catch (Exception $e) {
+        $r['resultado'] = 'error';
+        $r['mensaje'] = $e->getMessage();
     }
+    
+    return $r;
+}
 }
