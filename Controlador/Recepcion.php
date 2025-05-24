@@ -49,6 +49,7 @@ if (is_file("vista/" . $pagina . ".php")) {
     }
     $recepciones = getrecepcion();
     $proveedores = $k->obtenerproveedor();
+    $productos = $k->consultarproductos();
     require_once("vista/" . $pagina . ".php");
 } else {
     echo "pagina en construccion";
