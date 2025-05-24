@@ -42,7 +42,7 @@ input, select, button{
 .fondo-form{
     padding: 20px;
     background: #fff;
-    max-width: 850px;
+    max-width: 950px;
     margin: auto;
     display: flex;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -85,6 +85,20 @@ input, select, button{
     height: 30px;
     padding-right: 0;
     margin-top: 20px;
+}
+
+.btn-eliminar-pr{
+    border: none;
+    background: none;
+    color: red;
+}
+
+.numerico{
+    width: 80px; 
+    height: 30px;
+    padding: 4px;
+    border: 1px solid #ccc; 
+    border-radius: 4px;
 }
 
 select{

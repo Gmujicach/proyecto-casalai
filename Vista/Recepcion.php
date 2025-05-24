@@ -50,25 +50,24 @@ if (!isset($_SESSION['name'])) {
 						</div>
 					
 						<div class="table-responsive card shadow">
-						
-						<table class="tabla" id="tablarecepcion">
-							<thead class="">
-								<tr>
-									<th>Acción</th>
-									<th style="display:none">Cl</th>
-									<th>Codigo</th>
-									<th>Nombre</th>
-									<th>Modelo</th>
-									<th>Marca</th>
-									<th>Serial</th>
-									<th>Costo</th>
-									<th>Cantidad</th>
-								</tr>
-							</thead>
-							<tbody class="" id="recepcion1">
-							</tbody>
-						</table>
-					</div>
+							<table class="tabla" id="tablarecepcion">
+								<thead class="">
+									<tr>
+										<th>Acción</th>
+										<th style="display:none">Cl</th>
+										<th>Codigo</th>
+										<th>Nombre</th>
+										<th>Modelo</th>
+										<th>Marca</th>
+										<th>Serial</th>
+										<th>Costo</th>
+										<th>Cantidad</th>
+									</tr>
+								</thead>
+								<tbody class="" id="recepcion1">
+								</tbody>
+							</table>
+						</div>
 
 					<div>
 						<button type="button" class="boton-form" id="registrar" name="registrar">Registrar Recepcion</button>

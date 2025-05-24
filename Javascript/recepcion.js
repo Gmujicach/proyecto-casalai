@@ -155,7 +155,7 @@ $(document).ready(function(){
             var l = `
               <tr>
                <td>
-               <button type="button" class="btn" onclick="borrarp(this)">Eliminar</button>
+               <button type="button" class="btn-eliminar-pr" onclick="borrarp(this)">Eliminar</button>
                </td>
                <td style="display:none">
                    <input type="text" name="producto[]" style="display:none"
@@ -179,17 +179,12 @@ $(document).ready(function(){
                <td>`+
                         $(linea).find("td:eq(5)").text()+
                `</td>
-<td>
-  <input type="number" class="control-form" name="costo[]" min="0.01" step="0.01" value="1" 
-         style="width: 80px; padding: 4px; border: 1px solid #ccc; border-radius: 4px;" required>
-</td>
-<td>
-  <input type="number" class="control-form" name="cantidad[]" min="1" step="1" value="1" 
-         style="width: 60px; padding: 4px; border: 1px solid #ccc; border-radius: 4px;" required>
-</td>
-
-             
-               
+                <td>
+                    <input type="number" class="numerico" name="costo[]" min="0.01" step="0.01" value="1" required>
+                </td>
+                <td>
+                    <input type="number" class="numerico" name="cantidad[]" min="1" step="1" value="1" required>
+                </td>
                </tr>`;
             $("#recepcion1").append(l);
         }
