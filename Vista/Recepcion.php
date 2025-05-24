@@ -122,12 +122,9 @@ if (!isset($_SESSION['name'])) {
 			</div>
 		</section>
 	</div>
-<<<<<<< HEAD
 	</div>
 							
-=======
 	</div>					
->>>>>>> 37be234fcf438f8b08d3ba5509d2d9a3776f2d80
 
 	<div class="contenedor-tabla">
 	<h3>Lista de Recepciones</h3>
