@@ -23,7 +23,7 @@ if (!isset($_SESSION['name'])) {
 		<section class="container">
 			<form method="post" action="" id="f" class="formulario-1">
 				<input type="text" name="accion" id="accion" style="display:none" />
-				<h3 class="titulo-form">Gestionar Recepcion</h3>
+				<h3 class="titulo-form">Incluir Recepción</h3>
 				<div class="">
 					<div class="row">
 						<div class="col">
@@ -123,77 +123,76 @@ if (!isset($_SESSION['name'])) {
 		</section>
 	</div>
 	</div>
-<<<<<<< HEAD
 							
 
 	<div class="contenedor-tabla">
-  <h1 class="titulo-tabla display-5 text-center">LISTA DE RECEPCIONES</h1>
-  <table class="tablaConsultas">
-    <thead>
-      <tr>
-        <th>FECHA</th>
-        <th>CORRELATIVO</th>
-        <th>PROVEEDOR</th>
-        <th>PRODUCTO</th>
-        <th>CANTIDAD</th>
-        <th>COSTOS DE INVERSION</th>
-        <th>MODIFICACION</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      $rowspans = [];
-      foreach ($recepciones as $recepcion) {
-          $key = $recepcion['correlativo'];
-          if (!isset($rowspans[$key])) {
-              $rowspans[$key] = 1;
-          } else {
-              $rowspans[$key]++;
-          }
-      }
+	<h3>Lista de Recepciones</h3>
+		<table class="tablaConsultas" id="tablaConsultas">
+			<thead>
+			<tr>
+				<th>FECHA</th>
+				<th>CORRELATIVO</th>
+				<th>PROVEEDOR</th>
+				<th>PRODUCTO</th>
+				<th>CANTIDAD</th>
+				<th>COSTOS DE INVERSION</th>
+				<th>MODIFICACION</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php
+			$rowspans = [];
+			foreach ($recepciones as $recepcion) {
+				$key = $recepcion['correlativo'];
+				if (!isset($rowspans[$key])) {
+					$rowspans[$key] = 1;
+				} else {
+					$rowspans[$key]++;
+				}
+			}
 
 
-      $rendered = [];
+			$rendered = [];
 
-      foreach ($recepciones as $recepcion):
-          $correlativo = $recepcion['correlativo'];
-      ?>
-        <tr>
-          <?php if (!in_array($correlativo, $rendered)): ?>
-            <td rowspan="<?= $rowspans[$correlativo] ?>">
-              <?= htmlspecialchars($recepcion['fecha']) ?>
-            </td>
-            <td rowspan="<?= $rowspans[$correlativo] ?>">
-              <?= htmlspecialchars($recepcion['correlativo']) ?>
-            </td>
-            <td rowspan="<?= $rowspans[$correlativo] ?>">
-              <?= htmlspecialchars($recepcion['nombre']) ?>
-            </td>
-          <?php endif; ?>
+			foreach ($recepciones as $recepcion):
+				$correlativo = $recepcion['correlativo'];
+			?>
+				<tr>
+				<?php if (!in_array($correlativo, $rendered)): ?>
+					<td rowspan="<?= $rowspans[$correlativo] ?>">
+					<?= htmlspecialchars($recepcion['fecha']) ?>
+					</td>
+					<td rowspan="<?= $rowspans[$correlativo] ?>">
+					<?= htmlspecialchars($recepcion['correlativo']) ?>
+					</td>
+					<td rowspan="<?= $rowspans[$correlativo] ?>">
+					<?= htmlspecialchars($recepcion['nombre']) ?>
+					</td>
+				<?php endif; ?>
 
-          <td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
-          <td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
-          <td><?= htmlspecialchars($recepcion['costo']); ?></td>
+				<td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
+				<td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
+				<td><?= htmlspecialchars($recepcion['costo']); ?></td>
 
-          <?php if (!in_array($correlativo, $rendered)): ?>
-            <td rowspan="<?= $rowspans[$correlativo] ?>">
-              <button class="boton-form modificar"
-                data-bs-toggle="modal"
-                data-bs-target="#modalModificar"
-                data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
-                data-producto="<?= htmlspecialchars($recepcion['nombre_producto']) ?>"
-                data-cantidad="<?= htmlspecialchars($recepcion['cantidad']) ?>"
-                data-costo="<?= htmlspecialchars($recepcion['costo']) ?>">
-                Modificar
-              </button>
-            </td>
-            <?php $rendered[] = $correlativo; ?>
-          <?php endif; ?>
-        </tr>
-      <?php endforeach; ?>
-    </tbody>
-  </table>
-</div>
+				<?php if (!in_array($correlativo, $rendered)): ?>
+					<td rowspan="<?= $rowspans[$correlativo] ?>">
+					<button class="boton-form modificar"
+						data-bs-toggle="modal"
+						data-bs-target="#modalModificar"
+						data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
+						data-producto="<?= htmlspecialchars($recepcion['nombre_producto']) ?>"
+						data-cantidad="<?= htmlspecialchars($recepcion['cantidad']) ?>"
+						data-costo="<?= htmlspecialchars($recepcion['costo']) ?>">
+						Modificar
+					</button>
+					</td>
+					<?php $rendered[] = $correlativo; ?>
+				<?php endif; ?>
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
 
 		<div class="table-container">
 						
@@ -204,44 +203,39 @@ if (!isset($_SESSION['name'])) {
 						</div>
 		</div>
 	</div>
-
-<<<<<<< HEAD
 	
-<!-- Modal para modificación -->
-<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg"> <!-- modal-lg para más espacio -->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalModificarLabel">Modificar Recepción</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <form id="formularioEdicion">
-          <div class="mb-3">
-            <label for="modalFecha" class="form-label">Fecha:</label>
-            <input type="date" class="form-control" name="fecha" id="modalFecha">
-          </div>
-          <div class="mb-3">
-            <label for="modalCorrelativo" class="form-label">Correlativo:</label>
-            <input type="text" class="form-control" name="correlativo" id="modalCorrelativo" readonly>
-          </div>
+	<!-- Modal para modificación -->
+	<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg"> <!-- modal-lg para más espacio -->
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="modalModificarLabel">Modificar Recepción</h5>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+		</div>
+		<div class="modal-body">
+			<form id="formularioEdicion">
+			<div class="mb-3">
+				<label for="modalFecha" class="form-label">Fecha:</label>
+				<input type="date" class="form-control" name="fecha" id="modalFecha">
+			</div>
+			<div class="mb-3">
+				<label for="modalCorrelativo" class="form-label">Correlativo:</label>
+				<input type="text" class="form-control" name="correlativo" id="modalCorrelativo" readonly>
+			</div>
 
-          <div id="productosContainer">
-            <!-- Aquí se agregarán los productos dinámicamente con JS -->
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" form="formularioEdicion" class="btn btn-primary">Guardar Cambios</button>
-      </div>
-    </div>
-  </div>
-</div>
+			<div id="productosContainer">
+				<!-- Aquí se agregarán los productos dinámicamente con JS -->
+			</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+			<button type="submit" form="formularioEdicion" class="btn btn-primary">Guardar Cambios</button>
+		</div>
+		</div>
+	</div>
+	</div>
 
-
-=======
->>>>>>> 8adf8e6ac0efa63ecf6d285db9560d2f17100de1
     <?php include 'footer.php'; ?>
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
 	<script>
