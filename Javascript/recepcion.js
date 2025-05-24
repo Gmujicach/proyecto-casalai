@@ -180,11 +180,11 @@ $(document).ready(function(){
                         $(linea).find("td:eq(5)").text()+
                `</td>
 <td>
-  <input type="number" name="costo[]" min="0.01" step="0.01" value="1" 
+  <input type="number" class="control-form" name="costo[]" min="0.01" step="0.01" value="1" 
          style="width: 80px; padding: 4px; border: 1px solid #ccc; border-radius: 4px;" required>
 </td>
 <td>
-  <input type="number" name="cantidad[]" min="1" step="1" value="1" 
+  <input type="number" class="control-form" name="cantidad[]" min="1" step="1" value="1" 
          style="width: 60px; padding: 4px; border: 1px solid #ccc; border-radius: 4px;" required>
 </td>
 
