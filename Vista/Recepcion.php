@@ -48,7 +48,7 @@ if (!isset($_SESSION['name'])) {
                     <div class="col-md-8 input-group">
                     <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
                     <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
-                    <button type="button" class="btn btn-primary" id="listado" name="listado">LISTA DE PRODUCTOS</button>
+                    <button type="button" class="btn btn-primary" id="listado" name="listado">Lista de Productos</button>
                     </div>
                 </div>
 			
@@ -123,6 +123,7 @@ if (!isset($_SESSION['name'])) {
 		</section>
 	</div>
 	</div>
+<<<<<<< HEAD
 							
 
 	<div class="contenedor-tabla">
@@ -150,6 +151,7 @@ if (!isset($_SESSION['name'])) {
               $rowspans[$key]++;
           }
       }
+
 
       $rendered = [];
 
@@ -203,6 +205,7 @@ if (!isset($_SESSION['name'])) {
 		</div>
 	</div>
 
+<<<<<<< HEAD
 	
 <!-- Modal para modificación -->
 <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
@@ -237,6 +240,8 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 
+=======
+>>>>>>> 8adf8e6ac0efa63ecf6d285db9560d2f17100de1
     <?php include 'footer.php'; ?>
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
 	<script>
