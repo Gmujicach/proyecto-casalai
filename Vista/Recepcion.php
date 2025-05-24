@@ -23,7 +23,7 @@ if (!isset($_SESSION['name'])) {
 		<section class="container">
 			<form method="post" action="" id="f" class="formulario-1">
 				<input type="text" name="accion" id="accion" style="display:none" />
-				<h3 class="display-4 text-center">Gestionar Recepcion</h3>
+				<h3 class="titulo-form">Gestionar Recepcion</h3>
 				<div class="">
 					<div class="row">
 						<div class="col">
