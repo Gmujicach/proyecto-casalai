@@ -203,7 +203,6 @@ if (!isset($_SESSION['name'])) {
 		</div>
 	</div>
 
-<<<<<<< HEAD
 	
 <!-- Modal para modificación -->
 <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
@@ -238,8 +237,6 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 
-=======
->>>>>>> 8adf8e6ac0efa63ecf6d285db9560d2f17100de1
     <?php include 'footer.php'; ?>
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
 	<script>

@@ -179,12 +179,15 @@ $(document).ready(function(){
                <td>`+
                         $(linea).find("td:eq(5)").text()+
                `</td>
-                <td>
-                  <input type="number" min="1" value="1" name="costo[]" "/>
-               </td>  
-               <td>
-                  <input type="text" value="1" name="cantidad[]" "/>
-               </td>
+<td>
+  <input type="number" name="costo[]" min="0.01" step="0.01" value="1" 
+         style="width: 80px; padding: 4px; border: 1px solid #ccc; border-radius: 4px;" required>
+</td>
+<td>
+  <input type="number" name="cantidad[]" min="1" step="1" value="1" 
+         style="width: 60px; padding: 4px; border: 1px solid #ccc; border-radius: 4px;" required>
+</td>
+
              
                
                </tr>`;
