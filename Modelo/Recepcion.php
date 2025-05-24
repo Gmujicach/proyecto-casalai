@@ -156,13 +156,16 @@ class Recepcion extends BD{
 		
 	}
 
-	// function consultar() {
-    //     $sql = "SELECT * FROM tbl_dellate_recepcion_producto";
-    //     $conexion = $this->conex->prepare($sql);
-    //     $conexion->execute();
-    //     $registros = $conexion->fetchAll(PDO::FETCH_ASSOC);
-    //     return $registros;
-    // }
+	function consultarproductos() {
+    $sql = "SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial
+            FROM tbl_productos AS p 
+            INNER JOIN tbl_modelos AS m ON p.id_modelo = m.id_modelo 
+            INNER JOIN tbl_marcas AS mar ON m.id_marca = mar.id_marca;";
+    $conexion = $this->conexion()->prepare($sql);
+    $conexion->execute();
+    $registros = $conexion->fetchAll(PDO::FETCH_ASSOC);
+    return $registros;
+    }
 
 	function buscar() {
         $co = $this->conexion();
