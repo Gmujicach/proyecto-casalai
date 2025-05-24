@@ -195,7 +195,8 @@ class Recepcion extends BD{
         
         // Primera consulta para obtener datos de marcas
         $queryrecepciones = 
-        'SELECT r.fecha, r.correlativo, pr.nombre, pro.nombre_producto, d.cantidad, d.costo
+        'SELECT d.id_detalle_recepcion_productos,
+        r.fecha, r.correlativo, pr.nombre, pro.nombre_producto, d.cantidad, d.costo
         FROM tbl_recepcion_productos AS r 
         INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
         INNER JOIN tbl_proveedores AS pr ON pr.id_proveedor = r.id_proveedor 
