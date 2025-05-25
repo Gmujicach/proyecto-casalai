@@ -166,7 +166,7 @@
                       </a>
                 </li>
                 <h4>
-                    <span>Administrar Finazas</span>
+                    <span>Administrar Finanzas</span>
                     <div class="menu-separador"></div>
                 </h4>
                 <li>
