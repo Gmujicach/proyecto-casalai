@@ -78,7 +78,7 @@ case 'modificarRecepcion':
             $costo,
             $iddetalle
         );
-        if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificar') {
+        if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificarRecepcion') {
             echo json_encode([
                 'status' => 'success',
                 'message' => $respuesta['mensaje']

@@ -165,7 +165,7 @@ class Recepcion extends BD{
         }
 
         $co->commit();
-        $d['resultado'] = 'modificar';
+        $d['resultado'] = 'modificarRecepcion';
         $d['mensaje'] = 'Se modificó la recepción y sus productos correctamente';
 
     } catch (Exception $e) {

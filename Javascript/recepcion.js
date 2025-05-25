@@ -1,43 +1,48 @@
-$(document).ready(function() {
-    $('#formularioEdicion').on('submit', function(e) {
-        e.preventDefault();
+$(document).ready(function () {
+$(document).on('submit', '#formularioEdicion', function(e) {
+    e.preventDefault(); // ← Esto es crucial
 
-        var formData = new FormData(this);
-        formData.append('accion', 'modificarRecepcion');
+    var formData = new FormData(this);
+    formData.append('accion', 'modificarRecepcion');
 
-        $.ajax({
-            url: '', // La misma página
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: formData,
-            success: function(response) {
-                try {
-                    response = typeof response === "object" ? response : JSON.parse(response);
-                } catch (e) {
-                    Swal.fire('Error', 'Respuesta inesperada del servidor', 'error');
-                    return;
-                }
-                if (response.status === 'success') {
-                    $('#modalModificar').modal('hide');
+    $.ajax({
+        url: '', // misma página
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(response) {
+            try {
+                response = typeof response === "object" ? response : JSON.parse(response);
+            } catch (e) {
+                Swal.fire('Error', 'Respuesta inesperada del servidor', 'error');
+                return;
+            }
+
+            if (response.status === 'success') {
+                $('#modalModificar').modal('hide');
+                setTimeout(function() {
                     Swal.fire({
                         icon: 'success',
                         title: 'Modificado',
                         text: response.message
-                    }).then(function() {
+                    }).then(() => {
                         location.reload();
                     });
-                } else {
-                    Swal.fire('Error', response.message, 'error');
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                Swal.fire('Error', 'Error al modificar la recepción.', 'error');
+                }, 500);
+            } else {
+                Swal.fire('Error', response.message, 'error');
             }
-        });
+        },
+        error: function() {
+            Swal.fire('Error', 'Error al modificar la recepción.', 'error');
+        }
     });
 });
+
+});
+
 carga_productos();    //boton para levantar modal de productos
     $("#listado").on("click",function(){
         $("#modalp").modal("show");
