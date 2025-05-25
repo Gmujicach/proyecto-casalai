@@ -141,6 +141,7 @@ if (!isset($_SESSION['name'])) {
     </div>
 </div>
 
+<?php include 'footer.php'; ?>
 <script>
 function cambiarFilasPorPagina(filas) {
     const url = new URL(window.location.href);
