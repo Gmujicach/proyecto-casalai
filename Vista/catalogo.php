@@ -1,17 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="Styles/darckort.css">
-    <link rel="stylesheet" href="Styles/catalogo.css">
-    
+    <?php include 'header.php'; ?>
+    <style>
+        .disabled-combo {
+            opacity: 0.7;
+            background-color: #f8f9fa;
+            border: 1px dashed #ccc;
+        }
+
+        .disabled-combo .card-title {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+
+        .combo-actions-footer {
+            padding: 0.75rem 1.25rem;
+        }
+
+        .combo-card {
+            transition: all 0.3s ease;
+        }
+
+        .combo-card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+    </style>
 </head>
+
 <body>
-    <?php include 'NavBar.php'; ?>
+    <?php include 'NewNavBar.php'; ?>
     <br>
 
     <section class="container mt-5">
@@ -19,7 +43,7 @@
         <br>
         <br>
         <h1 class="text-center mb-4">Catálogo de Productos</h1>
-        
+
         <!-- Contenido de Productos -->
         <div class="card mb-4" id="productos-content">
             <div class="card-body">
@@ -45,13 +69,13 @@
                                 </button>
                             </div>
                             <a href="?pagina=carrito" class="btn btn-primary ms-2">
-                                <i class="bi bi-cart"></i> 
+                                <i class="bi bi-cart"></i>
                                 <span class="cart-count badge bg-danger d-none">0</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Tabla de Productos -->
                 <div class="table-responsive">
                     <table class="table table-striped table-hover align-middle">
@@ -70,14 +94,13 @@
                                 <?php foreach ($productos as $producto): ?>
                                     <tr class="product-row" data-id="<?= $producto['id_producto'] ?>">
                                         <td>
-                                            <button type="button" class="btn btn-primary btn-sm btn-agregar-carrito" 
-                                                    data-id-producto="<?= htmlspecialchars($producto['id_producto']) ?>">
+                                            <button type="button" class="btn btn-primary btn-sm btn-agregar-carrito"
+                                                data-id-producto="<?= htmlspecialchars($producto['id_producto']) ?>">
                                                 <i class="bi bi-cart-plus"></i> <span class="btn-text">Agregar</span>
                                             </button>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                
                                                 <div>
                                                     <strong><?= htmlspecialchars($producto['nombre_producto']) ?></strong>
                                                     <div class="text-muted small"><?= htmlspecialchars($producto['serial']) ?></div>
@@ -112,24 +135,39 @@
         <div class="card mb-4" id="combos-content" style="display: none;">
             <div class="card-body">
                 <?php if (!empty($combos)): ?>
+                    <!-- Botón para agregar nuevo combo (solo para admin) -->
+                    <?php if ($esAdmin): ?>
+                        <div class="text-end mb-3">
+                            <button type="button" class="btn btn-primary" id="nuevo_combo">
+                                <i class="bi bi-plus-circle"></i> Nuevo Combo
+                            </button>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                        <?php foreach ($combos as $combo): 
+                        <?php foreach ($combos as $combo):
+                            // Omitir combos inactivos para usuarios no admin
+                            if (!$esAdmin && !$combo['activo']) continue;
+
                             $detalles = $productosModel->obtenerDetallesCombo($combo['id_combo']);
                             $precioTotal = 0;
                             $todosDisponibles = true;
-                            
+
                             foreach ($detalles as $detalle) {
                                 $producto = $productosModel->obtenerProductoPorId($detalle['id_producto']);
                                 $precioTotal += ($producto['precio'] * $detalle['cantidad']);
                                 $todosDisponibles = $todosDisponibles && ($producto['stock'] >= $detalle['cantidad']);
                             }
-                            
+
                             $ahorro = $precioTotal * 0.1; // 10% de ahorro estimado
                         ?>
                             <div class="col">
-                                <div class="card h-100 combo-card">
+                                <div class="card h-100 combo-card <?= !$combo['activo'] ? 'disabled-combo' : '' ?>">
                                     <div class="combo-header">
                                         <h5 class="card-title mb-1"><?= htmlspecialchars($combo['nombre_combo']) ?></h5>
+                                        <?php if (!$combo['activo']): ?>
+                                            <span class="badge bg-secondary mb-2">Deshabilitado</span>
+                                        <?php endif; ?>
                                         <p class="text-muted small mb-2"><?= htmlspecialchars($combo['descripcion']) ?></p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h4 class="text-success mb-0">$<?= number_format($precioTotal - $ahorro, 2) ?></h4>
@@ -143,7 +181,7 @@
                                     <div class="card-body">
                                         <h6 class="mb-3">Contenido del Combo:</h6>
                                         <ul class="list-group list-group-flush mb-3">
-                                            <?php foreach ($detalles as $detalle): 
+                                            <?php foreach ($detalles as $detalle):
                                                 $producto = $productosModel->obtenerProductoPorId($detalle['id_producto']);
                                                 $disponible = $producto['stock'] >= $detalle['cantidad'];
                                             ?>
@@ -151,12 +189,12 @@
                                                     <div>
                                                         <?= htmlspecialchars($producto['nombre_producto']) ?>
                                                         <?php if (!$disponible): ?>
-                                                            <i class="bi bi-exclamation-triangle-fill text-danger ms-1" 
-                                                               title="Stock insuficiente"></i>
+                                                            <i class="bi bi-exclamation-triangle-fill text-danger ms-1"
+                                                                title="Stock insuficiente"></i>
                                                         <?php endif; ?>
                                                     </div>
                                                     <span class="text-end">
-                                                        <span class="text-muted small">$<?= number_format($producto['precio'], 2) ?></span> × 
+                                                        <span class="text-muted small">$<?= number_format($producto['precio'], 2) ?></span> ×
                                                         <span class="badge bg-<?= $disponible ? 'primary' : 'danger' ?> rounded-pill">
                                                             <?= $detalle['cantidad'] ?>
                                                         </span>
@@ -166,13 +204,32 @@
                                         </ul>
                                     </div>
                                     <div class="card-footer bg-transparent border-top-0 pt-0">
-                                        <button class="btn btn-<?= $todosDisponibles ? 'success' : 'secondary' ?> w-100 btn-add-combo btn-agregar-combo" 
-                                                data-id-combo="<?= $combo['id_combo'] ?>"
-                                                <?= !$todosDisponibles ? 'disabled' : '' ?>>
-                                            <i class="bi bi-cart-plus"></i> 
-                                            <?= $todosDisponibles ? 'Agregar Combo' : 'Productos no disponibles' ?>
+                                        <button class="btn btn-<?= $todosDisponibles ? 'success' : 'secondary' ?> w-100 btn-add-combo btn-agregar-combo"
+                                            data-id-combo="<?= $combo['id_combo'] ?>"
+                                            <?= !$todosDisponibles || !$combo['activo'] ? 'disabled' : '' ?>>
+                                            <i class="bi bi-cart-plus"></i>
+                                            <?= !$combo['activo'] ? 'Combo no disponible' : ($todosDisponibles ? 'Agregar Combo' : 'Productos no disponibles') ?>
                                         </button>
                                     </div>
+
+                                    <!-- Footer de acciones (solo para admin) -->
+                                    <?php if ($esAdmin): ?>
+                                        <div class="card-footer combo-actions-footer bg-light border-top-0 pt-0">
+                                            <div class="d-flex justify-content-between">
+                                                <button class="btn btn-sm btn-outline-primary btn-editar-combo"
+                                                    data-id-combo="<?= $combo['id_combo'] ?>">
+                                                    <i class="bi bi-pencil"></i> Editar
+                                                </button>
+                                                <button class="btn btn-sm <?= $combo['activo'] ? 'btn-outline-warning' : 'btn-outline-success' ?> btn-cambiar-estado"
+                                                    data-id-combo="<?= $combo['id_combo'] ?>"
+                                                    data-nombre-combo="<?= htmlspecialchars($combo['nombre_combo']) ?>"
+                                                    data-estado-actual="<?= $combo['activo'] ? 1 : 0 ?>">
+                                                    <i class="bi <?= $combo['activo'] ? 'bi-eye-slash' : 'bi-eye' ?>"></i>
+                                                    <?= $combo['activo'] ? 'Deshabilitar' : 'Habilitar' ?>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -227,40 +284,106 @@
         </div>
     </div>
 
+    <!-- Modal para habilitar/deshabilitar combo -->
+    <div class="modal fade" id="estadoComboModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="estadoComboModalLabel">Cambiar Estado del Combo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="estadoComboMensaje">¿Estás seguro de que deseas <span id="accionEstado">habilitar</span> este combo?</p>
+                    <input type="hidden" id="comboIdEstado">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmarCambioEstado">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para gestión de combos -->
+    <div class="modal fade" id="comboModal" tabindex="-1" aria-labelledby="comboModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="comboModalLabel">Gestionar Combo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="comboForm">
+                        <input type="hidden" id="id_combo" name="id_combo" value="">
+                        <div class="mb-3">
+                            <label for="nombre_combo" class="form-label">Nombre del Combo</label>
+                            <input type="text" class="form-control" id="nombre_combo" name="nombre_combo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Productos del Combo</label>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <select class="form-select" id="producto_select">
+                                        <option value="">Seleccionar producto</option>
+                                        <?php
+                                        $productosCombo = $productosModel->obtenerTodosProductosParaCombos();
+                                        foreach ($productosCombo as $producto): ?>
+                                            <option value="<?= $producto['id_producto'] ?>"
+                                                data-precio="<?= $producto['precio'] ?>"
+                                                data-stock="<?= $producto['stock'] ?>">
+                                                <?= htmlspecialchars($producto['nombre_producto']) ?> (<?= htmlspecialchars($producto['marca']) ?>)
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" class="form-control" id="producto_cantidad" min="1" value="1">
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn btn-primary w-100" id="agregar_producto">
+                                        <i class="bi bi-plus-circle"></i> Agregar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-sm" id="productos_combo_table">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th width="100px">Cantidad</th>
+                                            <th width="100px">Precio</th>
+                                            <th width="50px"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Los productos se agregarán dinámicamente aquí -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="guardar_combo">
+                        <i class="bi bi-save"></i> Guardar Combo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="Public/js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="Javascript/sweetalert2.all.min.js"></script>
-    <script>
-        // Funciones para mostrar/ocultar contenido
-        function mostrarProductos() {
-            document.getElementById('productos-content').style.display = 'block';
-            document.getElementById('combos-content').style.display = 'none';
-            document.getElementById('productos-tab').classList.add('active');
-            document.getElementById('combos-tab').classList.remove('active');
-            localStorage.setItem('catalogoTab', 'productos');
-        }
-
-        function mostrarCombos() {
-            document.getElementById('productos-content').style.display = 'none';
-            document.getElementById('combos-content').style.display = 'block';
-            document.getElementById('productos-tab').classList.remove('active');
-            document.getElementById('combos-tab').classList.add('active');
-            localStorage.setItem('catalogoTab', 'combos');
-        }
-
-        // Inicializar pestaña guardada
-        const tabPreference = localStorage.getItem('catalogoTab');
-        if (tabPreference === 'combos') {
-            mostrarCombos();
-        } else {
-            mostrarProductos();
-        }
-
-        // Actualizar contador del carrito al cargar la página
-        $(document).ready(function() {
-            updateCartCount();
-        });
-    </script>
     <script src="Javascript/catalogo.js"></script>
+
 </body>
+
 </html>

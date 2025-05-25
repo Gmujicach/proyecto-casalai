@@ -8,12 +8,11 @@
     <link rel="stylesheet" href="Public/bootstrap/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="Styles/darckort.css">
-    <link rel="stylesheet" href="Styles/carrito.css">
+    <?php include 'header.php'; ?>
     
 </head>
 <body>
-    <?php include 'NavBar.php'; ?>
+    <?php include 'NewNavBar.php'; ?>
     <section class="container mt-4">        
 
         <!-- Tabla de Productos en el Carrito -->

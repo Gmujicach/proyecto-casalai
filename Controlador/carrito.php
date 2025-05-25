@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_producto = $_POST['id_producto'] ?? null;
             if ($id_producto !== null) {
                 $carrito = new Carrito();
-                $id_cliente = 3; // Obtener de la sesión
+                $id_cliente = $_SESSION['id_usuario']; // Obtener de la sesión
                 $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
 
                 if (!$carritoCliente) {
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $id_producto = $_POST['id_producto'] ?? null;
                 if ($id_producto !== null) {
                     $carrito = new Carrito();
-                    $id_cliente = 3; // Obtener de la sesión en producción
+                    $id_cliente = $_SESSION['id_usuario'];; // Obtener de la sesión en producción
                     
                     try {
                         $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
 
         case 'eliminar_todo_carrito':
-            $id_cliente = 3; // Obtener de la sesión
+            $id_cliente = $_SESSION['id_usuario'];; // Obtener de la sesión
             $carrito = new Carrito();
             $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
 
@@ -120,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
 
         case 'registrar_compra':
-            $id_cliente = 3; // Obtener de la sesión
+            $id_cliente = $_SESSION['id_usuario'];; // Obtener de la sesión
             $carrito = new Carrito();
             $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
 
@@ -179,7 +179,7 @@ function obtenerProductos() {
 
 function obtenerProductosDelCarrito() {
     $carrito = new Carrito();
-    $id_cliente = 3; // Obtener de la sesión
+    $id_cliente = $_SESSION['id_usuario']; // Obtener de la sesión
     $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
 
     if ($carritoCliente) {

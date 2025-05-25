@@ -1,5 +1,5 @@
 <?php
-require_once 'Config/config.php';
+require_once 'Config/Config.php';
 
 class Catalogo extends BD {
     private $tablaCombo = 'tbl_combo';
@@ -7,10 +7,12 @@ class Catalogo extends BD {
     private $cantidad;
     private $id_producto;
 
-    function __construct() {
-        parent::__construct();
-        $this->conex = parent::getConexion();
+
+    public function __construct() {
+        $conexion = new BD('P');
+        $this->conex = $conexion->getConexion();
     }
+
 
     // Getters and Setters
 
