@@ -27,7 +27,7 @@ if (!isset($_SESSION['name'])) {
                 <span id="snombre_marca"></span>
             </div>
             <div class="form-group d-flex justify-content-center">
-                <button type="submit" class="boton-form">Registrar Marca</button>
+                <button type="submit" class="boton-form">Registrar</button>
             </div>
         </form>
     </div>
