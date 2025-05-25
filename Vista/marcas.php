@@ -17,22 +17,21 @@ if (!isset($_SESSION['name'])) {
 
 <?php include 'NewNavBar.php'; ?>
 
-<div class="container"> 
-<form id="incluirmarcas" action="" method="POST" class="formulario-1">
-    <input type="hidden" name="accion" value="ingresar">
-    <h3 class="display-4 text-center">INCLUIR MARCA</h3>
-    <div class="form-row">
-        <div class="form-group col-md-12">
-            <label for="nombre_marca">Nombre de la Marca</label>
-            <input type="text" placeholder="Escriba el nombre de la marca que desee Registrar" maxlength="15" class="form-control" id="nombre_marca" name="nombre_marca" required>
-            <span id="snombre_marca"></span>
-        </div>
+<div class="formulario-responsivo">
+    <div class="fondo-form">
+        <form id="incluirmarcas" action="" method="POST">
+            <input type="hidden" name="accion" value="ingresar">
+            <h3 class="titulo-form">INCLUIR MARCA</h3>
+            <div class="envolver-form">
+                <input type="text" placeholder="Nombre de la Marca" maxlength="15" class="control-form" id="nombre_marca" name="nombre_marca" required>
+                <span id="snombre_marca"></span>
+            </div>
+            <div class="form-group d-flex justify-content-center">
+                <button type="submit" class="boton-form">Registrar Marca</button>
+            </div>
+        </form>
     </div>
-    <div class="form-group d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary btn-lg">Registrar Marca</button>
-    </div>
-</form>
-    </div>
+</div>
 
 
     <div class="contenedor-tabla">
