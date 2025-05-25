@@ -82,9 +82,6 @@ class Cuentabanco extends BD {
         $stmt->bindParam(':telefono_cuenta', $this->telefono_cuenta);
         $stmt->bindParam(':correo_cuenta', $this->correo_cuenta);
 
-        /*$result = $stmt->execute();
-        $this->db = null;
-        return $result;*/
         return $stmt->execute();
     }
 
