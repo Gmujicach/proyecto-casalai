@@ -28,7 +28,7 @@
                 <li>
                     <a href="?pagina=Dashboard">
                         <span class="simbolo">
-                          <img src="img/dashboard.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/house.svg" alt="Dashboard" class="icono-svg" />
                           Dashboard
                         </span>
                       </a>
@@ -40,7 +40,7 @@
                 <li>
                     <a href="?pagina=Usuarios">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/users-round.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Usuario
                         </span>
                       </a>
@@ -52,7 +52,7 @@
                 <li>
                     <a href="?pagina=Recepcion">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/package.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Recepcion
                         </span>
                       </a>
