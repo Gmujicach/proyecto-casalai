@@ -33,16 +33,13 @@ if (!isset($_SESSION['name'])) {
     </div>
 </div>
 
-
-    <div class="contenedor-tabla">
-    <h3>LISTA DE USUARIOS</h3>
-
+<div class="contenedor-tabla">
+    <h3>Lista de Marcas</h3>
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th><input type="checkbox"></th>
-                <th>Nombre Marca</th>
-                <th></th>
+                <th>Nombre</th>
+                <th>Acciones</th>
                 <th><i class="vertical">
                         <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
                     </i>
@@ -53,15 +50,9 @@ if (!isset($_SESSION['name'])) {
         <tbody>
         <?php foreach ($marcas as $marcas): ?>
             <tr>
-                <td><input type="checkbox"></td>
                 <td>
                     <span class="nombre-usuario">
                     <?php echo htmlspecialchars($marcas['nombre_marca']); ?>
-                    </span>
-                </td>
-                <td>
-                    <span>
-                        <a href="#"class="">Ver Mas</a>
                     </span>
                 </td>
                 <td>
