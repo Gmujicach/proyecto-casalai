@@ -156,24 +156,34 @@ class Usuarios extends BD {
     }
 
     // Modificar Producto
-    public function modificarUsuario($id) {
+public function modificarUsuario($id) {
+    $claveEncriptada = !empty($this->clave) ? password_hash($this->clave, PASSWORD_BCRYPT) : null;
 
-        $claveEncriptada = !empty($this->clave) ? password_hash($this->clave, PASSWORD_BCRYPT) : null;
+    $sql = "UPDATE tbl_usuarios SET 
+                username = :username, 
+                " . (!empty($this->clave) ? "`password` = :clave, " : "") . "
+                rango = :rango,
+                nombres = :nombre,
+                apellidos = :apellido,
+                correo = :correo,
+                telefono = :telefono
+            WHERE id_usuario = :id_usuario";
 
-        $sql = "UPDATE tbl_usuarios SET username = :nombre, " . 
-           (!empty($this->clave) ? "`password` = :clave, " : "") . 
-           "rango = :rango WHERE id_usuario = :id_usuario";
-
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_usuario', $id);
-        $stmt->bindParam(':nombre', $this->username);
-        if (!empty($this->clave)) {
-                $stmt->bindParam(':clave', $claveEncriptada);
-            }
-        $stmt->bindParam(':rango', $this->rango);
-        
-        return $stmt->execute();
+    $stmt = $this->conex->prepare($sql);
+    $stmt->bindParam(':id_usuario', $id);
+    $stmt->bindParam(':username', $this->username);
+    if (!empty($this->clave)) {
+        $stmt->bindParam(':clave', $claveEncriptada);
     }
+    $stmt->bindParam(':rango', $this->rango);
+    $stmt->bindParam(':nombre', $this->nombre);
+    $stmt->bindParam(':apellido', $this->apellido);
+    $stmt->bindParam(':correo', $this->correo);
+    $stmt->bindParam(':telefono', $this->telefono);
+
+    return $stmt->execute();
+}
+
 
     // Eliminar Producto
     public function eliminarUsuario($id) {
