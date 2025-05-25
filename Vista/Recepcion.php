@@ -156,35 +156,35 @@ if (!isset($_SESSION['name'])) {
 				<td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
 				<td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
 				<td><?= htmlspecialchars($recepcion['costo']); ?></td>
-<?php
-$productosDelCorrelativo = array_filter($recepciones, function($r) use ($correlativo) {
-    return $r['correlativo'] === $correlativo;
-});
-$dataProductos = [];
+					<?php
+					$productosDelCorrelativo = array_filter($recepciones, function($r) use ($correlativo) {
+						return $r['correlativo'] === $correlativo;
+					});
+					$dataProductos = [];
 
-foreach ($productosDelCorrelativo as $item) {
-    $dataProductos[] = [
-		'id_producto' => $item['id_producto'],
-        'nombre_producto' => $item['nombre_producto'],
-        'cantidad' => $item['cantidad'],
-        'costo' => $item['costo'],
-		'iddetalles' => $item['id_detalle_recepcion_productos'] 
-    ];
-}
-?>
+					foreach ($productosDelCorrelativo as $item) {
+						$dataProductos[] = [
+							'id_producto' => $item['id_producto'],
+							'nombre_producto' => $item['nombre_producto'],
+							'cantidad' => $item['cantidad'],
+							'costo' => $item['costo'],
+							'iddetalles' => $item['id_detalle_recepcion_productos'] 
+						];
+					}
+					?>
 
 				<?php if (!in_array($correlativo, $rendered)): ?>
 					<td rowspan="<?= $rowspans[$correlativo] ?>">
-<button class="btn-modificar"
-    data-bs-toggle="modal"
-    data-bs-target="#modalModificar"
-    data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
-    data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
-    data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
-    data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"
-    data-productos='<?= json_encode($dataProductos, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
-    Modificar
-</button>
+						<button class="btn-modificar"
+							data-bs-toggle="modal"
+							data-bs-target="#modalModificar"
+							data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
+							data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
+							data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
+							data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"
+							data-productos='<?= json_encode($dataProductos, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+							Modificar
+						</button>
 
 
 
@@ -205,6 +205,7 @@ foreach ($productosDelCorrelativo as $item) {
 							</div>
 						</div>
 		</div>
+		<?php include 'footer.php'; ?>
 	</div>
 	
 <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
@@ -259,7 +260,6 @@ foreach ($productosDelCorrelativo as $item) {
   </div>
 </div>
 
-    <?php include 'footer.php'; ?>
 	<script>
 const productosDisponibles = <?= json_encode($productos) ?>;
 
