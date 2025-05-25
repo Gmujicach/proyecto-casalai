@@ -1,3 +1,4 @@
+
 <aside class="sidebar">
         <div class="headmenu">
             <img src="img/LOGO.png" alt="logo">
@@ -17,7 +18,6 @@
                    <p>Hola, ¿Cómo estás?</p>
               </div>
             </div>
-            
         </div>
         <div>
             <ul class="menu-link">
@@ -200,10 +200,10 @@
             </ul>
             <div class="user-cuenta">
                 <div class="user-perfil">
-                    <img src="img/ICON.jpg" alt="perfil-img">
+                    <img src="img/Avatar.png" alt="perfil-img">
                     <div class="user-detalle">
-                        <h3>Darckort</h3>
-                        <span>Rango</span>
+                        <h3><?php echo htmlspecialchars($_SESSION['name'] ?? 'Invitado'); ?></h3>
+                        <span><?php echo htmlspecialchars($_SESSION['rango'] ?? 'Usuario'); ?></span>
                     </div>
                 </div>
             </div>
