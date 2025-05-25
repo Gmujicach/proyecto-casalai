@@ -42,7 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'message' => 'Error al registrar la cuenta'
                 ]);
             }
-            
             exit;
         
         case 'obtener_cuenta':

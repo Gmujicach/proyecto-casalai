@@ -100,9 +100,7 @@ class Cuentabanco extends BD {
         }
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
-        $existe = $stmt->fetchColumn() > 0;
-        $this->db = null;
-        return $existe;
+        return $stmt->fetchColumn() > 0;
     }
 
     public function obtenerUltimaCuenta() {
