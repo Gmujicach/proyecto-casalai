@@ -56,6 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario->setId($id);
             $usuario->setUsername($_POST['nombre_usuario']);
             $usuario->setClave($_POST['clave_usuario']);
+            $usuario->setNombre($_POST['nombre']);
+            $usuario->setApellido($_POST['apellido_usuario']);
+            $usuario->setCorreo($_POST['correo_usuario']);
+            $usuario->setTelefono($_POST['telefono_usuario']);
             $usuario->setRango($_POST['rango']);
             
             if ($usuario->modificarUsuario($id)) {
@@ -76,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
 
         default:
-            echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
+            echo json_encode(['status' => 'error', 'message' => 'Acción no válida'. $accion.'']);
             break;
 
         // Cambiar estatus
