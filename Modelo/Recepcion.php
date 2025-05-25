@@ -5,7 +5,7 @@ class Recepcion extends BD{
     private $idproveedor;
     private $correlativo;
     private $desc;
-
+    private $fecha;
     private $costo;
     private $tablerecepcion = 'tbl_recepcion_productos';
 
@@ -14,6 +14,12 @@ class Recepcion extends BD{
 
     public function getidproveedor() {
         return $this->idproveedor;
+    }
+    public function getfecha() {
+        return $this->fecha;
+    }
+    public function setfecha($fecha) {
+        $this->fecha = $fecha;
     }
 
    public function setidproveedor($idproveedor) {
@@ -90,7 +96,89 @@ class Recepcion extends BD{
         return $d;
     }
     
-    
+    public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle)
+{
+    $d = array();
+
+    try {
+        $co = $this->conexion();
+        $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $co->beginTransaction();
+
+        // Actualizar la recepción principal
+        $sqlRecepcion = "UPDATE tbl_recepcion_productos 
+                         SET id_proveedor = :idproveedor, fecha = :fecha, correlativo = :correlativo 
+                         WHERE id_recepcion = :idRecepcion";
+        $stmt = $co->prepare($sqlRecepcion);
+        $stmt->bindParam(':idproveedor', $this->idproveedor, PDO::PARAM_INT);
+        $stmt->bindParam(':fecha', $this->fecha, PDO::PARAM_STR);
+        $stmt->bindParam(':correlativo', $this->correlativo, PDO::PARAM_STR);
+        $stmt->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Obtener los detalles actuales
+        $sqlExistentes = "SELECT id_detalle_recepcion_productos FROM tbl_detalle_recepcion_productos WHERE id_recepcion = :idRecepcion";
+        $stmt = $co->prepare($sqlExistentes);
+        $stmt->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
+        $stmt->execute();
+        $detallesExistentes = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+        // Detectar detalles que deben ser eliminados
+        $idsConservados = array_filter($iddetalle); // eliminar nulls (los nuevos productos no tienen id)
+        $idsEliminar = array_diff($detallesExistentes, $idsConservados);
+
+        if (!empty($idsEliminar)) {
+            $in = implode(',', array_fill(0, count($idsEliminar), '?'));
+            $sqlDelete = "DELETE FROM tbl_detalle_recepcion_productos WHERE id_detalle_recepcion_productos IN ($in)";
+            $stmt = $co->prepare($sqlDelete);
+            foreach (array_values($idsEliminar) as $k => $id) {
+                $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
+            }
+            $stmt->execute();
+        }
+
+        // Insertar o actualizar productos
+        $cap = count($idproducto);
+        for ($i = 0; $i < $cap; $i++) {
+            if (!empty($iddetalle[$i])) {
+                // Producto existente → actualizar
+                $sqlUpdate = "UPDATE tbl_detalle_recepcion_productos 
+                              SET id_producto = :idproducto, cantidad = :cantidad, costo = :costo 
+                              WHERE id_detalle_recepcion_productos = :iddetalle";
+                $stmt = $co->prepare($sqlUpdate);
+                $stmt->bindParam(':idproducto', $idproducto[$i], PDO::PARAM_INT);
+                $stmt->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
+                $stmt->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
+                $stmt->bindParam(':iddetalle', $iddetalle[$i], PDO::PARAM_INT);
+                $stmt->execute();
+            } else {
+                // Producto nuevo → insertar
+                $sqlInsert = "INSERT INTO tbl_detalle_recepcion_productos (id_recepcion, id_producto, cantidad, costo) 
+                              VALUES (:idRecepcion, :idproducto, :cantidad, :costo)";
+                $stmt = $co->prepare($sqlInsert);
+                $stmt->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
+                $stmt->bindParam(':idproducto', $idproducto[$i], PDO::PARAM_INT);
+                $stmt->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
+                $stmt->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
+                $stmt->execute();
+            }
+        }
+
+        $co->commit();
+        $d['resultado'] = 'modificar';
+        $d['mensaje'] = 'Se modificó la recepción y sus productos correctamente';
+
+    } catch (Exception $e) {
+        if ($co->inTransaction()) {
+            $co->rollBack();
+        }
+        $d['resultado'] = 'error';
+        $d['mensaje'] = $e->getMessage();
+    }
+
+    return $d;
+}
+
 	
 	
 	public function obtenerproveedor(){
@@ -199,6 +287,7 @@ class Recepcion extends BD{
         // Primera consulta para obtener datos de marcas
         $queryrecepciones = 
         'SELECT d.id_detalle_recepcion_productos,
+		r.id_recepcion, pro.id_producto, pr.id_proveedor,
         r.fecha, r.correlativo, pr.nombre, pro.nombre_producto, d.cantidad, d.costo
         FROM tbl_recepcion_productos AS r 
         INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
@@ -216,7 +305,50 @@ class Recepcion extends BD{
         return $recepciones;
     }
 
-	
+	public function obtenerDetallesPorRecepcion($idRecepcion) {
+    $datos = [];
+
+    try {
+        $co = $this->conexion(); // Asegúrate de que esta función devuelve una conexión PDO válida
+        $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Consultar productos de esa recepción
+        $sql = "SELECT dr.id_producto, dr.cantidad, dr.costo, p.nombre 
+                FROM tbl_detalle_recepcion_productos dr
+                INNER JOIN tbl_productos p ON dr.id_producto = p.id
+                WHERE dr.id_recepcion = :idRecepcion";
+
+        $stmt = $co->prepare($sql);
+        $stmt->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
+        $stmt->execute();
+        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Consultar todos los productos (para el <select>)
+        $sqlProductos = "SELECT id, nombre FROM tbl_productos";
+        $productosTodos = $co->query($sqlProductos)->fetchAll(PDO::FETCH_ASSOC);
+
+        // Agregar opciones al array de productos
+        foreach ($productos as &$producto) {
+            $opciones = '';
+            foreach ($productosTodos as $item) {
+                $selected = ($item['id'] == $producto['id_producto']) ? 'selected' : '';
+                $opciones .= "<option value='{$item['id']}' $selected>{$item['nombre']}</option>";
+            }
+            $producto['opciones'] = $opciones;
+        }
+
+        $datos = $productos;
+
+    } catch (Exception $e) {
+        $datos = [
+            'error' => true,
+            'mensaje' => $e->getMessage()
+        ];
+    }
+
+    return $datos;
+}
+
 
 	
 }

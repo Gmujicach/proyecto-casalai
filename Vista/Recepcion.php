@@ -156,15 +156,37 @@ if (!isset($_SESSION['name'])) {
 				<td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
 				<td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
 				<td><?= htmlspecialchars($recepcion['costo']); ?></td>
+<?php
+$productosDelCorrelativo = array_filter($recepciones, function($r) use ($correlativo) {
+    return $r['correlativo'] === $correlativo;
+});
+$dataProductos = [];
+
+foreach ($productosDelCorrelativo as $item) {
+    $dataProductos[] = [
+		'id_producto' => $item['id_producto'],
+        'nombre_producto' => $item['nombre_producto'],
+        'cantidad' => $item['cantidad'],
+        'costo' => $item['costo'],
+		'iddetalles' => $item['id_detalle_recepcion_productos'] 
+    ];
+}
+?>
 
 				<?php if (!in_array($correlativo, $rendered)): ?>
 					<td rowspan="<?= $rowspans[$correlativo] ?>">
-					<button class="btn-modificar"
+<button class="btn-modificar"
     data-bs-toggle="modal"
     data-bs-target="#modalModificar"
-    data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>">
+    data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
+    data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
+    data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
+    data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"
+    data-productos='<?= json_encode($dataProductos, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
     Modificar
 </button>
+
+
 
 					</td>
 					<?php $rendered[] = $correlativo; ?>
@@ -185,7 +207,7 @@ if (!isset($_SESSION['name'])) {
 		</div>
 	</div>
 	
-	<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
+<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg"> <!-- modal-lg para más espacio -->
     <div class="modal-content">
       <div class="modal-header">
@@ -193,224 +215,149 @@ if (!isset($_SESSION['name'])) {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
-        <form id="formularioEdicion">
-		
-        	<input type="hidden" name="id_detalles" id="modificarIdDetalles">
-          <div class="mb-3">
-            <label for="modalFecha" class="form-label">Fecha:</label>
-            <input type="date" class="form-control" name="fecha" id="modalFecha" required>
-          </div>
-		  	<div class="mb-3">
-			<label class="form-label mt-4" for="proveedor">Proveedor</label>
-			<select class="form-select" name="proveedor" id="proveedor">
-				<option value='disabled' disabled selected>Seleccione un Proveedor</option>
-				<?php
-				foreach ($proveedores  as $proveedor) {
-					echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre'] . "</option>";
-				} ?>
-			</select>
-		</div>
-          <div class="mb-3">
-            <label for="modalCorrelativo" class="form-label">Correlativo:</label>
-            <input type="text" class="form-control" name="correlativo" id="modalCorrelativo" readonly>
-          </div>
+        <form id="formularioEdicion" method="POST" action="" enctype="multipart/form-data">
+			<input type="hidden" name="accion" id="accion" value="modificarRecepcion">
+<input type="hidden" id="modalIdRecepcion" name="id_recepcion">
 
-          <hr>
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="mb-0">Productos</h6>
-            <button type="button" class="btn btn-success btn-sm" id="btnAgregarProducto">+ Incluir producto</button>
-          </div>
+<div class="form-group">
+    <label>Fecha</label>
+    <input type="date" id="modalFecha" name="fecha" class="form-control">
+</div>
 
-          <div id="productosContainer">
-            <!-- JS insertará aquí los productos -->
-          </div>
+<div class="form-group">
+    <label>Correlativo</label>
+    <input type="text" id="modalCorrelativo" name="correlativo" class="form-control">
+</div>
+
+<div class="form-group">
+    <label>Proveedor</label>
+    <select id="modalProveedor" name="proveedor" class="form-control">
+        <!-- Opciones dinámicas -->
+    </select>
+</div>
+
+<h5>Productos</h5>
+<div id="contenedorDetalles"></div>
+
         </form>
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" form="formularioEdicion" class="btn btn-primary">Guardar Cambios</button>
+        <button type="submit" form="formularioEdicion" class="btn btn-primary" id="Modificarrecepcion">Guardar Cambios</button>
       </div>
+
     </div>
   </div>
 </div>
 
     <?php include 'footer.php'; ?>
-	<script type="text/javascript" src="Javascript/recepcion.js">
-
 	<script>
-	document.getElementById('btnAgregarProducto').addEventListener('click', () => {
-  const productosContainer = document.getElementById('productosContainer');
-  const index = productosContainer.children.length + 1;
+const productosDisponibles = <?= json_encode($productos) ?>;
+$(document).on('click', '.btn-modificar', function (e) {
+    e.preventDefault();
 
-  const fieldset = document.createElement('fieldset');
-  fieldset.classList.add('border', 'p-3', 'mb-2');
-  fieldset.innerHTML = `
-    <legend class="fs-6">Producto ${index}</legend>
-    <div class="row g-2">
-      <div class="col-md-5">
-        <label class="form-label">Producto:</label>
-        <select class="form-select select-producto" name="producto[]">
-          <option value="">Seleccione...</option>
-          <!-- Opciones serán insertadas dinámicamente si lo deseas -->
-          <option value="Producto A">Producto A</option>
-          <option value="Producto B">Producto B</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">Cantidad:</label>
-        <input type="number" class="form-control" name="cantidad[]" min="1" value="1" required>
-      </div>
-      <div class="col-md-3">
-        <label class="form-label">Costo:</label>
-        <input type="number" class="form-control" name="costo[]" min="0.01" step="0.01" value="0.00" required>
-      </div>
-      <div class="col-md-1 d-flex align-items-end">
-        <button type="button" class="btn btn-danger btn-sm btnEliminarProducto">×</button>
-      </div>
-    </div>
-  `;
+    let idRecepcion = $(this).data('idrecepcion');
+    let correlativo = $(this).data('correlativo');
+    let fecha = $(this).data('fecha');
+    let proveedor = $(this).data('proveedor');
+    let productos = $(this).data('productos');
 
-  productosContainer.appendChild(fieldset);
-});
-
-// Delegación de evento para eliminar productos
-document.getElementById('productosContainer').addEventListener('click', function (e) {
-  if (e.target.classList.contains('btnEliminarProducto')) {
-    e.target.closest('fieldset').remove();
-  }
-});
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const botonesModificar = document.querySelectorAll('.boton-form.modificar');
-
-  botonesModificar.forEach(boton => {
-    boton.addEventListener('click', function () {
-      const correlativo = this.getAttribute('data-correlativo');
-      const producto = this.getAttribute('data-producto');
-      const cantidad = this.getAttribute('data-cantidad');
-      const costo = this.getAttribute('data-costo');
-
-      document.getElementById('modalCorrelativo').value = correlativo;
-
-      // También podrías establecer la fecha si la incluyes como data-fecha
-      // document.getElementById('modalFecha').value = this.getAttribute('data-fecha');
-
-      // Limpiar el contenedor antes de agregar nuevos campos
-      const contenedor = document.getElementById('productosContainer');
-      contenedor.innerHTML = '';
-
-      const fieldset = document.createElement('fieldset');
-      fieldset.classList.add('border', 'p-3', 'mb-2');
-      fieldset.innerHTML = `
-        <legend class="fs-6">Producto 1</legend>
-        <div class="row g-2">
-          <div class="col-md-5">
-            <label class="form-label">Producto:</label>
-            <select class="form-select select-producto" name="producto[]">
-              <option value="">Seleccione...</option>
-              <option value="${producto}" selected>${producto}</option>
-              <option value="Producto A">Producto A</option>
-              <option value="Producto B">Producto B</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Cantidad:</label>
-            <input type="number" class="form-control" name="cantidad[]" value="${cantidad}" min="1" required>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Costo:</label>
-            <input type="number" class="form-control" name="costo[]" value="${costo}" min="0.01" step="0.01" required>
-          </div>
-          <div class="col-md-1 d-flex align-items-end">
-            <button type="button" class="btn btn-danger btn-sm btnEliminarProducto">×</button>
-          </div>
-        </div>
-      `;
-
-      contenedor.appendChild(fieldset);
-    });
-  });
-});
-
-
-</script>
-
-<script>
-  // Preparar datos agrupados por correlativo para JS
-  const recepcionesPorCorrelativo = <?php 
-    $data = [];
-    foreach ($recepciones as $recepcion) {
-        $key = $recepcion['correlativo'];
-        if (!isset($data[$key])) $data[$key] = [];
-        $data[$key][] = [
-          'producto' => $recepcion['nombre_producto'],
-          'cantidad' => $recepcion['cantidad'],
-          'costo' => $recepcion['costo'],
-          'fecha' => $recepcion['fecha'], // para mostrar fecha en el modal si quieres
-        ];
+    // Si productos viene como string, conviértelo a objeto
+    if (typeof productos === "string") {
+        try {
+            productos = JSON.parse(productos);
+        } catch(e) {
+            productos = [];
+        }
     }
-    echo json_encode($data);
-  ?>;
-</script>
 
+    // Llenar campos básicos
+    $('#modalIdRecepcion').val(idRecepcion);
+    $('#modalCorrelativo').val(correlativo);
+    $('#modalFecha').val(fecha);
+
+    // Llenar select de proveedor SIEMPRE
+    let selectProveedor = $('#modalProveedor');
+    selectProveedor.empty(); // Limpia opciones anteriores
+    selectProveedor.append('<option value="disabled" disabled>Seleccione un Proveedor</option>');
+    <?php foreach ($proveedores as $prov): ?>
+        selectProveedor.append('<option value="<?= $prov['id_proveedor'] ?>"><?= addslashes($prov['nombre']) ?></option>');
+    <?php endforeach; ?>
+    // Seleccionar proveedor actual (por ID)
+    selectProveedor.val(proveedor);
+
+    // Cargar productos en el modal
+    let html = '';
+    if (productos && Array.isArray(productos)) {
+        productos.forEach((item, index) => {
+            html += `
+                <div class="row mb-2 grupo-producto">
+                    <div class="col-md-5">
+                        <label>Producto</label>
+                        <select class="form-control" name="productos[]">
+                            ${productosDisponibles.map(prod => `
+                                <option value="${prod.id_producto}" ${item.id_producto == prod.id_producto ? 'selected' : ''}>
+                                    ${prod.nombre_producto}
+                                </option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Cantidad</label>
+                        <input type="number" class="form-control" name="cantidades[]" value="${item.cantidad}">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Costo</label>
+                        <input type="number" class="form-control" name="costos[]" value="${item.costo}">
+						<input type="hidden" name="iddetalles[]" value="${item.iddetalles || ''}">
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        html = '<p>No se encontraron productos.</p>';
+    }
+
+    $('#contenedorDetalles').html(html);
+
+    // Mostrar modal
+    $('#modalModificar').modal('show');
+});
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  const botonesModificar = document.querySelectorAll('.boton-form.modificar');
+    const formEdicion = document.getElementById('formularioEdicion');
 
-  botonesModificar.forEach(boton => {
-    boton.addEventListener('click', function () {
-      const correlativo = this.getAttribute('data-correlativo');
+    formEdicion.addEventListener('submit', function (e) {
+        e.preventDefault(); // evita envío real para poder ver los datos
 
-      // Setear correlativo en el modal
-      document.getElementById('modalCorrelativo').value = correlativo;
+        const formData = new FormData(formEdicion);
+        const datos = {};
 
-      // Limpiar contenedor de productos
-      const contenedor = document.getElementById('productosContainer');
-      contenedor.innerHTML = '';
+        // Recolectar todos los campos simples
+        formData.forEach((valor, clave) => {
+            if (datos[clave]) {
+                // Si ya existe, convertir a array o agregar a array
+                if (!Array.isArray(datos[clave])) {
+                    datos[clave] = [datos[clave]];
+                }
+                datos[clave].push(valor);
+            } else {
+                datos[clave] = valor;
+            }
+        });
 
-      // Buscar productos para este correlativo en el objeto JS
-      const productos = recepcionesPorCorrelativo[correlativo] || [];
+        console.log("Datos enviados desde el modal de modificación:");
+        console.log(datos);
 
-      productos.forEach((producto, index) => {
-        const fieldset = document.createElement('fieldset');
-        fieldset.classList.add('border', 'p-3', 'mb-2');
-        fieldset.innerHTML = `
-          <legend class="fs-6">Producto ${index + 1}</legend>
-          <div class="row g-2">
-            <div class="col-md-5">
-              <label class="form-label">Producto:</label>
-              <select class="form-select select-producto" name="producto[]">
-                <option value="">Seleccione...</option>
-                <option value="${producto.producto}" selected>${producto.producto}</option>
-                <option value="Producto A">Producto A</option>
-                <option value="Producto B">Producto B</option>
-                <!-- Añade más opciones si quieres -->
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Cantidad:</label>
-              <input type="number" class="form-control" name="cantidad[]" value="${producto.cantidad}" min="1" required>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Costo:</label>
-              <input type="number" class="form-control" name="costo[]" value="${producto.costo}" min="0.01" step="0.01" required>
-            </div>
-            <div class="col-md-1 d-flex align-items-end">
-              <button type="button" class="btn btn-danger btn-sm btnEliminarProducto">×</button>
-            </div>
-          </div>
-        `;
-
-        contenedor.appendChild(fieldset);
-      });
+        // Si deseas que se envíe realmente después de ver los datos
+        formEdicion.submit();
     });
-  });
 });
-
 </script>
 
+	<script type="text/javascript" src="Javascript/recepcion.js">
 
 </body>
 </html>

@@ -2,7 +2,47 @@
 $(document).ready(function(){
     // Si estoy aca es porque l
     carga_productos();
-    
+
+    $('#Modificarrecepcion').on('submit', function(e) {
+        e.preventDefault();
+
+       
+        var formData = new FormData(this);
+        formData.append('accion', 'modificar');
+
+       
+        $.ajax({
+            url: '', 
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            data: formData,
+            success: function(response) {
+                console.log('Respuesta del servidor:', response);
+                response = JSON.parse(response); 
+                if (response.status === 'success') {
+                    $('#modalModificar').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: 'El producto se ha modificado correctamente'
+                    }).then(function() {
+                        location.reload();
+                    });
+                } else {
+                    muestraMensaje(response.message);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error al modificar el producto:', textStatus, errorThrown);
+                muestraMensaje('Error al modificar el producto.');
+            }
+        });
+    });
+
+
+
     //boton para levantar modal de productos
     $("#listado").on("click",function(){
         $("#modalp").modal("show");
