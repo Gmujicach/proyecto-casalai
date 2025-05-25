@@ -11,7 +11,7 @@ class Despacho extends BD
 
     function registrar($id_clientes, $id_producto,$cantidad, $correlativo)
     {
-        $co = $this->conexion();
+        $co = $this->getConexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $r = array();
         try {
@@ -65,7 +65,7 @@ class Despacho extends BD
 
     function listadoproductos()
     {
-        $co = $this->conexion();
+        $co = $this->getConexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $r = array();
         try {
@@ -101,7 +101,7 @@ class Despacho extends BD
 
     public function obtenercliente()
     {
-        $co = $this->Conexion();
+        $co = $this->getConexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $p = $co->prepare("SELECT id_clientes, nombre FROM tbl_clientes ");
         $p->execute();
@@ -119,7 +119,7 @@ class Despacho extends BD
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";
         
-        $stmtdespachos = $this->conexion()->prepare($querydespachos);
+        $stmtdespachos = $this->getConexion()->prepare($querydespachos);
         $stmtdespachos->execute();
         $despachos = $stmtdespachos->fetchAll(PDO::FETCH_ASSOC);
 

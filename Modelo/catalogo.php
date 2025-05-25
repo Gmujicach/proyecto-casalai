@@ -1,14 +1,15 @@
 <?php
-require_once 'Conexion.php';
+require_once 'Config/config.php';
 
-class Catalogo extends Conexion {
+class Catalogo extends BD {
     private $tablaCombo = 'tbl_combo';
     private $conex;
     private $cantidad;
     private $id_producto;
 
-    public function __construct() {
-        $this->conex = (new Conexion())->Conex();
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::getConexion();
     }
 
     // Getters and Setters

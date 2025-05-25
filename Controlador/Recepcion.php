@@ -59,34 +59,43 @@ if (is_file("vista/" . $pagina . ".php")) {
                 }
                 break;
 
-            case 'modificarRecepcion':
-                // Este es el que llama a la función modificar()
-                $idRecepcion = $_POST['id_recepcion'] ?? null;
-                $idproducto = $_POST['productos'] ?? [];
-                $cantidad = $_POST['cantidades'] ?? [];
-                $costo = $_POST['costos'] ?? [];
-                $iddetalle = $_POST['iddetalle'] ?? [];
+case 'modificarRecepcion':
+    $idRecepcion = $_POST['id_recepcion'] ?? null;
+    $idproducto = $_POST['productos'] ?? [];
+    $cantidad = $_POST['cantidades'] ?? [];
+    $costo = $_POST['costos'] ?? [];   
+    $iddetalle = $_POST['iddetalles'] ?? [];
 
-                $k->setidproveedor($_POST['proveedor']);
-                $k->setcorrelativo($_POST['correlativo']);
-                $k->setfecha($_POST['fecha']);
+    $k->setidproveedor($_POST['proveedor']);
+    $k->setcorrelativo($_POST['correlativo']);
+    $k->setfecha($_POST['fecha']);
 
-                if ($idRecepcion) {
-                    $respuesta = $k->modificar(
-                        $idRecepcion,
-                        $idproducto,
-                        $cantidad,
-                        $costo,
-                        $iddetalle
-                    );
-                    echo json_encode($respuesta);
-                } else {
-                    echo json_encode(['resultado' => 'error', 'mensaje' => 'ID de recepción faltante']);
-                }
-                break;
+    if ($idRecepcion) {
+        $respuesta = $k->modificar(
+            $idRecepcion,
+            $idproducto,
+            $cantidad,
+            $costo,
+            $iddetalle
+        );
+        if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificar') {
+            echo json_encode([
+                'status' => 'success',
+                'message' => $respuesta['mensaje']
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => $respuesta['mensaje'] ?? 'Error al modificar la recepción'
+            ]);
+        }
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'ID de recepción faltante']);
+    }
+    break;
 
             default:
-                echo json_encode(['resultado' => 'error', 'mensaje' => 'Acción no válida '.$accion.'']);
+                echo json_encode(['status' => 'error', 'message' => 'Acción no válida '.$accion.'']);
         }
 
         exit;

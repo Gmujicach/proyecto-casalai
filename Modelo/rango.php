@@ -8,7 +8,7 @@ class rango extends BD {
 
     function __construct() {
         parent::__construct();
-        $this->conex = parent::conexion();
+        $this->conex = parent::getConexion();
     }
 
     // Getters y Setters
@@ -34,7 +34,7 @@ class rango extends BD {
         $sql = "INSERT INTO tbl_rango (nombre_rango) VALUES (:nombre_rango)";
         
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':nombre_rango', $this->nombre_ranango);
+        $stmt->bindParam(':nombre_rango', $this->nombre_rango);
 
         return $stmt->execute();
     }

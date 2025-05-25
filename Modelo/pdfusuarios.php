@@ -46,7 +46,7 @@ class rusuarios extends BD{
 		//clases anteriores, en este caso la consulta sera sobre la tabla usuarios
 		//y tendra como parametros para filtro la cedula y el usuario
 		
-		$co = $this->conecta();
+		$co = $this->getConexion();
 		$co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		try{
 			

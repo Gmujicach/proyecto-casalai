@@ -239,14 +239,14 @@ foreach ($productosDelCorrelativo as $item) {
 <h5>Productos</h5>
 <div id="contenedorDetalles"></div>
 
-        </form>
+
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" form="formularioEdicion" class="btn btn-primary" id="Modificarrecepcion">Guardar Cambios</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
       </div>
-
+        </form>
     </div>
   </div>
 </div>
@@ -325,37 +325,7 @@ $(document).on('click', '.btn-modificar', function (e) {
     $('#modalModificar').modal('show');
 });
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const formEdicion = document.getElementById('formularioEdicion');
 
-    formEdicion.addEventListener('submit', function (e) {
-        e.preventDefault(); // evita envío real para poder ver los datos
-
-        const formData = new FormData(formEdicion);
-        const datos = {};
-
-        // Recolectar todos los campos simples
-        formData.forEach((valor, clave) => {
-            if (datos[clave]) {
-                // Si ya existe, convertir a array o agregar a array
-                if (!Array.isArray(datos[clave])) {
-                    datos[clave] = [datos[clave]];
-                }
-                datos[clave].push(valor);
-            } else {
-                datos[clave] = valor;
-            }
-        });
-
-        console.log("Datos enviados desde el modal de modificación:");
-        console.log(datos);
-
-        // Si deseas que se envíe realmente después de ver los datos
-        formEdicion.submit();
-    });
-});
-</script>
 
 	<script type="text/javascript" src="Javascript/recepcion.js">
 

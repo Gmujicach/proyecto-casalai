@@ -27,7 +27,7 @@ class Productos extends BD{
     
     function __construct() {
         parent::__construct();
-        $this->conex = parent::conexion();
+        $this->conex = parent::getConexion();
     }
 
     // Getters y Setters
@@ -305,7 +305,7 @@ class Producto extends Productos{
 
     function __construct() {
         parent::__construct();
-        $this->conex = parent::conexion();
+        $this->conex = parent::getConexion();
     }
 
     public function obtenerProductos() {

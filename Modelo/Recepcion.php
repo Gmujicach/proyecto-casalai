@@ -48,7 +48,7 @@ class Recepcion extends BD{
 	public function registrar($idproducto, $cantidad, $costo) {
         $d = array();
         if (!$this->buscar()) {  // Asegúrate de que `buscar()` esté bien definido
-            $co = $this->conexion();  // Asegúrate de que `conecta()` esté bien definido y retorne una conexión válida
+            $co = $this->getConexion();  // Asegúrate de que `conecta()` esté bien definido y retorne una conexión válida
             $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             try {
@@ -101,7 +101,7 @@ class Recepcion extends BD{
     $d = array();
 
     try {
-        $co = $this->conexion();
+        $co = $this->getConexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $co->beginTransaction();
 
@@ -182,7 +182,7 @@ class Recepcion extends BD{
 	
 	
 	public function obtenerproveedor(){
-        $co = $this->conexion();
+        $co = $this->getConexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $p = $co->prepare("SELECT id_proveedor,nombre FROM tbl_proveedores ");
         $p->execute();
@@ -194,7 +194,7 @@ class Recepcion extends BD{
 	
 	
 	function listadoproductos(){
-		$co = $this->conexion();
+		$co = $this->getConexion();
 		$co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$r = array();
 		try{
@@ -249,14 +249,14 @@ class Recepcion extends BD{
             FROM tbl_productos AS p 
             INNER JOIN tbl_modelos AS m ON p.id_modelo = m.id_modelo 
             INNER JOIN tbl_marcas AS mar ON m.id_marca = mar.id_marca;";
-    $conexion = $this->conexion()->prepare($sql);
+    $conexion = $this->getConexion()->prepare($sql);
     $conexion->execute();
     $registros = $conexion->fetchAll(PDO::FETCH_ASSOC);
     return $registros;
     }
 
 	function buscar() {
-        $co = $this->conexion();
+        $co = $this->getConexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $r = array();
         try {
@@ -298,7 +298,7 @@ class Recepcion extends BD{
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";
         
-        $stmtrecepciones = $this->conexion()->prepare($queryrecepciones);
+        $stmtrecepciones = $this->getConexion()->prepare($queryrecepciones);
         $stmtrecepciones->execute();
         $recepciones = $stmtrecepciones->fetchAll(PDO::FETCH_ASSOC);
 
@@ -309,7 +309,7 @@ class Recepcion extends BD{
     $datos = [];
 
     try {
-        $co = $this->conexion(); // Asegúrate de que esta función devuelve una conexión PDO válida
+        $co = $this->getConexion(); // Asegúrate de que esta función devuelve una conexión PDO válida
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Consultar productos de esa recepción

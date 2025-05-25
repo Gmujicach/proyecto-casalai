@@ -90,7 +90,7 @@ public function setEstatus($estatus) {
 
 public function validarCodigoReferencia() {
     $sql = "SELECT COUNT(*) FROM tbl_detalles_pago WHERE referencia = :referencia";
-    $stmt = $this->conexion()->prepare($sql);
+    $stmt = $this->getConexion()->prepare($sql);
     $stmt->bindParam(':referencia', $this->referencia);
     $stmt->execute();
     $count = $stmt->fetchColumn();
@@ -117,7 +117,7 @@ public function validarCodigoReferencia() {
         private function pagoIngresar() {
     try {
         // Insertar detalles del pago
-        $stmt = $this->conexion()->prepare("INSERT INTO `tbl_detalles_pago`
+        $stmt = $this->getConexion()->prepare("INSERT INTO `tbl_detalles_pago`
             (`id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`)
             VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([
@@ -130,7 +130,7 @@ public function validarCodigoReferencia() {
         ]);
 
         // Actualizar estatus de la factura a 'Procesada'
-        $updateStmt = $this->conexion()->prepare("UPDATE `tbl_facturas` SET `estatus` = 'En Proceso' WHERE `id_factura` = ?");
+        $updateStmt = $this->getConexion()->prepare("UPDATE `tbl_facturas` SET `estatus` = 'En Proceso' WHERE `id_factura` = ?");
         $updateStmt->execute([$this->factura]);
 
         return true;
@@ -155,7 +155,7 @@ public function validarCodigoReferencia() {
     dp.estatus
 FROM tbl_detalles_pago dp
 INNER JOIN tbl_cuentas c ON dp.id_cuenta = c.id_cuenta;";
-        $stmt = $this->conexion()->prepare($sql);
+        $stmt = $this->getConexion()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -168,7 +168,7 @@ INNER JOIN tbl_cuentas c ON dp.id_cuenta = c.id_cuenta;";
                     `referencia` = :referencia,
                     `fecha` = :fecha 
                 WHERE id_detalles = :id_detalles";
-        $stmt = $this->conexion()->prepare($sql);
+        $stmt = $this->getConexion()->prepare($sql);
         $stmt->bindParam(':id_detalles', $this->id_detalles);
         $stmt->bindParam(':id_factura', $this->factura);
         $stmt->bindParam(':id_cuenta', $this->cuenta);
@@ -183,7 +183,7 @@ private function pagoProcesar() {
             SET `estatus` = :estatus, `observaciones` = :observaciones
             WHERE id_detalles = :id_detalles";
     
-    $stmt = $this->conexion()->prepare($sql);
+    $stmt = $this->getConexion()->prepare($sql);
     $stmt->bindParam(':estatus', $this->estatus);
     $stmt->bindParam(':observaciones', $this->observaciones);
     $stmt->bindParam(':id_detalles', $this->id_detalles);
@@ -202,7 +202,7 @@ private function pagoProcesar() {
         public function cambiarEstatus($nuevoEstatus) {
         try {
             $sql = "UPDATE tbl_detalles_pago SET estatus = :estatus WHERE id_detalles = :id";
-            $stmt = $this->conexion()->prepare($sql);
+            $stmt = $this->getConexion()->prepare($sql);
             $stmt->bindParam(':estatus', $nuevoEstatus);
             $stmt->bindParam(':id', $this->id_detalles);
             

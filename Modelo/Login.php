@@ -32,7 +32,7 @@ class Login extends BD
 
 
     function existe() {
-    $co = $this->conexion();
+    $co = $this->getConexion();
     $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $r = array();
     

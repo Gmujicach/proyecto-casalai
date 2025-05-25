@@ -15,7 +15,7 @@ class OrdenDespacho extends BD {
 
     function __construct() {
         parent::__construct();
-        $this->conex = parent::conexion();
+        $this->conex = parent::getConexion();
     }
 
     // Getters y Setters

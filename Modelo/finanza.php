@@ -13,7 +13,7 @@ class Finanza extends BD {
 
     public function __construct() {
         parent::__construct();
-        $this->conex = parent::conexion();
+        $this->conex = parent::getConexion();
     }
 
     // Getters y setters
@@ -83,7 +83,7 @@ class Finanza extends BD {
         $sql = "SELECT f.id_factura FROM tbl_despachos d
                 JOIN tbl_facturas f ON d.id_factura = f.id_factura
                 WHERE d.id_despachos = ?";
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->getConexion()->prepare($sql);
         $stmt->execute([$id_despacho]);
         $factura = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$factura) return false;
@@ -92,7 +92,7 @@ class Finanza extends BD {
                 FROM tbl_factura_detalle fd
                 JOIN tbl_productos p ON fd.id_producto = p.id_producto
                 WHERE fd.factura_id = ?";
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->getConexion()->prepare($sql);
         $stmt->execute([$factura['id_factura']]);
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -106,7 +106,7 @@ class Finanza extends BD {
 
         $sql = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_despacho)
                 VALUES ('ingreso', ?, ?, NOW(), 1, ?)";
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->getConexion()->prepare($sql);
         return $stmt->execute([$monto_total, $descripcion, $id_despacho]);
     }
 
@@ -119,7 +119,7 @@ class Finanza extends BD {
                 FROM tbl_detalle_recepcion_productos drp
                 JOIN tbl_productos p ON drp.id_producto = p.id_producto
                 WHERE drp.id_recepcion = ?";
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->getConexion()->prepare($sql);
         $stmt->execute([$id_recepcion]);
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -133,7 +133,7 @@ class Finanza extends BD {
 
         $sql = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_recepcion)
                 VALUES ('egreso', ?, ?, NOW(), 1, ?)";
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->getConexion()->prepare($sql);
         return $stmt->execute([$monto_total, $descripcion, $id_recepcion]);
     }
 
@@ -143,7 +143,7 @@ class Finanza extends BD {
     }
     private function c_ingresos() {
         $sql = "SELECT * FROM tbl_ingresos_egresos WHERE tipo='ingreso' ORDER BY fecha DESC";
-        return $this->conex->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $this->getConexion()->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // CONSULTAR EGRESOS
@@ -152,7 +152,7 @@ class Finanza extends BD {
     }
     private function c_egresos() {
         $sql = "SELECT * FROM tbl_ingresos_egresos WHERE tipo='egreso' ORDER BY fecha DESC";
-        return $this->conex->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $this->getConexion()->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // ANULAR
@@ -161,7 +161,7 @@ class Finanza extends BD {
     }
     private function anular_r($id_finanzas) {
         $sql = "UPDATE tbl_ingresos_egresos SET estado=0 WHERE id_finanzas=?";
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->getConexion()->prepare($sql);
         return $stmt->execute([$id_finanzas]);
     }
 }

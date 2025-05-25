@@ -1,49 +1,44 @@
-
-$(document).ready(function(){
-    // Si estoy aca es porque l
-    carga_productos();
-
-    $('#Modificarrecepcion').on('submit', function(e) {
+$(document).ready(function() {
+    $('#formularioEdicion').on('submit', function(e) {
         e.preventDefault();
 
-       
         var formData = new FormData(this);
-        formData.append('accion', 'modificar');
+        formData.append('accion', 'modificarRecepcion');
 
-       
         $.ajax({
-            url: '', 
+            url: '', // La misma página
             type: 'POST',
             processData: false,
             contentType: false,
             cache: false,
             data: formData,
             success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                response = JSON.parse(response); 
+                try {
+                    response = typeof response === "object" ? response : JSON.parse(response);
+                } catch (e) {
+                    Swal.fire('Error', 'Respuesta inesperada del servidor', 'error');
+                    return;
+                }
                 if (response.status === 'success') {
                     $('#modalModificar').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Modificado',
-                        text: 'El producto se ha modificado correctamente'
+                        text: response.message
                     }).then(function() {
                         location.reload();
                     });
                 } else {
-                    muestraMensaje(response.message);
+                    Swal.fire('Error', response.message, 'error');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar el producto:', textStatus, errorThrown);
-                muestraMensaje('Error al modificar el producto.');
+                Swal.fire('Error', 'Error al modificar la recepción.', 'error');
             }
         });
     });
-
-
-
-    //boton para levantar modal de productos
+});
+carga_productos();    //boton para levantar modal de productos
     $("#listado").on("click",function(){
         $("#modalp").modal("show");
     });
@@ -111,8 +106,7 @@ $(document).ready(function(){
     });
         
         
-    });
-
+    
     function validarenvio(){
         
         var proveedorseleccionado = $("#proveedor").val();
@@ -241,17 +235,13 @@ $(document).ready(function(){
     }
 
 
-    function muestraMensaje(icono,tiempo,titulo,mensaje){
-
-        Swal.fire({
-        icon:icono,
-        timer:tiempo,	
-        title:titulo,
-        html:mensaje,
-        showConfirmButton:true,
-        confirmButtonText:'Aceptar',
-        });
-    }
+function muestraMensaje(mensaje) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: mensaje
+    });
+}
     
     //Funcion que muestra el modal con un mensaje
     

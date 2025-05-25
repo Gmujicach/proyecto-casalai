@@ -1,14 +1,13 @@
 <?php
-require_once 'Conexion.php';
+require_once 'Config/config.php';
 
-class Combos {
+class Combos extends BD {
     private $conex;
     //private $productos;
 
-    public function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
-        //$this->productos = new Productos();
+    function __construct() {
+        parent::__construct();
+        $this->conex = parent::getConexion();
     }
     //Metodos para los combos
     public function obtenerCombos() {
