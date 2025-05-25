@@ -40,10 +40,6 @@ if (!isset($_SESSION['name'])) {
             <tr>
                 <th>Nombre</th>
                 <th>Acciones</th>
-                <th><i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                </th>
             </tr>
         </thead>
 
@@ -63,7 +59,6 @@ if (!isset($_SESSION['name'])) {
                         </i>
                             <div class="desplegable">
                                 <ul>
-                                    <li><a href="#">Ver</a></li>
                                     <li><a href="#" class="modificar" data-toggle="modal" data-target="#modificar_usuario_modal" onclick="obtenerUsuario(<?php echo $usuario['id_marca']; ?>)">Modificar</a></li>
                                     <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $usuario['id_marca']; ?>)">Eliminar</a></li>
                                 </ul>
