@@ -135,7 +135,22 @@ if (!isset($_SESSION['name'])) {
                             <div class="desplegable">
                                 <ul>
                                     <li><a href="#">Ver</a></li>
-                                    <li><a href="#" class="modificar" data-toggle="modal" data-target="#modificar_usuario_modal" onclick="obtenerUsuario(<?php echo $usuario['id_usuario']; ?>)">Modificar</a></li>
+                                    <li>
+  <a href="#" class="modificar" 
+     data-id="<?php echo $usuario['id_usuario']; ?>"
+     data-nombres="<?php echo htmlspecialchars($usuario['nombres']); ?>"
+     data-apellidos="<?php echo htmlspecialchars($usuario['apellidos']); ?>"
+     data-usuario="<?php echo htmlspecialchars($usuario['username']); ?>"
+     data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
+     data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
+     data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
+     data-rango="<?php echo htmlspecialchars($usuario['rango']); ?>"
+     data-toggle="modal" 
+     data-target="#modificar_usuario_modal">
+     Modificar
+  </a>
+</li>
+
                                     <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $usuario['id_usuario']; ?>)">Eliminar</a></li>
                                 </ul>
                             </div>
@@ -221,9 +236,11 @@ if (!isset($_SESSION['name'])) {
                     <div class="form-group col-md-4">
                                     <label for="rango">Categorias</label>
                                     <select class="custom-select" id="rango" name="rango">
-                                    <option value="USUARIO">Usuario</option>
-                                                        <option value="admin">Administrador</option>
-                                                        <option value="almacen">Almacen</option>    
+                                    <option value="usuario">Usuario</option>
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Almacenista">Almacenista</option>
+                                    <option value="Cliente">Cliente</option> 
+                                    <option value="Desarrollador">Desarrollador</option>   
                                     </select>
                                 </div>
                     
@@ -251,6 +268,33 @@ if (!isset($_SESSION['name'])) {
   <script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/usuario.js"></script>
 <script src="Javascript/validaciones.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.modificar').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            const nombres = this.getAttribute('data-nombres');
+            const apellidos = this.getAttribute('data-apellidos');
+            const usuario = this.getAttribute('data-usuario');
+            const telefono = this.getAttribute('data-telefono');
+            const correo = this.getAttribute('data-correo');
+            const clave = this.getAttribute('data-clave');
+            const rango = this.getAttribute('data-rango');
+
+            // Insertar datos en el modal
+            document.getElementById('modificar_id_usuario').value = id;
+            document.getElementById('modificarnombre').value = nombres;
+            document.getElementById('modificarapellido_usuario').value = apellidos;
+            document.getElementById('modificarnombre_usuario').value = usuario;
+            document.getElementById('modificartelefono_usuario').value = telefono;
+            document.getElementById('modificarcorreo_usuario').value = correo;
+            document.getElementById('modificarclave_usuario').value = clave;
+            document.getElementById('rango').value = rango;
+        });
+    });
+});
+</script>
+
 </body>
 
 
