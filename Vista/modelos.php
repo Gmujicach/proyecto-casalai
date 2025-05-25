@@ -46,20 +46,22 @@ if (!isset($_SESSION['name'])) {
     </div>
 </div>
 
-    <div class="contenedor-tabla">
-    <h1 class="titulo-tabla display-5 text-center">LISTA DE MODELOS</h1>
-    <table class="tabla">
+<div class="contenedor-tabla">
+    <h3>Lista de los Modelos</h3>
+    <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th>Acciones</th>
                 <th>ID Marca</th>
                 <th>Nombre del modelo</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($modelos as $modelos): ?>
                 
                 <tr>
+                    <td><?php echo htmlspecialchars($modelos['nombre_marca']); ?></td>
+                    <td><?php echo htmlspecialchars($modelos['nombre_modelo']); ?></td>
                     <td>
                         <!-- Botón Modificar que abre el modal -->
                         <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarmodelosModal" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>">
@@ -69,8 +71,6 @@ if (!isset($_SESSION['name'])) {
                         <!-- Botón Eliminar -->
                         <a href="#" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>" class="btn btn-eliminar">Eliminar</a>
                     </td>
-                    <td><?php echo htmlspecialchars($modelos['nombre_marca']); ?></td>
-                    <td><?php echo htmlspecialchars($modelos['nombre_modelo']); ?></td>
                 </tr>
             
             <?php endforeach; ?>
@@ -115,7 +115,7 @@ if (!isset($_SESSION['name'])) {
 <div class="containera">
     <div class="row">
         <div class="col">
-               <button type="button" class="btn btn-primary" id="pdfmodelos" name="pdfmodelos"><a href="?pagina=pdfmodelos">GENERAR REPORTE</button>
+            <button type="button" class="btn btn-primary" id="pdfmodelos" name="pdfmodelos"><a href="?pagina=pdfmodelos">GENERAR REPORTE</button>
         </div>
         
     </div>
