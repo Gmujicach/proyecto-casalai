@@ -9,11 +9,11 @@ class Cuentabanco extends BD {
     private $telefono_cuenta;
     private $correo_cuenta;
     private $estado;
-    private $conex;
+    private $db;
 
     public function __construct() {
-        parent::__construct();
-        $this->conex = parent::conexion();
+        $conexion = new BD('P');
+        $this->db = $conexion->getConexion();
     }
 
     // Getters y Setters
@@ -75,14 +75,16 @@ class Cuentabanco extends BD {
         (nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta)
         VALUES (:nombre_banco, :numero_cuenta, :rif_cuenta, :telefono_cuenta, :correo_cuenta)";
         
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':nombre_banco', $this->nombre_banco);
         $stmt->bindParam(':numero_cuenta', $this->numero_cuenta);
         $stmt->bindParam(':rif_cuenta', $this->rif_cuenta);
         $stmt->bindParam(':telefono_cuenta', $this->telefono_cuenta);
         $stmt->bindParam(':correo_cuenta', $this->correo_cuenta);
 
-        return $stmt->execute();
+        $result = $stmt->execute();
+        $this->db = null;
+        return $result;
     }
 
     // Verificar si existe el número de cuenta
@@ -96,9 +98,11 @@ class Cuentabanco extends BD {
             $sql .= " AND id_cuenta != ?";
             $params[] = $excluir_id;
         }
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
-        return $stmt->fetchColumn() > 0;
+        $existe = $stmt->fetchColumn() > 0;
+        $this->db = null;
+        return $existe;
     }
 
     public function obtenerUltimaCuenta() {
@@ -107,12 +111,14 @@ class Cuentabanco extends BD {
     private function obtUltimaCuenta() {
         try {
             $sql = "SELECT * FROM tbl_cuentas ORDER BY id_cuenta DESC LIMIT 1";
-            $stmt = $this->conex->prepare($sql);
+            $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $cuenta = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->db = null;
             return $cuenta ? $cuenta : null;
         } catch (PDOException $e) {
             error_log("Error al obtener la última cuenta: " . $e->getMessage());
+            $this->db = null;
             return null;
         }
     }
@@ -125,11 +131,11 @@ class Cuentabanco extends BD {
         $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta 
         FROM tbl_cuentas WHERE id_cuenta = :id_cuenta";
 
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_cuenta', $id_cuenta);
         $stmt->execute();
         $cuenta_obt = $stmt->fetch(PDO::FETCH_ASSOC); // Devuelve un solo registro
-
+        $this->db = null;
         return $cuenta_obt;
     }
 
@@ -141,10 +147,10 @@ class Cuentabanco extends BD {
         $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta, estado 
         FROM tbl_cuentas";
 
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $cuentas_obt = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+        $this->db = null;
         return $cuentas_obt;
     }
 
@@ -157,15 +163,17 @@ class Cuentabanco extends BD {
         rif_cuenta = :rif_cuenta, telefono_cuenta = :telefono_cuenta, correo_cuenta = :correo_cuenta
         WHERE id_cuenta = :id_cuenta";
 
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':nombre_banco', $this->nombre_banco);
         $stmt->bindParam(':numero_cuenta', $this->numero_cuenta);
         $stmt->bindParam(':rif_cuenta', $this->rif_cuenta);
         $stmt->bindParam(':telefono_cuenta', $this->telefono_cuenta);
         $stmt->bindParam(':correo_cuenta', $this->correo_cuenta);
         $stmt->bindParam(':id_cuenta', $id_cuenta);
-
-        return $stmt->execute();
+        
+        $result = $stmt->execute();
+        $this->db = null;
+        return $result;
     }
 
     // Eliminar Cuenta
@@ -175,10 +183,12 @@ class Cuentabanco extends BD {
     private function e_cuentabanco($id_cuenta) {
         $sql = "DELETE FROM tbl_cuentas WHERE id_cuenta = :id_cuenta";
         
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_cuenta', $id_cuenta);
         
-        return $stmt->execute();
+        $result = $stmt->execute();
+        $this->db = null;
+        return $result;
     }
 
     public function verificarEstado() {
@@ -186,14 +196,15 @@ class Cuentabanco extends BD {
     }
     private function v_estadoCuenta() {
         $sql = "SHOW COLUMNS FROM tbl_cuentas LIKE 'estado'";
-        $stmt = $this->conex->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
         
         if ($stmt->rowCount() == 0) {
             $alterSql = "ALTER TABLE tbl_cuentas 
             ADD estado ENUM('habilitado','inhabilitado') NOT NULL DEFAULT 'habilitado'";
-            $this->conex->exec($alterSql);
+            $this->db->exec($alterSql);
         }
+        $this->db = null;
     }
 
     // Habilitar e Inhabilitar Cuenta
@@ -203,13 +214,15 @@ class Cuentabanco extends BD {
     private function estadoCuenta($nuevoEstado) {
         try {
             $sql = "UPDATE tbl_cuentas SET estado = :estado WHERE id_cuenta = :id_cuenta";
-            $stmt = $this->conex->prepare($sql);
+            $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':estado', $nuevoEstado);
             $stmt->bindParam(':id_cuenta', $this->id_cuenta);
-            
-            return $stmt->execute();
+            $result = $stmt->execute();
+            $this->db = null;
+            return $result;
         } catch (PDOException $e) {
             error_log("Error al cambiar estado: " . $e->getMessage());
+            $this->db = null;
             return false;
         }
     }

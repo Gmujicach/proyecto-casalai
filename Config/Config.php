@@ -1,20 +1,30 @@
-<?php 
-class BD{
-	private $host;
-	private $base;
-	private $usu;
-	private $clave;
+<?php
+require_once 'database.php';
 
-	function __construct(){
-		$this->host = 'localhost';
-		$this->base = 'casalai';
-		$this->usu = 'root';
-		$this->clave = '';
-	}
+class BD {
+    private $pdo = null;
 
-	function conexion(){
-		$conex = new PDO('mysql:host='.$this->host.';dbname='.$this->base.';charset=utf8',$this->usu,$this->clave);
-		return $conex;
-	}
+    // $tipo: 'P' para principal, 'S' para seguridad
+    public function __construct($tipo = 'P') {
+        $config = ($tipo === 'S') ? DB_SEGURIDAD : DB_PRINCIPAL;
+        $dsn = "mysql:host={$config['host']};dbname={$config['dbname']};charset={$config['charset']}";
+        try {
+            $this->pdo = new PDO($dsn, $config['user'], $config['pass'], [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_PERSISTENT => false
+            ]);
+        } catch (PDOException $e) {
+            die("Error de conexión: " . $e->getMessage());
+        }
+    }
+
+    public function getConexion() {
+        return $this->pdo;
+    }
+
+    public function cerrar() {
+        $this->pdo = null;
+    }
 }
 ?>
