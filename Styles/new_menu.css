@@ -20,7 +20,7 @@ body{
     left: 0;
     width: 85px;
     min-width: 85px; /* Ancho mínimo cuando está contraído */
-    max-width: 320px; /* Límite máximo para evitar overflows */
+    max-width: 340px; /* Límite máximo para evitar overflows */
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -167,8 +167,8 @@ body{
   }
   
   .icono-svg {
-    width: 1em;  /* Tamaño relativo al texto */
-    height: 1em;
+    width: 1.5em;  /* Tamaño relativo al texto */
+    height: 1.5em;
   }
 
 /* Estilos para las Notificaciones */
