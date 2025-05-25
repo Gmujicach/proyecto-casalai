@@ -12,6 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     switch ($accion) {
         case 'registrar':
+            ob_clean();
+            header('Content-Type: application/json; charset=utf-8');
             $cuentabanco = new Cuentabanco();
             $cuentabanco->setNombreBanco($_POST['nombre_banco']);
             $cuentabanco->setNumeroCuenta($_POST['numero_cuenta']);
@@ -42,7 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'message' => 'Error al registrar la cuenta'
                 ]);
             }
-            
             exit;
         
         case 'obtener_cuenta':

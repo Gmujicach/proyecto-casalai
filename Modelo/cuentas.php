@@ -94,15 +94,13 @@ class Cuentabanco extends BD {
     private function existeNumCuenta($numero_cuenta, $excluir_id) {
         $sql = "SELECT COUNT(*) FROM tbl_cuentas WHERE numero_cuenta = ?";
         $params = [$numero_cuenta];
-        if ($excluir_id) {
+        if ($excluir_id !== null) {
             $sql .= " AND id_cuenta != ?";
             $params[] = $excluir_id;
         }
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
-        $existe = $stmt->fetchColumn() > 0;
-        $this->db = null;
-        return $existe;
+        return $stmt->fetchColumn() > 0;
     }
 
     public function obtenerUltimaCuenta() {
