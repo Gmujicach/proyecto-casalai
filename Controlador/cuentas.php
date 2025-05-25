@@ -12,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     switch ($accion) {
         case 'registrar':
-            ob_clean();
             header('Content-Type: application/json; charset=utf-8');
             $cuentabanco = new Cuentabanco();
             $cuentabanco->setNombreBanco($_POST['nombre_banco']);
@@ -30,9 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($cuentabanco->registrarCuentabanco()) {
-                // Suponiendo que puedes obtener los datos luego de registrar
-                $cuentaRegistrada = $cuentabanco->obtenerUltimaCuenta(); // <-- deberías tener este método o algo similar
-            
+                $cuentaRegistrada = $cuentabanco->obtenerUltimaCuenta();
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Cuenta registrada correctamente',

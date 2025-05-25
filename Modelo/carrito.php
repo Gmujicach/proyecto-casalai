@@ -4,9 +4,9 @@ require_once 'Config/config.php';
 class Carrito extends BD {
     private $conex;
 
-    function __construct() {
-        parent::__construct();
-        $this->conex = parent::getConexion();
+    public function __construct() {
+        $conexion = new BD('P');
+        $this->conex = $conexion->getConexion();
     }
 
     // Métodos básicos del carrito

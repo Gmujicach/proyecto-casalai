@@ -5,10 +5,11 @@ class Combos extends BD {
     private $conex;
     //private $productos;
 
-    function __construct() {
-        parent::__construct();
-        $this->conex = parent::getConexion();
+    public function __construct() {
+        $conexion = new BD('P');
+        $this->conex = $conexion->getConexion();
     }
+    
     //Metodos para los combos
     public function obtenerCombos() {
         $sql = "SELECT id_combo, id_producto, cantidad FROM tbl_combo";

@@ -17,9 +17,9 @@ class Proveedores extends BD {
     private $activo=1;
     private $tableproveedor= 'tbl_proveedores';
 
-    function __construct() {
-        parent::__construct();
-        $this->conex = parent::getConexion();
+    public function __construct() {
+        $conexion = new BD('P');
+        $this->conex = $conexion->getConexion();
     }
 
     // Getters y Setters

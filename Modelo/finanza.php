@@ -12,8 +12,8 @@ class Finanza extends BD {
     private $id_recepcion;
 
     public function __construct() {
-        parent::__construct();
-        $this->conex = parent::getConexion();
+        $conexion = new BD('P');
+        $this->conex = $conexion->getConexion();
     }
 
     // Getters y setters
