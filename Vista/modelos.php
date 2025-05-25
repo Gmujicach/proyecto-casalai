@@ -17,35 +17,34 @@ if (!isset($_SESSION['name'])) {
 <body>
 
 <?php include 'NewNavBar.php'; ?>
-<div class="container"> 
-<form id="incluirmodelos" action="" method="POST" class="formulario-1"><?php //FORMULARIOOOOOOOOOOO INCLUIR ?>
-    <input type="hidden" name="accion" value="ingresar">
-    <h3 class="display-4 text-center">INCLUIR MODELOS</h3>
-        
-        <div class="form-group col-md-12">
-            <label for="id_marca"></label>
-            <select class="form-control" id="id_marca" name="id_marca">
-                <option value="">Selecciona una marca</option>
-                <?php foreach ($marcas as $marca): ?>
-                    <option value="<?php echo $marca['id_marca']; ?>"><?php echo $marca['nombre_marca']; ?></option>
-                 <?php endforeach; ?>
-            </select>
-        </div>
 
-    <div class="form-row">
-        <div class="form-group col-md-12">
-            <label for="nombre_modelo">Nombre de los Modelos</label>
-            <input type="text" maxlength="15" class="form-control" id="nombre_modelo" name="nombre_modelo" required>
-            <span id="snombre_modelo"></span>
-        </div>
-    </div>
+<div class="formulario-responsivo">
+    <div class="fondo-form">
+        <form id="registrarModelo" action="" method="POST">
+            <input type="hidden" name="accion" value="registrar">
+            <h3 class="titulo-form">Incluir Modelo</h3>
+            
+            <div class="envolver-form">
+                <label for="id_marca"></label>
+                <select class="form-select" id="id_marca" name="id_marca">
+                    <option value="">Selecciona una marca</option>
+                    <?php foreach ($marcas as $marca): ?>
+                        <option value="<?php echo $marca['id_marca']; ?>"><?php echo $marca['nombre_marca']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-    <div class="form-group d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
-    </div>
-</form>
-    </div>
+            <div class="envolver-form">
+                <input type="text" placeholder="Nombre del modelo" class="control-form" id="nombre_modelo" name="nombre_modelo" maxlength="15" required>
+                <span class="span-value" id="snombre_modelo"></span>
+            </div>
 
+            <button class="boton-form" type="submit">Registrar</button>
+            <button class="boton-reset" type="reset">Reset</button>
+
+        </form>
+    </div>
+</div>
 
     <div class="contenedor-tabla">
     <h1 class="titulo-tabla display-5 text-center">LISTA DE MODELOS</h1>
