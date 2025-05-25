@@ -567,35 +567,20 @@ $(document).ready(function () {
         return str;
     }
 
-});
+    // Delegación para el despliegue de opciones (modificar/eliminar)
+    $('#tablaConsultas').on('click', '.vertical', function(e) {
+        e.stopPropagation(); // Prevenir cierre inmediato
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Delegación de eventos para cada botón
-    document.querySelectorAll('.acciones-boton i').forEach(function (icono) {
-        icono.addEventListener('click', function (e) {
-            e.stopPropagation(); // Prevenir que se cierre inmediatamente por el click global
+        // Cerrar todos los menús primero
+        $('.desplegable').not($(this).next('.desplegable')).hide();
 
-            // Cerrar todos los menús primero
-            document.querySelectorAll('.desplegable').forEach(function (menu) {
-                if (menu !== icono.nextElementSibling) {
-                    menu.style.display = 'none';
-                }
-            });
-
-            // Alternar el menú actual
-            const menuActual = icono.nextElementSibling;
-            if (menuActual.style.display === 'block') {
-                menuActual.style.display = 'none';
-            } else {
-                menuActual.style.display = 'block';
-            }
-        });
+        // Alternar el menú actual
+        const menuActual = $(this).next('.desplegable');
+        menuActual.toggle();
     });
 
     // Cerrar el menú si se hace clic fuera
-    document.addEventListener('click', function () {
-        document.querySelectorAll('.desplegable').forEach(function (menu) {
-            menu.style.display = 'none';
-        });
+    $(document).on('click', function() {
+        $('.desplegable').hide();
     });
 });
