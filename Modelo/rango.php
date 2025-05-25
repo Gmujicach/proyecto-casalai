@@ -6,9 +6,9 @@ class rango extends BD {
     private $nombre_rango;
     private $conex;
 
-    function __construct() {
-        parent::__construct();
-        $this->conex = parent::getConexion();
+    public function __construct() {
+        $conexion = new BD('S');
+        $this->conex = $conexion->getConexion();
     }
 
     // Getters y Setters
