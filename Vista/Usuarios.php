@@ -189,9 +189,29 @@ if (!isset($_SESSION['name'])) {
                     <!-- Campos del formulario de modificación -->
                     <input type="hidden" id="modificar_id_usuario" name="id_usuario">
                     <div class="form-group">
-                        <label for="modificarnombre_usuario">Nombre del Usuario</label>
+                        <label for="modificarnombre">Nombres del Usuario</label>
+                        <input type="text" class="form-control" id="modificarnombre" name="nombre" maxlength="15" required>
+                        <span id="smodificarnombre_usuario"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="modificarapellido_usuario">Apellidos del Usuario</label>
+                        <input type="text" class="form-control" id="modificarapellido_usuario" name="apellido_usuario" maxlength="15" required>
+                        <span id="smodificarapellido_usuario"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="modificarnombre_usuario">Usuario</label>
                         <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="15" required>
                         <span id="smodificarnombre_usuario"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="modificartelefono_usuario">Telefono</label>
+                        <input type="text" class="form-control" id="modificartelefono_usuario" name="telefono_usuario" maxlength="15" required>
+                        <span id="smodificartelefono_usuario"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="modificarcorreo_usuario">Correo</label>
+                        <input type="text" class="form-control" id="modificarcorreo_usuario" name="correo_usuario" maxlength="15" required>
+                        <span id="smodificarcorreo_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarclave_usuario">Contraseña del Usuario</label>

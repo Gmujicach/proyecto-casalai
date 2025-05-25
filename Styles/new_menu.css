@@ -56,7 +56,7 @@ body{
     padding-left: 0rem;
     list-style: none;
     margin-top: 20px;
-    height: 75vh;
+    height: 70vh;
     overflow-y: auto;
     scrollbar-width: none; /* Firefox */
 }
@@ -126,10 +126,14 @@ body{
     color: #333;
 }
 
-.user-detalle{
+.user-detalle {
     margin-left: 23px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; /* Ajusta según necesidad */
 }
+
 
 .user-perfil img{
     width: 42px;
