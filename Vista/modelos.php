@@ -51,8 +51,8 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th>ID Marca</th>
-                <th>Nombre del modelo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -76,7 +76,7 @@ if (!isset($_SESSION['name'])) {
             <?php endforeach; ?>
         </tbody>
     </table>
-
+</div>
     
 
 <!-- Modal de modificación -->
@@ -101,7 +101,6 @@ if (!isset($_SESSION['name'])) {
                     
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-cerrar" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Modificar</button>
                 </div>
                 </div>
@@ -127,7 +126,7 @@ if (!isset($_SESSION['name'])) {
 
 
 
-
+<?php include 'footer.php'; ?>
 <script src="public/bootstrap/js/sidebar.js"></script>
   <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="public/js/jquery-3.7.1.min.js"></script>
