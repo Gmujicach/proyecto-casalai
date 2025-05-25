@@ -52,7 +52,7 @@
                 <li>
                     <a href="?pagina=Recepcion">
                         <span class="simbolo">
-                          <img src="IMG/package.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/package-open.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Recepcion
                         </span>
                       </a>
@@ -60,7 +60,7 @@
                 <li>
                     <a href="?pagina=despacho">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/package-check.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Despacho
                         </span>
                       </a>
@@ -72,7 +72,7 @@
                 <li>
                     <a href="?pagina=marcas">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/package-search.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Marcas
                         </span>
                       </a>
@@ -80,7 +80,7 @@
                 <li>
                     <a href="?pagina=modelos">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/package-search.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Modelos
                         </span>
                       </a>
@@ -88,7 +88,7 @@
                 <li>
                     <a href="?pagina=Productos">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/package-search.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Productos
                         </span>
                       </a>
@@ -100,7 +100,7 @@
                 <li>
                     <a href="?pagina=proveedores">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/truck.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Proveedores
                         </span>
                       </a>
@@ -112,7 +112,7 @@
                 <li>
                     <a href="?pagina=clientes">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/users-round.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Clientes
                         </span>
                       </a>
@@ -120,7 +120,7 @@
                 <li>
                     <a href="?pagina=catalogo">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/book-open.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Catalogo
                         </span>
                       </a>
@@ -128,7 +128,7 @@
                 <li>
                     <a href="?pagina=carrito">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/shopping-cart.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Carrito de Compras
                         </span>
                       </a>
@@ -136,7 +136,7 @@
                 <li>
                     <a href="?pagina=pasarela">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/credit-card.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Pasarela de Pagos
                         </span>
                       </a>
@@ -144,7 +144,7 @@
                 <li>
                     <a href="?pagina=cuentas">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/landmark.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Cuentas Bancarias
                         </span>
                       </a>
@@ -152,7 +152,7 @@
                 <li>
                     <a href="?pagina=gestionarFactura">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/receipt-text.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Pre-Factura
                         </span>
                       </a>
@@ -160,7 +160,7 @@
                 <li>
                     <a href="?pagina=OrdenDespacho">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/list-ordered.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Ordenes de Despacho
                         </span>
                       </a>
@@ -172,7 +172,7 @@
                 <li>
                     <a href="?pagina=finanza">
                         <span class="simbolo">
-                          <img src="img/warehouse.svg" alt="Dashboard" class="icono-svg" />
+                          <img src="IMG/dollar-sign.svg" alt="Dashboard" class="icono-svg" />
                           Gestionar Ingresos y Egresos
                         </span>
                       </a>
@@ -184,7 +184,7 @@
                 <li>
                     <a href="#">
                         <span class="simbolo">
-                          <img src="img/account_circle.svg" alt="logout" class="icono-svg" />
+                          <img src="IMG/circle-user-round.svg" alt="logout" class="icono-svg" />
                           Perfil
                         </span>
                       </a>
@@ -192,7 +192,7 @@
                 <li>
                     <a href='?pagina=cerrar'>
                         <span class="simbolo">
-                          <img src="img/logout.svg" alt="logout" class="icono-svg" />
+                          <img src="IMG/log-out.svg" alt="logout" class="icono-svg" />
                           Cerrar Sesión
                         </span>
                       </a>
