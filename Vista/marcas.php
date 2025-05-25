@@ -68,30 +68,30 @@ if (!isset($_SESSION['name'])) {
                 </td>
             </tr>
         <?php endforeach; ?>
+            <tfoot>
+                <tr>
+                    <td>Filas por Página: 
+                        <select id="filasPorPagina" onchange="cambiarFilasPorPagina(this.value)">
+                            <option value="10" <?= $filasPorPagina == 10 ? 'selected' : '' ?>>10</option>
+                            <option value="20" <?= $filasPorPagina == 20 ? 'selected' : '' ?>>20</option>
+                            <option value="50" <?= $filasPorPagina == 50 ? 'selected' : '' ?>>50</option>
+                            <option value="100" <?= $filasPorPagina == 100 ? 'selected' : '' ?>>100</option>
+                        </select>
+                    </td>
+                    <td><?= "$inicio-$fin de $totalMarcas" ?></td>
+                    <td>
+                        <a href="?pagina=<?= max(1, $paginaActual - 1) ?>&filas=<?= $filasPorPagina ?>">
+                            <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="?pagina=<?= min(ceil($totalMarcas / $filasPorPagina), $paginaActual + 1) ?>&filas=<?= $filasPorPagina ?>">
+                            <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tfoot>
         </tbody>
-        <tfoot>
-    <tr>
-        <td>Filas por Página: 
-            <select id="filasPorPagina" onchange="cambiarFilasPorPagina(this.value)">
-                <option value="10" <?= $filasPorPagina == 10 ? 'selected' : '' ?>>10</option>
-                <option value="20" <?= $filasPorPagina == 20 ? 'selected' : '' ?>>20</option>
-                <option value="50" <?= $filasPorPagina == 50 ? 'selected' : '' ?>>50</option>
-                <option value="100" <?= $filasPorPagina == 100 ? 'selected' : '' ?>>100</option>
-            </select>
-        </td>
-        <td><?= "$inicio-$fin de $totalMarcas" ?></td>
-        <td>
-            <a href="?pagina=<?= max(1, $paginaActual - 1) ?>&filas=<?= $filasPorPagina ?>">
-                <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
-            </a>
-        </td>
-        <td>
-            <a href="?pagina=<?= min(ceil($totalMarcas / $filasPorPagina), $paginaActual + 1) ?>&filas=<?= $filasPorPagina ?>">
-                <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
-            </a>
-        </td>
-    </tr>
-</tfoot>
     </table>
 
 
