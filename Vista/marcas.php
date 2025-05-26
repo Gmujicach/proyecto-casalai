@@ -57,8 +57,18 @@ if (!isset($_SESSION['name'])) {
                             </i>
                                 <div class="desplegable">
                                     <ul>
-                                        <li><a href="#" class="modificar" data-toggle="modal" data-target="#modificar_usuario_modal" onclick="obtenerUsuario(<?php echo $usuario['id_marca']; ?>)">Modificar</a></li>
-                                        <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $usuario['id_marca']; ?>)">Eliminar</a></li>
+                                        <li>
+                                            <button class="btn btn-primary btn-modificar"
+                                            data-id="<?php echo $marca['id_marca']; ?>"
+                                            data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
+                                            data-numero="<?php echo htmlspecialchars($cuenta['numero_cuenta']); ?>"
+                                            >Modificar</button>
+                                        </li>
+                                        <li>
+                                            <button class="btn btn-danger btn-eliminar"
+                                            data-id="<?php echo $marca['id_marca']; ?>"
+                                            >Eliminar</button>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
