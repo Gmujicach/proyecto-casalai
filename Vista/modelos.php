@@ -63,21 +63,33 @@ if (!isset($_SESSION['name'])) {
                     <td><?php echo htmlspecialchars($modelos['nombre_marca']); ?></td>
                     <td><?php echo htmlspecialchars($modelos['nombre_modelo']); ?></td>
                     <td>
-                        <!-- Botón Modificar que abre el modal -->
-                        <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarmodelosModal" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>">
-                        Modificar
-                        </button>
-                        <br>
-                        <!-- Botón Eliminar -->
-                        <a href="#" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>" class="btn btn-eliminar">Eliminar</a>
+                        <span>
+                            <div class="acciones-boton">
+                                <i class="vertical">
+                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                                </i>
+                                <div class="desplegable">
+                                    <ul>
+                                        <li>
+                                            <!-- Botón Modificar que abre el modal -->
+                                            <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarmodelosModal" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>">
+                                            Modificar
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <!-- Botón Eliminar -->
+                                            <a href="#" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>" class="btn btn-eliminar">Eliminar</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </span>
                     </td>
                 </tr>
-            
             <?php endforeach; ?>
         </tbody>
     </table>
 </div>
-    
 
 <!-- Modal de modificación -->
 <div class="modal fade" id="modificar_modelos_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_modelos_modal_label" aria-hidden="true">
