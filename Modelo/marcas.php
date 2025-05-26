@@ -5,7 +5,7 @@ class marca extends BD {
     private $tablemarcas = 'tbl_marcas';
     private $conex;
     private $nombre_marca;
-    private $id;
+    private $id_marca;
 
     public function __construct() {
         $conexion = new BD('P');
@@ -20,11 +20,11 @@ class marca extends BD {
         $this->nombre_marca = $nombre_marca;
     }
     
-    public function getId() {
-        return $this->id;
+    public function getIdMarca() {
+        return $this->id_marca;
     }
-    public function setId($id) {
-        $this->id = $id;
+    public function setIdMarca($id_marca) {
+        $this->id_marca = $id_marca;
     }
 
     // Verificar si existe el número de cuenta
@@ -75,26 +75,26 @@ class marca extends BD {
     }
 
     // Obtener Producto por ID
-    public function obtenermarcasPorId($id) {
-        return $this->obtmarcasPorId($id);
+    public function obtenermarcasPorId($id_marca) {
+        return $this->obtmarcasPorId($id_marca);
     }
-    private function obtmarcasPorId($id) {
+    private function obtmarcasPorId($id_marca) {
         $query = "SELECT * FROM tbl_marcas WHERE id_marca = ?";
         $stmt = $this->conex->prepare($query);
-        $stmt->execute([$id]);
+        $stmt->execute([$id_marca]);
         $marcas = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->conex = null;
         return $marcas;
     }
 
     // Modificar Producto
-    public function modificarmarcas($id) {
-        return $this->m_marcas($id);
+    public function modificarmarcas($id_marca) {
+        return $this->m_marcas($id_marca);
     }
-    private function m_marcas($id) {
+    private function m_marcas($id_marca) {
         $sql = "UPDATE tbl_marcas SET nombre_marca = :nombre_marca WHERE id_marca = :id_marca";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_marca', $id);
+        $stmt->bindParam(':id_marca', $id_marca);
         $stmt->bindParam(':nombre_marca', $this->nombre_marca);
         
         $result = $stmt->execute();
@@ -103,13 +103,13 @@ class marca extends BD {
     }
 
     // Eliminar Producto
-    public function eliminarmarcas($id) {
-        return $this->e_marcas($id);
+    public function eliminarmarcas($id_marca) {
+        return $this->e_marcas($id_marca);
     }
-    private function e_marcas($id) {
+    private function e_marcas($id_marca) {
         $sql = "DELETE FROM tbl_marcas WHERE id_marca = :id";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id_marca', $id_marca);
         
         $result = $stmt->execute();
         $this->conex = null;
