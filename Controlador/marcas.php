@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             }
 
-            if ($marca->ingresarmarcas()) {
+            if ($marca->registrarMarca()) {
                 $marcaRegistrada = $marca->obtenerUltimaMarca();
                 echo json_encode([
                     'status' => 'success',

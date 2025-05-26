@@ -19,7 +19,7 @@ if (!isset($_SESSION['name'])) {
 
 <div class="formulario-responsivo">
     <div class="fondo-form">
-        <form id="incluirmarcas" action="" method="POST">
+        <form id="registrarMarca" action="" method="POST">
             <input type="hidden" name="accion" value="registrar">
             <h3 class="titulo-form">INCLUIR MARCA</h3>
             <div class="envolver-form">

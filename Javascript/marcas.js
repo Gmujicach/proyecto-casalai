@@ -79,7 +79,7 @@ $(document).ready(function () {
     }
 
     // Enviar formulario de registro por AJAX
-    $('#incluirmarcas').on('submit', function(e) {
+    $('#registrarMarca').on('submit', function(e) {
         e.preventDefault();
 
         if(validarEnvioMarca()){

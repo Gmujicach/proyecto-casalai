@@ -44,10 +44,10 @@ class marca extends BD {
     }
 
     // Ingresar Marca
-    public function ingresarmarcas() {
-        return $this->i_marcas();
+    public function registrarMarca() {
+        return $this->r_marca();
     }
-    private function i_marcas() {
+    private function r_marca() {
         $sql = "INSERT INTO tbl_marcas (nombre_marca)
                 VALUES (:nombre_marca)";
         $stmt = $this->conex->prepare($sql);
