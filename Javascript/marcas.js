@@ -41,6 +41,7 @@ $(document).ready(function () {
     function agregarFilaMarca(marca) {
         const nuevaFila = `
             <tr data-id="${marca.id_marca}">
+                <td>${marca.id_marca}</td>
                 <td>${marca.nombre_marca}</td>
                 <td>
                     <div class="acciones-boton">

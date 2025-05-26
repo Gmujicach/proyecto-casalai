@@ -45,10 +45,9 @@ if (!isset($_SESSION['name'])) {
 
         <tbody>
             <?php foreach ($marcas as $marca): ?>
-                <tr>
-                    <td>
-                        <?php echo htmlspecialchars($marca['nombre_marca']); ?>
-                    </td>
+                <tr data-id="<?php echo $marca['id_marca']; ?>">
+                    <td><?php echo htmlspecialchars($marca['id_marca']); ?></td>
+                    <td><?php echo htmlspecialchars($marca['nombre_marca']); ?></td>
                     <td>
                         <span>
                             <div class="acciones-boton">
