@@ -80,8 +80,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         case 'eliminar':
             $id_marca = $_POST['id_marca'];
-            $marcaModel = new marca();
-            if ($marcaModel->eliminarmarcas($id_marca)) {
+            $marca = new marca();
+            if ($marca->eliminarmarcas($id_marca)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la marca']);

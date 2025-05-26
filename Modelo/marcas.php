@@ -107,7 +107,7 @@ class marca extends BD {
         return $this->e_marcas($id_marca);
     }
     private function e_marcas($id_marca) {
-        $sql = "DELETE FROM tbl_marcas WHERE id_marca = :id";
+        $sql = "DELETE FROM tbl_marcas WHERE id_marca = :id_marca";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_marca', $id_marca);
         
