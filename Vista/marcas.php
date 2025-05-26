@@ -47,9 +47,7 @@ if (!isset($_SESSION['name'])) {
             <?php foreach ($marcas as $marca): ?>
                 <tr>
                     <td>
-                        <span class="nombre-usuario">
                         <?php echo htmlspecialchars($marca['nombre_marca']); ?>
-                        </span>
                     </td>
                     <td>
                         <span>
