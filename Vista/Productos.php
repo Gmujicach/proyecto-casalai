@@ -55,10 +55,9 @@ if (!isset($_SESSION['name'])) {
             <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="3"></textarea>
             <span id="sClausula_garantia"></span>
         </div>
-
+    <br>
         <div class="grupo-form">
-            <label for="Seriales">Código Serial</label>
-            <input type="text" placeholder="Código Serial" maxlength="10" class="form-control" id="Seriales" name="Seriales" required>
+            <input type="text" placeholder="Código Serial" maxlength="10" class="control-form" id="Seriales" name="Seriales" required>
             <span id="sSeriales"></span>
         
             <select class="form-select" id="Categoria" name="Categoria" required>
@@ -73,7 +72,7 @@ if (!isset($_SESSION['name'])) {
 
         <!-- Campo faltante de PRECIO -->
         <div class="envolver-form">
-            <input type="text" placeholder="Precio" maxlength="10" class="form-control" id="Precio" name="Precio" required>
+            <input type="text" placeholder="Precio" maxlength="10" class="control-form" id="Precio" name="Precio" required>
             <span id="sPrecio"></span>
         </div>
 
