@@ -102,7 +102,7 @@ function getmarcas() {
     return $marca->getmarcas();
 }
 
-$pagina = "Marcas";
+$pagina = "marcas";
 if (is_file("Vista/" . $pagina . ".php")) {
 
     $paginaActual = $_GET['pagina'] ?? 1;

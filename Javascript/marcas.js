@@ -91,7 +91,7 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Cuenta registrada correctamente'
+                        text: respuesta.message || respuesta.msg || 'Marca registrada correctamente'
                     });
                     agregarFilaMarca(respuesta.marca);
                     resetMarca();
@@ -99,7 +99,7 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la cuenta'
+                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la marca'
                     });
                 }
             });
@@ -125,7 +125,7 @@ $(document).ready(function () {
         });
     }
 
-    // Cargar datos de la cuenta en el modal al abrir
+    // Cargar datos de la marca en el modal al abrir
     $(document).on('click', '.btn-modificar', function () {
         var fila = $(this).closest('tr');
         var celdas = fila.find('td');
@@ -224,7 +224,7 @@ $(document).ready(function () {
         $('#modificarMarcaModal').modal('hide');
     });
 
-    // Eliminar cuenta
+    // Eliminar marca
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault();
         Swal.fire({
