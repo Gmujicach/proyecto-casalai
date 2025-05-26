@@ -6,10 +6,10 @@ if (!isset($_SESSION['name'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-<meta charset="UTF-8">
+	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'header.php'; ?>
     <title>Gestionar Recepcion</title>
@@ -104,8 +104,6 @@ if (!isset($_SESSION['name'])) {
 			</div>
 		</section>
 	</div>
-	</div>
-							
 	</div>					
 
 	<div class="contenedor-tabla">
@@ -206,7 +204,6 @@ if (!isset($_SESSION['name'])) {
 						</div>
 		</div>
 		<?php include 'footer.php'; ?>
-	</div>
 	
 <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg"> <!-- modal-lg para más espacio -->

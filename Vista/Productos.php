@@ -1,91 +1,68 @@
 <?php
 if (!isset($_SESSION['name'])) {
-
- 	header('Location: .');
- 	exit();
- }
+    header('Location: .');
+    exit();
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestionar Productos</title>
-  
-  <?php include 'header.php'; ?>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Productos</title>
+    <?php include 'header.php'; ?>
 </head>
 <body>
 
 <?php include 'NewNavBar.php'; ?>
 
-<section class="container"> 
+<div class="formulario-responsivo">
+  <div class="fondo-form">
+    <form id="incluirProductoForm" action="" method="POST">
+        <input type="hidden" name="accion" value="ingresar">
+        <h3 class="titulo-form">INCLUIR PRODUCTOS</h3>
 
-<form id="incluirProductoForm" action="" method="POST" class="formulario-1">
-    <input type="hidden" name="accion" value="ingresar">
-    <h3 class="display-4 text-center">INCLUIR PRODUCTOS</h3>
-
-    <div class="row">
-        <div class="form-group col">
-            <label for="nombre_producto">Nombre del producto</label>
-            <input type="text" maxlength="15" class="form-control" id="nombre_producto" name="nombre_producto" required>
+        <div class="grupo-form">
+            <input type="text" placeholder="Nombre del producto" maxlength="15" class="control-form" id="nombre_producto" name="nombre_producto" required>
             <span id="snombre_producto"></span>
-        </div>
 
-        <div class="form-group col">
-            <label for="descripcion_producto">Descripción del producto</label>
-            <input type="text" maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" required>
+            <input type="text" placeholder="Descripción del producto" maxlength="50" class="control-form" id="descripcion_producto" name="descripcion_producto" required>
             <span id="sdescripcion_producto"></span>
         </div>
-
-        <div class="col">
-            <label for="Modelo">Modelo</label>
-            <select class="form-select" id="Modelo" name="Modelo" required>
-                <option value="">Seleccionar Modelo</option>
-                <?php foreach ($modelos as $modelo): ?>
-                    <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
-                <?php endforeach; ?>
-            </select>
+    <br>
+        <select class="form-select" id="Modelo" name="Modelo" required>
+            <option value="">Seleccionar Modelo</option>
+            <?php foreach ($modelos as $modelo): ?>
+                <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
+            <?php endforeach; ?>
+        </select>
+    <br>
+        <div class="envolver-form">
+            <label for="Stock_Actual">Stock Actual</label>
+            <input type="text" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" required>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="row my-2">
-            <div class="col" style="display:none">
-                <label for="Stock_Actual">Stock Actual</label>
-                <input type="text" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" required>
-            </div>
-            <div class="col">
-                <label for="Stock_Maximo">Stock Máximo</label>
-                <input type="text" maxlength="10" class="form-control" id="Stock_Maximo" name="Stock_Maximo" required>
-                <span id="sStock_Maximo"></span>
-            </div>
-            <div class="col">
-                <label for="Stock_Minimo">Stock Mínimo</label>
-                <input type="text" maxlength="10" class="form-control" id="Stock_Minimo" name="Stock_Minimo" required>
-                <span id="sStock_Minimo"></span>
-            </div>
+        <div class="grupo-form">
+            <input type="text" placeholder="Stock Máximo" maxlength="10" class="control-form" id="Stock_Maximo" name="Stock_Maximo" required>
+            <span id="sStock_Maximo"></span>
+        
+            <input type="text" placeholder="Stock Mínimo" maxlength="10" class="control-form" id="Stock_Minimo" name="Stock_Minimo" required>
+            <span id="sStock_Minimo"></span>
         </div>
-    </div>
-
-    <div class="form-group">
-        <label for="Clausula_garantia">Cláusula de garantía</label>
-        <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="3"></textarea>
-        <span id="sClausula_garantia"></span>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <label for="Seriales">Código Serial</label>
-            <input type="text" maxlength="10" class="form-control" id="Seriales" name="Seriales" required>
+    <br>
+        <div class="form-group">
+            <label for="Clausula_garantia">Cláusula de garantía</label>
+            <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="3"></textarea>
+            <span id="sClausula_garantia"></span>
+        </div>
+    <br>
+        <div class="grupo-form">
+            <input type="text" placeholder="Código Serial" maxlength="10" class="control-form" id="Seriales" name="Seriales" required>
             <span id="sSeriales"></span>
-        </div>
-
-        <div class="form-group col-md-4">
-            <label for="Categoria">Categorías</label>
-            <select class="custom-select" id="Categoria" name="Categoria" required>
+        
+            <select class="form-select" id="Categoria" name="Categoria" required>
                 <option value="">Seleccionar Categoría</option>
                 <option value="1">IMPRESORA</option>
                 <option value="3">TINTA</option>
@@ -96,100 +73,111 @@ if (!isset($_SESSION['name'])) {
         </div>
 
         <!-- Campo faltante de PRECIO -->
-        <div class="form-group col-md-4">
-            <label for="Precio">Precio</label>
-            <input type="text" maxlength="10" class="form-control" id="Precio" name="Precio" required>
+        <div class="envolver-form">
+            <input type="text" placeholder="Precio" maxlength="10" class="control-form" id="Precio" name="Precio" required>
             <span id="sPrecio"></span>
         </div>
-    </div>
 
-    <div class="d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
-    </div>
-</form>
-
-    </div>
+        <button class="boton-form" type="submit">Registrar</button>
+        <button class="boton-reset" type="reset">Reset</button>
+    </form>
+  </div>
+</div>
 
 
-    <div class="table-container">
-    <h1 class="titulo-tabla display-5 text-center">LISTA DE PRODUCTOS</h1>
-    <table class="tabla">
-    <thead>
-        <tr>
-            <th>Acciones</th>
-            <th>Id Producto</th>
-            <th>Nombre del Producto</th>
-            <th>Descripción</th>
-            <th>Modelo</th> <!-- CAMBIO: antes decía id_modelo -->
-            <th>Stock Actual</th>
-            <th>Stock Máximo</th>
-            <th>Stock Mínimo</th>
-            <th>Serial</th>
-            <th>Cláusula de Garantía</th>
-            <th>Categoría</th> <!-- CAMBIO: antes decía id_categoria -->
-            <th>Precio</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($productos as $producto): ?>
+<div class="contenedor-tabla">
+    <h3>Lista de Productos</h3>
+    <table class="tabla"class="tablaConsultas" id="tablaConsultas">
+        <thead>
             <tr>
-                <td>
-                    <!-- Botón Modificar -->
-                    <button 
-                        type="button" 
-                        class="btn btn-modificar" 
-                        data-toggle="modal" 
-                        data-target="#modificarProductoModal" 
-                        data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
-                        data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
-                        data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
-                        data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
-                        data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
-                        data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
-                        data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
-                        data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
-                        data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
-                        data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
-                        data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
-                    >
-                        Modificar
-                    </button>
-                    <br>
-                    <!-- Botón Eliminar -->
-                    <a href="#" 
-                        data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>" 
-                        class="btn btn-eliminar"
-                    >
-                        Eliminar
-                    </a>
-                </td>
-                <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
-                <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
-                <td><?php echo htmlspecialchars($producto['descripcion_producto']); ?></td>
-
-                <!-- AQUÍ cambia: mostramos el nombre del modelo -->
-                <td>
-                    <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
-                </td>
-
-                <td><?php echo htmlspecialchars($producto['stock']); ?></td>
-                <td><?php echo htmlspecialchars($producto['stock_maximo']); ?></td>
-                <td><?php echo htmlspecialchars($producto['stock_minimo']); ?></td>
-                <td><?php echo htmlspecialchars($producto['serial']); ?></td>
-                <td><?php echo htmlspecialchars($producto['clausula_garantia']); ?></td>
-
-                <!-- AQUÍ cambia: mostramos el nombre de la categoría -->
-                <td>
-                    <?php echo htmlspecialchars($producto['nombre_caracteristicas']); ?>
-                </td>
-
-                <td><?php echo htmlspecialchars($producto['precio']); ?></td>
-                
+                <th>Id Producto</th>
+                <th>Producto</th>
+                <th>Descripción</th>
+                <th>Modelo</th> <!-- CAMBIO: antes decía id_modelo -->
+                <th>Stock Actual</th>
+                <th>Stock Máximo</th>
+                <th>Stock Mínimo</th>
+                <th>Serial</th>
+                <th>Cláusula de Garantía</th>
+                <th>Categoría</th> <!-- CAMBIO: antes decía id_categoria -->
+                <th>Precio</th>
+                <th>Acciones</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach ($productos as $producto): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['descripcion_producto']); ?></td>
 
+                    <!-- AQUÍ cambia: mostramos el nombre del modelo -->
+                    <td>
+                        <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
+                    </td>
+
+                    <td><?php echo htmlspecialchars($producto['stock']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['stock_maximo']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['stock_minimo']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['serial']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['clausula_garantia']); ?></td>
+
+                    <!-- AQUÍ cambia: mostramos el nombre de la categoría -->
+                    <td>
+                        <?php echo htmlspecialchars($producto['nombre_caracteristicas']); ?>
+                    </td>
+
+                    <td><?php echo htmlspecialchars($producto['precio']); ?></td>
+                    
+                    <td>
+                        <span>
+                            <div class="acciones-boton">
+                                <i class="vertical">
+                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                                </i>
+                                <div class="desplegable">
+                                    <ul>
+                                        <li>
+                                            <!-- Botón Modificar -->
+                                            <button 
+                                                type="button" 
+                                                class="btn btn-modificar" 
+                                                data-toggle="modal" 
+                                                data-target="#modificarProductoModal" 
+                                                data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
+                                                data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
+                                                data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
+                                                data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
+                                                data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
+                                                data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
+                                                data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
+                                                data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
+                                                data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
+                                                data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
+                                                data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
+                                            >
+                                                Modificar
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <!-- Botón Eliminar -->
+                                            <a href="#" 
+                                                data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>" 
+                                                class="btn btn-eliminar"
+                                            >
+                                                Eliminar
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </span>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
                     <div class="row">
                         <div class="col">

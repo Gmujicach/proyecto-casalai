@@ -1,77 +1,231 @@
 $(document).ready(function () {
-    // Cargar datos del marcas en el modal al abrir
-    $(document).on('click', '.btn-modificar', function() {
-        var id_marca = $(this).data('id');
 
-        // Establecer el id_producto en el campo oculto del formulario de modificación
-        $('#modificar_id_marcas').val(id_marca);
+    // MENSAJE //
+    if($.trim($("#mensajes").text()) != ""){
+        mensajes("warning", 4000, "Atención", $("#mensajes").html());
+    }
 
-        // Realizar una solicitud AJAX para obtener los datos del marcas desde la base de datos
-        $.ajax({
-            url: '', // Ruta al controlador PHP que maneja las peticiones
-            type: 'POST',
-            dataType: 'json',
-            data: { id_marca: id_marca, accion: 'obtener_marcas' },
-            success: function(marcas) {
-                console.log('Datos de la Marca obtenidos:', marcas);
-                // Llenar los campos del formulario con los datos obtenidos del marcas
-                $('#modificarnombre_marca').val(marcas.nombre_marca);
-                
-                // Ajustar la imagen si se maneja la carga de imágenes
-                // $('#modificarImagen').val(marcas.imagen);
-
-                // Mostrar el modal de modificación después de llenar los datos
-                $('#modificar_marcas_modal').modal('show');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error en la solicitud AJAX:', textStatus, errorThrown);
-                muestraMensaje('Error al cargar los datos de la Marca.');
-            }
-        });
+    // NOMBRE DE LA MARCA
+    $("#nombre_marca").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        let nombre = document.getElementById("nombre_marca");
+        nombre.value = space(nombre.value);
+    });
+    $("#nombre_marca").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
+            $(this),
+            $("#snombre_marca"),
+            "*El formato solo permite letras*"
+        );
     });
 
-    // Enviar datos de modificación por AJAX al controlador PHP
-    $('#modificarmarcas').on('submit', function(e) {
+    // Validación antes de enviar (registro)
+    function validarEnvioMarca(){
+        let nombre = document.getElementById("nombre_marca");
+        nombre.value = space(nombre.value).trim();
+
+        if(validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
+            $("#nombre_marca"),
+            $("#snombre_marca"),
+            "*El nombre debe tener solo letras*"
+        )==0){
+            mensajes('error',4000,'Verifique el nombre de la marca','Debe tener solo letras');
+            return false;
+        }
+        return true;
+    }
+
+    // Función para agregar la fila a la tabla
+    function agregarFilaMarca(marca) {
+        const nuevaFila = `
+            <tr data-id="${marca.id_marca}">
+                <td>${marca.id_marca}</td>
+                <td>${marca.nombre_marca}</td>
+                <td>
+                    <div class="acciones-boton">
+                        <i class="vertical">
+                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                        </i>
+                        <div class="desplegable">
+                            <ul>
+                                <li>
+                                    <button class="btn btn-primary btn-modificar"
+                                        data-id="${marca.id_marca}"
+                                        data-nombre="${marca.nombre_marca}">
+                                        Modificar
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-danger btn-eliminar"
+                                        data-id="${marca.id_marca}">
+                                        Eliminar
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+        $('#tablaConsultas tbody').append(nuevaFila);
+    }
+
+    // Resetear formulario
+    function resetMarca() {
+        $("#nombre_marca").val('');
+        $("#snombre_marca").text('');
+    }
+
+    // Enviar formulario de registro por AJAX
+    $('#registrarMarca').on('submit', function(e) {
         e.preventDefault();
 
-        // Crear un objeto FormData con los datos del formulario
+        if(validarEnvioMarca()){
+            var datos = new FormData(this);
+            datos.append('accion', 'registrar');
+            enviarAjax(datos, function(respuesta){
+                if(respuesta.status === "success" || respuesta.resultado === "success"){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: respuesta.message || respuesta.msg || 'Marca registrada correctamente'
+                    });
+                    agregarFilaMarca(respuesta.marca);
+                    resetMarca();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la marca'
+                    });
+                }
+            });
+        }
+    });
+
+    // Función genérica para enviar AJAX
+    function enviarAjax(datos, callback) {
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: datos,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (respuesta) {
+                if (typeof respuesta === "string") {
+                    respuesta = JSON.parse(respuesta);
+                }
+                if(callback) callback(respuesta);
+            },
+            error: function () {
+                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
+            }
+        });
+    }
+
+    // Cargar datos de la marca en el modal al abrir
+    $(document).on('click', '.btn-modificar', function () {
+        $('#modificar_id_marca').val($(this).data('id'));
+        $('#modificar_nombre_marca').val($(this).data('nombre'));
+        $('#smnombre_marca').text('');
+        $('#modificarMarcaModal').modal('show');
+    });
+
+    // Validaciones en tiempo real para el modal de modificar
+    $("#modificar_nombre_marca").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        let nombre = document.getElementById("modificar_nombre_marca");
+        nombre.value = space(nombre.value);
+    });
+    $("#modificar_nombre_marca").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
+            $(this),
+            $("#smnombre_marca"),
+            "*El formato solo permite letras*"
+        );
+    });
+
+    // Validación para modificar
+    function validarMarca(datos) {
+        let errores = [];
+        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/.test(datos.nombre_marca)) {
+            errores.push("El nombre debe tener solo letras.");
+        }
+        return errores;
+    }
+
+    // Enviar modificación por AJAX
+    $('#modificarMarca').on('submit', function(e) {
+        e.preventDefault();
+
+        const datos = {
+            nombre_marca: $('#modificar_nombre_marca').val()
+        };
+
+        const errores = validarMarca(datos);
+
+        if (errores.length > 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de validación',
+                html: errores.join('<br>')
+            });
+            return;
+        }
+
         var formData = new FormData(this);
         formData.append('accion', 'modificar');
-
-        // Enviar la solicitud AJAX al controlador PHP
         $.ajax({
-            url: '', // Asegúrate de que la URL sea correcta
+            url: '',
             type: 'POST',
+            data: formData,
             processData: false,
             contentType: false,
-            cache: false,
-            data: formData,
+            dataType: 'json',
             success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                response = JSON.parse(response); // Asegúrate de que la respuesta sea un objeto JSON
                 if (response.status === 'success') {
-                    $('#modificarProductoModal').modal('hide');
+                    $('#modificarMarcaModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Modificado',
-                        text: 'La Marca se ha modificada correctamente'
-                    }).then(function() {
-                        location.reload(); // Recargar la página al modificar un producto
+                        text: 'La marca se ha modificado correctamente'
                     });
+
+                    const id = $('#modificar_id_marca').val();
+                    const nombre = $('#modificar_nombre_marca').val();
+
+                    const fila = $('tr[data-id="' + id + '"]');
+                    fila.find('td').eq(1).text(nombre);
+
+                    const botonModificar = fila.find('.btn-modificar');
+                    botonModificar.data('nombre', nombre);
                 } else {
-                    muestraMensaje(response.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'No se pudo modificar la marca'
+                    });
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar la Marca:', textStatus, errorThrown);
-                muestraMensaje('Error al modificar la Marca.');
+                console.error('Error al modificar la marca:', textStatus, errorThrown);
+                muestraMensaje('Error al modificar la marca.');
             }
         });
     });
 
-    // Función para eliminar el producto
+    // Cerrar modal de modificación
+    $(document).on('click', '#modificarMarcaModal .close', function() {
+        $('#modificarMarcaModal').modal('hide');
+    });
+
+    // Eliminar marca
     $(document).on('click', '.btn-eliminar', function (e) {
-        e.preventDefault(); // Evitar la redirección predeterminada del enlace
+        e.preventDefault();
         Swal.fire({
             title: '¿Está seguro?',
             text: "¡No podrás revertir esto!",
@@ -79,80 +233,73 @@ $(document).ready(function () {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminarlo!'
+            confirmButtonText: 'Sí, eliminarla!'
         }).then((result) => {
             if (result.isConfirmed) {
-                var id = $(this).data('id');
-                console.log("ID de la Marca a eliminar: ", id); // Punto de depuración
+                var id_marca = $(this).data('id');
                 var datos = new FormData();
                 datos.append('accion', 'eliminar');
-                datos.append('id', id);
-                enviarAjax(datos, function (respuesta) {
+                datos.append('id_marca', id_marca);
+                enviarAjax(datos, function(respuesta){
                     if (respuesta.status === 'success') {
                         Swal.fire(
-                            'Eliminado!',
-                            'La Marca ha sido eliminada.',
+                            'Eliminada!',
+                            'La marca ha sido eliminada.',
                             'success'
-                        ).then(function() {
-                            location.reload(); // Recargar la página al eliminar un producto
-                        });
+                        );
+                        eliminarFilaMarca(id_marca);
                     } else {
-                        muestraMensaje(respuesta.message);
+                        Swal.fire('Error', respuesta.message, 'error');
                     }
                 });
             }
         });
     });
 
-    // Función para incluir un nuevo producto
-    $('#incluirmarcas').on('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                try {
-                    const data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            title: 'Éxito',
-                            text: 'Marca ingresada exitosamente',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.message || 'Error al ingresar la Marca',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    }
-                } catch (e) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Error al procesar la respuesta del servidor',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Error en la solicitud AJAX: ' + error,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
+    function eliminarFilaMarca(id_marca) {
+        $(`#tablaConsultas tbody tr[data-id="${id_marca}"]`).remove();
+    }
+
+    // Función genérica para mostrar mensajes
+    function mensajes(icono, tiempo, titulo, mensaje){
+        Swal.fire({
+            icon: icono,
+            timer: tiempo,
+            title: titulo,
+            text: mensaje,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
         });
-    });
+    }
+
+    // Utilidades de validación
+    function validarKeyPress(er, e) {
+        key = e.keyCode;
+        tecla = String.fromCharCode(key);
+        a = er.test(tecla);
+
+        if (!a) {
+            e.preventDefault();
+        }
+    }
+
+    function validarKeyUp(er, etiqueta, etiquetamensaje, mensaje) {
+        a = er.test(etiqueta.val());
+
+        if (a) {
+            etiquetamensaje.text("");
+            return 1;
+        } else {
+            etiquetamensaje.text(mensaje);
+            return 0;
+        }
+    }
+
+    function space(str) {
+        const regex = /\s{2,}/g;
+        var str = str.replace(regex, ' ');
+        return str;
+    }
 
     // Delegación para el despliegue de opciones (modificar/eliminar)
     $('#tablaConsultas').on('click', '.vertical', function(e) {
@@ -170,73 +317,4 @@ $(document).ready(function () {
     $(document).on('click', function() {
         $('.desplegable').hide();
     });
-
-    // Manejar clic en flechas
-    $(document).on('click', '.flecha-izquierda, .flecha-derecha', function(e) {
-        e.preventDefault();
-        const url = $(this).closest('a').attr('href');
-        if(url) {
-            cambiarPagina(url.split('pagina=')[1]);
-        }
-    });
-
-    // Manejar cambio en filas por página
-    $('#filasPorPagina').change(function() {
-        cambiarFilasPorPagina(this.value);
-    });
 });
-
-// Función genérica para enviar AJAX
-function enviarAjax(datos, callback) {
-    console.log("Enviando datos AJAX: ", datos); // Punto de depuración
-    $.ajax({
-        url: '', // Asegúrate de que la URL apunte al controlador correcto
-        type: 'POST',
-        contentType: false,
-        data: datos,
-        processData: false,
-        cache: false,
-        success: function (respuesta) {
-            console.log("Respuesta del servidor: ", respuesta); // Punto de depuración
-            callback(JSON.parse(respuesta));
-        },
-        error: function () {
-            console.error('Error en la solicitud AJAX');
-            muestraMensaje('Error en la solicitud AJAX');
-        }
-    });
-}
-
-// Función genérica para mostrar mensajes
-function muestraMensaje(mensaje) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje
-    });
-}
-
-function cambiarPagina(pagina) {
-    const filas = $('#filasPorPagina').val();
-    
-    $.ajax({
-        url: '',
-        type: 'GET',
-        data: {
-            pagina: pagina,
-            filas: filas,
-            ajax: true
-        },
-        success: function(data) {
-            $('#tabla-usuarios').replaceWith($(data).find('#tabla-usuarios'));
-            actualizarParametrosURL(pagina, filas);
-        }
-    });
-}
-
-function actualizarParametrosURL(pagina, filas) {
-    const url = new URL(window.location);
-    url.searchParams.set('pagina', pagina);
-    url.searchParams.set('filas', filas);
-    window.history.pushState({}, '', url);
-}

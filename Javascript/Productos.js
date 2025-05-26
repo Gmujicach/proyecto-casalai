@@ -144,6 +144,23 @@ $(document).ready(function () {
             }
         });
     });
+
+    // Delegación para el despliegue de opciones (modificar/eliminar)
+    $('#tablaConsultas').on('click', '.vertical', function(e) {
+        e.stopPropagation(); // Prevenir cierre inmediato
+
+        // Cerrar todos los menús primero
+        $('.desplegable').not($(this).next('.desplegable')).hide();
+
+        // Alternar el menú actual
+        const menuActual = $(this).next('.desplegable');
+        menuActual.toggle();
+    });
+
+    // Cerrar el menú si se hace clic fuera
+    $(document).on('click', function() {
+        $('.desplegable').hide();
+    });
 });
 
 

@@ -1,96 +1,115 @@
 <?php
-
-
-
 if (!isset($_SESSION['name'])) {
-
- 	header('Location: .');
- 	exit();
- }
+	header('Location: .');
+	exit();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestionar Modelos</title>
-  <?php include 'header.php'; ?>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Modelos</title>
+    <?php include 'header.php'; ?>
 </head>
 <body>
 
 <?php include 'NewNavBar.php'; ?>
-<div class="container"> 
-<form id="incluirmodelos" action="" method="POST" class="formulario-1"><?php //FORMULARIOOOOOOOOOOO INCLUIR ?>
-    <input type="hidden" name="accion" value="ingresar">
-    <h3 class="display-4 text-center">INCLUIR MODELOS</h3>
-        
-        <div class="form-group col-md-12">
-            <label for="id_marca"></label>
-            <select class="form-control" id="id_marca" name="id_marca">
-                <option value="">Selecciona una marca</option>
-                <?php foreach ($marcas as $marca): ?>
-                    <option value="<?php echo $marca['id_marca']; ?>"><?php echo $marca['nombre_marca']; ?></option>
-                 <?php endforeach; ?>
-            </select>
-        </div>
 
-    <div class="form-row">
-        <div class="form-group col-md-12">
-            <label for="nombre_modelo">Nombre de los Modelos</label>
-            <input type="text" maxlength="15" class="form-control" id="nombre_modelo" name="nombre_modelo" required>
-            <span id="snombre_modelo"></span>
-        </div>
+<div class="formulario-responsivo">
+    <div class="fondo-form">
+        <form id="registrarModelo" action="" method="POST">
+            <input type="hidden" name="accion" value="registrar">
+            <h3 class="titulo-form">Incluir Modelo</h3>
+            
+            <div class="envolver-form">
+                <label for="id_marca"></label>
+                <select class="form-select" id="id_marca" name="id_marca">
+                    <option value="">Selecciona una marca</option>
+                    <?php foreach ($marcas as $marca): ?>
+                        <option value="<?php echo $marca['id_marca']; ?>"><?php echo $marca['nombre_marca']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="envolver-form">
+                <input type="text" placeholder="Nombre del modelo" class="control-form" id="nombre_modelo" name="nombre_modelo" maxlength="15" required>
+                <span class="span-value" id="snombre_modelo"></span>
+            </div>
+
+            <button class="boton-form" type="submit">Registrar</button>
+            <button class="boton-reset" type="reset">Reset</button>
+
+        </form>
     </div>
+</div>
 
-    <div class="form-group d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
-    </div>
-</form>
-    </div>
-
-
-    <div class="contenedor-tabla">
-    <h1 class="titulo-tabla display-5 text-center">LISTA DE MODELOS</h1>
-    <table class="tabla">
+<div class="contenedor-tabla">
+    <h3>Lista de los Modelos</h3>
+    <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
                 <th>Acciones</th>
-                <th>ID Marca</th>
-                <th>Nombre del modelo</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($modelos as $modelos): ?>
                 
                 <tr>
-                    <td>
-                        <!-- Botón Modificar que abre el modal -->
-                        <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarmodelosModal" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>">
-                        Modificar
-                        </button>
-                        <br>
-                        <!-- Botón Eliminar -->
-                        <a href="#" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>" class="btn btn-eliminar">Eliminar</a>
-                    </td>
                     <td><?php echo htmlspecialchars($modelos['nombre_marca']); ?></td>
                     <td><?php echo htmlspecialchars($modelos['nombre_modelo']); ?></td>
+                    <td>
+                        <span>
+                            <div class="acciones-boton">
+                                <i class="vertical">
+                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                                </i>
+                                <div class="desplegable">
+                                    <ul>
+                                        <li>
+                                            <!-- Botón Modificar que abre el modal -->
+                                            <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarmodelosModal" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>">
+                                            Modificar
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <!-- Botón Eliminar -->
+                                            <a href="#" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>" class="btn btn-eliminar">Eliminar</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </span>
+                    </td>
                 </tr>
-            
             <?php endforeach; ?>
         </tbody>
     </table>
-
-    
+</div>
+<!--<div class="containera">
+    <form method="post" action="" id="f" target="_blank">
+        <div class="containera">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-primary" id="pdfmodelos" name="pdfmodelos"><a href="?pagina=pdfmodelos">GENERAR REPORTE</button>
+                </div>
+            </div>
+        </div>
+        
+    </form>
+</div>-->
 
 <!-- Modal de modificación -->
 <div class="modal fade" id="modificar_modelos_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_modelos_modal_label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="modificarmodelos" method="POST" enctype="multipart/form-data">
+            <form id="modificarmodelos" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_modelos_modal_label">Modificar Modelos</h5>
+                    <h5 class="modal-title" id="modificar_modelos_modal_label">Modificar Modelo</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -104,42 +123,24 @@ if (!isset($_SESSION['name'])) {
                         <span id="smodificardescripcion_mo"></span>
                     </div>
                     
-                    </div>
+                </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-cerrar" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Modificar</button>
+                        <button type="submit" class="btn btn-primary">Modificar</button>
+                    </div>
                 </div>
-                </div>
-                
             </form>
         </div>
     </div>
-    <div class="containera"> <!-- todo el contenido ira dentro de esta etiqueta-->
-
-<form method="post" action="" id="f" target="_blank">
-<div class="containera">
-    <div class="row">
-        <div class="col">
-               <button type="button" class="btn btn-primary" id="pdfmodelos" name="pdfmodelos"><a href="?pagina=pdfmodelos">GENERAR REPORTE</button>
-        </div>
-        
-    </div>
-</div>
-</form>
-    
-</div> <!-- fin de container -->
 </div>
 
-
-
-
+<?php include 'footer.php'; ?>
 <script src="public/bootstrap/js/sidebar.js"></script>
-  <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="public/js/jquery-3.7.1.min.js"></script>
-  <script src="public/js/jquery.dataTables.min.js"></script>
-  <script src="public/js/dataTables.bootstrap5.min.js"></script>
-  <script src="public/js/datatable.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/datatable.js"></script>
+<script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/modelos.js"></script>
 <script src="Javascript/validaciones.js"></script>
 </body>
