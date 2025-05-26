@@ -80,7 +80,8 @@ $(document).ready(function () {
 
     // Enviar formulario de registro por AJAX
     $('#registrarMarca').on('submit', function(e) {
-        e.preventDefaumarca
+        e.preventDefault();
+
         if(validarEnvioMarca()){
             var datos = {
                 nombre_marca: $("#nombre_marca").val(),
