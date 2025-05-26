@@ -41,7 +41,6 @@ $(document).ready(function () {
     function agregarFilaMarca(marca) {
         const nuevaFila = `
             <tr data-id="${marca.id_marca}">
-                <td>${marca.id_marca}</td>
                 <td>${marca.nombre_marca}</td>
                 <td>
                     <div class="acciones-boton">
@@ -83,10 +82,8 @@ $(document).ready(function () {
         e.preventDefault();
 
         if(validarEnvioMarca()){
-            var datos = {
-                nombre_marca: $("#nombre_marca").val(),
-                accion: "registrar"
-            };
+            var datos = new FormData(this);
+            datos.append('accion', 'registrar');
             enviarAjax(datos, function(respuesta){
                 if(respuesta.status === "success" || respuesta.resultado === "success"){
                     Swal.fire({
@@ -109,15 +106,17 @@ $(document).ready(function () {
 
     // Función genérica para enviar AJAX
     function enviarAjax(datos, callback) {
-        let esFormData = (typeof datos === "object" && typeof datos.append === "function");
         $.ajax({
             url: '',
             type: 'POST',
             data: datos,
-            processData: !esFormData ? true : false,
-            contentType: !esFormData ? 'application/x-www-form-urlencoded; charset=UTF-8' : false,
-            dataType: 'json',
+            contentType: false,
+            processData: false,
+            cache: false,
             success: function (respuesta) {
+                if (typeof respuesta === "string") {
+                    respuesta = JSON.parse(respuesta);
+                }
                 if(callback) callback(respuesta);
             },
             error: function () {
@@ -128,10 +127,8 @@ $(document).ready(function () {
 
     // Cargar datos de la marca en el modal al abrir
     $(document).on('click', '.btn-modificar', function () {
-        var fila = $(this).closest('tr');
-        var celdas = fila.find('td');
-        $('#modificar_id_marca').val(celdas.eq(0).text().trim());
-        $('#modificar_nombre_marca').val(celdas.eq(1).text().trim());
+        $('#modificar_id_marca').val($(this).data('id'));
+        $('#modificar_nombre_marca').val($(this).data('nombre'));
         $('#smnombre_marca').text('');
         $('#modificarMarcaModal').modal('show');
     });
@@ -242,27 +239,16 @@ $(document).ready(function () {
                 var datos = new FormData();
                 datos.append('accion', 'eliminar');
                 datos.append('id_marca', id_marca);
-                $.ajax({
-                    url: '',
-                    type: 'POST',
-                    data: datos,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
-                    success: function (respuesta) {
-                        if (respuesta.status === 'success') {
-                            Swal.fire(
-                                'Eliminada!',
-                                'La marca ha sido eliminada.',
-                                'success'
-                            );
-                            eliminarFilaMarca(id_marca);
-                        } else {
-                            muestraMensaje(respuesta.message);
-                        }
-                    },
-                    error: function () {
-                        muestraMensaje('Error en la solicitud AJAX');
+                enviarAjax(datos, function(respuesta){
+                    if (respuesta.status === 'success') {
+                        Swal.fire(
+                            'Eliminada!',
+                            'La marca ha sido eliminada.',
+                            'success'
+                        );
+                        eliminarFilaMarca(id_marca);
+                    } else {
+                        Swal.fire('Error', respuesta.message, 'error');
                     }
                 });
             }
@@ -271,27 +257,6 @@ $(document).ready(function () {
 
     function eliminarFilaMarca(id_marca) {
         $(`#tablaConsultas tbody tr[data-id="${id_marca}"]`).remove();
-    }
-
-    // Función genérica para enviar AJAX
-    function enviarAjax(datos, callback) {
-        console.log("Enviando datos AJAX: ", datos); // Punto de depuración
-        $.ajax({
-            url: '', // Asegúrate de que la URL apunte al controlador correcto
-            type: 'POST',
-            data: datos,
-            contentType: false,
-            processData: false,
-            cache: false,
-            success: function (respuesta) {
-                console.log("Respuesta del servidor: ", respuesta); // Punto de depuración
-                callback(JSON.parse(respuesta));
-            },
-            error: function () {
-                console.error('Error en la solicitud AJAX');
-                muestraMensaje('Error en la solicitud AJAX');
-            }
-        });
     }
 
     // Función genérica para mostrar mensajes
