@@ -69,6 +69,11 @@ $(document).ready(function () {
         });
     });
 
+    // Cerrar modal de modificación
+    $(document).on('click', '#modificarCuentaModal .close', function() {
+        $('#modificarCuentaModal').modal('hide');
+    });
+
     // Función para eliminar el producto
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault(); // Evitar la redirección predeterminada del enlace
