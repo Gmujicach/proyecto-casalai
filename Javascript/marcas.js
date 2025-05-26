@@ -27,8 +27,8 @@ $(document).ready(function () {
 
         if(validarKeyUp(
             /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
-            $("#nombre_banco"),
-            $("#snombre_banco"),
+            $("#nombre_marca"),
+            $("#snombre_marca"),
             "*El nombre debe tener solo letras*"
         )==0){
             mensajes('error',4000,'Verifique el nombre de la marca','Debe tener solo letras');
@@ -52,14 +52,14 @@ $(document).ready(function () {
                             <ul>
                                 <li>
                                     <button class="btn btn-primary btn-modificar"
-                                        data-id="${cuenta.id_marca}"
-                                        data-nombre="${cuenta.nombre_marca}">
+                                        data-id="${marca.id_marca}"
+                                        data-nombre="${marca.nombre_marca}">
                                         Modificar
                                     </button>
                                 </li>
                                 <li>
                                     <button class="btn btn-danger btn-eliminar"
-                                        data-id="${cuenta.id_marca}">
+                                        data-id="${marca.id_marca}">
                                         Eliminar
                                     </button>
                                 </li>
@@ -80,8 +80,7 @@ $(document).ready(function () {
 
     // Enviar formulario de registro por AJAX
     $('#registrarMarca').on('submit', function(e) {
-        e.preventDefault();
-
+        e.preventDefaumarca
         if(validarEnvioMarca()){
             var datos = {
                 nombre_marca: $("#nombre_marca").val(),
@@ -132,6 +131,7 @@ $(document).ready(function () {
         var celdas = fila.find('td');
         $('#modificar_id_marca').val(celdas.eq(0).text().trim());
         $('#modificar_nombre_marca').val(celdas.eq(1).text().trim());
+        $('#smnombre_marca').text('');
         $('#modificarMarcaModal').modal('show');
     });
 
