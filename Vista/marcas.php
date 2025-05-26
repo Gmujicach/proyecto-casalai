@@ -23,12 +23,12 @@ if (!isset($_SESSION['name'])) {
             <input type="hidden" name="accion" value="ingresar">
             <h3 class="titulo-form">INCLUIR MARCA</h3>
             <div class="envolver-form">
-                <input type="text" placeholder="Nombre de la Marca" maxlength="15" class="control-form" id="nombre_marca" name="nombre_marca" required>
+                <input type="text" placeholder="Nombre de la Marca" class="control-form" id="nombre_marca" name="nombre_marca" maxlength="25" required>
                 <span id="snombre_marca"></span>
             </div>
-            <div class="form-group d-flex justify-content-center">
-                <button type="submit" class="boton-form">Registrar</button>
-            </div>
+
+            <button class="boton-form" type="submit">Registrar</button>
+            <button class="boton-reset" type="reset">Reset</button>
         </form>
     </div>
 </div>
@@ -44,11 +44,11 @@ if (!isset($_SESSION['name'])) {
         </thead>
 
         <tbody>
-            <?php foreach ($marcas as $marcas): ?>
+            <?php foreach ($marcas as $marca): ?>
                 <tr>
                     <td>
                         <span class="nombre-usuario">
-                        <?php echo htmlspecialchars($marcas['nombre_marca']); ?>
+                        <?php echo htmlspecialchars($marca['nombre_marca']); ?>
                         </span>
                     </td>
                     <td>
@@ -95,53 +95,38 @@ if (!isset($_SESSION['name'])) {
     </table>
 </div>
 
-<!-- Modal de modificación -->
-<div class="modal fade" id="modificar_usuario_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
+<!-- Modal para modificar marca -->
+<div class="modal fade" id="modificarMarcaModal" tabindex="-1" role="dialog" aria-labelledby="modificarMarcaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="modificarusuario" method="POST" enctype="multipart/form-data">
+            <form id="modificarMarca" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_usuario_modal_label">Modificar Usuario</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="modificarMarcaModalLabel">Modificar Marca</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
                 <div class="modal-body">
-                    <!-- Campos del formulario de modificación -->
-                    <input type="hidden" id="modificar_id_usuario" name="id_usuario">
+                    <input type="hidden" id="modificar_id_marca" name="id_marca">
                     <div class="form-group">
-                        <label for="modificarnombre_usuario">Nombre del Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="15" required>
-                        <span id="smodificarnombre_usuario"></span>
+                        <label for="modificar_nombre_marca">Nombre de la Marca</label>
+                        <input type="text" class="form-control" id="modificar_nombre_marca" name="nombre_marca" maxlength="25" required>
+                        <span class="span-value-modal" id="smnombre_marca"></span>
                     </div>
-                    <div class="form-group">
-                        <label for="modificarclave_usuario">Contraseña del Usuario</label>
-                        <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario" required>
-                        <span id="smodificarclave_usuario"></span>
-                    </div>
-                    <div class="form-group col-md-4">
-                                    <label for="rango">Categorias</label>
-                                    <select class="custom-select" id="rango" name="rango">
-                                    <option value="USUARIO">Usuario</option>
-                                                        <option value="admin">Administrador</option>
-                                                        <option value="almacen">Almacen</option>    
-                                    </select>
-                                </div>
-                    
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-cerrar" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Modificar</button>
                 </div>
-                </div>
-                
             </form>
         </div>
     </div>
 </div>
 
 <?php include 'footer.php'; ?>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
+<script src="Javascript/marcas.js"></script>
+
 <script>
 function cambiarFilasPorPagina(filas) {
     const url = new URL(window.location.href);
@@ -151,13 +136,12 @@ function cambiarFilasPorPagina(filas) {
 }
 </script>
 <script src="public/bootstrap/js/sidebar.js"></script>
-  <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="public/js/jquery-3.7.1.min.js"></script>
+  
   <script src="public/js/jquery.dataTables.min.js"></script>
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatable.js"></script>
   <script src="Javascript/sweetalert2.all.min.js"></script>
-<script src="Javascript/marcas.js"></script>
+
 <script src="Javascript/validaciones.js"></script>
 </body>
 </html>

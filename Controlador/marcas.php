@@ -15,20 +15,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     switch ($accion) {
         case 'ingresar':
+            header('Content-Type: application/json; charset=utf-8');
             $marca = new marca();
             $marca->setnombre_marca($_POST['nombre_marca']);
             
-            if (!$marca->validarmarca()) {
-                echo json_encode(['status' => 'error', 'message' => 'Esta Marca ya existe']);
+            if ($marca->existeNumeroMarca($_POST['nombre_marca'])) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El nombre de la marca ya existe'
+                ]);
+                exit;
             }
-            else {
-                if ($marca->ingresarmarcas()) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar la Marca']);
-                }
+
+            if ($marca->ingresarmarcas()) {
+                $marcaRegistrada = $marca->obtenerUltimaMarca();
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Marca registrada correctamente',
+                    'marca' => $marcaRegistrada
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Error al registrar la marca'
+                ]);
             }
-            break;
+            exit;
 
         case 'obtener_marcas':
             $id = $_POST['id_marca'];
@@ -38,25 +50,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($marca !== null) {
                     echo json_encode($marca);
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Marca no encontrado']);
+                    echo json_encode(['status' => 'error', 'message' => 'Marca no encontrada']);
                 }
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'ID de Marca no proporcionado']);
             }
-            break;
+            exit;
 
         case 'modificar':
+            ob_clean();
+            header('Content-Type: application/json; charset=utf-8');
             $id = $_POST['id_marca'];
             $marca = new marca();
             $marca->setId($id);
             $marca->setnombre_marca($_POST['nombre_marca']);
+
+            if ($marca->existeNumeroMarca($_POST['nombre_marca'], $id_marca)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El nombre de la marca ya existe'
+                ]);
+                exit;
+            }
             
             if ($marca->modificarmarcas($id)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al modificar la marca']);
             }
-            break;
+            exit;
 
         case 'eliminar':
             $id = $_POST['id'];
@@ -64,15 +86,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($marcaModel->eliminarmarcas($id)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la marca']);
             }
-            break;
+            exit;
 
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
-            break;
+        break;
     }
-    exit;
 }
 
 
