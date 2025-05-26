@@ -1,91 +1,67 @@
 <?php
 if (!isset($_SESSION['name'])) {
-
- 	header('Location: .');
- 	exit();
- }
+    header('Location: .');
+    exit();
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestionar Productos</title>
-  
-  <?php include 'header.php'; ?>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Productos</title>
+    <?php include 'header.php'; ?>
 </head>
 <body>
 
 <?php include 'NewNavBar.php'; ?>
 
-<section class="container"> 
+<div class="formulario-responsivo">
+  <div class="fondo-form">
+    <form id="incluirProductoForm" action="" method="POST">
+        <input type="hidden" name="accion" value="ingresar">
+        <h3 class="titulo-form">INCLUIR PRODUCTOS</h3>
 
-<form id="incluirProductoForm" action="" method="POST" class="formulario-1">
-    <input type="hidden" name="accion" value="ingresar">
-    <h3 class="display-4 text-center">INCLUIR PRODUCTOS</h3>
-
-    <div class="row">
-        <div class="form-group col">
-            <label for="nombre_producto">Nombre del producto</label>
-            <input type="text" maxlength="15" class="form-control" id="nombre_producto" name="nombre_producto" required>
+        <div class="grupo-form">
+            <input type="text" placeholder="Nombre del producto" maxlength="15" class="control-form" id="nombre_producto" name="nombre_producto" required>
             <span id="snombre_producto"></span>
-        </div>
 
-        <div class="form-group col">
-            <label for="descripcion_producto">Descripción del producto</label>
-            <input type="text" maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" required>
+            <input type="text" placeholder="Descripción del producto" maxlength="50" class="control-form" id="descripcion_producto" name="descripcion_producto" required>
             <span id="sdescripcion_producto"></span>
         </div>
+    <br>
+        <select class="form-select" id="Modelo" name="Modelo" required>
+            <option value="">Seleccionar Modelo</option>
+            <?php foreach ($modelos as $modelo): ?>
+                <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
+            <?php endforeach; ?>
+        </select>
 
-        <div class="col">
-            <label for="Modelo">Modelo</label>
-            <select class="form-select" id="Modelo" name="Modelo" required>
-                <option value="">Seleccionar Modelo</option>
-                <?php foreach ($modelos as $modelo): ?>
-                    <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
-                <?php endforeach; ?>
-            </select>
+        <div class="grupo-form">
+            <!--<label for="Stock_Actual">Stock Actual</label>
+            <input type="text" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" required>-->
+
+            <input type="text" placeholder="Stock Máximo" maxlength="10" class="control-form" id="Stock_Maximo" name="Stock_Maximo" required>
+            <span id="sStock_Maximo"></span>
+        
+            <input type="text" placeholder="Stock Mínimo" maxlength="10" class="control-form" id="Stock_Minimo" name="Stock_Minimo" required>
+            <span id="sStock_Minimo"></span>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="row my-2">
-            <div class="col" style="display:none">
-                <label for="Stock_Actual">Stock Actual</label>
-                <input type="text" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" required>
-            </div>
-            <div class="col">
-                <label for="Stock_Maximo">Stock Máximo</label>
-                <input type="text" maxlength="10" class="form-control" id="Stock_Maximo" name="Stock_Maximo" required>
-                <span id="sStock_Maximo"></span>
-            </div>
-            <div class="col">
-                <label for="Stock_Minimo">Stock Mínimo</label>
-                <input type="text" maxlength="10" class="form-control" id="Stock_Minimo" name="Stock_Minimo" required>
-                <span id="sStock_Minimo"></span>
-            </div>
+    <br>
+        <div class="form-group">
+            <label for="Clausula_garantia">Cláusula de garantía</label>
+            <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="3"></textarea>
+            <span id="sClausula_garantia"></span>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label for="Clausula_garantia">Cláusula de garantía</label>
-        <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="3"></textarea>
-        <span id="sClausula_garantia"></span>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4">
+        <div class="grupo-form">
             <label for="Seriales">Código Serial</label>
-            <input type="text" maxlength="10" class="form-control" id="Seriales" name="Seriales" required>
+            <input type="text" placeholder="Código Serial" maxlength="10" class="form-control" id="Seriales" name="Seriales" required>
             <span id="sSeriales"></span>
-        </div>
-
-        <div class="form-group col-md-4">
-            <label for="Categoria">Categorías</label>
-            <select class="custom-select" id="Categoria" name="Categoria" required>
+        
+            <select class="form-select" id="Categoria" name="Categoria" required>
                 <option value="">Seleccionar Categoría</option>
                 <option value="1">IMPRESORA</option>
                 <option value="3">TINTA</option>
@@ -96,19 +72,16 @@ if (!isset($_SESSION['name'])) {
         </div>
 
         <!-- Campo faltante de PRECIO -->
-        <div class="form-group col-md-4">
-            <label for="Precio">Precio</label>
-            <input type="text" maxlength="10" class="form-control" id="Precio" name="Precio" required>
+        <div class="envolver-form">
+            <input type="text" placeholder="Precio" maxlength="10" class="form-control" id="Precio" name="Precio" required>
             <span id="sPrecio"></span>
         </div>
-    </div>
 
-    <div class="d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
-    </div>
-</form>
-
-    </div>
+        <button class="boton-form" type="submit">Registrar</button>
+        <button class="boton-reset" type="reset">Reset</button>
+    </form>
+  </div>
+</div>
 
 
     <div class="table-container">
