@@ -61,7 +61,6 @@ if (!isset($_SESSION['name'])) {
                                             <button class="btn btn-primary btn-modificar"
                                             data-id="<?php echo $marca['id_marca']; ?>"
                                             data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
-                                            data-numero="<?php echo htmlspecialchars($cuenta['numero_cuenta']); ?>"
                                             >Modificar</button>
                                         </li>
                                         <li>
