@@ -38,11 +38,13 @@ if (!isset($_SESSION['name'])) {
                 <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
             <?php endforeach; ?>
         </select>
+    <br>
+        <div class="envolver-form">
+            <label for="Stock_Actual">Stock Actual</label>
+            <input type="text" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" required>
+        </div>
 
         <div class="grupo-form">
-            <!--<label for="Stock_Actual">Stock Actual</label>
-            <input type="text" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" required>-->
-
             <input type="text" placeholder="Stock Máximo" maxlength="10" class="control-form" id="Stock_Maximo" name="Stock_Maximo" required>
             <span id="sStock_Maximo"></span>
         
@@ -83,14 +85,14 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 
-    <div class="table-container">
-    <h1 class="titulo-tabla display-5 text-center">LISTA DE PRODUCTOS</h1>
-    <table class="tabla">
+<div class="contenedor-tabla">
+    <h3>Lista de Productos</h3>
+    <table class="tabla"class="tablaConsultas" id="tablaConsultas">
     <thead>
         <tr>
             <th>Acciones</th>
             <th>Id Producto</th>
-            <th>Nombre del Producto</th>
+            <th>Producto</th>
             <th>Descripción</th>
             <th>Modelo</th> <!-- CAMBIO: antes decía id_modelo -->
             <th>Stock Actual</th>
