@@ -39,7 +39,9 @@ CREATE TABLE `tbl_carrito` (
 --
 
 INSERT INTO `tbl_carrito` (`id_carrito`, `id_cliente`, `fecha_creacion`) VALUES
-(5, 3, '2025-03-26 05:43:16');
+(7, 1, '2025-05-25 21:40:06'),
+(8, 3, '2025-05-26 00:36:56'),
+(9, 7, '2025-05-26 00:46:46');
 
 -- --------------------------------------------------------
 
@@ -54,6 +56,14 @@ CREATE TABLE `tbl_carritodetalle` (
   `cantidad` int(11) NOT NULL,
   `estatus` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_carritodetalle`
+--
+
+INSERT INTO `tbl_carritodetalle` (`id_carrito_detalle`, `id_carrito`, `id_producto`, `cantidad`, `estatus`) VALUES
+(29, 9, 3, 5, 'pendiente'),
+(30, 9, 11, 6, 'pendiente');
 
 -- --------------------------------------------------------
 
@@ -123,9 +133,45 @@ INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `tel
 
 CREATE TABLE `tbl_combo` (
   `id_combo` int(11) NOT NULL,
+  `nombre_combo` varchar(255) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `activo` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_combo`
+--
+
+INSERT INTO `tbl_combo` (`id_combo`, `nombre_combo`, `descripcion`, `fecha_creacion`, `activo`) VALUES
+(10, '123', '213', '2025-05-25 21:34:30', 0),
+(11, 'Prueba 2', 'Muy bueno', '2025-05-25 22:51:42', 0),
+(12, 'Prueba 3', 'Combo Oficinista', '2025-05-26 00:47:33', 1),
+(13, 'Prueba 4', 'Combo de Computadora x 6 Cartuchos de Tinta', '2025-05-26 01:13:20', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_combo_detalle`
+--
+
+CREATE TABLE `tbl_combo_detalle` (
+  `id_detalle` int(11) NOT NULL,
+  `id_combo` int(11) NOT NULL,
   `id_producto` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_combo_detalle`
+--
+
+INSERT INTO `tbl_combo_detalle` (`id_detalle`, `id_combo`, `id_producto`, `cantidad`) VALUES
+(10, 13, 13, 3),
+(11, 13, 12, 3),
+(12, 13, 3, 1),
+(13, 12, 11, 3),
+(14, 12, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -167,6 +213,13 @@ CREATE TABLE `tbl_despachos` (
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_despachos`
+--
+
+INSERT INTO `tbl_despachos` (`id_despachos`, `fecha_despacho`, `id_factura`, `correlativo`, `activo`) VALUES
+(1, '2025-05-24', 1, '1110', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -199,8 +252,7 @@ INSERT INTO `tbl_detalles_pago` (`id_detalles`, `id_factura`, `id_cuenta`, `obse
 (17, 1, 1, '', 'Transferencia', '6546464', '2025-05-09', 'En Proceso'),
 (18, 1, 1, '', 'Transferencia', '1234561212', '2025-05-16', 'En Proceso'),
 (19, 1, 1, '', 'Transferencia', '4444', '2025-05-09', 'En Proceso'),
-(20, 1, 1, '', 'Transferencia', '12345671212', '2025-05-16', 'En Proceso'),
-(21, 0, 1, 'Pago Verificado con Éxito', 'Transferencia', '354364343', '2025-05-15', 'Pago Procesado');
+(20, 1, 1, '', 'Transferencia', '12345671212', '2025-05-16', 'En Proceso');
 
 -- --------------------------------------------------------
 
@@ -221,9 +273,9 @@ CREATE TABLE `tbl_detalle_recepcion_productos` (
 --
 
 INSERT INTO `tbl_detalle_recepcion_productos` (`id_detalle_recepcion_productos`, `id_recepcion`, `id_producto`, `costo`, `cantidad`) VALUES
-(1, 3, 3, 10, 3),
-(2, 4, 3, 10, 30),
-(3, 4, 10, 2, 10),
+(1, 3, 3, 10, 10),
+(2, 4, 3, 9, 34),
+(3, 4, 10, 6, 11),
 (4, 5, 3, 8, 1),
 (5, 5, 10, 10, 12);
 
@@ -246,8 +298,9 @@ CREATE TABLE `tbl_facturas` (
 --
 
 INSERT INTO `tbl_facturas` (`id_factura`, `fecha`, `cliente`, `descuento`, `estatus`) VALUES
-(0, '2024-07-18', 1, 1, 'Pago Procesado'),
-(1, '2024-07-18', 1, 1, 'Borrador');
+(1, '2024-07-18', 1, 1, 'Borrador'),
+(2, '2025-05-25', 1, 0, 'Borrador'),
+(3, '2025-05-25', 1, 0, 'Borrador');
 
 -- --------------------------------------------------------
 
@@ -267,9 +320,7 @@ CREATE TABLE `tbl_factura_detalle` (
 --
 
 INSERT INTO `tbl_factura_detalle` (`id`, `factura_id`, `id_producto`, `cantidad`) VALUES
-(1, 1, 3, 1),
-(2, 0, 3, 10),
-(3, 0, 3, 10);
+(1, 1, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -492,8 +543,13 @@ CREATE TABLE `tbl_productos` (
 --
 
 INSERT INTO `tbl_productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`) VALUES
-(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 9, 5, 20, 'Devolución dentro de un plazo de 31 días', 200.00, 1),
-(10, '1231', 'Colormedia', 'Tinta Profesional', 8, 3, -11, 1000, 10000, 'Sin devoluciones', 10.00, 0);
+(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 100, 5, 20, 'Devolución dentro de un plazo de 31 días', 200.00, 1),
+(10, '1231', 'Colormedia', 'Tinta Profesional', 8, 3, 100, 1000, 10000, 'Sin devoluciones', 10.00, 0),
+(11, '051004', 'Computadora 200', 'Potente y Practica', 79, 5, 10, 1000, 1000, '35 Dias', 1000.00, 1),
+(12, 'CRT009', 'Cartucho Canon PG-14', 'Cartucho original Canon negro', 67, 4, 15, 5, 25, '', 25.00, 1),
+(13, 'CRT010', 'Cartucho Canon CL-14', 'Cartucho original Canon color', 68, 4, 12, 5, 20, '', 28.00, 1),
+(14, 'OTH011', 'Cable USB Impresora', 'Cable USB 2.0 para impresora 1.8m', NULL, 5, 30, 10, 50, '', 8.00, 1),
+(15, 'OTH012', 'Papel Fotográfico', 'Papel fotográfico brillante A4 180gr', NULL, 5, 20, 5, 30, '', 12.00, 1);
 
 -- --------------------------------------------------------
 
@@ -599,11 +655,12 @@ CREATE TABLE `tbl_usuarios` (
 
 INSERT INTO `tbl_usuarios` (`id_usuario`, `username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`, `estatus`) VALUES
 (1, 'Admin', '$2y$10$j9dHxGq5aIkAqaZdE.NJg.zpV0HTTcER970QIVMUKjNLw/9R1N1Du', 'Administrador', 'ejemplo@gmail.com', 'Administrador', 'Administrador', '04145753363', 'habilitado'),
-(2, 'Despachador', '$2y$10$F/Jzvek8UvDZIsxCnN1arOjlH1hkrfre15aF36HhWiVYVU8CMospq', 'Despachador', 'ejemplo@gmail.com', 'Despachador', 'Despachador', '04145753363', 'habilitado'),
+(2, 'Despachador', '$2y$10$dgqa0ji1of1FxPQAu3DvI.Y.3MANE2DlQHF8uVTVKEbCJEqNiw/Oe', 'Almacenista', 'ejemplo@gmail.com', 'Despachador', 'Despachador', '04145753363', 'habilitado'),
 (3, 'Cliente', '$2y$10$n/ZpQkW4BaeFZiDzFDYLWuRbrBXvv8sokEeM9zQ7iK5DcjMEsFPly', 'Cliente', 'ejemplo@gmail.com', 'Cliente', 'Cliente', '04145753363', 'habilitado'),
-(4, 'DALV', '$2y$10$vnkAofAen/wh4.GnHKkDkO63/s8kUmUfyI44/e5Y2DlEg.43xymMS', 'usuario', 'EJEMPLO@GMAIL.COM', 'Diego', 'Lopez', '04145753363', 'inhabilitado'),
+(4, 'DALV', '$2y$10$vnkAofAen/wh4.GnHKkDkO63/s8kUmUfyI44/e5Y2DlEg.43xymMS', 'usuario', 'EJEMPLO@GMAIL.COM', 'Diego', 'Lopez', '04145753363', 'habilitado'),
 (5, 'Test', '$2y$10$PshH1iu9D6LxHqT//KlmB.ciWfUN5MMkmSuWDIpb52f9/MW2qulFi', 'usuario', 'testcorreo@gmail.com', 'Pueba', 'Test', '04125248965', 'habilitado'),
-(6, 'Darckort', '$2y$10$dyYy8O8xoZ.9vYP.vW.EluSRrhsAhsJ2c3Kcv88yI6ilkg4WJ73qi', 'usuario', 'darckortgame@gmail.com', 'Braynt', 'Medina', '04261504714', 'habilitado');
+(6, 'Darckort', '$2y$10$dyYy8O8xoZ.9vYP.vW.EluSRrhsAhsJ2c3Kcv88yI6ilkg4WJ73qi', 'usuario', 'darckortgame@gmail.com', 'Braynt', 'Medina', '04261504714', 'habilitado'),
+(7, 'DDDD', '12345', 'Administrador', 'diego0510lopez@gmail.com', 'Diego', 'Lopez', '04241587101', 'habilitado');
 
 --
 -- Índices para tablas volcadas
@@ -648,8 +705,15 @@ ALTER TABLE `tbl_clientes`
 -- Indices de la tabla `tbl_combo`
 --
 ALTER TABLE `tbl_combo`
-  ADD PRIMARY KEY (`id_combo`),
-  ADD KEY `tbl_detalles_combo1` (`id_producto`);
+  ADD PRIMARY KEY (`id_combo`);
+
+--
+-- Indices de la tabla `tbl_combo_detalle`
+--
+ALTER TABLE `tbl_combo_detalle`
+  ADD PRIMARY KEY (`id_detalle`),
+  ADD KEY `id_combo` (`id_combo`),
+  ADD KEY `id_producto` (`id_producto`);
 
 --
 -- Indices de la tabla `tbl_cuentas`
@@ -779,13 +843,13 @@ ALTER TABLE `tbl_usuarios`
 -- AUTO_INCREMENT de la tabla `tbl_carrito`
 --
 ALTER TABLE `tbl_carrito`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_carritodetalle`
 --
 ALTER TABLE `tbl_carritodetalle`
-  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_cartucho_tinta`
@@ -800,10 +864,28 @@ ALTER TABLE `tbl_categoria`
   MODIFY `id_categoria` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT de la tabla `tbl_combo`
+--
+ALTER TABLE `tbl_combo`
+  MODIFY `id_combo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_combo_detalle`
+--
+ALTER TABLE `tbl_combo_detalle`
+  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
 -- AUTO_INCREMENT de la tabla `tbl_cuentas`
 --
 ALTER TABLE `tbl_cuentas`
   MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_despachos`
+--
+ALTER TABLE `tbl_despachos`
+  MODIFY `id_despachos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_detalles_pago`
@@ -816,6 +898,12 @@ ALTER TABLE `tbl_detalles_pago`
 --
 ALTER TABLE `tbl_detalle_recepcion_productos`
   MODIFY `id_detalle_recepcion_productos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_facturas`
+--
+ALTER TABLE `tbl_facturas`
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_factura_detalle`
@@ -857,7 +945,7 @@ ALTER TABLE `tbl_otros`
 -- AUTO_INCREMENT de la tabla `tbl_productos`
 --
 ALTER TABLE `tbl_productos`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_protector_voltaje`
@@ -881,7 +969,7 @@ ALTER TABLE `tbl_tintas`
 -- AUTO_INCREMENT de la tabla `tbl_usuarios`
 --
 ALTER TABLE `tbl_usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
@@ -901,10 +989,11 @@ ALTER TABLE `tbl_cartucho_tinta`
   ADD CONSTRAINT `tbl_cartucho_tinta_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
 
 --
--- Filtros para la tabla `tbl_combo`
+-- Filtros para la tabla `tbl_combo_detalle`
 --
-ALTER TABLE `tbl_combo`
-  ADD CONSTRAINT `tbl_detalles_combo1` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
+ALTER TABLE `tbl_combo_detalle`
+  ADD CONSTRAINT `tbl_combo_detalle_ibfk_1` FOREIGN KEY (`id_combo`) REFERENCES `tbl_combo` (`id_combo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_combo_detalle_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_despachos`
@@ -931,7 +1020,7 @@ ALTER TABLE `tbl_detalle_recepcion_productos`
 -- Filtros para la tabla `tbl_facturas`
 --
 ALTER TABLE `tbl_facturas`
-  ADD CONSTRAINT `facturas_ibfk_1` FOREIGN KEY (`cliente`) REFERENCES `tbl_clientes` (`id_clientes`) ON DELETE CASCADE;
+  ADD CONSTRAINT `tbl_facturas_ibfk_1` FOREIGN KEY (`cliente`) REFERENCES `tbl_clientes` (`id_clientes`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_factura_detalle`

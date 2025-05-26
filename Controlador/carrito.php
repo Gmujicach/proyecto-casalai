@@ -120,20 +120,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
 
         case 'registrar_compra':
-            $id_cliente = $_SESSION['id_usuario'];; // Obtener de la sesión
+            $id_cliente = 1; // Obtener de la sesión
             $carrito = new Carrito();
             $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
 
             if ($carritoCliente) {
                 $id_carrito = $carritoCliente['id_carrito'];
-                if ($carrito->registrarCompra($id_carrito, $id_cliente)) {
-                    echo json_encode(['status' => 'success', 'message' => 'Compra registrada correctamente']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al registrar la compra']);
-                }
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'No se encontró el carrito del cliente']);
-            }
+try {
+    if ($carrito->registrarCompra($id_carrito, $id_cliente)) {
+        echo json_encode(['status' => 'success', 'message' => 'Compra registrada correctamente']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al registrar la compra']);
+    }
+} catch (Exception $e) {
+    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+};}
             break;
 
         case 'filtrar_por_marca':
