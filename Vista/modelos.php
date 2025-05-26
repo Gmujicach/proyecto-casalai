@@ -90,6 +90,18 @@ if (!isset($_SESSION['name'])) {
         </tbody>
     </table>
 </div>
+<!--<div class="containera">
+    <form method="post" action="" id="f" target="_blank">
+        <div class="containera">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-primary" id="pdfmodelos" name="pdfmodelos"><a href="?pagina=pdfmodelos">GENERAR REPORTE</button>
+                </div>
+            </div>
+        </div>
+        
+    </form>
+</div>-->
 
 <!-- Modal de modificación -->
 <div class="modal fade" id="modificar_modelos_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_modelos_modal_label" aria-hidden="true">
@@ -119,18 +131,6 @@ if (!isset($_SESSION['name'])) {
             </form>
         </div>
     </div>
-</div>
-
-<div class="containera">
-    <form method="post" action="" id="f" target="_blank">
-        <div class="containera">
-            <div class="row">
-                <div class="col">
-                    <button type="button" class="btn btn-primary" id="pdfmodelos" name="pdfmodelos"><a href="?pagina=pdfmodelos">GENERAR REPORTE</button>
-                </div>
-            </div>
-        </div>
-    </form>
 </div>
 
 <?php include 'footer.php'; ?>
