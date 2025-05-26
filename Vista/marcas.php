@@ -76,29 +76,6 @@ if (!isset($_SESSION['name'])) {
                 </tr>
             <?php endforeach; ?>
         </tbody>
-        <tfoot>
-            <tr>
-                <td>Filas por Página: 
-                    <select id="filasPorPagina" onchange="cambiarFilasPorPagina(this.value)">
-                        <option value="10" <?= $filasPorPagina == 10 ? 'selected' : '' ?>>10</option>
-                        <option value="20" <?= $filasPorPagina == 20 ? 'selected' : '' ?>>20</option>
-                        <option value="50" <?= $filasPorPagina == 50 ? 'selected' : '' ?>>50</option>
-                        <option value="100" <?= $filasPorPagina == 100 ? 'selected' : '' ?>>100</option>
-                    </select>
-                </td>
-                <td><?= "$inicio-$fin de $totalMarcas" ?></td>
-                <td>
-                    <a href="?pagina=<?= max(1, $paginaActual - 1) ?>&filas=<?= $filasPorPagina ?>">
-                        <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
-                    </a>
-                </td>
-                <td>
-                    <a href="?pagina=<?= min(ceil($totalMarcas / $filasPorPagina), $paginaActual + 1) ?>&filas=<?= $filasPorPagina ?>">
-                        <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
-                    </a>
-                </td>
-            </tr>
-        </tfoot>
     </table>
 </div>
 
@@ -134,21 +111,11 @@ if (!isset($_SESSION['name'])) {
 <script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="Javascript/marcas.js"></script>
 
-<script>
-function cambiarFilasPorPagina(filas) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('filas', filas);
-    url.searchParams.set('pagina', 1); // Resetear a primera página
-    window.location.href = url.toString();
-}
-</script>
 <script src="public/bootstrap/js/sidebar.js"></script>
-  
-  <script src="public/js/jquery.dataTables.min.js"></script>
-  <script src="public/js/dataTables.bootstrap5.min.js"></script>
-  <script src="public/js/datatable.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
 
-<script src="Javascript/validaciones.js"></script>
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/datatable.js"></script>
+
 </body>
 </html>
