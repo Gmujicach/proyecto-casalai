@@ -97,7 +97,7 @@ if (!isset($_SESSION['name'])) {
         <div class="modal-content">
             <form id="modificarmodelos" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_modelos_modal_label">Modificar Modelos</h5>
+                    <h5 class="modal-title" id="modificar_modelos_modal_label">Modificar Modelo</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -111,41 +111,36 @@ if (!isset($_SESSION['name'])) {
                         <span id="smodificardescripcion_mo"></span>
                     </div>
                     
-                    </div>
+                </div>
                     <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Modificar</button>
+                        <button type="submit" class="btn btn-primary">Modificar</button>
+                    </div>
                 </div>
-                </div>
-                
             </form>
         </div>
     </div>
-    <div class="containera"> <!-- todo el contenido ira dentro de esta etiqueta-->
+</div>
 
-<form method="post" action="" id="f" target="_blank">
 <div class="containera">
-    <div class="row">
-        <div class="col">
-            <button type="button" class="btn btn-primary" id="pdfmodelos" name="pdfmodelos"><a href="?pagina=pdfmodelos">GENERAR REPORTE</button>
+    <form method="post" action="" id="f" target="_blank">
+        <div class="containera">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-primary" id="pdfmodelos" name="pdfmodelos"><a href="?pagina=pdfmodelos">GENERAR REPORTE</button>
+                </div>
+            </div>
         </div>
-        
-    </div>
+    </form>
 </div>
-</form>
-    
-</div> <!-- fin de container -->
-</div>
-
-
 
 <?php include 'footer.php'; ?>
 <script src="public/bootstrap/js/sidebar.js"></script>
-  <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="public/js/jquery-3.7.1.min.js"></script>
-  <script src="public/js/jquery.dataTables.min.js"></script>
-  <script src="public/js/dataTables.bootstrap5.min.js"></script>
-  <script src="public/js/datatable.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/datatable.js"></script>
+<script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/modelos.js"></script>
 <script src="Javascript/validaciones.js"></script>
 </body>
