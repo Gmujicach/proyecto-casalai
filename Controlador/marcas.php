@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
-        case 'ingresar':
+        case 'registrar':
             header('Content-Type: application/json; charset=utf-8');
             $marca = new marca();
             $marca->setnombre_marca($_POST['nombre_marca']);

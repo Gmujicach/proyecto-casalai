@@ -85,7 +85,7 @@ $(document).ready(function () {
         if(validarEnvioMarca()){
             var datos = {
                 nombre_marca: $("#nombre_marca").val(),
-                accion: "ingresar"
+                accion: "registrar"
             };
             enviarAjax(datos, function(respuesta){
                 if(respuesta.status === "success" || respuesta.resultado === "success"){
