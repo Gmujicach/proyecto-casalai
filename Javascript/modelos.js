@@ -105,7 +105,7 @@ $(document).ready(function () {
     $(document).on('click', '.btn-modificar', function () {
         $('#modificar_id_modelo').val($(this).data('id'));
         $('#modificar_nombre_modelo').val($(this).data('nombre'));
-        $('#smodificar_modelo').text('');
+        $('#smnombre_modelo').text('');
         $('#modificarModeloModal').modal('show');
     });
 
@@ -119,7 +119,7 @@ $(document).ready(function () {
         validarKeyUp(
             /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]{1,25}$/,
             $(this),
-            $("#smodificar_modelo"),
+            $("#smnombre_modelo"),
             "*El formato permite letras, números y (-/)*"
         );
     });
@@ -156,6 +156,11 @@ $(document).ready(function () {
                 });
             }
         });
+    });
+
+    // Cerrar modal de modificación
+    $(document).on('click', '#modificarMarcaModal .close', function() {
+        $('#modificarMarcaModal').modal('hide');
     });
 
     // Eliminar modelo
