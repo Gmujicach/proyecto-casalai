@@ -181,20 +181,15 @@ if (!isset($_SESSION['name'])) {
                                             <!-- Botón Modificar -->
                                             <button 
                                                 type="button" 
-                                                class="btn btn-modificar" 
+                                                class="btn btn-primary modificar" 
+                                                id="modificarProductoBtn"
                                                 data-toggle="modal" 
                                                 data-target="#modificarProductoModal" 
                                                 data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
                                                 data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
-                                                data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
-                                                data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
+                                                data-modelo="<?php echo htmlspecialchars($producto['nombre_modelo']); ?>"
                                                 data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
-                                                data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
                                                 data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
-                                                data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
-                                                data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
-                                                data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
-                                                data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
                                             >
                                                 Realizar Pedido
                                             </button>
@@ -208,6 +203,59 @@ if (!isset($_SESSION['name'])) {
             <?php endforeach; ?>
         </tbody>
     </table>
+</div>
+
+<!-- Modal de modificación -->
+<div class="modal fade" id="modificarProductoModal" tabindex="-1" role="dialog" aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modificarProductoModalLabel">Realizar Pedido</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Acciones ocultas -->
+          <input type="hidden" name="accion" value="realizar_pedido">
+          <input type="hidden" id="modificarIdProducto" name="id_producto">
+
+          <!-- Campos -->
+          <div class="form-group">
+            <label for="modificarNombreProducto">Nombre del producto</label>
+            <input type="text" maxlength="50" class="form-control" id="modificarNombreProducto" name="nombre_producto" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="modificarModelo">Modelo</label>
+            <input type="text" maxlength="50" class="form-control" id="modificarModelo" name="modelo" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="Proveedor">Proveedor</label>
+            <select class="form-select" id="Proveedor" name="proveedor" required>
+              <option value="">Seleccionar Proveedor</option>
+              <option value="<?php echo $proveedor['id_proveedor']; ?>">
+                <?php echo $proveedor['nombre']; ?>
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="modificarStockMinimo">Cantidad a Pedir</label>
+            <input type="number" min="1" class="form-control" id="modificarStockMinimo" name="cantidad_pedir" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Confirmar Pedido</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 
@@ -289,5 +337,28 @@ if (!isset($_SESSION['name'])) {
   <?php include 'footer.php'; ?>
   <script src="Javascript/proveedor.js"></script>
   <script src="Javascript/validaciones.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Escuchar el clic en cualquier botón con clase "modificar"
+    document.querySelectorAll('.modificar').forEach(button => {
+        button.addEventListener('click', function () {
+            // Obtener los datos del botón
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
+            const modelo = this.dataset.modelo;
+            const stockactual = this.dataset.stockactual;
+            const stockminimo = this.dataset.stockminimo;
+
+            // Llenar los campos del modal
+            document.getElementById('modal-id').value = id;
+            document.getElementById('modal-nombre').value = nombre;
+            document.getElementById('modal-modelo').value = modelo;
+            document.getElementById('modal-stockminimo').value = stockminimo;
+        });
+    });
+});
+</script>
+
+
 </body>
 </html>
