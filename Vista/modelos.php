@@ -120,8 +120,11 @@ if (!isset($_SESSION['name'])) {
                 <div class="modal-body">
                     <input type="hidden" id="modificar_id_modelo" name="id_modelo">
                     <div class="form-group">
+                        <label for="modificar_marca_modelo">Marca</label>
                         <select class="form-select" id="modificar_marca_modelo" name="id_marca" required>
-                            <!-- Las opciones se llenarán por JS -->
+                            <script>
+                                window.marcasDisponibles = <?php echo json_encode($marcas); ?>;
+                            </script>
                         </select>
                     </div>
                     <div class="form-group">

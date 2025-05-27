@@ -146,6 +146,7 @@ class modelo extends BD{
         
         // Primera consulta para obtener datos de marcas
         $querymodelos = 'SELECT mo.id_modelo,
+                                mo.id_marca,
                                 mo.nombre_modelo,
                                 ma.nombre_marca 
                                 FROM tbl_modelos AS mo

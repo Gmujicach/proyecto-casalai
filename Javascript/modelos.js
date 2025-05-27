@@ -49,7 +49,7 @@ $(document).ready(function () {
                                 <li>
                                     <button class="btn btn-primary btn-modificar"
                                         data-id="${modelo.id_modelo}"
-                                        data-marca="${modelo.nombre_marca}"
+                                        data-marcaid="${modelo.id_marca}"
                                         data-nombre="${modelo.nombre_modelo}">
                                         Modificar
                                     </button>
@@ -131,8 +131,11 @@ $(document).ready(function () {
     $('#modificarModelo').on('submit', function(e) {
         e.preventDefault();
 
-        let nombre = $("#modificar_nombre_modelo").val().trim();
-        if(!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]{1,25}$/.test(nombre)){
+        let nombreModelo = $("#modificar_nombre_modelo").val().trim();
+        let idMarca = $("#modificar_marca_modelo").val();
+        let nombreMarca = $("#modificar_marca_modelo option:selected").text();
+
+        if(!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]{1,25}$/.test(nombreModelo)){
             Swal.fire('Error', 'El nombre solo permite letras, números y (-/)', 'error');
             return;
         }
@@ -149,8 +152,12 @@ $(document).ready(function () {
                 });
                 // Actualizar la fila en la tabla
                 let fila = $(`tr[data-id="${$("#modificar_id_modelo").val()}"]`);
-                fila.find('td').eq(1).text(nombre);
-                fila.find('.btn-modificar').data('nombre', nombre);
+                fila.find('td').eq(1).text(nombreMarca);      // Columna Marca
+                fila.find('td').eq(2).text(nombreModelo);     // Columna Modelo
+                // Actualizar los data-atributos del botón modificar
+                fila.find('.btn-modificar')
+                    .data('nombre', nombreModelo)
+                    .data('marcaid', idMarca);
             } else {
                 Swal.fire({
                     icon: 'error',
