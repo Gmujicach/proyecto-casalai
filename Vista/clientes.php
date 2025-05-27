@@ -65,14 +65,14 @@ if (!isset($_SESSION['name'])) {
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($clientes as $clientes): ?>
-                <?php if ($clientes['activo'] == 1) { ?>
+            <?php foreach ($clientes as $cliente): ?>
+                <?php if ($cliente['activo'] == 1) { ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($clientes['nombre']); ?></td>
-                    <td><?php echo htmlspecialchars($clientes['cedula']); ?></td>
-                    <td><?php echo htmlspecialchars($clientes['direccion']); ?></td>
-                    <td><?php echo htmlspecialchars($clientes['telefono']); ?></td>
-                    <td><?php echo htmlspecialchars($clientes['correo']); ?></td>
+                    <td><?php echo htmlspecialchars($cliente['nombre']); ?></td>
+                    <td><?php echo htmlspecialchars($cliente['cedula']); ?></td>
+                    <td><?php echo htmlspecialchars($cliente['direccion']); ?></td>
+                    <td><?php echo htmlspecialchars($cliente['telefono']); ?></td>
+                    <td><?php echo htmlspecialchars($cliente['correo']); ?></td>
                     <td>
                         <span>
                             <div class="acciones-boton">
@@ -83,13 +83,19 @@ if (!isset($_SESSION['name'])) {
                                     <ul>
                                         <li>
                                             <!-- Botón Modificar que abre el modal -->
-                                            <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarProductoModal" data-id="<?php echo htmlspecialchars($clientes['id_clientes']); ?>">
-                                            Modificar
+                                            <button type="button" class="btn btn-modificar"
+                                                data-id="<?php echo htmlspecialchars($cliente['id_clientes']); ?>"
+                                                data-nombre="<?php echo htmlspecialchars($cliente['nombre']); ?>"
+                                                data-cedula="<?php echo htmlspecialchars($cliente['cedula']); ?>"
+                                                data-direccion="<?php echo htmlspecialchars($cliente['direccion']); ?>"
+                                                data-telefono="<?php echo htmlspecialchars($cliente['telefono']); ?>"
+                                                data-correo="<?php echo htmlspecialchars($cliente['correo']); ?>">
+                                                Modificar
                                             </button>
                                         </li>
                                         <li>
                                             <!-- Botón Eliminar -->
-                                            <a href="#" data-id="<?php echo htmlspecialchars($clientes['id_clientes']); ?>" class="btn btn-eliminar">Eliminar</a>
+                                            <a href="#" data-id="<?php echo htmlspecialchars($cliente['id_clientes']); ?>" class="btn btn-eliminar">Eliminar</a>
                                         </li>
                                     </ul>
                                 </div>

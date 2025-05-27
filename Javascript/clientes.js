@@ -1,38 +1,14 @@
 $(document).ready(function () {
     // Cargar datos del clientes en el modal al abrir
-    $(document).on('click', '.btn-modificar', function() {
-        var id_clientes = $(this).data('id');
-
-        // Establecer el id_producto en el campo oculto del formulario de modificación
-        $('#modificar_id_clientes').val(id_clientes);
-
-        // Realizar una solicitud AJAX para obtener los datos del clientes desde la base de datos
-        $.ajax({
-            url: '', // Ruta al controlador PHP que maneja las peticiones
-            type: 'POST',
-            dataType: 'json',
-            data: { id_clientes: id_clientes, accion: 'obtener_clientes' },
-            success: function(clientes) {
-                console.log('Datos del Cliente obtenidos:', clientes);
-                // Llenar los campos del formulario con los datos obtenidos del clientes
-                $('#modificarnombre').val(clientes.nombre);
-                $('#modificardireccion').val(clientes.direccion);
-                $('#modificartelefono').val(clientes.telefono);
-                $('#modificarcedula').val(clientes.cedula);
-                $('#modificarcorreo').val(clientes.correo);
-                $('#modificaractivo').val(clientes.activo);
-                
-                // Ajustar la imagen si se maneja la carga de imágenes
-                // $('#modificarImagen').val(clientes.imagen);
-
-                // Mostrar el modal de modificación después de llenar los datos
-                $('#modificar_clientes_modal').modal('show');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error en la solicitud AJAX:', textStatus, errorThrown);
-                muestraMensaje('Error al cargar los datos del Cliente.');
-            }
-        });
+        $(document).on('click', '.btn-modificar', function () {
+        $('#modificar_id_clientes').val($(this).data('id'));
+        $('#modificarnombre').val($(this).data('nombre'));
+        $('#modificarcedula').val($(this).data('cedula'));
+        $('#modificardireccion').val($(this).data('direccion'));
+        $('#modificartelefono').val($(this).data('telefono'));
+        $('#modificarcorreo').val($(this).data('correo'));
+        $('#smnombre_cliente').text('');
+        $('#modificar_clientes_modal').modal('show');
     });
 
 
@@ -40,11 +16,9 @@ $(document).ready(function () {
     $('#modificarclientes').on('submit', function(e) {
         e.preventDefault();
 
-        // Crear un objeto FormData con los datos del formulario
         var formData = new FormData(this);
         formData.append('accion', 'modificar');
 
-        // Enviar la solicitud AJAX al controlador PHP
         $.ajax({
             url: '', // Asegúrate de que la URL sea correcta
             type: 'POST',
@@ -53,26 +27,38 @@ $(document).ready(function () {
             cache: false,
             data: formData,
             success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                response = JSON.parse(response); // Asegúrate de que la respuesta sea un objeto JSON
+                response = JSON.parse(response);
                 if (response.status === 'success') {
-                    $('#modificarProductoModal').modal('hide');
+                    $('#modificar_clientes_modal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Modificado',
                         text: 'El Cliente se ha modificado correctamente'
-                    }).then(function() {
-                        location.reload(); // Recargar la página al modificar un producto
                     });
+
+                    // Actualiza la fila en la tabla sin recargar
+                    let id = $('#modificar_id_clientes').val();
+                    let fila = $(`tr[data-id="${id}"]`);
+                    fila.find('td').eq(1).text($('#modificarnombre').val());
+                    fila.find('td').eq(2).text($('#modificardireccion').val());
+                    fila.find('td').eq(3).text($('#modificartelefono').val());
+                    fila.find('td').eq(4).text($('#modificarcedula').val());
+                    fila.find('td').eq(5).text($('#modificarcorreo').val());
+                    fila.find('td').eq(6).text($('#modificaractivo').val());
+
                 } else {
                     muestraMensaje(response.message);
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar el Cliente:', textStatus, errorThrown);
                 muestraMensaje('Error al modificar el Cliente.');
             }
         });
+    });
+
+    // Cerrar modal de modificación
+    $(document).on('click', '#modificar_clientes_modal .close', function() {
+        $('#modificar_clientes_modal').modal('hide');
     });
 
     // Función para eliminar el producto
