@@ -170,7 +170,106 @@ if (!isset($_SESSION['name'])) {
         </tfoot> -->
     </table>
 
+<div class="contenedor-tabla">
+    <h3>Lista de Productos Con Bajo Stock</h3>
+    <table class="tabla"class="tablaConsultas" id="tablaConsultas">
+        <thead>
+            <tr>
+                <th>Id Producto</th>
+                <th>Producto</th>
+                <th>Descripción</th>
+                <th>Modelo</th> <!-- CAMBIO: antes decía id_modelo -->
+                <th>Stock Actual</th>
+                <th>Stock Máximo</th>
+                <th>Stock Mínimo</th>
+                <th>Serial</th>
+                <th>Cláusula de Garantía</th>
+                <th>Categoría</th> <!-- CAMBIO: antes decía id_categoria -->
+                <th>Precio</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($productos as $producto): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['descripcion_producto']); ?></td>
 
+                    <!-- AQUÍ cambia: mostramos el nombre del modelo -->
+                    <td>
+                        <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
+                    </td>
+
+                    <td><?php echo htmlspecialchars($producto['stock']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['stock_maximo']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['stock_minimo']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['serial']); ?></td>
+                    <td><?php echo htmlspecialchars($producto['clausula_garantia']); ?></td>
+
+                    <!-- AQUÍ cambia: mostramos el nombre de la categoría -->
+                    <td>
+                        <?php echo htmlspecialchars($producto['nombre_caracteristicas']); ?>
+                    </td>
+
+                    <td><?php echo htmlspecialchars($producto['precio']); ?></td>
+                                    <td>
+                    <span class="campo-estatus <?php echo ($producto['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+                        onclick="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
+                        style="cursor: pointer;">
+                        <?php echo htmlspecialchars($producto['estado']); ?>
+                    </span>
+                </td>
+                    <td>
+                        <span>
+                            <div class="acciones-boton">
+                                <i class="vertical">
+                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                                </i>
+                                <div class="desplegable">
+                                    <ul>
+                                        <li>
+                                            <!-- Botón Modificar -->
+                                            <button 
+                                                type="button" 
+                                                class="btn btn-modificar" 
+                                                data-toggle="modal" 
+                                                data-target="#modificarProductoModal" 
+                                                data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
+                                                data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
+                                                data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
+                                                data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
+                                                data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
+                                                data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
+                                                data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
+                                                data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
+                                                data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
+                                                data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
+                                                data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
+                                            >
+                                                Modificar
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <!-- Botón Eliminar -->
+                                            <a href="#" 
+                                                data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>" 
+                                                class="btn btn-eliminar"
+                                            >
+                                                Eliminar
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </span>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
 
 <!-- Modal de modificación -->

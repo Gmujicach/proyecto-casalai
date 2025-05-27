@@ -2,7 +2,7 @@
 ob_start();
 
 require_once 'Modelo/Proveedores.php';
-
+require_once 'Modelo/Productos.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtiene la acción enviada en la solicitud POST
@@ -99,11 +99,16 @@ function getproveedores() {
     return $proveedor->getproveedores();
 }
 
+function obtenerProductosConBajoStock() {
+    $producto = new Producto();
+    return $producto->obtenerProductosConBajoStock();
+}
+
 $pagina = "Proveedores";
 if (is_file("Vista/" . $pagina . ".php")) {
 
     $proveedores = getproveedores();
-
+    $productos = obtenerProductosConBajoStock();
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
