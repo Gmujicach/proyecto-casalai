@@ -35,8 +35,9 @@ if (!isset($_SESSION['name'])) {
             <input type="text" placeholder="Correlativo" class="control-form" id="correlativo" name="correlativo" required>
             <span id="scorrelativo"></span>
         </div>
+        <br>
         <div class="envolver-form">
-            <select name="factura" id="factura" class="control-form" required>
+            <select name="factura" id="factura" class="form-select" required>
                 <option value="" disabled selected>Seleccionar Factura</option>
                 <?php foreach ($facturas as $factura): ?>
                     <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">

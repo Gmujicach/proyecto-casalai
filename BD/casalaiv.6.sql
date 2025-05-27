@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-05-2025 a las 16:10:59
+-- Tiempo de generación: 27-05-2025 a las 07:09:24
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -27,6 +27,7 @@ USE `casalai`;
 --
 -- Estructura de tabla para la tabla `tbl_carrito`
 --
+
 CREATE TABLE `tbl_carrito` (
   `id_carrito` int(11) NOT NULL,
   `id_cliente` int(11) NOT NULL,
@@ -113,8 +114,8 @@ CREATE TABLE `tbl_clientes` (
 --
 
 INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `telefono`, `correo`, `activo`) VALUES
-(0, 'Simon Freitezww', '30335416', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1),
-(1, 'Simon Freitez', '30335417', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1);
+(1, 'Simon Freitez', '30335417', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1),
+(1000, 'Simon Freitezww', '30335416', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -592,8 +593,8 @@ CREATE TABLE `tbl_proveedores` (
 --
 
 INSERT INTO `tbl_proveedores` (`id_proveedor`, `nombre`, `presona_contacto`, `telefono`, `correo`, `direccion`, `rif_representante`, `rif_proveedor`, `telefono_secundario`, `observaciones`) VALUES
-(0, 'Thunder Net', 'Diego Lopez', '0424-5329515', NULL, 'Avenida Lara', 'V-317663160', 'J-406452157', '0414-5413366', 'El Mejor'),
-(1, 'Servicios Técnicos', 'Brayan Mendoza', '04145555556', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo');
+(1, 'Servicios Técnicos', 'Brayan Mendoza', '04145555556', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo'),
+(1000, 'Thunder Net', 'Diego Lopez', '0424-5329515', NULL, 'Avenida Lara', 'V-317663160', 'J-406452157', '0414-5413366', 'El Mejor');
 
 -- --------------------------------------------------------
 
@@ -867,6 +868,12 @@ ALTER TABLE `tbl_categoria`
   MODIFY `id_categoria` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT de la tabla `tbl_clientes`
+--
+ALTER TABLE `tbl_clientes`
+  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
+
+--
 -- AUTO_INCREMENT de la tabla `tbl_combo`
 --
 ALTER TABLE `tbl_combo`
@@ -955,6 +962,12 @@ ALTER TABLE `tbl_productos`
 --
 ALTER TABLE `tbl_protector_voltaje`
   MODIFY `id_protector` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_proveedores`
+--
+ALTER TABLE `tbl_proveedores`
+  MODIFY `id_proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_recepcion_productos`

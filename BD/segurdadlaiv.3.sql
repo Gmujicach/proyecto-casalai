@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-05-2025 a las 03:44:57
+-- Tiempo de generación: 27-05-2025 a las 07:12:30
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -156,6 +156,7 @@ ALTER TABLE `tbl_rango`
 -- Indices de la tabla `tbl_recuperar`
 --
 ALTER TABLE `tbl_recuperar`
+  ADD PRIMARY KEY (`id_recuperar`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
@@ -192,6 +193,18 @@ ALTER TABLE `tbl_modulos`
 --
 ALTER TABLE `tbl_rango`
   MODIFY `id_rango` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_recuperar`
+--
+ALTER TABLE `tbl_recuperar`
+  MODIFY `id_recuperar` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_usuarios`
+--
+ALTER TABLE `tbl_usuarios`
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
