@@ -789,4 +789,25 @@ class Producto extends Productos{
 
         return $productos;
     }
+
+    public function obtenerProductosConBajoStock() {
+    $queryProductos = '
+        SELECT tbl_productos.*, 
+               tbl_modelos.nombre_modelo, 
+               tbl_categoria.nombre_caracteristicas 
+        FROM tbl_productos 
+        INNER JOIN tbl_modelos 
+            ON tbl_productos.id_modelo = tbl_modelos.id_modelo 
+        INNER JOIN tbl_categoria 
+            ON tbl_productos.id_categoria = tbl_categoria.id_categoria
+        WHERE tbl_productos.stock < tbl_productos.stock_minimo
+    ';
+
+    $stmtProductos = $this->conex->prepare($queryProductos);
+    $stmtProductos->execute();
+    $productos = $stmtProductos->fetchAll(PDO::FETCH_ASSOC);
+
+    return $productos;
+}
+
 }
