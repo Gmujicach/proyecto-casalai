@@ -95,7 +95,7 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th>Id Producto</th>
+                <th>ID</th>
                 <th>Producto</th>
                 <th>Descripción</th>
                 <th>Modelo</th> <!-- CAMBIO: antes decía id_modelo -->
