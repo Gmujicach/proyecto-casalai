@@ -41,10 +41,7 @@ if (!isset($_SESSION['name'])) {
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th><i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                </th>
+                <th>Acciones</th>
             </tr>
         </thead>
 
