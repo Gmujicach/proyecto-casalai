@@ -15,13 +15,16 @@ input, select, button{
 }
 
 .titulo-form{
-    position: absolute; /* Lo saca del flujo normal y lo posiciona respecto a .fondo-form */
-    top: 20px; /* Ajusta según el padding de .fondo-form */
+    top: 10px; /* Ajusta según el padding de .fondo-form */
     left: 0;
     width: 100%;
     text-align: center;
     margin: 0;
     padding: 10px 0;
+    color: #1f66df;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 25px;
 }
 
 :focus{
