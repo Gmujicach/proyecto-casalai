@@ -25,18 +25,109 @@
     font-size: 14px;
 }
 
+
 .contenedor-tabla {
-    box-sizing: border-box;
-    position: relative;
     display: flex;
-    flex-direction: column; /* Cambia la dirección del flex a columna */
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Alinea el contenido al inicio (arriba) */
-    padding: 20px; /* Añade padding en todos los lados */
-    background: #fff;
+    padding: 20px;
+    width: 100%;
+    position: relative;
+}
+
+/* Contenedor externo para el scroll */
+.tabla-scroll-outer {
+    width: 100%;
+    max-width: 1200px; /* Ajusta según tu diseño */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Contenedor interno con scroll */
+.tabla-scroll-inner {
+    width: calc(100% + 17px); /* Compensa el scroll */
+    max-height: 70vh;
+    overflow-y: scroll;
+    padding-right: 30px; /* Espacio para contenido */
+    margin-right: -17px; /* Empuja el scroll fuera */
+}
+
+/* Tabla centrada */
+.tablaConsultas {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+/* Personalización del scroll */
+.tabla-scroll-inner::-webkit-scrollbar {
+    width: 12px;
+}
+
+.tabla-scroll-inner::-webkit-scrollbar-thumb {
+    background: var(--primary);
     border-radius: 6px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-    height: 100vh; /* Mantienes la altura si es necesario */
+    border: 3px solid white;
+}
+
+/* Ajuste para menú desplegable */
+.acciones-boton .desplegable {
+    right: auto;
+    left: 100%;
+    margin-left: 5px;
+    z-index: 100;
+}/* Contenedor principal - Centrado con overflow */
+
+.contenedor-tabla {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    position: relative;
+}
+
+/* Contenedor externo para el scroll */
+.tabla-scroll-outer {
+    width: 100%;
+    max-width: 1200px; /* Ajusta según tu diseño */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Contenedor interno con scroll */
+.tabla-scroll-inner {
+    width: calc(100% + 17px); /* Compensa el scroll */
+    max-height: 70vh;
+    overflow-y: scroll;
+    padding-right: 30px; /* Espacio para contenido */
+    margin-right: -17px; /* Empuja el scroll fuera */
+}
+
+/* Tabla centrada */
+.tablaConsultas {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+/* Personalización del scroll */
+.tabla-scroll-inner::-webkit-scrollbar {
+    width: 12px;
+}
+
+.tabla-scroll-inner::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 6px;
+    border: 3px solid white;
+}
+
+/* Ajuste para menú desplegable */
+.acciones-boton .vertical {
+    right: auto;
+    left: 100%;
+    margin-left: 5px;
+    z-index: 100;
 }
 
 .contenedor-tabla h3 {
@@ -392,4 +483,11 @@ table tfoot tr td span a i{
 
 .btn-modificar:hover {
     background-color: #4d84e2;
+}
+
+.acciones-boton .vertical {
+    right: auto !important;
+    left: 100% !important;
+    margin-left: 5px;
+    z-index: 100;
 }

@@ -35,11 +35,17 @@ if (!isset($_SESSION['name'])) {
 
 <div class="contenedor-tabla">
     <h3>Lista de Marcas</h3>
+    <div class="tabla-scroll-outer">
+        <div class="tabla-scroll-inner">
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Acciones</th>
+                <th><i class="vertical">
+                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                    </i>
+                </th>
             </tr>
         </thead>
 
@@ -76,6 +82,8 @@ if (!isset($_SESSION['name'])) {
             <?php endforeach; ?>
         </tbody>
     </table>
+    </div>  
+</div>
 </div>
 
 <!-- Modal para modificar marca -->
