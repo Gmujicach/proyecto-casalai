@@ -19,6 +19,8 @@
     --alert-bg-color: #ffeccc;
     --alert-accent-color: #ce8500;
 }
+
+
 .contenedor-tabla a{
     text-decoration: none;
     color: var(--active);
@@ -26,30 +28,32 @@
 }
 
 
+/* Contenedor principal - Centrado perfecto */
 .contenedor-tabla {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     width: 100%;
-    position: relative;
+    box-sizing: border-box;
 }
 
-/* Contenedor externo para el scroll */
-.tabla-scroll-outer {
+/* Contenedor de tabla con posición relativa */
+.tabla-wrapper {
+    position: relative;
+    width: 400px;
+    max-width: 1200px; /* Ajusta según necesidad */
+    margin: 0 auto;
+}
+
+/* Contenedor de scroll - Truco para scroll pegado */
+.tabla-scroll-container {
     width: 100%;
-    max-width: 1200px; /* Ajusta según tu diseño */
-    position: relative;
-    overflow: hidden;
-}
-
-/* Contenedor interno con scroll */
-.tabla-scroll-inner {
-    width: calc(100% + 17px); /* Compensa el scroll */
     max-height: 70vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding-right: 30px; /* Espacio para contenido */
-    margin-right: -17px; /* Empuja el scroll fuera */
+    margin-right: -15px; /* Compensación */
+    scrollbar-gutter: stable; /* Evita saltos de contenido */
 }
 
 /* Tabla centrada */
@@ -60,11 +64,11 @@
 }
 
 /* Personalización del scroll */
-.tabla-scroll-inner::-webkit-scrollbar {
+.tabla-scroll-container::-webkit-scrollbar {
     width: 12px;
 }
 
-.tabla-scroll-inner::-webkit-scrollbar-thumb {
+.tabla-scroll-container::-webkit-scrollbar-thumb {
     background: var(--primary);
     border-radius: 6px;
     border: 3px solid white;
@@ -72,60 +76,8 @@
 
 /* Ajuste para menú desplegable */
 .acciones-boton .desplegable {
-    right: auto;
-    left: 100%;
-    margin-left: 5px;
-    z-index: 100;
-}/* Contenedor principal - Centrado con overflow */
-
-.contenedor-tabla {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    width: 100%;
-    position: relative;
-}
-
-/* Contenedor externo para el scroll */
-.tabla-scroll-outer {
-    width: 100%;
-    max-width: 1200px; /* Ajusta según tu diseño */
-    position: relative;
-    overflow: hidden;
-}
-
-/* Contenedor interno con scroll */
-.tabla-scroll-inner {
-    width: calc(100% + 17px); /* Compensa el scroll */
-    max-height: 70vh;
-    overflow-y: scroll;
-    padding-right: 30px; /* Espacio para contenido */
-    margin-right: -17px; /* Empuja el scroll fuera */
-}
-
-/* Tabla centrada */
-.tablaConsultas {
-    width: 100%;
-    margin: 0 auto;
-    border-collapse: collapse;
-}
-
-/* Personalización del scroll */
-.tabla-scroll-inner::-webkit-scrollbar {
-    width: 12px;
-}
-
-.tabla-scroll-inner::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 6px;
-    border: 3px solid white;
-}
-
-/* Ajuste para menú desplegable */
-.acciones-boton .vertical {
-    right: auto;
-    left: 100%;
+    right: auto !important;
+    left: 100% !important;
     margin-left: 5px;
     z-index: 100;
 }
