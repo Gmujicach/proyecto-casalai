@@ -172,13 +172,12 @@ class Proveedores extends BD {
         return $stmt->execute();
     }
 
-    // Eliminar Producto
     public function eliminarProveedor($id) {
-        $sql = "DELETE FROM tbl_proveedores WHERE id_proveedor = :id";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        return $stmt->execute();
-    }
+    $sql = "DELETE FROM tbl_proveedores WHERE id_proveedor = :id";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    return $stmt->execute();
+}
 
     public function getproveedores() {
         // Punto de depuración: Iniciando getmarcas

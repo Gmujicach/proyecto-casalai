@@ -123,40 +123,68 @@ $(document).ready(function () {
         });
     });
 
-    // Función para eliminar el producto
-    $(document).on('click', '.btn-eliminar', function (e) {
-        e.preventDefault(); // Evitar la redirección predeterminada del enlace
-        Swal.fire({
-            title: '¿Está seguro?',
-            text: "¡No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminarlo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                var id = $(this).data('id');
-                console.log("ID del Proveedor a eliminar: ", id); // Punto de depuración
-                var datos = new FormData();
-                datos.append('accion', 'eliminar');
-                datos.append('id', id);
-                enviarAjax(datos, function (respuesta) {
-                    if (respuesta.status === 'success') {
+    // Función para eliminar el proveedor
+$(document).on('click', '.eliminar', function (e) {
+    e.preventDefault();
+    var id_proveedor = $(this).data('id');
+    
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var datos = new FormData();
+            datos.append('accion', 'eliminar');
+            datos.append('id_proveedor', id_proveedor); // Cambiado a id_proveedor
+            
+            $.ajax({
+                url: '', // La misma página
+                type: 'POST',
+                data: datos,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    try {
+                        var respuesta = JSON.parse(response);
+                        if (respuesta.status === 'success') {
+                            Swal.fire(
+                                'Eliminado!',
+                                'El proveedor ha sido eliminado.',
+                                'success'
+                            ).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                respuesta.message || 'Error al eliminar el proveedor',
+                                'error'
+                            );
+                        }
+                    } catch (e) {
                         Swal.fire(
-                            'Eliminado!',
-                            'El Proveedor ha sido eliminada.',
-                            'success'
-                        ).then(function() {
-                            location.reload(); // Recargar la página al eliminar un producto
-                        });
-                    } else {
-                        muestraMensaje(respuesta.message);
+                            'Error!',
+                            'Error al procesar la respuesta del servidor',
+                            'error'
+                        );
                     }
-                });
-            }
-        });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire(
+                        'Error!',
+                        'Error en la solicitud AJAX: ' + error,
+                        'error'
+                    );
+                }
+            });
+        }
     });
+});
 
     // Función para incluir un nuevo producto
     $('#incluirproveedor').on('submit', function(event) {

@@ -145,7 +145,7 @@ if (!isset($_SESSION['name'])) {
                                         </a>
                                     </li>
 
-                                    <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $proveedor['id_proveedor']; ?>)">Eliminar</a></li>
+                                    <li><a href="#" class="eliminar" data-id="<?php echo $proveedor['id_proveedor']; ?>">Eliminar</a></li>
                                 </ul>
                             </div>
                         </div>
