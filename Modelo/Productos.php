@@ -270,7 +270,7 @@ public function getPrecio() {
     }
 
     public function eliminarProducto($id) {
-        $sql = "UPDATE tbl_productos SET estado = 0 WHERE id_producto = :id";
+        $sql = "DELETE FROM `tbl_productos` WHERE id_producto = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
@@ -285,6 +285,20 @@ public function getPrecio() {
             $errorInfo = $this->conex->errorInfo();
             echo "Debug: Error en el query: " . $errorInfo[2] . "\n";
             return [];
+        }
+    }
+
+        public function cambiarEstatus($nuevoEstatus) {
+        try {
+            $sql = "UPDATE tbl_productos SET estado = :estatus WHERE id_producto = :id";
+            $stmt = $this->conex->prepare($sql);
+            $stmt->bindParam(':estatus', $nuevoEstatus);
+            $stmt->bindParam(':id', $this->id);
+            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error al cambiar estatus: " . $e->getMessage());
+            return false;
         }
     }
 
@@ -307,7 +321,7 @@ public function obtenerProductosConMarca() {
               FROM tbl_productos p
               JOIN tbl_modelos mo ON p.id_modelo = mo.id_modelo
               JOIN tbl_marcas m ON mo.id_marca = m.id_marca
-              WHERE p.estado = 1 AND p.stock > 0
+              WHERE p.estado = 'habilitado' AND p.stock > 0
               ORDER BY p.nombre_producto ASC";
     
     $stmt = $this->conex->prepare($query);
@@ -320,7 +334,7 @@ public function obtenerProductosPorMarca($id_marca) {
               FROM tbl_productos p
               JOIN tbl_modelos mo ON p.id_modelo = mo.id_modelo
               JOIN tbl_marcas m ON mo.id_marca = m.id_marca
-              WHERE m.id_marca = :id_marca AND p.estado = 1 AND p.stock > 0
+              WHERE m.id_marca = :id_marca AND p.estado = 'habilitado' AND p.stock > 0
               ORDER BY p.nombre_producto ASC";
     
     $stmt = $this->conex->prepare($query);
@@ -348,7 +362,7 @@ public function obtenerDetallesCombo($id_combo) {
               INNER JOIN tbl_productos p ON cd.id_producto = p.id_producto
               INNER JOIN tbl_modelos mo ON p.id_modelo = mo.id_modelo
               INNER JOIN tbl_marcas m ON mo.id_marca = m.id_marca
-              WHERE cd.id_combo = :id_combo AND p.estado = 1";
+              WHERE cd.id_combo = :id_combo AND p.estado = 'habilitado'";
     
     $stmt = $this->conex->prepare($query);
     $stmt->bindParam(':id_combo', $id_combo);
@@ -483,7 +497,7 @@ public function obtenerTodosProductosParaCombos() {
               FROM tbl_productos p
               JOIN tbl_modelos mo ON p.id_modelo = mo.id_modelo
               JOIN tbl_marcas m ON mo.id_marca = m.id_marca
-              WHERE p.estado = 1
+              WHERE p.estado = 'habilitado'
               ORDER BY p.nombre_producto ASC";
     
     $stmt = $this->conex->prepare($query);
@@ -497,7 +511,7 @@ public function obtenerProductosBajoStock() {
               FROM tbl_productos p
               JOIN tbl_modelos mo ON p.id_modelo = mo.id_modelo
               JOIN tbl_marcas m ON mo.id_marca = m.id_marca
-              WHERE p.stock <= p.stock_minimo AND p.estado = 1
+              WHERE p.stock <= p.stock_minimo AND p.estado = 'habilitado'
               ORDER BY (p.stock / p.stock_minimo) ASC";
     
     $stmt = $this->conex->prepare($query);
@@ -514,7 +528,7 @@ public function buscarProductos($termino) {
                     p.descripcion_producto LIKE :termino OR
                     p.serial LIKE :termino OR
                     m.nombre_marca LIKE :termino)
-              AND p.estado = 1
+              AND p.estado = 'habilitado'
               ORDER BY p.nombre_producto ASC";
     
     $stmt = $this->conex->prepare($query);
@@ -678,7 +692,7 @@ public function obtenerCantidadCarrito($id_cliente) {
 }
 
 public function verificarStock($id_producto, $cantidad) {
-    $sql = "SELECT stock FROM tbl_productos WHERE id_producto = :id_producto AND estado = 1";
+    $sql = "SELECT stock FROM tbl_productos WHERE id_producto = :id_producto AND estado = 'habilitado'";
     $stmt = $this->conex->prepare($sql);
     $stmt->bindParam(':id_producto', $id_producto);
     $stmt->execute();
@@ -738,8 +752,7 @@ class Producto extends Productos{
         INNER JOIN tbl_modelos 
         ON tbl_productos.id_modelo = tbl_modelos.id_modelo 
         INNER JOIN tbl_categoria 
-        ON tbl_productos.id_categoria = tbl_categoria.id_categoria 
-        where estado = 1;
+        ON tbl_productos.id_categoria = tbl_categoria.id_categoria;
 ';
        
         $stmtProductos = $this->conex->prepare($queryProductos);

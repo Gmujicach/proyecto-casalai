@@ -40,6 +40,7 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Nombre</th>
                 <th>Acciones</th>
                 <th><i class="vertical">
@@ -87,13 +88,13 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 <!-- Modal para modificar marca -->
-<div class="modal fade" id="modificarMarcaModal" tabindex="-1" role="dialog" aria-labelledby="modificarMarcaModalLabel" aria-hidden="true">
+<div class="modal fade modal-modificar" id="modificarMarcaModal" tabindex="-1" role="dialog" aria-labelledby="modificarMarcaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="modificarMarca" method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modificarMarcaModalLabel">Modificar Marca</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

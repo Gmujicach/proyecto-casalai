@@ -101,6 +101,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
             }
             break;
+            
+            case 'cambiar_estatus':
+            $id = $_POST['id_producto'];
+            $nuevoEstatus = $_POST['nuevo_estatus'];
+            
+            // Validación básica
+            if (!in_array($nuevoEstatus, ['habilitado', 'inhabilitado'])) {
+                echo json_encode(['status' => 'error', 'message' => 'Estatus no válido']);
+                exit;
+            }
+            
+            $producto = new Productos();
+            $producto->setId($id);
+            
+            if ($producto->cambiarEstatus($nuevoEstatus)) {
+                echo json_encode(['status' => 'success']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
+            }
+            break;
 
         default:
             // Respuesta de error si la acción no es válida
