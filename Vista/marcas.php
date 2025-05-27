@@ -35,8 +35,8 @@ if (!isset($_SESSION['name'])) {
 
 <div class="contenedor-tabla">
     <h3>Lista de Marcas</h3>
-    <div class="tabla-wrapper">
-        <div class="tabla-scroll-container">
+    <div class="tabla-container">
+        <div class="tabla-scroll">
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
@@ -81,8 +81,8 @@ if (!isset($_SESSION['name'])) {
                 </tr>
             <?php endforeach; ?>
         </tbody>
-    </table>
-    </div>  
+    </table> 
+    </div>
 </div>
 </div>
 

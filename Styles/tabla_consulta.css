@@ -28,7 +28,6 @@
 }
 
 
-/* Contenedor principal - Centrado perfecto */
 .contenedor-tabla {
     display: flex;
     flex-direction: column;
@@ -36,50 +35,77 @@
     padding: 20px;
     width: 100%;
     box-sizing: border-box;
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    margin: 0 auto; /* Centrado horizontal */
 }
 
-/* Contenedor de tabla con posición relativa */
-.tabla-wrapper {
-    position: relative;
-    width: 400px;
-    max-width: 1200px; /* Ajusta según necesidad */
-    margin: 0 auto;
-}
-
-/* Contenedor de scroll - Truco para scroll pegado */
-.tabla-scroll-container {
+.tabla-container {
     width: 100%;
+    position: relative;
+    overflow: hidden; /* Oculta el scroll nativo */
+}
+
+.tabla-scroll {
+    width: calc(100% + 17px); /* Compensa el ancho del scroll */
     max-height: 70vh;
     overflow-y: auto;
-    padding-right: 30px; /* Espacio para contenido */
-    margin-right: -15px; /* Compensación */
-    scrollbar-gutter: stable; /* Evita saltos de contenido */
+    padding-right: 17px; /* Espacio para el scroll */
+    margin-right: -17px; /* Empuja el scroll al borde */
 }
 
-/* Tabla centrada */
 .tablaConsultas {
-    width: 100%;
+    /* width: 100%; */
     margin: 0 auto;
     border-collapse: collapse;
+    table-layout: auto; /* Ajuste automático del ancho */
 }
 
-/* Personalización del scroll */
-.tabla-scroll-container::-webkit-scrollbar {
+/* SCROLL PERSONALIZADO */
+.tabla-scroll::-webkit-scrollbar {
     width: 12px;
 }
 
-.tabla-scroll-container::-webkit-scrollbar-thumb {
+.tabla-scroll::-webkit-scrollbar-thumb {
     background: var(--primary);
     border-radius: 6px;
     border: 3px solid white;
 }
 
-/* Ajuste para menú desplegable */
+/* MENÚ DESPLEGABLE - POSICIÓN CORRECTA */
 .acciones-boton .desplegable {
     right: auto !important;
     left: 100% !important;
-    margin-left: 5px;
+    margin-left: 10px;
     z-index: 100;
+    position: absolute;
+}
+
+/* HEADER CENTRADO */
+.contenedor-tabla h3 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* CELDAS CENTRADAS */
+.tablaConsultas th,
+.tablaConsultas td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* RESPONSIVE PARA MÓVILES */
+@media (max-width: 768px) {
+    .tabla-scroll {
+        width: 100vw;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+    
+    .acciones-boton .desplegable {
+        left: auto !important;
+        right: 100% !important;
+    }
 }
 
 .contenedor-tabla h3 {
