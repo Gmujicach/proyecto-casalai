@@ -146,7 +146,6 @@ if (!isset($_SESSION['name'])) {
                     
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Modificar</button>
                 </div>
                 </div>
