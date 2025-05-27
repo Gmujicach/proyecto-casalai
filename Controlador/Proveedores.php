@@ -76,9 +76,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
 
         case 'eliminar':
-            $id = $_POST['id'];
-            $proveedorModel = new Proveedores();
-            if ($proveedorModel->eliminarProveedor($id)) {
+            $id_proveedor = $_POST['id_proveedor']; // Cambiado para coincidir con el nombre enviado
+            if ($id_proveedor === null) {
+                echo json_encode(['status' => 'error', 'message' => 'ID del Proveedor no proporcionado']);
+                exit;
+            }
+            $proveedor = new Proveedores();
+            if ($proveedor->eliminarProveedor($id_proveedor)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Proveedor']);

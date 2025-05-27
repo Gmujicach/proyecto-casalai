@@ -143,7 +143,7 @@ if (!isset($_SESSION['name'])) {
                                         </a>
                                     </li>
 
-                                    <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $proveedor['id_usuario']; ?>)">Eliminar</a></li>
+                                    <li><a href="#" class="eliminar" data-id="<?php echo $proveedor['id_proveedor']; ?>">Eliminar</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -212,126 +212,6 @@ if (!isset($_SESSION['name'])) {
     </table>
 </div>
 
-<!-- Modal de modificación -->
-<div class="modal fade" id="modificarProductoModal" tabindex="-1" role="dialog" aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modificarProductoModalLabel">Realizar Pedido</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-
-        <div class="modal-body">
-          <!-- Acciones ocultas -->
-          <input type="hidden" name="accion" value="realizar_pedido">
-          <input type="hidden" id="modificarIdProducto" name="id_producto">
-
-          <!-- Campos -->
-          <div class="form-group">
-            <label for="modificarNombreProducto">Nombre del producto</label>
-            <input type="text" maxlength="50" class="form-control" id="modificarNombreProducto" name="nombre_producto" readonly>
-          </div>
-
-          <div class="form-group">
-            <label for="modificarModelo">Modelo</label>
-            <input type="text" maxlength="50" class="form-control" id="modificarModelo" name="modelo" readonly>
-          </div>
-
-          <div class="form-group">
-            <label for="Proveedor">Proveedor</label>
-            <select class="form-select" id="Proveedor" name="proveedor" required>
-              <option value="">Seleccionar Proveedor</option>
-              <option value="<?php echo $proveedor['id_proveedor']; ?>">
-                <?php echo $proveedor['nombre']; ?>
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="modificarStockMinimo">Cantidad a Pedir</label>
-            <input type="number" min="1" class="form-control" id="modificarStockMinimo" name="cantidad_pedir" required>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Confirmar Pedido</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal de modificación -->
-    <div class="modal fade" id="modificar_usuario_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="modificarusuario" method="POST" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_usuario_modal_label">Modificar Usuario</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <!-- Campos del formulario de modificación -->
-                    <input type="hidden" id="modificar_id_usuario" name="id_usuario">
-                    <div class="form-group">
-                        <label for="modificarnombre">Nombres del Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre" name="nombre" maxlength="15" required>
-                        <span id="smodificarnombre_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarapellido_usuario">Apellidos del Usuario</label>
-                        <input type="text" class="form-control" id="modificarapellido_usuario" name="apellido_usuario" maxlength="15" required>
-                        <span id="smodificarapellido_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarnombre_usuario">Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="15" required>
-                        <span id="smodificarnombre_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificartelefono_usuario">Telefono</label>
-                        <input type="text" class="form-control" id="modificartelefono_usuario" name="telefono_usuario" maxlength="15" required>
-                        <span id="smodificartelefono_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarcorreo_usuario">Correo</label>
-                        <input type="text" class="form-control" id="modificarcorreo_usuario" name="correo_usuario" maxlength="15" required>
-                        <span id="smodificarcorreo_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarclave_usuario">Contraseña del Usuario</label>
-                        <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario" required>
-                        <span id="smodificarclave_usuario"></span>
-                    </div>
-                    <div class="form-group col-md-4">
-                                    <label for="rango">Categorias</label>
-                                    <select class="custom-select" id="rango" name="rango">
-                                    <option value="usuario">Usuario</option>
-                                    <option value="Administrador">Administrador</option>
-                                    <option value="Almacenista">Almacenista</option>
-                                    <option value="Cliente">Cliente</option> 
-                                    <option value="Desarrollador">Desarrollador</option>   
-                                    </select>
-                                </div>
-                    
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-cerrar" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Modificar</button>
-                </div>
-                </div>
-                
-            </form>
-        </div>
-    </div>
 </div>
 
                 
