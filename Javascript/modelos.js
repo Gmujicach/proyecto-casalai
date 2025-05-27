@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     // Validación en tiempo real para registro
     $("#nombre_modelo").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]*$/, e);
         let nombre = document.getElementById("nombre_modelo");
         nombre.value = space(nombre.value);
     });
