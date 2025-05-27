@@ -134,8 +134,8 @@ class Carrito extends BD{
             }
             
             // Insertar la compra
-            $sqlCompra = "INSERT INTO facturas (fecha, cliente, descuento, estatus) 
-                          VALUES (NOW(), :id_cliente, 0, 'Completada')";
+            $sqlCompra = "INSERT INTO tbl_facturas (fecha, cliente, descuento, estatus) 
+                          VALUES (NOW(), :id_cliente, 0, 'Borrador')";
             $stmtCompra = $this->conex->prepare($sqlCompra);
             $stmtCompra->bindParam(':id_cliente', $id_cliente);
             $stmtCompra->execute();
@@ -143,7 +143,7 @@ class Carrito extends BD{
             
             // Insertar los detalles de la compra
             foreach ($detallesCarrito as $detalle) {
-                $sqlDetalle = "INSERT INTO factura_detalle (factura_id, id_producto, cantidad) 
+                $sqlDetalle = "INSERT INTO tbl_factura_detalle (factura_id, id_producto, cantidad) 
                                VALUES (:id_factura, :id_producto, :cantidad)";
                 $stmtDetalle = $this->conex->prepare($sqlDetalle);
                 $stmtDetalle->bindParam(':id_factura', $id_factura);
@@ -152,8 +152,7 @@ class Carrito extends BD{
                 $stmtDetalle->execute();
                 
                 // Actualizar stock del producto
-                $sqlUpdateStock = "UPDATE productos SET stock = stock - :cantidad 
-                                   WHERE id_producto = :id_producto";
+                $sqlUpdateStock = "UPDATE tbl_productos SET stock = stock - :cantidad WHERE id_producto = :id_producto";
                 $stmtUpdateStock = $this->conex->prepare($sqlUpdateStock);
                 $stmtUpdateStock->bindParam(':cantidad', $detalle['cantidad']);
                 $stmtUpdateStock->bindParam(':id_producto', $detalle['id_producto']);
@@ -166,9 +165,9 @@ class Carrito extends BD{
             $this->conex->commit();
             return true;
         } catch (PDOException $e) {
-            $this->conex->rollBack();
-            error_log("Error al registrar compra: " . $e->getMessage());
-            return false;
-        }
+    $this->conex->rollBack();
+    error_log("Error al registrar compra: " . $e->getMessage());
+    throw $e; // Lanza la excepción para verla en el controlador
+}
     }
 }

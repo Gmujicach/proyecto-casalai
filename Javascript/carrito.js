@@ -1,5 +1,102 @@
 $(document).ready(function() {
     // Manejar el cambio en el filtro de marcas
+
+document.getElementById('registrar-compra').addEventListener('click', function () {
+    const datos = [];
+
+    document.querySelectorAll('.tabla tbody tr').forEach(fila => {
+        const nombre = fila.children[0]?.textContent.trim();
+        const cantidadInput = fila.querySelector('.cantidad');
+
+        const cantidad = parseInt(cantidadInput?.value || 0);
+        const idCarritoDetalle = cantidadInput?.dataset.idCarritoDetalle;
+        const idProducto = cantidadInput?.dataset.idProducto;
+
+        // Limpiar el precio y subtotal de símbolos y comas
+        const precioText = fila.children[2]?.textContent.replace('$', '').replace(/,/g, '').trim();
+        const subtotalText = fila.children[3]?.textContent.replace('$', '').replace(/,/g, '').trim();
+
+        const precio = parseFloat(precioText);
+        const subtotal = parseFloat(subtotalText);
+
+        if (nombre && cantidad && idCarritoDetalle && idProducto) {
+            datos.push({
+                id_carrito_detalle: idCarritoDetalle,
+                id_producto: idProducto,
+                nombre: nombre,
+                cantidad: cantidad,
+                precio_unitario: precio,
+                subtotal: subtotal
+            });
+        }
+    });
+
+    console.log("✅ Datos recogidos para prefactura:", datos);
+
+
+    $('#registrar-compra').on('click', function() {
+        Swal.fire({
+            title: '¿Confirmar compra?',
+            text: "¡Se registrará la compra con los productos actuales en el carrito!",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, registrar compra',
+            cancelButtonText: 'Cancelar',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                return $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: {
+                        accion: 'registrar_compra'
+                    }
+                }).then(response => {
+                    return JSON.parse(response);
+                }).catch(error => {
+                    Swal.showValidationMessage(
+                        `Error en la solicitud: ${error}`
+                    );
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (result.value.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Compra registrada!',
+                        text: result.value.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                                            // Redireccionar después de éxito
+                    window.location.href = '?pagina=gestionarFactura';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.value.message
+                    });
+                }
+            }
+        });
+    });
+});
+
+
+
+    // Muestra los datos en consola
+    console.log("Datos del carrito a enviar:", datos);
+
+    // Opcional: mostrar en una alerta
+    alert(JSON.stringify(datos, null, 2));
+
+    // Aquí podrías enviar los datos a tu backend con fetch/ajax si deseas
+});
+
     $('#filtroMarca').on('change', function() {
         const idMarca = $(this).val();
         
@@ -156,57 +253,9 @@ $(document).ready(function() {
         });
     });
 
-    // Manejar registro de compra
-    $('#registrar-compra').on('click', function() {
-        Swal.fire({
-            title: '¿Confirmar compra?',
-            text: "¡Se registrará la compra con los productos actuales en el carrito!",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, registrar compra',
-            cancelButtonText: 'Cancelar',
-            showLoaderOnConfirm: true,
-            preConfirm: () => {
-                return $.ajax({
-                    url: '',
-                    type: 'POST',
-                    data: {
-                        accion: 'registrar_compra'
-                    }
-                }).then(response => {
-                    return JSON.parse(response);
-                }).catch(error => {
-                    Swal.showValidationMessage(
-                        `Error en la solicitud: ${error}`
-                    );
-                });
-            },
-            allowOutsideClick: () => !Swal.isLoading()
-        }).then((result) => {
-            if (result.isConfirmed) {
-                if (result.value.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Compra registrada!',
-                        text: result.value.message,
-                        timer: 2000,
-                        showConfirmButton: false
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: result.value.message
-                    });
-                }
-            }
-        });
-    });
+    /*Manejar registro de compra
 
+*/
     // Delegación de eventos para los botones de agregar al carrito
     $(document).on('click', '.btn-agregar-carrito', function() {
         const idProducto = $(this).data('id-producto');
@@ -247,4 +296,3 @@ $(document).ready(function() {
             }
         });
     });
-});

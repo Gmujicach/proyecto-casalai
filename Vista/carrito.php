@@ -44,7 +44,8 @@
                                             class="form-control cantidad"
                                             value="<?php echo htmlspecialchars($carrito['cantidad']); ?>"
                                             min="1"
-                                            data-id-carrito-detalle="<?php echo htmlspecialchars($carrito['id_carrito_detalle']); ?>">
+                                            data-id-carrito-detalle="<?php echo htmlspecialchars($carrito['id_carrito_detalle']); ?>"
+                                            data-id-producto="<?php echo htmlspecialchars($carrito['id_producto']); ?>">
                                     </td>
                                     <td>$<?php echo number_format($carrito['precio'], 2); ?></td>
                                     <td class="subtotal">$<?php echo number_format($carrito['subtotal'], 2); ?></td>
