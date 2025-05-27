@@ -56,27 +56,20 @@ input, select, button{
     padding: 20px 45px;
 }
 
-.fondo-form h3{
-    text-transform: uppercase;
-    font-size: 55px;
-    text-align: center;
-    margin-bottom: 25px;
-}
-
 .grupo-form{
     display: flex;
 }
 
 .grupo-form input{
     width: 50%;
-}
-
-.grupo-form input:first-child{
-    margin-right: 25px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .envolver-form{
     position: relative;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .control-form{
@@ -104,10 +97,14 @@ input, select, button{
     border-radius: 4px;
 }
 
+.form-select{
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
 select{
     cursor: pointer;
     color: rgb(101, 162, 241);
-
 }
 
 select option[value=""] [disabled]{
