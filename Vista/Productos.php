@@ -36,7 +36,7 @@ if (!isset($_SESSION['name'])) {
       <select class="form-select" id="Modelo" name="Modelo" required>
         <option value="">Seleccionar Modelo</option>
         <?php foreach ($modelos as $modelo): ?>
-          <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
+          <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo 'Modelo: '.$modelo['nombre_modelo'].' Marca: '.$modelo['tbl_marcas']; ?></option>
         <?php endforeach; ?>
       </select>
 
@@ -242,7 +242,7 @@ foreach ($caracteristicas as $clave => $valor) {
             <select class="form-select" id="modificarModelo" name="Modelo" required>
               <option value="">Seleccionar Modelo</option>
               <?php foreach ($modelos as $modelo): ?>
-                <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
+                <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
               <?php endforeach; ?>
             </select>
           </div>
@@ -368,6 +368,15 @@ function mostrarCamposCategoria(categoriaId, modo = 'crear', data = {}) {
   }
 }
 
+</script>
+<script>
+$(document).ready(function() {
+    $('#tablaConsultas').DataTable({
+        language: {
+            url: 'Public/js/es-ES.json'
+        }
+    });
+});
 </script>
 </body>
 </html>

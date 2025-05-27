@@ -481,7 +481,15 @@ public function modificarProducto($id) {
         return $stmt->execute();
     }
     public function obtenerModelos() {
-        $query = "SELECT id_modelo, nombre_modelo FROM tbl_modelos";
+        $query = "SELECT 
+    mo.id_modelo AS tbl_modelos,
+    mo.nombre_modelo,
+    mar.nombre_marca AS tbl_marcas
+FROM 
+    tbl_modelos mo
+JOIN 
+    tbl_marcas mar ON mo.id_marca = mar.id_marca;
+";
         $stmt = $this->conex->query($query);
 
         if ($stmt) {
