@@ -145,6 +145,11 @@ $(document).ready(function () {
         });
     });
 
+    // Cerrar modal de modificación
+    $(document).on('click', '#modificarMarcaModal .close', function() {
+        $('#modificarMarcaModal').modal('hide');
+    });
+    
     // Delegación para el despliegue de opciones (modificar/eliminar)
     $('#tablaConsultas').on('click', '.vertical', function(e) {
         e.stopPropagation(); // Prevenir cierre inmediato

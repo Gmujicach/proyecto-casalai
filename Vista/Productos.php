@@ -87,7 +87,7 @@ if (!isset($_SESSION['name'])) {
 
 <div class="contenedor-tabla">
     <h3>Lista de Productos</h3>
-    <table class="tabla"class="tablaConsultas" id="tablaConsultas">
+    <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
                 <th>Id Producto</th>
@@ -194,7 +194,7 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 <!-- Modal de modificación -->
-<div class="modal fade" id="modificarProductoModal" tabindex="-1" role="dialog" aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
+<div class="modal fade modal-modificar" id="modificarProductoModal" tabindex="-1" role="dialog" aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
@@ -276,7 +276,6 @@ if (!isset($_SESSION['name'])) {
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary">Modificar</button>
         </div>
       </form>
