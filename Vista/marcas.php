@@ -35,8 +35,7 @@ if (!isset($_SESSION['name'])) {
 
 <div class="contenedor-tabla">
     <h3>Lista de Marcas</h3>
-    <div class="tabla-container">
-        <div class="tabla-scroll">
+    
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
@@ -82,8 +81,7 @@ if (!isset($_SESSION['name'])) {
             <?php endforeach; ?>
         </tbody>
     </table> 
-    </div>
-</div>
+
 </div>
 
 <!-- Modal para modificar marca -->
