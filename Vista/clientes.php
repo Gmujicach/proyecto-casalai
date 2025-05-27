@@ -104,7 +104,7 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 <!-- Modal de modificación -->
-<div class="modal fade" id="modificar_clientes_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
+<div class="modal fade modal-modificar" id="modificar_clientes_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="modificarclientes" method="POST" enctype="multipart/form-data">
@@ -158,6 +158,7 @@ if (!isset($_SESSION['name'])) {
         </div>
     </div>
 
+    <?php include 'footer.php'; ?>
     <div class="containera"> <!-- todo el contenido ira dentro de esta etiqueta-->
 
 <form method="post" action="" id="f" target="_blank">
@@ -173,9 +174,6 @@ if (!isset($_SESSION['name'])) {
 </div> <!-- fin de container -->
 
 </div>
-
-
-    
 
 <script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
