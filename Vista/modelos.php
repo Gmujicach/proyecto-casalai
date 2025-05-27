@@ -106,29 +106,26 @@ if (!isset($_SESSION['name'])) {
 </div>-->
 
 <!-- Modal de modificación -->
-<div class="modal fade modal-modificar" id="modificar_modelos_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_modelos_modal_label" aria-hidden="true">
+<div class="modal fade modal-modificar" id="modificarModeloModal" tabindex="-1" role="dialog" aria-labelledby="modificarModeloModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="modificarmodelos" method="POST">
+            <form id="modificarModelo" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_modelos_modal_label">Modificar Modelo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="modificarModeloModalLabel">Modificar Modelo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Campos del formulario de modificación -->
-                    <input type="hidden" id="modificar_id_modelos" name="id_modelo">
+                    <input type="hidden" id="modificar_id_modelo" name="id_modelo">
                     <div class="form-group">
-                        <label for="modificardescripcion_mo">Nombre del Modelo</label>
-                        <input type="text" class="form-control" id="modificardescripcion_mo" name="descripcion_mo" required>
-                        <span id="smodificardescripcion_mo"></span>
+                        <label for="modificar_nombre_modelo">Nombre del Modelo</label>
+                        <input type="text" class="form-control" id="modificar_nombre_modelo" name="nombre_modelo" maxlength="30" required>
+                        <span class="span-value-modal" id="smodificar_modelo"></span>
                     </div>
-                    
                 </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Modificar</button>
-                    </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Modificar</button>
                 </div>
             </form>
         </div>
@@ -136,14 +133,14 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 <?php include 'footer.php'; ?>
-<script src="public/bootstrap/js/sidebar.js"></script>
 <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/jquery-3.7.1.min.js"></script>
+<script src="Javascript/modelos.js"></script>
+
+<script src="public/bootstrap/js/sidebar.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>
-<script src="Javascript/sweetalert2.all.min.js"></script>
-<script src="Javascript/modelos.js"></script>
-<script src="Javascript/validaciones.js"></script>
+
 </body>
 </html>
