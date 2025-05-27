@@ -1,108 +1,107 @@
+<?php
+if (!isset($_SESSION['name'])) {
+    header('Location: .');
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestionar Clientes</title>
-  <?php include 'header.php'; ?>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Clientes</title>
+    <?php include 'header.php'; ?>
 </head>
 <body>
 
 <?php include 'NewNavBar.php'; ?>
 
-
-
-<div class="container"> 
-<form id="incluirclientes" action="" method="POST" class="formulario-1">
-    <input type="hidden" name="accion" value="ingresar">
-    <h3 class="display-4 text-center">INCLUIR CLIENTE</h3>
-                <div class="form-row">
-                     <div class="col">
-                        <label class="form-label mt-2" for="nombre">Nombre del Cliente</label>
-                        <input class="form-control" maxlength="15" type="text" id="nombre" name="nombre" placeholder="" required>
-                        <span id="snombre"></span>
-                    </div>
-
-                    <div class="col">
-                        <label class="form-label mt-2" for="cedula">Cedula/Rif</label>
-                        <input class="form-control" maxlength="15" type="text" id="cedula" name="cedula" placeholder="" required>
-                        <span id="scedula"></span>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <label class="form-label mt-2" for="telefono">Telefono</label>
-                        <input class="form-control" maxlength="11" type="text" id="telefono" name="telefono" placeholder="" required>
-                        <span id="stelefono"></span>
-                    </div>
-                    <div class="col">
-                        <label class="form-label mt-2" for="direccion">Direccion</label>
-                        <input class="form-control" maxlength="35" type="text" id="direccion" name="direccion" placeholder="" required>
-                        <span id="sdireccion"></span>
-                    </div>
-                </div>
+<div class="formulario-responsivo">
+    <div class="fondo-form">
+        <form id="incluirclientes" action="" method="POST">
+            <input type="hidden" name="accion" value="ingresar">
+            <h3 class="titulo-form">INCLUIR CLIENTE</h3>
                 
+            <div class="grupo-form">
+                <input class="control-form" placeholder="Nombre del Cliente" maxlength="15" type="text" id="nombre" name="nombre" placeholder="" required>
+                <span id="snombre"></span>
 
-                <div class="row">
-                    <div class="col">
-                        <label class="form-label mt-2" for="correo">Correo de Contacto</label>
-                        <input class="form-control" type="text" id="correo" name="correo" placeholder="" required>
-                        <span id="scorreo"></span>
-                    </div>
+                <input class="control-form" placeholder="Cedula/Rif" maxlength="15" type="text" id="cedula" name="cedula" placeholder="" required>
+                <span id="scedula"></span>
+            </div>
 
-                </div>
+            <div class="grupo-form">
+                <input class="control-form" placeholder="Teléfono" maxlength="11" type="text" id="telefono" name="telefono" placeholder="" required>
+                <span id="stelefono"></span>
 
+                <input class="control-form" placeholder="Dirección" maxlength="35" type="text" id="direccion" name="direccion" placeholder="" required>
+                <span id="sdireccion"></span>
+            </div>
+            
+            <div class="envolver-form">
+                <input class="control-form" placeholder="Correo de Contacto" type="text" id="correo" name="correo" placeholder="" required>
+                <span id="scorreo"></span>
+            </div>
 
+            <button class="boton-form" type="submit">Registrar</button>
+            <button class="boton-reset" type="reset">Reset</button>
+        </form>
     </div>
-    <div class="form-group d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
-    </div>
-</form>
-    </div>
+</div>
 
-
-    <div class="contenedor-tabla">
-    <h1 class="titulo-tabla display-5 text-center">LISTA DE CLIENTES</h1>
-    <table class="tabla">
+<div class="contenedor-tabla">
+    <h3>Lista de Clientes</h3>
+    <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th>Acciones</th>
                 <th>Nombre</th>
                 <th>Cedula</th>
                 <th>Direccion</th>
                 <th>Telefono</th>
                 <th>Correo</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($clientes as $clientes): ?>
                 <?php if ($clientes['activo'] == 1) { ?>
                 <tr>
-                    <td>
-                        <!-- Botón Modificar que abre el modal -->
-                        <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarProductoModal" data-id="<?php echo htmlspecialchars($clientes['id_clientes']); ?>">
-                        Modificar
-                        </button>
-                        <br>
-                        <!-- Botón Eliminar -->
-                        <a href="#" data-id="<?php echo htmlspecialchars($clientes['id_clientes']); ?>" class="btn btn-eliminar">Eliminar</a>
-                    </td>
                     <td><?php echo htmlspecialchars($clientes['nombre']); ?></td>
                     <td><?php echo htmlspecialchars($clientes['cedula']); ?></td>
                     <td><?php echo htmlspecialchars($clientes['direccion']); ?></td>
                     <td><?php echo htmlspecialchars($clientes['telefono']); ?></td>
                     <td><?php echo htmlspecialchars($clientes['correo']); ?></td>
+                    <td>
+                        <span>
+                            <div class="acciones-boton">
+                                <i class="vertical">
+                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                                </i>
+                                <div class="desplegable">
+                                    <ul>
+                                        <li>
+                                            <!-- Botón Modificar que abre el modal -->
+                                            <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarProductoModal" data-id="<?php echo htmlspecialchars($clientes['id_clientes']); ?>">
+                                            Modificar
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <!-- Botón Eliminar -->
+                                            <a href="#" data-id="<?php echo htmlspecialchars($clientes['id_clientes']); ?>" class="btn btn-eliminar">Eliminar</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </span>
+                    </td>
                 </tr>
                 <?php } ?>
             <?php endforeach; ?>
         </tbody>
     </table>
-
-    
-
-
+</div>
 
 <!-- Modal de modificación -->
 <div class="modal fade" id="modificar_clientes_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
