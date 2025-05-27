@@ -59,29 +59,53 @@ class Factura extends BD
     }
 
     // Crear factura
-    private function facturaIngresar() {
-        $pdo = $this->conex;
-        try {
-            $pdo->beginTransaction();
+private function facturaIngresar() {
+    $pdo = $this->conex;
+    try {
+        $pdo->beginTransaction();
 
-            // Insertar en tabla factura
-            $stmt = $pdo->prepare("INSERT INTO tbl_facturas (fecha, cliente, descuento, estatus) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$this->fecha, $this->cliente, $this->descuento, $this->estatus]);
+        // Insertar en tabla factura
+        $stmt = $pdo->prepare("INSERT INTO tbl_facturas (fecha, cliente, descuento, estatus) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$this->fecha, $this->cliente, $this->descuento, $this->estatus]);
 
-            $factura_id = $pdo->lastInsertId();
-
-            // Insertar en factura_detalle
-            $stmt2 = $pdo->prepare("INSERT INTO tbl_factura_detalle (factura_id, id_producto, cantidad) VALUES (?, ?, ?)");
-            $stmt2->execute([$factura_id, $this->id_producto, $this->cantidad]);
-
-            $pdo->commit();
-            return $factura_id;
-        } catch (PDOException $e) {
-            $pdo->rollBack();
-            echo "Error: " . $e->getMessage();
-            return false;
+        $factura_id = $pdo->lastInsertId();
+        if (!$factura_id) {
+            throw new Exception("No se pudo insertar la factura.");
         }
+
+        // Validar que $this->id_producto y $this->cantidad sean arrays y tengan la misma longitud
+        if (!is_array($this->id_producto) || !is_array($this->cantidad) || count($this->id_producto) !== count($this->cantidad)) {
+            throw new Exception("Datos de productos y cantidades inválidos o no coinciden.");
+        }
+
+        $detalle_insertados = 0;
+        $stmt2 = $pdo->prepare("INSERT INTO tbl_factura_detalle (factura_id, id_producto, cantidad) VALUES (?, ?, ?)");
+
+        foreach ($this->id_producto as $index => $id_producto) {
+            $cantidad = $this->cantidad[$index];
+
+            if (empty($id_producto) || empty($cantidad)) {
+                throw new Exception("Producto o cantidad vacío en el índice $index.");
+            }
+
+            $stmt2->execute([$factura_id, $id_producto, $cantidad]);
+            $detalle_insertados += $stmt2->rowCount();
+        }
+
+        if ($detalle_insertados !== count($this->id_producto)) {
+            throw new Exception("No se insertaron todos los detalles de la factura.");
+        }
+        
+
+        $pdo->commit();
+        return true;
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        return ['error' => $e->getMessage()];
     }
+}
+
+
 
     // Obtener factura
 public function facturaConsultar() {

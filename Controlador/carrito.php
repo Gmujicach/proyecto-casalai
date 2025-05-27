@@ -2,6 +2,7 @@
 ob_start();
 require_once 'Modelo/Productos.php';
 require_once 'Modelo/Carrito.php';
+require_once 'Modelo/Factura.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accion = $_POST['accion'] ?? '';
@@ -119,23 +120,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             break;
 
-        case 'registrar_compra':
-            $id_cliente = 1; // Obtener de la sesión
-            $carrito = new Carrito();
-            $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
-
-            if ($carritoCliente) {
-                $id_carrito = $carritoCliente['id_carrito'];
-try {
-    if ($carrito->registrarCompra($id_carrito, $id_cliente)) {
-        echo json_encode(['status' => 'success', 'message' => 'Compra registrada correctamente']);
+case 'registrar_compra':
+    $factura = new Factura();
+    // Aquí se debe obtener el ID del cliente de la sesión
+    $factura->setCliente(1); 
+    $factura->setFecha(date('Y-m-d H:i:s'));
+    $factura->setDescuento(0); // Descuento inicial
+    $factura->setEstatus('Borrador'); // Estado inicial de la compra
+    $productos = $_POST['productos'] ?? [];
+    $cantidades = $_POST['cantidad'] ?? [];
+    $factura->setIdProducto($productos);
+    $factura->setCantidad($cantidades);
+   /*
+    $carrito = new Carrito();
+    $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
+    $id_carrito = $carritoCliente['id_carrito'];
+    if ($carritoCliente) {
+        $id_carrito = $carritoCliente['id_carrito'];
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error al registrar la compra']);
+        echo json_encode(['status' => 'error', 'message' => 'No se encontró un carrito para este cliente.']);
     }
-} catch (Exception $e) {
-    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
-};}
-            break;
+    */
+        try {
+            $resultado = $factura->facturaTransaccion("Ingresar");
+
+            if (is_array($resultado) && isset($resultado['error'])) {
+
+                echo json_encode(['status' => 'error', 'message' => $resultado['error']]);
+            } elseif ($resultado === true) {
+                // Todo fue exitoso
+                $carrito = new Carrito();   
+                $carritoCliente = $carrito->obtenerCarritoPorCliente($_SESSION['id_usuario']);
+                $id_carrito = $carritoCliente['id_carrito'];
+                $carrito->eliminarTodoElCarrito($id_carrito);
+                echo json_encode(['status' => 'success', 'message' => 'Compra registrada correctamente']);
+            } else {
+                // Fallback genérico
+                echo json_encode(['status' => 'error', 'message' => 'Error desconocido al registrar la compra']);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['status' => 'error', 'message' => 'Excepción: ' . $e->getMessage()]);
+        }
+
+    break;
+
+
 
         case 'filtrar_por_marca':
             $id_marca = $_POST['id_marca'] ?? null;
