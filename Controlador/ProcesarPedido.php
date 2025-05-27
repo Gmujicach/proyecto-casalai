@@ -4,7 +4,10 @@ require_once 'Modelo/Productos.php';
 require_once 'Config/config.php';
 
 // Configuración de PHPMailer
-require '../vendor/autoload.php';
+require_once 'Config/PHPMailer/PHPMailer.php';
+require_once 'Config/PHPMailer/Exception.php';
+require_once 'Config/PHPMailer/SMTP.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -27,16 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['accion'] == 'realizar_pedido
             throw new Exception("No se pudo obtener la información del producto o proveedor");
         }
         
-        // Registrar el pedido en la base de datos (necesitarás crear esta tabla)
-        $conexion = new BD('P');
-        $conn = $conexion->getConexion();
-        
-        $query = "INSERT INTO tbl_pedidos_proveedores 
-                 (id_producto, id_proveedor, cantidad, fecha_pedido, estado) 
-                 VALUES (?, ?, ?, NOW(), 'pendiente')";
-        $stmt = $conn->prepare($query);
-        $stmt->execute([$id_producto, $id_proveedor, $cantidad]);
-        
         // Configurar y enviar correo
         $mail = new PHPMailer(true);
         
@@ -50,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['accion'] == 'realizar_pedido
         $mail->Port = 587;
         
         // Remitente y destinatario
-        $mail->setFrom('inventario@tudominio.com', 'Sistema de Inventario');
+        $mail->setFrom('Darckortgame@gmail.com', 'CASA LAI');
         $mail->addAddress($proveedor['correo'], $proveedor['nombre']);
         
         // Contenido del correo
