@@ -84,7 +84,6 @@ document.querySelectorAll('.btn-modificar').forEach(btn => {
         });
     });
 
-   
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault(); 
         Swal.fire({
@@ -119,7 +118,6 @@ document.querySelectorAll('.btn-modificar').forEach(btn => {
         });
     });
 
-   
     $('#incluirProductoForm').on('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(this);
