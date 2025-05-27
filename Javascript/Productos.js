@@ -183,7 +183,52 @@ function enviarAjax(datos, callback) {
         }
     });
 }
-
+function cambiarEstatus(idUsuario) {
+    const span = $(`span[onclick*="cambiarEstatus(${idUsuario}"]`);
+    const estatusActual = span.text().trim().toLowerCase();
+    const nuevoEstatus = estatusActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
+    
+    // Feedback visual inmediato
+    span.addClass('cambiando');
+    
+    $.ajax({
+        url: '',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            accion: 'cambiar_estatus',
+            id_producto: idUsuario,
+            nuevo_estatus: nuevoEstatus
+        },
+        success: function(data) {
+            span.removeClass('cambiando');
+            
+            if (data.status === 'success') {
+                span.text(nuevoEstatus);
+                span.removeClass('habilitado inhabilitado').addClass(nuevoEstatus);
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Estatus actualizado!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                // Revertir visualmente
+                span.text(estatusActual);
+                span.removeClass('habilitado inhabilitado').addClass(estatusActual);
+                Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
+            }
+        },
+        error: function(xhr, status, error) {
+            span.removeClass('cambiando');
+            // Revertir visualmente
+            span.text(estatusActual);
+            span.removeClass('habilitado inhabilitado').addClass(estatusActual);
+            Swal.fire('Error', 'Error en la conexión', 'error');
+        }
+    });
+}
 function muestraMensaje(mensaje) {
     Swal.fire({
         icon: 'error',

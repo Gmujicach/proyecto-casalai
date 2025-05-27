@@ -101,6 +101,7 @@ if (!isset($_SESSION['name'])) {
                 <th>Cláusula de Garantía</th>
                 <th>Categoría</th> <!-- CAMBIO: antes decía id_categoria -->
                 <th>Precio</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -128,7 +129,13 @@ if (!isset($_SESSION['name'])) {
                     </td>
 
                     <td><?php echo htmlspecialchars($producto['precio']); ?></td>
-                    
+                                    <td>
+                    <span class="campo-estatus <?php echo ($producto['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+                        onclick="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
+                        style="cursor: pointer;">
+                        <?php echo htmlspecialchars($producto['estado']); ?>
+                    </span>
+                </td>
                     <td>
                         <span>
                             <div class="acciones-boton">
@@ -286,26 +293,6 @@ if (!isset($_SESSION['name'])) {
   <script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/Productos.js"></script>
 <script src="Javascript/validaciones.js"></script>
-<script>
-document.getElementById('incluirProductoForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita que el formulario se envíe inmediatamente
-
-    // Crear un objeto FormData para capturar los datos
-    var formData = new FormData(this);
-
-    // Preparar el mensaje
-    var mensaje = "Datos enviados:\n\n";
-    formData.forEach(function(valor, clave) {
-        mensaje += clave + ": " + valor + "\n";
-    });
-
-    // Mostrar todos los datos en un alert
-    alert(mensaje);
-
-    // Opcional: después del alert, puedes enviar realmente el formulario
-    // this.submit();
-});
-</script>
 
 </body>
 </html>

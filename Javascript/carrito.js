@@ -50,7 +50,9 @@ document.getElementById('registrar-compra').addEventListener('click', function (
                     url: '',
                     type: 'POST',
                     data: {
-                        accion: 'registrar_compra'
+                        accion: 'registrar_compra',
+                        productos: datos.map(d => d.id_producto),
+                        cantidad: datos.map(d => d.cantidad)
                     }
                 }).then(response => {
                     return JSON.parse(response);
