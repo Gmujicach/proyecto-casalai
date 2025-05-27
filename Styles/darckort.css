@@ -392,3 +392,21 @@ transform: translateY(0%);
 .btn-logout:hover {
   background-color: #c82333;
 }
+
+/* Asegura disposición en columnas (no en fila) */
+.contenedor-principal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.contenedor-tabla {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 30px;
+}
+
+.dataTables_wrapper {
+  width: 100% !important;
+}

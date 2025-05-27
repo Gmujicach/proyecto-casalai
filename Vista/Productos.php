@@ -22,7 +22,11 @@ if (!isset($_SESSION['name'])) {
   <div class="fondo-form">
     <form id="incluirProductoForm" action="" method="POST">
       <input type="hidden" name="accion" value="ingresar">
+<<<<<<< HEAD
       <h3 class="titulo-form">INCLUIR PRODUCTOS</h3>
+=======
+      <h3>INCLUIR PRODUCTOS</h3>
+>>>>>>> b38312887c93d02c4390f5305dd19b7722f881f1
 
       <div class="envolver-form">
         <input type="text" placeholder="Nombre del producto" maxlength="15" class="control-form" id="nombre_producto" name="nombre_producto" required>
@@ -38,18 +42,29 @@ if (!isset($_SESSION['name'])) {
       <select class="form-select" id="Modelo" name="Modelo" required>
         <option value="">Seleccionar Modelo</option>
         <?php foreach ($modelos as $modelo): ?>
-          <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
+          <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo 'Modelo: '.$modelo['nombre_modelo'].' Marca: '.$modelo['tbl_marcas']; ?></option>
         <?php endforeach; ?>
       </select>
 
+<<<<<<< HEAD
       <div class="grupo-form">
         <input type="text" placeholder="Stock Actual" maxlength="10" class="control-form" value="0" id="Stock_Actual" name="Stock_Actual" required>
         <span id="sStock_Actual"></span>
 
         <input type="text" placeholder="Stock Máximo" maxlength="10" class="control-form" id="Stock_Maximo" name="Stock_Maximo" required>
+=======
+      <br>
+      <div class="envolver-form">
+        <label for="Stock_Actual">Stock Actual</label>
+        <input type="number" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" min="0" required>
+      </div>
+
+      <div class="grupo-form">
+        <input type="number" placeholder="Stock Máximo" maxlength="10" class="control-form" min="0" id="Stock_Maximo" name="Stock_Maximo" required>
+>>>>>>> b38312887c93d02c4390f5305dd19b7722f881f1
         <span id="sStock_Maximo"></span>
 
-        <input type="text" placeholder="Stock Mínimo" maxlength="10" class="control-form" id="Stock_Minimo" name="Stock_Minimo" required>
+        <input type="number" placeholder="Stock Mínimo" maxlength="10" class="control-form" min="0" id="Stock_Minimo" name="Stock_Minimo" required>
         <span id="sStock_Minimo"></span>
       </div>
       <br>
@@ -242,7 +257,7 @@ foreach ($caracteristicas as $clave => $valor) {
             <select class="form-select" id="modificarModelo" name="Modelo" required>
               <option value="">Seleccionar Modelo</option>
               <?php foreach ($modelos as $modelo): ?>
-                <option value="<?php echo $modelo['id_modelo']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
+                <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
               <?php endforeach; ?>
             </select>
           </div>
@@ -368,6 +383,15 @@ function mostrarCamposCategoria(categoriaId, modo = 'crear', data = {}) {
   }
 }
 
+</script>
+<script>
+$(document).ready(function() {
+    $('#tablaConsultas').DataTable({
+        language: {
+            url: 'Public/js/es-ES.json'
+        }
+    });
+});
 </script>
 </body>
 </html>
