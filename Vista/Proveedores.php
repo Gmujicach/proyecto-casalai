@@ -47,9 +47,16 @@ if (!isset($_SESSION['name'])) {
         </div>
 
         <div class="envolver-form">
+            <input type="text" placeholder="Correo" class="control-form" id="correo_proveedor" name="correo_proveedor" required>
+            <span id="scorreo_proveedor"></span>
+        </div>
+
+        <div class="envolver-form">
             <input type="text" placeholder="Direccion" class="control-form" id="direccion_proveedor" name="direccion_proveedor" required>
             <span id="sdireccion_proveedor"></span>
         </div>
+
+        
 
         <div class="grupo-form">
             <input type="text" placeholder="Telefono Principal" class="control-form" id="telefono_1" name="telefono_1" required>
@@ -178,7 +185,7 @@ if (!isset($_SESSION['name'])) {
                                 <div class="desplegable">
                                     <ul>
                                         <li>
-                                            <!-- Botón Modificar -->
+                                            <!-- Botón de Realizar Pedido -->
                                             <button 
                                                 type="button" 
                                                 class="btn btn-primary modificar" 
