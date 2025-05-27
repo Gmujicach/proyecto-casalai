@@ -13,7 +13,9 @@ class PasareladePago extends Factura {
     private $estatus;
 
 
-
+public function __construct() {
+    parent::__construct();
+}
     // Setters y Getters
 
     // ID Detalles
