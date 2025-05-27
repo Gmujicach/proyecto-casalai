@@ -55,18 +55,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
 
         case 'modificar':
-            $id = $_POST['id_proveedor'];
-            $proveedor = new Proveedores();
-            $proveedor->setId($id);
-            $proveedor->setNombre($_POST['nombre_proveedor']);
-            $proveedor->setRif1($_POST['rif_proveedor']);
-            $proveedor->setRepresentante($_POST['nombre_representante']);
-            $proveedor->setRif2($_POST['rif_representante']);
-            $proveedor->setCorreo($_POST['correo_proveedor']);
-            $proveedor->setObservacion($_POST['observacion']);
-            $proveedor->setTelefono1($_POST['telefono_1']);
-            $proveedor->setTelefono2($_POST['telefono_2']);
-            $proveedor->setDireccion($_POST['direccion_proveedor']);
+$id = $_POST['id_proveedor'];
+$proveedor = new Proveedores();
+$proveedor->setId($id);
+$proveedor->setNombre($_POST['nombre']);
+$proveedor->setRif1($_POST['rif_proveedor']);
+$proveedor->setRepresentante($_POST['persona_contacto']);
+$proveedor->setRif2($_POST['rif_representante']);
+$proveedor->setCorreo($_POST['correo']);
+$proveedor->setObservacion($_POST['observaciones']);
+$proveedor->setTelefono1($_POST['telefono']);
+$proveedor->setTelefono2($_POST['telefono_secundario']);
+$proveedor->setDireccion($_POST['direccion']);
+
             
             if ($proveedor->modificarProveedor($id)) {
                 echo json_encode(['status' => 'success']);
