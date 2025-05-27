@@ -27,7 +27,6 @@ USE `casalai`;
 --
 -- Estructura de tabla para la tabla `tbl_carrito`
 --
-
 CREATE TABLE `tbl_carrito` (
   `id_carrito` int(11) NOT NULL,
   `id_cliente` int(11) NOT NULL,
@@ -56,14 +55,6 @@ CREATE TABLE `tbl_carritodetalle` (
   `cantidad` int(11) NOT NULL,
   `estatus` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tbl_carritodetalle`
---
-
-INSERT INTO `tbl_carritodetalle` (`id_carrito_detalle`, `id_carrito`, `id_producto`, `cantidad`, `estatus`) VALUES
-(29, 9, 3, 5, 'pendiente'),
-(30, 9, 11, 6, 'pendiente');
 
 -- --------------------------------------------------------
 
@@ -168,7 +159,6 @@ CREATE TABLE `tbl_combo_detalle` (
 
 INSERT INTO `tbl_combo_detalle` (`id_detalle`, `id_combo`, `id_producto`, `cantidad`) VALUES
 (10, 13, 13, 3),
-(11, 13, 12, 3),
 (12, 13, 3, 1),
 (13, 12, 11, 3),
 (14, 12, 3, 1);
@@ -299,8 +289,13 @@ CREATE TABLE `tbl_facturas` (
 
 INSERT INTO `tbl_facturas` (`id_factura`, `fecha`, `cliente`, `descuento`, `estatus`) VALUES
 (1, '2024-07-18', 1, 1, 'Borrador'),
-(2, '2025-05-25', 1, 0, 'Borrador'),
-(3, '2025-05-25', 1, 0, 'Borrador');
+(18, '2025-05-26', 1, 0, 'Borrador'),
+(22, '2025-05-26', 1, 0, 'Borrador'),
+(23, '2025-05-26', 1, 0, 'Borrador'),
+(24, '2025-05-26', 1, 0, 'Borrador'),
+(26, '2025-05-26', 1, 0, 'Borrador'),
+(27, '2025-05-26', 1, 0, 'Borrador'),
+(28, '2025-05-26', 1, 0, 'Borrador');
 
 -- --------------------------------------------------------
 
@@ -320,7 +315,15 @@ CREATE TABLE `tbl_factura_detalle` (
 --
 
 INSERT INTO `tbl_factura_detalle` (`id`, `factura_id`, `id_producto`, `cantidad`) VALUES
-(1, 1, 3, 1);
+(1, 1, 3, 1),
+(7, 24, 3, 3),
+(8, 24, 11, 3),
+(9, 26, 13, 3),
+(11, 26, 3, 1),
+(12, 27, 13, 3),
+(14, 27, 3, 1),
+(15, 28, 13, 3),
+(17, 28, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -369,7 +372,7 @@ CREATE TABLE `tbl_ingresos_egresos` (
 
 CREATE TABLE `tbl_marcas` (
   `id_marca` int(11) NOT NULL,
-  `nombre_marca` varchar(255) NOT NULL
+  `nombre_marca` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -416,7 +419,7 @@ INSERT INTO `tbl_marcas` (`id_marca`, `nombre_marca`) VALUES
 
 CREATE TABLE `tbl_modelos` (
   `id_modelo` int(11) NOT NULL,
-  `nombre_modelo` varchar(255) NOT NULL,
+  `nombre_modelo` varchar(25) NOT NULL,
   `id_marca` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -535,7 +538,7 @@ CREATE TABLE `tbl_productos` (
   `stock_maximo` int(3) DEFAULT NULL,
   `clausula_garantia` varchar(150) NOT NULL,
   `precio` float(10,2) DEFAULT NULL,
-  `estado` int(1) DEFAULT 1
+  `estado` varchar(20) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -543,13 +546,12 @@ CREATE TABLE `tbl_productos` (
 --
 
 INSERT INTO `tbl_productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`) VALUES
-(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 100, 5, 20, 'Devolución dentro de un plazo de 31 días', 200.00, 1),
-(10, '1231', 'Colormedia', 'Tinta Profesional', 8, 3, 100, 1000, 10000, 'Sin devoluciones', 10.00, 0),
-(11, '051004', 'Computadora 200', 'Potente y Practica', 79, 5, 10, 1000, 1000, '35 Dias', 1000.00, 1),
-(12, 'CRT009', 'Cartucho Canon PG-14', 'Cartucho original Canon negro', 67, 4, 15, 5, 25, '', 25.00, 1),
-(13, 'CRT010', 'Cartucho Canon CL-14', 'Cartucho original Canon color', 68, 4, 12, 5, 20, '', 28.00, 1),
-(14, 'OTH011', 'Cable USB Impresora', 'Cable USB 2.0 para impresora 1.8m', NULL, 5, 30, 10, 50, '', 8.00, 1),
-(15, 'OTH012', 'Papel Fotográfico', 'Papel fotográfico brillante A4 180gr', NULL, 5, 20, 5, 30, '', 12.00, 1);
+(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 100, 5, 20, 'Devolución dentro de un plazo de 31 días', 200.00, 'inhabilitado'),
+(10, '1231', 'Colormedia', 'Tinta Profesional', 8, 3, 100, 1000, 10000, 'Sin devoluciones', 10.00, 'inhabilitado'),
+(11, '051004', 'Computadora 200', 'Potente y Practica', 79, 5, 10, 1000, 1000, '35 Dias', 1000.00, 'inhabilitado'),
+(13, 'CRT010', 'Cartucho Canon CL-14', 'Cartucho original Canon color', 68, 4, 12, 5, 20, '31 dias', 28.00, 'habilitado'),
+(14, 'OTH011', 'Cable USB Impresora', 'Cable USB 2.0 para impresora 1.8m', NULL, 5, 30, 10, 50, '', 8.00, '1'),
+(15, 'OTH012', 'Papel Fotográfico', 'Papel fotográfico brillante A4 180gr', NULL, 5, 20, 5, 30, '', 12.00, '1');
 
 -- --------------------------------------------------------
 
@@ -590,7 +592,8 @@ CREATE TABLE `tbl_proveedores` (
 --
 
 INSERT INTO `tbl_proveedores` (`id_proveedor`, `nombre`, `presona_contacto`, `telefono`, `correo`, `direccion`, `rif_representante`, `rif_proveedor`, `telefono_secundario`, `observaciones`) VALUES
-(1, 'Servicios Técnicos', 'Brayan Mendoza', '04145555555', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo');
+(0, 'Thunder Net', 'Diego Lopez', '0424-5329515', NULL, 'Avenida Lara', 'V-317663160', 'J-406452157', '0414-5413366', 'El Mejor'),
+(1, 'Servicios Técnicos', 'Brayan Mendoza', '04145555556', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo');
 
 -- --------------------------------------------------------
 
@@ -849,7 +852,7 @@ ALTER TABLE `tbl_carrito`
 -- AUTO_INCREMENT de la tabla `tbl_carritodetalle`
 --
 ALTER TABLE `tbl_carritodetalle`
-  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_cartucho_tinta`
@@ -903,13 +906,13 @@ ALTER TABLE `tbl_detalle_recepcion_productos`
 -- AUTO_INCREMENT de la tabla `tbl_facturas`
 --
 ALTER TABLE `tbl_facturas`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_factura_detalle`
 --
 ALTER TABLE `tbl_factura_detalle`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_impresoras`
