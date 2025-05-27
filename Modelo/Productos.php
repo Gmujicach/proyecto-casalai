@@ -21,6 +21,19 @@ class Productos extends BD{
     private $lleva_lote;
     private $lleva_serial;
     private $categoria;
+    private $numero;
+    private $color;
+    private $tipo;
+    private $volumen;
+    private $capacidad;
+    private $descripcion_otros;
+
+    private $voltaje_entrada;
+    private $voltaje_salida;
+    private $tomas;
+
+
+
     private $id;
 
     private $precio;
@@ -83,33 +96,7 @@ class Productos extends BD{
         return $this->peso;
     }
 
-    public function setPeso($peso) {
-        $this->peso = $peso;
-    }
 
-    public function getLargo() {
-        return $this->largo;
-    }
-
-    public function setLargo($largo) {
-        $this->largo = $largo;
-    }
-
-    public function getAlto() {
-        return $this->alto;
-    }
-
-    public function setAlto($alto) {
-        $this->alto = $alto;
-    }
-
-    public function getAncho() {
-        return $this->ancho;
-    }
-
-    public function setAncho($ancho) {
-        $this->ancho = $ancho;
-    }
 
     public function getClausulaDeGarantia() {
         return $this->clausula_garantia;
@@ -174,6 +161,43 @@ public function getPrecio() {
     return $this->precio;
 }
 
+public function setPeso($peso) { $this->peso = $peso; }
+public function setAlto($alto) { $this->alto = $alto; }
+public function getAlto() { return $this->alto; }
+
+public function setAncho($ancho) { $this->ancho = $ancho; }
+public function getAncho() { return $this->ancho; }
+
+public function setLargo($largo) { $this->largo = $largo; }
+public function getLargo() { return $this->largo; }
+
+public function setNumero($numero) { $this->numero = $numero; }
+public function getNumero() { return $this->numero; }
+
+public function setColor($color) { $this->color = $color; }
+public function getColor() { return $this->color; }
+
+public function setTipo($tipo) { $this->tipo = $tipo; }
+public function getTipo() { return $this->tipo; }
+
+public function setVolumen($volumen) { $this->volumen = $volumen; }
+public function getVolumen() { return $this->volumen; }
+
+// Reutiliza setNumero(), setColor()
+
+public function setCapacidad($capacidad) { $this->capacidad = $capacidad; }
+public function getCapacidad() { return $this->capacidad; }
+
+public function setDescripcionOtros($descripcion) { $this->descripcion_otros = $descripcion; }
+public function getDescripcionOtros() { return $this->descripcion_otros; }
+
+public function setVoltajeEntrada($voltaje_entrada) { $this->voltaje_entrada = $voltaje_entrada; }
+public function getVoltajeEntrada() { return $this->voltaje_entrada; }
+public function setVoltajeSalida($voltaje_salida) { $this->voltaje_salida = $voltaje_salida; }
+public function getVoltajeSalida() { return $this->voltaje_salida; }
+public function setTomas($tomas) { $this->tomas = $tomas; }
+public function getTomas() { return $this->tomas; }
+
 
     public function validarNombreProducto() {
         $sql = "SELECT COUNT(*) FROM tbl_productos WHERE nombre_producto = :nombre_producto";
@@ -196,25 +220,105 @@ public function getPrecio() {
         // Retorna true si no existe un producto con el mismo código interno
         return $count == 0;
     }
-    public function ingresarProducto() {
+public function ingresarProducto($datosCategoria) {
+    try {
+        // Iniciar transacción
+        $this->conex->beginTransaction();
+
+        // Insertar producto principal
         $sql = "INSERT INTO tbl_productos (`serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`)
-                VALUES (:serial_p, :nombre_producto, :descripcion_producto, :modelo, :categoria, :stock_actual, :stock_minimo, :stock_maximo, :clausula_garantia, :precio, 1)";
-        
+                VALUES (:serial_p, :nombre_producto, :descripcion_producto, :modelo, :categoria, :stock_actual, :stock_minimo, :stock_maximo, :clausula_garantia, :precio, 'habilitado')";
+
         $stmt = $this->conex->prepare($sql);
-    
+
         $stmt->bindParam(':serial_p', $this->serial);
         $stmt->bindParam(':nombre_producto', $this->nombre_producto);
-        $stmt->bindParam(':descripcion_producto', $this->descripcion_p); // CORREGIDO aquí
+        $stmt->bindParam(':descripcion_producto', $this->descripcion_p);
         $stmt->bindParam(':modelo', $this->id_modelo);
         $stmt->bindParam(':categoria', $this->categoria);
         $stmt->bindParam(':stock_actual', $this->stock_actual);
-        $stmt->bindParam(':stock_minimo', $this->stock_min); // CORREGIDO: stock mínimo
-        $stmt->bindParam(':stock_maximo', $this->stock_max); // CORREGIDO: stock máximo
+        $stmt->bindParam(':stock_minimo', $this->stock_min);
+        $stmt->bindParam(':stock_maximo', $this->stock_max);
         $stmt->bindParam(':clausula_garantia', $this->clausula_garantia);
-        $stmt->bindParam(':precio', $this->precio); // AÑADIDO: bind de precio
-    
-        return $stmt->execute();
+        $stmt->bindParam(':precio', $this->precio);
+
+        if (!$stmt->execute()) {
+            $this->conex->rollBack();
+            return false;
+        }
+
+        $idProducto = $this->conex->lastInsertId();
+
+        // Insertar datos según categoría
+        switch ($this->categoria) {
+            case '1': // Impresora
+                $sql = "INSERT INTO tbl_impresoras (id_producto, peso, alto, ancho, largo)
+                        VALUES (:id_producto, :peso, :alto, :ancho, :largo)";
+                $stmt = $this->conex->prepare($sql);
+                $stmt->bindParam(':id_producto', $idProducto);
+                $stmt->bindParam(':peso', $datosCategoria['peso']);
+                $stmt->bindParam(':alto', $datosCategoria['alto']);
+                $stmt->bindParam(':ancho', $datosCategoria['ancho']);
+                $stmt->bindParam(':largo', $datosCategoria['largo']);
+                break;
+
+            case '2': // Protector Voltaje
+                $sql = "INSERT INTO tbl_protector_voltaje (id_producto, voltaje_entrada, voltaje_salida, tomas, capacidad)
+                        VALUES (:id_producto, :voltaje_entrada, :voltaje_salida, :tomas, :capacidad)";
+                $stmt = $this->conex->prepare($sql);
+                $stmt->bindParam(':id_producto', $idProducto);
+                $stmt->bindParam(':voltaje_entrada', $datosCategoria['voltaje_entrada']);
+                $stmt->bindParam(':voltaje_salida', $datosCategoria['voltaje_salida']);
+                $stmt->bindParam(':tomas', $datosCategoria['tomas']);
+                $stmt->bindParam(':capacidad', $datosCategoria['capacidad']);
+                break;
+
+            case '3': // Tinta
+                $sql = "INSERT INTO tbl_tintas (id_producto, numero, color, tipo, volumen)
+                        VALUES (:id_producto, :numero, :color, :tipo, :volumen)";
+                $stmt = $this->conex->prepare($sql);
+                $stmt->bindParam(':id_producto', $idProducto);
+                $stmt->bindParam(':numero', $datosCategoria['numero']);
+                $stmt->bindParam(':color', $datosCategoria['color']);
+                $stmt->bindParam(':tipo', $datosCategoria['tipo']);
+                $stmt->bindParam(':volumen', $datosCategoria['volumen']);
+                break;
+
+            case '4': // Cartucho Tinta
+                $sql = "INSERT INTO tbl_cartucho_tinta (id_producto, numero, color, capacidad)
+                        VALUES (:id_producto, :numero, :color, :capacidad)";
+                $stmt = $this->conex->prepare($sql);
+                $stmt->bindParam(':id_producto', $idProducto);
+                $stmt->bindParam(':numero', $datosCategoria['numero']);
+                $stmt->bindParam(':color', $datosCategoria['color']);
+                $stmt->bindParam(':capacidad', $datosCategoria['capacidad']);
+                break;
+
+            case '5': // Otros
+                $sql = "INSERT INTO tbl_otros (id_producto, descripcion_otros)
+                        VALUES (:id_producto, :descripcion)";
+                $stmt = $this->conex->prepare($sql);
+                $stmt->bindParam(':id_producto', $idProducto);
+                $stmt->bindParam(':descripcion', $datosCategoria['descripcion_otros']);
+                break;
+        }
+
+        if (!$stmt->execute()) {
+            $this->conex->rollBack();
+            return false;
+        }
+
+        // Confirmar todo
+        $this->conex->commit();
+        return $idProducto;
+
+    } catch (PDOException $e) {
+        $this->conex->rollBack();
+        error_log("Error al ingresar producto: " . $e->getMessage());
+        return false;
     }
+}
+
     
 
     public function obtenerProductoPorId($id) {
@@ -233,7 +337,17 @@ public function getPrecio() {
         return $productos;
     }
 
-    public function modificarProducto($id) {
+public function modificarProducto($id) {
+    try {
+        $this->conex->beginTransaction();
+
+        // 1. Obtener la categoría actual del producto
+        $stmtOld = $this->conex->prepare("SELECT id_categoria FROM tbl_productos WHERE id_producto = :id");
+        $stmtOld->bindParam(':id', $id);
+        $stmtOld->execute();
+        $oldCategoria = $stmtOld->fetchColumn();
+
+        // 2. Actualizar tabla principal
         $sql = "UPDATE tbl_productos 
                 SET serial = :serial_p,
                     nombre_producto = :nombre_producto,
@@ -246,9 +360,8 @@ public function getPrecio() {
                     clausula_garantia = :clausula_garantia,
                     precio = :precio
                 WHERE id_producto = :id_producto";
-    
+
         $stmt = $this->conex->prepare($sql);
-    
         $stmt->bindParam(':id_producto', $id);
         $stmt->bindParam(':serial_p', $this->serial);
         $stmt->bindParam(':nombre_producto', $this->nombre_producto);
@@ -260,14 +373,106 @@ public function getPrecio() {
         $stmt->bindParam(':stock_maximo', $this->stock_max);
         $stmt->bindParam(':clausula_garantia', $this->clausula_garantia);
         $stmt->bindParam(':precio', $this->precio);
-    
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            $errorInfo = $stmt->errorInfo();
-            throw new Exception('Error al modificar producto: ' . $errorInfo[2]);
+        $stmt->execute();
+
+        // 3. Si la categoría cambió, eliminar datos antiguos
+        if ($oldCategoria !== $this->categoria) {
+            $tablas = [
+                '1' => 'tbl_impresoras',
+                '2' => 'tbl_protector_voltaje',
+                '3' => 'tbl_tintas',
+                '4' => 'tbl_cartuchos',
+                '5' => 'tbl_otros'
+            ];
+            if (isset($tablas[$oldCategoria])) {
+                $stmtDel = $this->conex->prepare("DELETE FROM {$tablas[$oldCategoria]} WHERE id_producto = :id");
+                $stmtDel->bindParam(':id', $id);
+                $stmtDel->execute();
+            }
         }
+
+        // 4. Insertar o actualizar según sea nueva o misma categoría
+        switch ($this->categoria) {
+            case '1': // IMPRESORA
+                if ($oldCategoria !== '1') {
+                    $sqlCat = "INSERT INTO tbl_impresoras (id_producto, peso, alto, ancho, largo) VALUES (:id, :peso, :alto, :ancho, :largo)";
+                } else {
+                    $sqlCat = "UPDATE tbl_impresoras SET peso = :peso, alto = :alto, ancho = :ancho, largo = :largo WHERE id_producto = :id";
+                }
+                $stmtCat = $this->conex->prepare($sqlCat);
+                $stmtCat->bindParam(':peso', $this->peso);
+                $stmtCat->bindParam(':alto', $this->alto);
+                $stmtCat->bindParam(':ancho', $this->ancho);
+                $stmtCat->bindParam(':largo', $this->largo);
+                break;
+
+            case '2': // PROTECTOR DE VOLTAJE
+                if ($oldCategoria !== '2') {
+                    $sqlCat = "INSERT INTO tbl_protector_voltaje (id_producto, voltaje_entrada, voltaje_salida, tomas, capacidad) VALUES (:id, :entrada, :salida, :tomas, :capacidad)";
+                } else {
+                    $sqlCat = "UPDATE tbl_protector_voltaje SET voltaje_entrada = :entrada, voltaje_salida = :salida, tomas = :tomas, capacidad = :capacidad WHERE id_producto = :id";
+                }
+                $stmtCat = $this->conex->prepare($sqlCat);
+                $stmtCat->bindParam(':entrada', $this->voltaje_entrada);
+                $stmtCat->bindParam(':salida', $this->voltaje_salida);
+                $stmtCat->bindParam(':tomas', $this->tomas);
+                $stmtCat->bindParam(':capacidad', $this->capacidad);
+                break;
+
+            case '3': // TINTA
+                if ($oldCategoria !== '3') {
+                    $sqlCat = "INSERT INTO tbl_tintas (id_producto, numero, color, tipo, volumen) VALUES (:id, :numero, :color, :tipo, :volumen)";
+                } else {
+                    $sqlCat = "UPDATE tbl_tintas SET numero = :numero, color = :color, tipo = :tipo, volumen = :volumen WHERE id_producto = :id";
+                }
+                $stmtCat = $this->conex->prepare($sqlCat);
+                $stmtCat->bindParam(':numero', $this->numero);
+                $stmtCat->bindParam(':color', $this->color);
+                $stmtCat->bindParam(':tipo', $this->tipo);
+                $stmtCat->bindParam(':volumen', $this->volumen);
+                break;
+
+            case '4': // CARTUCHO DE TINTA
+                if ($oldCategoria !== '4') {
+                    $sqlCat = "INSERT INTO tbl_cartucho_tinta (id_producto, numero, color, capacidad) VALUES (:id, :numero, :color, :capacidad)";
+                } else {
+                    $sqlCat = "UPDATE tbl_cartucho_tinta SET numero = :numero, color = :color, capacidad = :capacidad WHERE id_producto = :id";
+                }
+                $stmtCat = $this->conex->prepare($sqlCat);
+                $stmtCat->bindParam(':numero', $this->numero);
+                $stmtCat->bindParam(':color', $this->color);
+                $stmtCat->bindParam(':capacidad', $this->capacidad);
+                break;
+
+            case '5': // OTROS
+                if ($oldCategoria !== '5') {
+                    $sqlCat = "INSERT INTO tbl_otros (id_producto, descripcion_otros) VALUES (:id, :descripcion)";
+                } else {
+                    $sqlCat = "UPDATE tbl_otros SET descripcion_otros = :descripcion WHERE id_producto = :id";
+                }
+                $stmtCat = $this->conex->prepare($sqlCat);
+                $stmtCat->bindParam(':descripcion', $this->descripcion_otros);
+                break;
+
+            default:
+                $stmtCat = null;
+        }
+
+        if ($stmtCat !== null) {
+            $stmtCat->bindParam(':id', $id);
+            $stmtCat->execute();
+        }
+
+        $this->conex->commit();
+        return true;
+
+    } catch (Exception $e) {
+        $this->conex->rollBack();
+        throw new Exception('Error al modificar producto: ' . $e->getMessage());
     }
+}
+
+
 
     public function eliminarProducto($id) {
         $sql = "DELETE FROM `tbl_productos` WHERE id_producto = :id";
@@ -744,51 +949,64 @@ class Producto extends Productos{
         $this->conex = parent::getConexion();
     }
 
-    public function obtenerProductos() {
-       
-        $queryProductos = 
-        'SELECT tbl_productos.*, tbl_modelos.nombre_modelo, tbl_categoria.nombre_caracteristicas 
+public function obtenerProductos() {
+    // 1. Consulta general con modelo y categoría
+    $queryProductos = '
+        SELECT 
+            tbl_productos.*, 
+            tbl_modelos.nombre_modelo, 
+            tbl_categoria.nombre_caracteristicas 
         FROM tbl_productos 
         INNER JOIN tbl_modelos 
-        ON tbl_productos.id_modelo = tbl_modelos.id_modelo 
+            ON tbl_productos.id_modelo = tbl_modelos.id_modelo 
         INNER JOIN tbl_categoria 
-        ON tbl_productos.id_categoria = tbl_categoria.id_categoria;
-';
-       
-        $stmtProductos = $this->conex->prepare($queryProductos);
-        $stmtProductos->execute();
-        $productos = $stmtProductos->fetchAll(PDO::FETCH_ASSOC);
-        $idsModelos = array_column($productos, 'id_modelo');
-        $idsModelos = array_unique($idsModelos);
+            ON tbl_productos.id_categoria = tbl_categoria.id_categoria
+    ';
 
-        if (!empty($idsModelos)) {
-            $idsModelos = implode(',', $idsModelos);
+    $stmtProductos = $this->conex->prepare($queryProductos);
+    $stmtProductos->execute();
+    $productos = $stmtProductos->fetchAll(PDO::FETCH_ASSOC);
 
-            $queryModelos = 'SELECT id_modelo, nombre_modelo FROM ' . $this->tableModelos . ' WHERE id_modelo IN (' . $idsModelos . ')';
+    // 2. Agregar características específicas por categoría
+    foreach ($productos as &$producto) {
+        $idProducto = $producto['id_producto'];
+        $categoria = strtolower($producto['nombre_caracteristicas']); // debe ser como se llama la tabla
 
-            $stmtModelos = $this->conex->prepare($queryModelos);
-            $stmtModelos->execute();
-            $modelos = $stmtModelos->fetchAll(PDO::FETCH_ASSOC);
-            $descripcionModelos = [];
-            foreach ($modelos as $modelo) {
-                $descripcionModelos[$modelo['id_modelo']] = $modelo['nombre_modelo'];
-            }
-            foreach ($productos as &$producto) {
-                if (isset($descripcionModelos[$producto['id_modelo']])) {
-                    $producto['nombre_modelo'] = $descripcionModelos[$producto['id_modelo']];
-                } else {
-                    $producto['nombre_modelo'] = null;
-                }
-            }
-        } else {
-
-            foreach ($productos as &$producto) {
-                $producto['nombre_modelo'] = null;
-            }
+        switch ($categoria) {
+            case 'impresora':
+                $sql = "SELECT * FROM tbl_impresoras WHERE id_producto = :id";
+                break;
+            case 'protector de voltaje':
+                $sql = "SELECT * FROM tbl_protector_voltaje WHERE id_producto = :id";
+                break;
+            case 'tinta':
+                $sql = "SELECT * FROM tbl_tintas WHERE id_producto = :id";
+                break;
+            case 'cartucho':
+                $sql = "SELECT * FROM tbl_cartucho_tinta WHERE id_producto = :id";
+                break;
+            case 'tbl_otros':
+                $sql = "SELECT * FROM tbl_otros WHERE id_producto = :id";
+                break;
+            default:
+                $sql = null;
+                break;
         }
 
-        return $productos;
+        if ($sql) {
+            $stmt = $this->conex->prepare($sql);
+            $stmt->bindParam(':id', $idProducto, PDO::PARAM_INT);
+            $stmt->execute();
+            $caracteristicas = $stmt->fetch(PDO::FETCH_ASSOC);
+            $producto['caracteristicas'] = $caracteristicas ?: [];
+        } else {
+            $producto['caracteristicas'] = [];
+        }
     }
+
+    return $productos;
+}
+
 
     public function obtenerProductosConBajoStock() {
     $queryProductos = '

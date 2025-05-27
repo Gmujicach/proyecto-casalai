@@ -9,6 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     switch ($accion) {
 
+
+
             case 'agregar_al_carrito':
                 $id_producto = $_POST['id_producto'] ?? null;
                 if ($id_producto !== null) {

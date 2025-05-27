@@ -80,7 +80,7 @@ class cliente extends BD {
 
     public function ingresarclientes() {
         $sql = "INSERT INTO tbl_clientes (`nombre`, `cedula`, `direccion`, `telefono`, `correo`, `activo`)
-                VALUES (:nombre, :cedula :direccion, :telefono, :correo, :activo)";
+                VALUES (:nombre, :cedula, :direccion, :telefono, :correo, 1)";
         $stmt = $this->conex->prepare($sql);
         // Asignar valores a los parámetros
         $stmt->bindParam(':nombre', $this->nombre);
@@ -88,7 +88,6 @@ class cliente extends BD {
         $stmt->bindParam(':telefono', $this->telefono);
         $stmt->bindParam(':cedula', $this->cedula);
         $stmt->bindParam(':correo', $this->correo);
-        $stmt->bindParam(':activo', $this->activo);
         
         return $stmt->execute();
     }

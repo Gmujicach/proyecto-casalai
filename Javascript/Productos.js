@@ -1,23 +1,47 @@
 $(document).ready(function () {
-    $(document).on('click', '.btn-modificar', function() {
-        var boton = $(this);
+document.querySelectorAll('.btn-modificar').forEach(btn => {
+  btn.addEventListener('click', function () {
+    document.getElementById('modificarIdProducto').value = this.dataset.id;
+    document.getElementById('modificarNombreProducto').value = this.dataset.nombre;
+    document.getElementById('modificarDescripcionProducto').value = this.dataset.descripcion;
+    document.getElementById('modificarModelo').value = this.dataset.modelo;
+    document.getElementById('modificarStockActual').value = this.dataset.stockactual;
+    document.getElementById('modificarStockMaximo').value = this.dataset.stockmaximo;
+    document.getElementById('modificarStockMinimo').value = this.dataset.stockminimo;
+    document.getElementById('modificarClausulaGarantia').value = this.dataset.clausula;
+    document.getElementById('modificarSeriales').value = this.dataset.seriales;
+    document.getElementById('modificarPrecio').value = this.dataset.precio;
+    document.getElementById('modificarCategoria').value = this.dataset.categoria;
+
+    const categoria = this.dataset.categoria;
+
+    const dataExtra = {
+      alto: this.dataset.alto,
+      ancho: this.dataset.ancho,
+      color: this.dataset.color,
+      capacidad: this.dataset.capacidad,
+      voltaje: this.dataset.voltaje,
+      peso: this.dataset.peso,
+      largo: this.dataset.largo,
+      numero: this.dataset.numero,
+      tipo: this.dataset.tipo,
+      volumen: this.dataset.volumen,
+      tomas: this.dataset.tomas,
+      voltaje_entrada: this.dataset.voltaje_entrada,
+      voltaje_salida: this.dataset.voltaje_salida,
+      capacidad_bateria: this.dataset.capacidad,
+      descripcion_otros: this.dataset.descripcion_otros,
+
     
-        // Llenar los campos del formulario con los datos del botón
-        $('#modificarIdProducto').val(boton.data('id'));
-        $('#modificarNombreProducto').val(boton.data('nombre'));
-        $('#modificarDescripcionProducto').val(boton.data('descripcion'));
-        $('#modificarModelo').val(boton.data('modelo'));
-        $('#modificarStockActual').val(boton.data('stockactual'));
-        $('#modificarStockMaximo').val(boton.data('stockmaximo'));
-        $('#modificarStockMinimo').val(boton.data('stockminimo'));
-        $('#modificarPrecio').val(boton.data('precio'));
-        $('#modificarSeriales').val(boton.data('seriales'));
-        $('#modificarClausulaGarantia').val(boton.data('clausula'));
-        $('#modificarCategoria').val(boton.data('categoria'));
-    
-        // Mostrar el modal
+      // agrega más si es necesario
+    };
+
+    mostrarCamposCategoria(categoria, 'modificar', dataExtra);
+            // Mostrar el modal
         $('#modificarProductoModal').modal('show');
-    });
+  });
+});
+
     
     
 

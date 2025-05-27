@@ -34,6 +34,8 @@ $(document).ready(function () {
                         icon: 'success',
                         title: 'Modificado',
                         text: 'El Cliente se ha modificado correctamente'
+                    }).then(function() {
+                    location.reload();
                     });
 
                     // Actualiza la fila en la tabla sin recargar
