@@ -51,17 +51,18 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Marca</th>
                 <th>Modelo</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($modelos as $modelos): ?>
-                
-                <tr>
-                    <td><?php echo htmlspecialchars($modelos['nombre_marca']); ?></td>
-                    <td><?php echo htmlspecialchars($modelos['nombre_modelo']); ?></td>
+            <?php foreach ($modelos as $modelo): ?>
+                <tr data-id="<?php echo $modelo['id_modelo']; ?>">
+                    <td><?php echo htmlspecialchars($modelo['id_modelo']); ?></td>
+                    <td><?php echo htmlspecialchars($modelo['nombre_marca']); ?></td>
+                    <td><?php echo htmlspecialchars($modelo['nombre_modelo']); ?></td>
                     <td>
                         <span>
                             <div class="acciones-boton">
@@ -71,14 +72,15 @@ if (!isset($_SESSION['name'])) {
                                 <div class="desplegable">
                                     <ul>
                                         <li>
-                                            <!-- Botón Modificar que abre el modal -->
-                                            <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarmodelosModal" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>">
-                                            Modificar
-                                            </button>
+                                            <button class="btn btn-primary btn-modificar"
+                                            data-id="<?php echo $marca['id_modelo']; ?>"
+                                            data-nombre="<?php echo htmlspecialchars($marca['nombre_modelo']); ?>"
+                                            >Modificar</button>
                                         </li>
                                         <li>
-                                            <!-- Botón Eliminar -->
-                                            <a href="#" data-id="<?php echo htmlspecialchars($modelos['id_modelo']); ?>" class="btn btn-eliminar">Eliminar</a>
+                                            <button class="btn btn-danger btn-eliminar"
+                                            data-id="<?php echo $marca['id_modelo']; ?>"
+                                            >Eliminar</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -104,7 +106,7 @@ if (!isset($_SESSION['name'])) {
 </div>-->
 
 <!-- Modal de modificación -->
-<div class="modal fade" id="modificar_modelos_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_modelos_modal_label" aria-hidden="true">
+<div class="modal fade modal-modificar" id="modificar_modelos_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_modelos_modal_label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="modificarmodelos" method="POST">
