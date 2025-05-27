@@ -952,16 +952,17 @@ class Producto extends Productos{
 public function obtenerProductos() {
     // 1. Consulta general con modelo y categoría
     $queryProductos = '
-        SELECT 
-            tbl_productos.*, 
-            tbl_modelos.nombre_modelo, 
-            tbl_categoria.nombre_caracteristicas 
-        FROM tbl_productos 
-        INNER JOIN tbl_modelos 
-            ON tbl_productos.id_modelo = tbl_modelos.id_modelo 
-        INNER JOIN tbl_categoria 
-            ON tbl_productos.id_categoria = tbl_categoria.id_categoria
-    ';
+SELECT 
+    tbl_productos.*, 
+    tbl_modelos.nombre_modelo, 
+    tbl_categoria.nombre_caracteristicas 
+FROM tbl_productos 
+INNER JOIN tbl_modelos 
+    ON tbl_productos.id_modelo = tbl_modelos.id_modelo 
+INNER JOIN tbl_categoria 
+    ON tbl_productos.id_categoria = tbl_categoria.id_categoria
+ORDER BY tbl_productos.id_producto ASC;
+';
 
     $stmtProductos = $this->conex->prepare($queryProductos);
     $stmtProductos->execute();
@@ -985,7 +986,7 @@ public function obtenerProductos() {
             case 'cartucho':
                 $sql = "SELECT * FROM tbl_cartucho_tinta WHERE id_producto = :id";
                 break;
-            case 'tbl_otros':
+            case 'otros':
                 $sql = "SELECT * FROM tbl_otros WHERE id_producto = :id";
                 break;
             default:

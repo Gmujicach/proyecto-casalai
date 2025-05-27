@@ -22,7 +22,7 @@ if (!isset($_SESSION['name'])) {
   <div class="fondo-form">
     <form id="incluirProductoForm" action="" method="POST">
       <input type="hidden" name="accion" value="ingresar">
-      <h5 class="titulo-form">INCLUIR PRODUCTOS</h5>
+      <h3>INCLUIR PRODUCTOS</h3>
 
       <div class="grupo-form">
         <input type="text" placeholder="Nombre del producto" maxlength="15" class="control-form" id="nombre_producto" name="nombre_producto" required>
@@ -43,14 +43,14 @@ if (!isset($_SESSION['name'])) {
       <br>
       <div class="envolver-form">
         <label for="Stock_Actual">Stock Actual</label>
-        <input type="text" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" required>
+        <input type="number" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" min="0" required>
       </div>
 
       <div class="grupo-form">
-        <input type="text" placeholder="Stock Máximo" maxlength="10" class="control-form" id="Stock_Maximo" name="Stock_Maximo" required>
+        <input type="number" placeholder="Stock Máximo" maxlength="10" class="control-form" min="0" id="Stock_Maximo" name="Stock_Maximo" required>
         <span id="sStock_Maximo"></span>
 
-        <input type="text" placeholder="Stock Mínimo" maxlength="10" class="control-form" id="Stock_Minimo" name="Stock_Minimo" required>
+        <input type="number" placeholder="Stock Mínimo" maxlength="10" class="control-form" min="0" id="Stock_Minimo" name="Stock_Minimo" required>
         <span id="sStock_Minimo"></span>
       </div>
 
