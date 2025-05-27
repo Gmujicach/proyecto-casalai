@@ -145,29 +145,7 @@ if (!isset($_SESSION['name'])) {
             </tr>
         <?php endforeach; ?>
         </tbody>
-        <!-- <tfoot>
-            <tr>
-                <td>Filas por Página: 
-                    <select id="filasPorPagina" onchange="cambiarFilasPorPagina(this.value)">
-                        <option value="10" selected>10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </td>
-                <td><?php //echo "$inicio-$fin de $totalUsuarios"; ?></td>
-                <td>
-                    <a href="?pagina=<?php //echo max(1, $paginaActual - 1); ?>">
-                        <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
-                    </a>
-                </td>
-                <td>
-                    <a href="?pagina<?php //echo min(ceil($totalUsuarios / $filasPorPagina), $paginaActual + 1); ?>">
-                        <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
-                    </a>
-                </td>
-            </tr>
-        </tfoot> -->
+
     </table>
 
 <div class="contenedor-tabla">
@@ -177,16 +155,9 @@ if (!isset($_SESSION['name'])) {
             <tr>
                 <th>Id Producto</th>
                 <th>Producto</th>
-                <th>Descripción</th>
-                <th>Modelo</th> <!-- CAMBIO: antes decía id_modelo -->
+                <th>Modelo</th>
                 <th>Stock Actual</th>
-                <th>Stock Máximo</th>
                 <th>Stock Mínimo</th>
-                <th>Serial</th>
-                <th>Cláusula de Garantía</th>
-                <th>Categoría</th> <!-- CAMBIO: antes decía id_categoria -->
-                <th>Precio</th>
-                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -195,32 +166,9 @@ if (!isset($_SESSION['name'])) {
                 <tr>
                     <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
                     <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['descripcion_producto']); ?></td>
-
-                    <!-- AQUÍ cambia: mostramos el nombre del modelo -->
-                    <td>
-                        <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
-                    </td>
-
+                    <td><?php echo htmlspecialchars($producto['nombre_modelo']); ?></td>
                     <td><?php echo htmlspecialchars($producto['stock']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['stock_maximo']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['stock_minimo']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['serial']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['clausula_garantia']); ?></td>
-
-                    <!-- AQUÍ cambia: mostramos el nombre de la categoría -->
-                    <td>
-                        <?php echo htmlspecialchars($producto['nombre_caracteristicas']); ?>
-                    </td>
-
-                    <td><?php echo htmlspecialchars($producto['precio']); ?></td>
-                                    <td>
-                    <span class="campo-estatus <?php echo ($producto['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
-                        onclick="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
-                        style="cursor: pointer;">
-                        <?php echo htmlspecialchars($producto['estado']); ?>
-                    </span>
-                </td>
+                    <td><?php echo htmlspecialchars($producto['stock_minimo']); ?></td>            
                     <td>
                         <span>
                             <div class="acciones-boton">
@@ -248,17 +196,8 @@ if (!isset($_SESSION['name'])) {
                                                 data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
                                                 data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
                                             >
-                                                Modificar
+                                                Realizar Pedido
                                             </button>
-                                        </li>
-                                        <li>
-                                            <!-- Botón Eliminar -->
-                                            <a href="#" 
-                                                data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>" 
-                                                class="btn btn-eliminar"
-                                            >
-                                                Eliminar
-                                            </a>
                                         </li>
                                     </ul>
                                 </div>
