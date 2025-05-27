@@ -70,7 +70,10 @@ class modelo extends BD{
         return $this->obtUltimoModelo();
     }
     private function obtUltimoModelo() {
-        $sql = "SELECT * FROM tbl_modelos ORDER BY id_modelo DESC LIMIT 1";
+        $sql = "SELECT m.id_modelo, m.nombre_modelo, m.id_marca, ma.nombre_marca
+            FROM tbl_modelos m
+            JOIN tbl_marcas ma ON m.id_marca = ma.id_marca
+            ORDER BY m.id_modelo DESC LIMIT 1";
         $stmt = $this->conex->prepare($sql);
         $stmt->execute();
         $modelo = $stmt->fetch(PDO::FETCH_ASSOC);

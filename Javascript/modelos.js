@@ -49,6 +49,7 @@ $(document).ready(function () {
                                 <li>
                                     <button class="btn btn-primary btn-modificar"
                                         data-id="${modelo.id_modelo}"
+                                        data-marca="${modelo.nombre_marca}"
                                         data-nombre="${modelo.nombre_modelo}">
                                         Modificar
                                     </button>
