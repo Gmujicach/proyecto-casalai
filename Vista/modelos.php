@@ -73,13 +73,14 @@ if (!isset($_SESSION['name'])) {
                                     <ul>
                                         <li>
                                             <button class="btn btn-primary btn-modificar"
-                                            data-id="<?php echo $marca['id_modelo']; ?>"
-                                            data-nombre="<?php echo htmlspecialchars($marca['nombre_modelo']); ?>"
+                                            data-id="<?php echo $modelo['id_modelo']; ?>"
+                                            data-marca="<?php echo htmlspecialchars($modelo['nombre_marca']); ?>"
+                                            data-nombre="<?php echo htmlspecialchars($modelo['nombre_modelo']); ?>"
                                             >Modificar</button>
                                         </li>
                                         <li>
                                             <button class="btn btn-danger btn-eliminar"
-                                            data-id="<?php echo $marca['id_modelo']; ?>"
+                                            data-id="<?php echo $modelo['id_modelo']; ?>"
                                             >Eliminar</button>
                                         </li>
                                     </ul>
@@ -121,7 +122,7 @@ if (!isset($_SESSION['name'])) {
                     <div class="form-group">
                         <label for="modificar_nombre_modelo">Nombre del Modelo</label>
                         <input type="text" class="form-control" id="modificar_nombre_modelo" name="nombre_modelo" maxlength="25" required>
-                        <span class="span-value-modal" id="smodificar_modelo"></span>
+                        <span class="span-value-modal" id="smnombre_modelo"></span>
                     </div>
                 </div>
                 <div class="modal-footer">

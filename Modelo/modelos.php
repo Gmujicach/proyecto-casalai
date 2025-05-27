@@ -53,7 +53,7 @@ class modelo extends BD{
         return $stmt->fetchColumn() > 0;
     }
 
-    public function registrarModelos() {
+    public function registrarModelo() {
         return $this->r_modelos();
     }
     private function r_modelos() {
