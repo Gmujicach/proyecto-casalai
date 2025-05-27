@@ -42,9 +42,8 @@
 
 /* CONTENEDOR DE TABLA */
 .tabla-wrapper {
-    width: 100%;
     position: relative;
-    overflow: hidden;
+    z-index: 1; /* Establece un contexto de apilamiento */
 }
 
 /* CONTENEDOR DE SCROLL */
@@ -59,10 +58,8 @@
 
 /* TABLA */
 .tablaConsultas {
-    width: 100%;
-    margin: 0 auto;
-    border-collapse: collapse;
-    display: table; /* Cambiado de 'block' a 'table' */
+    position: static; /* Asegura que no cree un nuevo contexto de apilamiento */
+    z-index: auto;
 }
 
 /* SCROLLBAR */
@@ -79,15 +76,29 @@
     z-index: 0;
 }
 
+.acciones-boton {
+    position: relative;
+    z-index: 2; /* Mayor que el contenedor pero menor que el menú */
+}
+
 /* MENÚ DESPLEGABLE */
 .acciones-boton .desplegable {
-    right: auto !important;
-    left: 100% !important;
-    margin-left: 10px;
-    z-index: 1000; /* Mayor que el scroll */
     position: absolute;
-    transform: translateZ(0); /* Acelera renderizado */
-    will-change: transform; /* Optimización */
+    z-index: 1001; /* Valor muy alto para asegurar que esté encima de todo */
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+    margin-left: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: #fff;
+    min-width: 160px;
+    border-radius: 6px;
+    padding: 8px 0;
+    display: none;
+}
+
+.acciones-boton.active .desplegable {
+    display: block;
 }
 
 /* HEADER CENTRADO */
@@ -505,11 +516,6 @@ table tfoot tr td span a i{
     }
 }
 
-/* Elimina cualquier transform: translateZ(0) o will-change que pueda interferir */
-.acciones-boton .desplegable {
-    transform: none !important;
-    will-change: auto !important;
-}
 
 .tabla-scroll {
     overflow-y: overlay; /* Esto puede ayudar en algunos navegadores */
