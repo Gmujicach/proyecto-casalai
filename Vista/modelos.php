@@ -26,8 +26,8 @@ if (!isset($_SESSION['name'])) {
             
             <div class="envolver-form">
                 <label for="id_marca"></label>
-                <select class="form-select" id="id_marca" name="id_marca">
-                    <option value="">Selecciona una marca</option>
+                <select class="form-select" id="id_marca" name="id_marca" required>
+                    <option value="" hidden>Selecciona una marca</option>
                     <?php foreach ($marcas as $marca): ?>
                         <option value="<?php echo $marca['id_marca']; ?>"><?php echo $marca['nombre_marca']; ?></option>
                     <?php endforeach; ?>

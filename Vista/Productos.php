@@ -22,7 +22,7 @@ if (!isset($_SESSION['name'])) {
   <div class="fondo-form">
     <form id="incluirProductoForm" action="" method="POST">
       <input type="hidden" name="accion" value="ingresar">
-      <h3 class="titulo-form">INCLUIR PRODUCTOS</h3>
+      <h5 class="titulo-form">INCLUIR PRODUCTOS</h5>
 
       <div class="grupo-form">
         <input type="text" placeholder="Nombre del producto" maxlength="15" class="control-form" id="nombre_producto" name="nombre_producto" required>
