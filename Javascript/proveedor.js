@@ -1,5 +1,34 @@
 $(document).ready(function () {
     // Cargar datos del marcas en el modal al abrir
+        $(document).on('click', '#modificarProductoBtn', function() {
+        var boton = $(this);
+    
+        // Llenar los campos del formulario con los datos del botón
+        $('#modificarIdProducto').val(boton.data('id'));
+        $('#modificarNombreProducto').val(boton.data('nombre'));
+        $('#modificarModelo').val(boton.data('modelo'));
+        $('#modificarStockMinimo').val(boton.data('stockminimo'));
+    
+        // Mostrar el modal
+        $('#modificarProductoModal').modal('show');
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+  const modal = document.getElementById('modificarProductoModal');
+  modal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+
+    // Obtener datos del botón
+    const id = button.getAttribute('data-id');
+    const nombre = button.getAttribute('data-nombre');
+    const modelo = button.closest('tr').children[2].textContent; // Usa la celda de la tabla
+
+    // Llenar el modal
+    document.getElementById('modificarIdProducto').value = id;
+    document.getElementById('modificarNombreProducto').value = nombre;
+    document.getElementById('modificarModelo').value = modelo;
+  });
+});
+
     $(document).on('click', '.btn-modificar', function() {
         var id_proveedor = $(this).data('id');
 
