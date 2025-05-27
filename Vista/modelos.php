@@ -35,7 +35,7 @@ if (!isset($_SESSION['name'])) {
             </div>
 
             <div class="envolver-form">
-                <input type="text" placeholder="Nombre del modelo" class="control-form" id="nombre_modelo" name="nombre_modelo" maxlength="15" required>
+                <input type="text" placeholder="Nombre del modelo" class="control-form" id="nombre_modelo" name="nombre_modelo" maxlength="25" required>
                 <span class="span-value" id="snombre_modelo"></span>
             </div>
 
@@ -120,7 +120,7 @@ if (!isset($_SESSION['name'])) {
                     <input type="hidden" id="modificar_id_modelo" name="id_modelo">
                     <div class="form-group">
                         <label for="modificar_nombre_modelo">Nombre del Modelo</label>
-                        <input type="text" class="form-control" id="modificar_nombre_modelo" name="nombre_modelo" maxlength="30" required>
+                        <input type="text" class="form-control" id="modificar_nombre_modelo" name="nombre_modelo" maxlength="25" required>
                         <span class="span-value-modal" id="smodificar_modelo"></span>
                     </div>
                 </div>
