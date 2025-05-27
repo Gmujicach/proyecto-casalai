@@ -71,6 +71,7 @@ $(document).ready(function () {
 
     // Resetear formulario
     function resetModelo() {
+        $("#id_marca").val('');
         $("#nombre_modelo").val('');
         $("#snombre_modelo").text('');
     }
@@ -105,6 +106,7 @@ $(document).ready(function () {
     // Cargar datos de modelo en el modal al abrir
     $(document).on('click', '.btn-modificar', function () {
         $('#modificar_id_modelo').val($(this).data('id'));
+        llenarSelectMarcasModal($(this).data('marcaid'));
         $('#modificar_nombre_modelo').val($(this).data('nombre'));
         $('#smnombre_modelo').text('');
         $('#modificarModeloModal').modal('show');
@@ -158,6 +160,16 @@ $(document).ready(function () {
             }
         });
     });
+
+    function llenarSelectMarcasModal(idSeleccionada) {
+        let select = $('#modificar_marca_modelo');
+        select.empty();
+        select.append('<option value="">Seleccione una marca</option>');
+        window.marcasDisponibles.forEach(function(marca) {
+            let selected = marca.id_marca == idSeleccionada ? 'selected' : '';
+            select.append(`<option value="${marca.id_marca}" ${selected}>${marca.nombre_marca}</option>`);
+        });
+    }
 
     // Cerrar modal de modificación
     $(document).on('click', '#modificarMarcaModal .close', function() {

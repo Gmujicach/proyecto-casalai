@@ -74,7 +74,7 @@ if (!isset($_SESSION['name'])) {
                                         <li>
                                             <button class="btn btn-primary btn-modificar"
                                             data-id="<?php echo $modelo['id_modelo']; ?>"
-                                            data-marca="<?php echo htmlspecialchars($modelo['nombre_marca']); ?>"
+                                            data-marcaid="<?php echo htmlspecialchars($modelo['id_marca']); ?>"
                                             data-nombre="<?php echo htmlspecialchars($modelo['nombre_modelo']); ?>"
                                             >Modificar</button>
                                         </li>
@@ -119,6 +119,11 @@ if (!isset($_SESSION['name'])) {
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="modificar_id_modelo" name="id_modelo">
+                    <div class="form-group">
+                        <select class="form-select" id="modificar_marca_modelo" name="id_marca" required>
+                            <!-- Las opciones se llenarán por JS -->
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="modificar_nombre_modelo">Nombre del Modelo</label>
                         <input type="text" class="form-control" id="modificar_nombre_modelo" name="nombre_modelo" maxlength="25" required>
