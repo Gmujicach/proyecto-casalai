@@ -130,20 +130,22 @@ if (!isset($_SESSION['name'])) {
                                     <li>
                                         <a href="#" class="modificar" 
                                             data-id="<?php echo $proveedor['id_proveedor']; ?>"
-                                            data-nombres="<?php echo htmlspecialchars($usuario['nombres']); ?>"
-                                            data-apellidos="<?php echo htmlspecialchars($usuario['apellidos']); ?>"
-                                            data-usuario="<?php echo htmlspecialchars($usuario['username']); ?>"
-                                            data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
-                                            data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
-                                            data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
-                                            data-rango="<?php echo htmlspecialchars($usuario['rango']); ?>"
+                                            data-nombre="<?php echo htmlspecialchars($proveedor['nombre']); ?>"
+                                            data-persona-contacto="<?php echo htmlspecialchars($proveedor['presona_contacto']); ?>"
+                                            data-direccion="<?php echo htmlspecialchars($proveedor['direccion']); ?>"
+                                            data-telefono="<?php echo htmlspecialchars($proveedor['telefono']); ?>"
+                                            data-correo="<?php echo htmlspecialchars($proveedor['correo']); ?>"
+                                            data-telefono-secundario="<?php echo htmlspecialchars($proveedor['telefono_secundario']); ?>"
+                                            data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
+                                            data-rif-representante="<?php echo htmlspecialchars($proveedor['rif_representante']); ?>"
+                                            data-observaciones="<?php echo htmlspecialchars($proveedor['observaciones']); ?>"
                                             data-toggle="modal" 
                                             data-target="#modificar_usuario_modal">
                                             Modificar
                                         </a>
                                     </li>
 
-                                    <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $proveedor['id_usuario']; ?>)">Eliminar</a></li>
+                                    <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $proveedor['id_proveedor']; ?>)">Eliminar</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -266,80 +268,76 @@ if (!isset($_SESSION['name'])) {
 </div>
 
 
-<!-- Modal de modificación -->
-    <div class="modal fade" id="modificar_usuario_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="modificarusuario" method="POST" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_usuario_modal_label">Modificar Usuario</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <!-- Campos del formulario de modificación -->
-                    <input type="hidden" id="modificar_id_usuario" name="id_usuario">
-                    <div class="form-group">
-                        <label for="modificarnombre">Nombres del Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre" name="nombre" maxlength="15" required>
-                        <span id="smodificarnombre_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarapellido_usuario">Apellidos del Usuario</label>
-                        <input type="text" class="form-control" id="modificarapellido_usuario" name="apellido_usuario" maxlength="15" required>
-                        <span id="smodificarapellido_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarnombre_usuario">Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="15" required>
-                        <span id="smodificarnombre_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificartelefono_usuario">Telefono</label>
-                        <input type="text" class="form-control" id="modificartelefono_usuario" name="telefono_usuario" maxlength="15" required>
-                        <span id="smodificartelefono_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarcorreo_usuario">Correo</label>
-                        <input type="text" class="form-control" id="modificarcorreo_usuario" name="correo_usuario" maxlength="15" required>
-                        <span id="smodificarcorreo_usuario"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="modificarclave_usuario">Contraseña del Usuario</label>
-                        <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario" required>
-                        <span id="smodificarclave_usuario"></span>
-                    </div>
-                    <div class="form-group col-md-4">
-                                    <label for="rango">Categorias</label>
-                                    <select class="custom-select" id="rango" name="rango">
-                                    <option value="usuario">Usuario</option>
-                                    <option value="Administrador">Administrador</option>
-                                    <option value="Almacenista">Almacenista</option>
-                                    <option value="Cliente">Cliente</option> 
-                                    <option value="Desarrollador">Desarrollador</option>   
-                                    </select>
-                                </div>
-                    
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-cerrar" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Modificar</button>
-                </div>
-                </div>
-                
-            </form>
+<div class="modal fade" id="modificar_usuario_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="modificarProveedorForm" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modificar_usuario_modal_label">Modificar Proveedor</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+
+        <div class="modal-body">
+          <input type="hidden" id="modificar_id_proveedor" name="id_proveedor">
+          <input type="hidden" name="accion" value="modificar">
+
+          <div class="form-group">
+            <label for="modificar_nombre_proveedor">Nombre del Proveedor</label>
+            <input type="text" class="form-control" id="modificar_nombre_proveedor" name="nombre" required>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_persona_contacto">Persona de Contacto</label>
+            <input type="text" class="form-control" id="modificar_persona_contacto" name="persona_contacto" required>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_direccion">Dirección</label>
+            <input type="text" class="form-control" id="modificar_direccion" name="direccion" required>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_telefono">Teléfono</label>
+            <input type="text" class="form-control" id="modificar_telefono" name="telefono" required>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_correo">Correo</label>
+            <input type="email" class="form-control" id="modificar_correo" name="correo" required>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_telefono_secundario">Teléfono Secundario</label>
+            <input type="text" class="form-control" id="modificar_telefono_secundario" name="telefono_secundario">
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_rif_proveedor">RIF del Proveedor</label>
+            <input type="text" class="form-control" id="modificar_rif_proveedor" name="rif_proveedor">
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_rif_representante">RIF del Representante</label>
+            <input type="text" class="form-control" id="modificar_rif_representante" name="rif_representante">
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_observaciones">Observaciones</label>
+            <textarea class="form-control" id="modificar_observaciones" name="observaciones" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Modificar</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
-                
-            
-
-            
-    </form>
-</div>
 
   <?php include 'footer.php'; ?>
   <script src="Javascript/proveedor.js"></script>
