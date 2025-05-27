@@ -101,6 +101,7 @@ if (!isset($_SESSION['name'])) {
                 <th>Cláusula de Garantía</th>
                 <th>Categoría</th> <!-- CAMBIO: antes decía id_categoria -->
                 <th>Precio</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -128,7 +129,13 @@ if (!isset($_SESSION['name'])) {
                     </td>
 
                     <td><?php echo htmlspecialchars($producto['precio']); ?></td>
-                    
+                                    <td>
+                    <span class="campo-estatus <?php echo ($producto['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+                        onclick="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
+                        style="cursor: pointer;">
+                        <?php echo htmlspecialchars($producto['estado']); ?>
+                    </span>
+                </td>
                     <td>
                         <span>
                             <div class="acciones-boton">
