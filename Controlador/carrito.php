@@ -8,27 +8,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accion = $_POST['accion'] ?? '';
     
     switch ($accion) {
-        case 'agregar_al_carrito':
-            $id_producto = $_POST['id_producto'] ?? null;
-            if ($id_producto !== null) {
-                $carrito = new Carrito();
-                $id_cliente = $_SESSION['id_usuario']; // Obtener de la sesión
-                $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
-
-                if (!$carritoCliente) {
-                    $carrito->crearCarrito($id_cliente);
-                    $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
-                }
-
-                if ($carrito->agregarProductoAlCarrito($carritoCliente['id_carrito'], $id_producto)) {
-                    echo json_encode(['status' => 'success', 'message' => 'Producto agregado al carrito']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al agregar el producto al carrito']);
-                }
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'ID de producto no proporcionado']);
-            }
-            break;
 
             case 'agregar_al_carrito':
                 $id_producto = $_POST['id_producto'] ?? null;
@@ -70,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         'message' => 'ID de producto no válido'
                     ]);
                 }
-                exit;
+                
                 break;
 
         case 'actualizar_cantidad':
