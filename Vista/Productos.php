@@ -73,14 +73,13 @@ if (!isset($_SESSION['name'])) {
 
       <!-- Campos adicionales dinámicos por categoría -->
       <div id="caracteristicasCategoria" class="grupo-form"></div>
-
+    <br>
       <div class="grupo-form">
         <input type="text" placeholder="Código Serial" maxlength="10" class="control-form" id="Seriales" name="Seriales" required>
         <span id="sSeriales"></span>
 
-        
-  <input type="text" placeholder="Precio" maxlength="10" class="form-control" id="Precio" name="Precio" required>
-  <span class="input-group-text">$</span>
+        <input type="text" placeholder="Precio" maxlength="10" class="form-control" id="Precio" name="Precio" required>
+        <span class="input-group-text">$</span>
         <span id="sPrecio"></span>
       </div>
       

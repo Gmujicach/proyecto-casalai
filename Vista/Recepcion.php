@@ -24,6 +24,7 @@ if (!isset($_SESSION['name'])) {
 			<form method="post" action="" id="f">
 				<input type="hidden" name="accion" id="accion" style="display:none" />
 				<h3 class="titulo-form">Incluir Recepción</h3>
+					<br>
 						<div class="grupo-form">
 							<input type="text" placeholder="Correlativo del producto" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
 							<span id="scorrelativo"></span>
