@@ -82,11 +82,9 @@ if (!isset($_SESSION['name'])) {
   <span class="input-group-text">$</span>
         <span id="sPrecio"></span>
       </div>
-
-      <div class="grupo-boton">
-        <button class="boton-reset" type="reset">Reset</button>
-        <button class="boton-form" type="submit">Registrar</button>
-      </div>
+      
+      <button class="boton-form" type="submit">Registrar</button>
+      <button class="boton-reset" type="reset">Reset</button>
     </form>
   </div>
 </div>
