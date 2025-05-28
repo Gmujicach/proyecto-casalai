@@ -81,7 +81,7 @@ if (!isset($_SESSION['name'])) {
         <span id="sPrecio"></span>
       </div>
 
-      <div class="grupo-form">
+      <div class="grupo-boton">
         <button class="boton-reset" type="reset">Reset</button>
         <button class="boton-form" type="submit">Registrar</button>
       </div>
