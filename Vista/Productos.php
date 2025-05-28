@@ -35,13 +35,14 @@ if (!isset($_SESSION['name'])) {
         <span id="sdescripcion_producto"></span>
       </div>
     <br>
+    <div class="grupo-form">
       <select class="form-select" id="Modelo" name="Modelo" required>
         <option value="">Seleccionar Modelo</option>
         <?php foreach ($modelos as $modelo): ?>
           <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo ''.$modelo['nombre_modelo'].' ('.$modelo['tbl_marcas'].')'; ?></option>
         <?php endforeach; ?>
       </select>
-
+    </div>
       <div class="grupo-form">
         <input type="number" placeholder="Stock Actual" maxlength="10" class="control-form" value="0" id="Stock_Actual" name="Stock_Actual" required>
         <span id="sStock_Actual"></span>
