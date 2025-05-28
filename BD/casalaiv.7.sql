@@ -659,7 +659,7 @@ CREATE TABLE `tbl_usuarios` (
   `correo` varchar(50) DEFAULT NULL,
   `nombres` varchar(20) DEFAULT NULL,
   `apellidos` varchar(20) DEFAULT NULL,
-  `telefono` varchar(11) DEFAULT NULL,
+  `telefono` varchar(15) DEFAULT NULL,
   `estatus` enum('habilitado','inhabilitado') DEFAULT 'habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
