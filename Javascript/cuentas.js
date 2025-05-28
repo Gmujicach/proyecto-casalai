@@ -185,6 +185,12 @@ $(document).ready(function () {
         $('#modificar_rif_cuenta').val(celdas.eq(3).text().trim());
         $('#modificar_telefono_cuenta').val(celdas.eq(4).text().trim());
         $('#modificar_correo_cuenta').val(celdas.eq(5).text().trim());
+        //Limpieza del span de mensajes
+        $('#smnombre_banco').text('');
+        $('#smnumero_cuenta').text('');
+        $('#smrif_cuenta').text('');
+        $('#smtelefono_cuenta').text('');
+        $('#smcorreo_cuenta').text('');
         $('#modificarCuentaModal').modal('show');
     });
 
