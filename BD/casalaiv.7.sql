@@ -198,6 +198,7 @@ INSERT INTO `tbl_cuentas` (`id_cuenta`, `nombre_banco`, `numero_cuenta`, `rif_cu
 
 CREATE TABLE `tbl_despachos` (
   `id_despachos` int(11) NOT NULL,
+  `id_clientes` int(11) NOT NULL,
   `fecha_despacho` date NOT NULL,
   `correlativo` varchar(255) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT NULL
