@@ -275,14 +275,22 @@ class Despacho extends BD{
         
         // Primera consulta para obtener datos de marcas
         $querydespachos = 
-        'SELECT d.id_detalle,
-		r.id_despachos, pro.id_producto, pr.id_clientes,
-        r.fecha_despacho, r.correlativo, pr.nombre, pro.nombre_producto, d.cantidad
-        FROM tbl_despachos AS r 
-        INNER JOIN tbl_despacho_detalle AS d ON d.id_despachos = r.id_despachos 
-        INNER JOIN tbl_clientes AS pr ON pr.id_clientes = r.id_clientes 
-        INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto
-        ORDER BY r.correlativo ASC';
+        'SELECT 
+    d.id_detalle,
+    r.id_despachos,
+    pro.id_producto,
+    c.id_clientes,
+    r.fecha_despacho,
+    r.correlativo,
+    c.nombre AS nombre_cliente,
+    pro.nombre_producto,
+    d.cantidad
+FROM tbl_despachos AS r
+INNER JOIN tbl_despacho_detalle AS d ON d.id_despacho = r.id_despachos
+INNER JOIN tbl_clientes AS c ON c.id_clientes = r.id_clientes
+INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto
+ORDER BY r.correlativo ASC;
+';
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";

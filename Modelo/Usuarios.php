@@ -128,23 +128,22 @@ class Usuarios extends BD {
         return $count == 0;
     }*/
 
-    public function ingresarUsuario() {
+public function ingresarUsuario() {
+    $claveEncriptada = password_hash($this->clave, PASSWORD_BCRYPT);
 
-        $claveEncriptada = password_hash($this->clave, PASSWORD_BCRYPT);
+    $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`)
+            VALUES (:username, :clave, :rango, :correo, :nombres, :apellidos, :telefono)";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->bindParam(':username', $this->username);
+    $stmt->bindParam(':clave', $claveEncriptada);
+    $stmt->bindParam(':rango', $this->rango);
+    $stmt->bindParam(':correo', $this->correo);
+    $stmt->bindParam(':nombres', $this->nombre);
+    $stmt->bindParam(':apellidos', $this->apellido);
+    $stmt->bindParam(':telefono', $this->telefono);
 
-        $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`)
-                VALUES (:nombre, :clave, :rango, :correo, :nombres, :apellidos, :telefono)";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':nombre', $this->username);
-        $stmt->bindParam(':clave',$claveEncriptada);
-        $stmt->bindParam(':rango', $this->rango);
-        $stmt->bindParam(':correo', $this->correo);
-        $stmt->bindParam(':nombres', $this->nombre);
-        $stmt->bindParam(':apellidos', $this->apellido);
-        $stmt->bindParam(':telefono', $this->telefono);
-        
-        return $stmt->execute();
-    }
+    return $stmt->execute();
+}
 
     // Verificar si existe el número de cuenta
     public function existeUsuario($username, $excluir_id = null) {

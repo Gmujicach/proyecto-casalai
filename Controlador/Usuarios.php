@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             break;*/
 
-            if ($usuario->existeUsuario($_POST['username'])) {
+            if ($usuario->existeUsuario($_POST['nombre_usuario'])) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El nombre de usuario ya existe'
@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario->setTelefono($_POST['telefono_usuario']);
             $usuario->setRango($_POST['rango']);
             
-            if ($usuario->existeUsuario($_POST['username'], $id)) {
+            if ($usuario->existeUsuario($_POST['nombre_usuario'], $id)) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El nombre de usuario ya existe'

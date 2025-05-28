@@ -628,11 +628,11 @@ $(document).ready(function () {
         }
     }
 
-    function space(str) {
-        const regex = /\s{2,}/g;
-        var str = str.replace(regex, ' ');
-        return str;
-    }
+function space(str) {
+    str = (str || '').toString();
+    const regex = /\s{2,}/g;
+    return str.replace(regex, ' ');
+}
 
     // Cambio de estado
     $(document).on('click', '.campo-estatus', function() {
