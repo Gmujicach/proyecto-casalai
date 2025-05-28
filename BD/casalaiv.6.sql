@@ -57,15 +57,6 @@ CREATE TABLE `tbl_carritodetalle` (
   `estatus` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `tbl_carritodetalle`
---
-
-INSERT INTO `tbl_carritodetalle` (`id_carrito_detalle`, `id_carrito`, `id_producto`, `cantidad`, `estatus`) VALUES
-(39, 9, 13, 5, 'pendiente'),
-(40, 7, 10, 1, 'pendiente'),
-(41, 7, 13, 3, 'pendiente');
-
 -- --------------------------------------------------------
 
 --
@@ -79,13 +70,6 @@ CREATE TABLE `tbl_cartucho_tinta` (
   `color` varchar(50) DEFAULT NULL,
   `capacidad` int(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tbl_cartucho_tinta`
---
-
-INSERT INTO `tbl_cartucho_tinta` (`id_cartucho`, `id_producto`, `numero`, `color`, `capacidad`) VALUES
-(1, 19, 33, 'Azul Rey', 500);
 
 -- --------------------------------------------------------
 
@@ -107,7 +91,7 @@ INSERT INTO `tbl_categoria` (`id_categoria`, `nombre_caracteristicas`) VALUES
 (2, 'Protector de Voltaje'),
 (3, 'Tinta'),
 (4, 'Cartucho'),
-(5, 'Otros');
+(5, 'tbl_otros');
 
 -- --------------------------------------------------------
 
@@ -130,9 +114,8 @@ CREATE TABLE `tbl_clientes` (
 --
 
 INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `telefono`, `correo`, `activo`) VALUES
-(1, 'Simon Freitez', '30335417', 'Los Cardones Avenida Principal', '04241587101', 'ejemplo@gmail.com', 1),
-(1000, 'Simon Freitezww', '30335416', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1),
-(1001, 'Diego Lopez', '31766316', 'La Rinconada carrera 13A Porton ', '0414-5753363', 'diego0510lopez@gmail.com', 1);
+(1, 'Simon Freitez', '30335417', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1),
+(1000, 'Simon Freitezww', '30335416', 'Los Cardones', '04241587101', 'ejemplo@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -363,9 +346,7 @@ CREATE TABLE `tbl_impresoras` (
 --
 
 INSERT INTO `tbl_impresoras` (`id_impresora`, `id_producto`, `peso`, `alto`, `ancho`, `largo`) VALUES
-(4, 3, 20.00, 20.00, 20.00, 20.00),
-(5, 17, 100.00, 150.00, 150.00, 60.00),
-(6, 24, 100.00, 150.00, 150.00, 100.00);
+(4, 3, 20.00, 20.00, 20.00, 20.00);
 
 -- --------------------------------------------------------
 
@@ -448,7 +429,7 @@ CREATE TABLE `tbl_modelos` (
 --
 
 INSERT INTO `tbl_modelos` (`id_modelo`, `nombre_modelo`, `id_marca`) VALUES
-(1, 'L32501', 1),
+(1, 'L3250', 1),
 (2, 'L3210', 1),
 (3, 'L805', 1),
 (4, 'L1800', 1),
@@ -526,9 +507,7 @@ INSERT INTO `tbl_modelos` (`id_modelo`, `nombre_modelo`, `id_marca`) VALUES
 (76, '1000VA', 13),
 (77, 'AVR-1000', 14),
 (78, '520 Joules', 14),
-(79, 'Ejemplo', 7),
-(80, 'smart', 2),
-(84, 'Dsmart', 1);
+(79, 'Ejemplo', 7);
 
 -- --------------------------------------------------------
 
@@ -539,17 +518,8 @@ INSERT INTO `tbl_modelos` (`id_modelo`, `nombre_modelo`, `id_marca`) VALUES
 CREATE TABLE `tbl_otros` (
   `id_otros` int(11) NOT NULL,
   `id_producto` int(11) DEFAULT NULL,
-  `descripcion_otros` varchar(255) DEFAULT NULL
+  `descripcion` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tbl_otros`
---
-
-INSERT INTO `tbl_otros` (`id_otros`, `id_producto`, `descripcion_otros`) VALUES
-(1, 21, 'Tipo 4A'),
-(2, 22, 'Metal inoxidable'),
-(3, 23, 'De acero inoxidable');
 
 -- --------------------------------------------------------
 
@@ -577,20 +547,12 @@ CREATE TABLE `tbl_productos` (
 --
 
 INSERT INTO `tbl_productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`) VALUES
-(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 90, 5, 20, 'Devolución dentro de un plazo de 31 días', 200.00, 'habilitado'),
-(10, '1231', 'Colormedia', 'Tinta Profesional', 8, 3, 90, 1000, 10000, 'Sin devoluciones', 10.00, 'habilitado'),
-(11, '051004', 'Computadora 200', 'Potente y Practica', 79, 5, 10, 1000, 1000, '35 Dias', 1000.00, 'habilitado'),
+(3, '12345678', 'Impresora SuperLuxe', 'Buena Bonita y Barata', 49, 1, 100, 5, 20, 'Devolución dentro de un plazo de 31 días', 200.00, 'inhabilitado'),
+(10, '1231', 'Colormedia', 'Tinta Profesional', 8, 3, 100, 1000, 10000, 'Sin devoluciones', 10.00, 'inhabilitado'),
+(11, '051004', 'Computadora 200', 'Potente y Practica', 79, 5, 10, 1000, 1000, '35 Dias', 1000.00, 'inhabilitado'),
 (13, 'CRT010', 'Cartucho Canon CL-14', 'Cartucho original Canon color', 68, 4, 12, 5, 20, '31 dias', 28.00, 'habilitado'),
 (14, 'OTH011', 'Cable USB Impresora', 'Cable USB 2.0 para impresora 1.8m', NULL, 5, 30, 10, 50, '', 8.00, '1'),
-(15, 'OTH012', 'Papel Fotográfico', 'Papel fotográfico brillante A4 180gr', NULL, 5, 20, 5, 30, '', 12.00, '1'),
-(17, '00001', 'Gorda Dos mil', 'La mas Gorda del Mercado', 79, 1, -1, 1000, 1000, '10 Dias', 100.00, 'habilitado'),
-(18, '00002', 'SuperTinta', 'Muy Buena', 7, 3, 0, 1000, 1000, '365 dias', 100.00, 'habilitado'),
-(19, '00003', 'CartuchoBigBang', 'Cartucho Duradero', 14, 4, 0, 1000, 1000, '1000 Dias', 100.00, 'habilitado'),
-(20, '00004', 'GigaVoltio', 'Protege de Apagones todos tus equipos', 73, 2, 0, 1000, 1000, 'Sin Devolución después de una semana', 1000.00, 'habilitado'),
-(21, '00005', 'Hojas de Papel', 'Remo de 200 hojas', 79, 5, 0, 1000, 1000, 'Sin devoluciones', 10.00, 'habilitado'),
-(22, '00006', 'Clips de papel', '30 por caja', 80, 5, 0, 1000, 1000, 'Ninguna devolucion', 5.00, 'habilitado'),
-(23, '00007', 'Saca Puntas', 'Doble Saca', 79, 5, 0, 1000, 1000, 'Ninguna devolucion', 7.00, 'habilitado'),
-(24, '00008', 'Impresora Maxi', 'La Mejor Impresora del Mundo', 8, 1, 7, 1000, 1000, '365 Días de Garantía', 5000.00, 'habilitado');
+(15, 'OTH012', 'Papel Fotográfico', 'Papel fotográfico brillante A4 180gr', NULL, 5, 20, 5, 30, '', 12.00, '1');
 
 -- --------------------------------------------------------
 
@@ -606,13 +568,6 @@ CREATE TABLE `tbl_protector_voltaje` (
   `tomas` int(2) DEFAULT NULL,
   `capacidad` int(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tbl_protector_voltaje`
---
-
-INSERT INTO `tbl_protector_voltaje` (`id_protector`, `id_producto`, `voltaje_entrada`, `voltaje_salida`, `tomas`, `capacidad`) VALUES
-(2, 20, '5000', '20000', 8, 6000);
 
 -- --------------------------------------------------------
 
@@ -639,7 +594,7 @@ CREATE TABLE `tbl_proveedores` (
 
 INSERT INTO `tbl_proveedores` (`id_proveedor`, `nombre`, `presona_contacto`, `telefono`, `correo`, `direccion`, `rif_representante`, `rif_proveedor`, `telefono_secundario`, `observaciones`) VALUES
 (1, 'Servicios Técnicos', 'Brayan Mendoza', '04145555556', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo'),
-(1002, 'Brayan Cable Su', 'Brayan Mendozas', '0424-5329515', 'diego0510lopez@gmail.com', 'calle 32 con carrera 18 y 19', 'V-317033160', 'J-406452957', '0414-5413366', 'luyfiytdtditf');
+(1000, 'Thunder Net', 'Diego Lopez', '0424-5329515', NULL, 'Avenida Lara', 'V-317663160', 'J-406452157', '0414-5413366', 'El Mejor');
 
 -- --------------------------------------------------------
 
@@ -679,13 +634,6 @@ CREATE TABLE `tbl_tintas` (
   `tipo` varchar(50) DEFAULT NULL,
   `volumen` int(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tbl_tintas`
---
-
-INSERT INTO `tbl_tintas` (`id_tinta`, `id_producto`, `numero`, `color`, `tipo`, `volumen`) VALUES
-(1, 18, 18, 'Negro', 'Aceite', 500);
 
 -- --------------------------------------------------------
 
@@ -905,13 +853,13 @@ ALTER TABLE `tbl_carrito`
 -- AUTO_INCREMENT de la tabla `tbl_carritodetalle`
 --
 ALTER TABLE `tbl_carritodetalle`
-  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_cartucho_tinta`
 --
 ALTER TABLE `tbl_cartucho_tinta`
-  MODIFY `id_cartucho` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_cartucho` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_categoria`
@@ -923,7 +871,7 @@ ALTER TABLE `tbl_categoria`
 -- AUTO_INCREMENT de la tabla `tbl_clientes`
 --
 ALTER TABLE `tbl_clientes`
-  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1002;
+  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_combo`
@@ -977,7 +925,7 @@ ALTER TABLE `tbl_factura_detalle`
 -- AUTO_INCREMENT de la tabla `tbl_impresoras`
 --
 ALTER TABLE `tbl_impresoras`
-  MODIFY `id_impresora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_impresora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_ingresos_egresos`
@@ -995,31 +943,31 @@ ALTER TABLE `tbl_marcas`
 -- AUTO_INCREMENT de la tabla `tbl_modelos`
 --
 ALTER TABLE `tbl_modelos`
-  MODIFY `id_modelo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id_modelo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_otros`
 --
 ALTER TABLE `tbl_otros`
-  MODIFY `id_otros` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_otros` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_productos`
 --
 ALTER TABLE `tbl_productos`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_protector_voltaje`
 --
 ALTER TABLE `tbl_protector_voltaje`
-  MODIFY `id_protector` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_protector` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_proveedores`
 --
 ALTER TABLE `tbl_proveedores`
-  MODIFY `id_proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1003;
+  MODIFY `id_proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1001;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_recepcion_productos`
@@ -1031,7 +979,7 @@ ALTER TABLE `tbl_recepcion_productos`
 -- AUTO_INCREMENT de la tabla `tbl_tintas`
 --
 ALTER TABLE `tbl_tintas`
-  MODIFY `id_tinta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_tinta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_usuarios`

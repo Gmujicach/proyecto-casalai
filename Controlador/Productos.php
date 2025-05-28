@@ -140,11 +140,12 @@ case 'modificar':
                 exit;
             }
             $producto = new Productos();
-            if ($producto->eliminarProducto($id_producto)) {
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Producto']);
-            }
+$response = $producto->eliminarProducto($id_producto);
+if ($response['success']) {
+    echo json_encode(['status' => 'success', 'message' => $response['message']]);
+} else {
+    echo json_encode(['status' => 'error', 'message' => $response['message']]);
+}
             break;
             
             case 'cambiar_estatus':
