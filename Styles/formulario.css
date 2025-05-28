@@ -32,7 +32,7 @@ input, select, button{
 }
 
 .formulario-responsivo{
-    min-height: 100vh;
+    min-height: 85vh;
     background-size: cover;
     background-repeat: no-repeat;
     display: flex;
