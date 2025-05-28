@@ -24,19 +24,22 @@ if (!isset($_SESSION['name'])) {
             <input type="hidden" name="accion" value="ingresar">
             <h3 class="titulo-form">INCLUIR CLIENTE</h3>
                 
-            <div class="grupo-form">
+            <div class="envolver-form">
                 <input class="control-form" placeholder="Nombre completo" maxlength="100" type="text" id="nombre" name="nombre" required>
                 <span id="snombre"></span>
-
-                <input class="control-form" placeholder="Cedula/Rif" maxlength="15" type="text" id="cedula" name="cedula" required>
-                <span id="scedula"></span>
             </div>
 
             <div class="grupo-form">
+                <input class="control-form" placeholder="Cedula/Rif" maxlength="15" type="text" id="cedula" name="cedula" required>
+                <span id="scedula"></span>
+            
                 <input class="control-form" placeholder="Teléfono" maxlength="11" type="text" id="telefono" name="telefono" required>
                 <span id="stelefono"></span>
-
-                <input class="control-form" placeholder="Dirección" maxlength="35" type="text" id="direccion" name="direccion" required>
+            </div>
+        <br>
+            <div class="envolver-form">
+                <label for="Direccion">Dirección</label>
+                <textarea class="form-control" maxlength="50" type="text" id="direccion" name="direccion" rows="3"></textarea>
                 <span id="sdireccion"></span>
             </div>
             
