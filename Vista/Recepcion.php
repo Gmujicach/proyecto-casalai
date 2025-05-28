@@ -122,77 +122,65 @@ if (!isset($_SESSION['name'])) {
 			</tr>
 			</thead>
 			<tbody>
-			<?php
-			$rowspans = [];
-			foreach ($recepciones as $recepcion) {
-				$key = $recepcion['correlativo'];
-				if (!isset($rowspans[$key])) {
-					$rowspans[$key] = 1;
-				} else {
-					$rowspans[$key]++;
-				}
-			}
+<tbody>
+<?php
+usort($recepciones, function($a, $b) {
+    if ($a['fecha'] == $b['fecha']) {
+        if ($a['correlativo'] == $b['correlativo']) {
+            if ($a['nombre'] == $b['nombre']) {
+                return strcmp($a['nombre_producto'], $b['nombre_producto']);
+            }
+            return strcmp($a['nombre'], $b['nombre']);
+        }
+        return strcmp($a['correlativo'], $b['correlativo']);
+    }
+    return strcmp($a['fecha'], $b['fecha']);
+});
 
+// Agrupar para rowspan
+$rowspans = [];
+foreach ($recepciones as $recepcion) {
+    $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre'];
+    if (!isset($rowspans[$key])) {
+        $rowspans[$key] = 1;
+    } else {
+        $rowspans[$key]++;
+    }
+}
+$rendered = [];
+foreach ($recepciones as $recepcion):
+    $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre'];
+?>
+<tr>
+    <?php if (!in_array($key, $rendered)): ?>
+        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['fecha']) ?></td>
+        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['correlativo']) ?></td>
+        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['nombre']) ?></td>
+    <?php endif; ?>
 
-			$rendered = [];
+    <td><?= htmlspecialchars($recepcion['nombre_producto']) ?></td>
+    <td><?= htmlspecialchars($recepcion['cantidad']) ?></td>
+    <td><?= htmlspecialchars($recepcion['costo']) ?></td>
 
-			foreach ($recepciones as $recepcion):
-				$correlativo = $recepcion['correlativo'];
-			?>
-				<tr>
-				<?php if (!in_array($correlativo, $rendered)): ?>
-					<td rowspan="<?= $rowspans[$correlativo] ?>">
-					<?= htmlspecialchars($recepcion['fecha']) ?>
-					</td>
-					<td rowspan="<?= $rowspans[$correlativo] ?>">
-					<?= htmlspecialchars($recepcion['correlativo']) ?>
-					</td>
-					<td rowspan="<?= $rowspans[$correlativo] ?>">
-					<?= htmlspecialchars($recepcion['nombre']) ?>
-					</td>
-				<?php endif; ?>
+    <?php if (!in_array($key, $rendered)): ?>
+        <td rowspan="<?= $rowspans[$key] ?>">
+            <button class="btn-modificar"
+                data-bs-toggle="modal"
+                data-bs-target="#modalModificar"
+                data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
+                data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
+                data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
+                data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"
+                data-productos='<?= json_encode($dataProductos, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                Modificar
+            </button>
+        </td>
+        <?php $rendered[] = $key; ?>
+    <?php endif; ?>
+</tr>
+<?php endforeach; ?>
+</tbody>
 
-				<td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
-				<td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
-				<td><?= htmlspecialchars($recepcion['costo']); ?></td>
-					<?php
-					$productosDelCorrelativo = array_filter($recepciones, function($r) use ($correlativo) {
-						return $r['correlativo'] === $correlativo;
-					});
-					$dataProductos = [];
-
-					foreach ($productosDelCorrelativo as $item) {
-						$dataProductos[] = [
-							'id_producto' => $item['id_producto'],
-							'nombre_producto' => $item['nombre_producto'],
-							'cantidad' => $item['cantidad'],
-							'costo' => $item['costo'],
-							'iddetalles' => $item['id_detalle_recepcion_productos'] 
-						];
-					}
-					?>
-
-				<?php if (!in_array($correlativo, $rendered)): ?>
-					<td rowspan="<?= $rowspans[$correlativo] ?>">
-						<button class="btn-modificar"
-							data-bs-toggle="modal"
-							data-bs-target="#modalModificar"
-							data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
-							data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
-							data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
-							data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"
-							data-productos='<?= json_encode($dataProductos, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
-							Modificar
-						</button>
-
-
-
-					</td>
-					<?php $rendered[] = $correlativo; ?>
-				<?php endif; ?>
-				</tr>
-			<?php endforeach; ?>
-			</tbody>
 		</table>
 	</div>
 
@@ -376,18 +364,6 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
-	<script src="public/js/jquery.dataTables.min.js"></script>
-<script src="public/js/dataTables.bootstrap5.min.js"></script>
-<script src="public/js/datatable.js"></script>
-	<script>
-$(document).ready(function() {
-    $('#tablaConsultas').DataTable({
-        language: {
-            url: 'Public/js/es-ES.json'
-        }
-    });
-});
-</script>
 
 </body>
 </html>

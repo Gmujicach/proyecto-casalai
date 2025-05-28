@@ -280,30 +280,23 @@ class Recepcion extends BD{
     }
     
 
-    public function getrecepcion() {
-        // Punto de depuración: Iniciando getmarcas
-        //echo "Iniciando getmarcas.<br>";
-        
-        // Primera consulta para obtener datos de marcas
-        $queryrecepciones = 
-        'SELECT d.id_detalle_recepcion_productos,
-		r.id_recepcion, pro.id_producto, pr.id_proveedor,
+public function getrecepcion() {
+    $queryrecepciones = 
+    'SELECT d.id_detalle_recepcion_productos,
+        r.id_recepcion, pro.id_producto, pr.id_proveedor,
         r.fecha, r.correlativo, pr.nombre, pro.nombre_producto, d.cantidad, d.costo
-        FROM tbl_recepcion_productos AS r 
-        INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
-        INNER JOIN tbl_proveedores AS pr ON pr.id_proveedor = r.id_proveedor 
-        INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto
-        ORDER BY r.correlativo ASC';
-        
-        // Punto de depuración: Query de marcas preparada
-        //echo "Query de marcas preparada: " . $querymarcas . "<br>";
-        
-        $stmtrecepciones = $this->getConexion()->prepare($queryrecepciones);
-        $stmtrecepciones->execute();
-        $recepciones = $stmtrecepciones->fetchAll(PDO::FETCH_ASSOC);
+    FROM tbl_recepcion_productos AS r 
+    INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
+    INNER JOIN tbl_proveedores AS pr ON pr.id_proveedor = r.id_proveedor 
+    INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto
+    ORDER BY r.fecha ASC, r.correlativo ASC, pro.nombre_producto ASC';
 
-        return $recepciones;
-    }
+    $stmtrecepciones = $this->getConexion()->prepare($queryrecepciones);
+    $stmtrecepciones->execute();
+    $recepciones = $stmtrecepciones->fetchAll(PDO::FETCH_ASSOC);
+
+    return $recepciones;
+}
 
 	public function obtenerDetallesPorRecepcion($idRecepcion) {
     $datos = [];
