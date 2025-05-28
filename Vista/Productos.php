@@ -77,7 +77,9 @@ if (!isset($_SESSION['name'])) {
         <input type="text" placeholder="Código Serial" maxlength="10" class="control-form" id="Seriales" name="Seriales" required>
         <span id="sSeriales"></span>
 
-        <input type="text" placeholder="Precio" maxlength="10" class="control-form" id="Precio" name="Precio" required>
+        
+  <input type="text" placeholder="Precio" maxlength="10" class="form-control" id="Precio" name="Precio" required>
+  <span class="input-group-text">$</span>
         <span id="sPrecio"></span>
       </div>
 
