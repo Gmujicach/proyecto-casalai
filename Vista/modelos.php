@@ -23,8 +23,8 @@ if (!isset($_SESSION['name'])) {
         <form id="registrarModelo" action="" method="POST">
             <input type="hidden" name="accion" value="registrar">
             <h3 class="titulo-form">Incluir Modelo</h3>
-            
-            <div class="envolver-form">
+        <br>
+            <div class="grupo-form">
                 <label for="id_marca"></label>
                 <select class="form-select" id="id_marca" name="id_marca" required>
                     <option value="" hidden>Selecciona una marca</option>
