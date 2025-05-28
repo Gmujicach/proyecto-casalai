@@ -78,7 +78,7 @@ if (!isset($_SESSION['name'])) {
 
     <!--== LISTADO DE CONSULTA ==-->
 <div class="contenedor-tabla">
-    <h3>LISTA DE USUARIOS</h3>
+    <h3>LISTA DE PROVEEDORES</h3>
 
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
