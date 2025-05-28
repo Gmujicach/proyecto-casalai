@@ -84,39 +84,67 @@ document.querySelectorAll('.btn-modificar').forEach(btn => {
         });
     });
 
-    $(document).on('click', '.btn-eliminar', function (e) {
-        e.preventDefault(); 
-        Swal.fire({
-            title: '¿Está seguro?',
-            text: "¡No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminarlo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                var id = $(this).data('id');
-                console.log("ID del producto a eliminar: ", id); 
-                var datos = new FormData();
-                datos.append('accion', 'eliminar');
-                datos.append('id', id);
-                enviarAjax(datos, function (respuesta) {
-                    if (respuesta.status === 'success') {
+    $(document).on('click', '.eliminar', function (e) {
+    e.preventDefault();
+    var id_producto = $(this).data('id');
+    
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var datos = new FormData();
+            datos.append('accion', 'eliminar');
+            datos.append('id_producto', id_producto); // Cambiado a id_producto
+            
+            $.ajax({
+                url: '', // La misma página
+                type: 'POST',
+                data: datos,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    try {
+                        var respuesta = JSON.parse(response);
+                        if (respuesta.status === 'success') {
+                            Swal.fire(
+                                'Eliminado!',
+                                'El producto ha sido eliminado.',
+                                'success'
+                            ).then(function() {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                respuesta.message || 'Error al eliminar el producto',
+                                'error'
+                            );
+                        }
+                    } catch (e) {
                         Swal.fire(
-                            'Eliminado!',
-                            'El producto ha sido eliminado.',
-                            'success'
-                        ).then(function() {
-                            location.reload(); 
-                        });
-                    } else {
-                        muestraMensaje(respuesta.message);
+                            'Error!',
+                            'Error al procesar la respuesta del servidor',
+                            'error'
+                        );
                     }
-                });
-            }
-        });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire(
+                        'Error!',
+                        'Error en la solicitud AJAX: ' + error,
+                        'error'
+                    );
+                }
+            });
+        }
     });
+});
 
     $('#incluirProductoForm').on('submit', function(event) {
         event.preventDefault();

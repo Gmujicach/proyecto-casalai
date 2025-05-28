@@ -134,13 +134,16 @@ case 'modificar':
 
 
         case 'eliminar':
-            // Obtiene el ID del producto y llama al método para eliminarlo
-            $id = $_POST['id'];
-            $productoModel = new Productos();
-            if ($productoModel->eliminarProducto($id)) {
+            $id_producto = $_POST['id_producto']; // Cambiado para coincidir con el nombre enviado
+            if ($id_producto === null) {
+                echo json_encode(['status' => 'error', 'message' => 'ID del Producto no proporcionado']);
+                exit;
+            }
+            $producto = new Productos();
+            if ($producto->eliminarProducto($id_producto)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Producto']);
             }
             break;
             

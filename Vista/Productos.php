@@ -207,9 +207,9 @@ foreach ($caracteristicas as $clave => $valor) {
                                             <!-- Botón Eliminar -->
                                             <a href="#" 
                                                 data-id="<?php echo $producto['id_producto']; ?>" 
-                                                class="btn btn-eliminar"
+                                                class="eliminar"
                                             >
-                                                Eliminar
+                                                Eliminar Esta
                                             </a>
                                         </li>
                                     </ul>
