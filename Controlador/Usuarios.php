@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'ID del Usuario no proporcionado']);
             }
-            break;
+            exit;
 
         case 'modificar':
             $id_usuario = $_POST['id_usuario'];
@@ -108,11 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
             }
-            break;
-
-        default:
-            echo json_encode(['status' => 'error', 'message' => 'Acción no válida'. $accion.'']);
-            break;
+            exit;
 
         // Cambiar estatus
         case 'cambiar_estatus':
@@ -133,13 +129,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
             }
-            break;
+            exit;
+        
+        default:
+            echo json_encode(['status' => 'error', 'message' => 'Acción no válida'. $accion.'']);
+        exit;
     }
-    exit;
 }
-
-
-
 
 function getusuarios() {
     $usuario = new Usuarios();
