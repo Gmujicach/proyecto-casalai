@@ -68,11 +68,11 @@ class Usuarios extends BD {
     }
 
         public function getId() {
-        return $this->id;
+        return $this->id_usuario;
     }
 
     public function setId($id_usuario) {
-        $this->id = $id_usuario;
+        $this->id_usuario = $id_usuario;
     }
 
     public function getNombre() {
@@ -231,7 +231,7 @@ public function modificarUsuario($id_usuario) {
             $sql = "UPDATE tbl_usuarios SET estatus = :estatus WHERE id_usuario = :id_usuario";
             $stmt = $this->conex->prepare($sql);
             $stmt->bindParam(':estatus', $nuevoEstatus);
-            $stmt->bindParam(':id_usuario', $this->id);
+            $stmt->bindParam(':id_usuario', $this->id_usuario);
             
             return $stmt->execute();
         } catch (PDOException $e) {
