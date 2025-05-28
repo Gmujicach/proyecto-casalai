@@ -29,8 +29,8 @@ if (!isset($_SESSION['name'])) {
 							<input type="text" placeholder="Correlativo del producto" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
 							<span id="scorrelativo"></span>
 						
-							<select class="form-select" name="proveedor" id="proveedor">
-								<option value='disabled' disabled selected>Seleccione un Proveedor</option>
+							<select class="form-select" name="cliente" id="cliente">
+								<option value='disabled' disabled selected>Seleccione el Cliente</option>
 								<?php
 								foreach ($proveedores  as $proveedor) {
 									echo "<option value='" . $proveedor['id_clientes'] . "'>" . $proveedor['nombre'] . "</option>";
