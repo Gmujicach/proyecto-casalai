@@ -283,55 +283,6 @@ $(document).ready(function () {
         $('#modificar_usuario_modal').modal('show');
     });
 
-    // Validación antes de enviar (modal modificar usuario)
-    /*function validarEnvioUsuarioModificar() {
-        let errores = [];
-
-        // Username
-        let username = $("#modificar_username");
-        username.val(space(username.val()).trim());
-        if (validarKeyUp(/^[a-zA-Z0-9_]{4,20}$/, username, $("#smodificar_username"), "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*") == 0) {
-            valido = false;
-        }
-
-        // Nombres
-        let nombres = $("#modificar_nombres");
-        nombres.val(space(nombres.val()).trim());
-        if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, nombres, $("#smodificar_nombres"), "*Solo letras, mínimo 2 caracteres*") == 0) {
-            valido = false;
-        }
-
-        // Apellidos
-        let apellidos = $("#modificar_apellidos");
-        apellidos.val(space(apellidos.val()).trim());
-        if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, apellidos, $("#smodificar_apellidos"), "*Solo letras, mínimo 2 caracteres*") == 0) {
-            valido = false;
-        }
-
-        // Correo
-        let correo = $("#modificar_correo");
-        if (validarKeyUp(/^[\w\.-]+@[\w\.-]+\.\w{2,4}$/, correo, $("#smodificar_correo"), "*Correo electrónico no válido*") == 0) {
-            valido = false;
-        }
-
-        // Teléfono
-        let telefono = $("#modificar_telefono");
-        if (validarKeyUp(/^[0-9]{7,15}$/, telefono, $("#smodificar_telefono"), "*Solo números, mínimo 7 dígitos*") == 0) {
-            valido = false;
-        }
-
-        // Contraseña (opcional en modificar)
-        let clave = $("#modificar_clave");
-        if (clave.val().length > 0 && validarKeyUp(/^.{6,20}$/, clave, $("#smodificar_clave"), "*La contraseña debe tener entre 6 y 20 caracteres*") == 0) {
-            valido = false;
-        }
-
-        if (!valido) {
-            mensajes('error', 4000, 'Verifique los campos', 'Corrija los errores antes de continuar');
-        }
-        return valido;
-    }*/
-
     // Enviar modificación de usuario por AJAX
     $('#modificarusuario').on('submit', function(e) {
         e.preventDefault();
@@ -414,101 +365,6 @@ $(document).ready(function () {
         });
     });
 
-    /*$('#formModificarUsuario').on('submit', function(e) {
-        e.preventDefault();
-
-        // Validación antes de enviar
-        const datos = {
-            username: $('#modificar_username').val(),
-            nombres: $('#modificar_nombres').val(),
-            apellidos: $('#modificar_apellidos').val(),
-            correo: $('#modificar_correo').val(),
-            telefono: $('#modificar_telefono').val(),
-            rango: $('#modificar_rango').val()
-        };
-
-        const errores = [];
-        if (!/^[a-zA-Z0-9_]{4,20}$/.test(datos.username)) {
-            errores.push("El usuario debe tener entre 4 y 20 caracteres alfanuméricos.");
-        }
-        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/.test(datos.nombres)) {
-            errores.push("Nombres: solo letras, mínimo 2 caracteres.");
-        }
-        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/.test(datos.apellidos)) {
-            errores.push("Apellidos: solo letras, mínimo 2 caracteres.");
-        }
-        if (!/^[\w\.-]+@[\w\.-]+\.\w{2,4}$/.test(datos.correo)) {
-            errores.push("Correo electrónico no válido.");
-        }
-        if (!/^[0-9]{7,15}$/.test(datos.telefono)) {
-            errores.push("Teléfono: solo números, mínimo 7 dígitos.");
-        }
-
-        // Contraseña solo si se va a cambiar
-        let clave = $('#modificar_clave').val();
-        if (clave.length > 0 && !/^.{6,20}$/.test(clave)) {
-            errores.push("La contraseña debe tener entre 6 y 20 caracteres.");
-        }
-
-        if (errores.length > 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error de validación',
-                html: errores.join('<br>')
-            });
-            return;
-        }
-
-        var formData = new FormData(this);
-        formData.append('accion', 'modificar');
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            success: function(response) {
-            if (response.status === 'success') {
-                $('#modalModificarUsuario').modal('hide');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Modificado',
-                    text: 'El usuario se ha modificado correctamente'
-                });
-
-                const id = $('#modificar_id_usuario').val();
-                const fila = $(`#tablaUsuarios tbody tr[data-id="${id}"]`);
-                fila.find('td').eq(0).text($('#modificar_username').val());
-                fila.find('td').eq(1).text($('#modificar_nombres').val());
-                fila.find('td').eq(2).text($('#modificar_apellidos').val());
-                fila.find('td').eq(3).text($('#modificar_correo').val());
-                fila.find('td').eq(4).text($('#modificar_telefono').val());
-                fila.find('td').eq(5).text($('#modificar_rango').val());
-
-                // Actualiza los data-atributos del botón modificar
-                const botonModificar = fila.find('.btn-modificar');
-                botonModificar.data('username', $('#modificar_username').val());
-                botonModificar.data('nombres', $('#modificar_nombres').val());
-                botonModificar.data('apellidos', $('#modificar_apellidos').val());
-                botonModificar.data('correo', $('#modificar_correo').val());
-                botonModificar.data('telefono', $('#modificar_telefono').val());
-                botonModificar.data('rango', $('#modificar_rango').val());
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message || 'No se pudo modificar el usuario'
-                });
-            }
-        },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar la marca:', textStatus, errorThrown);
-                muestraMensaje('Error al modificar la marca.');
-            }
-        });
-    });*/
-
     // Cerrar modal de modificación
     $(document).on('click', '#modificar_usuario_modal .close', function() {
         $('#modificar_usuario_modal').modal('hide');
@@ -542,56 +398,6 @@ $(document).ready(function () {
             }
         });
     });
-    /*
-    // Función para incluir un nuevo producto
-    $('#incluirusuario').on('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                try {
-                    const data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            title: 'Éxito',
-                            text: 'Usuario ingresada exitosamente',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.message || 'Error al ingresar la Marca',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    }
-                } catch (e) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Error al procesar la respuesta del servidor',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Error en la solicitud AJAX: ' + error,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        });
-    });*/
 
     // Función genérica para mostrar mensajes
     function mensajes(icono, tiempo, titulo, mensaje){
@@ -636,16 +442,15 @@ function space(str) {
 
     // Cambio de estado
     $(document).on('click', '.campo-estatus', function() {
-        const id = $(this).data('id');
-        cambiarEstatus(id);
+        const id_usuario = $(this).data('id_usuario');
+        cambiarEstatus(id_usuario);
     });
 
-    function cambiarEstatus(id) {
-        const span = $(`span.campo-estatus[data-id="${id}"]`);
+    function cambiarEstatus(id_usuario) {
+        const span = $(`span.campo-estatus[data-id="${id_usuario}"]`);
         const estatusActual = span.text().trim();
         const nuevoEstatus = estatusActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
         
-        // Feedback visual inmediato
         span.addClass('cambiando');
         
         $.ajax({
@@ -654,16 +459,14 @@ function space(str) {
             dataType: 'json',
             data: {
                 accion: 'cambiar_estatus',
-                id_usuario: id,
+                id_usuario: id_usuario,
                 nuevo_estatus: nuevoEstatus
             },
             success: function(data) {
                 span.removeClass('cambiando');
-                
                 if (data.status === 'success') {
                     span.text(nuevoEstatus);
                     span.removeClass('habilitado inhabilitado').addClass(nuevoEstatus);
-                    
                     Swal.fire({
                         icon: 'success',
                         title: '¡Estatus actualizado!',
@@ -686,6 +489,23 @@ function space(str) {
             }
         });
     }
+
+    // Delegación para el despliegue de opciones (modificar/eliminar)
+    $('#tablaConsultas').on('click', '.vertical', function(e) {
+        e.stopPropagation(); // Prevenir cierre inmediato
+
+        // Cerrar todos los menús primero
+        $('.desplegable').not($(this).next('.desplegable')).hide();
+
+        // Alternar el menú actual
+        const menuActual = $(this).next('.desplegable');
+        menuActual.toggle();
+    });
+
+    // Cerrar el menú si se hace clic fuera
+    $(document).on('click', function() {
+        $('.desplegable').hide();
+    });
 
     $(document).ready(function() {
         // Manejar clic en flechas

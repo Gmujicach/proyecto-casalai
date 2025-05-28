@@ -4,7 +4,7 @@ require_once 'Config/config.php';
 class Usuarios extends BD {
     
     private $conex;
-    private $id;
+    private $id_usuario;
     private $username;
     private $clave;
     private $rango="usuario";
@@ -71,8 +71,8 @@ class Usuarios extends BD {
         return $this->id;
     }
 
-    public function setId($id) {
-        $this->id = $id;
+    public function setId($id_usuario) {
+        $this->id = $id_usuario;
     }
 
     public function getNombre() {
@@ -169,9 +169,9 @@ public function ingresarUsuario() {
             $sql = "SELECT * FROM tbl_usuarios ORDER BY id_usuario DESC LIMIT 1";
             $stmt = $this->conex->prepare($sql);
             $stmt->execute();
-            $usu = $stmt->fetch(PDO::FETCH_ASSOC);
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->conex = null;
-            return $usu ? $usu : null;
+            return $usuario ? $usuario : null;
         } catch (PDOException $e) {
             error_log("Error al obtener la última cuenta: " . $e->getMessage());
             $this->conex = null;
@@ -180,16 +180,16 @@ public function ingresarUsuario() {
     }
 
     // Obtener Producto por ID
-    public function obtenerUsuarioPorId($id) {
+    public function obtenerUsuarioPorId($id_usuario) {
         $query = "SELECT * FROM tbl_usuarios WHERE id_usuario = ?";
         $stmt = $this->conex->prepare($query);
-        $stmt->execute([$id]);
+        $stmt->execute([$id_usuario]);
         $usuarios = $stmt->fetch(PDO::FETCH_ASSOC);
         return $usuarios;
     }
 
     // Modificar Producto
-public function modificarUsuario($id) {
+public function modificarUsuario($id_usuario) {
     $claveEncriptada = !empty($this->clave) ? password_hash($this->clave, PASSWORD_BCRYPT) : null;
 
     $sql = "UPDATE tbl_usuarios SET 
@@ -200,10 +200,10 @@ public function modificarUsuario($id) {
                 apellidos = :apellido,
                 correo = :correo,
                 telefono = :telefono
-            WHERE id_usuario = :id";
+            WHERE id_usuario = :id_usuario";
 
     $stmt = $this->conex->prepare($sql);
-    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':id_usuario', $id_usuario);
     $stmt->bindParam(':username', $this->username);
     if (!empty($this->clave)) {
         $stmt->bindParam(':clave', $claveEncriptada);
@@ -219,19 +219,19 @@ public function modificarUsuario($id) {
 
 
     // Eliminar Producto
-    public function eliminarUsuario($id) {
-        $sql = "DELETE FROM tbl_usuarios WHERE id_usuario = :id";
+    public function eliminarUsuario($id_usuario) {
+        $sql = "DELETE FROM tbl_usuarios WHERE id_usuario = :id_usuario";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id_usuario', $id_usuario);
         return $stmt->execute();
     }
 
     public function cambiarEstatus($nuevoEstatus) {
         try {
-            $sql = "UPDATE tbl_usuarios SET estatus = :estatus WHERE id_usuario = :id";
+            $sql = "UPDATE tbl_usuarios SET estatus = :estatus WHERE id_usuario = :id_usuario";
             $stmt = $this->conex->prepare($sql);
             $stmt->bindParam(':estatus', $nuevoEstatus);
-            $stmt->bindParam(':id', $this->id);
+            $stmt->bindParam(':id_usuario', $this->id);
             
             return $stmt->execute();
         } catch (PDOException $e) {
