@@ -22,19 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario->setCorreo($_POST['correo_usuario']);
             $usuario->setTelefono($_POST['telefono_usuario']);
 
-            
-            /*if (!$usuario->validarUsuario()) {
-                echo json_encode(['status' => 'error', 'message' => 'Este Usuario ya existe']);
-            }
-            else {
-                if ($usuario->ingresarUsuario()) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el Usuario']);
-                }
-            }
-            break;*/
-
             if ($usuario->existeUsuario($_POST['nombre_usuario'])) {
                 echo json_encode([
                     'status' => 'error',
