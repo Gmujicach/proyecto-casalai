@@ -266,7 +266,7 @@ $(document).ready(function () {
     }
 
     $(document).on('click', '.btn-modificar', function () {
-        $('#modificar_id_usuario').val($(this).data('id_usuario'));
+        $('#modificar_id_usuario').val($(this).data('id'));
         $('#modificarnombre_usuario').val($(this).data('username'));
         $('#modificarnombre').val($(this).data('nombres'));
         $('#modificarapellido_usuario').val($(this).data('apellidos'));
@@ -517,7 +517,7 @@ $(document).ready(function () {
     // Función para eliminar el producto
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault();
-        let id_usuario = $(this).data('id_usuario');
+        let id_usuario = $(this).data('id');
         Swal.fire({
             title: '¿Está seguro?',
             text: "¡No podrás revertir esto!",
