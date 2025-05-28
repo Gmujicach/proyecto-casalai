@@ -2,8 +2,6 @@
 
 require_once 'Config/config.php';
 
-
-
 class Despacho extends BD
 {
 
