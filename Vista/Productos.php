@@ -209,7 +209,7 @@ foreach ($caracteristicas as $clave => $valor) {
                                                 data-id="<?php echo $producto['id_producto']; ?>" 
                                                 class="eliminar"
                                             >
-                                                Eliminar
+                                                Eliminar Esta
                                             </a>
                                         </li>
                                     </ul>
