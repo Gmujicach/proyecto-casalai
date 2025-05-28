@@ -213,7 +213,8 @@ require_once 'Controlador/Despacho.php';
     </div>
     <!--fin de seccion modal-->
 
-    <?php include 'footer.php'; ?>
     <script src="Javascript/despacho.js"></script>
     <script src="Javascript/validaciones.js"></script>
 </body>
+
+<?php include 'footer.php'; ?>
