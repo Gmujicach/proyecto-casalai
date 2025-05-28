@@ -198,21 +198,31 @@ INSERT INTO `tbl_cuentas` (`id_cuenta`, `nombre_banco`, `numero_cuenta`, `rif_cu
 
 CREATE TABLE `tbl_despachos` (
   `id_despachos` int(11) NOT NULL,
+  `id_clientes` int(11) NOT NULL,
   `fecha_despacho` date NOT NULL,
-  `id_factura` int(11) NOT NULL,
   `correlativo` varchar(255) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `tbl_despachos`
---
-
-INSERT INTO `tbl_despachos` (`id_despachos`, `fecha_despacho`, `id_factura`, `correlativo`, `activo`) VALUES
-(1, '2025-05-24', 1, '1110', 1);
 
 -- --------------------------------------------------------
 
+--
+-- Estructura de tabla para la tabla `tbl_despacho_detalle`
+
+CREATE TABLE IF NOT EXISTS `tbl_despacho_detalle` (
+  `id_detalle` int(11) NOT NULL AUTO_INCREMENT,
+  `id_despacho` int(11) NOT NULL,
+  `id_producto` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  PRIMARY KEY (`id_detalle`),
+  KEY `id_despacho` (`id_despacho`),
+  KEY `id_producto` (`id_producto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `tbl_despacho_detalle`
+  ADD CONSTRAINT `tbl_despacho_detalle_ibfk_1` FOREIGN KEY (`id_despacho`) REFERENCES `tbl_despachos` (`id_despachos`) ON DELETE CASCADE,
+  ADD CONSTRAINT `tbl_despacho_detalle_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
 --
 -- Estructura de tabla para la tabla `tbl_detalles_pago`
 --

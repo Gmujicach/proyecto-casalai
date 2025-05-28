@@ -1,22 +1,22 @@
 <?php  
 
 function getdespacho() {
-    $recepcion = new Despacho();
-    return $recepcion->getdespacho();
+    $despacho = new Despacho();
+    return $despacho->getdespacho();
 }
 
-if (!is_file("Modelo/Despacho.php")) {
+if (!is_file("Modelo/" . $pagina . ".php")) {
     echo "Falta definir la clase " . $pagina;
     exit;
 }
 
-require_once("Modelo/Despacho.php");
+require_once("Modelo/" . $pagina . ".php");
 $k = new Despacho();
 
-if (is_file("vista/Despacho.php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     $accion = $_POST['accion'] ?? '';
 
-   if (!empty($_POST)) {
+    if (!empty($_POST)) {
         switch ($accion) {
             case 'listado':
                 $respuesta = $k->listadoproductos();
@@ -24,23 +24,59 @@ if (is_file("vista/Despacho.php")) {
                 break;
 
             case 'registrar':
-                $k->setIdClientes($_POST['id_clientes']);
-                $k->setCorrelativo($_POST['correlativo']);
-                $respuesta = $k->registrarDespacho();
-                echo json_encode(value: $respuesta);
+                $k->setidcliente($_POST['cliente']);
+                $k->setcorrelativo($_POST['correlativo']);
+                $respuesta = $k->registrar(
+                    $_POST['producto'],
+                    $_POST['cantidad'],
+                );
+                echo json_encode($respuesta);
                 break;
 
             case 'buscar':
+                $correlativo = $_POST['correlativo'] ?? null;
+                $k->setcorrelativo($correlativo);
+                $respuesta = $k->buscar();
+                if (!$respuesta) {
+                    echo json_encode([
+                        "resultado" => "no_encontro",
+                        "mensaje" => "No se encontró el correlativo: " . $correlativo
+                    ]);
+                } else {
+                    echo json_encode($respuesta);
+                }
+                break;
 
-/*
-case 'modificarDespacho':
+            case 'obtener_detalles':
+                // Para cargar los datos de productos antes de modificar
+                $idDespacho = $_POST['id_despachos'] ?? null;
+                if ($idDespacho) {
+                    $respuesta = $k->obtenerDetallesPorDespacho($idDespacho);
+                    echo json_encode($respuesta);
+                } else {
+                    echo json_encode(['error' => true, 'mensaje' => 'ID de recepción no recibido']);
+                }
+                break;
 
-    $k->setIdClientes($_POST['clientes']);
+case 'modificarRecepcion':
+    $idRecepcion = $_POST['id_recepcion'] ?? null;
+    $idproducto = $_POST['productos'] ?? [];
+    $cantidad = $_POST['cantidades'] ?? [];
+    $costo = $_POST['costos'] ?? [];   
+    $iddetalle = $_POST['iddetalles'] ?? [];
+
+    $k->setidcliente($_POST['proveedor']);
     $k->setcorrelativo($_POST['correlativo']);
-    $k->setFechaDespacho($_POST['fecha']);
+    $k->setfecha($_POST['fecha']);
 
     if ($idRecepcion) {
-        $respuesta = $k->modificarDespacho();
+        $respuesta = $k->modificar(
+            $idRecepcion,
+            $idproducto,
+            $cantidad,
+            $costo,
+            $iddetalle
+        );
         if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificarRecepcion') {
             echo json_encode([
                 'status' => 'success',
@@ -55,7 +91,7 @@ case 'modificarDespacho':
     } else {
         echo json_encode(['status' => 'error', 'message' => 'ID de recepción faltante']);
     }
-    break;*/
+    break;
 
             default:
                 echo json_encode(['status' => 'error', 'message' => 'Acción no válida '.$accion.'']);
@@ -65,11 +101,11 @@ case 'modificarDespacho':
     }
 
     // Vista inicial
-    $recepciones = getdespacho();
-    $proveedores = $k->obtenerfactura();
+    $despachos = getdespacho();
+    $proveedores = $k->obtenercliente();
     $productos = $k->consultarproductos();
 
-    require_once("vista/Despacho.php");
+    require_once("vista/" . $pagina . ".php");
 
 } else {
     echo "pagina en construccion";
