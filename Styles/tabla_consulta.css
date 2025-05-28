@@ -163,7 +163,7 @@ table tr th{
 }
 
 table thead tr th i{
-    font-size: 24   px;
+    font-size: 24px;
 }
 
 table tbody tr td{
@@ -196,6 +196,13 @@ table tbody tr td .campo-correo{
     font-size: 16px;
     font-weight: 500;
     margin-top: 3px;
+}
+
+table tbody tr td .campo-telefono{
+    display: inline-block;
+    color: var(--tbody-text-color);
+    font-size: 16px;
+    font-weight: 500;
 }
 
 table tbody tr td .campo-rango{
