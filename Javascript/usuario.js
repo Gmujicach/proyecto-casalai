@@ -218,7 +218,8 @@ function agregarFilaUsuario(usuario) {
             </td>
         </tr>
     `;
-    $('#tablaConsultas tbody').append(nuevaFila);
+const tabla = $('#tablaConsultas').DataTable();
+tabla.row.add($(nuevaFila)).draw();
 }
 
     // Resetear formulario de usuario
@@ -374,12 +375,66 @@ $('#incluirusuario').on('submit', function(e) {
                 });
 
                 const id = $('#modificar_id_usuario').val();
-                const fila = $(`#tablaConsultas tbody tr[data-id="${id}"]`);
-                fila.find('td').eq(0).text($('#modificarnombre').val());
-                fila.find('td').eq(1).text($('#modificarapellido_usuario').val());
-                fila.find('td').eq(2).text($('#modificarcorreo_usuario').val());
-                fila.find('td').eq(3).text($('#modificartelefono_usuario').val());
-                fila.find('td').eq(4).text($('#rango').val());
+const fila = $(`#tablaConsultas tbody tr[data-id="${id}"]`);
+const nombres = $('#modificarnombre').val();
+const apellidos = $('#modificarapellido_usuario').val();
+const username = $('#modificarnombre_usuario').val();
+const correo = $('#modificarcorreo_usuario').val();
+const telefono = $('#modificartelefono_usuario').val();
+const rango = $('#rango').val();
+
+// Si tienes el estatus en el backend, úsalo, si no, mantenlo igual
+const estatus = fila.find('.campo-estatus').text().trim();
+
+// Actualiza cada celda con el mismo formato que la tabla original
+fila.find('td').eq(0).html(`
+    <span class="campo-nombres">${nombres} ${apellidos}</span>
+    <span class="campo-correo">${correo}</span>
+`);
+fila.find('td').eq(1).html(`
+    <span class="campo-telefono">${telefono}</span>
+`);
+fila.find('td').eq(2).html(`
+    <span class="campo-rango">${rango}</span>
+`);
+fila.find('td').eq(3).html(`
+    <span class="campo-estatus ${estatus === 'habilitado' ? 'habilitado' : 'inhabilitado'}"
+          data-id="${id}" style="cursor: pointer;">
+        ${estatus}
+    </span>
+`);
+fila.find('td').eq(4).html(`
+    <span>
+        <div class="acciones-boton">
+            <i class="vertical">
+                <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+            </i>
+            <div class="desplegable">
+                <ul>
+                    <li>
+                        <button class="btn btn-primary btn-modificar"
+                            data-id="${id}"
+                            data-username="${username}"
+                            data-nombres="${nombres}"
+                            data-apellidos="${apellidos}"
+                            data-correo="${correo}"
+                            data-telefono="${telefono}"
+                            data-clave=""
+                            data-rango="${rango}">
+                            Modificar
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn btn-danger btn-eliminar"
+                            data-id="${id}">
+                            Eliminar
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </span>
+`);
 
                 // Actualiza los data-atributos del botón modificar
                 const botonModificar = fila.find('.btn-modificar');
@@ -423,7 +478,9 @@ $('#incluirusuario').on('submit', function(e) {
                 enviarAjax(datos, function(respuesta){
                     if (respuesta.status === 'success') {
                         Swal.fire('Eliminado!', 'El usuario ha sido eliminado.', 'success');
-                        $(`#tablaConsultas tbody tr[data-id="${id_usuario}"]`).remove();
+                        const tabla = $('#tablaConsultas').DataTable();
+const fila = $(`#tablaConsultas tbody tr[data-id="${id_usuario}"]`);
+tabla.row(fila).remove().draw();
                     } else {
                         Swal.fire('Error', respuesta.message || 'No se pudo eliminar el usuario', 'error');
                     }
