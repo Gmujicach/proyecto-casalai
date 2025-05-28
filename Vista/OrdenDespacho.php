@@ -59,22 +59,17 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th><input type="checkbox"></th>
                 <th>Correlativo</th>
                 <th>Fecha</th>
                 <th>Factura</th>
-                <th></th>
-                <th><i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                </th>
+                <th>Ver Mas</th>
+                <th>Acciones</th>
             </tr>
         </thead>
 
         <tbody>
         <?php foreach ($ordendespacho as $orden): ?>
             <tr>
-    <td><input type="checkbox"></td>
     <td><span class="campo-correlativo"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
     <td><span class="campo-fecha"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
     <td><span class="campo-factura"><?php echo htmlspecialchars($orden['activo']); ?></span></td>

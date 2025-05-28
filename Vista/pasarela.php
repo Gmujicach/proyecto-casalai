@@ -21,7 +21,6 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th><input type="checkbox"></th>
                 <th>ID Factura</th>
                 <th>Cuenta</th>
                 <th>Tipo de Pago</th>
@@ -29,17 +28,13 @@ if (!isset($_SESSION['name'])) {
                 <th>Fecha</th>
                 <th>Estatus</th>
                 <th>Observaciones</th>
-                <th><i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                </th>
+                <th>Acciones</th>
             </tr>
         </thead>
 
         <tbody>
         <?php foreach ($datos as $dato): ?>
             <tr>
-                <td><input type="checkbox" value="<?php echo htmlspecialchars($dato['id_detalles']); ?>"></td>
                 
                 <td><?php echo htmlspecialchars($dato['id_factura']); ?></td>
                 <td><?php echo htmlspecialchars($dato['tbl_cuentas']); ?></td>
