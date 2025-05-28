@@ -80,11 +80,9 @@ if (!isset($_SESSION['name'])) {
         <input type="text" placeholder="Precio" maxlength="10" class="control-form" id="Precio" name="Precio" required>
         <span id="sPrecio"></span>
       </div>
-
-      <div class="grupo-boton">
-        <button class="boton-reset" type="reset">Reset</button>
-        <button class="boton-form" type="submit">Registrar</button>
-      </div>
+      
+      <button class="boton-form" type="submit">Registrar</button>
+      <button class="boton-reset" type="reset">Reset</button>
     </form>
   </div>
 </div>
