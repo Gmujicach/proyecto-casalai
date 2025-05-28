@@ -114,20 +114,6 @@ class Usuarios extends BD {
         }
     }
 
-
-     /* Método para guardar el proveedor
-
-     public function validarUsuario() {
-        $sql = "SELECT COUNT(*) FROM tbl_usuarios WHERE username = :username";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':username', $this->username);
-        $stmt->execute();
-        $count = $stmt->fetchColumn();
-    
-        // Retorna true si no existe un producto con el mismo nombre
-        return $count == 0;
-    }*/
-
 public function ingresarUsuario() {
     $claveEncriptada = password_hash($this->clave, PASSWORD_BCRYPT);
 
