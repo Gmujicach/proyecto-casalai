@@ -191,7 +191,7 @@ if (!isset($_SESSION['name'])) {
                     <div class="form-group">
                         <label for="modificarnombre">Nombres del Usuario</label>
                         <input type="text" class="form-control" id="modificarnombre" name="nombre" maxlength="20" required>
-                        <span class="span-value-modal" id="smodificarnombre_usuario"></span>
+                        <span class="span-value-modal" id="smodificarnombre"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarapellido_usuario">Apellidos del Usuario</label>
