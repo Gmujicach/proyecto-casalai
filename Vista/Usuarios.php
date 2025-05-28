@@ -74,23 +74,19 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th><input type="checkbox"></th>
+                
                 <th>Nombre</th>
                 <th>Telefono</th>
                 <th>Rango</th>
                 <th>Estatus</th>
-                <!-- <th></th> -->
-                <th><i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                </th>
+                <th>Acciones</th>
             </tr>
         </thead>
 
         <tbody>
         <?php foreach ($usuarios as $usuario): ?>
             <tr>
-                <td><input type="checkbox"></td>
+                
                 <td>
                     <span class="campo-nombres">
                     <?php echo htmlspecialchars($usuario['nombres']); ?> <?php echo htmlspecialchars($usuario['apellidos']); ?>
