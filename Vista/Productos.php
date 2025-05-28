@@ -36,7 +36,7 @@ if (!isset($_SESSION['name'])) {
       <select class="form-select" id="Modelo" name="Modelo" required>
         <option value="">Seleccionar Modelo</option>
         <?php foreach ($modelos as $modelo): ?>
-          <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo 'Modelo: '.$modelo['nombre_modelo'].' Marca: '.$modelo['tbl_marcas']; ?></option>
+          <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo ''.$modelo['nombre_modelo'].' ('.$modelo['tbl_marcas'].')'; ?></option>
         <?php endforeach; ?>
       </select>
 
@@ -304,9 +304,7 @@ foreach ($caracteristicas as $clave => $valor) {
 <script src="public/bootstrap/js/sidebar.js"></script>
   <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="public/js/jquery-3.7.1.min.js"></script>
-  <script src="public/js/jquery.dataTables.min.js"></script>
-  <script src="public/js/dataTables.bootstrap5.min.js"></script>
-  <script src="public/js/datatable.js"></script>
+
   <script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/Productos.js"></script>
 <script src="Javascript/validaciones.js"></script>
@@ -369,6 +367,9 @@ function mostrarCamposCategoria(categoriaId, modo = 'crear', data = {}) {
 }
 
 </script>
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/datatable.js"></script>
 <script>
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
