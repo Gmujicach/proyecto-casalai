@@ -59,10 +59,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         case 'obtener_usuario':
-            $id = $_POST['id_usuario'];
-            if ($id !== null) {
+            $id_usuario = $_POST['id_usuario'];
+            if ($id_usuario !== null) {
                 $usuario = new Usuarios();
-                $usuario = $usuario->obtenerUsuarioPorId($id);
+                $usuario = $usuario->obtenerUsuarioPorId($id_usuario);
                 if ($usuario !== null) {
                     echo json_encode($usuario);
                 } else {
@@ -74,9 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
 
         case 'modificar':
-            $id = $_POST['id'];
+            $id_usuario = $_POST['id_usuario'];
             $usuario = new Usuarios();
-            $usuario->setId($id);
+            $usuario->setId($id_usuario);
             $usuario->setUsername($_POST['nombre_usuario']);
             $usuario->setClave($_POST['clave_usuario']);
             $usuario->setNombre($_POST['nombre']);
@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario->setTelefono($_POST['telefono_usuario']);
             $usuario->setRango($_POST['rango']);
             
-            if ($usuario->existeUsuario($_POST['username'], $id)) {
+            if ($usuario->existeUsuario($_POST['username'], $id_usuario)) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El nombre de usuario ya existe'
@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             }
 
-            if ($usuario->modificarUsuario($id)) {
+            if ($usuario->modificarUsuario($id_usuario)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
@@ -101,9 +101,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         case 'eliminar':
-            $id = $_POST['id'];
+            $id_usuario = $_POST['id_usuario'];
             $usuarioModel = new Usuarios();
-            if ($usuarioModel->eliminarUsuario($id)) {
+            if ($usuarioModel->eliminarUsuario($id_usuario)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
@@ -116,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Cambiar estatus
         case 'cambiar_estatus':
-            $id = $_POST['id'];
+            $id_usuario = $_POST['id_usuario'];
             $nuevoEstatus = $_POST['nuevo_estatus'];
             
             // Validación básica
@@ -126,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             
             $usuario = new Usuarios();
-            $usuario->setId($id);
+            $usuario->setId($id_usuario);
             
             if ($usuario->cambiarEstatus($nuevoEstatus)) {
                 echo json_encode(['status' => 'success']);

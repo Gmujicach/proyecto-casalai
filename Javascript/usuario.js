@@ -266,7 +266,7 @@ $(document).ready(function () {
     }
 
     $(document).on('click', '.btn-modificar', function () {
-        $('#modificar_id_usuario').val($(this).data('id'));
+        $('#modificar_id_usuario').val($(this).data('id_usuario'));
         $('#modificarnombre_usuario').val($(this).data('username'));
         $('#modificarnombre').val($(this).data('nombres'));
         $('#modificarapellido_usuario').val($(this).data('apellidos'));
@@ -517,7 +517,7 @@ $(document).ready(function () {
     // Función para eliminar el producto
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault();
-        let id_usuario = $(this).data('id');
+        let id_usuario = $(this).data('id_usuario');
         Swal.fire({
             title: '¿Está seguro?',
             text: "¡No podrás revertir esto!",
@@ -636,12 +636,12 @@ $(document).ready(function () {
 
     // Cambio de estado
     $(document).on('click', '.campo-estatus', function() {
-        const id = $(this).data('id');
-        cambiarEstatus(id);
+        const id_usuario = $(this).data('id_usuario');
+        cambiarEstatus(id_usuario);
     });
 
-    function cambiarEstatus(id) {
-        const span = $(`span.campo-estatus[data-id="${id}"]`);
+    function cambiarEstatus(id_usuario) {
+        const span = $(`span.campo-estatus[data-id="${id_usuario}"]`);
         const estatusActual = span.text().trim();
         const nuevoEstatus = estatusActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
         
@@ -654,7 +654,7 @@ $(document).ready(function () {
             dataType: 'json',
             data: {
                 accion: 'cambiar_estatus',
-                id_usuario: id,
+                id_usuario: id_usuario,
                 nuevo_estatus: nuevoEstatus
             },
             success: function(data) {
