@@ -25,23 +25,23 @@ if (!isset($_SESSION['name'])) {
             <h3 class="titulo-form">INCLUIR CLIENTE</h3>
                 
             <div class="grupo-form">
-                <input class="control-form" placeholder="Nombre del Cliente" maxlength="15" type="text" id="nombre" name="nombre" placeholder="" required>
+                <input class="control-form" placeholder="Nombre completo" maxlength="100" type="text" id="nombre" name="nombre" required>
                 <span id="snombre"></span>
 
-                <input class="control-form" placeholder="Cedula/Rif" maxlength="15" type="text" id="cedula" name="cedula" placeholder="" required>
+                <input class="control-form" placeholder="Cedula/Rif" maxlength="15" type="text" id="cedula" name="cedula" required>
                 <span id="scedula"></span>
             </div>
 
             <div class="grupo-form">
-                <input class="control-form" placeholder="Teléfono" maxlength="11" type="text" id="telefono" name="telefono" placeholder="" required>
+                <input class="control-form" placeholder="Teléfono" maxlength="11" type="text" id="telefono" name="telefono" required>
                 <span id="stelefono"></span>
 
-                <input class="control-form" placeholder="Dirección" maxlength="35" type="text" id="direccion" name="direccion" placeholder="" required>
+                <input class="control-form" placeholder="Dirección" maxlength="35" type="text" id="direccion" name="direccion" required>
                 <span id="sdireccion"></span>
             </div>
             
             <div class="envolver-form">
-                <input class="control-form" placeholder="Correo de Contacto" type="text" id="correo" name="correo" placeholder="" required>
+                <input class="control-form" placeholder="Correo electrónico" type="text" id="correo" name="correo" required>
                 <span id="scorreo"></span>
             </div>
 
@@ -56,10 +56,10 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th>Nombre</th>
+                <th>Nombre del usuario</th>
                 <th>Cedula</th>
-                <th>Direccion</th>
-                <th>Telefono</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
                 <th>Correo</th>
                 <th>Acciones</th>
             </tr>
@@ -95,7 +95,9 @@ if (!isset($_SESSION['name'])) {
                                         </li>
                                         <li>
                                             <!-- Botón Eliminar -->
-                                            <a href="#" data-id="<?php echo htmlspecialchars($cliente['id_clientes']); ?>" class="btn btn-eliminar">Eliminar</a>
+                                            <button class="btn btn-danger btn-eliminar"
+                                            data-id="<?php echo $marca['id_clientes']; ?>"
+                                            >Eliminar</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -149,20 +151,14 @@ if (!isset($_SESSION['name'])) {
                         <span id="smodificarcorreo"></span>
                     </div>
                     
-                    
-                    </div>
-                    <div class="modal-footer">
+                </div>
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Modificar</button>
                 </div>
-                </div>
-
-                
             </form>
-
-            
         </div>
     </div>
-
+</div>
     <?php include 'footer.php'; ?>
     <div class="containera"> <!-- todo el contenido ira dentro de esta etiqueta-->
 

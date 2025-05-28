@@ -190,32 +190,32 @@ if (!isset($_SESSION['name'])) {
                     <input type="hidden" id="modificar_id_usuario" name="id_usuario">
                     <div class="form-group">
                         <label for="modificarnombre">Nombres del Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre" name="nombre" maxlength="15" required>
-                        <span class="span-value-modal" id="smodificarnombre_usuario"></span>
+                        <input type="text" class="form-control" id="modificarnombre" name="nombre" maxlength="20" required>
+                        <span class="span-value-modal" id="smodificarnombre"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarapellido_usuario">Apellidos del Usuario</label>
-                        <input type="text" class="form-control" id="modificarapellido_usuario" name="apellido_usuario" maxlength="15" required>
+                        <input type="text" class="form-control" id="modificarapellido_usuario" name="apellido_usuario" maxlength="20" required>
                         <span class="span-value-modal" id="smodificarapellido_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarnombre_usuario">Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="15" required>
+                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="30" required>
                         <span class="span-value-modal" id="smodificarnombre_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificartelefono_usuario">Telefono</label>
-                        <input type="text" class="form-control" id="modificartelefono_usuario" name="telefono_usuario" maxlength="15" required>
+                        <input type="text" class="form-control" id="modificartelefono_usuario" name="telefono_usuario" maxlength="13" required>
                         <span class="span-value-modal" id="smodificartelefono_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarcorreo_usuario">Correo</label>
-                        <input type="text" class="form-control" id="modificarcorreo_usuario" name="correo_usuario" maxlength="15" required>
+                        <input type="text" class="form-control" id="modificarcorreo_usuario" name="correo_usuario" maxlength="50" required>
                         <span class="span-value-modal" id="smodificarcorreo_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarclave_usuario">Contraseña del Usuario</label>
-                        <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario" required>
+                        <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario" maxlength="15" required>
                         <span class="span-value-modal" id="smodificarclave_usuario"></span>
                     </div>
                     <div class="form-group col-md-4">
@@ -251,31 +251,6 @@ if (!isset($_SESSION['name'])) {
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatable.js"></script>
 <script src="Javascript/usuario.js"></script>
-<!--<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.modificar').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            const nombres = this.getAttribute('data-nombres');
-            const apellidos = this.getAttribute('data-apellidos');
-            const usuario = this.getAttribute('data-usuario');
-            const telefono = this.getAttribute('data-telefono');
-            const correo = this.getAttribute('data-correo');
-            const clave = this.getAttribute('data-clave');
-            const rango = this.getAttribute('data-rango');
-
-            // Insertar datos en el modal
-            document.getElementById('modificar_id_usuario').value = id;
-            document.getElementById('modificarnombre').value = nombres;
-            document.getElementById('modificarapellido_usuario').value = apellidos;
-            document.getElementById('modificarnombre_usuario').value = usuario;
-            document.getElementById('modificartelefono_usuario').value = telefono;
-            document.getElementById('modificarcorreo_usuario').value = correo;
-            document.getElementById('modificarclave_usuario').value = clave;
-            document.getElementById('rango').value = rango;
-        });
-    });
-});-->
 </script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>

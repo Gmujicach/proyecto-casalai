@@ -299,6 +299,86 @@ $('#incluirusuario').on('submit', function(e) {
         });
     }
 
+    $("#modificarnombre").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]*$/, e);
+        let nombre = document.getElementById("modificarnombre");
+        nombre.value = space(nombre.value);
+    });
+    $("#modificarnombre").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/,
+            $(this),
+            $("#smodificarnombre"),
+            "*Solo letras, de 2 a 30 caracteres*"
+        );
+    });
+
+    $("#modificarapellido_usuario").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]*$/, e);
+        let nombre = document.getElementById("modificarapellido_usuario");
+        nombre.value = space(nombre.value);
+    });
+    $("#modificarapellido_usuario").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/,
+            $(this),
+            $("#smodificarapellido_usuario"),
+            "*Solo letras, de 2 a 30 caracteres*"
+        );
+    });
+
+    $("#modificarnombre_usuario").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-Z0-9_]*$/, e);
+    });
+    $("#modificarnombre_usuario").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-Z0-9_]{4,20}$/,
+            $(this),
+            $("#smodificarnombre_usuario"),
+            "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*"
+        );
+    });
+
+    // TELÉFONO
+    $("#modificartelefono_usuario").on("keypress", function(e){
+        validarKeyPress(/^[0-9-]*$/, e);
+    });
+
+    $("#modificartelefono_usuario").on("keyup", function(){
+        validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $(this),
+            $("#smodificartelefono_usuario"),
+            "*Formato válido: 04XX-XXX-XXXX*"
+        );
+    });
+
+    // CORREO ELECTRÓNICO
+    $("#modificarcorreo_usuario").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
+    });
+
+    $("#modificarcorreo_usuario").on("keyup", function(){
+        validarKeyUp(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $(this),
+            $("#smodificarcorreo_usuario"),
+            "*Formato válido: example@gmail.com*"
+        );
+    });
+
+    $("#modificarclave_usuario").on("keypress", function(e){
+        validarKeyPress(/^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]*$/, e);
+    });
+    $("#modificarclave_usuario").on("keyup", function(){
+        validarKeyUp(
+            /^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]{4,15}$/,
+            $(this),
+            $("#smodificarclave_usuario"),
+            "*Solo letras y números, de 3 a 15 caracteres*"
+        );
+    });
+
     $(document).on('click', '.btn-modificar', function () {
         $('#modificar_id_usuario').val($(this).data('id'));
         $('#modificarnombre_usuario').val($(this).data('username'));
@@ -532,7 +612,7 @@ function space(str) {
 
     // Cambio de estado
     $(document).on('click', '.campo-estatus', function() {
-        const id_usuario = $(this).data('id_usuario');
+        const id_usuario = $(this).data('id');
         cambiarEstatus(id_usuario);
     });
 
