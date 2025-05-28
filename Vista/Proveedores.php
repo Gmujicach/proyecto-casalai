@@ -83,12 +83,10 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                
                 <th>Nombre</th>
                 <th>R.I.F</th>
                 <th>Telefono</th>
-               <th>Acciones</th>
-
+                <th>Acciones</th>
             </tr>
         </thead>
 
@@ -124,7 +122,6 @@ if (!isset($_SESSION['name'])) {
                         </i>
                             <div class="desplegable">
                                 <ul>
-                                    <li><a href="#">Ver</a></li>
                                     <li>
                                         <a href="#" class="modificar" 
                                             data-id="<?php echo $proveedor['id_proveedor']; ?>"
@@ -152,15 +149,15 @@ if (!isset($_SESSION['name'])) {
             </tr>
         <?php endforeach; ?>
         </tbody>
-
     </table>
+</div>
 
 <div class="contenedor-tabla">
     <h3>Lista de Productos Con Bajo Stock</h3>
     <table class="tabla"class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th>Id Producto</th>
+                <th>ID</th>
                 <th>Producto</th>
                 <th>Modelo</th>
                 <th>Stock Actual</th>
