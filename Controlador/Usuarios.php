@@ -73,32 +73,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             exit;
 
-        case 'modificar':
-            $id_usuario = $_POST['id_usuario'];
-            $usuario = new Usuarios();
-            $usuario->setId($id_usuario);
-            $usuario->setUsername($_POST['nombre_usuario']);
-            $usuario->setClave($_POST['clave_usuario']);
-            $usuario->setNombre($_POST['nombre']);
-            $usuario->setApellido($_POST['apellido_usuario']);
-            $usuario->setCorreo($_POST['correo_usuario']);
-            $usuario->setTelefono($_POST['telefono_usuario']);
-            $usuario->setRango($_POST['rango']);
-            
-            if ($usuario->existeUsuario($_POST['nombre_usuario'], $id)) {
-                echo json_encode([
-                    'status' => 'error',
-                    'message' => 'El nombre de usuario ya existe'
-                ]);
-                exit;
-            }
+case 'modificar':
+    $id_usuario = $_POST['id_usuario'];
+    $usuario = new Usuarios();
+    $usuario->setId($id_usuario);
+    $usuario->setUsername($_POST['nombre_usuario']);
+    $usuario->setClave($_POST['clave_usuario']);
+    $usuario->setNombre($_POST['nombre']);
+    $usuario->setApellido($_POST['apellido_usuario']);
+    $usuario->setCorreo($_POST['correo_usuario']);
+    $usuario->setTelefono($_POST['telefono_usuario']);
+    $usuario->setRango($_POST['rango']);
+    
+    // CORRIGE ESTA LÍNEA:
+    if ($usuario->existeUsuario($_POST['nombre_usuario'], $id_usuario)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'El nombre de usuario ya existe'
+        ]);
+        exit;
+    }
 
-            if ($usuario->modificarUsuario($id_usuario)) {
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
-            }
-            exit;
+    if ($usuario->modificarUsuario($id_usuario)) {
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
+    }
+    exit;
 
         case 'eliminar':
             $id_usuario = $_POST['id_usuario'];
