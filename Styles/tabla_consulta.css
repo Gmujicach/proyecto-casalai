@@ -203,6 +203,7 @@ table tbody tr td .campo-telefono{
     color: var(--tbody-text-color);
     font-size: 16px;
     font-weight: 500;
+    min-width: 150px;
 }
 
 table tbody tr td .campo-rango{
