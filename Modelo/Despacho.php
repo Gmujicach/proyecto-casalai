@@ -9,6 +9,7 @@ class Despacho extends BD
     private $id_clientes;
     private $fecha_despacho;
     private $correlativo;
+    private $factura;
 
     public function __construct() {
     parent::__construct('P');
@@ -51,58 +52,16 @@ class Despacho extends BD
 
     
 
-    function registrar($id_clientes, $id_producto,$cantidad, $correlativo)
-    {
-        $co = $this->getConexion();
-        $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $r = array();
-        try {
-           
-            $fecha = date('Y-m-d H:i:s');
-            $exist = $co->query("SELECT id_producto, stock FROM tbl_productos ");
-            $stock = [];
-
-            while ($row = $exist->fetch(PDO::FETCH_ASSOC)
-            ) {
-                $stock[$row['id_producto']] = [
-                    'cantidad' => $row['stock'],
-                ];
-            }
-
-            for ($i = 0; $i < count($id_producto); $i++) {
-                $idProd = $id_producto[$i];
-                $cantidadActual = isset($stock[$idProd]['cantidad']) ? $stock[$idProd]['cantidad'] : 0;
-                $Total = $cantidadActual - $cantidad[$i];
-                $co->query("UPDATE tbl_productos SET stock = $Total WHERE id_producto = $idProd");
-            }
-            
-                $guarda = $co->query("INSERT INTO tbl_despachos(id_clientes,fecha_despacho ,correlativo)
-                values ('$id_clientes',' $fecha','$correlativo')");
-                $lid = $co->lastInsertId();
-            
-          
-
-            $tamano = count($id_producto);
-
-            for ($i = 0; $i < $tamano; $i++) {
-                $gd = $co->query("INSERT INTO `tbl_detalle_despachos`
-			   (id_producto,cantidad, id_despachos)
-			   values(
-              '$id_producto[$i]',
-               '$cantidad[$i]',
-                '$lid'
-               )");
-            }
-           
-
-            $r['resultado'] = 'registrar';
-            $r['mensaje'] =  "Se registro correctamente";
-        } catch (Exception $e) {
-            $r['resultado'] = 'error';
-            $r['mensaje'] =  $e->getMessage();
-        }
-        return $r;
-    }
+    public function registrarDespacho() {
+    $sql = "INSERT INTO tbl_despachos (fecha_despacho, id_factura, correlativo, activo)
+            VALUES (:fecha, :factura, :correlativo, 1)";
+    $stmt = $this->getConexion()->prepare($sql);
+    $stmt->bindParam(':fecha', $this->fecha_despacho);
+    $stmt->bindParam(':factura', $this->factura);
+    $stmt->bindParam(':correlativo', $this->correlativo);
+    
+    return $stmt->execute();
+}
 
 
     function listadoproductos()
@@ -181,4 +140,6 @@ class Despacho extends BD
 
         return $despachos;
     }
+
+   
 }
