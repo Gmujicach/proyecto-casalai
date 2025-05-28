@@ -83,14 +83,12 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th><input type="checkbox"></th>
+                
                 <th>Nombre</th>
                 <th>R.I.F</th>
                 <th>Telefono</th>
-                <th><i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                </th>
+               <th>Acciones</th>
+
             </tr>
         </thead>
 
@@ -98,7 +96,7 @@ if (!isset($_SESSION['name'])) {
         <tbody>
         <?php foreach ($proveedores as $proveedor): ?>
             <tr>
-                <td><input type="checkbox"></td>
+                
                 <td>
                     <span class="campo-nombres">
                     <?php echo htmlspecialchars($proveedor['nombre']); ?>
@@ -367,14 +365,5 @@ document.addEventListener("DOMContentLoaded", function () {
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>
-<script>
-$(document).ready(function() {
-    $('#tablaConsultas').DataTable({
-        language: {
-            url: 'Public/js/es-ES.json'
-        }
-    });
-});
-</script>
 </body>
 </html>
