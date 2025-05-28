@@ -157,16 +157,35 @@ $(document).ready(function () {
         return valido;
     }
 
-    function agregarFilaUsuario(usuario) {
-        const nuevaFila = `
-            <tr data-id="${usuario.id_usuario}">
-                <td>${usuario.username}</td>
-                <td>${usuario.nombres}</td>
-                <td>${usuario.apellidos}</td>
-                <td>${usuario.correo}</td>
-                <td>${usuario.telefono}</td>
-                <td>${usuario.rango}</td>
-                <td>
+function agregarFilaUsuario(usuario) {
+    const nuevaFila = `
+        <tr data-id="${usuario.id_usuario}">
+            <td>
+                <span class="campo-nombres">
+                    ${usuario.nombres} ${usuario.apellidos}
+                </span>
+                <span class="campo-correo">
+                    ${usuario.correo}
+                </span>
+            </td>
+            <td>
+                <span class="campo-telefono">
+                    ${usuario.telefono}
+                </span>
+            </td>
+            <td>
+                <span class="campo-rango">
+                    ${usuario.rango}
+                </span>
+            </td>
+            <td>
+                <span class="campo-estatus ${usuario.estatus === 'habilitado' ? 'habilitado' : 'inhabilitado'}"
+                      data-id="${usuario.id_usuario}" style="cursor: pointer;">
+                    ${usuario.estatus}
+                </span>
+            </td>
+            <td>
+                <span>
                     <div class="acciones-boton">
                         <i class="vertical">
                             <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
@@ -181,7 +200,7 @@ $(document).ready(function () {
                                         data-apellidos="${usuario.apellidos}"
                                         data-correo="${usuario.correo}"
                                         data-telefono="${usuario.telefono}"
-                                        data-clave="${usuario.password}"
+                                        data-clave="${usuario.password || ''}"
                                         data-rango="${usuario.rango}">
                                         Modificar
                                     </button>
@@ -195,11 +214,12 @@ $(document).ready(function () {
                             </ul>
                         </div>
                     </div>
-                </td>
-            </tr>
-        `;
-        $('#tablaConsultas tbody').append(nuevaFila);
-    }
+                </span>
+            </td>
+        </tr>
+    `;
+    $('#tablaConsultas tbody').append(nuevaFila);
+}
 
     // Resetear formulario de usuario
     function resetUsuario() {
@@ -219,31 +239,44 @@ $(document).ready(function () {
     }
 
     // Enviar formulario de registro de usuario por AJAX
-    $('#incluirusuario').on('submit', function(e) {
-        e.preventDefault();
+$('#incluirusuario').on('submit', function(e) {
+    e.preventDefault();
 
-        if (validarEnvioUsuario()) {
-            var datos = new FormData(this);
-            datos.append('accion', 'registrar');
-            enviarAjax(datos, function(respuesta){
-                if(respuesta.status === "success" || respuesta.resultado === "success"){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Usuario registrado correctamente'
-                    });
-                    agregarFilaUsuario(respuesta.usuario);
-                    resetUsuario();
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: respuesta.message || respuesta.msg || 'No se pudo registrar el usuario'
-                    });
+    if (validarEnvioUsuario()) {
+        var datos = new FormData(this);
+        datos.append('accion', 'registrar');
+        enviarAjax(datos, function(respuesta){
+            if(respuesta.status === "success" || respuesta.resultado === "success"){
+                // Mostrar mensaje con datos del usuario
+                let infoExtra = '';
+                if (respuesta.marca) {
+                    infoExtra = `<br><b>Usuario:</b> ${respuesta.marca.username || ''} <br><b>Correo:</b> ${respuesta.marca.correo || ''}`;
                 }
-            });
-        }
-    });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    html: (respuesta.message || respuesta.msg || 'Usuario registrado correctamente') + infoExtra
+                });
+
+                // Agregar la nueva fila a la tabla
+                if (respuesta.marca) {
+                    agregarFilaUsuario(respuesta.marca);
+                }
+
+                // Limpiar el formulario
+                $('#incluirusuario')[0].reset();
+                // Limpiar mensajes de validación
+                $('.span-value').text('');
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: respuesta.message || respuesta.msg || 'No se pudo registrar el usuario'
+                });
+            }
+        });
+    }
+});
 
     function enviarAjax(datos, callback) {
         $.ajax({
