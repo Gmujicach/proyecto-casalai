@@ -28,13 +28,13 @@ if (!isset($_SESSION['name'])) {
         <input type="text" placeholder="Nombre del producto" maxlength="15" class="control-form" id="nombre_producto" name="nombre_producto" required>
         <span id="snombre_producto"></span>
       </div>
-      <br>
+    <br>
       <div class="envolver-form">
         <label for="Descripcion_producto">Descripción del producto</label>
         <textarea maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" rows="3"></textarea>
         <span id="sdescripcion_producto"></span>
       </div>
-      <br>
+    <br>
       <select class="form-select" id="Modelo" name="Modelo" required>
         <option value="">Seleccionar Modelo</option>
         <?php foreach ($modelos as $modelo): ?>
@@ -52,14 +52,13 @@ if (!isset($_SESSION['name'])) {
         <input type="number" placeholder="Stock Mínimo" maxlength="10" class="control-form" min="0" id="Stock_Minimo" name="Stock_Minimo" required>
         <span id="sStock_Minimo"></span>
       </div>
-      <br>
+    <br>
       <div class="envolver-form">
         <label for="Clausula_garantia">Cláusula de garantía</label>
         <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="3"></textarea>
         <span id="sClausula_garantia"></span>
       </div>
-
-      <br>
+    <br>
       <div class="grupo-form">
         <select class="form-select" id="Categoria" name="Categoria" required onchange="mostrarCamposCategoria(this.value)">
           <option value="">Seleccionar Categoría</option>
