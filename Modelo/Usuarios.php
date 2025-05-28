@@ -115,7 +115,7 @@ class Usuarios extends BD {
     }
 
 
-     // Método para guardar el proveedor
+     /* Método para guardar el proveedor
 
      public function validarUsuario() {
         $sql = "SELECT COUNT(*) FROM tbl_usuarios WHERE username = :username";
@@ -126,7 +126,7 @@ class Usuarios extends BD {
     
         // Retorna true si no existe un producto con el mismo nombre
         return $count == 0;
-    }
+    }*/
 
     public function ingresarUsuario() {
 
@@ -144,6 +144,40 @@ class Usuarios extends BD {
         $stmt->bindParam(':telefono', $this->telefono);
         
         return $stmt->execute();
+    }
+
+    // Verificar si existe el número de cuenta
+    public function existeUsuario($username, $excluir_id = null) {
+        return $this->existeUsu($username, $excluir_id); 
+    }
+    private function existeUsu($username, $excluir_id) {
+        $sql = "SELECT COUNT(*) FROM tbl_usuarios WHERE username = ?";
+        $params = [$username];
+        if ($excluir_id !== null) {
+            $sql .= " AND id_usuario != ?";
+            $params[] = $excluir_id;
+        }
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function obtenerUltimoUsuario() {
+        return $this->obtUltimoUsu(); 
+    }
+    private function obtUltimoUsu() {
+        try {
+            $sql = "SELECT * FROM tbl_usuarios ORDER BY id_usuario DESC LIMIT 1";
+            $stmt = $this->conex->prepare($sql);
+            $stmt->execute();
+            $usu = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->conex = null;
+            return $usu ? $usu : null;
+        } catch (PDOException $e) {
+            error_log("Error al obtener la última cuenta: " . $e->getMessage());
+            $this->conex = null;
+            return null;
+        }
     }
 
     // Obtener Producto por ID
@@ -167,10 +201,10 @@ public function modificarUsuario($id) {
                 apellidos = :apellido,
                 correo = :correo,
                 telefono = :telefono
-            WHERE id_usuario = :id_usuario";
+            WHERE id_usuario = :id";
 
     $stmt = $this->conex->prepare($sql);
-    $stmt->bindParam(':id_usuario', $id);
+    $stmt->bindParam(':id', $id);
     $stmt->bindParam(':username', $this->username);
     if (!empty($this->clave)) {
         $stmt->bindParam(':clave', $claveEncriptada);

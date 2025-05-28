@@ -22,36 +22,36 @@ if (!isset($_SESSION['name'])) {
 <div class="formulario-responsivo">
     <div class="fondo-form">
     <form id="incluirusuario" action="" method="POST" action="">
-        <input type="hidden" name="accion" value="ingresar">
+        <input type="hidden" name="accion" value="registrar">
         <h3 class="titulo-form">INCLUIR USUARIO</h3>
 
         <div class="grupo-form">
-            <input type="text" placeholder="Nombre" class="control-form" id="nombre" name="nombre" required>
-            <span id="snombre"></span>
+            <input type="text" placeholder="Nombre" class="control-form" id="nombre" name="nombre" maxlength="30" required>
+            <span class="span-value" id="snombre"></span>
 
-            <input type="text" placeholder="Apellido" class="control-form" id="apellido_usuario" name="apellido_usuario" required>
-            <span id="sapellido"></span>
+            <input type="text" placeholder="Apellido" class="control-form" id="apellido_usuario" name="apellido_usuario" maxlength="30" required>
+            <span class="span-value" id="sapellido"></span>
         </div>
         <div class="envolver-form">
-            <input type="text" placeholder="Nombre de Usuario" class="control-form" id="nombre_usuario" name="nombre_usuario" required>
-            <span id="snombre_usuario"></span>
+            <input type="text" placeholder="Nombre de Usuario" class="control-form" id="nombre_usuario" name="nombre_usuario" maxlength="20" required>
+            <span class="span-value" id="snombre_usuario"></span>
         </div>
         <div class="envolver-form">
-            <input type="text" placeholder="Telefono" class="control-form" id="telefono_usuario" name="telefono_usuario" required>
-            <span id="stelefono_usuario"></span>
+            <input type="text" placeholder="Telefono" class="control-form" id="telefono_usuario" name="telefono_usuario" maxlength="13" required>
+            <span class="span-value" id="stelefono_usuario"></span>
         </div>
         <div class="envolver-form">
-            <input type="text" placeholder="CorreoEjemplo@gmail.com" class="control-form" id="correo_usuario" name="correo_usuario" required>
-            <span id="scorreo_usuario"></span>
+            <input type="text" placeholder="CorreoEjemplo@gmail.com" class="control-form" id="correo_usuario" name="correo_usuario" maxlength="50" required>
+            <span class="span-value" id="scorreo_usuario"></span>
         </div>
 
         <div class="envolver-form">
-            <input type="password" placeholder="contraseña" class="control-form" id="clave_usuario" name="clave_usuario" required>
-            <span id="sclave_usuario"></span>
+            <input type="password" placeholder="Contraseña" class="control-form" id="clave_usuario" name="clave_usuario" maxlength="15" required>
+            <span class="span-value" id="sclave_usuario"></span>
         </div>
         <div class="envolver-form">
-            <input type="password" placeholder="Confirmar Contraseña" class="control-form" id="clave_confirmar" name="clave_confirmar" required>
-            <span id="sclave_confirmar"></span>
+            <input type="password" placeholder="Confirmar Contraseña" class="control-form" id="clave_confirmar" name="clave_confirmar" maxlength="15" required>
+            <span class="span-value" id="sclave_confirmar"></span>
         </div>
         <!-- <div class="envolver-form">
             <select name="" id="" class="control-form">
@@ -74,7 +74,6 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                
                 <th>Nombre</th>
                 <th>Telefono</th>
                 <th>Rango</th>
@@ -85,8 +84,7 @@ if (!isset($_SESSION['name'])) {
 
         <tbody>
         <?php foreach ($usuarios as $usuario): ?>
-            <tr>
-                
+            <tr data-id="<?php echo $usuario['id_usuario']; ?>">
                 <td>
                     <span class="campo-nombres">
                     <?php echo htmlspecialchars($usuario['nombres']); ?> <?php echo htmlspecialchars($usuario['apellidos']); ?>
@@ -108,7 +106,7 @@ if (!isset($_SESSION['name'])) {
                 </td>
                 <td>
                     <span class="campo-estatus <?php echo ($usuario['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
-                        onclick="cambiarEstatus(<?php echo $usuario['id_usuario']; ?>, '<?php echo $usuario['estatus']; ?>')"
+                        data-id="<?php echo $usuario['id_usuario']; ?>" 
                         style="cursor: pointer;">
                         <?php echo htmlspecialchars($usuario['estatus']); ?>
                     </span>
@@ -121,24 +119,24 @@ if (!isset($_SESSION['name'])) {
                         </i>
                             <div class="desplegable">
                                 <ul>
-                                    <li><a href="#">Ver</a></li>
                                     <li>
-  <a href="#" class="modificar" 
-     data-id="<?php echo $usuario['id_usuario']; ?>"
-     data-nombres="<?php echo htmlspecialchars($usuario['nombres']); ?>"
-     data-apellidos="<?php echo htmlspecialchars($usuario['apellidos']); ?>"
-     data-usuario="<?php echo htmlspecialchars($usuario['username']); ?>"
-     data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
-     data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
-     data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
-     data-rango="<?php echo htmlspecialchars($usuario['rango']); ?>"
-     data-toggle="modal" 
-     data-target="#modificar_usuario_modal">
-     Modificar
-  </a>
-</li>
-
-                                    <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $usuario['id_usuario']; ?>)">Eliminar</a></li>
+                                        <button class="btn btn-primary btn-modificar"
+                                            data-id="<?php echo $usuario['id_usuario']; ?>"
+                                            data-username="<?php echo htmlspecialchars($usuario['username']); ?>"
+                                            data-nombres="<?php echo htmlspecialchars($usuario['nombres']); ?>"
+                                            data-apellidos="<?php echo htmlspecialchars($usuario['apellidos']); ?>"
+                                            data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
+                                            data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
+                                            data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
+                                            data-rango="<?php echo htmlspecialchars($usuario['rango']); ?>">
+                                            Modificar
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-danger btn-eliminar" 
+                                        data-id="<?php echo $usuario['id_usuario']; ?>"
+                                        >Eliminar</button>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -171,15 +169,15 @@ if (!isset($_SESSION['name'])) {
             </tr>
         </tfoot> -->
     </table>
-
+</div>
 
 
 
 <!-- Modal de modificación -->
-    <div class="modal fade" id="modificar_usuario_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
+<div class="modal fade modal-modificar" id="modificar_usuario_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="modificarusuario" method="POST" enctype="multipart/form-data">
+            <form id="modificarusuario" method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modificar_usuario_modal_label">Modificar Usuario</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -193,32 +191,32 @@ if (!isset($_SESSION['name'])) {
                     <div class="form-group">
                         <label for="modificarnombre">Nombres del Usuario</label>
                         <input type="text" class="form-control" id="modificarnombre" name="nombre" maxlength="15" required>
-                        <span id="smodificarnombre_usuario"></span>
+                        <span class="span-value-modal" id="smodificarnombre_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarapellido_usuario">Apellidos del Usuario</label>
                         <input type="text" class="form-control" id="modificarapellido_usuario" name="apellido_usuario" maxlength="15" required>
-                        <span id="smodificarapellido_usuario"></span>
+                        <span class="span-value-modal" id="smodificarapellido_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarnombre_usuario">Usuario</label>
                         <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="15" required>
-                        <span id="smodificarnombre_usuario"></span>
+                        <span class="span-value-modal" id="smodificarnombre_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificartelefono_usuario">Telefono</label>
                         <input type="text" class="form-control" id="modificartelefono_usuario" name="telefono_usuario" maxlength="15" required>
-                        <span id="smodificartelefono_usuario"></span>
+                        <span class="span-value-modal" id="smodificartelefono_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarcorreo_usuario">Correo</label>
                         <input type="text" class="form-control" id="modificarcorreo_usuario" name="correo_usuario" maxlength="15" required>
-                        <span id="smodificarcorreo_usuario"></span>
+                        <span class="span-value-modal" id="smodificarcorreo_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarclave_usuario">Contraseña del Usuario</label>
                         <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario" required>
-                        <span id="smodificarclave_usuario"></span>
+                        <span class="span-value-modal" id="smodificarclave_usuario"></span>
                     </div>
                     <div class="form-group col-md-4">
                                     <label for="rango">Categorias</label>
@@ -233,7 +231,7 @@ if (!isset($_SESSION['name'])) {
                     
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-cerrar" data-bs-dismiss="modal">Cancelar</button>
+
                     <button type="submit" class="btn btn-primary">Modificar</button>
                 </div>
                 </div>
@@ -252,9 +250,7 @@ if (!isset($_SESSION['name'])) {
   <script src="public/js/jquery.dataTables.min.js"></script>
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatable.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/usuario.js"></script>
-<script src="Javascript/validaciones.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.modificar').forEach(function (btn) {
