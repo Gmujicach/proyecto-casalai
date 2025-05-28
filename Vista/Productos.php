@@ -157,7 +157,7 @@ if (!isset($_SESSION['name'])) {
                     </td>
                                     <td>
                     <span class="campo-estatus <?php echo ($producto['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
-                      click="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
+                      onclick="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
                         style="cursor: pointer;">
                         <?php echo htmlspecialchars($producto['estado']); ?>
                     </span>
@@ -209,7 +209,7 @@ foreach ($caracteristicas as $clave => $valor) {
                                                 data-id="<?php echo $producto['id_producto']; ?>" 
                                                 class="eliminar"
                                             >
-                                                Eliminar Esta
+                                                Eliminar
                                             </a>
                                         </li>
                                     </ul>

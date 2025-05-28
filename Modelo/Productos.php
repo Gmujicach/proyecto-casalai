@@ -474,12 +474,32 @@ public function modificarProducto($id) {
 
 
 
-    public function eliminarProducto($id) {
+public function eliminarProducto($id) {
+    try {
         $sql = "DELETE FROM `tbl_productos` WHERE id_producto = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
-        return $stmt->execute();
+        $stmt->execute();
+        return [
+            'success' => true,
+            'message' => 'Producto eliminado exitosamente.'
+        ];
+    } catch (PDOException $e) {
+        if ($e->getCode() == '23000') {
+            // Código de error para violación de clave foránea
+            return [
+                'success' => false,
+                'message' => 'No se puede eliminar el producto porque tiene registros asociados.'
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Error inesperado: ' . $e->getMessage()
+            ];
+        }
     }
+}
+
     public function obtenerModelos() {
         $query = "SELECT 
     mo.id_modelo AS tbl_modelos,
