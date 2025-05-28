@@ -451,7 +451,6 @@ $(document).ready(function () {
         const estatusActual = span.text().trim();
         const nuevoEstatus = estatusActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
         
-        // Feedback visual inmediato
         span.addClass('cambiando');
         
         $.ajax({
@@ -465,11 +464,9 @@ $(document).ready(function () {
             },
             success: function(data) {
                 span.removeClass('cambiando');
-                
                 if (data.status === 'success') {
                     span.text(nuevoEstatus);
                     span.removeClass('habilitado inhabilitado').addClass(nuevoEstatus);
-                    
                     Swal.fire({
                         icon: 'success',
                         title: '¡Estatus actualizado!',

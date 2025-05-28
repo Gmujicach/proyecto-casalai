@@ -232,7 +232,7 @@ public function modificarUsuario($id_usuario) {
             $sql = "UPDATE tbl_usuarios SET estatus = :estatus WHERE id_usuario = :id_usuario";
             $stmt = $this->conex->prepare($sql);
             $stmt->bindParam(':estatus', $nuevoEstatus);
-            $stmt->bindParam(':id_usuario', $this->id_usuario);
+            $stmt->bindParam(':id_usuario', $this->id);
             
             return $stmt->execute();
         } catch (PDOException $e) {
