@@ -176,16 +176,41 @@ class Cuentabanco extends BD {
     public function eliminarCuentabanco($id_cuenta) {
         return $this->e_cuentabanco($id_cuenta); 
     }
-    private function e_cuentabanco($id_cuenta) {
+private function e_cuentabanco($id_cuenta) {
+    try {
         $sql = "DELETE FROM tbl_cuentas WHERE id_cuenta = :id_cuenta";
-        
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_cuenta', $id_cuenta);
+        $stmt->bindParam(':id_cuenta', $id_cuenta, PDO::PARAM_INT);
         
         $result = $stmt->execute();
-        $this->db = null;
-        return $result;
+
+        if ($result) {
+            return [
+                'success' => true,
+                'message' => 'Cuenta bancaria eliminada exitosamente.'
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'No se pudo eliminar la cuenta bancaria.'
+            ];
+        }
+
+    } catch (PDOException $e) {
+        if ($e->getCode() == '23000') {
+            return [
+                'success' => false,
+                'message' => 'No se puede eliminar la cuenta bancaria porque tiene registros asociados.'
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Error inesperado: ' . $e->getMessage()
+            ];
+        }
     }
+}
+
 
     public function verificarEstado() {
         return $this->v_estadoCuenta(); 

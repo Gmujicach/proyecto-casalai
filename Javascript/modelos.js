@@ -33,41 +33,43 @@ $(document).ready(function () {
     }
 
     // Función para agregar una nueva fila a la tabla
-    function agregarFilaModelo(modelo) {
-        const nuevaFila = `
-            <tr data-id="${modelo.id_modelo}">
-                <td>${modelo.id_modelo}</td>
-                <td>${modelo.nombre_marca}</td>
-                <td>${modelo.nombre_modelo}</td>
-                <td>
-                    <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                        <div class="desplegable">
-                            <ul>
-                                <li>
-                                    <button class="btn btn-primary btn-modificar"
-                                        data-id="${modelo.id_modelo}"
-                                        data-marcaid="${modelo.id_marca}"
-                                        data-nombre="${modelo.nombre_modelo}">
-                                        Modificar
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-danger btn-eliminar"
-                                        data-id="${modelo.id_modelo}">
-                                        Eliminar
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+function agregarFilaModelo(modelo) {
+    const nuevaFila = `
+        <tr data-id="${modelo.id_modelo}">
+            <td>${modelo.id_modelo}</td>
+            <td>${modelo.nombre_marca}</td>
+            <td>${modelo.nombre_modelo}</td>
+            <td>
+                <div class="acciones-boton">
+                    <i class="vertical">
+                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                    </i>
+                    <div class="desplegable">
+                        <ul>
+                            <li>
+                                <button class="btn btn-primary btn-modificar"
+                                    data-id="${modelo.id_modelo}"
+                                    data-marcaid="${modelo.id_marca}"
+                                    data-nombre="${modelo.nombre_modelo}">
+                                    Modificar
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn btn-danger btn-eliminar"
+                                    data-id="${modelo.id_modelo}">
+                                    Eliminar
+                                </button>
+                            </li>
+                        </ul>
                     </div>
-                </td>
-            </tr>
-        `;
-        $('#tablaConsultas tbody').append(nuevaFila);
-    }
+                </div>
+            </td>
+        </tr>
+    `;
+    const tabla = $('#tablaConsultas').DataTable();
+    tabla.row.add($(nuevaFila)).draw(false); // Agrega la fila
+    tabla.page('last').draw('page');         // Muestra la última página
+}
 
     // Resetear formulario
     function resetModelo() {
@@ -202,7 +204,9 @@ $(document).ready(function () {
                 enviarAjax(datos, function(respuesta){
                     if (respuesta.status === 'success') {
                         Swal.fire('Eliminado!', 'El modelo ha sido eliminado.', 'success');
-                        $(`#tablaConsultas tbody tr[data-id="${id_modelo}"]`).remove();
+                        const tabla = $('#tablaConsultas').DataTable();
+                        const fila = $(`#tablaConsultas tbody tr[data-id="${id_modelo}"]`);
+                        tabla.row(fila).remove().draw();
                     } else {
                         Swal.fire('Error', respuesta.message, 'error');
                     }

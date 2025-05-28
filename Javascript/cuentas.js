@@ -479,9 +479,11 @@ $(document).ready(function () {
     }
 
     // Función para eliminar una fila de la tabla
-    function eliminarFilaCuenta(id_cuenta) {
-        $(`#tablaConsultas tbody tr[data-id="${id_cuenta}"]`).remove();
-    }
+function eliminarFilaCuenta(id_cuenta) {
+    const tabla = $('#tablaConsultas').DataTable();
+    const fila = $(`#tablaConsultas tbody tr[data-id="${id_cuenta}"]`);
+    tabla.row(fila).remove().draw();
+}
 
     // Función para cambiar el estado de la cuenta
     function cambiarEstado(id_cuenta) {
@@ -583,4 +585,12 @@ $(document).ready(function () {
     $(document).on('click', function() {
         $('.desplegable').hide();
     });
+    
+    function muestraMensaje(mensaje) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: mensaje
+    });
+}
 });
