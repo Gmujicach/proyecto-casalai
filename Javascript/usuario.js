@@ -612,7 +612,7 @@ function space(str) {
 
     // Cambio de estado
     $(document).on('click', '.campo-estatus', function() {
-        const id_usuario = $(this).data('id_usuario');
+        const id_usuario = $(this).data('id');
         cambiarEstatus(id_usuario);
     });
 
