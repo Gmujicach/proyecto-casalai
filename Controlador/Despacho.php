@@ -16,7 +16,7 @@ $k = new Despacho();
 if (is_file("vista/Despacho.php")) {
     $accion = $_POST['accion'] ?? '';
 
- /*   if (!empty($_POST)) {
+   if (!empty($_POST)) {
         switch ($accion) {
             case 'listado':
                 $respuesta = $k->listadoproductos();
@@ -24,60 +24,23 @@ if (is_file("vista/Despacho.php")) {
                 break;
 
             case 'registrar':
-                $k->setidproveedor($_POST['proveedor']);
-                $k->setcorrelativo($_POST['correlativo']);
-                $respuesta = $k->registrar(
-                    $_POST['producto'],
-                    $_POST['cantidad'],
-                    $_POST['costo']
-                );
-                echo json_encode($respuesta);
+                $k->setIdClientes($_POST['id_clientes']);
+                $k->setCorrelativo($_POST['correlativo']);
+                $respuesta = $k->registrarDespacho();
+                echo json_encode(value: $respuesta);
                 break;
 
             case 'buscar':
-                $correlativo = $_POST['correlativo'] ?? null;
-                $k->setcorrelativo($correlativo);
-                $respuesta = $k->buscar();
-                if (!$respuesta) {
-                    echo json_encode([
-                        "resultado" => "no_encontro",
-                        "mensaje" => "No se encontró el correlativo: " . $correlativo
-                    ]);
-                } else {
-                    echo json_encode($respuesta);
-                }
-                break;
 
-            case 'obtener_detalles':
-                // Para cargar los datos de productos antes de modificar
-                $idRecepcion = $_POST['id_recepcion'] ?? null;
-                if ($idRecepcion) {
-                    $respuesta = $k->obtenerDetallesPorRecepcion($idRecepcion);
-                    echo json_encode($respuesta);
-                } else {
-                    echo json_encode(['error' => true, 'mensaje' => 'ID de recepción no recibido']);
-                }
-                break;
-
+/*
 case 'modificarDespacho':
-    $idRecepcion = $_POST['id_recepcion'] ?? null;
-    $idproducto = $_POST['productos'] ?? [];
-    $cantidad = $_POST['cantidades'] ?? [];
-    $costo = $_POST['costos'] ?? [];   
-    $iddetalle = $_POST['iddetalles'] ?? [];
 
-    $k->setidproveedor($_POST['proveedor']);
+    $k->setIdClientes($_POST['clientes']);
     $k->setcorrelativo($_POST['correlativo']);
-    $k->setfecha($_POST['fecha']);
+    $k->setFechaDespacho($_POST['fecha']);
 
     if ($idRecepcion) {
-        $respuesta = $k->modificar(
-            $idRecepcion,
-            $idproducto,
-            $cantidad,
-            $costo,
-            $iddetalle
-        );
+        $respuesta = $k->modificarDespacho();
         if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificarRecepcion') {
             echo json_encode([
                 'status' => 'success',
@@ -92,7 +55,7 @@ case 'modificarDespacho':
     } else {
         echo json_encode(['status' => 'error', 'message' => 'ID de recepción faltante']);
     }
-    break;
+    break;*/
 
             default:
                 echo json_encode(['status' => 'error', 'message' => 'Acción no válida '.$accion.'']);
@@ -100,7 +63,7 @@ case 'modificarDespacho':
 
         exit;
     }
-*/
+
     // Vista inicial
     $recepciones = getdespacho();
     $proveedores = $k->obtenerfactura();

@@ -133,7 +133,6 @@ if (!isset($_SESSION['name'])) {
 
 
 					</td>
-					<?php $rendered[] = $correlativo; ?>
 				
 				</tr>
 			</tbody>
