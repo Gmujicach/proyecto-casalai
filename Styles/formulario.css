@@ -32,14 +32,12 @@ input, select, button{
 }
 
 .formulario-responsivo{
-   min-height: 100vh;
-   background-size: cover;
-   background-repeat: no-repeat;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-  
-
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .fondo-form{
@@ -56,27 +54,20 @@ input, select, button{
     padding: 20px 45px;
 }
 
-.fondo-form h3{
-    text-transform: uppercase;
-    font-size: 55px;
-    text-align: center;
-    margin-bottom: 25px;
-}
-
 .grupo-form{
     display: flex;
 }
 
 .grupo-form input{
     width: 50%;
-}
-
-.grupo-form input:first-child{
-    margin-right: 25px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .envolver-form{
     position: relative;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .control-form{
@@ -104,10 +95,14 @@ input, select, button{
     border-radius: 4px;
 }
 
+.form-select{
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
 select{
     cursor: pointer;
     color: rgb(101, 162, 241);
-
 }
 
 select option[value=""] [disabled]{
@@ -134,7 +129,7 @@ select option[value=""] [disabled]{
 
 .boton-form:hover {
     background-color: #4d84e2;
-  }
+}
 
 .boton-reset{
     border-radius: 10px;
@@ -165,9 +160,9 @@ select option[value=""] [disabled]{
     margin-bottom: 7px;
 }
 
-  /* Estilos para el Responsive del Formulario*/
+/* Estilos para el Responsive del Formulario*/
 
-  @media screen and (max-width: 750px){
+@media screen and (max-width: 750px){
     .fondo-form{
         display: block;
     }
@@ -184,4 +179,4 @@ select option[value=""] [disabled]{
     .boton-reset{
         margin-top: 10px;
     }
-    }
+}

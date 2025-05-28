@@ -22,17 +22,19 @@ if (!isset($_SESSION['name'])) {
   <div class="fondo-form">
     <form id="incluirProductoForm" action="" method="POST">
       <input type="hidden" name="accion" value="ingresar">
-      <h3>INCLUIR PRODUCTOS</h3>
+      <h3 class="titulo-form">INCLUIR PRODUCTOS</h3>
 
-      <div class="grupo-form">
+      <div class="envolver-form">
         <input type="text" placeholder="Nombre del producto" maxlength="15" class="control-form" id="nombre_producto" name="nombre_producto" required>
         <span id="snombre_producto"></span>
-
-        <input type="text" placeholder="Descripción del producto" maxlength="50" class="control-form" id="descripcion_producto" name="descripcion_producto" required>
+      </div>
+    <br>
+      <div class="envolver-form">
+        <label for="Descripcion_producto">Descripción del producto</label>
+        <textarea maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" rows="3"></textarea>
         <span id="sdescripcion_producto"></span>
       </div>
-
-      <br>
+    <br>
       <select class="form-select" id="Modelo" name="Modelo" required>
         <option value="">Seleccionar Modelo</option>
         <?php foreach ($modelos as $modelo): ?>
@@ -40,32 +42,24 @@ if (!isset($_SESSION['name'])) {
         <?php endforeach; ?>
       </select>
 
-      <br>
-      <div class="envolver-form">
-        <label for="Stock_Actual">Stock Actual</label>
-        <input type="number" class="form-control" value="0" id="Stock_Actual" name="Stock_Actual" min="0" required>
-      </div>
-
       <div class="grupo-form">
-        <input type="number" placeholder="Stock Máximo" maxlength="10" class="control-form" min="0" id="Stock_Maximo" name="Stock_Maximo" required>
+        <input type="number" placeholder="Stock Actual" maxlength="10" class="control-form" value="0" id="Stock_Actual" name="Stock_Actual" required>
+        <span id="sStock_Actual"></span>
+
+        <input type="number" placeholder="Stock Máximo" maxlength="10" class="control-form" id="Stock_Maximo" name="Stock_Maximo" required>
         <span id="sStock_Maximo"></span>
 
         <input type="number" placeholder="Stock Mínimo" maxlength="10" class="control-form" min="0" id="Stock_Minimo" name="Stock_Minimo" required>
         <span id="sStock_Minimo"></span>
       </div>
-
-      <br>
-      <div class="form-group">
+    <br>
+      <div class="envolver-form">
         <label for="Clausula_garantia">Cláusula de garantía</label>
         <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="3"></textarea>
         <span id="sClausula_garantia"></span>
       </div>
-
-      <br>
+    <br>
       <div class="grupo-form">
-        <input type="text" placeholder="Código Serial" maxlength="10" class="control-form" id="Seriales" name="Seriales" required>
-        <span id="sSeriales"></span>
-
         <select class="form-select" id="Categoria" name="Categoria" required onchange="mostrarCamposCategoria(this.value)">
           <option value="">Seleccionar Categoría</option>
           <option value="1">IMPRESORA</option>
@@ -79,13 +73,18 @@ if (!isset($_SESSION['name'])) {
       <!-- Campos adicionales dinámicos por categoría -->
       <div id="caracteristicasCategoria" class="grupo-form"></div>
 
-      <div class="envolver-form">
+      <div class="grupo-form">
+        <input type="text" placeholder="Código Serial" maxlength="10" class="control-form" id="Seriales" name="Seriales" required>
+        <span id="sSeriales"></span>
+
         <input type="text" placeholder="Precio" maxlength="10" class="control-form" id="Precio" name="Precio" required>
         <span id="sPrecio"></span>
       </div>
 
-      <button class="boton-form" type="submit">Registrar</button>
-      <button class="boton-reset" type="reset">Reset</button>
+      <div class="grupo-boton">
+        <button class="boton-reset" type="reset">Reset</button>
+        <button class="boton-form" type="submit">Registrar</button>
+      </div>
     </form>
   </div>
 </div>
