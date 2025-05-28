@@ -113,17 +113,6 @@ if (!isset($_SESSION['name'])) {
                         <?php echo htmlspecialchars($usuario['estatus']); ?>
                     </span>
                 </td>
-                <!-- <td>
-                    <span class="precio">200
-                     <//?php //echo htmlspecialchars($usuario['precio']); ?> -->
-                    <!-- </span>
-                    <span class="moneda">USD</span>
-                </td> -->
-                <!-- <td>
-                    <span>
-                        <a href="#"class="">Ver Mas</a>
-                    </span>
-                </td> -->
                 <td>
                     <span>
                         <div class="acciones-boton">

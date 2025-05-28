@@ -132,10 +132,15 @@ if (!isset($_SESSION['name'])) {
                         <?php echo htmlspecialchars($producto['nombre_caracteristicas']); ?>
                     </td>
 
-                    <td><?php echo htmlspecialchars($producto['precio']); ?></td>
+                    <td>
+                      <span class="precio"><?php echo htmlspecialchars($producto['precio']); ?></span>
+                     </span>
+                        <span class="moneda">USD</span>
+                
+                    </td>
                                     <td>
                     <span class="campo-estatus <?php echo ($producto['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
-                        onclick="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
+                      click="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
                         style="cursor: pointer;">
                         <?php echo htmlspecialchars($producto['estado']); ?>
                     </span>
