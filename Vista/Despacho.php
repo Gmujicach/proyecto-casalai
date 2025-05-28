@@ -33,7 +33,7 @@ if (!isset($_SESSION['name'])) {
 								<option value='disabled' disabled selected>Seleccione un Proveedor</option>
 								<?php
 								foreach ($proveedores  as $proveedor) {
-									echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre'] . "</option>";
+									echo "<option value='" . $proveedor['id_clientes'] . "'>" . $proveedor['nombre'] . "</option>";
 								} ?>
 							</select>
 						</div>
@@ -115,73 +115,18 @@ if (!isset($_SESSION['name'])) {
 				<th>FECHA</th>
 				<th>CORRELATIVO</th>
 				<th>PROVEEDOR</th>
-				<th>PRODUCTO</th>
-				<th>CANTIDAD</th>
-				<th>COSTOS DE INVERSION</th>
 				<th>MODIFICACION</th>
 			</tr>
 			</thead>
 			<tbody>
-			<?php
-			$rowspans = [];
-			foreach ($recepciones as $recepcion) {
-				$key = $recepcion['correlativo'];
-				if (!isset($rowspans[$key])) {
-					$rowspans[$key] = 1;
-				} else {
-					$rowspans[$key]++;
-				}
-			}
 
 
-			$rendered = [];
 
-			foreach ($recepciones as $recepcion):
-				$correlativo = $recepcion['correlativo'];
-			?>
-				<tr>
-				<?php if (!in_array($correlativo, $rendered)): ?>
-					<td rowspan="<?= $rowspans[$correlativo] ?>">
-					<?= htmlspecialchars($recepcion['fecha']) ?>
-					</td>
-					<td rowspan="<?= $rowspans[$correlativo] ?>">
-					<?= htmlspecialchars($recepcion['correlativo']) ?>
-					</td>
-					<td rowspan="<?= $rowspans[$correlativo] ?>">
-					<?= htmlspecialchars($recepcion['nombre']) ?>
-					</td>
-				<?php endif; ?>
 
-				<td><?= htmlspecialchars($recepcion['nombre_producto']); ?></td>
-				<td><?= htmlspecialchars($recepcion['cantidad']); ?></td>
-				<td><?= htmlspecialchars($recepcion['costo']); ?></td>
-					<?php
-					$productosDelCorrelativo = array_filter($recepciones, function($r) use ($correlativo) {
-						return $r['correlativo'] === $correlativo;
-					});
-					$dataProductos = [];
-
-					foreach ($productosDelCorrelativo as $item) {
-						$dataProductos[] = [
-							'id_producto' => $item['id_producto'],
-							'nombre_producto' => $item['nombre_producto'],
-							'cantidad' => $item['cantidad'],
-							'costo' => $item['costo'],
-							'iddetalles' => $item['id_detalle_recepcion_productos'] 
-						];
-					}
-					?>
-
-				<?php if (!in_array($correlativo, $rendered)): ?>
-					<td rowspan="<?= $rowspans[$correlativo] ?>">
+					<td>
 						<button class="btn-modificar"
 							data-bs-toggle="modal"
-							data-bs-target="#modalModificar"
-							data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
-							data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
-							data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
-							data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"
-							data-productos='<?= json_encode($dataProductos, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+							data-bs-target="#modalModificar">
 							Modificar
 						</button>
 
@@ -189,9 +134,8 @@ if (!isset($_SESSION['name'])) {
 
 					</td>
 					<?php $rendered[] = $correlativo; ?>
-				<?php endif; ?>
+				
 				</tr>
-			<?php endforeach; ?>
 			</tbody>
 		</table>
 	</div>

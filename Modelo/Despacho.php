@@ -3,9 +3,53 @@
 require_once 'Config/config.php';
 
 class Despacho extends BD
-{
-
+{   
     private $tabledespacho ='tbl_despachos';
+    private $id_despacho;
+    private $id_clientes;
+    private $fecha_despacho;
+    private $correlativo;
+
+    public function __construct() {
+    parent::__construct('P');
+    $this->db = $this->getConexion();
+}
+    public function setIdDespacho($id_despacho)
+    {
+        $this->id_despacho = $id_despacho;
+    }
+    public function getIdDespacho()
+    {
+        return $this->id_despacho;
+    }
+    public function setIdClientes($id_clientes)
+    {
+        $this->id_clientes = $id_clientes;
+    }
+    public function getIdClientes()
+    {
+        return $this->id_clientes;
+    }
+    public function setFechaDespacho($fecha_despacho)
+    {
+        $this->fecha_despacho = $fecha_despacho;
+    }
+    public function getFechaDespacho()
+    {
+        return $this->fecha_despacho;
+    }
+    public function setCorrelativo($correlativo)
+    {
+        $this->correlativo = $correlativo;
+    }
+    public function getCorrelativo()
+    {
+        return $this->correlativo;
+    }
+
+
+
+    
 
     function registrar($id_clientes, $id_producto,$cantidad, $correlativo)
     {
@@ -97,25 +141,39 @@ class Despacho extends BD
         return $r;
     }
 
-    public function obtenercliente()
+    public function obtenerfactura()
     {
         $co = $this->getConexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $p = $co->prepare("SELECT id_clientes, nombre FROM tbl_clientes ");
+        $p = $co->prepare("SELECT f.id_factura, c.nombre , c.id_clientes, f.fecha, f.estatus
+        FROM tbl_facturas AS f
+        INNER JOIN tbl_clientes AS c ON c.id_clientes = f.cliente; ");
         $p->execute();
         $r = $p->fetchAll(PDO::FETCH_ASSOC);
         return $r;
     }
-
+	function consultarproductos() {
+    $sql = "SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial
+            FROM tbl_productos AS p 
+            INNER JOIN tbl_modelos AS m ON p.id_modelo = m.id_modelo 
+            INNER JOIN tbl_marcas AS mar ON m.id_marca = mar.id_marca;";
+    $conexion = $this->getConexion()->prepare($sql);
+    $conexion->execute();
+    $registros = $conexion->fetchAll(PDO::FETCH_ASSOC);
+    return $registros;
+    }
     public function getdespacho() {
-        // Punto de depuración: Iniciando getmarcas
-        //echo "Iniciando getmarcas.<br>";
-        
-        // Primera consulta para obtener datos de marcas
-        $querydespachos = 'SELECT * FROM ' . $this->tabledespacho;
+
+        $querydespachos = 'SELECT d.id_despachos, d.correlativo, d.fecha_despacho,
+         c.id_clientes, c.nombre, c.cedula 
+        FROM tbl_despachos AS d 
+        INNER JOIN tbl_facturas AS f ON d.id_despachos = f.id_factura 
+        INNER JOIN tbl_clientes AS c ON f.cliente = c.id_clientes;
+        ';
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";
+        
         
         $stmtdespachos = $this->getConexion()->prepare($querydespachos);
         $stmtdespachos->execute();

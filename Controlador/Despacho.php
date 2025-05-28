@@ -1,22 +1,22 @@
 <?php  
 
-function getrecepcion() {
-    $recepcion = new Recepcion();
-    return $recepcion->getrecepcion();
+function getdespacho() {
+    $recepcion = new Despacho();
+    return $recepcion->getdespacho();
 }
 
-if (!is_file("Modelo/Recepcion.php")) {
+if (!is_file("Modelo/Despacho.php")) {
     echo "Falta definir la clase " . $pagina;
     exit;
 }
 
-require_once("Modelo/Recepcion.php");
-$k = new Recepcion();
+require_once("Modelo/Despacho.php");
+$k = new Despacho();
 
-if (is_file("vista/Recepcion.php")) {
+if (is_file("vista/Despacho.php")) {
     $accion = $_POST['accion'] ?? '';
 
-    if (!empty($_POST)) {
+ /*   if (!empty($_POST)) {
         switch ($accion) {
             case 'listado':
                 $respuesta = $k->listadoproductos();
@@ -59,7 +59,7 @@ if (is_file("vista/Recepcion.php")) {
                 }
                 break;
 
-case 'modificarRecepcion':
+case 'modificarDespacho':
     $idRecepcion = $_POST['id_recepcion'] ?? null;
     $idproducto = $_POST['productos'] ?? [];
     $cantidad = $_POST['cantidades'] ?? [];
@@ -100,10 +100,10 @@ case 'modificarRecepcion':
 
         exit;
     }
-
+*/
     // Vista inicial
-    $recepciones = getrecepcion();
-    $proveedores = $k->obtenerproveedor();
+    $recepciones = getdespacho();
+    $proveedores = $k->obtenerfactura();
     $productos = $k->consultarproductos();
 
     require_once("vista/Despacho.php");
