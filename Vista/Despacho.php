@@ -373,9 +373,8 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 });
 </script>
 
-
-
-	<script type="text/javascript" src="Javascript/recepcion.js"></script>
-
+    <script src="Javascript/despacho.js"></script>
+    <script src="Javascript/validaciones.js"></script>
 </body>
-</html>
+
+<?php include 'footer.php'; ?>

@@ -97,10 +97,8 @@ if (!isset($_SESSION['name'])) {
                 <th>ID</th>
                 <th>Producto</th>
                 <th>Descripción</th>
-                <th>Modelo</th> <!-- CAMBIO: antes decía id_modelo -->
                 <th>Stock Actual</th>
-                <th>Stock Máximo</th>
-                <th>Stock Mínimo</th>
+                <th>Stock Max<hr>Min</th>
                 <th>Serial</th>
                 <th>Cláusula de Garantía</th>
                 <th>Categoría</th> <!-- CAMBIO: antes decía id_categoria -->
@@ -112,19 +110,38 @@ if (!isset($_SESSION['name'])) {
         <tbody>
             <?php foreach ($productos as $producto): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['descripcion_producto']); ?></td>
-
-                    <!-- AQUÍ cambia: mostramos el nombre del modelo -->
                     <td>
+                      <?php echo htmlspecialchars($producto['id_producto']); ?>
+                    </td>
+                    <td>
+                      <span class="campo-nombres">
+                      <?php echo htmlspecialchars($producto['nombre_producto']); ?>
+                      </span>
+                      <span class="campo-correo">
                         <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="campo-nombres">
+                      <?php echo htmlspecialchars($producto['descripcion_producto']); ?>
+                      </span>
                     </td>
 
-                    <td><?php echo htmlspecialchars($producto['stock']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['stock_maximo']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['stock_minimo']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['serial']); ?></td>
+                    <td>
+                      <?php echo htmlspecialchars($producto['stock']); ?>
+                    </td>
+                    <td>
+                      <span class="campo-nombres">
+                      <?php echo htmlspecialchars($producto['stock_maximo']); ?>
+                      </span>
+                      <span><hr></span>
+                      <span class="campo-nombres">
+                      <?php echo htmlspecialchars($producto['stock_minimo']); ?>
+                      </span>
+                    </td>
+                    <td>
+                      <?php echo htmlspecialchars($producto['serial']); ?>
+                    </td>
                     <td><?php echo htmlspecialchars($producto['clausula_garantia']); ?></td>
 
                     <!-- AQUÍ cambia: mostramos el nombre de la categoría -->
