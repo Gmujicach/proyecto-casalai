@@ -21,31 +21,31 @@ if (!isset($_SESSION['name'])) {
 <div class="formulario-responsivo">
     <div class="fondo-form">
         <form id="incluirclientes" action="" method="POST">
-            <input type="hidden" name="accion" value="ingresar">
+            <input type="hidden" name="accion" value="registrar">
             <h3 class="titulo-form">INCLUIR CLIENTE</h3>
                 
             <div class="envolver-form">
                 <input class="control-form" placeholder="Nombre completo" maxlength="100" type="text" id="nombre" name="nombre" required>
-                <span id="snombre"></span>
+                <span class="span-value" id="snombre"></span>
             </div>
 
             <div class="grupo-form">
-                <input class="control-form" placeholder="Cedula/Rif" maxlength="15" type="text" id="cedula" name="cedula" required>
-                <span id="scedula"></span>
+                <input class="control-form" placeholder="Cedula/Rif" maxlength="12" type="text" id="cedula" name="cedula" required>
+                <span class="span-value" id="scedula"></span>
             
-                <input class="control-form" placeholder="Teléfono" maxlength="11" type="text" id="telefono" name="telefono" required>
-                <span id="stelefono"></span>
+                <input class="control-form" placeholder="Teléfono" maxlength="13" type="text" id="telefono" name="telefono" required>
+                <span class="span-value" id="stelefono"></span>
             </div>
         <br>
             <div class="envolver-form">
                 <label for="Direccion">Dirección</label>
                 <textarea class="form-control" maxlength="50" type="text" id="direccion" name="direccion" rows="3"></textarea>
-                <span id="sdireccion"></span>
+                <span class="span-value" id="sdireccion"></span>
             </div>
             
             <div class="envolver-form">
-                <input class="control-form" placeholder="Correo electrónico" type="text" id="correo" name="correo" required>
-                <span id="scorreo"></span>
+                <input class="control-form" placeholder="Correo electrónico" type="text" id="correo" name="correo" maxlength="50" required>
+                <span class="span-value" id="scorreo"></span>
             </div>
 
             <button class="boton-form" type="submit">Registrar</button>
@@ -70,7 +70,7 @@ if (!isset($_SESSION['name'])) {
         <tbody>
             <?php foreach ($clientes as $cliente): ?>
                 <?php if ($cliente['activo'] == 1) { ?>
-                <tr>
+                <tr data-id="<?php echo $cliente['id_clientes']; ?>">
                     <td><?php echo htmlspecialchars($cliente['nombre']); ?></td>
                     <td><?php echo htmlspecialchars($cliente['cedula']); ?></td>
                     <td><?php echo htmlspecialchars($cliente['direccion']); ?></td>
@@ -129,29 +129,29 @@ if (!isset($_SESSION['name'])) {
                     <!-- Campos del formulario de modificación -->
                     <input type="hidden" id="modificar_id_clientes" name="id_clientes">
                     <div class="form-group">
-                        <label for="modificarnombre">Nombre</label>
-                        <input type="text" class="form-control" maxlength="15" id="modificarnombre" name="nombre" required>
-                        <span id="smodificarnombre"></span>
+                        <label for="modificarnombre">Nombre completo</label>
+                        <input type="text" class="form-control" maxlength="100" id="modificarnombre" name="nombre" required>
+                        <span class="span-value-modal" id="smodificarnombre"></span>
                     </div>
                     <div class="form-group">
-                        <label for="modificardireccion">Direccion</label>
-                        <input type="text" class="form-control" id="modificardireccion" name="direccion" required>
-                        <span id="smodificardireccion"></span>
+                        <label for="modificarcedula">Cédula</label>
+                        <input type="text" class="form-control" id="modificarcedula" name="cedula" maxlength="12" required>
+                        <span class="span-value-modal" id="smodificarcedula"></span>
                     </div>
                     <div class="form-group">
-                        <label for="modificartelefono">Telefono</label>
-                        <input type="text" class="form-control" id="modificartelefono" name="telefono" required>
-                        <span id="smodificartelefono"></span>
+                        <label for="modificartelefono">Teléfono</label>
+                        <input type="text" class="form-control" id="modificartelefono" name="telefono" maxlength="13" required>
+                        <span class="span-value-modal" id="smodificartelefono"></span>
                     </div>
                     <div class="form-group">
-                        <label for="modificarcedula">Cedula</label>
-                        <input type="text" class="form-control" id="modificarcedula" name="cedula" required>
-                        <span id="smodificarcedula"></span>
+                        <label for="modificardireccion">Dirección</label>
+                        <textarea class="form-control" maxlength="50" type="text" id="modificardireccion" name="modificardireccion" rows="3"></textarea>
+                        <span class="span-value-modal" id="smodificardireccion"></span>
                     </div>
                     <div class="form-group">
-                        <label for="modificarcorreo">Correo</label>
-                        <input type="text" class="form-control" id="modificarcorreo" name="correo" required>
-                        <span id="smodificarcorreo"></span>
+                        <label for="modificarcorreo">Correo electrónico</label>
+                        <input type="text" class="form-control" id="modificarcorreo" name="correo" maxlength="50" required>
+                        <span class="span-value-modal" id="smodificarcorreo"></span>
                     </div>
                     
                 </div>
@@ -179,13 +179,12 @@ if (!isset($_SESSION['name'])) {
 
 </div>
 
-<script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script src="Javascript/clientes.js"></script>
-<script src="Javascript/validaciones.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>
