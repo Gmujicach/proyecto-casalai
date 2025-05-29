@@ -194,7 +194,10 @@ $(document).ready(function() {
     $('#tablaConsultas').DataTable({
         language: {
             url: 'Public/js/es-ES.json'
-        }
+        },
+        columnDefs: [
+            { orderable: false, targets: 5 } // Deshabilitar ordenamiento para columna de acciones
+        ]
     });
 });
 </script>

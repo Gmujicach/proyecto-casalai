@@ -131,54 +131,49 @@ $(document).ready(function () {
     }
 
     function agregarFilaCliente(cliente) {
-    // Verifica que cliente tenga los datos esperados
-    console.log('Datos del cliente recibidos:', cliente);
+    // Verificar si DataTables está inicializado
+    const tabla = $('#tablaConsultas').DataTable();
     
-    const nuevaFila = `
-        <tr data-id="${cliente.id_clientes}">
-            <td>${cliente.nombre}</td>
-            <td>${cliente.cedula}</td>
-            <td>${cliente.direccion}</td>
-            <td>${cliente.telefono}</td>
-            <td>${cliente.correo}</td>
-            <td>
-                <div class="acciones-boton">
-                    <i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                    <div class="desplegable">
-                        <ul>
-                            <li>
-                                <button class="btn btn-primary btn-modificar"
-                                    data-id="${cliente.id_clientes}"
-                                    data-nombre="${cliente.nombre}"
-                                    data-cedula="${cliente.cedula}"
-                                    data-direccion="${cliente.direccion}"
-                                    data-telefono="${cliente.telefono}"
-                                    data-correo="${cliente.correo}">
-                                    Modificar
-                                </button>
-                            </li>
-                            <li>
-                                <button class="btn btn-danger btn-eliminar"
-                                    data-id="${cliente.id_clientes}">
-                                    Eliminar
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    `;
+    // Crear la nueva fila como un array de datos (en el mismo orden que las columnas)
+    const nuevaFila = [
+        cliente.nombre,
+        cliente.cedula,
+        cliente.direccion,
+        cliente.telefono,
+        cliente.correo,
+        `<div class="acciones-boton">
+            <i class="vertical">
+                <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+            </i>
+            <div class="desplegable">
+                <ul>
+                    <li>
+                        <button class="btn btn-primary btn-modificar"
+                            data-id="${cliente.id_clientes}"
+                            data-nombre="${cliente.nombre}"
+                            data-cedula="${cliente.cedula}"
+                            data-direccion="${cliente.direccion}"
+                            data-telefono="${cliente.telefono}"
+                            data-correo="${cliente.correo}">
+                            Modificar
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn btn-danger btn-eliminar"
+                            data-id="${cliente.id_clientes}">
+                            Eliminar
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>`
+    ];
+
+    // Agregar la nueva fila al DataTable y redibujar
+    tabla.row.add(nuevaFila).draw(false);
     
-    // Agrega la nueva fila a la tabla
-    $('#tablaConsultas tbody').prepend(nuevaFila);
-    
-    // Si usas DataTables, necesitas redibujar la tabla
-    if($.fn.DataTable.isDataTable('#tablaConsultas')) {
-        $('#tablaConsultas').DataTable().draw();
-    }
+    // Opcional: ordenar por la columna 0 (nombre) de forma ascendente
+    tabla.order([0, 'asc']).draw();
 }
     // Resetear formulario
     function resetCliente() {
@@ -210,23 +205,13 @@ $(document).ready(function () {
             processData: false,
             dataType: 'json',
             success: function(respuesta){
-                // Verifica primero si es un objeto válido
-                if(typeof respuesta === 'string') {
-                    try {
-                        respuesta = JSON.parse(respuesta);
-                    } catch(e) {
-                        console.error('Error parsing JSON:', e);
-                        return;
-                    }
-                }
-
                 if(respuesta.status === "success"){
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
                         text: respuesta.message || 'Cliente registrado correctamente'
                     }).then(() => {
-                        // Agregar la nueva fila y resetear el formulario
+                        // Agregar la nueva fila a DataTables
                         if(respuesta.cliente) {
                             agregarFilaCliente(respuesta.cliente);
                         }
