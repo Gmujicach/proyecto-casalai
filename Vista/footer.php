@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
   </div>
     <!-- Bootstrap JS -->
   <script src='Public/bootstrap/js/bootstrap.bundle.min.js'></script>
-  <script src="Javascript/validaciones.js"></script>
   <script src="Public/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="Public/js/jquery-3.7.1.min.js"></script>
   <script src="Public/js/jquery.dataTables.min.js"></script>

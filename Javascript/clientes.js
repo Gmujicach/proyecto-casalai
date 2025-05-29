@@ -131,46 +131,55 @@ $(document).ready(function () {
     }
 
     function agregarFilaCliente(cliente) {
-        const nuevaFila = `
-            <tr data-id="${cliente.id_clientes}">
-                <td>${cliente.nombre}</td>
-                <td>${cliente.cedula}</td>
-                <td>${cliente.direccion}</td>
-                <td>${cliente.telefono}</td>
-                <td>${cliente.correo}</td>
-                <td>
-                    <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                        <div class="desplegable">
-                            <ul>
-                                <li>
-                                    <button class="btn btn-primary btn-modificar"
-                                        data-id="${cliente.id_clientes}"
-                                        data-nombre="${cliente.nombre}"
-                                        data-cedula="${cliente.cedula}"
-                                        data-direccion="${cliente.direccion}"
-                                        data-telefono="${cliente.telefono}"
-                                        data-correo="${cliente.correo}">
-                                        Modificar
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-danger btn-eliminar"
-                                        data-id="${cuenta.id_clientes}">
-                                        Eliminar
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+    // Verifica que cliente tenga los datos esperados
+    console.log('Datos del cliente recibidos:', cliente);
+    
+    const nuevaFila = `
+        <tr data-id="${cliente.id_clientes}">
+            <td>${cliente.nombre}</td>
+            <td>${cliente.cedula}</td>
+            <td>${cliente.direccion}</td>
+            <td>${cliente.telefono}</td>
+            <td>${cliente.correo}</td>
+            <td>
+                <div class="acciones-boton">
+                    <i class="vertical">
+                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                    </i>
+                    <div class="desplegable">
+                        <ul>
+                            <li>
+                                <button class="btn btn-primary btn-modificar"
+                                    data-id="${cliente.id_clientes}"
+                                    data-nombre="${cliente.nombre}"
+                                    data-cedula="${cliente.cedula}"
+                                    data-direccion="${cliente.direccion}"
+                                    data-telefono="${cliente.telefono}"
+                                    data-correo="${cliente.correo}">
+                                    Modificar
+                                </button>
+                            </li>
+                            <li>
+                                <button class="btn btn-danger btn-eliminar"
+                                    data-id="${cliente.id_clientes}">
+                                    Eliminar
+                                </button>
+                            </li>
+                        </ul>
                     </div>
-                </td>
-            </tr>
-        `;
-        $('#tablaConsultas tbody').append(nuevaFila);
+                </div>
+            </td>
+        </tr>
+    `;
+    
+    // Agrega la nueva fila a la tabla
+    $('#tablaConsultas tbody').prepend(nuevaFila);
+    
+    // Si usas DataTables, necesitas redibujar la tabla
+    if($.fn.DataTable.isDataTable('#tablaConsultas')) {
+        $('#tablaConsultas').DataTable().draw();
     }
-
+}
     // Resetear formulario
     function resetCliente() {
         $("#nombre").val('');
@@ -186,31 +195,62 @@ $(document).ready(function () {
     }
 
     // Enviar formulario de registro por AJAX
-    $('#incluirclientes').on('submit', function(e) {
-        e.preventDefault();
+    $('#ingresarclientes').on('submit', function(e) {
+    e.preventDefault();
 
-        if(validarEnvioCliente()){
-            var datos = new FormData(this);
-            datos.append('accion', 'registrar');
-            enviarAjax(datos, function(respuesta){
-                if(respuesta.status === "success" || respuesta.resultado === "success"){
+    if(validarEnvioCliente()){
+        var datos = new FormData(this);
+        datos.append('accion', 'registrar');
+        
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: datos,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(respuesta){
+                // Verifica primero si es un objeto válido
+                if(typeof respuesta === 'string') {
+                    try {
+                        respuesta = JSON.parse(respuesta);
+                    } catch(e) {
+                        console.error('Error parsing JSON:', e);
+                        return;
+                    }
+                }
+
+                if(respuesta.status === "success"){
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Cliente registrado correctamente'
+                        text: respuesta.message || 'Cliente registrado correctamente'
+                    }).then(() => {
+                        // Agregar la nueva fila y resetear el formulario
+                        if(respuesta.cliente) {
+                            agregarFilaCliente(respuesta.cliente);
+                        }
+                        resetCliente();
                     });
-                    agregarFilaCliente(respuesta.cliente);
-                    resetCliente();
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: respuesta.message || respuesta.msg || 'No se pudo registrar el cliente'
+                        text: respuesta.message || 'Error al registrar el cliente'
                     });
                 }
-            });
-        }
-    });
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'Ocurrió un error al comunicarse con el servidor'
+                });
+            }
+        });
+    }
+});
 
     // Función genérica para enviar AJAX
     function enviarAjax(datos, callback) {
