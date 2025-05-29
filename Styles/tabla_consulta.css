@@ -170,6 +170,7 @@ table tbody tr td{
     text-align: center;
     position: relative;
     padding: 14px 12px;
+    min-width: 150px;
     border-bottom: 1px solid var(--primary-800 ); 
 }
 
@@ -203,7 +204,6 @@ table tbody tr td .campo-telefono{
     color: var(--tbody-text-color);
     font-size: 16px;
     font-weight: 500;
-    min-width: 150px;
 }
 
 table tbody tr td .campo-rango{
@@ -356,7 +356,7 @@ table tbody tr td .precio{
     color: var(--secundary);
     font-size: 16px;
     font-weight: 500;
-    text-align: right;
+    text-align: center;
 }
 
 table tbody tr td .moneda{
@@ -364,7 +364,7 @@ table tbody tr td .moneda{
     color: var(--tbody-text-color);
     font-size: 16px;
     font-weight: 400;
-    text-align: right;
+    text-align: center;
 }
 
 table tbody tr td .acciones-boton {

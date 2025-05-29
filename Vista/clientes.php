@@ -39,7 +39,7 @@ if (!isset($_SESSION['name'])) {
         <br>
             <div class="envolver-form">
                 <label for="Direccion">Dirección</label>
-                <textarea class="form-control" maxlength="100" type="text" id="direccion" name="direccion" rows="3"></textarea>
+                <textarea class="form-control" maxlength="100" id="direccion" name="direccion" rows="3"></textarea>
                 <span class="span-value" id="sdireccion"></span>
             </div>
             
@@ -146,7 +146,7 @@ if (!isset($_SESSION['name'])) {
                     </div>
                     <div class="form-group">
                         <label for="modificardireccion">Dirección</label>
-                        <textarea class="form-control" maxlength="100" type="text" id="modificardireccion" name="direccion" rows="3"></textarea>
+                        <textarea class="form-control" maxlength="100" id="modificardireccion" name="direccion" rows="3"></textarea>
                         <span class="span-value-modal" id="smodificardireccion"></span>
                     </div>
                     <div class="form-group">
