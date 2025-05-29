@@ -99,8 +99,9 @@ if (!isset($_SESSION['name'])) {
                                         <li>
                                             <!-- Botón Eliminar -->
                                             <button class="btn btn-danger btn-eliminar"
-                                            data-id="<?php echo $marca['id_clientes']; ?>"
-                                            >Eliminar</button>
+                                                data-id="<?php echo $cliente['id_clientes']; ?>">
+                                                Eliminar
+                                            </button>
                                         </li>
                                     </ul>
                                 </div>
