@@ -55,7 +55,7 @@ $(document).ready(function () {
 
     $("#direccion").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\,-s\b]{2,100}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
             $(this),
             $("#sdireccion"),
             "*El formato permite letras y números*"
