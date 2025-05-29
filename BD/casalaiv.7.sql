@@ -198,6 +198,7 @@ INSERT INTO `tbl_cuentas` (`id_cuenta`, `nombre_banco`, `numero_cuenta`, `rif_cu
 
 CREATE TABLE `tbl_despachos` (
   `id_despachos` int(11) NOT NULL,
+  `id_factura` int(11) NOT NULL,
   `id_clientes` int(11) NOT NULL,
   `fecha_despacho` date NOT NULL,
   `correlativo` varchar(255) DEFAULT NULL,
@@ -220,9 +221,7 @@ CREATE TABLE IF NOT EXISTS `tbl_despacho_detalle` (
   KEY `id_producto` (`id_producto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE `tbl_despacho_detalle`
-  ADD CONSTRAINT `tbl_despacho_detalle_ibfk_1` FOREIGN KEY (`id_despacho`) REFERENCES `tbl_despachos` (`id_despachos`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tbl_despacho_detalle_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
+
 --
 -- Estructura de tabla para la tabla `tbl_detalles_pago`
 --
@@ -1027,6 +1026,9 @@ ALTER TABLE `tbl_combo_detalle`
 ALTER TABLE `tbl_despachos`
   ADD CONSTRAINT `fk_despacho_factura` FOREIGN KEY (`id_factura`) REFERENCES `tbl_facturas` (`id_factura`);
 
+ALTER TABLE `tbl_despacho_detalle`
+  ADD CONSTRAINT `tbl_despacho_detalle_ibfk_1` FOREIGN KEY (`id_despacho`) REFERENCES `tbl_despachos` (`id_despachos`) ON DELETE CASCADE,
+  ADD CONSTRAINT `tbl_despacho_detalle_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
 --
 -- Filtros para la tabla `tbl_detalles_pago`
 --
