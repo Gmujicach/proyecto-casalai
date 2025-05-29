@@ -605,7 +605,8 @@ CREATE TABLE `tbl_proveedores` (
   `rif_representante` varchar(20) DEFAULT NULL,
   `rif_proveedor` varchar(20) DEFAULT NULL,
   `telefono_secundario` varchar(20) DEFAULT NULL,
-  `observaciones` text DEFAULT NULL
+  `observaciones` text DEFAULT NULL,
+  `estado` enum('habilitado','inhabilitado') NOT NULL DEFAULT 'habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
