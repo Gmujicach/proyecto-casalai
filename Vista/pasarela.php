@@ -57,7 +57,7 @@ if (!isset($_SESSION['name'])) {
                             <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
                         </i>
                         <div class="desplegable">
-                            <ul>
+                            <ul><?php  if($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista'){ ?>
                                 <li><a href="#" class="modificarEstado" 
    data-id="<?php echo htmlspecialchars($dato['id_detalles']); ?>"
    data-factura="<?php echo htmlspecialchars($dato['id_factura']); ?>"
@@ -65,8 +65,10 @@ if (!isset($_SESSION['name'])) {
    data-observaciones="Pago no verificado aún">
    Cambiar Estatus
 </a>
+<?php }; ?>
 </li>
-                                <li>
+<?php if (!($dato["estatus"] === "Pago Procesado")){ ?>
+<li>
   <a href="#"
    class="modificar"
    data-id="<?php echo $dato['id_detalles']; ?>"
@@ -77,8 +79,8 @@ if (!isset($_SESSION['name'])) {
    data-factura="<?php echo htmlspecialchars($dato['id_factura']); ?>">
    Modificar
 </a>
-
 </li>
+<?php }; ?>
 
                             </ul>
                         </div>
