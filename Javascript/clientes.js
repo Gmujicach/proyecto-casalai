@@ -175,13 +175,13 @@ $(document).ready(function () {
     function resetCliente() {
         $("#nombre").val('');
         $("#cedula").val('');
-        $("#telefono").val('');
         $("#direccion").val('');
+        $("#telefono").val('');
         $("#correo").val('');
         $("#snombre").text('');
         $("#scedula").text('');
-        $("#stelefono").text('');
         $("#sdireccion").text('');
+        $("#stelefono").text('');
         $("#scorreo").text('');
     }
 
@@ -224,8 +224,8 @@ $(document).ready(function () {
             var datos = {
                 nombre: $("#nombre").val(),
                 cedula: $("#cedula").val(),
-                telefono: $("#telefono").val(),
                 direccion: $("#direccion").val(),
+                telefono: $("#telefono").val(),
                 correo: $("#correo").val(),
                 accion: "registrar"
             };
@@ -275,13 +275,13 @@ $(document).ready(function () {
         $('#modificar_id_clientes').val($(this).data('id'));
         $('#modificarnombre').val($(this).data('nombre'));
         $('#modificarcedula').val($(this).data('cedula'));
-        $('#modificartelefono').val($(this).data('telefono'));
         $('#modificardireccion').val($(this).data('direccion'));
+        $('#modificartelefono').val($(this).data('telefono'));
         $('#modificarcorreo').val($(this).data('correo'));
         $('#smodificarnombre').text('');
         $('#smodificarcedula').text('');
-        $('#smodificartelefono').text('');
         $('#smodificardireccion').text('');
+        $('#smodificartelefono').text('');
         $('#smodificarcorreo').text('');
         $('#modificar_clientes_modal').modal('show');
     });
@@ -364,11 +364,11 @@ $(document).ready(function () {
         if (!/^[VEJPG0-9-.\b]*$/.test(datos.cedula)) {
             errores.push("El formato solo permite números y (V,E,J,P,G,-.)");
         }
-        if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono)) {
-            errores.push("Formato correcto: 04XX-XXX-XXXX.");
-        }
         if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,100}$/.test(datos.direccion)) {
             errores.push("El formato permite letras y números.");
+        }
+        if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono)) {
+            errores.push("Formato correcto: 04XX-XXX-XXXX.");
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo)) {
             errores.push("Formato correcto: example@gmail.com.");
@@ -383,8 +383,8 @@ $(document).ready(function () {
         const datos = {
             nombre: $('#modificarnombre').val(),
             cedula: $('#modificarcedula').val(),
-            telefono: $('#modificartelefono').val(),
             direccion: $('#modificardireccion').val(),
+            telefono: $('#modificartelefono').val(),
             correo: $('#modificarcorreo').val()
         }
 
