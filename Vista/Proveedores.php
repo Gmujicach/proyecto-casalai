@@ -86,6 +86,7 @@ if (!isset($_SESSION['name'])) {
                 <th>Nombre</th>
                 <th>R.I.F</th>
                 <th>Telefono</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -93,7 +94,7 @@ if (!isset($_SESSION['name'])) {
 
         <tbody>
         <?php foreach ($proveedores as $proveedor): ?>
-            <tr>
+            <tr data-id="<?php echo $proveedor['id_proveedor']; ?>">
                 
                 <td>
                     <span class="campo-nombres">
@@ -112,6 +113,15 @@ if (!isset($_SESSION['name'])) {
                     <span class="campo-telefono">
                     <?php echo htmlspecialchars($proveedor['telefono']); ?>
                     </span>
+                </td>
+                <td class="campo-estado">
+                      <span 
+  class="campo-estatus <?php echo ($proveedor['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+  data-id="<?php echo $proveedor['id_proveedor']; ?>"
+  onclick="cambiarEstatus(<?php echo $proveedor['id_proveedor']; ?>, '<?php echo $proveedor['estado']; ?>')"
+  style="cursor: pointer;">
+  <?php echo htmlspecialchars($proveedor['estado']); ?>
+</span>
                 </td>
                 
                 <td>
@@ -154,7 +164,7 @@ if (!isset($_SESSION['name'])) {
 
 <div class="contenedor-tabla">
     <h3>Lista de Productos Con Bajo Stock</h3>
-    <table class="tabla"class="tablaConsultas" id="tablaConsultas">
+    <table class="tabla"class="tablaConsultas" id="">
         <thead>
             <tr>
                 <th>ID</th>
@@ -362,5 +372,14 @@ document.addEventListener("DOMContentLoaded", function () {
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>
+<script>
+$(document).ready(function() {
+    $('#tablaConsultas').DataTable({
+        language: {
+            url: 'Public/js/es-ES.json'
+        }
+    });
+});
+</script>
 </body>
 </html>

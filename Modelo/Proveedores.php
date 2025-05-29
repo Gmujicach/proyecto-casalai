@@ -128,22 +128,27 @@ class Proveedores extends BD {
         return $count == 0;
     }
 
-    public function ingresarProveedor() {
-        $sql = "INSERT INTO tbl_proveedores (`nombre`, `presona_contacto`, `direccion`, `telefono`, `telefono_secundario`, `rif_representante`, `rif_proveedor`, `correo`, `observaciones`)
-                VALUES (:nombre, :representante, :direccion, :telefono1, :telefono2, :rif2, :rif1, :correo, :observacion)";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':nombre', $this->nombre);
-        $stmt->bindParam(':representante', $this->representante);
-        $stmt->bindParam(':direccion', $this->direccion);
-        $stmt->bindParam(':telefono1', $this->telefono1);
-        $stmt->bindParam(':telefono2', $this->telefono2);
-        $stmt->bindParam(':rif1', $this->rif1);
-        $stmt->bindParam(':rif2', $this->rif2);
-        $stmt->bindParam(':correo', $this->correo);
-        $stmt->bindParam(':observacion', $this->observacion);
-        
-        return $stmt->execute();
+public function ingresarProveedor() {
+    $sql = "INSERT INTO tbl_proveedores (`nombre`, `presona_contacto`, `direccion`, `telefono`, `telefono_secundario`, `rif_representante`, `rif_proveedor`, `correo`, `observaciones`)
+            VALUES (:nombre, :representante, :direccion, :telefono1, :telefono2, :rif2, :rif1, :correo, :observacion)";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->bindParam(':nombre', $this->nombre);
+    $stmt->bindParam(':representante', $this->representante);
+    $stmt->bindParam(':direccion', $this->direccion);
+    $stmt->bindParam(':telefono1', $this->telefono1);
+    $stmt->bindParam(':telefono2', $this->telefono2);
+    $stmt->bindParam(':rif1', $this->rif1);
+    $stmt->bindParam(':rif2', $this->rif2);
+    $stmt->bindParam(':correo', $this->correo);
+    $stmt->bindParam(':observacion', $this->observacion);
+
+    if ($stmt->execute()) {
+        $ultimoId = $this->conex->lastInsertId();
+        return $this->obtenerProveedorPorId($ultimoId);
+    } else {
+        return false;
     }
+}
 
     // Obtener Producto por ID
     public function obtenerProveedorPorId($id) {
@@ -194,6 +199,20 @@ class Proveedores extends BD {
         $proveedores = $stmtproveedores->fetchAll(PDO::FETCH_ASSOC);
 
         return $proveedores;
+    }
+
+            public function cambiarEstatus($nuevoEstatus) {
+        try {
+            $sql = "UPDATE tbl_proveedores SET estado = :estatus WHERE id_proveedor = :id";
+            $stmt = $this->conex->prepare($sql);
+            $stmt->bindParam(':estatus', $nuevoEstatus);
+            $stmt->bindParam(':id', $this->id);
+            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error al cambiar estatus: " . $e->getMessage());
+            return false;
+        }
     }
 }
 
