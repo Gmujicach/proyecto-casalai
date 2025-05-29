@@ -16,9 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case 'registrar':
             $cliente = new cliente();
             $cliente->setnombre($_POST['nombre']);
-            $cliente->setdireccion($_POST['direccion']);
-            $cliente->settelefono($_POST['telefono']);
             $cliente->setcedula($_POST['cedula']);
+            $cliente->settelefono($_POST['telefono']);
+            $cliente->setdireccion($_POST['direccion']);
             $cliente->setcorreo($_POST['correo']);
             
             if ($cliente->existeNumeroCedula($_POST['cedula'])) {

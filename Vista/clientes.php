@@ -145,7 +145,7 @@ if (!isset($_SESSION['name'])) {
                     </div>
                     <div class="form-group">
                         <label for="modificardireccion">Dirección</label>
-                        <textarea class="form-control" maxlength="50" type="text" id="direccion" name="direccion" rows="3"></textarea>
+                        <textarea class="form-control" maxlength="50" type="text" id="modificardireccion" name="modificardireccion" rows="3"></textarea>
                         <span class="span-value-modal" id="smodificardireccion"></span>
                     </div>
                     <div class="form-group">

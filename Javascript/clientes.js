@@ -185,6 +185,7 @@ $(document).ready(function () {
         $("#scorreo").text('');
     }
 
+    /*
     // Enviar formulario de registro por AJAX
     $('#incluirclientes').on('submit', function(e) {
         e.preventDefault();
@@ -211,10 +212,10 @@ $(document).ready(function () {
             });
         }
     });
+*/
 
 
 
-/*
     // Enviar formulario de registro
     $('#incluirclientes').on('submit', function(e) {
         e.preventDefault();
@@ -247,7 +248,7 @@ $(document).ready(function () {
             });
         }
     });
-*/
+
 
 
     // Función genérica para enviar AJAX
