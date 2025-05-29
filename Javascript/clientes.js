@@ -199,8 +199,8 @@ $(document).ready(function () {
                         title: 'Éxito',
                         text: respuesta.message || respuesta.msg || 'Cliente registrado correctamente'
                     });
-                    agregarFilaClinte(respuesta.cliente);
-                    resetClinte();
+                    agregarFilaCliente(respuesta.cliente);
+                    resetCliente();
                 } else {
                     Swal.fire({
                         icon: 'error',

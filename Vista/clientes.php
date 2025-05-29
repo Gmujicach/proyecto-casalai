@@ -130,17 +130,17 @@ if (!isset($_SESSION['name'])) {
                     <input type="hidden" id="modificar_id_clientes" name="id_clientes">
                     <div class="form-group">
                         <label for="modificarnombre">Nombre completo</label>
-                        <input type="text" class="form-control" maxlength="15" id="modificarnombre" name="nombre" required>
+                        <input type="text" class="form-control" maxlength="100" id="modificarnombre" name="nombre" required>
                         <span class="span-value-modal" id="smodificarnombre"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarcedula">Cédula</label>
-                        <input type="text" class="form-control" id="modificarcedula" name="cedula" required>
+                        <input type="text" class="form-control" id="modificarcedula" name="cedula" maxlength="12" required>
                         <span class="span-value-modal" id="smodificarcedula"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificartelefono">Teléfono</label>
-                        <input type="text" class="form-control" id="modificartelefono" name="telefono" required>
+                        <input type="text" class="form-control" id="modificartelefono" name="telefono" maxlength="13" required>
                         <span class="span-value-modal" id="smodificartelefono"></span>
                     </div>
                     <div class="form-group">
@@ -150,7 +150,7 @@ if (!isset($_SESSION['name'])) {
                     </div>
                     <div class="form-group">
                         <label for="modificarcorreo">Correo electrónico</label>
-                        <input type="text" class="form-control" id="modificarcorreo" name="correo" required>
+                        <input type="text" class="form-control" id="modificarcorreo" name="correo" maxlength="50" required>
                         <span class="span-value-modal" id="smodificarcorreo"></span>
                     </div>
                     
