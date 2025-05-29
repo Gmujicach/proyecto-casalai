@@ -185,7 +185,6 @@ $(document).ready(function () {
         $("#scorreo").text('');
     }
 
-    /*
     // Enviar formulario de registro por AJAX
     $('#incluirclientes').on('submit', function(e) {
         e.preventDefault();
@@ -193,42 +192,6 @@ $(document).ready(function () {
         if(validarEnvioCliente()){
             var datos = new FormData(this);
             datos.append('accion', 'registrar');
-            enviarAjax(datos, function(respuesta){
-                if(respuesta.status === "success" || respuesta.resultado === "success"){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Cliente registrado correctamente'
-                    });
-                    agregarFilaCliente(respuesta.cliente);
-                    resetCliente();
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: respuesta.message || respuesta.msg || 'No se pudo registrar el cliente'
-                    });
-                }
-            });
-        }
-    });
-*/
-
-
-
-    // Enviar formulario de registro
-    $('#ingresarclientes').on('submit', function(e) {
-        e.preventDefault();
-
-        if(validarEnvioCliente()){
-            var datos = {
-                nombre: $("#nombre").val(),
-                cedula: $("#cedula").val(),
-                direccion: $("#direccion").val(),
-                telefono: $("#telefono").val(),
-                correo: $("#correo").val(),
-                accion: "registrar"
-            };
             enviarAjax(datos, function(respuesta){
                 if(respuesta.status === "success" || respuesta.resultado === "success"){
                     Swal.fire({
@@ -438,8 +401,8 @@ $(document).ready(function () {
                     botonModificar.data('direccion', direccion);
                     botonModificar.data('telefono', telefono);
                     botonModificar.data('correo', correo);
-
-                    /* Actualiza la fila en la tabla sin recargar
+/*
+                    //Actualiza la fila en la tabla sin recargar
                     let id = $('#modificar_id_clientes').val();
                     let fila = $(`tr[data-id="${id}"]`);
                     fila.find('td').eq(0).text($('#modificarnombre').val());

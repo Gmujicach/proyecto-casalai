@@ -96,7 +96,7 @@ class cliente extends BD {
         return $this->existeNumCedula($cedula, $excluir_id); 
     }
     private function existeNumCedula($cedula, $excluir_id) {
-        $sql = "SELECT COUNT(*) FROM tbl_cuentas WHERE cedula = ?";
+        $sql = "SELECT COUNT(*) FROM tbl_clientes WHERE cedula = ?";
         $params = [$cedula];
         if ($excluir_id !== null) {
             $sql .= " AND id_clientes != ?";
@@ -107,7 +107,7 @@ class cliente extends BD {
         return $stmt->fetchColumn() > 0;
     }
 
-    public function obtenerUltimaCliente() {
+    public function obtenerUltimoCliente() {
         return $this->obtUltimaCliente(); 
     }
     private function obtUltimaCliente() {
