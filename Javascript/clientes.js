@@ -478,10 +478,10 @@ $(document).ready(function () {
             confirmButtonText: 'Sí, eliminarlo!'
         }).then((result) => {
             if (result.isConfirmed) {
-                var id_clientes = $(this).data('id');
+                var id = $(this).data('id');
                 var datos = new FormData();
                 datos.append('accion', 'eliminar');
-                datos.append('id_clientes', id_clientes);
+                datos.append('id_clientes', id);
                 $.ajax({
                     url: '',
                     type: 'POST',
