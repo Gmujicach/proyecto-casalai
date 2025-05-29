@@ -101,27 +101,85 @@ $(document).ready(function () {
             cache: false,
             data: formData,
             success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                response = JSON.parse(response); // Asegúrate de que la respuesta sea un objeto JSON
-                if (response.status === 'success') {
-                    $('#modificarProductoModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: 'El Proveedor se ha modificada correctamente'
-                    }).then(function() {
-                        location.reload(); // Recargar la página al modificar un producto
-                    });
-                } else {
-                    muestraMensaje(response.message);
-                }
-            },
+    response = JSON.parse(response);
+    if (response.status === 'success') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Modificado',
+            text: 'El Proveedor se ha modificado correctamente'
+        }).then(function() {
+            // Supón que el backend retorna el proveedor modificado en response.proveedor
+            if (response.proveedor) {
+                actualizarFilaProveedor(response.proveedor);
+            }
+            $('#modificar_usuario_modal').modal('hide');
+$('.modal-backdrop').remove();
+$('body').removeClass('modal-open');
+$('body').css('padding-right', '');
+        });
+    } else {
+        muestraMensaje(response.message);
+    }
+},
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Error al modificar el Proveedor:', textStatus, errorThrown);
                 muestraMensaje('Error al modificar el Proveedor.');
             }
         });
     });
+
+function actualizarFilaProveedor(proveedor) {
+    const tabla = $('#tablaConsultas').DataTable();
+    $('#tablaConsultas tbody tr').each(function() {
+        if ($(this).attr('data-id') == proveedor.id_proveedor) {
+            tabla.row(this).data([
+                `<span class="campo-nombres">${proveedor.nombre}</span><span class="campo-correo">${proveedor.correo}</span>`,
+                `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
+                `<span class="campo-telefono">${proveedor.telefono}</span>`,
+                `<span class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" data-id="${proveedor.id_proveedor}" onclick="cambiarEstatus(${proveedor.id_proveedor}, '${proveedor.estado}')" style="cursor: pointer;">${proveedor.estado}</span>`,
+                `<span>
+                    <div class="acciones-boton">
+                        <i class="vertical">
+                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                        </i>
+                        <div class="desplegable">
+                            <ul>
+                                <li>
+                                    <a href="#" class="modificar" 
+                                        data-id="${proveedor.id_proveedor}"
+                                        data-nombre="${proveedor.nombre}"
+                                        data-persona-contacto="${proveedor.presona_contacto}"
+                                        data-direccion="${proveedor.direccion}"
+                                        data-telefono="${proveedor.telefono}"
+                                        data-correo="${proveedor.correo}"
+                                        data-telefono-secundario="${proveedor.telefono_secundario}"
+                                        data-rif-proveedor="${proveedor.rif_proveedor}"
+                                        data-rif-representante="${proveedor.rif_representante}"
+                                        data-observaciones="${proveedor.observaciones}"
+                                        data-toggle="modal" 
+                                        data-target="#modificar_usuario_modal">
+                                        Modificar
+                                    </a>
+                                </li>
+                                <li><a href="#" class="eliminar" data-id="${proveedor.id_proveedor}">Eliminar</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </span>`
+            ]).draw(false);
+        }
+    });
+}
+
+$(document).on('click', '.acciones-boton .vertical', function(e) {
+    e.stopPropagation();
+    $('.desplegable').not($(this).siblings('.desplegable')).hide();
+    $(this).siblings('.desplegable').toggle();
+});
+
+$(document).on('click', function() {
+    $('.desplegable').hide();
+});
 
     // Función para eliminar el proveedor
 $(document).on('click', '.eliminar', function (e) {
@@ -140,7 +198,7 @@ $(document).on('click', '.eliminar', function (e) {
         if (result.isConfirmed) {
             var datos = new FormData();
             datos.append('accion', 'eliminar');
-            datos.append('id_proveedor', id_proveedor); // Cambiado a id_proveedor
+            datos.append('id_proveedor', id_proveedor);
             
             $.ajax({
                 url: '', // La misma página
@@ -156,8 +214,13 @@ $(document).on('click', '.eliminar', function (e) {
                                 'Eliminado!',
                                 'El proveedor ha sido eliminado.',
                                 'success'
-                            ).then(function() {
-                                location.reload();
+                            );
+                            // Elimina la fila de la tabla y actualiza el paginador
+                            const tabla = $('#tablaConsultas').DataTable();
+                            $('#tablaConsultas tbody tr').each(function() {
+                                if ($(this).attr('data-id') == id_proveedor) {
+                                    tabla.row(this).remove().draw(false);
+                                }
                             });
                         } else {
                             Swal.fire(
@@ -197,34 +260,39 @@ $(document).on('click', '.eliminar', function (e) {
             contentType: false,
             processData: false,
             success: function(response) {
-                try {
-                    const data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            title: 'Éxito',
-                            text: 'Proveedor ingresada exitosamente',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.message || 'Error al ingresar el Proveedor',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    }
-                } catch (e) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Error al procesar la respuesta del servidor',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
+    try {
+        const data = JSON.parse(response);
+        if (data.status === 'success') {
+            Swal.fire({
+                title: 'Éxito',
+                text: 'Proveedor ingresado exitosamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                // Supón que el backend retorna el proveedor insertado en data.proveedor
+                if (data.proveedor) {
+                    agregarFilaProveedor(data.proveedor);
                 }
-            },
+                $('#incluirproveedor')[0].reset();
+                $('#incluirproveedor input, #incluirproveedor textarea').val('');
+            });
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: data.message || 'Error al ingresar el Proveedor',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    } catch (e) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Error al procesar la respuesta del servidor',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+},
             error: function(xhr, status, error) {
                 Swal.fire({
                     title: 'Error',
@@ -236,6 +304,46 @@ $(document).on('click', '.eliminar', function (e) {
         });
     });
 });
+
+function agregarFilaProveedor(proveedor) {
+    const tabla = $('#tablaConsultas').DataTable();
+    const nuevaFila = tabla.row.add([
+        `<span class="campo-nombres">${proveedor.nombre}</span><span class="campo-correo">${proveedor.correo}</span>`,
+        `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
+        `<span class="campo-telefono">${proveedor.telefono}</span>`,
+        `<span class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" data-id="${proveedor.id_proveedor}" onclick="cambiarEstatus(${proveedor.id_proveedor}, '${proveedor.estado}')" style="cursor: pointer;">${proveedor.estado}</span>`,
+        `<span>
+            <div class="acciones-boton">
+                <i class="vertical">
+                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                </i>
+                <div class="desplegable">
+                    <ul>
+                        <li>
+                            <a href="#" class="modificar" 
+                                data-id="${proveedor.id_proveedor}"
+                                data-nombre="${proveedor.nombre}"
+                                data-persona-contacto="${proveedor.presona_contacto}"
+                                data-direccion="${proveedor.direccion}"
+                                data-telefono="${proveedor.telefono}"
+                                data-correo="${proveedor.correo}"
+                                data-telefono-secundario="${proveedor.telefono_secundario}"
+                                data-rif-proveedor="${proveedor.rif_proveedor}"
+                                data-rif-representante="${proveedor.rif_representante}"
+                                data-observaciones="${proveedor.observaciones}"
+                                data-toggle="modal" 
+                                data-target="#modificar_usuario_modal">
+                                Modificar
+                            </a>
+                        </li>
+                        <li><a href="#" class="eliminar" data-id="${proveedor.id_proveedor}">Eliminar</a></li>
+                    </ul>
+                </div>
+            </div>
+        </span>`
+    ]).draw(false).node();
+    $(nuevaFila).attr('data-id', proveedor.id_proveedor);
+}
 
 // Función genérica para enviar AJAX
 function enviarAjax(datos, callback) {
@@ -258,6 +366,47 @@ function enviarAjax(datos, callback) {
     });
 }
 
+function cambiarEstatus(idUsuario) {
+    const span = $(`span.campo-estatus[data-id="${idUsuario}"]`);
+    const estatusActual = span.text().trim().toLowerCase();
+    const nuevoEstatus = estatusActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
+
+    span.addClass('cambiando');
+
+    $.ajax({
+        url: '',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            accion: 'cambiar_estado',
+            id_proveedor: idUsuario,
+            nuevo_estatus: nuevoEstatus
+        },
+        success: function(data) {
+            span.removeClass('cambiando');
+            if (data.status === 'success') {
+                span.text(nuevoEstatus);
+                span.removeClass('habilitado inhabilitado').addClass(nuevoEstatus);
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Estatus actualizado!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                span.text(estatusActual);
+                span.removeClass('habilitado inhabilitado').addClass(estatusActual);
+                Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
+            }
+        },
+        error: function(xhr, status, error) {
+            span.removeClass('cambiando');
+            span.text(estatusActual);
+            span.removeClass('habilitado inhabilitado').addClass(estatusActual);
+            Swal.fire('Error', 'Error en la conexión', 'error');
+        }
+    });
+}
 // Función genérica para mostrar mensajes
 function muestraMensaje(mensaje) {
     Swal.fire({

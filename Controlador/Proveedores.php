@@ -31,11 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo json_encode(['status' => 'error', 'message' => 'Este R.I.F ya esta registrador']);
             }
             else {
-                if ($proveedor->ingresarProveedor()) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el Usuario']);
-                }
+                $nuevoProveedor = $proveedor->ingresarProveedor();
+if ($nuevoProveedor) {
+    echo json_encode(['status' => 'success', 'proveedor' => $nuevoProveedor]);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el Usuario']);
+}
             }
             break;
 
@@ -70,8 +71,9 @@ $proveedor->setDireccion($_POST['direccion']);
 
             
             if ($proveedor->modificarProveedor($id)) {
-                echo json_encode(['status' => 'success']);
-            } else {
+    $proveedorActualizado = $proveedor->obtenerProveedorPorId($id);
+    echo json_encode(['status' => 'success', 'proveedor' => $proveedorActualizado]);
+}else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Proveedor']);
             }
             break;
@@ -87,6 +89,17 @@ $proveedor->setDireccion($_POST['direccion']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Proveedor']);
+            }
+            break;
+            case 'cambiar_estado':
+            $id_proveedor = $_POST['id_proveedor'];
+            $nuevoEstatus = $_POST['nuevo_estatus'];
+            $proveedor = new Proveedores();
+            $proveedor->setId($id_proveedor);
+            if ($proveedor->cambiarEstatus($nuevoEstatus)) {
+                echo json_encode(['status' => 'success']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus del Proveedor']);
             }
             break;
 
