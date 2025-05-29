@@ -12,7 +12,7 @@ if (!isset($_SESSION['name'])) {
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'header.php'; ?>
-    <title>Gestionar Recepcion</title>
+    <title>Gestionar Despacho</title>
 </head>
 
 <body>
@@ -23,7 +23,7 @@ if (!isset($_SESSION['name'])) {
 		<section class="container">
 			<form method="post" action="" id="f">
 				<input type="hidden" name="accion" id="accion" style="display:none" />
-				<h3 class="titulo-form">Incluir Recepción</h3>
+				<h3 class="titulo-form">Incluir Despacho</h3>
 					<br>
 						<div class="grupo-form">
 							<input type="text" placeholder="Correlativo del producto" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
@@ -107,7 +107,7 @@ if (!isset($_SESSION['name'])) {
 	</div>					
 
 	<div class="contenedor-tabla">
-	<h3>Lista de Recepciones</h3>
+	<h3>Lista de Despachos</h3>
 		<table class="tablaConsultas" id="tablaConsultas">
 <thead>
 <tr>

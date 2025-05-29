@@ -21,19 +21,20 @@ $(document).on('submit', '#formularioEdicion', function(e) {
             }
 
             if (response.status === 'success') {
-                $('#modalModificar').modal('hide');
-                setTimeout(function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: response.message
-                    }).then(() => {
-                        location.reload();
-                    });
-                }, 500);
-            } else {
-                Swal.fire('Error', response.message, 'error');
-            }
+    $('#modalModificar').modal('hide');
+    $('.modal-backdrop').remove();
+$('body').removeClass('modal-open');
+    if (response.tbody) {
+        $('#tablaConsultas tbody').html(response.tbody);
+    }
+    Swal.fire({
+        icon: 'success',
+        title: 'Modificado',
+        text: response.message
+    });
+} else {
+    Swal.fire('Error', response.message, 'error');
+}
         },
         error: function() {
             Swal.fire('Error', 'Error al modificar la recepción.', 'error');
@@ -317,9 +318,12 @@ function muestraMensaje(tipo = 'success', tiempo = 4000, titulo = '', mensaje = 
                         $('#listadop').html(lee.mensaje);
                     }
                     else if(lee.resultado=='registrar'){
-                        muestraMensaje('success', 6000,'REGISTRAR', lee.mensaje);
-                        borrar();
-                    }else if (lee.resultado == "encontro") {		
+    muestraMensaje('success', 6000,'REGISTRAR', lee.mensaje);
+    if (lee.tbody) {
+        $('#tablaConsultas tbody').html(lee.tbody);
+    }
+    borrar();
+}else if (lee.resultado == "encontro") {		
                         if (lee.mensaje == 'El numero de correlativo ya existe!') {
                             muestraMensaje('success', 6000,'Atencion', lee.mensaje);
                         }		

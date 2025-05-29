@@ -37,55 +37,52 @@ class Despacho extends BD{
     public function setcorrelativo($correlativo) {
         $this->correlativo = $correlativo;
     }
-	public function registrar($idproducto, $cantidad) {
-        $d = array();
-        if (!$this->buscar()) {  // Asegúrate de que `buscar()` esté bien definido
-            $co = $this->getConexion();  // Asegúrate de que `conecta()` esté bien definido y retorne una conexión válida
-            $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-            try {
-                // Insertar en tbl_recepcion_productos
-                $tiempo = date('Y-m-d');
-    
-                // Asegúrate de que `$this->idproveedor` y `$this->correlativo` estén definidos
-                $sql = "INSERT INTO tbl_despachos (id_clientes, fecha_despacho, correlativo) 
-                        VALUES (:id_cliente, :fecha_despacho, :correlativo)";
-                
-                $stmt = $co->prepare($sql);
-                $stmt->bindParam(':id_cliente', $this->idcliente, PDO::PARAM_INT);
-                $stmt->bindParam(':fecha_despacho', $tiempo, PDO::PARAM_STR);
-                $stmt->bindParam(':correlativo', $this->correlativo, PDO::PARAM_STR);
-                $stmt->execute();
-                
-                $idDespacho = $co->lastInsertId();
-                
-                $cap = count($idproducto);
-    
-                // Insertar en tbl_detalle_recepcion_productos
-                for ($i = 0; $i < $cap; $i++) {
-                    // Asegúrate de que `$this->desc` esté definido correctamente como una propiedad de la clase
-                    $sqlDetalle = "INSERT INTO tbl_despacho_detalle (id_despacho, id_producto, cantidad) 
-                                   VALUES (:id_despacho, :idProducto, :cantidad)";
-                    
-                    $stmtDetalle = $co->prepare($sqlDetalle);
-                    $stmtDetalle->bindParam(':id_despacho', $idDespacho, PDO::PARAM_INT);
-                    $stmtDetalle->bindParam(':idProducto', $idproducto[$i], PDO::PARAM_INT); // Define $this->desc antes
-                    $stmtDetalle->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
-                    $stmtDetalle->execute();
-                }
-    
-                $d['resultado'] = 'registrar';
-                $d['mensaje'] = 'Se registró la nota de entrada correctamente';
-            } catch (Exception $e) {
-                $d['resultado'] = 'error';
-                $d['mensaje'] = $e->getMessage();
+
+public function registrar($idproducto, $cantidad) {
+    $d = array();
+    if (!$this->buscar()) {
+        $co = $this->getConexion();
+        $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        try {
+            $tiempo = date('Y-m-d');
+            $sql = "INSERT INTO tbl_despachos (id_clientes, fecha_despacho, correlativo) 
+                    VALUES (:id_cliente, :fecha_despacho, :correlativo)";
+            $stmt = $co->prepare($sql);
+            $stmt->bindParam(':id_cliente', $this->idcliente, PDO::PARAM_INT);
+            $stmt->bindParam(':fecha_despacho', $tiempo, PDO::PARAM_STR);
+            $stmt->bindParam(':correlativo', $this->correlativo, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $idDespacho = $co->lastInsertId();
+            $cap = count($idproducto);
+
+            for ($i = 0; $i < $cap; $i++) {
+                $sqlDetalle = "INSERT INTO tbl_despacho_detalle (id_despacho, id_producto, cantidad) 
+                               VALUES (:id_despacho, :idProducto, :cantidad)";
+                $stmtDetalle = $co->prepare($sqlDetalle);
+                $stmtDetalle->bindParam(':id_despacho', $idDespacho, PDO::PARAM_INT);
+                $stmtDetalle->bindParam(':idProducto', $idproducto[$i], PDO::PARAM_INT);
+                $stmtDetalle->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
+                $stmtDetalle->execute();
             }
-        } else {
+
+            // Devuelve también la lista actualizada de despachos
             $d['resultado'] = 'registrar';
-            $d['mensaje'] = 'El número correlativo ya existe!';
+            $d['mensaje'] = 'Se registró la nota de despacho correctamente';
+            $d['despachos'] = $this->getdespacho();
+
+        } catch (Exception $e) {
+            $d['resultado'] = 'error';
+            $d['mensaje'] = $e->getMessage();
         }
-        return $d;
+    } else {
+        $d['resultado'] = 'registrar';
+        $d['mensaje'] = 'El número correlativo ya existe!';
+        $d['despachos'] = $this->getdespacho();
     }
+    return $d;
+}
     
     public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle)
 {
@@ -347,6 +344,7 @@ ORDER BY r.correlativo ASC;
 }
 
 
+
 public function modificarDespacho($idDespacho, $idproducto, $cantidad, $iddetalle)
 {
     $d = array();
@@ -416,6 +414,7 @@ public function modificarDespacho($idDespacho, $idproducto, $cantidad, $iddetall
         $co->commit();
         $d['resultado'] = 'modificarRecepcion';
         $d['mensaje'] = 'Se modificó el despacho y sus productos correctamente';
+        $d['despachos'] = $this->getdespacho();
 
     } catch (Exception $e) {
         if ($co->inTransaction()) {
@@ -423,6 +422,7 @@ public function modificarDespacho($idDespacho, $idproducto, $cantidad, $iddetall
         }
         $d['resultado'] = 'error';
         $d['mensaje'] = $e->getMessage();
+        $d['despachos'] = $this->getdespacho();
     }
 
     return $d;
