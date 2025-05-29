@@ -217,7 +217,7 @@ $(document).ready(function () {
 
 
     // Enviar formulario de registro
-    $('#incluirclientes').on('submit', function(e) {
+    $('#ingresarclientes').on('submit', function(e) {
         e.preventDefault();
 
         if(validarEnvioCliente()){
@@ -248,8 +248,6 @@ $(document).ready(function () {
             });
         }
     });
-
-
 
     // Función genérica para enviar AJAX
     function enviarAjax(datos, callback) {
