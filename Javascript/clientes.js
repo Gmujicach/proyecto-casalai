@@ -48,14 +48,14 @@ $(document).ready(function () {
     });
 
     $("#direccion").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
         let direccion = document.getElementById("direccion");
         direccion.value = space(direccion.value);
     });
 
     $("#direccion").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,100}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
             $(this),
             $("#sdireccion"),
             "*El formato permite letras y números*"
@@ -110,7 +110,7 @@ $(document).ready(function () {
             return false;
         }
         if(validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,100}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
             $("#direccion"),
             $("#sdireccion"),
             "*Puede haber letras y números*"
@@ -131,54 +131,49 @@ $(document).ready(function () {
     }
 
     function agregarFilaCliente(cliente) {
-    // Verifica que cliente tenga los datos esperados
-    console.log('Datos del cliente recibidos:', cliente);
+    // Verificar si DataTables está inicializado
+    const tabla = $('#tablaConsultas').DataTable();
     
-    const nuevaFila = `
-        <tr data-id="${cliente.id_clientes}">
-            <td>${cliente.nombre}</td>
-            <td>${cliente.cedula}</td>
-            <td>${cliente.direccion}</td>
-            <td>${cliente.telefono}</td>
-            <td>${cliente.correo}</td>
-            <td>
-                <div class="acciones-boton">
-                    <i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                    <div class="desplegable">
-                        <ul>
-                            <li>
-                                <button class="btn btn-primary btn-modificar"
-                                    data-id="${cliente.id_clientes}"
-                                    data-nombre="${cliente.nombre}"
-                                    data-cedula="${cliente.cedula}"
-                                    data-direccion="${cliente.direccion}"
-                                    data-telefono="${cliente.telefono}"
-                                    data-correo="${cliente.correo}">
-                                    Modificar
-                                </button>
-                            </li>
-                            <li>
-                                <button class="btn btn-danger btn-eliminar"
-                                    data-id="${cliente.id_clientes}">
-                                    Eliminar
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    `;
+    // Crear la nueva fila como un array de datos (en el mismo orden que las columnas)
+    const nuevaFila = [
+        cliente.nombre,
+        cliente.cedula,
+        cliente.direccion,
+        cliente.telefono,
+        cliente.correo,
+        `<div class="acciones-boton">
+            <i class="vertical">
+                <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+            </i>
+            <div class="desplegable">
+                <ul>
+                    <li>
+                        <button class="btn btn-primary btn-modificar"
+                            data-id="${cliente.id_clientes}"
+                            data-nombre="${cliente.nombre}"
+                            data-cedula="${cliente.cedula}"
+                            data-direccion="${cliente.direccion}"
+                            data-telefono="${cliente.telefono}"
+                            data-correo="${cliente.correo}">
+                            Modificar
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn btn-danger btn-eliminar"
+                            data-id="${cliente.id_clientes}">
+                            Eliminar
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>`
+    ];
+
+    // Agregar la nueva fila al DataTable y redibujar
+    tabla.row.add(nuevaFila).draw(false);
     
-    // Agrega la nueva fila a la tabla
-    $('#tablaConsultas tbody').prepend(nuevaFila);
-    
-    // Si usas DataTables, necesitas redibujar la tabla
-    if($.fn.DataTable.isDataTable('#tablaConsultas')) {
-        $('#tablaConsultas').DataTable().draw();
-    }
+    // Opcional: ordenar por la columna 0 (nombre) de forma ascendente
+    tabla.order([0, 'asc']).draw();
 }
     // Resetear formulario
     function resetCliente() {
@@ -210,23 +205,13 @@ $(document).ready(function () {
             processData: false,
             dataType: 'json',
             success: function(respuesta){
-                // Verifica primero si es un objeto válido
-                if(typeof respuesta === 'string') {
-                    try {
-                        respuesta = JSON.parse(respuesta);
-                    } catch(e) {
-                        console.error('Error parsing JSON:', e);
-                        return;
-                    }
-                }
-
                 if(respuesta.status === "success"){
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
                         text: respuesta.message || 'Cliente registrado correctamente'
                     }).then(() => {
-                        // Agregar la nueva fila y resetear el formulario
+                        // Agregar la nueva fila a DataTables
                         if(respuesta.cliente) {
                             agregarFilaCliente(respuesta.cliente);
                         }
@@ -332,14 +317,14 @@ $(document).ready(function () {
     });
 
     $("#modificardireccion").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
         let direccion = document.getElementById("direccion");
         direccion.value = space(direccion.value);
     });
 
     $("#modificardireccion").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,100}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
             $(this),
             $("#smodificardireccion"),
             "*El formato permite letras y números*"
@@ -367,7 +352,7 @@ $(document).ready(function () {
         if (!/^[VEJPG0-9-.\b]*$/.test(datos.cedula)) {
             errores.push("El formato solo permite números y (V,E,J,P,G,-.)");
         }
-        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,100}$/.test(datos.direccion)) {
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/.test(datos.direccion)) {
             errores.push("El formato permite letras y números.");
         }
         if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono)) {
@@ -381,7 +366,7 @@ $(document).ready(function () {
 
     // Enviar datos de modificación por AJAX al controlador PHP
     $('#modificarclientes').on('submit', function(e) {
-    e.preventDefault();
+        e.preventDefault();
 
         const datos = {
             nombre: $('#modificarnombre').val(),
@@ -412,46 +397,36 @@ $(document).ready(function () {
             contentType: false,
             cache: false,
             data: formData,
+            dataType: 'json', // <-- Asegúrate de esto
             success: function(response) {
-        response = JSON.parse(response);
-        if (response.status === 'success') {
-            $('#modificar_clientes_modal').modal('hide');
-            Swal.fire({
-                icon: 'success',
-                title: 'Modificado',
-                text: 'El Cliente se ha modificado correctamente'
-            });
+                if (response.status === 'success') {
+                    $('#modificar_clientes_modal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: 'El Cliente se ha modificado correctamente'
+                    });
 
-            const id = $('#modificar_id_clientes').val(); // Añadir esta línea
-            const nombre = $('#modificarnombre').val();
-            const cedula = $('#modificarcedula').val();
-            const direccion = $('#modificardireccion').val();
-            const telefono = $('#modificartelefono').val();
-            const correo = $('#modificarcorreo').val();
+                    const id = $('#modificar_id_clientes').val();
+                    const nombre = $('#modificarnombre').val();
+                    const cedula = $('#modificarcedula').val();
+                    const direccion = $('#modificardireccion').val();
+                    const telefono = $('#modificartelefono').val();
+                    const correo = $('#modificarcorreo').val();
 
-            const fila = $('tr[data-id="' + id + '"]');
-            fila.find('td').eq(0).text(nombre);
-            fila.find('td').eq(1).text(cedula);
-            fila.find('td').eq(2).text(direccion);
-            fila.find('td').eq(3).text(telefono);
-            fila.find('td').eq(4).text(correo);
+                    const fila = $('tr[data-id="' + id + '"]');
+                    fila.find('td').eq(0).text(nombre);
+                    fila.find('td').eq(1).text(cedula);
+                    fila.find('td').eq(2).text(direccion);
+                    fila.find('td').eq(3).text(telefono);
+                    fila.find('td').eq(4).text(correo);
 
-            const botonModificar = fila.find('.btn-modificar');
-            botonModificar.data('nombre', nombre);
-            botonModificar.data('cedula', cedula);
-            botonModificar.data('direccion', direccion);
-            botonModificar.data('telefono', telefono);
-            botonModificar.data('correo', correo);
-       
-/*
-                    //Actualiza la fila en la tabla sin recargar
-                    let id = $('#modificar_id_clientes').val();
-                    let fila = $(`tr[data-id="${id}"]`);
-                    fila.find('td').eq(0).text($('#modificarnombre').val());
-                    fila.find('td').eq(1).text($('#modificarcedula').val());
-                    fila.find('td').eq(2).text($('#modificardireccion').val());
-                    fila.find('td').eq(3).text($('#modificartelefono').val());
-                    fila.find('td').eq(4).text($('#modificarcorreo').val());*/
+                    const botonModificar = fila.find('.btn-modificar');
+                    botonModificar.data('nombre', nombre);
+                    botonModificar.data('cedula', cedula);
+                    botonModificar.data('direccion', direccion);
+                    botonModificar.data('telefono', telefono);
+                    botonModificar.data('correo', correo);
                 } else {
                     muestraMensaje(response.message || 'No se pudo modificar el cliente');
                 }
@@ -575,13 +550,5 @@ $(document).ready(function () {
     $(document).on('click', function() {
         $('.desplegable').hide();
     });
-
-    function muestraMensaje(mensaje) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: mensaje
-        });
-    }
 });
 
