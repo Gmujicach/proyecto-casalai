@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
-        case 'ingresar':
+        case 'registrar':
             $cliente = new cliente();
             $cliente->setnombre($_POST['nombre']);
             $cliente->setdireccion($_POST['direccion']);
@@ -21,19 +21,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cliente->setcedula($_POST['cedula']);
             $cliente->setcorreo($_POST['correo']);
             
-            // Validar si el cliente ya existe
+            if ($cliente->existeNumeroCedula($_POST['cedula'])) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El número de cedula/RIF ya existe'
+                ]);
+                exit;
+            }
 
-            if (!$cliente->validaCedulaCliente()) {
-                echo json_encode(['status' => 'error', 'message' => 'Este Cliente ya existe']);
+            if ($cliente->ingresarclientes()) {
+                $clienteRegistrado = $cliente->obtenerUltimaCliente();
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Cliente registrado correctamente',
+                    'cliente' => $clienteRegistrado
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Error al registrar el cliente'
+                ]);
             }
-            else {
-                if ($cliente->ingresarclientes()) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el Cliente']);
-                }
-            }
-            break;
+            exit;
 
         case 'obtener_clientes':
             $id = $_POST['id_clientes'];
@@ -48,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'ID de Cliente no proporcionado']);
             }
-            break;
+            exit;
 
         case 'modificar':
             $id = $_POST['id_clientes'];
@@ -60,12 +69,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cliente->setcedula($_POST['cedula']);
             $cliente->setcorreo($_POST['correo']);
             
+            if ($cliente->existeNumeroCedula($_POST['cedula'], $id)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El número de cedula/RIF ya existe'
+                ]);
+                exit;
+            }
+
             if ($cliente->modificarclientes($id)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Cliente']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el cliente']);
             }
-            break;
+            exit;
 
         case 'eliminar':
             $id = $_POST['id'];
@@ -75,16 +92,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Cliente']);
             }
-            break;
+            exit;
 
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
-            break;
+        exit;
     }
-    exit;
 }
-
-
 
 function getclientes() {
     $cliente = new cliente();

@@ -66,7 +66,7 @@ class cliente extends BD {
     public function setId($id) {
         $this->id = $id;
     }
-
+/*
     public function validaCedulaCliente() {
         $sql = "SELECT COUNT(*) FROM tbl_clientes WHERE cedula = :cedula";
         $stmt = $this->conex->prepare($sql);
@@ -77,7 +77,7 @@ class cliente extends BD {
         // Retorna true si no existe un producto con el mismo nombre
         return $count == 0;
     }
-
+*/
     public function ingresarclientes() {
         $sql = "INSERT INTO tbl_clientes (`nombre`, `cedula`, `direccion`, `telefono`, `correo`, `activo`)
                 VALUES (:nombre, :cedula, :direccion, :telefono, :correo, 1)";
@@ -90,6 +90,39 @@ class cliente extends BD {
         $stmt->bindParam(':correo', $this->correo);
         
         return $stmt->execute();
+    }
+
+    public function existeNumeroCedula($cedula, $excluir_id = null) {
+        return $this->existeNumCedula($cedula, $excluir_id); 
+    }
+    private function existeNumCedula($cedula, $excluir_id) {
+        $sql = "SELECT COUNT(*) FROM tbl_cuentas WHERE cedula = ?";
+        $params = [$cedula];
+        if ($excluir_id !== null) {
+            $sql .= " AND id_clientes != ?";
+            $params[] = $excluir_id;
+        }
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function obtenerUltimaCliente() {
+        return $this->obtUltimaCliente(); 
+    }
+    private function obtUltimaCliente() {
+        try {
+            $sql = "SELECT * FROM tbl_clientes ORDER BY id_clientes DESC LIMIT 1";
+            $stmt = $this->conex->prepare($sql);
+            $stmt->execute();
+            $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->conex = null;
+            return $cliente ? $cliente : null;
+        } catch (PDOException $e) {
+            error_log("Error al obtener el último cliente: " . $e->getMessage());
+            $this->conex = null;
+            return null;
+        }
     }
 
     // Obtener Producto por ID
@@ -148,8 +181,6 @@ class cliente extends BD {
 
         return $clientes;
     }
-
-    
 }
 
 
