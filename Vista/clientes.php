@@ -39,7 +39,7 @@ if (!isset($_SESSION['name'])) {
         <br>
             <div class="envolver-form">
                 <label for="Direccion">Dirección</label>
-                <textarea class="form-control" maxlength="50" type="text" id="direccion" name="direccion" rows="3"></textarea>
+                <textarea class="form-control" maxlength="100" type="text" id="direccion" name="direccion" rows="3"></textarea>
                 <span class="span-value" id="sdireccion"></span>
             </div>
             
@@ -119,7 +119,7 @@ if (!isset($_SESSION['name'])) {
 <div class="modal fade modal-modificar" id="modificar_clientes_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="modificarclientes" method="POST" enctype="multipart/form-data">
+            <form id="modificarclientes" method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modificar_clientes_modal_label">Modificar Cliente</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -146,7 +146,7 @@ if (!isset($_SESSION['name'])) {
                     </div>
                     <div class="form-group">
                         <label for="modificardireccion">Dirección</label>
-                        <textarea class="form-control" maxlength="50" type="text" id="modificardireccion" name="modificardireccion" rows="3"></textarea>
+                        <textarea class="form-control" maxlength="100" type="text" id="modificardireccion" name="modificardireccion" rows="3"></textarea>
                         <span class="span-value-modal" id="smodificardireccion"></span>
                     </div>
                     <div class="form-group">

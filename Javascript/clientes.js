@@ -366,7 +366,7 @@ $(document).ready(function () {
 
     // Enviar datos de modificación por AJAX al controlador PHP
     $('#modificarclientes').on('submit', function(e) {
-    e.preventDefault();
+        e.preventDefault();
 
         const datos = {
             nombre: $('#modificarnombre').val(),
@@ -397,46 +397,36 @@ $(document).ready(function () {
             contentType: false,
             cache: false,
             data: formData,
+            dataType: 'json', // <-- Asegúrate de esto
             success: function(response) {
-        response = JSON.parse(response);
-        if (response.status === 'success') {
-            $('#modificar_clientes_modal').modal('hide');
-            Swal.fire({
-                icon: 'success',
-                title: 'Modificado',
-                text: 'El Cliente se ha modificado correctamente'
-            });
+                if (response.status === 'success') {
+                    $('#modificar_clientes_modal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: 'El Cliente se ha modificado correctamente'
+                    });
 
-            const id = $('#modificar_id_clientes').val(); // Añadir esta línea
-            const nombre = $('#modificarnombre').val();
-            const cedula = $('#modificarcedula').val();
-            const direccion = $('#modificardireccion').val();
-            const telefono = $('#modificartelefono').val();
-            const correo = $('#modificarcorreo').val();
+                    const id = $('#modificar_id_clientes').val();
+                    const nombre = $('#modificarnombre').val();
+                    const cedula = $('#modificarcedula').val();
+                    const direccion = $('#modificardireccion').val();
+                    const telefono = $('#modificartelefono').val();
+                    const correo = $('#modificarcorreo').val();
 
-            const fila = $('tr[data-id="' + id + '"]');
-            fila.find('td').eq(0).text(nombre);
-            fila.find('td').eq(1).text(cedula);
-            fila.find('td').eq(2).text(direccion);
-            fila.find('td').eq(3).text(telefono);
-            fila.find('td').eq(4).text(correo);
+                    const fila = $('tr[data-id="' + id + '"]');
+                    fila.find('td').eq(0).text(nombre);
+                    fila.find('td').eq(1).text(cedula);
+                    fila.find('td').eq(2).text(direccion);
+                    fila.find('td').eq(3).text(telefono);
+                    fila.find('td').eq(4).text(correo);
 
-            const botonModificar = fila.find('.btn-modificar');
-            botonModificar.data('nombre', nombre);
-            botonModificar.data('cedula', cedula);
-            botonModificar.data('direccion', direccion);
-            botonModificar.data('telefono', telefono);
-            botonModificar.data('correo', correo);
-       
-/*
-                    //Actualiza la fila en la tabla sin recargar
-                    let id = $('#modificar_id_clientes').val();
-                    let fila = $(`tr[data-id="${id}"]`);
-                    fila.find('td').eq(0).text($('#modificarnombre').val());
-                    fila.find('td').eq(1).text($('#modificarcedula').val());
-                    fila.find('td').eq(2).text($('#modificardireccion').val());
-                    fila.find('td').eq(3).text($('#modificartelefono').val());
-                    fila.find('td').eq(4).text($('#modificarcorreo').val());*/
+                    const botonModificar = fila.find('.btn-modificar');
+                    botonModificar.data('nombre', nombre);
+                    botonModificar.data('cedula', cedula);
+                    botonModificar.data('direccion', direccion);
+                    botonModificar.data('telefono', telefono);
+                    botonModificar.data('correo', correo);
                 } else {
                     muestraMensaje(response.message || 'No se pudo modificar el cliente');
                 }
