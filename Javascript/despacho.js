@@ -219,9 +219,6 @@ carga_productos();    //boton para levantar modal de productos
                         $(linea).find("td:eq(5)").text()+
                `</td>
                 <td>
-                    <input type="number" class="numerico" name="costo[]" min="0.01" step="0.01" value="1" required>
-                </td>
-                <td>
                     <input type="number" class="numerico" name="cantidad[]" min="1" step="1" value="1" required>
                 </td>
                </tr>`;
@@ -240,11 +237,13 @@ carga_productos();    //boton para levantar modal de productos
     }
 
 
-function muestraMensaje(mensaje) {
+function muestraMensaje(tipo = 'success', tiempo = 4000, titulo = '', mensaje = '') {
     Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje
+        icon: tipo,
+        title: titulo,
+        text: mensaje,
+        timer: tiempo,
+        showConfirmButton: false
     });
 }
     

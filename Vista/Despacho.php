@@ -61,7 +61,6 @@ if (!isset($_SESSION['name'])) {
 										<th>Modelo</th>
 										<th>Marca</th>
 										<th>Serial</th>
-										<th>Costo</th>
 										<th>Cantidad</th>
 									</tr>
 								</thead>
@@ -110,32 +109,91 @@ if (!isset($_SESSION['name'])) {
 	<div class="contenedor-tabla">
 	<h3>Lista de Recepciones</h3>
 		<table class="tablaConsultas" id="tablaConsultas">
-			<thead>
-			<tr>
-				<th>FECHA</th>
-				<th>CORRELATIVO</th>
-				<th>PROVEEDOR</th>
-				<th>MODIFICACION</th>
-			</tr>
-			</thead>
-			<tbody>
+<thead>
+<tr>
+    <th>FECHA</th>
+    <th>CORRELATIVO</th>
+    <th>CLIENTE</th>
+    <th>PRODUCTO</th>
+    <th>CANTIDAD</th>
+    <th>MODIFICACIÓN</th>
+</tr>
+</thead>
+<tbody>
+    <?php
+// Agrupar productos por despacho
+$productosPorDespacho = [];
+foreach ($despachos as $fila) {
+    $id = $fila['id_despachos'];
+    if (!isset($productosPorDespacho[$id])) {
+        $productosPorDespacho[$id] = [];
+    }
+    $productosPorDespacho[$id][] = [
+        'id_producto' => $fila['id_producto'],
+        'cantidad' => $fila['cantidad'],
+        'id_detalle' => $fila['id_detalle'] ?? '', // si tienes iddetalle
+        // agrega más campos si necesitas
+    ];
+}
+?>
+<?php
 
+usort($despachos, function($a, $b) {
+    if ($a['fecha_despacho'] == $b['fecha_despacho']) {
+        if ($a['correlativo'] == $b['correlativo']) {
+            if ($a['nombre_cliente'] == $b['nombre_cliente']) {
+                return strcmp($a['nombre_producto'], $b['nombre_producto']);
+            }
+            return strcmp($a['nombre_cliente'], $b['nombre_cliente']);
+        }
+        return strcmp($a['correlativo'], $b['correlativo']);
+    }
+    return strcmp($a['fecha_despacho'], $b['fecha_despacho']);
+});
 
+// Agrupar para rowspan
+$rowspans = [];
+foreach ($despachos as $despacho) {
+    $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
+    if (!isset($rowspans[$key])) {
+        $rowspans[$key] = 1;
+    } else {
+        $rowspans[$key]++;
+    }
+}
+$rendered = [];
+foreach ($despachos as $despacho):
+    $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
+    $id = $despacho['id_despachos'];
+?>
+<tr>
+    <?php if (!in_array($key, $rendered)): ?>
+        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['fecha_despacho']) ?></td>
+        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['correlativo']) ?></td>
+        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['nombre_cliente']) ?></td>
+    <?php endif; ?>
 
+    <td><?= htmlspecialchars($despacho['nombre_producto']) ?></td>
+    <td><?= htmlspecialchars($despacho['cantidad']) ?></td>
 
-					<td>
-						<button class="btn-modificar"
-							data-bs-toggle="modal"
-							data-bs-target="#modalModificar">
-							Modificar
-						</button>
-
-
-
-					</td>
-				
-				</tr>
-			</tbody>
+    <?php if (!in_array($key, $rendered)): ?>
+        <td rowspan="<?= $rowspans[$key] ?>">
+            <button class="btn-modificar"
+                data-bs-toggle="modal"
+                data-bs-target="#modalModificar"
+                data-iddespacho="<?= htmlspecialchars($despacho['id_despachos']) ?>"
+                data-correlativo="<?= htmlspecialchars($despacho['correlativo']) ?>"
+                data-fecha="<?= htmlspecialchars($despacho['fecha_despacho']) ?>"
+                data-cliente="<?= htmlspecialchars($despacho['id_clientes']) ?>"
+                data-productos='<?= json_encode($productosPorDespacho[$id], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                Modificar
+            </button>
+        </td>
+        <?php $rendered[] = $key; ?>
+    <?php endif; ?>
+</tr>
+<?php endforeach; ?>
+</tbody>
 		</table>
 	</div>
 
@@ -207,10 +265,10 @@ const productosDisponibles = <?= json_encode($productos) ?>;
 $(document).on('click', '.btn-modificar', function (e) {
     e.preventDefault();
 
-    let idRecepcion = $(this).data('idrecepcion');
+    let idDespacho = $(this).data('iddespacho');
     let correlativo = $(this).data('correlativo');
     let fecha = $(this).data('fecha');
-    let proveedor = $(this).data('proveedor');
+    let cliente = $(this).data('cliente');
     let productos = $(this).data('productos');
 
     // Si productos viene como string, conviértelo a objeto
@@ -223,18 +281,18 @@ $(document).on('click', '.btn-modificar', function (e) {
     }
 
     // Llenar campos básicos
-    $('#modalIdRecepcion').val(idRecepcion);
+    $('#modalIdRecepcion').val(idDespacho);
     $('#modalCorrelativo').val(correlativo);
     $('#modalFecha').val(fecha);
 
-    // Llenar select de proveedor
-    let selectProveedor = $('#modalProveedor');
-    selectProveedor.empty();
-    selectProveedor.append('<option value="disabled" disabled>Seleccione un Proveedor</option>');
+    // Llenar select de cliente
+    let selectCliente = $('#modalProveedor');
+    selectCliente.empty();
+    selectCliente.append('<option value="disabled" disabled>Seleccione el Cliente</option>');
     <?php foreach ($proveedores as $prov): ?>
-        selectProveedor.append('<option value="<?= $prov['id_proveedor'] ?>"><?= addslashes($prov['nombre']) ?></option>');
+        selectCliente.append('<option value="<?= $prov['id_clientes'] ?>"><?= addslashes($prov['nombre']) ?></option>');
     <?php endforeach; ?>
-    selectProveedor.val(proveedor);
+    selectCliente.val(cliente);
 
     // Generar HTML de productos existentes
     let html = '';
@@ -257,9 +315,8 @@ $(document).on('click', '.btn-modificar', function (e) {
                         <input type="number" class="form-control" name="cantidades[]" value="${item.cantidad}">
                     </div>
                     <div class="col-md-2">
-                        <label>Costo</label>
-                        <input type="number" class="form-control" name="costos[]" value="${item.costo}">
-                        <input type="hidden" name="iddetalles[]" value="${item.iddetalles || ''}">
+                        
+                        <input type="hidden" name="iddetalles[]" value="${item.id_detalle || ''}">
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <button type="button" class="btn btn-danger btn-eliminar-producto">Eliminar Producto</button>
@@ -294,8 +351,7 @@ function crearBloqueProducto(productosDisponibles) {
                 <input type="number" class="form-control" name="cantidades[]" value="1" min="1">
             </div>
             <div class="col-md-2">
-                <label>Costo</label>
-                <input type="number" class="form-control" name="costos[]" value="0" min="0" step="0.01">
+                
                 <input type="hidden" name="iddetalles[]" value="">
             </div>
             <div class="col-md-2 d-flex align-items-end">
@@ -318,6 +374,45 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
     <script src="Javascript/despacho.js"></script>
     <script src="Javascript/validaciones.js"></script>
+    <script>
+function mostrarDatosFormulario(formId) {
+    const form = document.getElementById(formId);
+    const formData = new FormData(form);
+    const datos = {};
+
+    for (let [clave, valor] of formData.entries()) {
+        // Si el nombre termina en [], guárdalo como array
+        if (clave.endsWith('[]')) {
+            const key = clave.slice(0, -2); // quita los corchetes
+            if (!datos[key]) {
+                datos[key] = [];
+            }
+            datos[key].push(valor);
+        } else {
+            // Si ya existe la clave, conviértelo en array
+            if (datos[clave]) {
+                if (!Array.isArray(datos[clave])) {
+                    datos[clave] = [datos[clave]];
+                }
+                datos[clave].push(valor);
+            } else {
+                datos[clave] = valor;
+            }
+        }
+    }
+
+    console.log("Datos del formulario:", datos);
+    alert(JSON.stringify(datos, null, 2));
+}
+
+// Ejecutar cuando se hace clic en "Registrar Recepción"
+document.getElementById('registrar').addEventListener('click', function () {
+    mostrarDatosFormulario('f');
+});
+</script>
+
 </body>
+
+
 
 <?php include 'footer.php'; ?>

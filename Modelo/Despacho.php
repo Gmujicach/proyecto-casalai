@@ -53,11 +53,11 @@ class Despacho extends BD{
                 
                 $stmt = $co->prepare($sql);
                 $stmt->bindParam(':id_cliente', $this->idcliente, PDO::PARAM_INT);
-                $stmt->bindParam(':fecha_recepcion', $tiempo, PDO::PARAM_STR);
+                $stmt->bindParam(':fecha_despacho', $tiempo, PDO::PARAM_STR);
                 $stmt->bindParam(':correlativo', $this->correlativo, PDO::PARAM_STR);
                 $stmt->execute();
                 
-                $idRecepcion = $co->lastInsertId();
+                $idDespacho = $co->lastInsertId();
                 
                 $cap = count($idproducto);
     
@@ -65,7 +65,7 @@ class Despacho extends BD{
                 for ($i = 0; $i < $cap; $i++) {
                     // Asegúrate de que `$this->desc` esté definido correctamente como una propiedad de la clase
                     $sqlDetalle = "INSERT INTO tbl_despacho_detalle (id_despacho, id_producto, cantidad) 
-                                   VALUES (:id_despacho, :idProducto, :cantidad, :costo)";
+                                   VALUES (:id_despacho, :idProducto, :cantidad)";
                     
                     $stmtDetalle = $co->prepare($sqlDetalle);
                     $stmtDetalle->bindParam(':id_despacho', $idDespacho, PDO::PARAM_INT);
@@ -346,6 +346,87 @@ ORDER BY r.correlativo ASC;
     return $datos;
 }
 
+
+public function modificarDespacho($idDespacho, $idproducto, $cantidad, $iddetalle)
+{
+    $d = array();
+
+    try {
+        $co = $this->getConexion();
+        $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $co->beginTransaction();
+
+        // Actualizar la cabecera del despacho
+        $sqlDespacho = "UPDATE tbl_despachos 
+                        SET id_clientes = :id_cliente, fecha_despacho = :fecha, correlativo = :correlativo 
+                        WHERE id_despachos = :idDespacho";
+        $stmt = $co->prepare($sqlDespacho);
+        $stmt->bindParam(':id_cliente', $this->idcliente, PDO::PARAM_INT);
+        $stmt->bindParam(':fecha', $this->fecha, PDO::PARAM_STR);
+        $stmt->bindParam(':correlativo', $this->correlativo, PDO::PARAM_STR);
+        $stmt->bindParam(':idDespacho', $idDespacho, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Obtener los detalles actuales
+        $sqlExistentes = "SELECT id_detalle FROM tbl_despacho_detalle WHERE id_despacho = :idDespacho";
+        $stmt = $co->prepare($sqlExistentes);
+        $stmt->bindParam(':idDespacho', $idDespacho, PDO::PARAM_INT);
+        $stmt->execute();
+        $detallesExistentes = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+        // Detectar detalles que deben ser eliminados
+        $idsConservados = array_filter($iddetalle); // eliminar vacíos (los nuevos productos no tienen id)
+        $idsEliminar = array_diff($detallesExistentes, $idsConservados);
+
+        if (!empty($idsEliminar)) {
+            $in = implode(',', array_fill(0, count($idsEliminar), '?'));
+            $sqlDelete = "DELETE FROM tbl_despacho_detalle WHERE id_detalle IN ($in)";
+            $stmt = $co->prepare($sqlDelete);
+            foreach (array_values($idsEliminar) as $k => $id) {
+                $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
+            }
+            $stmt->execute();
+        }
+
+        // Insertar o actualizar productos
+        $cap = count($idproducto);
+        for ($i = 0; $i < $cap; $i++) {
+            if (!empty($iddetalle[$i])) {
+                // Producto existente → actualizar
+                $sqlUpdate = "UPDATE tbl_despacho_detalle
+                              SET id_producto = :idproducto, cantidad = :cantidad
+                              WHERE id_detalle = :iddetalle";
+                $stmt = $co->prepare($sqlUpdate);
+                $stmt->bindParam(':idproducto', $idproducto[$i], PDO::PARAM_INT);
+                $stmt->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
+                $stmt->bindParam(':iddetalle', $iddetalle[$i], PDO::PARAM_INT);
+                $stmt->execute();
+            } else {
+                // Producto nuevo → insertar
+                $sqlInsert = "INSERT INTO tbl_despacho_detalle (id_despacho, id_producto, cantidad) 
+                              VALUES (:idDespacho, :idproducto, :cantidad)";
+                $stmt = $co->prepare($sqlInsert);
+                $stmt->bindParam(':idDespacho', $idDespacho, PDO::PARAM_INT);
+                $stmt->bindParam(':idproducto', $idproducto[$i], PDO::PARAM_INT);
+                $stmt->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
+                $stmt->execute();
+            }
+        }
+
+        $co->commit();
+        $d['resultado'] = 'modificarRecepcion';
+        $d['mensaje'] = 'Se modificó el despacho y sus productos correctamente';
+
+    } catch (Exception $e) {
+        if ($co->inTransaction()) {
+            $co->rollBack();
+        }
+        $d['resultado'] = 'error';
+        $d['mensaje'] = $e->getMessage();
+    }
+
+    return $d;
+}
 
 	
 }

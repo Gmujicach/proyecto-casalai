@@ -9,7 +9,7 @@ class OrdenDespacho extends BD {
     private $fecha;
     private $activo = 1;
     private $factura;
-    private $tableordendespacho = 'tbl_despachos';
+    private $tableordendespacho = 'tbl_orden_despachos';
 
 
 
@@ -66,7 +66,7 @@ class OrdenDespacho extends BD {
     // Método para validar si el correlativo ya existe
 
      public function validarCorrelativo() {
-        $sql = "SELECT COUNT(*) FROM tbl_despachos WHERE correlativo = :correlativo";
+        $sql = "SELECT COUNT(*) FROM tbl_orden_despachos WHERE correlativo = :correlativo";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':correlativo', $this->correlativo);
         $stmt->execute();
@@ -78,7 +78,7 @@ class OrdenDespacho extends BD {
 
     // Método para ingresar una nueva orden de despacho
     public function ingresarOrdenDespacho() {
-    $sql = "INSERT INTO tbl_despachos (fecha_despacho, id_factura, correlativo, activo)
+    $sql = "INSERT INTO tbl_orden_despachos (fecha_despacho, id_factura, correlativo, activo)
             VALUES (:fecha, :factura, :correlativo, :activo)";
     $stmt = $this->conex->prepare($sql);
     $stmt->bindParam(':fecha', $this->fecha);
@@ -91,7 +91,7 @@ class OrdenDespacho extends BD {
 
     // Método para obtener una orden de despacho por su ID
     public function obtenerOrdenPorId($id) {
-        $query = "SELECT * FROM tbl_despachos WHERE id_despachos = ?";
+        $query = "SELECT * FROM tbl_orden_despachos WHERE id_despachos = ?";
         $stmt = $this->conex->prepare($query);
         $stmt->execute([$id]);
         $ordendespacho = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -100,7 +100,7 @@ class OrdenDespacho extends BD {
 
     // Método para modificar una orden de despacho
     public function modificarOrdenDespacho($id) {
-        $sql = "UPDATE tbl_despachos SET fecha_despacho = :fecha, correlativo=:correlativo, id_factura=:factura  WHERE id_despachos = :id_despacho";
+        $sql = "UPDATE tbl_orden_despachos SET fecha_despacho = :fecha, correlativo=:correlativo, id_factura=:factura  WHERE id_despachos = :id_despacho";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_despacho', $id);
         $stmt->bindParam(':fecha', $this->fecha);
@@ -112,7 +112,7 @@ class OrdenDespacho extends BD {
 
     // Método para eliminar una orden de despacho
     public function eliminarOrdenDespacho($id) {
-        $sql = "DELETE FROM tbl_despachos WHERE id_despachos = :id";
+        $sql = "DELETE FROM tbl_orden_despachos WHERE id_despachos = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();

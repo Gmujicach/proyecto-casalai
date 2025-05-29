@@ -23,16 +23,16 @@ if (is_file("vista/" . $pagina . ".php")) {
                 echo json_encode($respuesta);
                 break;
 
-            case 'registrar':
-                $k->setidcliente($_POST['cliente']);
-                $k->setcorrelativo($_POST['correlativo']);
-                $respuesta = $k->registrar(
-                    $_POST['producto'],
-                    $_POST['cantidad'],
-                );
-                echo json_encode($respuesta);
-                break;
 
+case 'registrar':
+    $k->setidcliente($_POST['cliente']);
+    $k->setcorrelativo($_POST['correlativo']);
+    // Recibe los arrays correctamente
+    $productos = $_POST['producto'] ?? [];
+    $cantidades = $_POST['cantidad'] ?? [];
+    $respuesta = $k->registrar($productos, $cantidades);
+    echo json_encode($respuesta);
+    break;
             case 'buscar':
                 $correlativo = $_POST['correlativo'] ?? null;
                 $k->setcorrelativo($correlativo);
@@ -58,24 +58,23 @@ if (is_file("vista/" . $pagina . ".php")) {
                 }
                 break;
 
+
 case 'modificarRecepcion':
-    $idRecepcion = $_POST['id_recepcion'] ?? null;
+    $idDespacho = $_POST['id_recepcion'] ?? null;
     $idproducto = $_POST['productos'] ?? [];
     $cantidad = $_POST['cantidades'] ?? [];
-    $costo = $_POST['costos'] ?? [];   
     $iddetalle = $_POST['iddetalles'] ?? [];
 
     $k->setidcliente($_POST['proveedor']);
     $k->setcorrelativo($_POST['correlativo']);
     $k->setfecha($_POST['fecha']);
 
-    if ($idRecepcion) {
-        $respuesta = $k->modificar(
-            $idRecepcion,
+    if ($idDespacho) {
+        $respuesta = $k->modificarDespacho(
+            $idDespacho,
             $idproducto,
             $cantidad,
-            $costo,
-            $iddetalle
+             $iddetalle
         );
         if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificarRecepcion') {
             echo json_encode([
@@ -85,11 +84,11 @@ case 'modificarRecepcion':
         } else {
             echo json_encode([
                 'status' => 'error',
-                'message' => $respuesta['mensaje'] ?? 'Error al modificar la recepción'
+                'message' => $respuesta['mensaje'] ?? 'Error al modificar el despacho'
             ]);
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'ID de recepción faltante']);
+        echo json_encode(['status' => 'error', 'message' => 'ID de despacho faltante']);
     }
     break;
 
