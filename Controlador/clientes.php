@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($cliente->ingresarclientes()) {
-                $clienteRegistrado = $cliente->obtenerUltimaCliente();
+                $clienteRegistrado = $cliente->obtenerUltimoCliente();
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Cliente registrado correctamente',
