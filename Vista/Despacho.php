@@ -1,9 +1,4 @@
-<?php
-if (!isset($_SESSION['name'])) {
-	header('Location: .');
-	exit();
-}
-?>
+<?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista' ) { ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -416,3 +411,11 @@ document.getElementById('registrar').addEventListener('click', function () {
 
 
 <?php include 'footer.php'; ?>
+
+
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado");
+    exit;
+}
+?>

@@ -13,17 +13,16 @@ class Permisos extends BD {
     /**
      * Verifica si un usuario tiene permiso para un módulo específico
      */
-    public function verificarPermiso($usuarioId, $modulo) {
-        $query = "SELECT COUNT(*) FROM id_rango u
-                 JOIN rol_permiso rp ON u.rol_id = rp.rol_id
-                 JOIN permisos p ON rp.permiso_id = p.id
-                 WHERE u.id = ? AND p.modulo = ?";
-        
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([$usuarioId, $modulo]);
-        
-        return $stmt->fetchColumn() > 0;
-    }
+        public function verificarPermiso($usuarioId, $modulo) {
+            $query = "SELECT COUNT(*) FROM usuarios u
+                    JOIN rol_permiso rp ON u.rol_id = rp.rol_id
+                    JOIN permisos p ON rp.permiso_id = p.id
+                    WHERE u.id = ? AND p.modulo = ?";
+            
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([$usuarioId, $modulo]);
+            return $stmt->fetchColumn() > 0;
+        }
     
     /**
      * Obtiene todos los permisos de un usuario
@@ -44,7 +43,7 @@ class Permisos extends BD {
      * Registra intento de acceso no autorizado
      */
     public function registrarIntentoNoAutorizado($usuarioId, $modulo) {
-        $query = "INSERT INTO tbl_bitacora (id_usuario, id_modulo, fecha_hora, ip)
+        $query = "INSERT INTO tbl_bitacora (id_usuario, id_modulo, fecha_hora)
                  VALUES (?, ?, NOW(), ?)";
         
         $stmt = $this->db->prepare($query);

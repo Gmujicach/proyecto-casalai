@@ -49,32 +49,58 @@ data-mensaje="<?php echo !empty($mensaje) ? $mensaje : ''; ?>">
 
 
 
-          <form action="#" class="registrar-form">
-            <h2 class="title">Registrarse</h2>
-            <div class="input-field">
-              <i class="fas fa-user"></i>
-              <input type="text" placeholder="Nombre de Usuario" />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-envelope"></i>
-              <input type="email" placeholder="Correo Electrónico" />
-            </div>
-            <div class="input-field">
-              <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Contraseña" />
-            </div>
-            <input type="submit" class="btn" value="Registrarse" />
-            <p class="social-text">Síguenos en nuestras Redes Sociales</p>
-            <div class="social-media">
-              <a href="#" class="social-icon">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-google"></i>
-              </a>
-              </a>
-            </div>
-          </form>
+
+<!-- Formulario de Registro (para Login.php) -->
+<form method="post" id="registro-usuario-cliente" class="registrar-form">
+  <h2 class="title">Registrarse</h2>
+  <div class="input-field">
+    <i class="fas fa-user"></i>
+    <input type="text" name="nombre_usuario" id="nombre_usuario" placeholder="Nombre de Usuario" maxlength="20" required />
+  </div>
+  <div class="input-field">
+    <i class="fas fa-user"></i>
+    <input type="text" name="nombre" id="nombre" placeholder="Nombre" maxlength="30" required />
+
+    <i class="fas fa-user"></i>
+    <input type="text" name="apellido" id="apellido" placeholder="Apellido" maxlength="30" required />
+  </div>
+  <div class="input-field">
+    <i class="fas fa-id-card"></i>
+    <input type="text" name="cedula" id="cedula" placeholder="Cédula/RIF" maxlength="12" required />
+  </div>
+  <div class="input-field">
+    <i class="fas fa-phone"></i>
+    <input type="text" name="telefono" id="telefono" placeholder="Teléfono" maxlength="13" required />
+  </div>
+  <div class="envolver-form">
+    <label for="direccion" style="color:#888; font-size:13px;">Dirección</label>
+    <textarea class="form-control" maxlength="100" id="direccion" name="direccion" rows="2" required style="resize:none; border-radius:20px; padding:10px 20px; border: none; background: #f0f0f0; margin-bottom: 10px;"></textarea>
+    <span class="span-value" id="sdireccion"></span>
+  </div>
+  <div class="input-field">
+    <i class="fas fa-envelope"></i>
+    <input type="email" name="correo" id="correo" placeholder="Correo Electrónico" maxlength="50" required />
+  </div>
+  <div class="input-field">
+    <i class="fas fa-lock"></i>
+    <input type="password" name="clave" id="clave" placeholder="Contraseña" maxlength="15" required />
+  </div>
+  <div class="input-field">
+    <i class="fas fa-lock"></i>
+    <input type="password" name="clave_confirmar" id="clave_confirmar" placeholder="Confirmar Contraseña" maxlength="15" required />
+  </div>
+  <input type="hidden" name="accion" value="registrar" />
+  <input type="submit" class="btn" value="Registrarse" />
+  <p class="social-text">Síguenos en nuestras Redes Sociales</p>
+  <div class="social-media">
+    <a href="#" class="social-icon">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="#" class="social-icon">
+      <i class="fab fa-google"></i>
+    </a>
+  </div>
+</form>
         </div>
       </div>
 

@@ -1,14 +1,11 @@
-<?php
+<?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Cliente' ) { ?>
 
+<!DOCTYPE html>
+<html lang="es">
 
-
-if (!isset($_SESSION['name'])) {
-
- 	header('Location: .');
- 	exit();
- }
-?>
-
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
@@ -205,3 +202,10 @@ $(document).ready(function() {
 
 
 </html>
+
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado");
+    exit;
+}
+?>

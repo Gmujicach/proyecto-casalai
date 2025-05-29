@@ -1,3 +1,5 @@
+<?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Cliente') { ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -387,3 +389,10 @@
 </body>
 
 </html>
+
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado");
+    exit;
+}
+?>

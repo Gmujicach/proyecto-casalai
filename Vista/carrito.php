@@ -1,3 +1,5 @@
+<?php if ($_SESSION['rango'] == 'Administrador') { ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -98,3 +100,10 @@
     <script src="Javascript/carrito.js"></script>
 </body>
 </html>
+
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado");
+    exit;
+}
+?>

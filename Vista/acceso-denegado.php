@@ -14,8 +14,9 @@
         <h1>Acceso Denegado</h1>
         <p>No tienes permisos para acceder a esta sección.</p>
         <p>Si crees que esto es un error, por favor contacta al administrador.</p>
-        <a href="/dashboard" class="btn btn-primary">Volver al inicio</a>
+        <a href="?pagina=Dashboard" class="btn btn-primary">Volver al inicio</a>
     </div>
 </div>
 
 <?php include 'footer.php'; ?>
+

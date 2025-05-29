@@ -44,7 +44,7 @@ class Base {
     protected function getDatabaseConnection() {
         // Retorna tu objeto de conexión PDO
         // Ejemplo:
-        return new PDO('mysql:host=localhost;dbname=seguridadcasalai', 'root', '');
+        return new PDO('mysql:host=localhost;dbname=seguridad_cl', 'root', '');
     }
 }
 ?>

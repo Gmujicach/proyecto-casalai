@@ -1,9 +1,4 @@
-<?php
-if (!isset($_SESSION['name'])) {
-    header('Location: .');
-    exit();
-}
-?>
+<?php if ($_SESSION['rango'] == 'Administrador') {?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -71,3 +66,10 @@ if (!isset($_SESSION['name'])) {
 
 </body>
 </html>
+
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado"); 
+    exit;
+}
+?>

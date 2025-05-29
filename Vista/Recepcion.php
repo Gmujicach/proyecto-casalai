@@ -1,9 +1,4 @@
-<?php
-if (!isset($_SESSION['name'])) {
-	header('Location: .');
-	exit();
-}
-?>
+<?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista' ) { ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -381,3 +376,10 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 </body>
 </html>
+
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado");
+    exit;
+}
+?>
