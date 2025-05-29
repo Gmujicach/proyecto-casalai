@@ -60,6 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         case 'modificar':
+            ob_clean();
+            header('Content-Type: application/json; charset=utf-8');
             $id = $_POST['id_clientes'];
             $cliente = new cliente();
             $cliente->setId($id);
