@@ -48,14 +48,14 @@ $(document).ready(function () {
     });
 
     $("#direccion").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
         let direccion = document.getElementById("direccion");
         direccion.value = space(direccion.value);
     });
 
     $("#direccion").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,100}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\,-s\b]{2,100}$/,
             $(this),
             $("#sdireccion"),
             "*El formato permite letras y números*"
@@ -110,7 +110,7 @@ $(document).ready(function () {
             return false;
         }
         if(validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,100}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
             $("#direccion"),
             $("#sdireccion"),
             "*Puede haber letras y números*"
@@ -317,14 +317,14 @@ $(document).ready(function () {
     });
 
     $("#modificardireccion").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
         let direccion = document.getElementById("direccion");
         direccion.value = space(direccion.value);
     });
 
     $("#modificardireccion").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,100}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
             $(this),
             $("#smodificardireccion"),
             "*El formato permite letras y números*"
@@ -352,7 +352,7 @@ $(document).ready(function () {
         if (!/^[VEJPG0-9-.\b]*$/.test(datos.cedula)) {
             errores.push("El formato solo permite números y (V,E,J,P,G,-.)");
         }
-        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,100}$/.test(datos.direccion)) {
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/.test(datos.direccion)) {
             errores.push("El formato permite letras y números.");
         }
         if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono)) {
@@ -550,13 +550,5 @@ $(document).ready(function () {
     $(document).on('click', function() {
         $('.desplegable').hide();
     });
-
-    function muestraMensaje(mensaje) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: mensaje
-        });
-    }
 });
 
