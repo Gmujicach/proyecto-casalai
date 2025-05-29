@@ -341,7 +341,7 @@ $(document).ready(function () {
 
     // Enviar datos de modificación por AJAX al controlador PHP
     $('#modificarclientes').on('submit', function(e) {
-        e.preventDefault();
+    e.preventDefault();
 
         const datos = {
             nombre: $('#modificarnombre').val(),
@@ -373,34 +373,36 @@ $(document).ready(function () {
             cache: false,
             data: formData,
             success: function(response) {
-                response = JSON.parse(response);
-                if (response.status === 'success') {
-                    $('#modificar_clientes_modal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: 'El Cliente se ha modificado correctamente'
-                    });
+        response = JSON.parse(response);
+        if (response.status === 'success') {
+            $('#modificar_clientes_modal').modal('hide');
+            Swal.fire({
+                icon: 'success',
+                title: 'Modificado',
+                text: 'El Cliente se ha modificado correctamente'
+            });
 
-                    const nombre = $('#modificarnombre').val();
-                    const cedula = $('#modificarcedula').val();
-                    const direccion = $('#modificardireccion').val();
-                    const telefono = $('#modificartelefono').val();
-                    const correo = $('#modificarcorreo').val();
+            const id = $('#modificar_id_clientes').val(); // Añadir esta línea
+            const nombre = $('#modificarnombre').val();
+            const cedula = $('#modificarcedula').val();
+            const direccion = $('#modificardireccion').val();
+            const telefono = $('#modificartelefono').val();
+            const correo = $('#modificarcorreo').val();
 
-                    const fila = $('tr[data-id="' + id + '"]');
-                    fila.find('td').eq(0).text(nombre);
-                    fila.find('td').eq(1).text(cedula);
-                    fila.find('td').eq(2).text(direccion);
-                    fila.find('td').eq(3).text(telefono);
-                    fila.find('td').eq(4).text(correo);
+            const fila = $('tr[data-id="' + id + '"]');
+            fila.find('td').eq(0).text(nombre);
+            fila.find('td').eq(1).text(cedula);
+            fila.find('td').eq(2).text(direccion);
+            fila.find('td').eq(3).text(telefono);
+            fila.find('td').eq(4).text(correo);
 
-                    const botonModificar = fila.find('.btn-modificar');
-                    botonModificar.data('nombre', nombre);
-                    botonModificar.data('cedula', cedula);
-                    botonModificar.data('direccion', direccion);
-                    botonModificar.data('telefono', telefono);
-                    botonModificar.data('correo', correo);
+            const botonModificar = fila.find('.btn-modificar');
+            botonModificar.data('nombre', nombre);
+            botonModificar.data('cedula', cedula);
+            botonModificar.data('direccion', direccion);
+            botonModificar.data('telefono', telefono);
+            botonModificar.data('correo', correo);
+       
 /*
                     //Actualiza la fila en la tabla sin recargar
                     let id = $('#modificar_id_clientes').val();
@@ -427,48 +429,48 @@ $(document).ready(function () {
 
     // Función para eliminar el producto
     $(document).on('click', '.btn-eliminar', function (e) {
-        e.preventDefault(); // Evitar la redirección predeterminada del enlace
-
-        Swal.fire({
-            title: '¿Está seguro?',
-            text: "¡No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminarlo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                var id = $(this).data('id');
-                var datos = new FormData();
-                datos.append('accion', 'eliminar');
-                datos.append('id_clientes', id);
-                $.ajax({
-                    url: '',
-                    type: 'POST',
-                    data: datos,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
-                    success: function (respuesta) {
-                        if (respuesta.status === 'success') {
-                            Swal.fire(
-                                'Eliminada!',
-                                'La cliente ha sido eliminado.',
-                                'success'
-                            );
-                            eliminarFilaCliente(id_clientes);
-                        } else {
-                            muestraMensaje(respuesta.message);
-                        }
-                    },
-                    error: function () {
-                        muestraMensaje('Error en la solicitud AJAX');
+    e.preventDefault();
+    var id = $(this).data('id');
+    
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var datos = new FormData();
+            datos.append('accion', 'eliminar');
+            datos.append('id_clientes', id); // Cambiado de 'id' a 'id_clientes'
+            
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: datos,
+                processData: false,
+                contentType: false,
+                success: function (respuesta) {
+                    if (respuesta.status === 'success') {
+                        Swal.fire(
+                            'Eliminado!',
+                            'El cliente ha sido eliminado.',
+                            'success'
+                        );
+                        eliminarFilaCliente(id);
+                    } else {
+                        muestraMensaje(respuesta.message);
                     }
-                });
-            }
-        });
+                },
+                error: function () {
+                    muestraMensaje('Error en la solicitud AJAX');
+                }
+            });
+        }
     });
+});
 
     function eliminarFilaCliente(id_clientes) {
         const tabla = $('#tablaConsultas').DataTable();

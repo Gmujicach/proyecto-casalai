@@ -149,13 +149,12 @@ class cliente extends BD {
     return $stmt->execute();
 }
 
-    function eliminar_l($id) {
-        $sql = "UPDATE tbl_clientes SET activo = 0 WHERE id = :id_clientes";
-        $conexion = $this->conex->prepare($sql);
-        $conexion->bindParam(':id_clientes', $id);
-        return $conexion->execute();
-    }
-
+function eliminar_l($id) {
+    $sql = "UPDATE tbl_clientes SET activo = 0 WHERE id_clientes = :id_clientes";
+    $conexion = $this->conex->prepare($sql);
+    $conexion->bindParam(':id_clientes', $id);
+    return $conexion->execute();
+}
 
     // Eliminar cliente
     public function eliminarclientes($id) {
