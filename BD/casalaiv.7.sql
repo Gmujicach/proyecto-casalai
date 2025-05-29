@@ -198,29 +198,26 @@ INSERT INTO `tbl_cuentas` (`id_cuenta`, `nombre_banco`, `numero_cuenta`, `rif_cu
 
 CREATE TABLE `tbl_despachos` (
   `id_despachos` int(11) NOT NULL,
-  `id_factura` int(11) NOT NULL,
   `id_clientes` int(11) NOT NULL,
   `fecha_despacho` date NOT NULL,
   `correlativo` varchar(255) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tbl_despacho_detalle`
+--
 
-CREATE TABLE IF NOT EXISTS `tbl_despacho_detalle` (
-  `id_detalle` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tbl_despacho_detalle` (
+  `id_detalle` int(11) NOT NULL,
   `id_despacho` int(11) NOT NULL,
   `id_producto` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL,
-  PRIMARY KEY (`id_detalle`),
-  KEY `id_despacho` (`id_despacho`),
-  KEY `id_producto` (`id_producto`)
+  `cantidad` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tbl_detalles_pago`
@@ -521,6 +518,20 @@ INSERT INTO `tbl_modelos` (`id_modelo`, `nombre_modelo`, `id_marca`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tbl_orden_despachos`
+--
+
+CREATE TABLE `tbl_orden_despachos` (
+  `id_orden_despachos` int(11) NOT NULL,
+  `id_factura` int(11) NOT NULL,
+  `fecha_despacho` date NOT NULL,
+  `correlativo` varchar(255) DEFAULT NULL,
+  `activo` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tbl_otros`
 --
 
@@ -739,7 +750,15 @@ ALTER TABLE `tbl_cuentas`
 --
 ALTER TABLE `tbl_despachos`
   ADD PRIMARY KEY (`id_despachos`),
-  ADD KEY `fk_despacho_cliente` (`id_factura`);
+  ADD KEY `id_clientes` (`id_clientes`);
+
+--
+-- Indices de la tabla `tbl_despacho_detalle`
+--
+ALTER TABLE `tbl_despacho_detalle`
+  ADD PRIMARY KEY (`id_detalle`),
+  ADD KEY `id_despacho` (`id_despacho`),
+  ADD KEY `id_producto` (`id_producto`);
 
 --
 -- Indices de la tabla `tbl_detalles_pago`
@@ -799,6 +818,13 @@ ALTER TABLE `tbl_marcas`
 ALTER TABLE `tbl_modelos`
   ADD PRIMARY KEY (`id_modelo`),
   ADD KEY `fk_modelo_marca` (`id_marca`);
+
+--
+-- Indices de la tabla `tbl_orden_despachos`
+--
+ALTER TABLE `tbl_orden_despachos`
+  ADD PRIMARY KEY (`id_orden_despachos`),
+  ADD KEY `id_factura` (`id_factura`);
 
 --
 -- Indices de la tabla `tbl_otros`
@@ -905,6 +931,12 @@ ALTER TABLE `tbl_cuentas`
 --
 ALTER TABLE `tbl_despachos`
   MODIFY `id_despachos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_despacho_detalle`
+--
+ALTER TABLE `tbl_despacho_detalle`
+  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_detalles_pago`
@@ -1024,11 +1056,15 @@ ALTER TABLE `tbl_combo_detalle`
 -- Filtros para la tabla `tbl_despachos`
 --
 ALTER TABLE `tbl_despachos`
-  ADD CONSTRAINT `fk_despacho_factura` FOREIGN KEY (`id_factura`) REFERENCES `tbl_facturas` (`id_factura`);
+  ADD CONSTRAINT `tbl_despachos_ibfk_1` FOREIGN KEY (`id_clientes`) REFERENCES `tbl_clientes` (`id_clientes`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+--
+-- Filtros para la tabla `tbl_despacho_detalle`
+--
 ALTER TABLE `tbl_despacho_detalle`
   ADD CONSTRAINT `tbl_despacho_detalle_ibfk_1` FOREIGN KEY (`id_despacho`) REFERENCES `tbl_despachos` (`id_despachos`) ON DELETE CASCADE,
   ADD CONSTRAINT `tbl_despacho_detalle_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`);
+
 --
 -- Filtros para la tabla `tbl_detalles_pago`
 --
@@ -1076,6 +1112,12 @@ ALTER TABLE `tbl_ingresos_egresos`
 ALTER TABLE `tbl_modelos`
   ADD CONSTRAINT `fk_modelo_marca` FOREIGN KEY (`id_marca`) REFERENCES `tbl_marcas` (`id_marca`),
   ADD CONSTRAINT `modelo_ibfk_1` FOREIGN KEY (`id_marca`) REFERENCES `tbl_marcas` (`id_marca`);
+
+--
+-- Filtros para la tabla `tbl_orden_despachos`
+--
+ALTER TABLE `tbl_orden_despachos`
+  ADD CONSTRAINT `tbl_orden_despachos_ibfk_1` FOREIGN KEY (`id_factura`) REFERENCES `tbl_facturas` (`id_factura`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_otros`
