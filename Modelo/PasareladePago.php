@@ -214,5 +214,33 @@ private function pagoProcesar() {
             return false;
         }
     }
+        public function obtenerPagoPorId($id) {
+        $sql = "SELECT 
+                    dp.id_detalles,
+                    dp.id_factura,
+                    dp.id_cuenta,
+                    c.nombre_banco AS tbl_cuentas,
+                    dp.observaciones,
+                    dp.tipo,
+                    dp.referencia,
+                    dp.fecha,
+                    dp.estatus
+                FROM tbl_detalles_pago dp
+                INNER JOIN tbl_cuentas c ON dp.id_cuenta = c.id_cuenta
+                WHERE dp.id_detalles = :id";
+        $stmt = $this->getConexion()->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+        private function pagoEliminar() {
+        $sql = "DELETE FROM tbl_detalles_pago WHERE id_detalles = :id_detalles";
+        $stmt = $this->getConexion()->prepare($sql);
+        $stmt->bindParam(':id_detalles', $this->id_detalles, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+
 }
 ?>

@@ -53,46 +53,57 @@ $listadocuentas = $cuentaModel->consultarCuentabanco();
                 break;
     
             case 'modificar':
-            error_log("Acción recibida: " . $accion);
+    error_log("Acción recibida: " . $accion);
 
-                $id = $_POST['id_detalles'];
+    $id = $_POST['id_detalles'];
+    $pasarela->setIdDetalles($id);
+    $pasarela->setReferencia($_POST['referencia']);
+    $pasarela->setFecha($_POST['fecha']);
+    $pasarela->setTipo($_POST['tipo']);
+    $pasarela->setFactura($_POST['id_factura']);
+    $pasarela->setCuenta($_POST['cuenta']);
 
-                $pasarela->setIdDetalles($id);
-                $pasarela->setReferencia($_POST['referencia']);
-                $pasarela->setFecha($_POST['fecha']);
-                $pasarela->setTipo($_POST['tipo']);
-                $pasarela->setFactura($_POST['id_factura']);
-                $pasarela->setCuenta($_POST['cuenta']);
-
-                
-                
-                // Intento de modificar el producto y devuelve una respuesta en formato JSON
-                if ($pasarela->pasarelaTransaccion('Modificar')) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
-                }
-                break;
+    if ($pasarela->pasarelaTransaccion('Modificar')) {
+        $pagoActualizado = $pasarela->obtenerPagoPorId($id);
+        echo json_encode(['status' => 'success', 'pago' => $pagoActualizado]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
+    }
+    break;
     
 
                         // Cambiar estatus
         case 'modificar_estado':
-            error_log("Acción recibida: " . $accion);
-            $id = $_POST['id_detalles'];
-            $nuevoEstatus = $_POST['estatus'];
-            $observaciones = $_POST['observaciones'];
-            $factura = $_POST['id_factura'];
-            $pasarela->setIdDetalles($id);
-            $pasarela->setObservaciones($observaciones);
-            $pasarela->setEstatus($nuevoEstatus);
-            $pasarela->setFactura($factura);
+    error_log("Acción recibida: " . $accion);
+    $id = $_POST['id_detalles'];
+    $nuevoEstatus = $_POST['estatus'];
+    $observaciones = $_POST['observaciones'];
+    $factura = $_POST['id_factura'];
+    $pasarela->setIdDetalles($id);
+    $pasarela->setObservaciones($observaciones);
+    $pasarela->setEstatus($nuevoEstatus);
+    $pasarela->setFactura($factura);
 
-            if ($pasarela->pasarelaTransaccion('Procesar')) {
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
-            }
-            break;
+    if ($pasarela->pasarelaTransaccion('Procesar')) {
+        $pagoActualizado = $pasarela->obtenerPagoPorId($id);
+        echo json_encode(['status' => 'success', 'pago' => $pagoActualizado]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
+    }
+    break;
+            case 'eliminar':
+                // Crear una nueva instancia del modelo Productos
+                $pasarela = new PasareladePago();
+                $id = $_POST['id_detalles'];
+                $pasarela->setIdDetalles($id);
+                
+                // Intento de eliminar el producto y devuelve una respuesta en formato JSON
+                if ($pasarela->pasarelaTransaccion('Eliminar')) {
+                    echo json_encode(['status' => 'success']);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
+                }
+                break;
     
             default:
                 // Respuesta de error si la acción no es válida

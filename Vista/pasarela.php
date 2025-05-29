@@ -80,7 +80,6 @@ if (!isset($_SESSION['name'])) {
 
 </li>
 
-                                <li><a href="#" class="eliminar" onclick="eliminarPago(<?php echo $dato['id_detalles']; ?>)">Eliminar</a></li>
                             </ul>
                         </div>
                     </div>
@@ -228,38 +227,7 @@ if (!isset($_SESSION['name'])) {
   })();
 </script>
 
-<script>
-  document.getElementById('formModificarEstado').addEventListener('submit', function(e) {
-    e.preventDefault(); // evita el envío tradicional del formulario
 
-    const form = e.target;
-    const formData = new FormData(form);
-
-    console.log("🔍 Valores enviados:");
-    for (let [name, value] of formData.entries()) {
-        console.log(`name: ${name}, value: ${value}`);
-    }
-  });
-$(document).ready(function () {
-  $('.modificar').on('click', function (e) {
-    e.preventDefault();
-
-    const id = $(this).data('id');
-    const cuenta = $(this).data('cuenta');
-    const referencia = $(this).data('referencia');
-    const fecha = $(this).data('fecha');
-    const tipo = $(this).data('tipo'); // Asegúrate de agregarlo en el HTML
-    const factura = $(this).data('factura');
-    $('#modificarIdDetalles').val(id);
-    $('#modificarCuenta').val(cuenta);
-    $('#modificarReferencia').val(referencia);
-    $('#modificarFecha').val(fecha);
-    $('#modificarTipo').val(tipo);
-    $('#modificarFactura').val(factura);
-    $('#modificarPago').modal('show');
-  });
-});
-</script>
 <script>
     function estatusAClase(estatus) {
         return estatus
