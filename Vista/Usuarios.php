@@ -9,7 +9,7 @@
     <title>Gestionar Usuarios</title>
     <?php include 'header.php'; ?>
 </head>
-<body>
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <?php include 'NewNavBar.php'; ?>
 
@@ -185,17 +185,17 @@
                     <input type="hidden" id="modificar_id_usuario" name="id_usuario">
                     <div class="form-group">
                         <label for="modificarnombre">Nombres del Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre" name="nombre" maxlength="20" required>
+                        <input type="text" class="form-control" id="modificarnombre" name="nombre" maxlength="30" required>
                         <span class="span-value-modal" id="smodificarnombre"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarapellido_usuario">Apellidos del Usuario</label>
-                        <input type="text" class="form-control" id="modificarapellido_usuario" name="apellido_usuario" maxlength="20" required>
+                        <input type="text" class="form-control" id="modificarapellido_usuario" name="apellido_usuario" maxlength="30" required>
                         <span class="span-value-modal" id="smodificarapellido_usuario"></span>
                     </div>
                     <div class="form-group">
                         <label for="modificarnombre_usuario">Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="30" required>
+                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="20" required>
                         <span class="span-value-modal" id="smodificarnombre_usuario"></span>
                     </div>
                     <div class="form-group">

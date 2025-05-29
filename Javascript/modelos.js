@@ -170,6 +170,10 @@ function agregarFilaModelo(modelo) {
         });
     });
 
+    $(document).on('click', '#modificarModeloModal .close', function() {
+        $('#modificarModeloModal').modal('hide');
+    });
+
     function llenarSelectMarcasModal(idSeleccionada) {
         let select = $('#modificar_marca_modelo');
         select.empty();

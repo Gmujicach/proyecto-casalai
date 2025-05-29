@@ -10,7 +10,7 @@
     <title>Gestionar Despacho</title>
 </head>
 
-<body>
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 <?php include 'NewNavBar.php'; ?>
 
 	<div class="formulario-responsivo">
@@ -69,34 +69,35 @@
 					</div>
 				</form>
 			
-			<div class="modal fade" tabindex="-1" role="dialog" id="modalp">
-				<div class="modal-dialog " role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Listado de productos</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-							</button>
-						</div>
-						<div class="modal-body">
-							<table class="table table-striped table-hover">
-								<thead class="text-center">
-									<tr>
-										<th style="display:none">Id</th>
-										<th>Codigo</th>
-										<th>Nombre</th>
-										<th>Modelo</th>
-										<th>Marca</th>
-										<th>Serial</th>
-									</tr>
-								</thead>
-								<tbody class="text-center" id="listadop">
 
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modalp">
+  <div class="modal-dialog" role="document" style="max-width: none; width: auto;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Listado de productos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-3">
+        <table class="table table-striped table-hover m-0">
+          <thead class="text-center">
+            <tr>
+              <th style="display:none">Id</th>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>Modelo</th>
+              <th>Marca</th>
+              <th>Serial</th>
+            </tr>
+          </thead>
+          <tbody class="text-center" id="listadop">
+            <!-- Aquí se insertan los productos -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 		</section>
 	</div>
 	</div>					

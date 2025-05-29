@@ -3,6 +3,7 @@
   <link rel="stylesheet" href="Styles/formulario.css">
   <link rel="stylesheet" href="Styles/tabla_consulta.css">
   <link rel="stylesheet" href="Styles/modalmodificar.css">
+  <link rel="stylesheet" href="Styles/fondo.css">
   <!-- Bootstrap 5 CSS -->
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">

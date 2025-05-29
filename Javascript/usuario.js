@@ -19,12 +19,12 @@ $(document).ready(function () {
         );
     });
 
-    $("#apellido").on("keypress", function(e){
+    $("#apellido_usuario").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]*$/, e);
-        let nombre = document.getElementById("apellido");
-        nombre.value = space(nombre.value);
+        let apellido_usuario = document.getElementById("apellido_usuario");
+        apellido_usuario.value = space(apellido_usuario.value);
     });
-    $("#apellido").on("keyup", function(){
+    $("#apellido_usuario").on("keyup", function(){
         validarKeyUp(
             /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/,
             $(this),
@@ -74,26 +74,26 @@ $(document).ready(function () {
     });
 
     $("#clave_usuario").on("keypress", function(e){
-        validarKeyPress(/^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]*$/, e);
+        validarKeyPress(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]*$/, e);
     });
     $("#clave_usuario").on("keyup", function(){
         validarKeyUp(
-            /^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]{4,15}$/,
+            /^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/,
             $(this),
             $("#sclave_usuario"),
-            "*Solo letras y números, de 3 a 15 caracteres*"
+            "*Solo letras y números, de 6 a 15 caracteres*"
         );
     });
 
     $("#clave_confirmar").on("keypress", function(e){
-        validarKeyPress(/^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]*$/, e);
+        validarKeyPress(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]*$/, e);
     });
     $("#clave_confirmar").on("keyup", function(){
         validarKeyUp(
-            /^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]{4,15}$/,
+            /^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/,
             $(this),
             $("#sclave_confirmar"),
-            "*Solo letras y números, de 3 a 15 caracteres*"
+            "*Solo letras y números, de 6 a 15 caracteres*"
         );
     });
 
@@ -108,9 +108,9 @@ $(document).ready(function () {
         }
 
         // Apellido
-        let apellido = $("#apellido");
-        apellido.val(space(apellido.val()).trim());
-        if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, apellido, $("#sapellido"), "*Solo letras, de 2 a 30 caracteres*") == 0) {
+        let apellido_usuario = $("#apellido");
+        apellido_usuario.val(space(apellido_usuario.val()).trim());
+        if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, apellido_usuario, $("#sapellido"), "*Solo letras, de 2 a 30 caracteres*") == 0) {
             valido = false;
         }
 
@@ -135,13 +135,13 @@ $(document).ready(function () {
 
         // Clave
         let clave_usuario = $("#clave_usuario");
-        if (validarKeyUp(/^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]{4,15}$/, clave_usuario, $("#sclave_usuario"), "*Solo letras y números, de 3 a 15 caracteres*") == 0) {
+        if (validarKeyUp(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/, clave_usuario, $("#sclave_usuario"), "*Solo letras y números, de 6 a 15 caracteres*") == 0) {
             valido = false;
         }
 
         // Confirmar clave
         let clave_confirmar = $("#clave_confirmar");
-        if (validarKeyUp(/^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]{4,15}$/, clave_confirmar, $("#sclave_confirmar"), "*Solo letras y números, de 3 a 15 caracteres*") == 0) {
+        if (validarKeyUp(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/, clave_confirmar, $("#sclave_confirmar"), "*Solo letras y números, de 6 a 15 caracteres*") == 0) {
             valido = false;
         }
 
@@ -368,14 +368,14 @@ $('#incluirusuario').on('submit', function(e) {
     });
 
     $("#modificarclave_usuario").on("keypress", function(e){
-        validarKeyPress(/^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]*$/, e);
+        validarKeyPress(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]*$/, e);
     });
     $("#modificarclave_usuario").on("keyup", function(){
         validarKeyUp(
-            /^[A-Za-z0-9\b\s\u00f1\u00d1\u00E0-\u00FC]{4,15}$/,
+            /^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/,
             $(this),
             $("#smodificarclave_usuario"),
-            "*Solo letras y números, de 3 a 15 caracteres*"
+            "*Solo letras y números, de 6 a 15 caracteres*"
         );
     });
 
@@ -430,8 +430,8 @@ $('#incluirusuario').on('submit', function(e) {
 
         // Contraseña solo si se va a cambiar
         let clave = $('#modificarclave_usuario').val();
-        if (clave.length > 0 && !/^.{6,20}$/.test(clave)) {
-            errores.push("La contraseña debe tener entre 6 y 20 caracteres.");
+        if (clave.length > 0 && !/^.{6,15}$/.test(clave)) {
+            errores.push("La contraseña debe tener entre 6 y 15 caracteres.");
         }
 
         if (errores.length > 0) {

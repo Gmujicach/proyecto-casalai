@@ -202,57 +202,56 @@ public function registrar($idproducto, $cantidad) {
 
 	
 	
-	function listadoproductos(){
-		$co = $this->getConexion();
-		$co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$r = array();
-		try{
-			
-			$resultado = $co->query("SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial
+function listadoproductos(){
+    $co = $this->getConexion();
+    $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $r = array();
+    try{
+        $resultado = $co->query("SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial
             FROM tbl_productos AS p 
             INNER JOIN tbl_modelos AS m ON p.id_modelo = m.id_modelo 
             INNER JOIN tbl_marcas AS mar ON m.id_marca = mar.id_marca;");
-			
-			if($resultado){
-				
-				$respuesta = '';
-				foreach($resultado as $r){
-					$respuesta = $respuesta."<tr style='cursor:pointer' onclick='colocaproducto(this);'>";
-						$respuesta = $respuesta."<td style='display:none'>";
-							$respuesta = $respuesta.$r['id_producto'];
-						$respuesta = $respuesta."</td>";
-						$respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['id_producto'];
-						$respuesta = $respuesta."</td>";
-						$respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['nombre_producto'];
-						$respuesta = $respuesta."</td>";
-                        $respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['nombre_modelo'];
-						$respuesta = $respuesta."</td>";
-                        $respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['nombre_marca'];
-						$respuesta = $respuesta."</td>";
-                        $respuesta = $respuesta."<td>";
-							$respuesta = $respuesta.$r['serial'];
-						$respuesta = $respuesta."</td>";
-					$respuesta = $respuesta."</tr>";
-				}
-				
-			    
-			}
-			$r['resultado'] = 'listado';
-			$r['mensaje'] =  $respuesta;
-			
-		}catch(Exception $e){
-			$r['resultado'] = 'error';
-		    $r['mensaje'] =  $e->getMessage();
-		}
-		
-		return $r;
-		
-	}
+        
+        if($resultado){
+            $respuesta = '';
+            $totalColumnas = 6; // Número de columnas de la tabla
+            $totalFilas = 0;
+            foreach($resultado as $r){
+                $respuesta .= "<tr style='cursor:pointer' onclick='colocaproducto(this);'>";
+                $respuesta .= "<td style='display:none'>{$r['id_producto']}</td>";
+                $respuesta .= "<td>{$r['id_producto']}</td>";
+                $respuesta .= "<td>{$r['nombre_producto']}</td>";
+                $respuesta .= "<td>{$r['nombre_modelo']}</td>";
+                $respuesta .= "<td>{$r['nombre_marca']}</td>";
+                $respuesta .= "<td>{$r['serial']}</td>";
+                $respuesta .= "</tr>";
+                $totalFilas++;
+            }
 
+            // Ajuste de tamaño sugerido para el modal según la cantidad de filas
+            // (esto se puede usar en JS para cambiar el tamaño del modal dinámicamente)
+            $modalSize = 'modal-md';
+            if ($totalFilas > 8) {
+                $modalSize = 'modal-lg';
+            }
+            if ($totalFilas > 20) {
+                $modalSize = 'modal-xl';
+            }
+        }
+        $r = [
+            'resultado' => 'listado',
+            'mensaje' => $respuesta,
+            'modalSize' => isset($modalSize) ? $modalSize : 'modal-md'
+        ];
+    }catch(Exception $e){
+        $r = [
+            'resultado' => 'error',
+            'mensaje' => $e->getMessage(),
+            'modalSize' => 'modal-md'
+        ];
+    }
+    return $r;
+}
 	function consultarproductos() {
     $sql = "SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial
             FROM tbl_productos AS p 

@@ -21,7 +21,7 @@ if (!isset($_SESSION['name'])) {
 
 </head>
 
-<body>
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
   <?php include 'NewNavBar.php'; ?>
 
   <section style=" height: 100vh;" class="dashboard-section">

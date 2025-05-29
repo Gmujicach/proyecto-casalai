@@ -67,4 +67,55 @@ class Login extends BD
     
     return $r;
 }
+
+
+
+public function registrarUsuarioYCliente($datos) {
+    $co = $this->getConexion();
+    $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $respuesta = ['status' => 'error', 'mensaje' => ''];
+
+    try {
+        // Verifica si el usuario ya existe
+        $p = $co->prepare("SELECT COUNT(*) FROM tbl_usuarios WHERE username = ?");
+        $p->execute([$datos['nombre_usuario']]);
+        if ($p->fetchColumn() > 0) {
+            $respuesta['mensaje'] = "El nombre de usuario ya está en uso. Por favor elige otro.";
+            return $respuesta;
+        }
+
+        // Hashea la contraseña
+        $hash = password_hash($datos['clave'], PASSWORD_DEFAULT);
+
+        // Inserta en tbl_usuarios
+        $p = $co->prepare("INSERT INTO tbl_usuarios (username, password, nombres, apellidos, correo, telefono, rango, estatus)
+                           VALUES (?, ?, ?, ?, ?, ?, 'Cliente', 'habilitado')");
+        $p->execute([
+            $datos['nombre_usuario'],
+            $hash,
+            $datos['nombre'],
+            $datos['apellido'],
+            $datos['correo'],
+            $datos['telefono']
+        ]);
+
+        // Inserta en tbl_clientes
+        $p = $co->prepare("INSERT INTO tbl_clientes (nombre, cedula, telefono, direccion, correo, activo)
+                           VALUES (?, ?, ?, ?, ?, ?)");
+        $p->execute([
+            $datos['nombre'] . ' ' . $datos['apellido'],
+            $datos['cedula'],
+            $datos['telefono'],
+            $datos['direccion'],
+            $datos['correo'],
+            1
+        ]);
+
+        $respuesta['status'] = 'success';
+        $respuesta['mensaje'] = 'Usuario y cliente registrados correctamente.';
+    } catch (Exception $e) {
+        $respuesta['mensaje'] = $e->getMessage();
+    }
+    return $respuesta;
+}
 }

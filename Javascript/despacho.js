@@ -314,9 +314,10 @@ function muestraMensaje(tipo = 'success', tiempo = 4000, titulo = '', mensaje = 
                     console.log(lee.resultado);
                     
                     if(lee.resultado=='listado'){
-                        
-                        $('#listadop').html(lee.mensaje);
-                    }
+    $('#listadop').html(lee.mensaje);
+    // Ajusta el tamaño del modal según la sugerencia del backend
+    $('#modalp .modal-dialog').removeClass('modal-md modal-lg modal-xl').addClass(lee.modalSize);
+}
                     else if(lee.resultado=='registrar'){
     muestraMensaje('success', 6000,'REGISTRAR', lee.mensaje);
     if (lee.tbody) {
