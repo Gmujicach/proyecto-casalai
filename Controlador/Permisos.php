@@ -11,7 +11,7 @@ class Base {
         }
         
         // Instanciar modelo de permisos
-        $this->permisos = new Permisos($this->getConexion());
+        $this->permisos = new Permisos();
     }
     
     /**
@@ -44,7 +44,7 @@ class Base {
     protected function getDatabaseConnection() {
         // Retorna tu objeto de conexión PDO
         // Ejemplo:
-        return new PDO('mysql:host=localhost;dbname=tu_db', 'usuario', 'password');
+        return new PDO('mysql:host=localhost;dbname=seguridadcasalai', 'root', '');
     }
 }
 ?>

@@ -240,11 +240,12 @@ carga_productos();    //boton para levantar modal de productos
     }
 
 
-function muestraMensaje(mensaje) {
+function muestraMensaje(tipo, tiempo, titulo, mensaje) {
     Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje
+        icon: tipo,
+        title: titulo,
+        text: mensaje,
+        timer: tiempo || 3000
     });
 }
     
@@ -318,9 +319,9 @@ function muestraMensaje(mensaje) {
                         $('#listadop').html(lee.mensaje);
                     }
                     else if(lee.resultado=='registrar'){
-                        muestraMensaje('success', 6000,'REGISTRAR', lee.mensaje);
-                        borrar();
-                    }else if (lee.resultado == "encontro") {		
+    muestraMensaje('success', 6000, 'REGISTRAR', lee.mensaje);
+    borrar();
+}else if (lee.resultado == "encontro") {		
                         if (lee.mensaje == 'El numero de correlativo ya existe!') {
                             muestraMensaje('success', 6000,'Atencion', lee.mensaje);
                         }		

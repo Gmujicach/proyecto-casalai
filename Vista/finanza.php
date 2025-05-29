@@ -26,7 +26,6 @@ if (!isset($_SESSION['name'])) {
                 <th>Fecha</th>
                 <th>Monto</th>
                 <th>Descripción</th>
-                <th>Acción</th>
             </tr>
         </thead>
         <tbody>
@@ -35,13 +34,7 @@ if (!isset($_SESSION['name'])) {
                 <td><?= $ing['fecha'] ?></td>
                 <td><?= number_format($ing['monto'],2) ?></td>
                 <td><?= $ing['descripcion'] ?></td>
-                <td>
-                    <?php if($ing['estado']): ?>
-                    <button class="anular-finanza" data-id="<?= $ing['id_finanzas'] ?>">Anular</button>
-                    <?php else: ?>
-                    <span style="color:red;">Anulado</span>
-                    <?php endif; ?>
-                </td>
+
             </tr>
             <?php endforeach; ?>
         </tbody>
@@ -56,7 +49,6 @@ if (!isset($_SESSION['name'])) {
                 <th>Fecha</th>
                 <th>Monto</th>
                 <th>Descripción</th>
-                <th>Acción</th>
             </tr>
         </thead>
         <tbody>
@@ -65,13 +57,7 @@ if (!isset($_SESSION['name'])) {
                 <td><?= $eg['fecha'] ?></td>
                 <td><?= number_format($eg['monto'],2) ?></td>
                 <td><?= $eg['descripcion'] ?></td>
-                <td>
-                    <?php if($eg['estado']): ?>
-                    <button class="anular-finanza" data-id="<?= $eg['id_finanzas'] ?>">Anular</button>
-                    <?php else: ?>
-                    <span style="color:red;">Anulado</span>
-                    <?php endif; ?>
-                </td>
+
             </tr>
             <?php endforeach; ?>
         </tbody>

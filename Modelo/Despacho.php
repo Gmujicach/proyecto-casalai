@@ -57,6 +57,10 @@ public function registrar($idproducto, $cantidad) {
             $idDespacho = $co->lastInsertId();
             $cap = count($idproducto);
 
+            // Para el ingreso
+            $descripcion = "Venta: ";
+            $monto_total = 0;
+
             for ($i = 0; $i < $cap; $i++) {
                 $sqlDetalle = "INSERT INTO tbl_despacho_detalle (id_despacho, id_producto, cantidad) 
                                VALUES (:id_despacho, :idProducto, :cantidad)";
@@ -65,16 +69,35 @@ public function registrar($idproducto, $cantidad) {
                 $stmtDetalle->bindParam(':idProducto', $idproducto[$i], PDO::PARAM_INT);
                 $stmtDetalle->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
                 $stmtDetalle->execute();
+
+                // Obtener precio del producto
+                $sqlPrecio = "SELECT precio, nombre_producto FROM tbl_productos WHERE id_producto = ?";
+                $stmtPrecio = $co->prepare($sqlPrecio);
+                $stmtPrecio->execute([$idproducto[$i]]);
+                $prod = $stmtPrecio->fetch(PDO::FETCH_ASSOC);
+                $precio = $prod ? floatval($prod['precio']) : 0;
+                $nombre = $prod ? $prod['nombre_producto'] : $idproducto[$i];
+
+                $descripcion .= "{$nombre} (x{$cantidad[$i]}), ";
+                $monto_total += $precio * $cantidad[$i];
             }
+            $descripcion = rtrim($descripcion, ', ');
+
+            // Registrar ingreso en tbl_ingresos_egresos
+            $sqlIngreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_despacho)
+                          VALUES ('ingreso', ?, ?, ?, 1, ?)";
+            $stmtIngreso = $co->prepare($sqlIngreso);
+            $stmtIngreso->execute([$monto_total, $descripcion, $tiempo, $idDespacho]);
 
             // Devuelve también la lista actualizada de despachos
             $d['resultado'] = 'registrar';
-            $d['mensaje'] = 'Se registró la nota de despacho correctamente';
+            $d['mensaje'] = 'Se registró la nota de despacho correctamente y el ingreso fue registrado.';
             $d['despachos'] = $this->getdespacho();
 
         } catch (Exception $e) {
             $d['resultado'] = 'error';
             $d['mensaje'] = $e->getMessage();
+            $d['despachos'] = $this->getdespacho();
         }
     } else {
         $d['resultado'] = 'registrar';
@@ -388,6 +411,8 @@ public function modificarDespacho($idDespacho, $idproducto, $cantidad, $iddetall
 
         // Insertar o actualizar productos
         $cap = count($idproducto);
+        $descripcion = "Venta: ";
+        $monto_total = 0;
         for ($i = 0; $i < $cap; $i++) {
             if (!empty($iddetalle[$i])) {
                 // Producto existente → actualizar
@@ -409,11 +434,42 @@ public function modificarDespacho($idDespacho, $idproducto, $cantidad, $iddetall
                 $stmt->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
                 $stmt->execute();
             }
+
+            // Obtener precio y nombre del producto
+            $sqlPrecio = "SELECT precio, nombre_producto FROM tbl_productos WHERE id_producto = ?";
+            $stmtPrecio = $co->prepare($sqlPrecio);
+            $stmtPrecio->execute([$idproducto[$i]]);
+            $prod = $stmtPrecio->fetch(PDO::FETCH_ASSOC);
+            $precio = $prod ? floatval($prod['precio']) : 0;
+            $nombre = $prod ? $prod['nombre_producto'] : $idproducto[$i];
+
+            $descripcion .= "{$nombre} (x{$cantidad[$i]}), ";
+            $monto_total += $precio * $cantidad[$i];
+        }
+        $descripcion = rtrim($descripcion, ', ');
+
+        // Actualizar o insertar ingreso en tbl_ingresos_egresos
+        $sqlCheck = "SELECT id_finanzas FROM tbl_ingresos_egresos WHERE id_despacho = ?";
+        $stmt = $co->prepare($sqlCheck);
+        $stmt->execute([$idDespacho]);
+        $ingreso = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($ingreso) {
+            // Actualizar ingreso existente
+            $sqlIngreso = "UPDATE tbl_ingresos_egresos SET monto = ?, descripcion = ?, fecha = ?, estado = 1 WHERE id_despacho = ?";
+            $stmt = $co->prepare($sqlIngreso);
+            $stmt->execute([$monto_total, $descripcion, $this->fecha, $idDespacho]);
+        } else {
+            // Insertar nuevo ingreso
+            $sqlIngreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_despacho)
+                          VALUES ('ingreso', ?, ?, ?, 1, ?)";
+            $stmt = $co->prepare($sqlIngreso);
+            $stmt->execute([$monto_total, $descripcion, $this->fecha, $idDespacho]);
         }
 
         $co->commit();
         $d['resultado'] = 'modificarRecepcion';
-        $d['mensaje'] = 'Se modificó el despacho y sus productos correctamente';
+        $d['mensaje'] = 'Se modificó el despacho y sus productos correctamente, y el ingreso fue actualizado.';
         $d['despachos'] = $this->getdespacho();
 
     } catch (Exception $e) {

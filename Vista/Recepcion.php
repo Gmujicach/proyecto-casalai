@@ -139,6 +139,19 @@ usort($recepciones, function($a, $b) {
 
 // Agrupar para rowspan
 $rowspans = [];
+$dataProductosPorRecepcion = [];
+foreach ($recepciones as $fila) {
+    $id = $fila['id_recepcion'];
+    if (!isset($dataProductosPorRecepcion[$id])) {
+        $dataProductosPorRecepcion[$id] = [];
+    }
+    $dataProductosPorRecepcion[$id][] = [
+        'id_producto' => $fila['id_producto'],
+        'cantidad' => $fila['cantidad'],
+        'costo' => $fila['costo'],
+        'iddetalles' => $fila['id_detalle_recepcion_productos'] ?? '',
+    ];
+}
 foreach ($recepciones as $recepcion) {
     $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre'];
     if (!isset($rowspans[$key])) {
@@ -170,8 +183,9 @@ foreach ($recepciones as $recepcion):
                 data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
                 data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
                 data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
-                data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"
-                data-productos='<?= json_encode($dataProductos, JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"                
+                data-productos='<?= json_encode($dataProductosPorRecepcion[$recepcion['id_recepcion']], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+            
                 Modificar
             </button>
         </td>

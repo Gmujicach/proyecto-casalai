@@ -22,6 +22,28 @@ $(document).ready(function () {
         cancelarFactura(id);
     });
     
+
+
+
+
+    // Evento click de botón registrar
+    $("#registrar").on("click", function () {
+        var datos = new FormData($('#f')[0]);
+        $('#cliente').change(function () {
+            var valor = $(this).val();
+            datos.append('cliente', valor);
+        });
+        datos.append('accion', 'registrar');
+        enviaAjax(datos);
+    });
+});
+
+function carga_productos() {
+    var datos = new FormData();
+    datos.append('accion', 'listadoproductos');
+    enviaAjax(datos);
+}
+
     function cancelarFactura(id) {
         Swal.fire({
             title: '¿Está seguro?',
@@ -55,25 +77,28 @@ $(document).ready(function () {
         });
     }
 
-    function enviarAjax(datos, callback) {
-        console.log("Enviando datos AJAX: ", datos);
-        $.ajax({
-            url: '', 
-            type: 'POST',
-            contentType: false,
-            data: datos,
-            processData: false,
-            cache: false,
-            success: function (respuesta) {
-                console.log("Respuesta del servidor: ", respuesta); 
-                callback(JSON.parse(respuesta));
-            },
-            error: function () {
-                console.error('Error en la solicitud AJAX');
-                muestraMensaje('Error en la solicitud AJAX');
-            }
-        });
+function enviarAjax(datos, callback) {
+    // Mostrar el contenido real del FormData
+    for (var pair of datos.entries()) {
+        console.log(pair[0]+ ': ' + pair[1]);
     }
+    $.ajax({
+        url: '', 
+        type: 'POST',
+        contentType: false,
+        data: datos,
+        processData: false,
+        cache: false,
+        success: function (respuesta) {
+            console.log("Respuesta del servidor: ", respuesta); 
+            callback(JSON.parse(respuesta));
+        },
+        error: function () {
+            console.error('Error en la solicitud AJAX');
+            muestraMensaje('Error en la solicitud AJAX');
+        }
+    });
+}
 
     function muestraMensaje(mensaje) {
         Swal.fire({
@@ -82,25 +107,6 @@ $(document).ready(function () {
             text: mensaje
         });
     }
-
-    // Evento click de botón registrar
-    $("#registrar").on("click", function () {
-        var datos = new FormData($('#f')[0]);
-        $('#cliente').change(function () {
-            var valor = $(this).val();
-            datos.append('cliente', valor);
-        });
-        datos.append('accion', 'registrar');
-        enviaAjax(datos);
-    });
-});
-
-function carga_productos() {
-    var datos = new FormData();
-    datos.append('accion', 'listadoproductos');
-    enviaAjax(datos);
-}
-
 // Función para colocar los productos
 function colocaproducto(linea) {
     var id = $(linea).find("td:eq(0)").text();
@@ -203,6 +209,13 @@ function actualizarFila(input) {
     fila.find(".subtotal").text(subtotal.toFixed(2) + " $");
     actualizarSubtotal();
 }
+
+$(document).on('click', '.cancelar', function (e) {
+    e.preventDefault();
+    const id = $(this).closest('form').find('input[name="id_factura"]').val();
+    console.log("ID a cancelar:", id);
+    cancelarFactura(id);
+});
 
 // Función para calcular el total de los subtotales
 function actualizarSubtotal() {

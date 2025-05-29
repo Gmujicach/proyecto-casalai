@@ -11,10 +11,15 @@ class Finanza extends BD {
     private $id_despacho;
     private $id_recepcion;
 
+    private $conex;
+
     public function __construct() {
         $conexion = new BD('P');
         $this->conex = $conexion->getConexion();
     }
+public function getConexion() {
+    return $this->conex;
+}
 
     // Getters y setters
     public function getIdFinanzas() { 
@@ -77,6 +82,8 @@ class Finanza extends BD {
     public function registrarIngreso($id_despacho) {
         return $this->r_ingreso($id_despacho); 
     }
+
+
     private function r_ingreso($id_despacho) {
 
         // Obtener factura y productos

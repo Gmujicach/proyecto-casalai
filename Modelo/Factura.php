@@ -173,10 +173,10 @@ public function facturaConsultar() {
                     <input type="hidden" name="id_factura" value="' . $id_factura . '">
                     <button type="submit" class="btn btn-success btn-lg">Procesar</button>
                 </form>
-                <form action="" method="POST" style="display:inline;">
-                    <input type="hidden" name="id_factura" value="' . $id_factura . '">
-                    <button type="submit" class="btn btn-danger btn-lg cancelar" name="accion" value="cancelar">Cancelar</button>
-                </form>';
+<form action="" method="POST" style="display:inline;">
+    <input type="hidden" name="id_factura" value="' . $id_factura . '">
+    <button type="button" class="btn btn-danger btn-lg cancelar" name="accion" value="cancelar">Cancelar</button>
+</form>';
 
 
         }else if ($estatusPago) {
