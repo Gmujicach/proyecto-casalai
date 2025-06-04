@@ -374,149 +374,75 @@ $("#modificarobservacion").on("keyup",function(){
 
 
 
-//INICIO DE VALIDACION DE DESPACHO
+// Función para validar solo teclas numéricas
+function validarkeypress(er, e) {
+  key = e.key;
+  if (!er.test(key)) {
+    e.preventDefault();
+  }
+}
 
-$("#correlativo").on("keypress",function(e){
-    validarkeypress(/^[0-9-\b]*$/,e);
+// Función para validar campos al soltar una tecla
+function validarkeyup(er, input, span, mensaje) {
+  let valor = input.val();
+  if (!er.test(valor) || parseFloat(valor) <= 0) {
+    span.text(mensaje).css("color", "red");
+    input.addClass("is-invalid").removeClass("is-valid");
+    return false;
+  } else {
+    span.text("").css("color", "");
+    input.addClass("is-valid").removeClass("is-invalid");
+    return true;
+  }
+}
+
+// Validaciones para campos numéricos que no pueden ser <= 0
+$("#Stock_Actual, #Stock_Minimo, #Stock_Maximo, #Precio").on("keypress", function(e){
+  validarkeypress(/^[0-9\b]*$/, e);
 });
 
-$("#correlativo").on("keyup",function(){
-    validarkeyup(/^[1-9]{4,10}$/,$(this),
-    $("#scorrelativo"),"Se permite de 4 a 10 carácteres");
+$("#Stock_Actual").on("keyup", function(){
+  validarkeyup(/^[1-9][0-9]{0,9}$/, $(this), $("#sStock_Actual"), "Debe ser un número mayor a 0");
 });
 
-//FIN DE VALIDACION DE DESPACHO
-
-
-//INICIO DE VALIDACION DE PRODUCTOS
-
-$("#Nombre_P").on("keypress",function(e){
-    validarkeypress(/^[A-Za-z\b\s\u00f1\u00d1\u00E0-\u00FC]*$/,e);
+$("#Stock_Minimo").on("keyup", function(){
+  validarkeyup(/^[1-9][0-9]{0,9}$/, $(this), $("#sStock_Minimo"), "Debe ser un número mayor a 0");
 });
 
-$("#Nombre_P").on("keyup",function(){
-    validarkeyup(/^[A-Za-z\b\s\u00f1\u00d1\u00E0-\u00FC]{3,15}$/,
-    $(this),$("#sNombre_P"),"Solo letras entre 3 y 15 caracteres");
+$("#Stock_Maximo").on("keyup", function(){
+  validarkeyup(/^[1-9][0-9]{0,9}$/, $(this), $("#sStock_Maximo"), "Debe ser un número mayor a 0");
 });
 
-$("#modificarNombre_P").on("keypress",function(e){
-    validarkeypress(/^[A-Za-z\b\s\u00f1\u00d1\u00E0-\u00FC]*$/,e);
+$("#Precio").on("keyup", function(){
+  validarkeyup(/^[1-9][0-9]{0,9}$/, $(this), $("#sPrecio"), "Debe ser un número mayor a 0");
 });
 
-$("#modificarNombre_P").on("keyup",function(){
-    validarkeyup(/^[A-Za-z\b\s\u00f1\u00d1\u00E0-\u00FC]{3,15}$/,
-    $(this),$("#smodificarNombre_P"),"Solo letras entre 3 y 15 caracteres");
+// Validar que Stock Mínimo < Stock Máximo
+$("#Stock_Minimo, #Stock_Maximo").on("keyup", function(){
+  let minimo = parseInt($("#Stock_Minimo").val());
+  let maximo = parseInt($("#Stock_Maximo").val());
+  if (minimo >= maximo && maximo > 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Error en Stock",
+      text: "El Stock Mínimo debe ser menor que el Stock Máximo",
+    });
+    $("#Stock_Minimo").addClass("is-invalid");
+    $("#Stock_Maximo").addClass("is-invalid");
+  }
+
+  $("#Stock_Minimo, #Stock_Maximo").on("focusout", function(){
+  let minimo = parseInt($("#Stock_Minimo").val());
+  let maximo = parseInt($("#Stock_Maximo").val());
+  if (minimo >= maximo && maximo > 0) {
+    $("#Stock_Minimo").addClass("is-invalid");
+    $("#Stock_Maximo").addClass("is-invalid");
+  } else {
+    $("#Stock_Minimo").removeClass("is-invalid").addClass("is-valid");
+    $("#Stock_Maximo").removeClass("is-invalid").addClass("is-valid");
+  }});
 });
 
-//
-
-$("#Descripcion_P").on("keypress",function(e){
-    validarkeypress(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]*$/,e);
-});
-
-$("#Descripcion_P").on("keyup",function(){
-    validarkeyup(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]{6,50}$/,
-    $(this),$("#sDescripcion_P"),"Solo letras y/o numeros y Simbolos entre 6 y 50 caracteres");
-});
-
-$("#modificarDescripcion_P").on("keypress",function(e){
-    validarkeypress(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]*$/,e);
-});
-
-$("#modificarDescripcion_P").on("keyup",function(){
-    validarkeyup(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]{6,50}$/,
-    $(this),$("#smodificarDescripcion_P"),"Solo letras y/o numeros y Simbolos entre 6 y 50 caracteres");
-});
-
-//
-
-$("#Stock_Maximo").on("keypress",function(e){
-    validarkeypress(/^[0-9-\b]*$/,e);
-});
-
-$("#Stock_Maximo").on("keyup",function(){
-    validarkeyup(/^[0-9]{4,10}$/,$(this),
-    $("#sStock_Maximo"),"Se permite de 4 a 10 carácteres");
-});
-
-//
-
-$("#Stock_Minimo").on("keypress",function(e){
-    validarkeypress(/^[0-9-\b]*$/,e);
-});
-
-$("#Stock_Minimo").on("keyup",function(){
-    validarkeyup(/^[0-9]{4,10}$/,$(this),
-    $("#sStock_Minimo"),"Se permite de 4 a 10 carácteres");
-});
-
-//
-
-$("#Peso").on("keypress",function(e){
-    validarkeypress(/^[0-9]+(\.[0-9])?$/,e);
-});
-
-$("#Peso").on("keyup",function(){
-    validarkeyup(/^[0-9]+(\.[0-9]{1,2})?$/,$(this),
-    $("#sPeso"),"Se permite de 4 a 10 carácteres");
-});
-
-//
-
-$("#Largo").on("keypress",function(e){
-    validarkeypress(/^[0-9]+(\.[0-9])?$/,e);
-});
-
-$("#Largo").on("keyup",function(){
-    validarkeyup(/^[0-9]+(\.[0-9]{1,2})?$/,$(this),
-    $("#sLargo"),"Se permite de 4 a 10 carácteres");
-});
-
-//
-
-$("#Alto").on("keypress",function(e){
-    validarkeypress(/^[0-9]+(\.[0-9])?$/,e);
-});
-
-$("#Alto").on("keyup",function(){
-    validarkeyup(/^[0-9]+(\.[0-9]{1,2})?$/,$(this),
-    $("#sAlto"),"Se permite de 4 a 10 carácteres");
-});
-
-//
-
-$("#Ancho").on("keypress",function(e){
-    validarkeypress(/^[0-9]+(\.[0-9])?$/,e);
-});
-
-$("#Ancho").on("keyup",function(){
-    validarkeyup(/^[0-9]+(\.[0-9]{1,2})?$/,$(this),
-    $("#sAncho"),"Se permite de 4 a 10 carácteres");
-});
-
-//
-
-$("#Clausula_de_garantia").on("keypress",function(e){
-    validarkeypress(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]*$/,e);
-});
-
-$("#Clausula_de_garantia").on("keyup",function(){
-    validarkeyup(/^[A-Za-z0-9,#\b\@\s\u00f1\u00d1\u00E0-\u00FC-]{6,50}$/,
-    $(this),$("#sClausula_de_garantia"),"Solo letras y/o numeros y Simbolos entre 6 y 50 caracteres");
-});
-
-//
-
-$("#Codigo_Interno").on("keypress",function(e){
-    validarkeypress(/^[0-9-\b]*$/,e);
-});
-
-$("#Codigo_Interno").on("keyup",function(){
-    validarkeyup(/^[1-9]{4,10}$/,$(this),
-    $("#sCodigo_Interno"),"Se permite de 4 a 10 carácteres");
-});
-
-//FIN DE VALIDACION DE PRODUCTOS
 
 
 

@@ -8,6 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Productos</title>
     <?php include 'header.php'; ?>
+    <style>
+.foto-producto {
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    object-fit: contain;
+    background: #fff;
+}
+</style>
 </head>
 <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
@@ -17,72 +28,116 @@
   <div class="fondo-form">
     <form id="incluirProductoForm" action="" method="POST">
       <input type="hidden" name="accion" value="ingresar">
-      <h3 class="titulo-form">INCLUIR PRODUCTOS</h3>
+      <h3 class="titulo-form">📦 Incluir Nuevo Producto</h3>
 
+      <!-- Nombre del producto -->
       <div class="envolver-form">
-        <input type="text" placeholder="Nombre del producto" maxlength="15" class="control-form" id="nombre_producto" name="nombre_producto" required>
-        <span id="snombre_producto"></span>
+        <label for="nombre_producto">Nombre del producto</label>
+        <input type="text" placeholder="Ej: Impresora Epson L3150" maxlength="15" class="form-control" id="nombre_producto" name="nombre_producto" required>
+        <small class="form-text text-muted">Debe tener al menos 3 caracteres.</small>
       </div>
-    <br>
+<div class="envolver-form">
+  <label for="imagen">Imagen del producto</label>
+  <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*" required>
+  <small class="form-text text-muted">Seleccione una imagen clara del producto (JPG, PNG, etc.).</small>
+  <div id="previewImagen" style="margin-top: 10px;">
+    <img id="imagenPreview" src="#" alt="Vista previa" style="display: none; max-height: 150px; border-radius: 8px; border: 1px solid #ccc; padding: 5px;">
+  </div>
+</div>
+      <br>
+
+      <!-- Descripción -->
       <div class="envolver-form">
-        <label for="Descripcion_producto">Descripción del producto</label>
-        <textarea maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" rows="3"></textarea>
-        <span id="sdescripcion_producto"></span>
+        <label for="descripcion_producto">Descripción del producto</label>
+        <textarea maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" rows="2" placeholder="Ej: Impresora multifuncional a color con WiFi"></textarea>
+        <small class="form-text text-muted">Breve descripción (máx. 50 caracteres).</small>
       </div>
-    <br>
-    <div class="grupo-form">
-      <select class="form-select" id="Modelo" name="Modelo" required>
-        <option value="">Seleccionar Modelo</option>
-        <?php foreach ($modelos as $modelo): ?>
-          <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo ''.$modelo['nombre_modelo'].' ('.$modelo['tbl_marcas'].')'; ?></option>
-        <?php endforeach; ?>
-      </select>
-    </div>
-      <div class="grupo-form">
-        <input type="number" placeholder="Stock Actual" maxlength="10" class="control-form" value="0" id="Stock_Actual" name="Stock_Actual" required>
-        <span id="sStock_Actual"></span>
+      <br>
 
-        <input type="number" placeholder="Stock Máximo" maxlength="10" class="control-form" id="Stock_Maximo" name="Stock_Maximo" required>
-        <span id="sStock_Maximo"></span>
-
-        <input type="number" placeholder="Stock Mínimo" maxlength="10" class="control-form" min="0" id="Stock_Minimo" name="Stock_Minimo" required>
-        <span id="sStock_Minimo"></span>
+      <!-- Modelo -->
+      <div class="envolver-form">
+        <label for="Modelo">Modelo</label>
+        <select class="form-select" id="Modelo" name="Modelo" required>
+          <option value="">Seleccione un modelo</option>
+          <?php foreach ($modelos as $modelo): ?>
+            <option value="<?= $modelo['tbl_modelos']; ?>">
+              <?= $modelo['nombre_modelo'] . ' (' . $modelo['tbl_marcas'] . ')' ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+        <small class="form-text text-muted">Seleccione el modelo asociado al producto.</small>
       </div>
-    <br>
+      <br>
+
+      <!-- Stock -->
+      <div class="envolver-form" style="display: flex; flex-wrap: wrap; gap: 1rem;">
+        <div style="flex: 1;">
+          <label for="Stock_Actual">Stock Actual</label>
+          <input type="number" class="form-control" id="Stock_Actual" name="Stock_Actual" min="1" required placeholder="Ej: 10">
+          <small class="form-text text-muted">Cantidad actualmente disponible.</small>
+        </div>
+        <div style="flex: 1;">
+          <label for="Stock_Maximo">Stock Máximo</label>
+          <input type="number" class="form-control" id="Stock_Maximo" name="Stock_Maximo" min="1" required placeholder="Ej: 100">
+          <small class="form-text text-muted">Capacidad máxima en inventario.</small>
+        </div>
+        <div style="flex: 1;">
+          <label for="Stock_Minimo">Stock Mínimo</label>
+          <input type="number" class="form-control" id="Stock_Minimo" name="Stock_Minimo" min="1" required placeholder="Ej: 5">
+          <small class="form-text text-muted">Cantidad mínima antes de alertar reposición.</small>
+        </div>
+      </div>
+      <br>
+
+      <!-- Garantía -->
       <div class="envolver-form">
         <label for="Clausula_garantia">Cláusula de garantía</label>
-        <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="3"></textarea>
-        <span id="sClausula_garantia"></span>
+        <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="2" placeholder="Ej: Garantía válida por 6 meses en defectos de fábrica."></textarea>
+        <small class="form-text text-muted">Opcional. Especificar condiciones de garantía.</small>
       </div>
-    <br>
-      <div class="grupo-form">
+      <br>  
+
+      <!-- Categoría -->
+      <div class="envolver-form">
+        <label for="Categoria">Categoría</label>
         <select class="form-select" id="Categoria" name="Categoria" required onchange="mostrarCamposCategoria(this.value)">
-          <option value="">Seleccionar Categoría</option>
+          <option value="">Seleccione una categoría</option>
           <option value="1">IMPRESORA</option>
           <option value="3">TINTA</option>
           <option value="4">CARTUCHO DE TINTA</option>
           <option value="2">PROTECTOR DE VOLTAJE</option>
           <option value="5">OTROS</option>
         </select>
+        <small class="form-text text-muted">Según la categoría, se mostrarán campos adicionales.</small>
       </div>
 
-      <!-- Campos adicionales dinámicos por categoría -->
-      <div id="caracteristicasCategoria" class="grupo-form"></div>
-    <br>
-      <div class="grupo-form">
-        <input type="text" placeholder="Código Serial" maxlength="10" class="control-form" id="Seriales" name="Seriales" required>
-        <span id="sSeriales"></span>
+      <!-- Campos dinámicos por categoría -->
+      <div id="caracteristicasCategoria" class="envolver-form"></div>
+      <br>
 
-        <input type="number" placeholder="Precio" maxlength="10" class="form-control" id="Precio" name="Precio" required>
-        <span class="input-group-text">$</span>
-        <span id="sPrecio"></span>
+      <!-- Serial y Precio -->
+      <div class="envolver-form" style="display: flex; gap: 1rem;">
+        <div style="flex: 2;">
+          <label for="Seriales">Código Serial</label>
+          <input type="text" class="form-control" id="Seriales" name="Seriales" maxlength="10" placeholder="Ej: EPSON1234" required>
+          <small class="form-text text-muted">Debe ser único y válido.</small>
+        </div>
+        <div style="flex: 1;">
+          <label for="Precio">Precio ($)</label>
+          <input class="form-control" id="Precio" name="Precio" min="1" step="1" placeholder="Ej: 100" required>
+          <small class="form-text text-muted">Precio unitario del producto.</small>
+        </div>
       </div>
-      
-      <button class="boton-form" type="submit">Registrar</button>
-      <button class="boton-reset" type="reset">Reset</button>
+
+      <!-- Botones -->
+      <div class="envolver-form">
+      <button class="boton-form" type="submit">Registrar Producto</button>
+      <button class="boton-reset" type="reset">Limpiar Formulario</button>
+      </div>
     </form>
   </div>
 </div>
+
 
 <div class="contenedor-tabla">
     <h3>Lista de Productos</h3>
@@ -90,6 +145,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Foto del producto</th>
                 <th>Producto</th>
                 <th>Descripción</th>
                 <th>Stock Actual</th>
@@ -108,6 +164,28 @@
                     <td>
                       <?php echo htmlspecialchars($producto['id_producto']); ?>
                     </td>
+<td>
+  <?php
+    $id = $producto['id_producto'];
+    $ruta_base = 'IMG/Productos/';
+    $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
+
+    $ruta_imagen = '';
+    foreach ($extensiones as $ext) {
+        if (file_exists($ruta_base .'producto_'. $id . '.' . $ext)) {
+            $ruta_imagen = $ruta_base .'producto_' . $id . '.' . $ext;
+            break;
+        }
+    }
+
+    if (!empty($ruta_imagen)) {
+        echo '<img src="' . htmlspecialchars($ruta_imagen) . '" alt="Foto del producto" class="foto-producto">';
+    } else {
+        echo '<img src="IMG/no-disponible.png" alt="No disponible" class="foto-producto">';
+    }
+  ?>
+</td>
+
                     <td>
                       <span class="campo-nombres">
                       <?php echo htmlspecialchars($producto['nombre_producto']); ?>
@@ -176,6 +254,7 @@ foreach ($caracteristicas as $clave => $valor) {
 }
 ?>
 
+
 <button 
     type="button" 
     class="btn btn-modificar" 
@@ -192,7 +271,22 @@ foreach ($caracteristicas as $clave => $valor) {
     data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
     data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
     data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
-    <?php echo $atributosExtra; ?>
+    <?php
+        // Lógica para la imagen igual que en la tabla
+        $id = $producto['id_producto'];
+        $ruta_base = 'IMG/Productos/';
+        $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
+        $ruta_imagen = '';
+        foreach ($extensiones as $ext) {
+            if (file_exists($ruta_base .'producto_'. $id . '.' . $ext)) {
+                $ruta_imagen = $ruta_base .'producto_' . $id . '.' . $ext;
+                break;
+            }
+        }
+        $data_imagen = !empty($ruta_imagen) ? $ruta_imagen : 'IMG/no-disponible.png';
+        echo 'data-imagen="' . htmlspecialchars($data_imagen) . '"';
+        echo $atributosExtra;
+    ?>
 >
     Modificar
 </button>
@@ -247,7 +341,16 @@ foreach ($caracteristicas as $clave => $valor) {
             <label for="modificarNombreProducto">Nombre del producto</label>
             <input type="text" maxlength="15" class="form-control" id="modificarNombreProducto" name="nombre_producto" required>
           </div>
-
+          <!-- Imagen actual y nueva -->
+<div class="form-group">
+  <label>Imagen actual</label><br>
+  <img id="modificarImagenPreview" src="#" alt="Imagen actual" style="max-height: 120px; border-radius: 8px; border: 1px solid #ccc; padding: 5px;">
+</div>
+<div class="form-group">
+  <label for="modificarImagen">Cambiar imagen</label>
+  <input type="file" class="form-control" id="modificarImagen" name="imagen" accept="image/*">
+  <small class="form-text text-muted">Seleccione una nueva imagen solo si desea reemplazar la actual.</small>
+</div>
           <div class="form-group">
             <label for="modificarDescripcionProducto">Descripción del producto</label>
             <input type="text" maxlength="50" class="form-control" id="modificarDescripcionProducto" name="descripcion_producto" required>
@@ -290,7 +393,7 @@ foreach ($caracteristicas as $clave => $valor) {
             </div>
             <div class="form-group col-md-4">
             <label for="modificarPrecio">Precio</label>
-            <input type="number" min="0" class="form-control" id="modificarPrecio" name="Precio" required>
+            <input  min="0" class="form-control" id="modificarPrecio" name="Precio" required>
             </div>
 
             <div class="form-group col-md-4">
@@ -318,10 +421,9 @@ foreach ($caracteristicas as $clave => $valor) {
 </div>
 
 <script src="public/bootstrap/js/sidebar.js"></script>
-  <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="public/js/jquery-3.7.1.min.js"></script>
-
-  <script src="Javascript/sweetalert2.all.min.js"></script>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
+<script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/Productos.js"></script>
 <script src="Javascript/validaciones.js"></script>
 <script>
@@ -338,42 +440,42 @@ function mostrarCamposCategoria(categoriaId, modo = 'crear', data = {}) {
   switch (categoriaId) {
     case '1': // IMPRESORA
       contenedor.innerHTML = `
-        <input type="text" placeholder="Peso (kg)" class="control-form" name="peso" value="${data.peso || ''}">
-        <input type="text" placeholder="Alto (cm)" class="control-form" name="alto" value="${data.alto || ''}">
-        <input type="text" placeholder="Ancho (cm)" class="control-form" name="ancho" value="${data.ancho || ''}">
-        <input type="text" placeholder="Largo (cm)" class="control-form" name="largo" value="${data.largo || ''}">
+        <input type="number" placeholder="Peso en kilogramos (ej. 2.5)" step="0.01" min="0" class="control-form" name="peso" value="${data.peso || ''}" required>
+        <input type="number" placeholder="Alto en cm" min="0" class="control-form" name="alto" value="${data.alto || ''}" required>
+        <input type="number" placeholder="Ancho en cm" min="0" class="control-form" name="ancho" value="${data.ancho || ''}" required>
+        <input type="number" placeholder="Largo en cm" min="0" class="control-form" name="largo" value="${data.largo || ''}" required>
       `;
       break;
 
     case '2': // PROTECTOR DE VOLTAJE
       contenedor.innerHTML = `
-        <input type="text" placeholder="Voltaje de entrada" class="control-form" name="voltaje_entrada" value="${data.voltaje_entrada || ''}">
-        <input type="text" placeholder="Voltaje de salida" class="control-form" name="voltaje_salida" value="${data.voltaje_salida || ''}">
-        <input type="number" placeholder="Cantidad de tomas" class="control-form" name="tomas" value="${data.tomas || ''}">
-        <input type="number" placeholder="Capacidad (W)" class="control-form" name="capacidad" value="${data.capacidad_bateria || ''}">
+        <input type="text" placeholder="Voltaje de entrada (ej. 120V)" class="control-form" name="voltaje_entrada" pattern="^\\d+(V|v)$" title="Ejemplo: 120V" value="${data.voltaje_entrada || ''}" required>
+        <input type="text" placeholder="Voltaje de salida (ej. 110V)" class="control-form" name="voltaje_salida" pattern="^\\d+(V|v)$" title="Ejemplo: 110V" value="${data.voltaje_salida || ''}" required>
+        <input type="number" placeholder="Cantidad de tomas" class="control-form" name="tomas" min="1" max="20" value="${data.tomas || ''}" required>
+        <input type="number" placeholder="Capacidad en vatios (W)" class="control-form" name="capacidad" min="1" value="${data.capacidad || data.capacidad_bateria || ''}" required>
       `;
       break;
 
     case '3': // TINTA
       contenedor.innerHTML = `
-        <input type="number" placeholder="Número" class="control-form" name="numero" value="${data.numero || ''}">
-        <input type="text" placeholder="Color" class="control-form" name="color" value="${data.color || ''}">
-        <input type="text" placeholder="Tipo de tinta" class="control-form" name="tipo" value="${data.tipo || ''}">
-        <input type="number" placeholder="Volumen (ml)" class="control-form" name="volumen" value="${data.volumen || ''}">
+        <input type="number" placeholder="Número de tinta" class="control-form" name="numero" min="0" value="${data.numero || ''}" required>
+        <input type="text" placeholder="Color (ej. Magenta)" class="control-form" name="color" maxlength="20" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ ]+" title="Solo letras y espacios" value="${data.color || ''}" required>
+        <input type="text" placeholder="Tipo de tinta (ej. Pigmentada)" class="control-form" name="tipo" maxlength="30" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ ]+" title="Solo letras y espacios" value="${data.tipo || ''}" required>
+        <input type="number" placeholder="Volumen (ml)" class="control-form" name="volumen" min="1" max="1000" step="1" value="${data.volumen || ''}" required>
       `;
       break;
 
     case '4': // CARTUCHO DE TINTA
       contenedor.innerHTML = `
-        <input type="number" placeholder="Número" class="control-form" name="numero" value="${data.numero || ''}">
-        <input type="text" placeholder="Color" class="control-form" name="color" value="${data.color || ''}">
-        <input type="number" placeholder="Capacidad (ml)" class="control-form" name="capacidad" value="${data.capacidad || ''}">
+        <input type="number" placeholder="Número de cartucho" class="control-form" name="numero" min="0" value="${data.numero || ''}" required>
+        <input type="text" placeholder="Color del cartucho" class="control-form" name="color" maxlength="20" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ ]+" title="Solo letras y espacios" value="${data.color || ''}" required>
+        <input type="number" placeholder="Capacidad en ml" class="control-form" name="capacidad" min="1" max="1000" value="${data.capacidad || ''}" required>
       `;
       break;
 
     case '5': // OTROS
       contenedor.innerHTML = `
-        <input type="text" placeholder="Descripción adicional" class="control-form" name="descripcion_otros" value="${data.descripcion_otros || ''}">
+        <input type="text" placeholder="Descripción adicional del producto" class="control-form" name="descripcion_otros" maxlength="100" value="${data.descripcion_otros || ''}" required>
       `;
       break;
 

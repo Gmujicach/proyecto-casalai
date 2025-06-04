@@ -295,7 +295,7 @@ public function ingresarProducto($datosCategoria) {
                 break;
 
             case '5': // Otros
-                $sql = "INSERT INTO tbl_otros (id_producto, descripcion_otros)
+                $sql = "INSERT INTO tbl_otros (id_producto, descripcion)
                         VALUES (:id_producto, :descripcion)";
                 $stmt = $this->conex->prepare($sql);
                 $stmt->bindParam(':id_producto', $idProducto);

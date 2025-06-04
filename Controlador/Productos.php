@@ -44,11 +44,47 @@ case 'ingresar':
         // Aquí pasamos todos los datos del formulario a ingresarProducto()
         $resultado = $Producto->ingresarProducto($_POST);
 
-        if ($resultado) {
-            echo json_encode(['status' => 'success', 'id_producto' => $resultado]);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el producto']);
+
+if ($resultado) {
+    $id_producto = $resultado;
+    $respuesta = [
+        'status' => 'success',
+        'id_producto' => $id_producto
+    ];
+
+    // Procesar imagen (si existe)
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+        $directorio = "IMG/Productos/";
+
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0755, true); // crea la carpeta si no existe
         }
+
+        $nombre_original = $_FILES['imagen']['name'];
+        $extension = pathinfo($nombre_original, PATHINFO_EXTENSION);
+
+        // Nombre único basado en ID del producto + timestamp para evitar sobrescritura
+        $nombre_nuevo = "producto_" . $id_producto . "_" .$resultado;
+
+        $ruta_destino = $directorio . $nombre_nuevo;
+
+        if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
+            // Aquí podrías guardar la ruta en la base de datos si lo deseas
+            $respuesta['imagen'] = $nombre_nuevo;
+            $respuesta['mensaje'] = "Producto registrado e imagen guardada correctamente.";
+        } else {
+            $respuesta['imagen'] = null;
+            $respuesta['mensaje'] = "Producto registrado, pero error al guardar la imagen.";
+        }
+    } else {
+        $respuesta['mensaje'] = "Producto registrado correctamente.";
+    }
+
+    echo json_encode($respuesta);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el producto']);
+}
+
     }
     break;
 
@@ -126,7 +162,37 @@ case 'modificar':
 
     // Guardar los cambios
     if ($Producto->modificarProducto($id)) {
+
+if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+    $id = $_POST['id_producto'];
+    $directorio = "IMG/Productos/";
+    if (!is_dir($directorio)) {
+        mkdir($directorio, 0755, true);
+    }
+
+    // Eliminar imagen anterior si existe (buscando por extensiones)
+    $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
+    foreach ($extensiones as $ext) {
+        $ruta_antigua = $directorio . 'producto_' . $id . '.' . $ext;
+        if (file_exists($ruta_antigua)) {
+            unlink($ruta_antigua);
+        }
+    }
+
+    // Guardar la nueva imagen con el mismo formato de nombre
+    $nombre_original = $_FILES['imagen']['name'];
+    $extension = strtolower(pathinfo($nombre_original, PATHINFO_EXTENSION));
+    $nombre_nuevo = "producto_" . $id . "." . $extension;
+    $ruta_destino = $directorio . $nombre_nuevo;
+
+    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
         echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al modificar la imagen del producto']);
+    }
+} else {
+    echo json_encode(['status' => 'success']);
+}
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
     }

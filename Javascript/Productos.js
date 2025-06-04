@@ -146,55 +146,232 @@ document.querySelectorAll('.btn-modificar').forEach(btn => {
     });
 });
 
-    $('#incluirProductoForm').on('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                try {
-                    const data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            title: 'Éxito',
-                            text: 'Producto ingresado exitosamente',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.message || 'Error al ingresar el producto',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    }
-                } catch (e) {
+$('#incluirProductoForm').on('submit', function(event) {
+    event.preventDefault();
+
+    // Validaciones antes del envío
+    let errores = [];
+
+    const nombre = $('#nombre_producto').val().trim();
+    const descripcion = $('#descripcion_producto').val().trim();
+    const modelo = $('#Modelo').val();
+    const stockActual = parseInt($('#Stock_Actual').val());
+    const stockMinimo = parseInt($('#Stock_Minimo').val());
+    const stockMaximo = parseInt($('#Stock_Maximo').val());
+    const categoria = $('#Categoria').val();
+    const seriales = $('#Seriales').val().trim();
+    const precioInput = $('#Precio').val().trim().replace(',', '.');
+    const precio = Number(precioInput);
+    const precioRegex = /^\d+(\.\d{0,2})?$/;
+
+
+    if (nombre.length < 3) {
+        errores.push("El nombre del producto debe tener al menos 3 caracteres.");
+    }
+
+    if (!modelo) {
+        errores.push("Debe seleccionar un modelo.");
+    }
+
+    if (isNaN(stockActual) || stockActual <= 0) {
+        errores.push("El Stock Actual debe ser mayor a 0.");
+    }
+
+    if (isNaN(stockMinimo) || stockMinimo <= 0) {
+        errores.push("El Stock Mínimo debe ser mayor a 0.");
+    }
+
+    if (isNaN(stockMaximo) || stockMaximo <= 0) {
+        errores.push("El Stock Máximo debe ser mayor a 0.");
+    }
+
+    if (!isNaN(stockMinimo) && !isNaN(stockMaximo) && stockMinimo >= stockMaximo) {
+        errores.push("El Stock Mínimo debe ser menor al Stock Máximo.");
+    }
+
+    if (!categoria) {
+        errores.push("Debe seleccionar una categoría.");
+    }
+
+    if (seriales.length === 0) {
+        errores.push("Debe ingresar el código serial.");
+    }
+
+    if (!precioRegex.test(precioInput)) {
+    errores.push("El precio debe ser un número válido con hasta 2 decimales.");
+} else if (precio <= 0) {
+    errores.push("El precio debe ser mayor a 0.");
+}
+$('#Precio').val($('#Precio').val().replace(',', '.'));
+
+    // VALIDACIONES ADICIONALES POR CATEGORÍA
+    switch (categoria) {
+        case '1': // IMPRESORA
+            const peso = parseFloat($('[name="peso"]').val());
+            const alto = parseFloat($('[name="alto"]').val());
+            const ancho = parseFloat($('[name="ancho"]').val());
+            const largo = parseFloat($('[name="largo"]').val());
+
+            if (isNaN(peso) || peso <= 0) errores.push("El peso debe ser un número mayor a 0.");
+            if (isNaN(alto) || alto <= 0) errores.push("El alto debe ser un número mayor a 0.");
+            if (isNaN(ancho) || ancho <= 0) errores.push("El ancho debe ser un número mayor a 0.");
+            if (isNaN(largo) || largo <= 0) errores.push("El largo debe ser un número mayor a 0.");
+            break;
+
+        case '2': // PROTECTOR DE VOLTAJE
+            const voltajeEntrada = $('[name="voltaje_entrada"]').val().trim();
+            const voltajeSalida = $('[name="voltaje_salida"]').val().trim();
+            const tomas = parseInt($('[name="tomas"]').val());
+            const capacidad = parseFloat($('[name="capacidad"]').val());
+
+            if (!/^\d+(V|v)$/.test(voltajeEntrada)) errores.push("Voltaje de entrada inválido (ej. 120V).");
+            if (!/^\d+(V|v)$/.test(voltajeSalida)) errores.push("Voltaje de salida inválido (ej. 110V).");
+            if (isNaN(tomas) || tomas <= 0) errores.push("La cantidad de tomas debe ser un número mayor a 0.");
+            if (isNaN(capacidad) || capacidad <= 0) errores.push("La capacidad debe ser un número mayor a 0.");
+            break;
+
+        case '3': // TINTA
+            const numeroTinta = parseInt($('[name="numero"]').val());
+            const colorTinta = $('[name="color"]').val().trim();
+            const tipoTinta = $('[name="tipo"]').val().trim();
+            const volumen = parseInt($('[name="volumen"]').val());
+
+            if (isNaN(numeroTinta) || numeroTinta < 0) errores.push("El número de tinta debe ser un número válido.");
+            if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/.test(colorTinta)) errores.push("El color debe contener solo letras.");
+            if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/.test(tipoTinta)) errores.push("El tipo de tinta debe contener solo letras.");
+            if (isNaN(volumen) || volumen <= 0) errores.push("El volumen debe ser mayor a 0.");
+            break;
+
+        case '4': // CARTUCHO DE TINTA
+            const numeroCartucho = parseInt($('[name="numero"]').val());
+            const colorCartucho = $('[name="color"]').val().trim();
+            const capacidadCartucho = parseInt($('[name="capacidad"]').val());
+
+            if (isNaN(numeroCartucho) || numeroCartucho < 0) errores.push("El número de cartucho debe ser válido.");
+            if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/.test(colorCartucho)) errores.push("El color del cartucho debe contener solo letras.");
+            if (isNaN(capacidadCartucho) || capacidadCartucho <= 0) errores.push("La capacidad del cartucho debe ser mayor a 0.");
+            break;
+
+        case '5': // OTROS
+            const descripcionOtros = $('[name="descripcion_otros"]').val().trim();
+            if (descripcionOtros.length < 3) errores.push("La descripción adicional debe tener al menos 3 caracteres.");
+            break;
+    }
+
+    if (errores.length > 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Errores en el formulario',
+            html: errores.join("<br>"),
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
+
+    // Si pasa validación, continuar con el envío AJAX
+    const formData = new FormData(this);
+
+    $.ajax({
+        url: '',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            try {
+                const data = JSON.parse(response);
+                if (data.status === 'success') {
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: 'Producto ingresado exitosamente',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
                     Swal.fire({
                         title: 'Error',
-                        text: 'Error al procesar la respuesta del servidor',
+                        text: data.message || 'Error al ingresar el producto',
                         icon: 'error',
                         confirmButtonText: 'Aceptar'
                     });
                 }
-            },
-            error: function(xhr, status, error) {
+            } catch (e) {
                 Swal.fire({
                     title: 'Error',
-                    text: 'Error en la solicitud AJAX: ' + error,
+                    text: 'Error al procesar la respuesta del servidor',
                     icon: 'error',
                     confirmButtonText: 'Aceptar'
                 });
             }
-        });
+        },
+        error: function(xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Error en la solicitud AJAX: ' + error,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
     });
+});
 
+document.getElementById('imagen').addEventListener('change', function (event) {
+  const input = event.target;
+  const preview = document.getElementById('imagenPreview');
+
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    preview.src = '#';
+    preview.style.display = 'none';
+  }
+});
+
+document.querySelectorAll('.btn-modificar').forEach(btn => {
+  btn.addEventListener('click', function () {
+    // ...otros campos...
+    const imagen = this.dataset.imagen; // ya es la ruta completa
+const preview = document.getElementById('modificarImagenPreview');
+preview.src = imagen;
+preview.style.display = 'block';
+
+    // Limpiar input file
+    document.getElementById('modificarImagen').value = '';
+    // Limpiar preview si cambia la imagen
+    document.getElementById('modificarImagen').onchange = function (event) {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+        };
+        reader.readAsDataURL(this.files[0]);
+      } else {
+        preview.src = rutaImagen;
+      }
+    };
+    // ...resto del código...
+    $('#modificarProductoModal').modal('show');
+  });
+});
+
+$('#Precio').on('input', function() {
+    let precioInput = $(this).val().trim().replace(',', '.');
+    const precioRegex = /^\d+(\.\d{0,2})?$/;
+    if (!precioRegex.test(precioInput) && precioInput !== "") {
+        $(this).addClass('is-invalid');
+    } else {
+        $(this).removeClass('is-invalid');
+    }
+});
     // Cerrar modal de modificación
     $(document).on('click', '#modificarProductoModal .close', function() {
         $('#modificarProductoModal').modal('hide');

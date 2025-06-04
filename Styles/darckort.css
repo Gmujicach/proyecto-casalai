@@ -410,3 +410,14 @@ transform: translateY(0%);
 .dataTables_wrapper {
   width: 100% !important;
 }
+
+.foto-producto {
+  width: 100px;         /* Cambia según tu diseño */
+  height: 100px;        /* Igual que el ancho para cuadrado */
+  object-fit: contain;  /* Mantiene la proporción sin recorte */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px;
+  background-color: #f9f9f9;
+}
+
