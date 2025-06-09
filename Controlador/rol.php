@@ -38,6 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             exit;
         
+        case 'consultar_roles':
+            $rol = new Rol();
+            $roles_obt = $rol->consultarRol();
+
+            echo json_encode($roles_obt);
+            exit;
+        
         case 'obtener_rol':
             $id_rol = $_POST['id_rol'];
 
@@ -99,12 +106,12 @@ function consultarRoles() {
 }
 
 $pagina = "roles";
-
 if (is_file("Vista/" . $pagina . ".php")) {
+
     $roles = consultarRoles();
     require_once("Vista/" . $pagina . ".php");
 } else {
-    echo "La página nombreRol";
+    echo "Página en construcción";
 }
 
 ob_end_flush();

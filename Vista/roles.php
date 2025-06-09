@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionar Marcas</title>
+    <title>Gestionar Roles</title>
     <?php include 'header.php'; ?>
 </head>
 <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
@@ -17,7 +17,7 @@
         <div class="fondo-form">
             <form id="registrarMarca" action="" method="POST">
                 <input type="hidden" name="accion" value="registrar">
-                <h3 class="titulo-form">INCLUIR MARCA</h3>
+                <h3 class="titulo-form">INCLUIR ROL</h3>
                 <div class="envolver-form">
                     <input type="text" placeholder="Nombre de la Marca" class="control-form" id="nombre_marca" name="nombre_marca" maxlength="25" required>
                     <span class="span-value" id="snombre_marca"></span>

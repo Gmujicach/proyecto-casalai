@@ -98,7 +98,7 @@
 
             <?php if ($_SESSION['rango'] == 'Administrador') { ?>
                 <h4><span>Administrar Seguridad</span><div class="menu-separador"></div></h4>
-                <li><a href="?pagina=rol"><span class="simbolo"><img src="IMG/user-round-search.svg" class="icono-svg" />Gestionar Roles</span></a></li>
+                <li><a href="?pagina=roles"><span class="simbolo"><img src="IMG/user-round-search.svg" class="icono-svg" />Gestionar Roles</span></a></li>
                 <li><a href="?pagina=permisos"><span class="simbolo"><img src="IMG/key-round.svg" class="icono-svg" />Gestionar Permisos</span></a></li>
                 <li><a href="?pagina=bitacora"><span class="simbolo"><img src="IMG/notebook.svg" class="icono-svg" />Gestionar Bitácora</span></a></li>
             <?php } ?>
