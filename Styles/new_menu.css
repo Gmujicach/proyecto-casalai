@@ -121,7 +121,7 @@ body{
 .user-cuenta{
     margin-top: auto;
     padding: 12px 10px;
-    margin-left: -10px;
+    margin-left: 5px;
 }
 
 .user-cuenta .user-perfil{
@@ -145,11 +145,11 @@ body{
 }
 
 .user-perfil h3{
-    font-size: 1.25em;
+    font-size: 1.5em;
     font-weight: 600;
 }
 .user-perfil span{
-    font-size: 0.8em;
+    font-size: 1.15em;
     font-weight: 600;
     display: block;
     margin-top: 0;
