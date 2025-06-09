@@ -1,7 +1,7 @@
 <?php
 require_once 'Config/config.php';
 
-class rol extends BD {
+class Rol extends BD {
     private $id_rol;
     private $nombre_rol;
     private $conex;
@@ -26,7 +26,6 @@ class rol extends BD {
         $this->nombre_rol = $nombre_rol; 
     } 
 
-    // Registrar Rol
     public function registrarRol() {
         return $this->r_Rol();
     }
@@ -39,7 +38,39 @@ class rol extends BD {
         return $stmt->execute();
     }
 
-    // Obtener Rol por ID
+    public function existeNombreRol($nombre_rol, $excluir_id = null) {
+        return $this->existeNomRol($nombre_rol, $excluir_id); 
+    }
+    private function existeNomRol($nombre_rol, $excluir_id) {
+        $sql = "SELECT COUNT(*) FROM tbl_rol WHERE nombre_rol = ?";
+        $params = [$nombre_rol];
+        if ($excluir_id !== null) {
+            $sql .= " AND id_rol != ?";
+            $params[] = $excluir_id;
+        }
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function obtenerUltimoRol() {
+        return $this->obtUltimoRol(); 
+    }
+    private function obtUltimoRol() {
+        try {
+            $sql = "SELECT * FROM tbl_rol ORDER BY id_rol DESC LIMIT 1";
+            $stmt = $this->conex->prepare($sql);
+            $stmt->execute();
+            $rol = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->conex = null;
+            return $rol ? $rol : null;
+        } catch (PDOException $e) {
+            error_log("Error al obtener el último rol: " . $e->getMessage());
+            $this->conex = null;
+            return null;
+        }
+    }
+
     public function obtenerRolPorId($id_rol) {
         return $this->rolporid($id_rol); 
     }
@@ -47,14 +78,12 @@ class rol extends BD {
         $sql = "SELECT id_rol, nombre_rol FROM tbl_rol WHERE id_rol = :id_rol";
 
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_rol', $id_rol);
-        $stmt->execute();
-        $rol_obt = $stmt->fetch(PDO::FETCH_ASSOC); // Devuelve un solo registro
-
-        return $rol_obt;
+        $stmt->execute([$id_rol]);
+        $roles = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->conex = null;
+        return $roles;
     }
 
-    // Consultar Roles
     public function consultarRoles() {
         return $this->c_roles(); 
     }
@@ -64,11 +93,10 @@ class rol extends BD {
         $stmt = $this->conex->prepare($sql);
         $stmt->execute();
         $roles_obt = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+        $this->conex = null;
         return $roles_obt;
     }
 
-    // Modificar Rol
     public function modificarRol($id_rol) {
         return $this->m_rol($id_rol); 
     }
@@ -79,10 +107,11 @@ class rol extends BD {
         $stmt->bindParam(':id_rol', $id_rol);
         $stmt->bindParam(':nombre_rol', $this->nombre_rol);
 
-        return $stmt->execute();
+        $result = $stmt->execute();
+        $this->conex = null;
+        return $result;
     }
 
-    // Eliminar Rol
     public function eliminarRol($id_rol) {
         return $this->e_rol($id_rol); 
     }
@@ -92,7 +121,9 @@ class rol extends BD {
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_rol', $id_rol);
         
-        return $stmt->execute();
+        $result = $stmt->execute();
+        $this->conex = null;
+        return $result;
     }
 }
 ?>

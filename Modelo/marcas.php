@@ -27,11 +27,10 @@ class marca extends BD {
         $this->id_marca = $id_marca;
     }
 
-    // Verificar si existe el número de cuenta
-    public function existeNumeroMarca($nombre_marca, $excluir_id = null) {
-        return $this->existeNumMarca($nombre_marca, $excluir_id); 
+    public function existeNombreMarca($nombre_marca, $excluir_id = null) {
+        return $this->existeNomMarca($nombre_marca, $excluir_id); 
     }
-    private function existeNumMarca($nombre_marca, $excluir_id) {
+    private function existeNomMarca($nombre_marca, $excluir_id) {
         $sql = "SELECT COUNT(*) FROM tbl_marcas WHERE nombre_marca = ?";
         $params = [$nombre_marca];
         if ($excluir_id !== null) {
@@ -43,7 +42,6 @@ class marca extends BD {
         return $stmt->fetchColumn() > 0;
     }
 
-    // Ingresar Marca
     public function registrarMarca() {
         return $this->r_marca();
     }
@@ -74,7 +72,6 @@ class marca extends BD {
         }
     }
 
-    // Obtener Producto por ID
     public function obtenermarcasPorId($id_marca) {
         return $this->obtmarcasPorId($id_marca);
     }
@@ -87,7 +84,6 @@ class marca extends BD {
         return $marcas;
     }
 
-    // Modificar Producto
     public function modificarmarcas($id_marca) {
         return $this->m_marcas($id_marca);
     }
@@ -102,7 +98,6 @@ class marca extends BD {
         return $result;
     }
 
-    // Eliminar Producto
     public function eliminarmarcas($id_marca) {
         return $this->e_marcas($id_marca);
     }
@@ -120,14 +115,7 @@ class marca extends BD {
         return $this->g_marcas();
     }
     private function g_marcas() {
-        // Punto de depuración: Iniciando getmarcas
-        //echo "Iniciando getmarcas.<br>";
-        
-        // Primera consulta para obtener datos de marcas
         $querymarcas = 'SELECT id_marca, nombre_marca FROM ' . $this->tablemarcas;
-        
-        // Punto de depuración: Query de marcas preparada
-        //echo "Query de marcas preparada: " . $querymarcas . "<br>";
         
         $stmtmarcas = $this->conex->prepare($querymarcas);
         $stmtmarcas->execute();
@@ -135,7 +123,5 @@ class marca extends BD {
         $this->conex = null;
         return $marcas;
     }
-    
 }
-
 ?>

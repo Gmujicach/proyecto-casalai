@@ -1,11 +1,9 @@
 $(document).ready(function () {
 
-    // MENSAJE //
     if($.trim($("#mensajes").text()) != ""){
         mensajes("warning", 4000, "Atención", $("#mensajes").html());
     }
 
-    // NOMBRE DE LA MARCA
     $("#nombre_marca").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("nombre_marca");
@@ -20,7 +18,6 @@ $(document).ready(function () {
         );
     });
 
-    // Validación antes de enviar (registro)
     function validarEnvioMarca(){
         let nombre = document.getElementById("nombre_marca");
         nombre.value = space(nombre.value).trim();
@@ -37,7 +34,6 @@ $(document).ready(function () {
         return true;
     }
 
-    // Función para agregar la fila a la tabla
     function agregarFilaMarca(marca) {
         const nuevaFila = `
             <tr data-id="${marca.id_marca}">
@@ -72,13 +68,11 @@ $(document).ready(function () {
         $('#tablaConsultas tbody').append(nuevaFila);
     }
 
-    // Resetear formulario
     function resetMarca() {
         $("#nombre_marca").val('');
         $("#snombre_marca").text('');
     }
 
-    // Enviar formulario de registro por AJAX
     $('#registrarMarca').on('submit', function(e) {
         e.preventDefault();
 
@@ -105,7 +99,6 @@ $(document).ready(function () {
         }
     });
 
-    // Función genérica para enviar AJAX
     function enviarAjax(datos, callback) {
         $.ajax({
             url: '',
@@ -126,7 +119,6 @@ $(document).ready(function () {
         });
     }
 
-    // Cargar datos de la marca en el modal al abrir
     $(document).on('click', '.btn-modificar', function () {
         $('#modificar_id_marca').val($(this).data('id'));
         $('#modificar_nombre_marca').val($(this).data('nombre'));
@@ -134,7 +126,6 @@ $(document).ready(function () {
         $('#modificarMarcaModal').modal('show');
     });
 
-    // Validaciones en tiempo real para el modal de modificar
     $("#modificar_nombre_marca").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("modificar_nombre_marca");
@@ -149,7 +140,6 @@ $(document).ready(function () {
         );
     });
 
-    // Validación para modificar
     function validarMarca(datos) {
         let errores = [];
         if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/.test(datos.nombre_marca)) {
@@ -158,7 +148,6 @@ $(document).ready(function () {
         return errores;
     }
 
-    // Enviar modificación por AJAX
     $('#modificarMarca').on('submit', function(e) {
         e.preventDefault();
 
@@ -218,7 +207,6 @@ $(document).ready(function () {
         });
     });
 
-    // Cerrar modal de modificación
     $(document).on('click', '#modificarMarcaModal .close', function() {
         $('#modificarMarcaModal').modal('hide');
     });
@@ -260,7 +248,6 @@ $(document).ready(function () {
         $(`#tablaConsultas tbody tr[data-id="${id_marca}"]`).remove();
     }
 
-    // Función genérica para mostrar mensajes
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
             icon: icono,
@@ -272,7 +259,6 @@ $(document).ready(function () {
         });
     }
 
-    // Utilidades de validación
     function validarKeyPress(er, e) {
         key = e.keyCode;
         tecla = String.fromCharCode(key);

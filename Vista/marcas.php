@@ -73,10 +73,8 @@
             <?php endforeach; ?>
         </tbody>
     </table> 
-
 </div>
 
-<!-- Modal para modificar marca -->
 <div class="modal fade modal-modificar" id="modificarMarcaModal" tabindex="-1" role="dialog" aria-labelledby="modificarMarcaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

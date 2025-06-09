@@ -16,7 +16,6 @@ class Cuentabanco extends BD {
         $this->db = $conexion->getConexion();
     }
 
-    // Getters y Setters
     public function getIdCuenta() { 
         return $this->id_cuenta; 
     }
@@ -66,7 +65,6 @@ class Cuentabanco extends BD {
         $this->estado = $estado;
     }
 
-    // Registrar Cuenta
     public function registrarCuentabanco() {
         return $this->r_cuentabanco(); 
     }
@@ -85,7 +83,6 @@ class Cuentabanco extends BD {
         return $stmt->execute();
     }
 
-    // Verificar si existe el número de cuenta
     public function existeNumeroCuenta($numero_cuenta, $excluir_id = null) {
         return $this->existeNumCuenta($numero_cuenta, $excluir_id); 
     }
@@ -119,7 +116,6 @@ class Cuentabanco extends BD {
         }
     }
     
-    // Obtener Cuenta por ID
     public function obtenerCuentaPorId($id_cuenta) {
         return $this->cuentaporid($id_cuenta); 
     }
@@ -135,7 +131,6 @@ class Cuentabanco extends BD {
         return $cuenta_obt;
     }
 
-    // Consultar Cuentas
     public function consultarCuentabanco() {
         return $this->c_cuentabanco(); 
     }
@@ -150,7 +145,6 @@ class Cuentabanco extends BD {
         return $cuentas_obt;
     }
 
-    // Modificar Cuenta
     public function modificarCuentabanco($id_cuenta) {
         return $this->m_cuentabanco($id_cuenta); 
     }
@@ -172,45 +166,43 @@ class Cuentabanco extends BD {
         return $result;
     }
 
-    // Eliminar Cuenta
     public function eliminarCuentabanco($id_cuenta) {
         return $this->e_cuentabanco($id_cuenta); 
     }
-private function e_cuentabanco($id_cuenta) {
-    try {
-        $sql = "DELETE FROM tbl_cuentas WHERE id_cuenta = :id_cuenta";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_cuenta', $id_cuenta, PDO::PARAM_INT);
-        
-        $result = $stmt->execute();
+    private function e_cuentabanco($id_cuenta) {
+        try {
+            $sql = "DELETE FROM tbl_cuentas WHERE id_cuenta = :id_cuenta";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id_cuenta', $id_cuenta, PDO::PARAM_INT);
+            
+            $result = $stmt->execute();
 
-        if ($result) {
-            return [
-                'success' => true,
-                'message' => 'Cuenta bancaria eliminada exitosamente.'
-            ];
-        } else {
-            return [
-                'success' => false,
-                'message' => 'No se pudo eliminar la cuenta bancaria.'
-            ];
-        }
+            if ($result) {
+                return [
+                    'success' => true,
+                    'message' => 'Cuenta bancaria eliminada exitosamente.'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'No se pudo eliminar la cuenta bancaria.'
+                ];
+            }
 
-    } catch (PDOException $e) {
-        if ($e->getCode() == '23000') {
-            return [
-                'success' => false,
-                'message' => 'No se puede eliminar la cuenta bancaria porque tiene registros asociados.'
-            ];
-        } else {
-            return [
-                'success' => false,
-                'message' => 'Error inesperado: ' . $e->getMessage()
-            ];
+        } catch (PDOException $e) {
+            if ($e->getCode() == '23000') {
+                return [
+                    'success' => false,
+                    'message' => 'No se puede eliminar la cuenta bancaria porque tiene registros asociados.'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Error inesperado: ' . $e->getMessage()
+                ];
+            }
         }
     }
-}
-
 
     public function verificarEstado() {
         return $this->v_estadoCuenta(); 
@@ -228,7 +220,6 @@ private function e_cuentabanco($id_cuenta) {
         $this->db = null;
     }
 
-    // Habilitar e Inhabilitar Cuenta
     public function cambiarEstado($nuevoEstado) {
         return $this->estadoCuenta($nuevoEstado); 
     }
