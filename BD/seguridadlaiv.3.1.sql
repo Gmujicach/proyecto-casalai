@@ -166,7 +166,7 @@ ALTER TABLE `tbl_usuarios`
   ADD PRIMARY KEY (`id_usuario`),
   ADD KEY `id_rol` (`id_rol`);
 
---_r
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
