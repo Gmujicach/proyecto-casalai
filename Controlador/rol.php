@@ -107,7 +107,6 @@ function consultarRoles() {
 
 $pagina = "roles";
 if (is_file("Vista/" . $pagina . ".php")) {
-
     $roles = consultarRoles();
     require_once("Vista/" . $pagina . ".php");
 } else {
