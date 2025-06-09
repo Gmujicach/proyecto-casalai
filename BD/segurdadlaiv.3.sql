@@ -69,19 +69,19 @@ CREATE TABLE `tbl_modulos` (
 
 CREATE TABLE `tbl_permisos` (
   `accion` varchar(10) NOT NULL,
-  `id_rango` int(11) NOT NULL,
+  `id_rol` int(11) NOT NULL,
   `id_modulo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tbl_rango`
+-- Estructura de tabla para la tabla `tbl_rol`
 --
 
-CREATE TABLE `tbl_rango` (
-  `id_rango` int(11) NOT NULL,
-  `nombre_rango` varchar(15) NOT NULL
+CREATE TABLE `tbl_rol` (
+  `id_rol` int(11) NOT NULL,
+  `nombre_rol` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -107,7 +107,7 @@ CREATE TABLE `tbl_usuarios` (
   `id_usuario` int(11) NOT NULL,
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `id_rango` int(11) NOT NULL,
+  `id_rol` int(11) NOT NULL,
   `correo` varchar(50) DEFAULT NULL,
   `nombres` varchar(20) DEFAULT NULL,
   `apellidos` varchar(20) DEFAULT NULL,
@@ -143,14 +143,14 @@ ALTER TABLE `tbl_modulos`
 -- Indices de la tabla `tbl_permisos`
 --
 ALTER TABLE `tbl_permisos`
-  ADD KEY `id_rango` (`id_rango`,`id_modulo`),
+  ADD KEY `id_rol` (`id_rol`,`id_modulo`),
   ADD KEY `id_modulo` (`id_modulo`);
 
 --
--- Indices de la tabla `tbl_rango`
+-- Indices de la tabla `tbl_rol`
 --
-ALTER TABLE `tbl_rango`
-  ADD PRIMARY KEY (`id_rango`);
+ALTER TABLE `tbl_rol`
+  ADD PRIMARY KEY (`id_rol`);
 
 --
 -- Indices de la tabla `tbl_recuperar`
@@ -164,9 +164,9 @@ ALTER TABLE `tbl_recuperar`
 --
 ALTER TABLE `tbl_usuarios`
   ADD PRIMARY KEY (`id_usuario`),
-  ADD KEY `id_rango` (`id_rango`);
+  ADD KEY `id_rol` (`id_rol`);
 
---
+--_r
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -189,10 +189,10 @@ ALTER TABLE `tbl_modulos`
   MODIFY `id_modulo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `tbl_rango`
+-- AUTO_INCREMENT de la tabla `tbl_rol`
 --
-ALTER TABLE `tbl_rango`
-  MODIFY `id_rango` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tbl_rol`
+  MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_recuperar`
@@ -227,7 +227,7 @@ ALTER TABLE `tbl_bitacora`
 -- Filtros para la tabla `tbl_permisos`
 --
 ALTER TABLE `tbl_permisos`
-  ADD CONSTRAINT `tbl_permisos_ibfk_1` FOREIGN KEY (`id_rango`) REFERENCES `tbl_rango` (`id_rango`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tbl_permisos_ibfk_1` FOREIGN KEY (`id_rol`) REFERENCES `tbl_rol` (`id_rol`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `tbl_permisos_ibfk_2` FOREIGN KEY (`id_modulo`) REFERENCES `tbl_modulos` (`id_modulo`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -240,7 +240,7 @@ ALTER TABLE `tbl_recuperar`
 -- Filtros para la tabla `tbl_usuarios`
 --
 ALTER TABLE `tbl_usuarios`
-  ADD CONSTRAINT `fk_usuarios_rango` FOREIGN KEY (`id_rango`) REFERENCES `tbl_rango` (`id_rango`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_usuarios_rol` FOREIGN KEY (`id_rol`) REFERENCES `tbl_rol` (`id_rol`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
