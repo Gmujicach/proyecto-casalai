@@ -105,7 +105,7 @@ function consultarRoles() {
     return $rol->consultarRoles();
 }
 
-$pagina = "roles";
+$pagina = "rol";
 if (is_file("Vista/" . $pagina . ".php")) {
     $roles = consultarRoles();
     require_once("Vista/" . $pagina . ".php");
