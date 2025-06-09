@@ -91,7 +91,7 @@ body{
     transform: translateY(-50%);
     background: #0976f3;
     transform-origin: right;
-    transition-duration: 0.3s;
+    transition-duration: 0.1s;
 }
 
 .sidebar:hover .menu-link .menu-separador{
