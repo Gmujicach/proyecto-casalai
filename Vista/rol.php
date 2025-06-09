@@ -47,17 +47,17 @@
                 <tr data-id="<?php echo $rol['id_rol']; ?>">
                     <td>
                         <ul>
-                            <li>
-                                <button class="btn btn-primary btn-modificar"
-                                data-id="<?php echo $rol['id_marca']; ?>"
+                            <div>
+                                <button class="btn-modificar"
+                                data-id="<?php echo $rol['id_rol']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($rol['nombre_rol']); ?>"
-                                >Modificar</button>
-                            </li>
-                            <li>
-                                <button class="btn btn-danger btn-eliminar"
+                            >Modificar</button>
+                            </div>
+                            <div>
+                                <button class="btn-eliminar"
                                 data-id="<?php echo $rol['id_rol']; ?>"
                                 >Eliminar</button>
-                            </li>
+                            </div>
                         </ul>
                     </td>
                     <td><?php echo htmlspecialchars($rol['id_rol']); ?></td>
