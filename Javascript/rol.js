@@ -68,7 +68,7 @@ $(document).ready(function () {
 
     $('#btnIncluirRol').on('click', function() {
         $('#registrarRol')[0].reset();
-        $('#snombre_Rol').text('');
+        $('#snombre_rol').text('');
         $('#registrarRolModal').modal('show');
     });
 
