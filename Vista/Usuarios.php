@@ -48,14 +48,6 @@
             <input type="password" placeholder="Confirmar Contraseña" class="control-form" id="clave_confirmar" name="clave_confirmar" maxlength="15" required>
             <span class="span-value" id="sclave_confirmar"></span>
         </div>
-        <!-- <div class="envolver-form">
-            <select name="" id="" class="control-form">
-                <option value="" disabled selected>Seleccionar</option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-            </select>
-        </div> -->
 
         <button class="boton-form" type="submit">Registrar</button>
     </form>
