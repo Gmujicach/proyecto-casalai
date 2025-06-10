@@ -46,37 +46,26 @@
                     <td><?php echo htmlspecialchars($marca['id_marca']); ?></td>
                     <td><?php echo htmlspecialchars($marca['nombre_marca']); ?></td>
                     <td>
-                        <span>
-                            <div class="acciones-boton">
-                            <i class="vertical">
-                                <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                            </i>
-                                <div class="desplegable">
-                                    <ul>
-                                        <li>
-                                            <button class="btn btn-primary btn-modificar"
-                                            data-id="<?php echo $marca['id_marca']; ?>"
-                                            data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
-                                            >Modificar</button>
-                                        </li>
-                                        <li>
-                                            <button class="btn btn-danger btn-eliminar"
-                                            data-id="<?php echo $marca['id_marca']; ?>"
-                                            >Eliminar</button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </span>
+                        <ul>
+                            <li>
+                                <button class="btn btn-primary btn-modificar"
+                                data-id="<?php echo $marca['id_marca']; ?>"
+                                data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
+                                >Modificar</button>
+                            </li>
+                            <li>
+                                <button class="btn btn-danger btn-eliminar"
+                                data-id="<?php echo $marca['id_marca']; ?>"
+                                >Eliminar</button>
+                            </li>
+                        </ul>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table> 
-
 </div>
 
-<!-- Modal para modificar marca -->
 <div class="modal fade modal-modificar" id="modificarMarcaModal" tabindex="-1" role="dialog" aria-labelledby="modificarMarcaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
