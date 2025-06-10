@@ -15,12 +15,12 @@
 <div class="modal fade modal-registrar" id="registrarRolModal" tabindex="-1" role="dialog" aria-labelledby="registrarRolModalLabel" aria-hidden="true">
     <div class="formulario-responsivo">
         <div class="fondo-form">
-            <form id="registrarMarca" action="" method="POST">
+            <form id="registrarRol" action="" method="POST">
                 <input type="hidden" name="accion" value="registrar">
                 <h3 class="titulo-form">INCLUIR ROL</h3>
                 <div class="envolver-form">
-                    <input type="text" placeholder="Nombre de la Marca" class="control-form" id="nombre_marca" name="nombre_marca" maxlength="25" required>
-                    <span class="span-value" id="snombre_marca"></span>
+                    <input type="text" placeholder="Nombre del Rol" class="control-form" id="nombre_rol" name="nombre_rol" maxlength="25" required>
+                    <span class="span-value" id="snombre_rol"></span>
                 </div>
 
                 <button class="boton-form" type="submit">Registrar</button>
@@ -31,6 +31,14 @@
 </div>
 
 <div class="contenedor-tabla">
+    <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+        <button id="btnIncluirRol" 
+                class="btn btn-success" 
+                style="font-size: 1.3rem; padding: 15px 40px; border-radius: 10px;">
+            Incluir Rol
+        </button>
+    </div>
+
     <h3>Lista de Roles</h3>
     
     <table class="tablaConsultas" id="tablaConsultas">

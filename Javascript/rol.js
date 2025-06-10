@@ -39,19 +39,19 @@ $(document).ready(function () {
             <tr data-id="${rol.id_rol}">
                 <td>
                     <ul>
-                        <li>
-                            <button class="btn btn-primary btn-modificar"
+                        <div>
+                            <button class="btn-modificar"
                                 data-id="${rol.id_rol}"
                                 data-nombre="${rol.nombre_rol}">
                                 Modificar
                             </button>
-                        </li>
-                        <li>
-                            <button class="btn btn-danger btn-eliminar"
+                        </div>
+                        <div>
+                            <button class=btn-eliminar"
                                 data-id="${rol.id_rol}">
                                 Eliminar
                             </button>
-                        </li>
+                        </div>
                     </ul>
                 </td>
                 <td>${rol.id_rol}</td>
@@ -65,6 +65,12 @@ $(document).ready(function () {
         $("#nombre_rol").val('');
         $("#snombre_rol").text('');
     }
+
+    $('#btnIncluirRol').on('click', function() {
+        $('#registrarRol')[0].reset();
+        $('#snombre_Rol').text('');
+        $('#registrarRolModal').modal('show');
+    });
 
     $('#registrarRol').on('submit', function(e) {
         e.preventDefault();
@@ -145,7 +151,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         const datos = {
-            nombre_marca: $('#modificar_nombre_rol').val()
+            nombre_rol: $('#modificar_nombre_rol').val()
         };
 
         const errores = validarRol(datos);
@@ -200,8 +206,8 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '#modificarMarcaModal .close', function() {
-        $('#modificarMarcaModal').modal('hide');
+    $(document).on('click', '#modificarRolModal .close', function() {
+        $('#modificarRolModal').modal('hide');
     });
 
     $(document).on('click', '.btn-eliminar', function (e) {
