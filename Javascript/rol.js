@@ -98,6 +98,10 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on('click', '#registrarRolModal .close', function() {
+        $('#registrarRolModal').modal('hide');
+    });
+
     function enviarAjax(datos, callback) {
         $.ajax({
             url: '',
@@ -187,7 +191,7 @@ $(document).ready(function () {
                     const nombre = $('#modificar_nombre_rol').val();
 
                     const fila = $('tr[data-id="' + id + '"]');
-                    fila.find('td').eq(1).text(nombre);
+                    fila.find('td').eq(2).text(nombre);
 
                     const botonModificar = fila.find('.btn-modificar');
                     botonModificar.data('nombre', nombre);

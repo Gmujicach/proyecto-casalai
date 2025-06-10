@@ -11,7 +11,7 @@
 <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <?php include 'NewNavBar.php'; ?>
-
+<!--
 <div class="modal fade modal-registrar" id="registrarRolModal" tabindex="-1" role="dialog" aria-labelledby="registrarRolModalLabel" aria-hidden="true">
     <div class="formulario-responsivo">
         <div class="fondo-form">
@@ -25,6 +25,34 @@
 
                 <button class="boton-form" type="submit">Registrar</button>
                 <button class="boton-reset" type="reset">Reset</button>
+            </form>
+        </div>
+    </div>
+</div>
+-->
+
+<div class="modal fade modal-registrar" id="registrarRolModal" tabindex="-1" role="dialog" aria-labelledby="registrarRolModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="registrarRol" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarRolModalLabel">Incluir Rol</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="envolver-form">
+                        <label for="nombre_rol">Nombre del Rol</label>
+                        <input type="text" placeholder="Nombre del Rol" class="control-form" id="nombre_rol" name="nombre_rol" maxlength="15" required>
+                        <span class="span-value" id="snombre_rol"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
             </form>
         </div>
     </div>
