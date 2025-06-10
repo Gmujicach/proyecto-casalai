@@ -40,10 +40,8 @@
 </div>
 
 <div class="contenedor-tabla">
-    <div style="display: flex; justify-content: center; margin-bottom: 25px;">
-        <button id="btnIncluirRol" 
-                class="btn btn-success" 
-                style="font-size: 1.3rem; padding: 15px 40px; border-radius: 10px;">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirRol" class="btn-incluir">
             Incluir Rol
         </button>
     </div>

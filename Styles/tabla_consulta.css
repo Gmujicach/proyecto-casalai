@@ -116,6 +116,26 @@
     width: 100%; /* Asegura que ocupe todo el ancho */
 }
 
+.space-btn-incluir {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.btn-incluir{
+    font-size: 1rem; 
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background-color:#2ac94f;
+    cursor: pointer;
+    color: #fff;
+    transition: 0.5s;
+}
+.btn-incluir:hover {
+    background-color: #21a141;
+}
+
 table{
     display: block;
     text-align: left;

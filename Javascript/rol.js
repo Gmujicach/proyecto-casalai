@@ -47,7 +47,7 @@ $(document).ready(function () {
                             </button>
                         </div>
                         <div>
-                            <button class=btn-eliminar"
+                            <button class="btn-eliminar"
                                 data-id="${rol.id_rol}">
                                 Eliminar
                             </button>
