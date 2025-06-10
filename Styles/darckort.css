@@ -421,3 +421,20 @@ transform: translateY(0%);
   background-color: #f9f9f9;
 }
 
+/* ===== Botones de acción uniformes ===== */
+.btn-accion {
+  /* mismo ancho y alto mínimo para ambos */
+  min-width: 115px;          /* ajusta a tu gusto */
+  padding: .35rem .75rem;    /* idéntico relleno */
+  font-size: .875rem;        /* texto consistente */
+  line-height: 1.25;         /* centra verticalmente */
+  display: inline-flex;      /* alinea icono + texto */
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;               /* espacio icono-texto */
+}
+
+/* Si usas Bootstrap 5 + Icons: mantén iconos centrados */
+.btn-accion i {
+  font-size: 1rem;           /* mismo alto que el texto */
+}
