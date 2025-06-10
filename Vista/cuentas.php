@@ -52,6 +52,7 @@
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
+                <th>Acciones</th>
                 <th>ID</th>
                 <th>Nombre del Banco</th>
                 <th>Número de Cuenta</th>
@@ -59,12 +60,33 @@
                 <th>Teléfono</th>
                 <th>Correo</th>
                 <th>Estatus</th>
-                <th>Acciones</th>
+
             </tr>
         </thead>
         <tbody>
             <?php foreach ($cuentabancos as $cuenta): ?>
                 <tr data-id="<?php echo $cuenta['id_cuenta']; ?>">
+                                        <td>
+                        <span>
+                            <div class="acciones-boton">
+
+
+                                            <button class="btn btn-primary btn-modificar"
+                                            data-id="<?php echo $cuenta['id_cuenta']; ?>"
+                                            data-nombre="<?php echo htmlspecialchars($cuenta['nombre_banco']); ?>"
+                                            data-numero="<?php echo htmlspecialchars($cuenta['numero_cuenta']); ?>"
+                                            data-rif="<?php echo htmlspecialchars($cuenta['rif_cuenta']); ?>"
+                                            data-telefono="<?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?>"
+                                            data-correo="<?php echo htmlspecialchars($cuenta['correo_cuenta']); ?>"
+                                            >Modificar</button>
+
+                                            <button class="btn btn-danger btn-eliminar"
+                                            data-id="<?php echo $cuenta['id_cuenta']; ?>"
+                                            >Eliminar</button>
+
+                            </div>
+                        </span>
+                    </td>
                     <td><?php echo htmlspecialchars($cuenta['id_cuenta']); ?></td>
                     <td><?php echo htmlspecialchars($cuenta['nombre_banco']); ?></td>
                     <td><?php echo htmlspecialchars($cuenta['numero_cuenta']); ?></td>
@@ -79,34 +101,7 @@
                             <?php echo htmlspecialchars($cuenta['estado']); ?>
                         </span>
                     </td>
-                    <td>
-                        <span>
-                            <div class="acciones-boton">
-                                <i class="vertical">
-                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                                </i>
-                                <div class="desplegable">
-                                    <ul>
-                                        <li>
-                                            <button class="btn btn-primary btn-modificar"
-                                            data-id="<?php echo $cuenta['id_cuenta']; ?>"
-                                            data-nombre="<?php echo htmlspecialchars($cuenta['nombre_banco']); ?>"
-                                            data-numero="<?php echo htmlspecialchars($cuenta['numero_cuenta']); ?>"
-                                            data-rif="<?php echo htmlspecialchars($cuenta['rif_cuenta']); ?>"
-                                            data-telefono="<?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?>"
-                                            data-correo="<?php echo htmlspecialchars($cuenta['correo_cuenta']); ?>"
-                                            >Modificar</button>
-                                        </li>
-                                        <li>
-                                            <button class="btn btn-danger btn-eliminar"
-                                            data-id="<?php echo $cuenta['id_cuenta']; ?>"
-                                            >Eliminar</button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </span>
-                    </td>
+
                 </tr>
             <?php endforeach; ?>
         </tbody>

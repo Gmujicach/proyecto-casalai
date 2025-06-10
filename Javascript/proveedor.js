@@ -133,38 +133,33 @@ function actualizarFilaProveedor(proveedor) {
     $('#tablaConsultas tbody tr').each(function() {
         if ($(this).attr('data-id') == proveedor.id_proveedor) {
             tabla.row(this).data([
-                `<span class="campo-nombres">${proveedor.nombre}</span><span class="campo-correo">${proveedor.correo}</span>`,
+                `<div class="acciones-boton">
+                    <button type="button" class="btn btn-primary btn-modificar modificar" 
+                        data-id="${proveedor.id_proveedor}"
+                        data-nombre="${proveedor.nombre}"
+                        data-persona-contacto="${proveedor.presona_contacto}"
+                        data-direccion="${proveedor.direccion}"
+                        data-telefono="${proveedor.telefono}"
+                        data-correo="${proveedor.correo}"
+                        data-telefono-secundario="${proveedor.telefono_secundario}"
+                        data-rif-proveedor="${proveedor.rif_proveedor}"
+                        data-rif-representante="${proveedor.rif_representante}"
+                        data-observaciones="${proveedor.observaciones}"
+                        data-toggle="modal" 
+                        data-target="#modificar_usuario_modal">
+                        Modificar
+                    </button>
+                    <button type="button" class="btn btn-danger btn-eliminar eliminar" data-id="${proveedor.id_proveedor}">Eliminar</button>
+                </div>`,
+                `<span class="campo-nombres">${proveedor.nombre}</span>`,
+                `<span class="campo-correo">${proveedor.correo}</span>`,
                 `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
                 `<span class="campo-telefono">${proveedor.telefono}</span>`,
-                `<span class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" data-id="${proveedor.id_proveedor}" onclick="cambiarEstatus(${proveedor.id_proveedor}, '${proveedor.estado}')" style="cursor: pointer;">${proveedor.estado}</span>`,
-                `<span>
-                    <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                        <div class="desplegable">
-                            <ul>
-                                <li>
-                                    <a href="#" class="modificar" 
-                                        data-id="${proveedor.id_proveedor}"
-                                        data-nombre="${proveedor.nombre}"
-                                        data-persona-contacto="${proveedor.presona_contacto}"
-                                        data-direccion="${proveedor.direccion}"
-                                        data-telefono="${proveedor.telefono}"
-                                        data-correo="${proveedor.correo}"
-                                        data-telefono-secundario="${proveedor.telefono_secundario}"
-                                        data-rif-proveedor="${proveedor.rif_proveedor}"
-                                        data-rif-representante="${proveedor.rif_representante}"
-                                        data-observaciones="${proveedor.observaciones}"
-                                        data-toggle="modal" 
-                                        data-target="#modificar_usuario_modal">
-                                        Modificar
-                                    </a>
-                                </li>
-                                <li><a href="#" class="eliminar" data-id="${proveedor.id_proveedor}">Eliminar</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                `<span class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
+                    data-id="${proveedor.id_proveedor}"
+                    onclick="cambiarEstatus(${proveedor.id_proveedor}, '${proveedor.estado}')"
+                    style="cursor: pointer;">
+                    ${proveedor.estado}
                 </span>`
             ]).draw(false);
         }
@@ -308,38 +303,33 @@ $(document).on('click', '.eliminar', function (e) {
 function agregarFilaProveedor(proveedor) {
     const tabla = $('#tablaConsultas').DataTable();
     const nuevaFila = tabla.row.add([
-        `<span class="campo-nombres">${proveedor.nombre}</span><span class="campo-correo">${proveedor.correo}</span>`,
+        `<div class="acciones-boton">
+            <button type="button" class="btn btn-primary btn-modificar modificar" 
+                data-id="${proveedor.id_proveedor}"
+                data-nombre="${proveedor.nombre}"
+                data-persona-contacto="${proveedor.presona_contacto}"
+                data-direccion="${proveedor.direccion}"
+                data-telefono="${proveedor.telefono}"
+                data-correo="${proveedor.correo}"
+                data-telefono-secundario="${proveedor.telefono_secundario}"
+                data-rif-proveedor="${proveedor.rif_proveedor}"
+                data-rif-representante="${proveedor.rif_representante}"
+                data-observaciones="${proveedor.observaciones}"
+                data-toggle="modal" 
+                data-target="#modificar_usuario_modal">
+                Modificar
+            </button>
+            <button type="button" class="btn btn-danger btn-eliminar eliminar" data-id="${proveedor.id_proveedor}">Eliminar</button>
+        </div>`,
+        `<span class="campo-nombres">${proveedor.nombre}</span>`,
+        `<span class="campo-correo">${proveedor.correo}</span>`,
         `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
         `<span class="campo-telefono">${proveedor.telefono}</span>`,
-        `<span class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" data-id="${proveedor.id_proveedor}" onclick="cambiarEstatus(${proveedor.id_proveedor}, '${proveedor.estado}')" style="cursor: pointer;">${proveedor.estado}</span>`,
-        `<span>
-            <div class="acciones-boton">
-                <i class="vertical">
-                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                </i>
-                <div class="desplegable">
-                    <ul>
-                        <li>
-                            <a href="#" class="modificar" 
-                                data-id="${proveedor.id_proveedor}"
-                                data-nombre="${proveedor.nombre}"
-                                data-persona-contacto="${proveedor.presona_contacto}"
-                                data-direccion="${proveedor.direccion}"
-                                data-telefono="${proveedor.telefono}"
-                                data-correo="${proveedor.correo}"
-                                data-telefono-secundario="${proveedor.telefono_secundario}"
-                                data-rif-proveedor="${proveedor.rif_proveedor}"
-                                data-rif-representante="${proveedor.rif_representante}"
-                                data-observaciones="${proveedor.observaciones}"
-                                data-toggle="modal" 
-                                data-target="#modificar_usuario_modal">
-                                Modificar
-                            </a>
-                        </li>
-                        <li><a href="#" class="eliminar" data-id="${proveedor.id_proveedor}">Eliminar</a></li>
-                    </ul>
-                </div>
-            </div>
+        `<span class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
+            data-id="${proveedor.id_proveedor}"
+            onclick="cambiarEstatus(${proveedor.id_proveedor}, '${proveedor.estado}')"
+            style="cursor: pointer;">
+            ${proveedor.estado}
         </span>`
     ]).draw(false).node();
     $(nuevaFila).attr('data-id', proveedor.id_proveedor);

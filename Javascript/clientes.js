@@ -130,50 +130,33 @@ $(document).ready(function () {
         return true;
     }
 
-    function agregarFilaCliente(cliente) {
-    // Verificar si DataTables está inicializado
+function agregarFilaCliente(cliente) {
     const tabla = $('#tablaConsultas').DataTable();
-    
-    // Crear la nueva fila como un array de datos (en el mismo orden que las columnas)
     const nuevaFila = [
+        `<div class="acciones-boton">
+            <button type="button" class="btn btn-primary btn-modificar"
+                data-id="${cliente.id_clientes}"
+                data-nombre="${cliente.nombre}"
+                data-cedula="${cliente.cedula}"
+                data-direccion="${cliente.direccion}"
+                data-telefono="${cliente.telefono}"
+                data-correo="${cliente.correo}">
+                Modificar
+            </button>
+            <button class="btn btn-danger btn-eliminar"
+                data-id="${cliente.id_clientes}">
+                Eliminar
+            </button>
+        </div>`,
         cliente.nombre,
         cliente.cedula,
         cliente.direccion,
         cliente.telefono,
-        cliente.correo,
-        `<div class="acciones-boton">
-            <i class="vertical">
-                <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-            </i>
-            <div class="desplegable">
-                <ul>
-                    <li>
-                        <button class="btn btn-primary btn-modificar"
-                            data-id="${cliente.id_clientes}"
-                            data-nombre="${cliente.nombre}"
-                            data-cedula="${cliente.cedula}"
-                            data-direccion="${cliente.direccion}"
-                            data-telefono="${cliente.telefono}"
-                            data-correo="${cliente.correo}">
-                            Modificar
-                        </button>
-                    </li>
-                    <li>
-                        <button class="btn btn-danger btn-eliminar"
-                            data-id="${cliente.id_clientes}">
-                            Eliminar
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>`
+        cliente.correo
     ];
-
-    // Agregar la nueva fila al DataTable y redibujar
-    tabla.row.add(nuevaFila).draw(false);
-    
-    // Opcional: ordenar por la columna 0 (nombre) de forma ascendente
-    tabla.order([0, 'asc']).draw();
+    // Agrega la fila y le pone el atributo data-id
+    const rowNode = tabla.row.add(nuevaFila).draw(false).node();
+    $(rowNode).attr('data-id', cliente.id_clientes);
 }
     // Resetear formulario
     function resetCliente() {
@@ -212,10 +195,10 @@ $(document).ready(function () {
                         text: respuesta.message || 'Cliente registrado correctamente'
                     }).then(() => {
                         // Agregar la nueva fila a DataTables
-                        if(respuesta.cliente) {
-                            agregarFilaCliente(respuesta.cliente);
-                        }
-                        resetCliente();
+                        if(respuesta.status === "success" && respuesta.cliente){
+    agregarFilaCliente(respuesta.cliente);
+    resetCliente();
+}
                     });
                 } else {
                     Swal.fire({
@@ -399,35 +382,46 @@ $(document).ready(function () {
             data: formData,
             dataType: 'json', // <-- Asegúrate de esto
             success: function(response) {
-                if (response.status === 'success') {
-                    $('#modificar_clientes_modal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: 'El Cliente se ha modificado correctamente'
-                    });
+if (response.status === 'success') {
+    $('#modificar_clientes_modal').modal('hide');
+    Swal.fire({
+        icon: 'success',
+        title: 'Modificado',
+        text: 'El Cliente se ha modificado correctamente'
+    });
 
-                    const id = $('#modificar_id_clientes').val();
-                    const nombre = $('#modificarnombre').val();
-                    const cedula = $('#modificarcedula').val();
-                    const direccion = $('#modificardireccion').val();
-                    const telefono = $('#modificartelefono').val();
-                    const correo = $('#modificarcorreo').val();
+    const id = $('#modificar_id_clientes').val();
+    const nombre = $('#modificarnombre').val();
+    const cedula = $('#modificarcedula').val();
+    const direccion = $('#modificardireccion').val();
+    const telefono = $('#modificartelefono').val();
+    const correo = $('#modificarcorreo').val();
 
-                    const fila = $('tr[data-id="' + id + '"]');
-                    fila.find('td').eq(0).text(nombre);
-                    fila.find('td').eq(1).text(cedula);
-                    fila.find('td').eq(2).text(direccion);
-                    fila.find('td').eq(3).text(telefono);
-                    fila.find('td').eq(4).text(correo);
-
-                    const botonModificar = fila.find('.btn-modificar');
-                    botonModificar.data('nombre', nombre);
-                    botonModificar.data('cedula', cedula);
-                    botonModificar.data('direccion', direccion);
-                    botonModificar.data('telefono', telefono);
-                    botonModificar.data('correo', correo);
-                } else {
+const tabla = $('#tablaConsultas').DataTable();
+const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
+fila.data([
+    `<div class="acciones-boton">
+        <button type="button" class="btn btn-primary btn-modificar"
+            data-id="${id}"
+            data-nombre="${nombre}"
+            data-cedula="${cedula}"
+            data-direccion="${direccion}"
+            data-telefono="${telefono}"
+            data-correo="${correo}">
+            Modificar
+        </button>
+        <button class="btn btn-danger btn-eliminar"
+            data-id="${id}">
+            Eliminar
+        </button>
+    </div>`,
+    nombre,
+    cedula,
+    direccion,
+    telefono,
+    correo
+]).draw(false);
+} else {
                     muestraMensaje(response.message || 'No se pudo modificar el cliente');
                 }
             },

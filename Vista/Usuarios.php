@@ -69,23 +69,56 @@
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Telefono</th>
-                <th>Rango</th>
-                <th>Estatus</th>
                 <th>Acciones</th>
+                <th>Nombre y Apellido</th>
+                <th>Correo</th>
+                <th>Usuario</th>
+                <th>Telefono</th>
+                <th>Rol</th>
+                <th>Estatus</th>
+
             </tr>
         </thead>
 
         <tbody>
         <?php foreach ($usuarios as $usuario): ?>
             <tr data-id="<?php echo $usuario['id_usuario']; ?>">
+                                <td>
+                    <span>
+                        <div class="acciones-boton">
+
+                                        <button class="btn btn-primary btn-modificar"
+                                            data-id="<?php echo $usuario['id_usuario']; ?>"
+                                            data-username="<?php echo htmlspecialchars($usuario['username']); ?>"
+                                            data-nombres="<?php echo htmlspecialchars($usuario['nombres']); ?>"
+                                            data-apellidos="<?php echo htmlspecialchars($usuario['apellidos']); ?>"
+                                            data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
+                                            data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
+                                            data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
+                                            data-rango="<?php echo htmlspecialchars($usuario['rango']); ?>">
+                                            Modificar
+                                        </button>
+
+                                        <button class="btn btn-danger btn-eliminar" 
+                                        data-id="<?php echo $usuario['id_usuario']; ?>"
+                                        >Eliminar</button>
+
+                        </div>
+                    </span>
+                </td>
                 <td>
                     <span class="campo-nombres">
                     <?php echo htmlspecialchars($usuario['nombres']); ?> <?php echo htmlspecialchars($usuario['apellidos']); ?>
                     </span>
+                </td>
+                <td>
                     <span class="campo-correo">
                     <?php echo htmlspecialchars($usuario['correo']); ?>
+                    </span> 
+                </td>
+                <td>
+                    <span class="campo-usuario">
+                    <?php echo htmlspecialchars($usuario['username']); ?>
                     </span>
                 </td>
                 
@@ -106,37 +139,7 @@
                         <?php echo htmlspecialchars($usuario['estatus']); ?>
                     </span>
                 </td>
-                <td>
-                    <span>
-                        <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                            <div class="desplegable">
-                                <ul>
-                                    <li>
-                                        <button class="btn btn-primary btn-modificar"
-                                            data-id="<?php echo $usuario['id_usuario']; ?>"
-                                            data-username="<?php echo htmlspecialchars($usuario['username']); ?>"
-                                            data-nombres="<?php echo htmlspecialchars($usuario['nombres']); ?>"
-                                            data-apellidos="<?php echo htmlspecialchars($usuario['apellidos']); ?>"
-                                            data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
-                                            data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
-                                            data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
-                                            data-rango="<?php echo htmlspecialchars($usuario['rango']); ?>">
-                                            Modificar
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="btn btn-danger btn-eliminar" 
-                                        data-id="<?php echo $usuario['id_usuario']; ?>"
-                                        >Eliminar</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </span>
-                </td>
+
             </tr>
         <?php endforeach; ?>
         </tbody>
