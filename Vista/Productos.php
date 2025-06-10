@@ -18,6 +18,22 @@
     object-fit: contain;
     background: #fff;
 }
+.btn-accion {
+  min-width: 130px;           /* Un poco más ancho para textos largos */
+  max-width: 130px;
+  height: 38px;               /* Altura fija para todos */
+  padding: 0 .75rem;          /* Relleno horizontal uniforme */
+  font-size: .95rem;          /* Texto consistente */
+  line-height: 1.25;
+  display: inline-flex;       /* Alinea icono + texto */
+  align-items: center;        /* Centra verticalmente */
+  justify-content: center;    /* Centra horizontalmente */
+  gap: .4rem;                 /* Espacio icono-texto */
+  border-radius: 6px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  text-align: center;
+}
 </style>
 </head>
 <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
@@ -235,77 +251,62 @@
                         <?php echo htmlspecialchars($producto['estado']); ?>
                     </span>
                 </td>
-                    <td>
-                        <span>
-                            <div class="acciones-boton">
-                                <i class="vertical">
-                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                                </i>
-                                <div class="desplegable">
-                                    <ul>
-                                        <li>
-                                            <!-- Botón Modificar -->
-<?php
-$caracteristicas = $producto['caracteristicas'] ?? [];
-
-$atributosExtra = '';
-foreach ($caracteristicas as $clave => $valor) {
-    $atributosExtra .= ' data-' . htmlspecialchars($clave) . '="' . htmlspecialchars($valor) . '"';
-}
-?>
-
-
-<button 
-    type="button" 
-    class="btn btn-modificar" 
-    data-toggle="modal" 
-    data-target="#modificarProductoModal" 
-    data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
-    data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
-    data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
-    data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
-    data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
-    data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
-    data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
-    data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
-    data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
-    data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
-    data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
+<td>
     <?php
-        // Lógica para la imagen igual que en la tabla
-        $id = $producto['id_producto'];
-        $ruta_base = 'IMG/Productos/';
-        $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
-        $ruta_imagen = '';
-        foreach ($extensiones as $ext) {
-            if (file_exists($ruta_base .'producto_'. $id . '.' . $ext)) {
-                $ruta_imagen = $ruta_base .'producto_' . $id . '.' . $ext;
-                break;
-            }
-        }
-        $data_imagen = !empty($ruta_imagen) ? $ruta_imagen : 'IMG/no-disponible.png';
-        echo 'data-imagen="' . htmlspecialchars($data_imagen) . '"';
-        echo $atributosExtra;
-    ?>
->
-    Modificar
-</button>
+    $caracteristicas = $producto['caracteristicas'] ?? [];
 
-                                        </li>
-                                        <li>
-                                            <!-- Botón Eliminar -->
-                                            <a href="#" 
-                                                data-id="<?php echo $producto['id_producto']; ?>" 
-                                                class="eliminar"
-                                            >
-                                                Eliminar
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </span>
-                    </td>
+    $atributosExtra = '';
+    foreach ($caracteristicas as $clave => $valor) {
+        $atributosExtra .= ' data-' . htmlspecialchars($clave) . '="' . htmlspecialchars($valor) . '"';
+    }
+    ?>
+
+    <!-- Botón Modificar -->
+    <button 
+        type="button" 
+        class="btn btn-sm btn-accion btn-primary me-2 btn-modificar" 
+        data-bs-toggle="modal" 
+        data-bs-target="#modificarProductoModal" 
+        data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
+        data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
+        data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
+        data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
+        data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
+        data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
+        data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
+        data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
+        data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
+        data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
+        data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
+        <?php
+            $id = $producto['id_producto'];
+            $ruta_base = 'IMG/Productos/';
+            $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
+            $ruta_imagen = '';
+            foreach ($extensiones as $ext) {
+                if (file_exists($ruta_base .'producto_'. $id . '.' . $ext)) {
+                    $ruta_imagen = $ruta_base .'producto_' . $id . '.' . $ext;
+                    break;
+                }
+            }
+            $data_imagen = !empty($ruta_imagen) ? $ruta_imagen : 'IMG/no-disponible.png';
+            echo 'data-imagen="' . htmlspecialchars($data_imagen) . '"';
+            echo $atributosExtra;
+        ?>
+    >
+        <i class="bi bi-pencil-square"></i> Modificar
+    </button>
+
+    <!-- Botón Eliminar -->
+    <button 
+        type="button" 
+        class="btn btn-sm btn-accion btn-danger eliminar" 
+        data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
+    >
+        <i class="bi bi-trash"></i> Eliminar
+    </button>
+</td>
+
                 </tr>
             <?php endforeach; ?>
         </tbody>
