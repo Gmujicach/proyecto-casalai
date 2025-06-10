@@ -11,25 +11,6 @@
 <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <?php include 'NewNavBar.php'; ?>
-<!--
-<div class="modal fade modal-registrar" id="registrarRolModal" tabindex="-1" role="dialog" aria-labelledby="registrarRolModalLabel" aria-hidden="true">
-    <div class="formulario-responsivo">
-        <div class="fondo-form">
-            <form id="registrarRol" action="" method="POST">
-                <input type="hidden" name="accion" value="registrar">
-                <h3 class="titulo-form">INCLUIR ROL</h3>
-                <div class="envolver-form">
-                    <input type="text" placeholder="Nombre del Rol" class="control-form" id="nombre_rol" name="nombre_rol" maxlength="25" required>
-                    <span class="span-value" id="snombre_rol"></span>
-                </div>
-
-                <button class="boton-form" type="submit">Registrar</button>
-                <button class="boton-reset" type="reset">Reset</button>
-            </form>
-        </div>
-    </div>
-</div>
--->
 
 <div class="modal fade modal-registrar" id="registrarRolModal" tabindex="-1" role="dialog" aria-labelledby="registrarRolModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -109,7 +90,7 @@
         <div class="modal-content">
             <form id="modificarRol" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificarRolModalLabel">Modificar Rol</h5>
+                    <h5 class="titulo-form" id="modificarRolModalLabel">Modificar Rol</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

@@ -32,28 +32,14 @@ input, select, button{
     outline: none;
 }
 
-.formulario-responsivo{
-    min-height: 85vh;
-    background-size: cover;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.modal-registrar label {
+    font-size: 1rem;
+    color: #1976d2;
+    font-weight: 500;
+    margin-top: 12px;
+    margin-bottom: 4px;
 }
 
-.fondo-form{
-    padding: 20px;
-    background: #fff;
-    max-width: 950px;
-    margin: auto;
-    display: flex;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.fondo-form form{
-    width: 100%;
-    padding: 20px 45px;
-}
 
 .grupo-form{
     display: flex;
@@ -79,7 +65,6 @@ input, select, button{
     width: 100%;
     height: 30px;
     padding-right: 0;
-    margin-top: 20px;
 }
 
 .btn-eliminar-pr{
@@ -113,8 +98,8 @@ select option[value=""] [disabled]{
 .boton-form{
     border-radius: 10px;
     border: none;
-    width: 165px;
-    height: 50px;
+    width: 100px;
+    height: 40px;
     margin: auto;
     margin-top: 40px;
     cursor: pointer;
@@ -135,8 +120,8 @@ select option[value=""] [disabled]{
 .boton-reset{
     border-radius: 10px;
     border: none;
-    width: 165px;
-    height: 50px;
+    width: 100px;
+    height: 40px;
     margin: auto;
     margin-top: 10px;
     cursor: pointer;
@@ -161,18 +146,8 @@ select option[value=""] [disabled]{
     margin-bottom: 7px;
 }
 
-/* Estilos para el Responsive del Formulario*/
-
 @media screen and (max-width: 750px){
-    .fondo-form{
-        display: block;
-    }
-
-    .fondo-form form{
-        width: 100%;
-        padding: 40px 0 30px;
-    }
-
+    
     .boton-form{
         margin-top: 60px;
     }
