@@ -68,7 +68,7 @@
 
 /* Etiquetas */
 .modal-modificar .form-group label {
-    font-size: 0.97rem;
+    font-size: 1rem;
     color: #1976d2;
     font-weight: 500;
     margin-top: 12px;
@@ -86,12 +86,12 @@
 
 /* Botón Modificar igual que el botón Registrar */
 .modal-modificar .btn-primary {
-    background-color: #1976d2;
+    background-color: #5995fd;
     border: none;
     color: #fff;
     font-weight: 600;
     padding: 10px 28px;
-    border-radius: 6px;
+    border-radius: 10px;
     font-size: 1rem;
     transition: background 0.2s;
     box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
@@ -99,7 +99,7 @@
 
 .modal-modificar .btn-primary:hover,
 .modal-modificar .btn-primary:focus {
-    background-color: #1251a3;
+    background-color: #4d84e2;
     color: #fff;
 }
 
@@ -108,6 +108,7 @@
     font-style: italic;
     margin-top: 3px;
     margin-bottom: 7px;
+    font-size: 1rem;
 }
 
 /* Responsive */

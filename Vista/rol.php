@@ -13,28 +13,35 @@
 <?php include 'NewNavBar.php'; ?>
 
 <div class="modal fade modal-registrar" id="registrarRolModal" tabindex="-1" role="dialog" aria-labelledby="registrarRolModalLabel" aria-hidden="true">
-    <div class="formulario-responsivo">
-        <div class="fondo-form">
-            <form id="registrarRol" action="" method="POST">
-                <input type="hidden" name="accion" value="registrar">
-                <h3 class="titulo-form">INCLUIR ROL</h3>
-                <div class="envolver-form">
-                    <input type="text" placeholder="Nombre del Rol" class="control-form" id="nombre_rol" name="nombre_rol" maxlength="25" required>
-                    <span class="span-value" id="snombre_rol"></span>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="registrarRol" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarRolModalLabel">Incluir Rol</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-
-                <button class="boton-form" type="submit">Registrar</button>
-                <button class="boton-reset" type="reset">Reset</button>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="envolver-form">
+                        <label for="nombre_rol">Nombre del Rol</label>
+                        <input type="text" placeholder="Nombre del Rol" class="control-form" id="nombre_rol" name="nombre_rol" maxlength="15" required>
+                        <span class="span-value" id="snombre_rol"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
 
 <div class="contenedor-tabla">
-    <div style="display: flex; justify-content: center; margin-bottom: 25px;">
-        <button id="btnIncluirRol" 
-                class="btn btn-success" 
-                style="font-size: 1.3rem; padding: 15px 40px; border-radius: 10px;">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirRol" class="btn-incluir">
             Incluir Rol
         </button>
     </div>
@@ -81,7 +88,7 @@
         <div class="modal-content">
             <form id="modificarRol" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificarRolModalLabel">Modificar Rol</h5>
+                    <h5 class="titulo-form" id="modificarRolModalLabel">Modificar Rol</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -112,7 +119,15 @@
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>
-
+<script>
+$(document).ready(function() {
+    $('#tablaConsultas').DataTable({
+        language: {
+            url: 'Public/js/es-ES.json'
+        }
+    });
+});
+</script>
 </body>
 </html>
 

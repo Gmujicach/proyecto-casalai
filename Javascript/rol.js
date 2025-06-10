@@ -47,7 +47,7 @@ $(document).ready(function () {
                             </button>
                         </div>
                         <div>
-                            <button class=btn-eliminar"
+                            <button class="btn-eliminar"
                                 data-id="${rol.id_rol}">
                                 Eliminar
                             </button>
@@ -68,7 +68,7 @@ $(document).ready(function () {
 
     $('#btnIncluirRol').on('click', function() {
         $('#registrarRol')[0].reset();
-        $('#snombre_Rol').text('');
+        $('#snombre_rol').text('');
         $('#registrarRolModal').modal('show');
     });
 
@@ -96,6 +96,10 @@ $(document).ready(function () {
                 }
             });
         }
+    });
+
+    $(document).on('click', '#registrarRolModal .close', function() {
+        $('#registrarRolModal').modal('hide');
     });
 
     function enviarAjax(datos, callback) {
@@ -187,7 +191,7 @@ $(document).ready(function () {
                     const nombre = $('#modificar_nombre_rol').val();
 
                     const fila = $('tr[data-id="' + id + '"]');
-                    fila.find('td').eq(1).text(nombre);
+                    fila.find('td').eq(2).text(nombre);
 
                     const botonModificar = fila.find('.btn-modificar');
                     botonModificar.data('nombre', nombre);
