@@ -1,46 +1,55 @@
 $(document).ready(function () {
-$(document).on('submit', '#formularioEdicion', function(e) {
-    e.preventDefault(); // ← Esto es crucial
+    $(document).on('submit', '#formularioEdicion', function(e) {
+        e.preventDefault();
 
-    var formData = new FormData(this);
-    formData.append('accion', 'modificarRecepcion');
+        var formData = new FormData(this);
+        formData.append('accion', 'modificarRecepcion');
 
-    $.ajax({
-        url: '', // misma página
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        cache: false,
-        success: function(response) {
-            try {
-                response = typeof response === "object" ? response : JSON.parse(response);
-            } catch (e) {
-                Swal.fire('Error', 'Respuesta inesperada del servidor', 'error');
-                return;
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(response) {
+                try {
+                    response = typeof response === "object" ? response : JSON.parse(response);
+                } catch (e) {
+                    Swal.fire('Error', 'Respuesta inesperada del servidor', 'error');
+                    return;
+                }
+
+                if (response.status === 'success') {
+                    $('#modalModificar').modal('hide');
+                    setTimeout(function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Modificado',
+                            text: response.message
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }, 500);
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function() {
+                Swal.fire('Error', 'Error al modificar la recepción.', 'error');
             }
-
-            if (response.status === 'success') {
-                $('#modalModificar').modal('hide');
-                setTimeout(function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: response.message
-                    }).then(() => {
-                        location.reload();
-                    });
-                }, 500);
-            } else {
-                Swal.fire('Error', response.message, 'error');
-            }
-        },
-        error: function() {
-            Swal.fire('Error', 'Error al modificar la recepción.', 'error');
-        }
+        });
     });
-});
+    
+    $('#btnIncluirRecepcion').on('click', function() {
+        $('#f')[0].reset();
+        $('#scorrelativo').text('');
+        $('#registrarRecepcionModal').modal('show');
+    });
 
+    $(document).on('click', '#registrarRecepcionModal .close', function() {
+        $('#registrarRecepcionModal').modal('hide');
+    });
 });
 
 carga_productos();    //boton para levantar modal de productos

@@ -11,66 +11,74 @@
 </head>
 
 <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
 <?php include 'NewNavBar.php'; ?>
 
-	<div class="formulario-responsivo">
-    <div class="fondo-form">
-		<section class="container">
-			<form method="post" action="" id="f">
-				<input type="hidden" name="accion" id="accion" style="display:none" />
-				<h3 class="titulo-form">Incluir Recepción</h3>
-					<br>
-						<div class="grupo-form">
-							<input type="text" placeholder="Correlativo del producto" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
-							<span id="scorrelativo"></span>
-						
-							<select class="form-select" name="proveedor" id="proveedor">
-								<option value='disabled' disabled selected>Seleccione un Proveedor</option>
-								<?php
-								foreach ($proveedores  as $proveedor) {
-									echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre'] . "</option>";
-								} ?>
-							</select>
-						</div>
-			
-						<div class="envolver-form">
-							<input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
-							<input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
-							<button type="button" class="boton-form" id="listado" name="listado">Lista de Productos</button>
-						</div>
-					
-						<div class="row">
-							<div class="col">
-								<hr />
-							</div>
-						</div>
-					
-						<div class="table-responsive card shadow">
-							<table class="tabla" id="tablarecepcion">
-								<thead class="">
-									<tr>
-										<th>Acción</th>
-										<th style="display:none">Cl</th>
-										<th>Codigo</th>
-										<th>Nombre</th>
-										<th>Modelo</th>
-										<th>Marca</th>
-										<th>Serial</th>
-										<th>Costo</th>
-										<th>Cantidad</th>
-									</tr>
-								</thead>
-								<tbody class="" id="recepcion1">
-								</tbody>
-							</table>
-						</div>
+<div class="modal fade modal-registrar" id="registrarRecepcionModal" tabindex="-1" role="dialog" aria-labelledby="registrarRecepcionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="f" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarRecepcionModalLabel">Incluir Recepción</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="envolver-form">
+                        <input type="text" placeholder="Correlativo del producto" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
+                        <span id="scorrelativo"></span>
+                    </div>
+                    <div class="envolver-form">
+                        <select class="form-select" name="proveedor" id="proveedor">
+                            <option value='disabled' disabled selected>Seleccione un Proveedor</option>
+                            <?php
+                            foreach ($proveedores  as $proveedor) {
+                                echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre'] . "</option>";
+                            } ?>
+                        </select>
+                    </div>
+        
+                    <div class="envolver-form">
+                        <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
+                        <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
+                        <button type="button" class="boton-form" id="listado" name="listado">Lista de Productos</button>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col">
+                            <hr />
+                        </div>
+                    </div>
+                
+                    <div class="table-responsive card shadow">
+                        <table class="tabla" id="tablarecepcion">
+                            <thead class="">
+                                <tr>
+                                    <th>Acción</th>
+                                    <th style="display:none">Cl</th>
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
+                                    <th>Modelo</th>
+                                    <th>Marca</th>
+                                    <th>Serial</th>
+                                    <th>Costo</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody class="" id="recepcion1">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="boton-form" id="registrar" name="registrar">Registrar Recepción</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
+            </form>
 
-					<div>
-						<button type="button" class="boton-form" id="registrar" name="registrar">Registrar Recepción</button>
-					</div>
-				</form>
-			
-			<div class="modal fade" tabindex="-1" role="dialog" id="modalp">
+            <div class="modal fade" tabindex="-1" role="dialog" id="modalp">
 				<div class="modal-dialog " role="document">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -98,14 +106,21 @@
 					</div>
 				</div>
 			</div>
-		</section>
-	</div>
-	</div>					
+        </div>
+    </div>
+</div>
 
-	<div class="contenedor-tabla">
+<div class="contenedor-tabla">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirRecepcion" class="btn-incluir">
+            Incluir Recepción
+        </button>
+    </div>
+
 	<h3>Lista de Recepciones</h3>
-		<table class="tablaConsultas" id="tablaConsultas">
-			<thead>
+
+	<table class="tablaConsultas" id="tablaConsultas">
+		<thead>
 			<tr>
 				<th>FECHA</th>
 				<th>CORRELATIVO</th>
@@ -113,82 +128,81 @@
 				<th>PRODUCTO</th>
 				<th>CANTIDAD</th>
 				<th>COSTOS DE INVERSION</th>
-				<th>MODIFICACION</th>
+				<th>ACCIÓN</th>
 			</tr>
-			</thead>
-			<tbody>
-<tbody>
-<?php
-usort($recepciones, function($a, $b) {
-    if ($a['fecha'] == $b['fecha']) {
-        if ($a['correlativo'] == $b['correlativo']) {
-            if ($a['nombre'] == $b['nombre']) {
-                return strcmp($a['nombre_producto'], $b['nombre_producto']);
+		</thead>
+
+        <tbody>
+        <?php
+        usort($recepciones, function($a, $b) {
+            if ($a['fecha'] == $b['fecha']) {
+                if ($a['correlativo'] == $b['correlativo']) {
+                    if ($a['nombre'] == $b['nombre']) {
+                        return strcmp($a['nombre_producto'], $b['nombre_producto']);
+                    }
+                    return strcmp($a['nombre'], $b['nombre']);
+                }
+                return strcmp($a['correlativo'], $b['correlativo']);
             }
-            return strcmp($a['nombre'], $b['nombre']);
+            return strcmp($a['fecha'], $b['fecha']);
+        });
+
+        $rowspans = [];
+        $dataProductosPorRecepcion = [];
+        foreach ($recepciones as $fila) {
+            $id = $fila['id_recepcion'];
+            if (!isset($dataProductosPorRecepcion[$id])) {
+                $dataProductosPorRecepcion[$id] = [];
+            }
+            $dataProductosPorRecepcion[$id][] = [
+                'id_producto' => $fila['id_producto'],
+                'cantidad' => $fila['cantidad'],
+                'costo' => $fila['costo'],
+                'iddetalles' => $fila['id_detalle_recepcion_productos'] ?? '',
+            ];
         }
-        return strcmp($a['correlativo'], $b['correlativo']);
-    }
-    return strcmp($a['fecha'], $b['fecha']);
-});
+        foreach ($recepciones as $recepcion) {
+            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre'];
+            if (!isset($rowspans[$key])) {
+                $rowspans[$key] = 1;
+            } else {
+                $rowspans[$key]++;
+            }
+        }
+        $rendered = [];
+        foreach ($recepciones as $recepcion):
+            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre'];
+        ?>
+        <tr>
+            <?php if (!in_array($key, $rendered)): ?>
+                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['fecha']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['correlativo']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['nombre']) ?></td>
+            <?php endif; ?>
 
-// Agrupar para rowspan
-$rowspans = [];
-$dataProductosPorRecepcion = [];
-foreach ($recepciones as $fila) {
-    $id = $fila['id_recepcion'];
-    if (!isset($dataProductosPorRecepcion[$id])) {
-        $dataProductosPorRecepcion[$id] = [];
-    }
-    $dataProductosPorRecepcion[$id][] = [
-        'id_producto' => $fila['id_producto'],
-        'cantidad' => $fila['cantidad'],
-        'costo' => $fila['costo'],
-        'iddetalles' => $fila['id_detalle_recepcion_productos'] ?? '',
-    ];
-}
-foreach ($recepciones as $recepcion) {
-    $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre'];
-    if (!isset($rowspans[$key])) {
-        $rowspans[$key] = 1;
-    } else {
-        $rowspans[$key]++;
-    }
-}
-$rendered = [];
-foreach ($recepciones as $recepcion):
-    $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre'];
-?>
-<tr>
-    <?php if (!in_array($key, $rendered)): ?>
-        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['fecha']) ?></td>
-        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['correlativo']) ?></td>
-        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['nombre']) ?></td>
-    <?php endif; ?>
+            <td><?= htmlspecialchars($recepcion['nombre_producto']) ?></td>
+            <td><?= htmlspecialchars($recepcion['cantidad']) ?></td>
+            <td><?= htmlspecialchars($recepcion['costo']) ?></td>
 
-    <td><?= htmlspecialchars($recepcion['nombre_producto']) ?></td>
-    <td><?= htmlspecialchars($recepcion['cantidad']) ?></td>
-    <td><?= htmlspecialchars($recepcion['costo']) ?></td>
-
-    <?php if (!in_array($key, $rendered)): ?>
-        <td rowspan="<?= $rowspans[$key] ?>">
-            <button class="btn-modificar"
-                data-bs-toggle="modal"
-                data-bs-target="#modalModificar"
-                data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
-                data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
-                data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
-                data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"                
-                data-productos='<?= json_encode($dataProductosPorRecepcion[$recepcion['id_recepcion']], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
-            
-                Modificar
-            </button>
-        </td>
-        <?php $rendered[] = $key; ?>
-    <?php endif; ?>
-</tr>
-<?php endforeach; ?>
-</tbody>
+            <?php if (!in_array($key, $rendered)): ?>
+                <td rowspan="<?= $rowspans[$key] ?>">
+                    <button class="btn-modificar"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalModificar"
+                        data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
+                        data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
+                        data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
+                        data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"                
+                        data-productos='<?= json_encode($dataProductosPorRecepcion[$recepcion['id_recepcion']], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                    
+                        Modificar
+                    </button>
+                </td>
+                <?php $rendered[] = $key; ?>
+            <?php endif; ?>
+        </tr>
+        <?php endforeach; ?>
+        </tbody>
 
 		</table>
 	</div>
