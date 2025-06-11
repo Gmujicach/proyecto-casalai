@@ -5,7 +5,6 @@ require_once 'Modelo/modelos.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtiene la acción enviada en la solicitud POST
     if (isset($_POST['accion'])) {
         $accion = $_POST['accion'];
     } else {

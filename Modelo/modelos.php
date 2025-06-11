@@ -37,7 +37,6 @@ class modelo extends BD{
         $this->id_modelo = $id_modelo;
     }
 
-    // Verificar si existe el modelo
     public function existeNombreModelo($nombre_modelo, $excluir_id = null) {
         return $this->existeNomModelo($nombre_modelo, $excluir_id);
     }
