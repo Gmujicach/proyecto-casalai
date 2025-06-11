@@ -54,34 +54,25 @@
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th>Nombre del usuario</th>
+                <th>Acciones</th>
+                <th>Nombre del Cliente</th>
                 <th>Cedula</th>
                 <th>Dirección</th>
                 <th>Teléfono</th>
                 <th>Correo</th>
-                <th>Acciones</th>
+                
             </tr>
         </thead>
         <tbody>
             <?php foreach ($clientes as $cliente): ?>
                 <?php if ($cliente['activo'] == 1) { ?>
                 <tr data-id="<?php echo $cliente['id_clientes']; ?>">
-                    <td><?php echo htmlspecialchars($cliente['nombre']); ?></td>
-                    <td><?php echo htmlspecialchars($cliente['cedula']); ?></td>
-                    <td><?php echo htmlspecialchars($cliente['direccion']); ?></td>
-                    <td><?php echo htmlspecialchars($cliente['telefono']); ?></td>
-                    <td><?php echo htmlspecialchars($cliente['correo']); ?></td>
-                    <td>
+                                        <td>
                         <span>
                             <div class="acciones-boton">
-                                <i class="vertical">
-                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                                </i>
-                                <div class="desplegable">
-                                    <ul>
-                                        <li>
+             
                                             <!-- Botón Modificar que abre el modal -->
-                                            <button type="button" class="btn btn-modificar"
+                                            <button type="button" class="btn btn-primary btn-modificar"
                                                 data-id="<?php echo htmlspecialchars($cliente['id_clientes']); ?>"
                                                 data-nombre="<?php echo htmlspecialchars($cliente['nombre']); ?>"
                                                 data-cedula="<?php echo htmlspecialchars($cliente['cedula']); ?>"
@@ -90,19 +81,22 @@
                                                 data-correo="<?php echo htmlspecialchars($cliente['correo']); ?>">
                                                 Modificar
                                             </button>
-                                        </li>
-                                        <li>
+
                                             <!-- Botón Eliminar -->
                                             <button class="btn btn-danger btn-eliminar"
                                                 data-id="<?php echo $cliente['id_clientes']; ?>">
                                                 Eliminar
                                             </button>
-                                        </li>
-                                    </ul>
-                                </div>
+
                             </div>
                         </span>
                     </td>
+                    <td><?php echo htmlspecialchars($cliente['nombre']); ?></td>
+                    <td><?php echo htmlspecialchars($cliente['cedula']); ?></td>
+                    <td><?php echo htmlspecialchars($cliente['direccion']); ?></td>
+                    <td><?php echo htmlspecialchars($cliente['telefono']); ?></td>
+                    <td><?php echo htmlspecialchars($cliente['correo']); ?></td>
+
                 </tr>
                 <?php } ?>
             <?php endforeach; ?>

@@ -161,65 +161,49 @@ function agregarFilaUsuario(usuario) {
     const nuevaFila = `
         <tr data-id="${usuario.id_usuario}">
             <td>
-                <span class="campo-nombres">
-                    ${usuario.nombres} ${usuario.apellidos}
-                </span>
-                <span class="campo-correo">
-                    ${usuario.correo}
-                </span>
-            </td>
-            <td>
-                <span class="campo-telefono">
-                    ${usuario.telefono}
-                </span>
-            </td>
-            <td>
-                <span class="campo-rango">
-                    ${usuario.rango}
-                </span>
-            </td>
-            <td>
-                <span class="campo-estatus ${usuario.estatus === 'habilitado' ? 'habilitado' : 'inhabilitado'}"
-                      data-id="${usuario.id_usuario}" style="cursor: pointer;">
-                    ${usuario.estatus}
-                </span>
-            </td>
-            <td>
                 <span>
                     <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                        <div class="desplegable">
-                            <ul>
-                                <li>
-                                    <button class="btn btn-primary btn-modificar"
-                                        data-id="${usuario.id_usuario}"
-                                        data-username="${usuario.username}"
-                                        data-nombres="${usuario.nombres}"
-                                        data-apellidos="${usuario.apellidos}"
-                                        data-correo="${usuario.correo}"
-                                        data-telefono="${usuario.telefono}"
-                                        data-clave="${usuario.password || ''}"
-                                        data-rango="${usuario.rango}">
-                                        Modificar
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-danger btn-eliminar"
-                                        data-id="${usuario.id_usuario}">
-                                        Eliminar
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+                        <button class="btn btn-primary btn-modificar"
+                            data-id="${usuario.id_usuario}"
+                            data-username="${usuario.username}"
+                            data-nombres="${usuario.nombres}"
+                            data-apellidos="${usuario.apellidos}"
+                            data-correo="${usuario.correo}"
+                            data-telefono="${usuario.telefono}"
+                            data-clave=""
+                            data-rango="${usuario.rango}">
+                            Modificar
+                        </button>
+                        <button class="btn btn-danger btn-eliminar"
+                            data-id="${usuario.id_usuario}">
+                            Eliminar
+                        </button>
                     </div>
+                </span>
+            </td>
+            <td>
+                <span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>
+            </td>
+            <td>
+                <span class="campo-correo">${usuario.correo}</span>
+            </td>
+            <td>
+                <span class="campo-usuario">${usuario.username}</span>
+            </td>
+            <td>
+                <span class="campo-telefono">${usuario.telefono}</span>
+            </td>
+            <td>
+                <span class="campo-rango">${usuario.rango}</span>
+            </td>
+            <td>
+                <span class="campo-estatus habilitado" data-id="${usuario.id_usuario}" style="cursor: pointer;">
+                    habilitado
                 </span>
             </td>
         </tr>
     `;
-const tabla = $('#tablaConsultas').DataTable();
-tabla.row.add($(nuevaFila)).draw();
+    $('#tablaConsultas tbody').append(nuevaFila);
 }
 
     // Resetear formulario de usuario
@@ -242,37 +226,24 @@ tabla.row.add($(nuevaFila)).draw();
     // Enviar formulario de registro de usuario por AJAX
 $('#incluirusuario').on('submit', function(e) {
     e.preventDefault();
-
     if (validarEnvioUsuario()) {
         var datos = new FormData(this);
         datos.append('accion', 'registrar');
         enviarAjax(datos, function(respuesta){
-            if(respuesta.status === "success" || respuesta.resultado === "success"){
-                // Mostrar mensaje con datos del usuario
-                let infoExtra = '';
-                if (respuesta.marca) {
-                    infoExtra = `<br><b>Usuario:</b> ${respuesta.marca.username || ''} <br><b>Correo:</b> ${respuesta.marca.correo || ''}`;
-                }
+            if(respuesta.status === "success" && respuesta.usuario){
                 Swal.fire({
                     icon: 'success',
                     title: 'Éxito',
-                    html: (respuesta.message || respuesta.msg || 'Usuario registrado correctamente') + infoExtra
+                    text: respuesta.message || 'Usuario registrado correctamente'
                 });
-
-                // Agregar la nueva fila a la tabla
-                if (respuesta.marca) {
-                    agregarFilaUsuario(respuesta.marca);
-                }
-
-                // Limpiar el formulario
+                agregarFilaUsuario(respuesta.usuario);
                 $('#incluirusuario')[0].reset();
-                // Limpiar mensajes de validación
                 $('.span-value').text('');
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: respuesta.message || respuesta.msg || 'No se pudo registrar el usuario'
+                    text: respuesta.message || 'No se pudo registrar el usuario'
                 });
             }
         });
@@ -447,74 +418,69 @@ $('#incluirusuario').on('submit', function(e) {
         formData.append('accion', 'modificar');
         enviarAjax(formData, function(response) {
             if (response.status === 'success') {
-                $('#modificar_usuario_modal').modal('hide');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Modificado',
-                    text: 'El usuario se ha modificado correctamente'
-                });
+    $('#modificar_usuario_modal').modal('hide');
+    Swal.fire({
+        icon: 'success',
+        title: 'Modificado',
+        text: 'El usuario se ha modificado correctamente'
+    });
 
-                const id = $('#modificar_id_usuario').val();
-const fila = $(`#tablaConsultas tbody tr[data-id="${id}"]`);
-const nombres = $('#modificarnombre').val();
-const apellidos = $('#modificarapellido_usuario').val();
-const username = $('#modificarnombre_usuario').val();
-const correo = $('#modificarcorreo_usuario').val();
-const telefono = $('#modificartelefono_usuario').val();
-const rango = $('#rango').val();
+    const id = $('#modificar_id_usuario').val();
+    const fila = $(`#tablaConsultas tbody tr[data-id="${id}"]`);
+    const nombres = $('#modificarnombre').val();
+    const apellidos = $('#modificarapellido_usuario').val();
+    const username = $('#modificarnombre_usuario').val();
+    const correo = $('#modificarcorreo_usuario').val();
+    const telefono = $('#modificartelefono_usuario').val();
+    const rango = $('#rango').val();
+    const estatus = fila.find('.campo-estatus').text().trim();
 
-// Si tienes el estatus en el backend, úsalo, si no, mantenlo igual
-const estatus = fila.find('.campo-estatus').text().trim();
-
-// Actualiza cada celda con el mismo formato que la tabla original
-fila.find('td').eq(0).html(`
-    <span class="campo-nombres">${nombres} ${apellidos}</span>
-    <span class="campo-correo">${correo}</span>
-`);
-fila.find('td').eq(1).html(`
-    <span class="campo-telefono">${telefono}</span>
-`);
-fila.find('td').eq(2).html(`
-    <span class="campo-rango">${rango}</span>
-`);
-fila.find('td').eq(3).html(`
-    <span class="campo-estatus ${estatus === 'habilitado' ? 'habilitado' : 'inhabilitado'}"
-          data-id="${id}" style="cursor: pointer;">
-        ${estatus}
-    </span>
-`);
-fila.find('td').eq(4).html(`
-    <span>
-        <div class="acciones-boton">
-            <i class="vertical">
-                <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-            </i>
-            <div class="desplegable">
-                <ul>
-                    <li>
-                        <button class="btn btn-primary btn-modificar"
-                            data-id="${id}"
-                            data-username="${username}"
-                            data-nombres="${nombres}"
-                            data-apellidos="${apellidos}"
-                            data-correo="${correo}"
-                            data-telefono="${telefono}"
-                            data-clave=""
-                            data-rango="${rango}">
-                            Modificar
-                        </button>
-                    </li>
-                    <li>
-                        <button class="btn btn-danger btn-eliminar"
-                            data-id="${id}">
-                            Eliminar
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </span>
-`);
+    // Actualiza cada celda con el mismo formato que la tabla original
+    fila.html(`
+        <td>
+            <span>
+                <div class="acciones-boton">
+                    <button class="btn btn-primary btn-modificar"
+                        data-id="${id}"
+                        data-username="${username}"
+                        data-nombres="${nombres}"
+                        data-apellidos="${apellidos}"
+                        data-correo="${correo}"
+                        data-telefono="${telefono}"
+                        data-clave=""
+                        data-rango="${rango}">
+                        Modificar
+                    </button>
+                    <button class="btn btn-danger btn-eliminar"
+                        data-id="${id}">
+                        Eliminar
+                    </button>
+                </div>
+            </span>
+        </td>
+        <td>
+            <span class="campo-nombres">${nombres} ${apellidos}</span>
+        </td>
+        <td>
+            <span class="campo-correo">${correo}</span>
+        </td>
+        <td>
+            <span class="campo-usuario">${username}</span>
+        </td>
+        <td>
+            <span class="campo-telefono">${telefono}</span>
+        </td>
+        <td>
+            <span class="campo-rango">${rango}</span>
+        </td>
+        <td>
+            <span class="campo-estatus ${estatus === 'habilitado' ? 'habilitado' : 'inhabilitado'}"
+                  data-id="${id}" style="cursor: pointer;">
+                ${estatus}
+            </span>
+        </td>
+    `);
+;
 
                 // Actualiza los data-atributos del botón modificar
                 const botonModificar = fila.find('.btn-modificar');

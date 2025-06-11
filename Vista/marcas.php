@@ -33,33 +33,32 @@
     
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
-            <tr>
+            <tr> 
+               <th>Acciones</th>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Acciones</th>
+
             </tr>
         </thead>
 
         <tbody>
             <?php foreach ($marcas as $marca): ?>
-                <tr data-id="<?php echo $marca['id_marca']; ?>">
-                    <td><?php echo htmlspecialchars($marca['id_marca']); ?></td>
-                    <td><?php echo htmlspecialchars($marca['nombre_marca']); ?></td>
+                <tr data-id="<?php echo $marca['id_marca']; ?>">        
                     <td>
-                        <ul>
-                            <li>
+
                                 <button class="btn btn-primary btn-modificar"
                                 data-id="<?php echo $marca['id_marca']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
                                 >Modificar</button>
-                            </li>
-                            <li>
+                          
                                 <button class="btn btn-danger btn-eliminar"
                                 data-id="<?php echo $marca['id_marca']; ?>"
                                 >Eliminar</button>
-                            </li>
-                        </ul>
+
                     </td>
+                    <td><?php echo htmlspecialchars($marca['id_marca']); ?></td>
+                    <td><?php echo htmlspecialchars($marca['nombre_marca']); ?></td>
+
                 </tr>
             <?php endforeach; ?>
         </tbody>

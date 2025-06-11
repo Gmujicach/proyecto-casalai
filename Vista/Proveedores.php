@@ -73,11 +73,13 @@
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
+                
+                <th>Acciones</th>
                 <th>Nombre</th>
+                <th>Correo</th>
                 <th>R.I.F</th>
                 <th>Telefono</th>
                 <th>Estado</th>
-                <th>Acciones</th>
             </tr>
         </thead>
 
@@ -85,15 +87,40 @@
         <tbody>
         <?php foreach ($proveedores as $proveedor): ?>
             <tr data-id="<?php echo $proveedor['id_proveedor']; ?>">
-                
+                                <td>
+                        <div class="acciones-boton">
+
+                                        <button type="button" class="btn btn-primary btn-modificar modificar" 
+                                            data-id="<?php echo $proveedor['id_proveedor']; ?>"
+                                            data-nombre="<?php echo htmlspecialchars($proveedor['nombre']); ?>"
+                                            data-persona-contacto="<?php echo htmlspecialchars($proveedor['presona_contacto']); ?>"
+                                            data-direccion="<?php echo htmlspecialchars($proveedor['direccion']); ?>"
+                                            data-telefono="<?php echo htmlspecialchars($proveedor['telefono']); ?>"
+                                            data-correo="<?php echo htmlspecialchars($proveedor['correo']); ?>"
+                                            data-telefono-secundario="<?php echo htmlspecialchars($proveedor['telefono_secundario']); ?>"
+                                            data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
+                                            data-rif-representante="<?php echo htmlspecialchars($proveedor['rif_representante']); ?>"
+                                            data-observaciones="<?php echo htmlspecialchars($proveedor['observaciones']); ?>"
+                                            data-toggle="modal" 
+                                            data-target="#modificar_usuario_modal">
+                                            Modificar
+                                        </button>
+                                   
+                                    <button type=""button" class="btn btn-danger btn-eliminar eliminar" data-id="<?php echo $proveedor['id_proveedor']; ?>">Eliminar</button>
+                                    </div>
+
+                </td>
                 <td>
                     <span class="campo-nombres">
                     <?php echo htmlspecialchars($proveedor['nombre']); ?>
                     </span>
+                   
+                </td>
+                <td>
                     <span class="campo-correo">
                     <?php echo htmlspecialchars($proveedor['correo']); ?>
                     </span>
-                </td>
+                </td> 
                 <td>
                     <span class="campo-nombres">
                     <?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>
@@ -114,38 +141,7 @@
 </span>
                 </td>
                 
-                <td>
-                    <span>
-                        <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                            <div class="desplegable">
-                                <ul>
-                                    <li>
-                                        <a href="#" class="modificar" 
-                                            data-id="<?php echo $proveedor['id_proveedor']; ?>"
-                                            data-nombre="<?php echo htmlspecialchars($proveedor['nombre']); ?>"
-                                            data-persona-contacto="<?php echo htmlspecialchars($proveedor['presona_contacto']); ?>"
-                                            data-direccion="<?php echo htmlspecialchars($proveedor['direccion']); ?>"
-                                            data-telefono="<?php echo htmlspecialchars($proveedor['telefono']); ?>"
-                                            data-correo="<?php echo htmlspecialchars($proveedor['correo']); ?>"
-                                            data-telefono-secundario="<?php echo htmlspecialchars($proveedor['telefono_secundario']); ?>"
-                                            data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
-                                            data-rif-representante="<?php echo htmlspecialchars($proveedor['rif_representante']); ?>"
-                                            data-observaciones="<?php echo htmlspecialchars($proveedor['observaciones']); ?>"
-                                            data-toggle="modal" 
-                                            data-target="#modificar_usuario_modal">
-                                            Modificar
-                                        </a>
-                                    </li>
 
-                                    <li><a href="#" class="eliminar" data-id="<?php echo $proveedor['id_proveedor']; ?>">Eliminar</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </span>
-                </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -176,13 +172,7 @@
                     <td>
                         <span>
                             <div class="acciones-boton">
-                                <i class="vertical">
-                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                                </i>
-                                <div class="desplegable">
-                                    <ul>
-                                        <li>
-                                            <!-- Botón de Realizar Pedido -->
+                               
                                             <button 
                                                 type="button" 
                                                 class="btn btn-primary modificar" 
@@ -197,9 +187,6 @@
                                             >
                                                 Realizar Pedido
                                             </button>
-                                        </li>
-                                    </ul>
-                                </div>
                             </div>
                         </span>
                     </td>

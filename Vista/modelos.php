@@ -46,43 +46,37 @@
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
+                <th>Acciones</th>
                 <th>ID</th>
                 <th>Marca</th>
                 <th>Modelo</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($modelos as $modelo): ?>
                 <tr data-id="<?php echo $modelo['id_modelo']; ?>">
-                    <td><?php echo htmlspecialchars($modelo['id_modelo']); ?></td>
-                    <td><?php echo htmlspecialchars($modelo['nombre_marca']); ?></td>
-                    <td><?php echo htmlspecialchars($modelo['nombre_modelo']); ?></td>
-                    <td>
+                                        <td>
                         <span>
                             <div class="acciones-boton">
-                                <i class="vertical">
-                                    <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                                </i>
-                                <div class="desplegable">
-                                    <ul>
-                                        <li>
+
+                               
                                             <button class="btn btn-primary btn-modificar"
                                             data-id="<?php echo $modelo['id_modelo']; ?>"
                                             data-marcaid="<?php echo htmlspecialchars($modelo['id_marca']); ?>"
                                             data-nombre="<?php echo htmlspecialchars($modelo['nombre_modelo']); ?>"
                                             >Modificar</button>
-                                        </li>
-                                        <li>
+                                
                                             <button class="btn btn-danger btn-eliminar"
                                             data-id="<?php echo $modelo['id_modelo']; ?>"
                                             >Eliminar</button>
-                                        </li>
-                                    </ul>
-                                </div>
+                                     
                             </div>
                         </span>
                     </td>
+                    <td><?php echo htmlspecialchars($modelo['id_modelo']); ?></td>
+                    <td><?php echo htmlspecialchars($modelo['nombre_marca']); ?></td>
+                    <td><?php echo htmlspecialchars($modelo['nombre_modelo']); ?></td>
+
                 </tr>
             <?php endforeach; ?>
         </tbody>

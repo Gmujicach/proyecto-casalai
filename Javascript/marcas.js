@@ -34,70 +34,56 @@ $(document).ready(function () {
         return true;
     }
 
-    function agregarFilaMarca(marca) {
-        const nuevaFila = `
-            <tr data-id="${marca.id_marca}">
-                <td>${marca.id_marca}</td>
-                <td>${marca.nombre_marca}</td>
-                <td>
-                    <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                        <div class="desplegable">
-                            <ul>
-                                <li>
-                                    <button class="btn btn-primary btn-modificar"
-                                        data-id="${marca.id_marca}"
-                                        data-nombre="${marca.nombre_marca}">
-                                        Modificar
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-danger btn-eliminar"
-                                        data-id="${marca.id_marca}">
-                                        Eliminar
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        `;
-        $('#tablaConsultas tbody').append(nuevaFila);
-    }
+function agregarFilaMarca(marca) {
+    const nuevaFila = `
+        <tr data-id="${marca.id_marca}">
+            <td>
+                <button class="btn btn-primary btn-modificar"
+                    data-id="${marca.id_marca}"
+                    data-nombre="${marca.nombre_marca}">
+                    Modificar
+                </button>
+                <button class="btn btn-danger btn-eliminar"
+                    data-id="${marca.id_marca}">
+                    Eliminar
+                </button>
+            </td>
+            <td>${marca.id_marca}</td>
+            <td>${marca.nombre_marca}</td>
+        </tr>
+    `;
+    $('#tablaConsultas tbody').append(nuevaFila);
+}
 
     function resetMarca() {
         $("#nombre_marca").val('');
         $("#snombre_marca").text('');
     }
 
-    $('#registrarMarca').on('submit', function(e) {
-        e.preventDefault();
-
-        if(validarEnvioMarca()){
-            var datos = new FormData(this);
-            datos.append('accion', 'registrar');
-            enviarAjax(datos, function(respuesta){
-                if(respuesta.status === "success" || respuesta.resultado === "success"){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Marca registrada correctamente'
-                    });
-                    agregarFilaMarca(respuesta.marca);
-                    resetMarca();
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la marca'
-                    });
-                }
-            });
-        }
-    });
+$('#registrarMarca').on('submit', function(e) {
+    e.preventDefault();
+    if(validarEnvioMarca()){
+        var datos = new FormData(this);
+        datos.append('accion', 'registrar');
+        enviarAjax(datos, function(respuesta){
+            if(respuesta.status === "success" && respuesta.marca){
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: respuesta.message || 'Marca registrada correctamente'
+                });
+                agregarFilaMarca(respuesta.marca);
+                resetMarca();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: respuesta.message || 'No se pudo registrar la marca'
+                });
+            }
+        });
+    }
+});
 
     function enviarAjax(datos, callback) {
         $.ajax({
@@ -176,22 +162,35 @@ $(document).ready(function () {
             contentType: false,
             dataType: 'json',
             success: function(response) {
-                if (response.status === 'success') {
-                    $('#modificarMarcaModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: 'La marca se ha modificado correctamente'
-                    });
+if (response.status === 'success') {
+    $('#modificarMarcaModal').modal('hide');
+    Swal.fire({
+        icon: 'success',
+        title: 'Modificado',
+        text: 'La marca se ha modificado correctamente'
+    });
 
-                    const id = $('#modificar_id_marca').val();
-                    const nombre = $('#modificar_nombre_marca').val();
+    const id = $('#modificar_id_marca').val();
+    const nombre = $('#modificar_nombre_marca').val();
 
-                    const fila = $('tr[data-id="' + id + '"]');
-                    fila.find('td').eq(1).text(nombre);
+    // Actualiza la fila completa con el mismo formato original
+    const fila = $(`tr[data-id="${id}"]`);
+    fila.html(`
+        <td>
+            <button class="btn btn-primary btn-modificar"
+                data-id="${id}"
+                data-nombre="${nombre}">
+                Modificar
+            </button>
+            <button class="btn btn-danger btn-eliminar"
+                data-id="${id}">
+                Eliminar
+            </button>
+        </td>
+        <td>${id}</td>
+        <td>${nombre}</td>
+    `);
 
-                    const botonModificar = fila.find('.btn-modificar');
-                    botonModificar.data('nombre', nombre);
                 } else {
                     Swal.fire({
                         icon: 'error',

@@ -36,9 +36,9 @@ $(document).ready(function () {
     });
 
     // RIF
-    $("#rif_cuenta").on("keypress", function(e){
-        validarKeyPress(/^[VEJPG0-9-\b]*$/, e);
-    });
+$("#rif_cuenta").on("keypress", function(e){
+    validarKeyPress(/^[vejpg0-9-\b]*$/i, e);
+});
 
     $("#rif_cuenta").on("keyup", function(){
         validarKeyUp(
@@ -97,8 +97,10 @@ $(document).ready(function () {
                         title: 'Éxito',
                         text: respuesta.message || respuesta.msg || 'Cuenta registrada correctamente'
                     });
-                    agregarFilaCuenta(respuesta.cuenta);
-                    resetCuenta();
+                    if(respuesta.status === "success" && respuesta.cuenta){
+    agregarFilaCuenta(respuesta.cuenta);
+    resetCuenta();
+}
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -138,11 +140,11 @@ $(document).ready(function () {
     });
 
     $("#modificar_rif_cuenta").on("keypress", function(e){
-        validarKeyPress(/^[VEJPG0-9-\b]*$/, e);
+       validarKeyPress(/^[vejpg0-9-\b]*$/i, e);
     });
     $("#modificar_rif_cuenta").on("keyup", function(){
         validarKeyUp(
-            /^[VEJPG]-\d{8}-\d$/,
+            /^[vejpg0-9-\b]*$/i,
             $(this),
             $("#smrif_cuenta"),
             "*Formato válido: J-12345678-9*"
@@ -179,12 +181,12 @@ $(document).ready(function () {
     $(document).on('click', '.btn-modificar', function () {
         var fila = $(this).closest('tr');
         var celdas = fila.find('td');
-        $('#modificar_id_cuenta').val(celdas.eq(0).text().trim());
-        $('#modificar_nombre_banco').val(celdas.eq(1).text().trim());
-        $('#modificar_numero_cuenta').val(celdas.eq(2).text().trim());
-        $('#modificar_rif_cuenta').val(celdas.eq(3).text().trim());
-        $('#modificar_telefono_cuenta').val(celdas.eq(4).text().trim());
-        $('#modificar_correo_cuenta').val(celdas.eq(5).text().trim());
+        $('#modificar_id_cuenta').val(celdas.eq(1).text().trim());
+        $('#modificar_nombre_banco').val(celdas.eq(2).text().trim());
+        $('#modificar_numero_cuenta').val(celdas.eq(3).text().trim());
+        $('#modificar_rif_cuenta').val(celdas.eq(4).text().trim());
+        $('#modificar_telefono_cuenta').val(celdas.eq(5).text().trim());
+        $('#modificar_correo_cuenta').val(celdas.eq(6).text().trim());
         //Limpieza del span de mensajes
         $('#smnombre_banco').text('');
         $('#smnumero_cuenta').text('');
@@ -227,36 +229,53 @@ $(document).ready(function () {
             contentType: false,
             dataType: 'json',
             success: function(response) {
-                if (response.status === 'success') {
-                    $('#modificarCuentaModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: 'La cuenta se ha modificado correctamente'
-                    });
+if (response.status === 'success') {
+    $('#modificarCuentaModal').modal('hide');
+    Swal.fire({
+        icon: 'success',
+        title: 'Modificado',
+        text: 'La cuenta se ha modificado correctamente'
+    });
 
-                    const id = $('#modificar_id_cuenta').val();
-                    const nombre = $('#modificar_nombre_banco').val();
-                    const numero = $('#modificar_numero_cuenta').val();
-                    const rif = $('#modificar_rif_cuenta').val();
-                    const telefono = $('#modificar_telefono_cuenta').val();
-                    const correo = $('#modificar_correo_cuenta').val();
+    const id = $('#modificar_id_cuenta').val();
+    const nombre = $('#modificar_nombre_banco').val();
+    const numero = $('#modificar_numero_cuenta').val();
+    const rif = $('#modificar_rif_cuenta').val();
+    const telefono = $('#modificar_telefono_cuenta').val();
+    const correo = $('#modificar_correo_cuenta').val();
 
-                    const fila = $('tr[data-id="' + id + '"]');
-                    fila.find('td').eq(1).text(nombre);
-                    fila.find('td').eq(2).text(numero);
-                    fila.find('td').eq(3).text(rif);
-                    fila.find('td').eq(4).text(telefono);
-                    fila.find('td').eq(5).text(correo);
-
-                    const botonModificar = fila.find('.btn-modificar');
-                    botonModificar.data('nombre', nombre);
-                    botonModificar.data('numero', numero);
-                    botonModificar.data('rif', rif);
-                    botonModificar.data('telefono', telefono);
-                    botonModificar.data('correo', correo);
-
-                } else {
+    const tabla = $('#tablaConsultas').DataTable();
+    const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
+    fila.data([
+        `<div class="acciones-boton">
+            <button class="btn btn-primary btn-modificar"
+                data-id="${id}"
+                data-nombre="${nombre}"
+                data-numero="${numero}"
+                data-rif="${rif}"
+                data-telefono="${telefono}"
+                data-correo="${correo}">
+                Modificar
+            </button>
+            <button class="btn btn-danger btn-eliminar"
+                data-id="${id}">
+                Eliminar
+            </button>
+        </div>`,
+        id,
+        nombre,
+        numero,
+        rif,
+        telefono,
+        correo,
+        `<span 
+            class="campo-estatus habilitado" 
+            data-id="${id}" 
+            style="cursor: pointer;">
+            habilitado
+        </span>`
+    ]).draw(false);
+} else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -434,55 +453,41 @@ $(document).ready(function () {
     }
 
     // Función para agregar una nueva fila a la tabla
-    function agregarFilaCuenta(cuenta) {
-        const nuevaFila = `
-            <tr data-id="${cuenta.id_cuenta}">
-                <td>${cuenta.id_cuenta}</td>
-                <td>${cuenta.nombre_banco}</td>
-                <td>${cuenta.numero_cuenta}</td>
-                <td>${cuenta.rif_cuenta}</td>
-                <td>${cuenta.telefono_cuenta}</td>
-                <td>${cuenta.correo_cuenta}</td>
-                <td>
-                    <span 
-                        class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
-                        data-id="${cuenta.id_cuenta}" 
-                        style="cursor: pointer;">
-                        ${cuenta.estado}
-                    </span>
-                </td>
-                <td>
-                    <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                        <div class="desplegable">
-                            <ul>
-                                <li>
-                                    <button class="btn btn-primary btn-modificar"
-                                        data-id="${cuenta.id_cuenta}"
-                                        data-nombre="${cuenta.nombre_banco}"
-                                        data-numero="${cuenta.numero_cuenta}"
-                                        data-rif="${cuenta.rif_cuenta}"
-                                        data-telefono="${cuenta.telefono_cuenta}"
-                                        data-correo="${cuenta.correo_cuenta}">
-                                        Modificar
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="btn btn-danger btn-eliminar"
-                                        data-id="${cuenta.id_cuenta}">
-                                        Eliminar
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        `;
-        $('#tablaConsultas tbody').append(nuevaFila);
-    }
+function agregarFilaCuenta(cuenta) {
+    const tabla = $('#tablaConsultas').DataTable();
+    const nuevaFila = [
+        `<div class="acciones-boton">
+            <button class="btn btn-primary btn-modificar"
+                data-id="${cuenta.id_cuenta}"
+                data-nombre="${cuenta.nombre_banco}"
+                data-numero="${cuenta.numero_cuenta}"
+                data-rif="${cuenta.rif_cuenta}"
+                data-telefono="${cuenta.telefono_cuenta}"
+                data-correo="${cuenta.correo_cuenta}">
+                Modificar
+            </button>
+            <button class="btn btn-danger btn-eliminar"
+                data-id="${cuenta.id_cuenta}">
+                Eliminar
+            </button>
+        </div>`,
+        cuenta.id_cuenta,
+        cuenta.nombre_banco,
+        cuenta.numero_cuenta,
+        cuenta.rif_cuenta,
+        cuenta.telefono_cuenta,
+        cuenta.correo_cuenta,
+        `<span 
+            class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
+            data-id="${cuenta.id_cuenta}" 
+            style="cursor: pointer;">
+            ${cuenta.estado}
+        </span>`
+    ];
+    // Agrega la fila y le pone el atributo data-id
+    const rowNode = tabla.row.add(nuevaFila).draw(false).node();
+    $(rowNode).attr('data-id', cuenta.id_cuenta);
+}
 
     // Función para eliminar una fila de la tabla
 function eliminarFilaCuenta(id_cuenta) {
