@@ -15,7 +15,6 @@ $(document).ready(function () {
         );
     });
 
-    // Validación antes de enviar (registro)
     function validarEnvioModelo(){
         let nombre = document.getElementById("nombre_modelo");
         nombre.value = space(nombre.value).trim();
@@ -32,44 +31,49 @@ $(document).ready(function () {
         return true;
     }
 
-    // Función para agregar una nueva fila a la tabla
-function agregarFilaModelo(modelo) {
-    const nuevaFila = `
-        <tr data-id="${modelo.id_modelo}">
-            <td>
-                <span>
-                    <div class="acciones-boton">
-                        <button class="btn btn-primary btn-modificar"
-                            data-id="${modelo.id_modelo}"
-                            data-marcaid="${modelo.id_marca}"
-                            data-nombre="${modelo.nombre_modelo}">
-                            Modificar
-                        </button>
-                        <button class="btn btn-danger btn-eliminar"
-                            data-id="${modelo.id_modelo}">
-                            Eliminar
-                        </button>
-                    </div>
-                </span>
-            </td>
-            <td>${modelo.id_modelo}</td>
-            <td>${modelo.nombre_marca}</td>
-            <td>${modelo.nombre_modelo}</td>
-        </tr>
-    `;
-    const tabla = $('#tablaConsultas').DataTable();
-    tabla.row.add($(nuevaFila)).draw(false);
-    tabla.page('last').draw('page');
-}
+    function agregarFilaModelo(modelo) {
+        const nuevaFila = `
+            <tr data-id="${modelo.id_modelo}">
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                data-id="${modelo.id_modelo}"
+                                data-marcaid="${modelo.id_marca}"
+                                data-nombre="${modelo.nombre_modelo}">
+                                Modificar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
+                                data-id="${modelo.id_modelo}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+                <td>${modelo.id_modelo}</td>
+                <td>${modelo.nombre_marca}</td>
+                <td>${modelo.nombre_modelo}</td>
+            </tr>
+        `;
+        const tabla = $('#tablaConsultas').DataTable();
+        tabla.row.add($(nuevaFila)).draw(false);
+        tabla.page('last').draw('page');
+    }
 
-    // Resetear formulario
     function resetModelo() {
         $("#id_marca").val('');
         $("#nombre_modelo").val('');
         $("#snombre_modelo").text('');
     }
 
-    // Enviar formulario de registro por AJAX
+    $('#btnIncluirModelo').on('click', function() {
+        $('#registrarModelo')[0].reset();
+        $('#snombre_modelo').text('');
+        $('#registrarModeloModal').modal('show');
+    });
+
     $('#registrarModelo').on('submit', function(e) {
         e.preventDefault();
 
@@ -96,7 +100,10 @@ function agregarFilaModelo(modelo) {
         }
     });
 
-    // Cargar datos de modelo en el modal al abrir
+    $(document).on('click', '#registrarModeloModal .close', function() {
+        $('#registrarModeloModal').modal('hide');
+    });
+
     $(document).on('click', '.btn-modificar', function () {
         $('#modificar_id_modelo').val($(this).data('id'));
         llenarSelectMarcasModal($(this).data('marcaid'));
@@ -105,7 +112,6 @@ function agregarFilaModelo(modelo) {
         $('#modificarModeloModal').modal('show');
     });
 
-    // Validaciones en tiempo real para el modal de modificar
     $("#modificar_nombre_modelo").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]*$/, e);
         let nombre = document.getElementById("modificar_nombre_modelo");
@@ -120,7 +126,6 @@ function agregarFilaModelo(modelo) {
         );
     });
 
-    // Enviar modificación por AJAX
     $('#modificarModelo').on('submit', function(e) {
         e.preventDefault();
 
@@ -137,39 +142,39 @@ function agregarFilaModelo(modelo) {
         datos.append('accion', 'modificar');
         enviarAjax(datos, function(respuesta){
             if(respuesta.status === "success" || respuesta.resultado === "success"){
-    $('#modificarModeloModal').modal('hide');
-    Swal.fire({
-        icon: 'success',
-        title: 'Modificado',
-        text: respuesta.message || 'El modelo se ha modificado correctamente'
-    });
+            $('#modificarModeloModal').modal('hide');
+            Swal.fire({
+                icon: 'success',
+                title: 'Modificado',
+                text: respuesta.message || 'El modelo se ha modificado correctamente'
+            });
 
-    // Actualizar la fila en la tabla con el mismo formato
-    let modelo = respuesta.modelo; // El backend debe retornar el modelo actualizado
-    let fila = $(`tr[data-id="${modelo.id_modelo}"]`);
-    const nuevaFila = `
-        <td>
-            <span>
-                <div class="acciones-boton">
-                    <button class="btn btn-primary btn-modificar"
-                        data-id="${modelo.id_modelo}"
-                        data-marcaid="${modelo.id_marca}"
-                        data-nombre="${modelo.nombre_modelo}">
-                        Modificar
-                    </button>
-                    <button class="btn btn-danger btn-eliminar"
-                        data-id="${modelo.id_modelo}">
-                        Eliminar
-                    </button>
-                </div>
-            </span>
-        </td>
-        <td>${modelo.id_modelo}</td>
-        <td>${modelo.nombre_marca}</td>
-        <td>${modelo.nombre_modelo}</td>
-    `;
-    const tabla = $('#tablaConsultas').DataTable();
-    tabla.row(fila).data($(nuevaFila)).draw(false);
+            // Actualizar la fila en la tabla con el mismo formato
+            let modelo = respuesta.modelo; // El backend debe retornar el modelo actualizado
+            let fila = $(`tr[data-id="${modelo.id_modelo}"]`);
+            const nuevaFila = `
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                data-id="${modelo.id_modelo}"
+                                data-marcaid="${modelo.id_marca}"
+                                data-nombre="${modelo.nombre_modelo}">
+                                Modificar
+                            </button>
+                            <button class="btn-eliminar"
+                                data-id="${modelo.id_modelo}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+                <td>${modelo.id_modelo}</td>
+                <td>${modelo.nombre_marca}</td>
+                <td>${modelo.nombre_modelo}</td>
+            `;
+            const tabla = $('#tablaConsultas').DataTable();
+            tabla.row(fila).data($(nuevaFila)).draw(false);
 
             } else {
                 Swal.fire({
@@ -195,12 +200,10 @@ function agregarFilaModelo(modelo) {
         });
     }
 
-    // Cerrar modal de modificación
     $(document).on('click', '#modificarMarcaModal .close', function() {
         $('#modificarMarcaModal').modal('hide');
     });
 
-    // Eliminar modelo
     $(document).on('click', '.btn-eliminar', function () {
         let id_modelo = $(this).data('id');
         Swal.fire({
@@ -230,7 +233,6 @@ function agregarFilaModelo(modelo) {
         });
     });
 
-    // Función AJAX genérica
     function enviarAjax(datos, callback) {
         $.ajax({
             url: '',
@@ -251,7 +253,6 @@ function agregarFilaModelo(modelo) {
         });
     }
 
-    // Funciones utilitarias (puedes copiar las de marcas.js)
     function validarKeyPress(regex, e) {
         let key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
         if (!regex.test(key)) {
@@ -281,21 +282,4 @@ function agregarFilaModelo(modelo) {
             showConfirmButton: false
         });
     }
-
-    // Delegación para el despliegue de opciones (modificar/eliminar)
-    $('#tablaConsultas').on('click', '.vertical', function(e) {
-        e.stopPropagation(); // Prevenir cierre inmediato
-
-        // Cerrar todos los menús primero
-        $('.desplegable').not($(this).next('.desplegable')).hide();
-
-        // Alternar el menú actual
-        const menuActual = $(this).next('.desplegable');
-        menuActual.toggle();
-    });
-
-    // Cerrar el menú si se hace clic fuera
-    $(document).on('click', function() {
-        $('.desplegable').hide();
-    });
 });
