@@ -34,56 +34,72 @@ $(document).ready(function () {
         return true;
     }
 
-function agregarFilaMarca(marca) {
-    const nuevaFila = `
-        <tr data-id="${marca.id_marca}">
-            <td>
-                <button class="btn btn-primary btn-modificar"
-                    data-id="${marca.id_marca}"
-                    data-nombre="${marca.nombre_marca}">
-                    Modificar
-                </button>
-                <button class="btn btn-danger btn-eliminar"
-                    data-id="${marca.id_marca}">
-                    Eliminar
-                </button>
-            </td>
-            <td>${marca.id_marca}</td>
-            <td>${marca.nombre_marca}</td>
-        </tr>
-    `;
-    $('#tablaConsultas tbody').append(nuevaFila);
-}
+    function agregarFilaMarca(marca) {
+        const nuevaFila = `
+            <tr data-id="${marca.id_marca}">
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                data-id="${marca.id_marca}"
+                                data-nombre="${marca.nombre_marca}">
+                                Modificar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
+                                data-id="${marca.id_marca}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+                <td>${marca.id_marca}</td>
+                <td>${marca.nombre_marca}</td>
+            </tr>
+        `;
+        $('#tablaConsultas tbody').append(nuevaFila);
+    }
 
     function resetMarca() {
         $("#nombre_marca").val('');
         $("#snombre_marca").text('');
     }
 
-$('#registrarMarca').on('submit', function(e) {
-    e.preventDefault();
-    if(validarEnvioMarca()){
-        var datos = new FormData(this);
-        datos.append('accion', 'registrar');
-        enviarAjax(datos, function(respuesta){
-            if(respuesta.status === "success" && respuesta.marca){
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: respuesta.message || 'Marca registrada correctamente'
-                });
-                agregarFilaMarca(respuesta.marca);
-                resetMarca();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: respuesta.message || 'No se pudo registrar la marca'
-                });
-            }
-        });
-    }
-});
+    $('#btnIncluirMarca').on('click', function() {
+        $('#registrarMarca')[0].reset();
+        $('#snombre_marca').text('');
+        $('#registrarMarcaModal').modal('show');
+    });
+
+    $('#registrarMarca').on('submit', function(e) {
+        e.preventDefault();
+        if(validarEnvioMarca()){
+            var datos = new FormData(this);
+            datos.append('accion', 'registrar');
+            enviarAjax(datos, function(respuesta){
+                if(respuesta.status === "success" && respuesta.marca){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: respuesta.message || 'Marca registrada correctamente'
+                    });
+                    agregarFilaMarca(respuesta.marca);
+                    resetMarca();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: respuesta.message || 'No se pudo registrar la marca'
+                    });
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '#registrarMarcaModal .close', function() {
+        $('#registrarMarcaModal').modal('hide');
+    });
 
     function enviarAjax(datos, callback) {
         $.ajax({
@@ -162,43 +178,47 @@ $('#registrarMarca').on('submit', function(e) {
             contentType: false,
             dataType: 'json',
             success: function(response) {
-if (response.status === 'success') {
-    $('#modificarMarcaModal').modal('hide');
-    Swal.fire({
-        icon: 'success',
-        title: 'Modificado',
-        text: 'La marca se ha modificado correctamente'
-    });
+            if (response.status === 'success') {
+                $('#modificarMarcaModal').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Modificado',
+                    text: 'La marca se ha modificado correctamente'
+                });
 
-    const id = $('#modificar_id_marca').val();
-    const nombre = $('#modificar_nombre_marca').val();
+                const id = $('#modificar_id_marca').val();
+                const nombre = $('#modificar_nombre_marca').val();
 
-    // Actualiza la fila completa con el mismo formato original
-    const fila = $(`tr[data-id="${id}"]`);
-    fila.html(`
-        <td>
-            <button class="btn btn-primary btn-modificar"
-                data-id="${id}"
-                data-nombre="${nombre}">
-                Modificar
-            </button>
-            <button class="btn btn-danger btn-eliminar"
-                data-id="${id}">
-                Eliminar
-            </button>
-        </td>
-        <td>${id}</td>
-        <td>${nombre}</td>
-    `);
-
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message || 'No se pudo modificar la marca'
-                    });
-                }
-            },
+                const fila = $(`tr[data-id="${id}"]`);
+                fila.html(`
+                    <td>
+                        <ul>
+                            <div>
+                                <button class="btn-modificar"
+                                    data-id="${id}"
+                                    data-nombre="${nombre}">
+                                    Modificar
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn-eliminar"
+                                    data-id="${id}">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </ul>
+                    </td>
+                    <td>${id}</td>
+                    <td>${nombre}</td>
+                `);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'No se pudo modificar la marca'
+                });
+            }
+        },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Error al modificar la marca:', textStatus, errorThrown);
                 muestraMensaje('Error al modificar la marca.');
@@ -210,7 +230,6 @@ if (response.status === 'success') {
         $('#modificarMarcaModal').modal('hide');
     });
 
-    // Eliminar marca
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault();
         Swal.fire({
@@ -285,21 +304,4 @@ if (response.status === 'success') {
         var str = str.replace(regex, ' ');
         return str;
     }
-
-    // Delegación para el despliegue de opciones (modificar/eliminar)
-    $('#tablaConsultas').on('click', '.vertical', function(e) {
-        e.stopPropagation(); // Prevenir cierre inmediato
-
-        // Cerrar todos los menús primero
-        $('.desplegable').not($(this).next('.desplegable')).hide();
-
-        // Alternar el menú actual
-        const menuActual = $(this).next('.desplegable');
-        menuActual.toggle();
-    });
-
-    // Cerrar el menú si se hace clic fuera
-    $(document).on('click', function() {
-        $('.desplegable').hide();
-    });
 });

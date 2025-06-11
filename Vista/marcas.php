@@ -12,32 +12,49 @@
 
 <?php include 'NewNavBar.php'; ?>
 
-<div class="formulario-responsivo">
-    <div class="fondo-form">
-        <form id="registrarMarca" action="" method="POST">
-            <input type="hidden" name="accion" value="registrar">
-            <h3 class="titulo-form">INCLUIR MARCA</h3>
-            <div class="envolver-form">
-                <input type="text" placeholder="Nombre de la Marca" class="control-form" id="nombre_marca" name="nombre_marca" maxlength="25" required>
-                <span class="span-value" id="snombre_marca"></span>
-            </div>
-
-            <button class="boton-form" type="submit">Registrar</button>
-            <button class="boton-reset" type="reset">Reset</button>
-        </form>
+<div class="modal fade modal-registrar" id="registrarMarcaModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="registrarMarca" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarMarcaModalLabel">Incluir Marca</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="envolver-form">
+                        <label for="nombre_marca">Nombre de la Marca</label>
+                        <input type="text" placeholder="Nombre de la Marca" class="control-form" id="nombre_marca" name="nombre_marca" maxlength="25" required>
+                        <span class="span-value" id="snombre_marca"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 <div class="contenedor-tabla">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirMarca" class="btn-incluir">
+            Incluir Marca
+        </button>
+    </div>
+
     <h3>Lista de Marcas</h3>
     
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr> 
-               <th>Acciones</th>
+                <th>Acciones</th>
                 <th>ID</th>
                 <th>Nombre</th>
-
             </tr>
         </thead>
 
@@ -45,20 +62,22 @@
             <?php foreach ($marcas as $marca): ?>
                 <tr data-id="<?php echo $marca['id_marca']; ?>">        
                     <td>
-
-                                <button class="btn btn-primary btn-modificar"
+                        <ul>
+                            <div>
+                                <button class="btn-modificar"
                                 data-id="<?php echo $marca['id_marca']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
                                 >Modificar</button>
-                          
-                                <button class="btn btn-danger btn-eliminar"
+                            </div>
+                            <div>
+                                <button class="btn-eliminar"
                                 data-id="<?php echo $marca['id_marca']; ?>"
                                 >Eliminar</button>
-
+                            </div>
+                        </ul>
                     </td>
                     <td><?php echo htmlspecialchars($marca['id_marca']); ?></td>
                     <td><?php echo htmlspecialchars($marca['nombre_marca']); ?></td>
-
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -112,7 +131,6 @@ $(document).ready(function() {
 </script>
 </body>
 </html>
-
 <?php
 } else {
     header("Location: ?pagina=acceso-denegado");
