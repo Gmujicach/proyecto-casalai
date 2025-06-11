@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-    // MENSAJE //
     if($.trim($("#mensajes").text()) != ""){
         mensajes("warning", 4000, "Atención", $("#mensajes").html());
     }
@@ -45,7 +44,6 @@ $(document).ready(function () {
         );
     });
 
-    // TELÉFONO
     $("#telefono_usuario").on("keypress", function(e){
         validarKeyPress(/^[0-9-]*$/, e);
     });
@@ -59,7 +57,6 @@ $(document).ready(function () {
         );
     });
 
-    // CORREO ELECTRÓNICO
     $("#correo_usuario").on("keypress", function (e) {
         validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
     });
@@ -100,52 +97,44 @@ $(document).ready(function () {
     function validarEnvioUsuario() {
         let valido = true;
 
-        // Nombre
         let nombre = $("#nombre");
         nombre.val(space(nombre.val()).trim());
         if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, nombre, $("#snombre"), "*Solo letras, de 2 a 30 caracteres*") == 0) {
             valido = false;
         }
 
-        // Apellido
         let apellido_usuario = $("#apellido");
         apellido_usuario.val(space(apellido_usuario.val()).trim());
         if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, apellido_usuario, $("#sapellido"), "*Solo letras, de 2 a 30 caracteres*") == 0) {
             valido = false;
         }
 
-        // Nombre de usuario
         let nombre_usuario = $("#nombre_usuario");
         nombre_usuario.val(space(nombre_usuario.val()).trim());
         if (validarKeyUp(/^[a-zA-Z0-9_]{4,20}$/, nombre_usuario, $("#snombre_usuario"), "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*") == 0) {
             valido = false;
         }
 
-        // Teléfono
         let telefono_usuario = $("#telefono_usuario");
         if (validarKeyUp(/^\d{4}-\d{3}-\d{4}$/, telefono_usuario, $("#stelefono_usuario"), "*Formato válido: 04XX-XXX-XXXX*") == 0) {
             valido = false;
         }
 
-        // Correo electrónico
         let correo_usuario = $("#correo_usuario");
         if (validarKeyUp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, correo_usuario, $("#scorreo_usuario"), "*Formato válido: example@gmail.com*") == 0) {
             valido = false;
         }
 
-        // Clave
         let clave_usuario = $("#clave_usuario");
         if (validarKeyUp(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/, clave_usuario, $("#sclave_usuario"), "*Solo letras y números, de 6 a 15 caracteres*") == 0) {
             valido = false;
         }
 
-        // Confirmar clave
         let clave_confirmar = $("#clave_confirmar");
         if (validarKeyUp(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/, clave_confirmar, $("#sclave_confirmar"), "*Solo letras y números, de 6 a 15 caracteres*") == 0) {
             valido = false;
         }
 
-        // Confirmación de clave igual
         if (clave_usuario.val() !== clave_confirmar.val()) {
             $("#sclave_confirmar").text("*Las contraseñas no coinciden*");
             valido = false;
@@ -157,98 +146,114 @@ $(document).ready(function () {
         return valido;
     }
 
-function agregarFilaUsuario(usuario) {
-    const nuevaFila = `
-        <tr data-id="${usuario.id_usuario}">
-            <td>
-                <span>
-                    <div class="acciones-boton">
-                        <button class="btn btn-primary btn-modificar"
-                            data-id="${usuario.id_usuario}"
-                            data-username="${usuario.username}"
-                            data-nombres="${usuario.nombres}"
-                            data-apellidos="${usuario.apellidos}"
-                            data-correo="${usuario.correo}"
-                            data-telefono="${usuario.telefono}"
-                            data-clave=""
-                            data-rango="${usuario.rango}">
-                            Modificar
-                        </button>
-                        <button class="btn btn-danger btn-eliminar"
-                            data-id="${usuario.id_usuario}">
-                            Eliminar
-                        </button>
-                    </div>
-                </span>
-            </td>
-            <td>
-                <span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>
-            </td>
-            <td>
-                <span class="campo-correo">${usuario.correo}</span>
-            </td>
-            <td>
-                <span class="campo-usuario">${usuario.username}</span>
-            </td>
-            <td>
-                <span class="campo-telefono">${usuario.telefono}</span>
-            </td>
-            <td>
-                <span class="campo-rango">${usuario.rango}</span>
-            </td>
-            <td>
-                <span class="campo-estatus habilitado" data-id="${usuario.id_usuario}" style="cursor: pointer;">
-                    habilitado
-                </span>
-            </td>
-        </tr>
-    `;
-    $('#tablaConsultas tbody').append(nuevaFila);
-}
+    function agregarFilaUsuario(usuario) {
+        const nuevaFila = `
+            <tr data-id="${usuario.id_usuario}">
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                data-id="${usuario.id_usuario}"
+                                data-username="${usuario.username}"
+                                data-nombres="${usuario.nombres}"
+                                data-apellidos="${usuario.apellidos}"
+                                data-correo="${usuario.correo}"
+                                data-telefono="${usuario.telefono}"
+                                data-clave=""
+                                data-rango="${usuario.rango}">
+                                Modificar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
+                                data-id="${usuario.id_usuario}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+                <td>
+                    <span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>
+                </td>
+                <td>
+                    <span class="campo-correo">${usuario.correo}</span>
+                </td>
+                <td>
+                    <span class="campo-usuario">${usuario.username}</span>
+                </td>
+                <td>
+                    <span class="campo-telefono">${usuario.telefono}</span>
+                </td>
+                <td>
+                    <span class="campo-rango">${usuario.rango}</span>
+                </td>
+                <td>
+                    <span class="campo-estatus habilitado" data-id="${usuario.id_usuario}" style="cursor: pointer;">
+                        habilitado
+                    </span>
+                </td>
+            </tr>
+        `;
+        $('#tablaConsultas tbody').append(nuevaFila);
+    }
 
-    // Resetear formulario de usuario
     function resetUsuario() {
-        $("#username").val('');
-        $("#susername").text('');
-        $("#nombres").val('');
-        $("#snombres").text('');
-        $("#apellidos").val('');
-        $("#sapellidos").text('');
-        $("#correo").val('');
-        $("#scorreo").text('');
-        $("#telefono").val('');
-        $("#stelefono").text('');
-        $("#clave").val('');
-        $("#sclave").text('');
-        $("#rango").val('');
+        $("#nombre").val('');
+        $("#snombre").text('');
+        $("#apellido").val('');
+        $("#sapellido").text('');
+        $("#nombre_usuario").val('');
+        $("#snombre_usuario").text('');
+        $("#telefono_usuario").val('');
+        $("#stelefono_usuario").text('');
+        $("#correo_usuario").val('');
+        $("#scorreo_usuario").text('');
+        $("#clave_usuario").val('');
+        $("#sclave_usuario").text('');
+        $("#clave_confirmar").val('');
+        $("#sclave_confirmar").text('');
     }
 
-    // Enviar formulario de registro de usuario por AJAX
-$('#incluirusuario').on('submit', function(e) {
-    e.preventDefault();
-    if (validarEnvioUsuario()) {
-        var datos = new FormData(this);
-        datos.append('accion', 'registrar');
-        enviarAjax(datos, function(respuesta){
-            if(respuesta.status === "success" && respuesta.usuario){
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: respuesta.message || 'Usuario registrado correctamente'
-                });
-                agregarFilaUsuario(respuesta.usuario);
-                $('#incluirusuario')[0].reset();
-                $('.span-value').text('');
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: respuesta.message || 'No se pudo registrar el usuario'
-                });
-            }
-        });
-    }
-});
+    $('#btnIncluirUsuario').on('click', function() {
+        $('#incluirusuario')[0].reset();
+        $('#snombre').text('');
+        $('#sapellido').text('');
+        $('#snombre_usuario').text('');
+        $('#scorreo_usuario').text('');
+        $('#stelefono_usuario').text('');
+        $('#sclave_usuario').text('');
+        $('#sclave_confirmar').text('');
+        $('#registrarUsuarioModal').modal('show');
+    });
+
+    $('#incluirusuario').on('submit', function(e) {
+        e.preventDefault();
+        if (validarEnvioUsuario()) {
+            var datos = new FormData(this);
+            datos.append('accion', 'registrar');
+            enviarAjax(datos, function(respuesta){
+                if(respuesta.status === "success" && respuesta.usuario){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: respuesta.message || 'Usuario registrado correctamente'
+                    });
+                    agregarFilaUsuario(respuesta.usuario);
+                    resetUsuario();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: respuesta.message || 'No se pudo registrar el usuario'
+                    });
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '#registrarUsuarioModal .close', function() {
+        $('#registrarUsuarioModal').modal('hide');
+    });
 
     function enviarAjax(datos, callback) {
         $.ajax({
@@ -310,7 +315,6 @@ $('#incluirusuario').on('submit', function(e) {
         );
     });
 
-    // TELÉFONO
     $("#modificartelefono_usuario").on("keypress", function(e){
         validarKeyPress(/^[0-9-]*$/, e);
     });
@@ -324,7 +328,6 @@ $('#incluirusuario').on('submit', function(e) {
         );
     });
 
-    // CORREO ELECTRÓNICO
     $("#modificarcorreo_usuario").on("keypress", function (e) {
         validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
     });
@@ -358,7 +361,7 @@ $('#incluirusuario').on('submit', function(e) {
         $('#modificarcorreo_usuario').val($(this).data('correo'));
         $('#modificartelefono_usuario').val($(this).data('telefono'));
         $('#rango').val($(this).data('rango'));
-        // Limpia los spans de validación si los tienes
+
         $('#smodificarnombre_usuario').text('');
         $('#smodificarnombre').text('');
         $('#smodificarapellido_usuario').text('');
@@ -368,11 +371,9 @@ $('#incluirusuario').on('submit', function(e) {
         $('#modificar_usuario_modal').modal('show');
     });
 
-    // Enviar modificación de usuario por AJAX
     $('#modificarusuario').on('submit', function(e) {
         e.preventDefault();
 
-        // Validación antes de enviar
         const datos = {
             username: $('#modificarnombre_usuario').val(),
             nombres: $('#modificarnombre').val(),
@@ -399,7 +400,6 @@ $('#incluirusuario').on('submit', function(e) {
             errores.push("Formato correcto: 04XX-XXX-XXXX.");
         }
 
-        // Contraseña solo si se va a cambiar
         let clave = $('#modificarclave_usuario').val();
         if (clave.length > 0 && !/^.{6,15}$/.test(clave)) {
             errores.push("La contraseña debe tener entre 6 y 15 caracteres.");
@@ -418,71 +418,69 @@ $('#incluirusuario').on('submit', function(e) {
         formData.append('accion', 'modificar');
         enviarAjax(formData, function(response) {
             if (response.status === 'success') {
-    $('#modificar_usuario_modal').modal('hide');
-    Swal.fire({
-        icon: 'success',
-        title: 'Modificado',
-        text: 'El usuario se ha modificado correctamente'
-    });
+                $('#modificar_usuario_modal').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Modificado',
+                    text: 'El usuario se ha modificado correctamente'
+                });
 
-    const id = $('#modificar_id_usuario').val();
-    const fila = $(`#tablaConsultas tbody tr[data-id="${id}"]`);
-    const nombres = $('#modificarnombre').val();
-    const apellidos = $('#modificarapellido_usuario').val();
-    const username = $('#modificarnombre_usuario').val();
-    const correo = $('#modificarcorreo_usuario').val();
-    const telefono = $('#modificartelefono_usuario').val();
-    const rango = $('#rango').val();
-    const estatus = fila.find('.campo-estatus').text().trim();
+                const id = $('#modificar_id_usuario').val();
+                const fila = $(`#tablaConsultas tbody tr[data-id="${id}"]`);
+                const nombres = $('#modificarnombre').val();
+                const apellidos = $('#modificarapellido_usuario').val();
+                const username = $('#modificarnombre_usuario').val();
+                const correo = $('#modificarcorreo_usuario').val();
+                const telefono = $('#modificartelefono_usuario').val();
+                const rango = $('#rango').val();
+                const estatus = fila.find('.campo-estatus').text().trim();
 
-    // Actualiza cada celda con el mismo formato que la tabla original
-    fila.html(`
-        <td>
-            <span>
-                <div class="acciones-boton">
-                    <button class="btn btn-primary btn-modificar"
-                        data-id="${id}"
-                        data-username="${username}"
-                        data-nombres="${nombres}"
-                        data-apellidos="${apellidos}"
-                        data-correo="${correo}"
-                        data-telefono="${telefono}"
-                        data-clave=""
-                        data-rango="${rango}">
-                        Modificar
-                    </button>
-                    <button class="btn btn-danger btn-eliminar"
-                        data-id="${id}">
-                        Eliminar
-                    </button>
-                </div>
-            </span>
-        </td>
-        <td>
-            <span class="campo-nombres">${nombres} ${apellidos}</span>
-        </td>
-        <td>
-            <span class="campo-correo">${correo}</span>
-        </td>
-        <td>
-            <span class="campo-usuario">${username}</span>
-        </td>
-        <td>
-            <span class="campo-telefono">${telefono}</span>
-        </td>
-        <td>
-            <span class="campo-rango">${rango}</span>
-        </td>
-        <td>
-            <span class="campo-estatus ${estatus === 'habilitado' ? 'habilitado' : 'inhabilitado'}"
-                  data-id="${id}" style="cursor: pointer;">
-                ${estatus}
-            </span>
-        </td>
-    `);
-;
-
-                // Actualiza los data-atributos del botón modificar
+                fila.html(`
+                    <td>
+                        <ul>
+                            <div>
+                                <button class="btn-modificar"
+                                    data-id="${id}"
+                                    data-username="${username}"
+                                    data-nombres="${nombres}"
+                                    data-apellidos="${apellidos}"
+                                    data-correo="${correo}"
+                                    data-telefono="${telefono}"
+                                    data-clave=""
+                                    data-rango="${rango}">
+                                    Modificar
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn-eliminar"
+                                    data-id="${id}">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </ul>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">${nombres} ${apellidos}</span>
+                    </td>
+                    <td>
+                        <span class="campo-correo">${correo}</span>
+                    </td>
+                    <td>
+                        <span class="campo-usuario">${username}</span>
+                    </td>
+                    <td>
+                        <span class="campo-telefono">${telefono}</span>
+                    </td>
+                    <td>
+                        <span class="campo-rango">${rango}</span>
+                    </td>
+                    <td>
+                        <span class="campo-estatus ${estatus === 'habilitado' ? 'habilitado' : 'inhabilitado'}"
+                            data-id="${id}" style="cursor: pointer;">
+                            ${estatus}
+                        </span>
+                    </td>
+                `);
                 const botonModificar = fila.find('.btn-modificar');
                 botonModificar.data('nombres', $('#modificarnombre').val());
                 botonModificar.data('apellidos', $('#modificarapellido_usuario').val());
@@ -499,12 +497,10 @@ $('#incluirusuario').on('submit', function(e) {
         });
     });
 
-    // Cerrar modal de modificación
     $(document).on('click', '#modificar_usuario_modal .close', function() {
         $('#modificar_usuario_modal').modal('hide');
     });
     
-    // Función para eliminar el producto
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault();
         let id_usuario = $(this).data('id');
@@ -525,8 +521,8 @@ $('#incluirusuario').on('submit', function(e) {
                     if (respuesta.status === 'success') {
                         Swal.fire('Eliminado!', 'El usuario ha sido eliminado.', 'success');
                         const tabla = $('#tablaConsultas').DataTable();
-const fila = $(`#tablaConsultas tbody tr[data-id="${id_usuario}"]`);
-tabla.row(fila).remove().draw();
+                        const fila = $(`#tablaConsultas tbody tr[data-id="${id_usuario}"]`);
+                        tabla.row(fila).remove().draw();
                     } else {
                         Swal.fire('Error', respuesta.message || 'No se pudo eliminar el usuario', 'error');
                     }
@@ -535,7 +531,6 @@ tabla.row(fila).remove().draw();
         });
     });
 
-    // Función genérica para mostrar mensajes
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
             icon: icono,
@@ -547,7 +542,6 @@ tabla.row(fila).remove().draw();
         });
     }
 
-    // Utilidades de validación
     function validarKeyPress(er, e) {
         key = e.keyCode;
         tecla = String.fromCharCode(key);
@@ -570,13 +564,12 @@ tabla.row(fila).remove().draw();
         }
     }
 
-function space(str) {
-    str = (str || '').toString();
-    const regex = /\s{2,}/g;
-    return str.replace(regex, ' ');
-}
+    function space(str) {
+        str = (str || '').toString();
+        const regex = /\s{2,}/g;
+        return str.replace(regex, ' ');
+    }
 
-    // Cambio de estado
     $(document).on('click', '.campo-estatus', function() {
         const id_usuario = $(this).data('id');
         cambiarEstatus(id_usuario);
@@ -610,7 +603,6 @@ function space(str) {
                         timer: 1500
                     });
                 } else {
-                    // Revertir visualmente
                     span.text(estatusActual);
                     span.removeClass('habilitado inhabilitado').addClass(estatusActual);
                     Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
@@ -618,69 +610,10 @@ function space(str) {
             },
             error: function(xhr, status, error) {
                 span.removeClass('cambiando');
-                // Revertir visualmente
                 span.text(estatusActual);
                 span.removeClass('habilitado inhabilitado').addClass(estatusActual);
                 Swal.fire('Error', 'Error en la conexión', 'error');
             }
         });
-    }
-
-    // Delegación para el despliegue de opciones (modificar/eliminar)
-    $('#tablaConsultas').on('click', '.vertical', function(e) {
-        e.stopPropagation(); // Prevenir cierre inmediato
-
-        // Cerrar todos los menús primero
-        $('.desplegable').not($(this).next('.desplegable')).hide();
-
-        // Alternar el menú actual
-        const menuActual = $(this).next('.desplegable');
-        menuActual.toggle();
-    });
-
-    // Cerrar el menú si se hace clic fuera
-    $(document).on('click', function() {
-        $('.desplegable').hide();
-    });
-
-    $(document).ready(function() {
-        // Manejar clic en flechas
-        $(document).on('click', '.flecha-izquierda, .flecha-derecha', function(e) {
-            e.preventDefault();
-            const url = $(this).closest('a').attr('href');
-            if(url) {
-                cambiarPagina(url.split('pagina=')[1]);
-            }
-        });
-
-        // Manejar cambio en filas por página
-        $('#filasPorPagina').change(function() {
-            cambiarFilasPorPagina(this.value);
-        });
-    });
-
-    function cambiarPagina(pagina) {
-        const filas = $('#filasPorPagina').val();
-        
-        $.ajax({
-            url: '',
-            type: 'GET',
-            data: {
-                pagina: pagina,
-                filas: filas,
-                ajax: true
-            },
-            success: function(data) {
-                $('#tabla-usuarios').replaceWith($(data).find('#tabla-usuarios'));
-                actualizarParametrosURL(pagina, filas);
-            }
-        });
-    }
-
-    function actualizarParametrosURL(pagina, filas) {
-        const url = new URL(window.location);
-        url.searchParams.set('pagina', pagina);
-        url.searchParams.set('filas', filas);
-        window.history.pushState({}, '', url);
     }
 });
