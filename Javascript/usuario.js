@@ -401,7 +401,7 @@ $(document).ready(function () {
     $("#modificarapellido_usuario").val($(this).data("apellidos"));
     $("#modificarcorreo_usuario").val($(this).data("correo"));
     $("#modificartelefono_usuario").val($(this).data("telefono"));
-    $("#rango").val($(this).data("rango"));
+    $("#modificar_rango").val($(this).data("rango"));
 
     $("#smodificarnombre_usuario").text("");
     $("#smodificarnombre").text("");
@@ -451,81 +451,85 @@ $(document).ready(function () {
       return;
     }
 
-    var formData = new FormData(this);
-    formData.append("accion", "modificar");
-    enviarAjax(formData, function (response) {
-      if (response.status === "success") {
-        $("#modificar_usuario_modal").modal("hide");
-        Swal.fire({
-          icon: "success",
-          title: "Modificado",
-          text: "El usuario se ha modificado correctamente",
-        });
+  var formData = new FormData(this);
+  formData.append("accion", "modificar");
+  enviarAjax(formData, function (response) {
+    if (response.status === "success") {
+      $("#modificar_usuario_modal").modal("hide");
+      Swal.fire({
+        icon: "success",
+        title: "Modificado",
+        text: "El usuario se ha modificado correctamente",
+      });
 
-        const tabla = $("#tablaConsultas").DataTable();
-        const id = $("#modificar_id_usuario").val();
-        const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
-        const nombres = $("#modificarnombre").val();
-        const apellidos = $("#modificarapellido_usuario").val();
-        const username = $("#modificarnombre_usuario").val();
-        const correo = $("#modificarcorreo_usuario").val();
-        const telefono = $("#modificartelefono_usuario").val();
-        const rango = $("#rango").val();
-        const estatus = fila.node()
-          ? $(fila.node()).find(".campo-estatus").text().trim()
-          : "habilitado";
+      const tabla = $("#tablaConsultas").DataTable();
+      const id = $("#modificar_id_usuario").val();
+      const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
+      const nombres = $("#modificarnombre").val();
+      const apellidos = $("#modificarapellido_usuario").val();
+      const username = $("#modificarnombre_usuario").val();
+      const correo = $("#modificarcorreo_usuario").val();
+      const telefono = $("#modificartelefono_usuario").val();
+      const rango = $("#modificar_rango").val(); // Usa el nuevo id
+      const estatus = fila.node()
+        ? $(fila.node()).find(".campo-estatus").text().trim()
+        : "habilitado";
 
-        fila
-          .data([
-            `<ul>
-        <div>
-            <button class="btn-modificar"
-                data-id="${id}"
-                data-username="${username}"
-                data-nombres="${nombres}"
-                data-apellidos="${apellidos}"
-                data-correo="${correo}"
-                data-telefono="${telefono}"
-                data-clave=""
-                data-rango="${rango}">
-                Modificar
-            </button>
-        </div>
-        <div>
-            <button class="btn-eliminar"
-                data-id="${id}">
-                Eliminar
-            </button>
-        </div>
-    </ul>`,
-            `<span class="campo-nombres">${nombres} ${apellidos}</span>`,
-            `<span class="campo-correo">${correo}</span>`,
-            `<span class="campo-usuario">${username}</span>`,
-            `<span class="campo-telefono">${telefono}</span>`,
-            `<span class="campo-rango">${rango}</span>`,
-            `<span class="campo-estatus ${
-              estatus === "habilitado" ? "habilitado" : "inhabilitado"
-            }"
-        data-id="${id}" style="cursor: pointer;">
-        ${estatus}
-    </span>`,
-          ])
-          .draw(false);
-        const botonModificar = fila.find(".btn-modificar");
-        botonModificar.data("nombres", $("#modificarnombre").val());
-        botonModificar.data("apellidos", $("#modificarapellido_usuario").val());
-        botonModificar.data("correo", $("#modificarcorreo_usuario").val());
-        botonModificar.data("telefono", $("#modificartelefono_usuario").val());
-        botonModificar.data("rango", $("#rango").val());
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: response.message || "No se pudo modificar el usuario",
-        });
-      }
-    });
+      fila
+        .data([
+          `<ul>
+      <div>
+          <button class="btn-modificar"
+              data-id="${id}"
+              data-username="${username}"
+              data-nombres="${nombres}"
+              data-apellidos="${apellidos}"
+              data-correo="${correo}"
+              data-telefono="${telefono}"
+              data-clave=""
+              data-rango="${rango}">
+              Modificar
+          </button>
+      </div>
+      <div>
+          <button class="btn-eliminar"
+              data-id="${id}">
+              Eliminar
+          </button>
+      </div>
+  </ul>`,
+          `<span class="campo-nombres">${nombres} ${apellidos}</span>`,
+          `<span class="campo-correo">${correo}</span>`,
+          `<span class="campo-usuario">${username}</span>`,
+          `<span class="campo-telefono">${telefono}</span>`,
+          `<span class="campo-rango">${rango}</span>`,
+          `<span class="campo-estatus ${
+            estatus === "habilitado" ? "habilitado" : "inhabilitado"
+          }"
+      data-id="${id}" style="cursor: pointer;">
+      ${estatus}
+  </span>`,
+        ])
+        .draw(false);
+
+      // Actualiza los data-* del botón Modificar
+      const filaNode = fila.node();
+      const botonModificar = $(filaNode).find(".btn-modificar");
+      botonModificar.data("username", username);
+      botonModificar.data("nombres", nombres);
+      botonModificar.data("apellidos", apellidos);
+      botonModificar.data("correo", correo);
+      botonModificar.data("telefono", telefono);
+      botonModificar.data("rango", rango);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: response.message || "No se pudo modificar el usuario",
+      });
+    }
   });
+});
 
   $(document).on("click", "#modificar_usuario_modal .close", function () {
     $("#modificar_usuario_modal").modal("hide");

@@ -7,7 +7,7 @@ class Usuarios extends BD {
     private $id_usuario;
     private $username;
     private $clave;
-    private $rango="usuario";
+    private $id_rol;
     private $activo=1;
     private $tableusuarios = 'tbl_usuarios';
     private $nombre;
@@ -19,7 +19,7 @@ class Usuarios extends BD {
 
 
     public function __construct() {
-        $conexion = new BD('P');
+        $conexion = new BD('S');
         $this->conex = $conexion->getConexion();
     }
 
@@ -60,11 +60,11 @@ class Usuarios extends BD {
         $this->clave = $clave;
     }
     public function getRango() {
-        return $this->rango;
+        return $this->id_rol;
     }
 
-    public function setRango($rango) {
-        $this->rango = $rango;
+    public function setRango($id_rol) {
+        $this->id_rol = $id_rol;
     }
 
         public function getId() {
@@ -117,12 +117,12 @@ class Usuarios extends BD {
 public function ingresarUsuario() {
     $claveEncriptada = password_hash($this->clave, PASSWORD_BCRYPT);
 
-    $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`)
-            VALUES (:username, :clave, :rango, :correo, :nombres, :apellidos, :telefono)";
+    $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `id_rol`, `correo`, `nombres`, `apellidos`, `telefono`)
+            VALUES (:username, :clave, :id_rol, :correo, :nombres, :apellidos, :telefono)";
     $stmt = $this->conex->prepare($sql);
     $stmt->bindParam(':username', $this->username);
     $stmt->bindParam(':clave', $claveEncriptada);
-    $stmt->bindParam(':rango', $this->rango);
+    $stmt->bindParam(':id_rol', $this->id_rol);
     $stmt->bindParam(':correo', $this->correo);
     $stmt->bindParam(':nombres', $this->nombre);
     $stmt->bindParam(':apellidos', $this->apellido);
@@ -180,7 +180,7 @@ public function modificarUsuario($id_usuario) {
 
     $sql = "UPDATE tbl_usuarios SET 
                 username = :username, 
-                rango = :rango,
+                id_rol = :id_rol,
                 nombres = :nombre,
                 apellidos = :apellido,
                 correo = :correo,
@@ -193,7 +193,7 @@ public function modificarUsuario($id_usuario) {
     if (!empty($this->clave)) {
         $stmt->bindParam(':clave', $claveEncriptada);
     }
-    $stmt->bindParam(':rango', $this->rango);
+    $stmt->bindParam(':id_rol', $this->id_rol);
     $stmt->bindParam(':nombre', $this->nombre);
     $stmt->bindParam(':apellido', $this->apellido);
     $stmt->bindParam(':correo', $this->correo);
@@ -233,7 +233,11 @@ public function modificarUsuario($id_usuario) {
         //echo "Iniciando getmarcas.<br>";
         
         // Primera consulta para obtener datos de marcas
-        $queryusuarios = 'SELECT * FROM ' . $this->tableusuarios;
+        $queryusuarios = 'SELECT usuarios.*, rol.nombre_rol 
+FROM tbl_usuarios AS usuarios
+INNER JOIN tbl_rol AS rol ON usuarios.id_rol = rol.id_rol
+ORDER BY usuarios.id_usuario DESC;
+';
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";
