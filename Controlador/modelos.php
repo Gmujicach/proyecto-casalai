@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $modelo->setIdModelo($id_modelo);
             $modelo->setnombre_modelo($_POST['nombre_modelo']);
             
-            if ($modelo->existeNombreModelo($_POST['nombre_modelo'])) {
+            if ($modelo->existeNombreModelo($_POST['nombre_modelo'], $id_modelo)) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El modelo ya existe'
