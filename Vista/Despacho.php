@@ -187,16 +187,18 @@ foreach ($despachos as $despacho):
 
     <?php if (!in_array($key, $rendered)): ?>
         <td rowspan="<?= $rowspans[$key] ?>">
-            <button class="btn-modificar"
-                data-bs-toggle="modal"
-                data-bs-target="#modalModificar"
-                data-iddespacho="<?= htmlspecialchars($despacho['id_despachos']) ?>"
-                data-correlativo="<?= htmlspecialchars($despacho['correlativo']) ?>"
-                data-fecha="<?= htmlspecialchars($despacho['fecha_despacho']) ?>"
-                data-cliente="<?= htmlspecialchars($despacho['id_clientes']) ?>"
-                data-productos='<?= json_encode($productosPorDespacho[$id], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
-                Modificar
-            </button>
+            <ul>
+                <button class="btn-modificar"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalModificar"
+                    data-iddespacho="<?= htmlspecialchars($despacho['id_despachos']) ?>"
+                    data-correlativo="<?= htmlspecialchars($despacho['correlativo']) ?>"
+                    data-fecha="<?= htmlspecialchars($despacho['fecha_despacho']) ?>"
+                    data-cliente="<?= htmlspecialchars($despacho['id_clientes']) ?>"
+                    data-productos='<?= json_encode($productosPorDespacho[$id], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                    Modificar
+                </button>
+            </ul>
         </td>
         <?php $rendered[] = $key; ?>
     <?php endif; ?>

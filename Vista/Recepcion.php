@@ -187,17 +187,18 @@
 
             <?php if (!in_array($key, $rendered)): ?>
                 <td rowspan="<?= $rowspans[$key] ?>">
-                    <button class="btn-modificar"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalModificar"
-                        data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
-                        data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
-                        data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
-                        data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"                
-                        data-productos='<?= json_encode($dataProductosPorRecepcion[$recepcion['id_recepcion']], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
-                    
-                        Modificar
-                    </button>
+                    <ul>
+                        <button class="btn-modificar"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalModificar"
+                            data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
+                            data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
+                            data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
+                            data-proveedor="<?= htmlspecialchars($recepcion['id_proveedor']) ?>"                
+                            data-productos='<?= json_encode($dataProductosPorRecepcion[$recepcion['id_recepcion']], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                            Modificar
+                        </button>
+                    </ul>
                 </td>
                 <?php $rendered[] = $key; ?>
             <?php endif; ?>
