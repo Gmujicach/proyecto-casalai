@@ -13,43 +13,59 @@
 
 <?php include 'NewNavBar.php'; ?>
 
-<div class="formulario-responsivo">
-    <div class="fondo-form">
-        <form id="ingresarclientes" action="" method="POST">
-            <input type="hidden" name="accion" value="registrar">
-            <h3 class="titulo-form">INCLUIR CLIENTE</h3>
-                
-            <div class="envolver-form">
-                <input class="control-form" placeholder="Nombre completo" maxlength="100" type="text" id="nombre" name="nombre" required>
-                <span class="span-value" id="snombre"></span>
-            </div>
+<div class="modal fade modal-registrar" id="registrarClienteModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="ingresarclientes" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarClienteModalLabel">Incluir Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="envolver-form">
+                        <input class="control-form" placeholder="Nombre completo" maxlength="100" type="text" id="nombre" name="nombre" required>
+                        <span class="span-value" id="snombre"></span>
+                    </div>
 
-            <div class="grupo-form">
-                <input class="control-form" placeholder="Cedula/Rif" maxlength="12" type="text" id="cedula" name="cedula" required>
-                <span class="span-value" id="scedula"></span>
-            
-                <input class="control-form" placeholder="Teléfono" maxlength="13" type="text" id="telefono" name="telefono" required>
-                <span class="span-value" id="stelefono"></span>
-            </div>
-        <br>
-            <div class="envolver-form">
-                <label for="Direccion">Dirección</label>
-                <textarea class="form-control" maxlength="100" id="direccion" name="direccion" rows="3"></textarea>
-                <span class="span-value" id="sdireccion"></span>
-            </div>
-            
-            <div class="envolver-form">
-                <input class="control-form" placeholder="Correo electrónico" type="text" id="correo" name="correo" maxlength="50" required>
-                <span class="span-value" id="scorreo"></span>
-            </div>
-
-            <button class="boton-form" type="submit">Registrar</button>
-            <button class="boton-reset" type="reset">Reset</button>
-        </form>
+                    <div class="grupo-form">
+                        <input class="control-form" placeholder="Cedula/Rif" maxlength="12" type="text" id="cedula" name="cedula" required>
+                        <span class="span-value" id="scedula"></span>
+                    
+                        <input class="control-form" placeholder="Teléfono" maxlength="13" type="text" id="telefono" name="telefono" required>
+                        <span class="span-value" id="stelefono"></span>
+                    </div>
+                <br>
+                    <div class="envolver-form">
+                        <label for="Direccion">Dirección</label>
+                        <textarea class="form-control" maxlength="100" id="direccion" name="direccion" rows="3"></textarea>
+                        <span class="span-value" id="sdireccion"></span>
+                    </div>
+                    
+                    <div class="envolver-form">
+                        <input class="control-form" placeholder="Correo electrónico" type="text" id="correo" name="correo" maxlength="50" required>
+                        <span class="span-value" id="scorreo"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 <div class="contenedor-tabla">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirCliente" class="btn-incluir">
+            Incluir Cliente
+        </button>
+    </div>
+
     <h3>Lista de Clientes</h3>
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
@@ -60,43 +76,38 @@
                 <th>Dirección</th>
                 <th>Teléfono</th>
                 <th>Correo</th>
-                
             </tr>
         </thead>
         <tbody>
             <?php foreach ($clientes as $cliente): ?>
                 <?php if ($cliente['activo'] == 1) { ?>
                 <tr data-id="<?php echo $cliente['id_clientes']; ?>">
-                                        <td>
-                        <span>
-                            <div class="acciones-boton">
-             
-                                            <!-- Botón Modificar que abre el modal -->
-                                            <button type="button" class="btn btn-primary btn-modificar"
-                                                data-id="<?php echo htmlspecialchars($cliente['id_clientes']); ?>"
-                                                data-nombre="<?php echo htmlspecialchars($cliente['nombre']); ?>"
-                                                data-cedula="<?php echo htmlspecialchars($cliente['cedula']); ?>"
-                                                data-direccion="<?php echo htmlspecialchars($cliente['direccion']); ?>"
-                                                data-telefono="<?php echo htmlspecialchars($cliente['telefono']); ?>"
-                                                data-correo="<?php echo htmlspecialchars($cliente['correo']); ?>">
-                                                Modificar
-                                            </button>
-
-                                            <!-- Botón Eliminar -->
-                                            <button class="btn btn-danger btn-eliminar"
-                                                data-id="<?php echo $cliente['id_clientes']; ?>">
-                                                Eliminar
-                                            </button>
-
+                    <td>
+                        <ul>
+                            <div>
+                                <button class="btn-modificar"
+                                    data-id="<?php echo htmlspecialchars($cliente['id_clientes']); ?>"
+                                    data-nombre="<?php echo htmlspecialchars($cliente['nombre']); ?>"
+                                    data-cedula="<?php echo htmlspecialchars($cliente['cedula']); ?>"
+                                    data-direccion="<?php echo htmlspecialchars($cliente['direccion']); ?>"
+                                    data-telefono="<?php echo htmlspecialchars($cliente['telefono']); ?>"
+                                    data-correo="<?php echo htmlspecialchars($cliente['correo']); ?>">
+                                    Modificar
+                                </button>
                             </div>
-                        </span>
+                            <div>
+                                <button class="btn-eliminar"
+                                    data-id="<?php echo $cliente['id_clientes']; ?>">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </ul>
                     </td>
                     <td><?php echo htmlspecialchars($cliente['nombre']); ?></td>
                     <td><?php echo htmlspecialchars($cliente['cedula']); ?></td>
                     <td><?php echo htmlspecialchars($cliente['direccion']); ?></td>
                     <td><?php echo htmlspecialchars($cliente['telefono']); ?></td>
                     <td><?php echo htmlspecialchars($cliente['correo']); ?></td>
-
                 </tr>
                 <?php } ?>
             <?php endforeach; ?>
@@ -104,19 +115,17 @@
     </table>
 </div>
 
-<!-- Modal de modificación -->
 <div class="modal fade modal-modificar" id="modificar_clientes_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="modificarclientes" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_clientes_modal_label">Modificar Cliente</h5>
+                    <h5 class="titulo-form" id="modificar_clientes_modal_label">Modificar Cliente</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Campos del formulario de modificación -->
                     <input type="hidden" id="modificar_id_clientes" name="id_clientes">
                     <div class="form-group">
                         <label for="modificarnombre">Nombre completo</label>

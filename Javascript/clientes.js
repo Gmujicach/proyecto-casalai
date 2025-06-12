@@ -33,7 +33,6 @@ $(document).ready(function () {
         );
     });
 
-    // TELÉFONO
     $("#telefono").on("keypress", function(e){
         validarKeyPress(/^[0-9-]*$/, e);
     });
@@ -130,35 +129,38 @@ $(document).ready(function () {
         return true;
     }
 
-function agregarFilaCliente(cliente) {
-    const tabla = $('#tablaConsultas').DataTable();
-    const nuevaFila = [
-        `<div class="acciones-boton">
-            <button type="button" class="btn btn-primary btn-modificar"
-                data-id="${cliente.id_clientes}"
-                data-nombre="${cliente.nombre}"
-                data-cedula="${cliente.cedula}"
-                data-direccion="${cliente.direccion}"
-                data-telefono="${cliente.telefono}"
-                data-correo="${cliente.correo}">
-                Modificar
-            </button>
-            <button class="btn btn-danger btn-eliminar"
-                data-id="${cliente.id_clientes}">
-                Eliminar
-            </button>
-        </div>`,
-        cliente.nombre,
-        cliente.cedula,
-        cliente.direccion,
-        cliente.telefono,
-        cliente.correo
-    ];
-    // Agrega la fila y le pone el atributo data-id
-    const rowNode = tabla.row.add(nuevaFila).draw(false).node();
-    $(rowNode).attr('data-id', cliente.id_clientes);
-}
-    // Resetear formulario
+    function agregarFilaCliente(cliente) {
+        const tabla = $('#tablaConsultas').DataTable();
+        const nuevaFila = [
+            `<ul>
+                <div>
+                    <button class="btn-modificar"
+                        data-id="${cliente.id_clientes}"
+                        data-nombre="${cliente.nombre}"
+                        data-cedula="${cliente.cedula}"
+                        data-direccion="${cliente.direccion}"
+                        data-telefono="${cliente.telefono}"
+                        data-correo="${cliente.correo}">
+                        Modificar
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-eliminar"
+                        data-id="${cliente.id_clientes}">
+                        Eliminar
+                    </button>
+                </div>
+            </ul>`,
+            cliente.nombre,
+            cliente.cedula,
+            cliente.direccion,
+            cliente.telefono,
+            cliente.correo
+        ];
+        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
+        $(rowNode).attr('data-id', cliente.id_clientes);
+    }
+
     function resetCliente() {
         $("#nombre").val('');
         $("#cedula").val('');
@@ -172,55 +174,66 @@ function agregarFilaCliente(cliente) {
         $("#scorreo").text('');
     }
 
-    // Enviar formulario de registro por AJAX
+    $('#btnIncluirCliente').on('click', function() {
+        $('#ingresarclientes')[0].reset();
+        $('#snombre').text('');
+        $('#scedula').text('');
+        $('#sdireccion').text('');
+        $('#stelefono').text('');
+        $('#scorreo').text('');
+        $('#registrarClienteModal').modal('show');
+    });
+
     $('#ingresarclientes').on('submit', function(e) {
     e.preventDefault();
 
-    if(validarEnvioCliente()){
-        var datos = new FormData(this);
-        datos.append('accion', 'registrar');
-        
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: datos,
-            contentType: false,
-            processData: false,
-            dataType: 'json',
-            success: function(respuesta){
-                if(respuesta.status === "success"){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Éxito',
-                        text: respuesta.message || 'Cliente registrado correctamente'
-                    }).then(() => {
-                        // Agregar la nueva fila a DataTables
-                        if(respuesta.status === "success" && respuesta.cliente){
-    agregarFilaCliente(respuesta.cliente);
-    resetCliente();
-}
-                    });
-                } else {
+        if(validarEnvioCliente()){
+            var datos = new FormData(this);
+            datos.append('accion', 'registrar');
+            
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: datos,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(respuesta){
+                    if(respuesta.status === "success"){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: respuesta.message || 'Cliente registrado correctamente'
+                        }).then(() => {
+                            if(respuesta.status === "success" && respuesta.cliente){
+                                agregarFilaCliente(respuesta.cliente);
+                                resetCliente();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: respuesta.message || 'Error al registrar el cliente'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
-                        text: respuesta.message || 'Error al registrar el cliente'
+                        title: 'Error de conexión',
+                        text: 'Ocurrió un error al comunicarse con el servidor'
                     });
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX Error:', status, error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error de conexión',
-                    text: 'Ocurrió un error al comunicarse con el servidor'
-                });
-            }
-        });
-    }
-});
+            });
+        }
+    });
 
-    // Función genérica para enviar AJAX
+    $(document).on('click', '#registrarClienteModal .close', function() {
+        $('#registrarClienteModal').modal('hide');
+    });
+
     function enviarAjax(datos, callback) {
         $.ajax({
             url: '',
@@ -347,7 +360,6 @@ function agregarFilaCliente(cliente) {
         return errores;
     }
 
-    // Enviar datos de modificación por AJAX al controlador PHP
     $('#modificarclientes').on('submit', function(e) {
         e.preventDefault();
 
@@ -400,21 +412,25 @@ if (response.status === 'success') {
 const tabla = $('#tablaConsultas').DataTable();
 const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
 fila.data([
-    `<div class="acciones-boton">
-        <button type="button" class="btn btn-primary btn-modificar"
-            data-id="${id}"
-            data-nombre="${nombre}"
-            data-cedula="${cedula}"
-            data-direccion="${direccion}"
-            data-telefono="${telefono}"
-            data-correo="${correo}">
-            Modificar
-        </button>
-        <button class="btn btn-danger btn-eliminar"
-            data-id="${id}">
-            Eliminar
-        </button>
-    </div>`,
+    `<ul>
+        <div>
+            <button class="btn-modificar"
+                data-id="${id}"
+                data-nombre="${nombre}"
+                data-cedula="${cedula}"
+                data-direccion="${direccion}"
+                data-telefono="${telefono}"
+                data-correo="${correo}">
+                Modificar
+            </button>
+        </div>
+        <div>
+            <button class="btn-eliminar"
+                data-id="${id}">
+                Eliminar
+            </button>
+        </div>
+    </ul>`,
     nombre,
     cedula,
     direccion,
@@ -431,12 +447,10 @@ fila.data([
         });
     });
 
-    // Cerrar modal de modificación
     $(document).on('click', '#modificar_clientes_modal .close', function() {
         $('#modificar_clientes_modal').modal('hide');
     });
 
-    // Función para eliminar el producto
     $(document).on('click', '.btn-eliminar', function (e) {
     e.preventDefault();
     var id = $(this).data('id');
@@ -453,7 +467,7 @@ fila.data([
         if (result.isConfirmed) {
             var datos = new FormData();
             datos.append('accion', 'eliminar');
-            datos.append('id_clientes', id); // Cambiado de 'id' a 'id_clientes'
+            datos.append('id_clientes', id);
             
             $.ajax({
                 url: '',
@@ -527,22 +541,4 @@ fila.data([
         var str = str.replace(regex, ' ');
         return str;
     }
-
-    // Delegación para el despliegue de opciones (modificar/eliminar)
-    $('#tablaConsultas').on('click', '.vertical', function(e) {
-        e.stopPropagation(); // Prevenir cierre inmediato
-
-        // Cerrar todos los menús primero
-        $('.desplegable').not($(this).next('.desplegable')).hide();
-
-        // Alternar el menú actual
-        const menuActual = $(this).next('.desplegable');
-        menuActual.toggle();
-    });
-
-    // Cerrar el menú si se hace clic fuera
-    $(document).on('click', function() {
-        $('.desplegable').hide();
-    });
 });
-
