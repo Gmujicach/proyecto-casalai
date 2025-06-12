@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Usuario registrada correctamente',
-                    'marca' => $usuarioRegistrada
+                    'usuario' => $usuarioRegistrada
                 ]);
             } else {
                 echo json_encode([

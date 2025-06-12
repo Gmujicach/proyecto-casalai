@@ -73,23 +73,16 @@
     <td><span><a href="#" class="">Ver Mas</a></span></td>
     <td>
         <div class="acciones-boton">
-            <i class="vertical">
-                <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-            </i>
-            <div class="desplegable">
-                <ul>
-                    <li><a href="#">Ver</a></li>
-                    <li>
-                    <a href="#" class="modificar" 
-                        data-id="<?php echo $orden['id_despachos']; ?>" 
+
+                    <button href="#" class="btn  btn-primary btn-modificar modificar" 
+                        data-id="<?php echo $orden['id_orden_despachos']; ?>" 
                         data-fecha="<?php echo $orden['fecha_despacho']; ?>"
                         data-correlativo="<?php echo $orden['correlativo']; ?>"
                         data-factura="<?php echo $orden['id_factura']; ?>"
                         data-bs-toggle="modal" 
                         data-bs-target="#modificar_orden_modal">Modificar
-                    </a>
-                    </li>
-                    <li><a href="#" class="eliminar" data-id="<?php echo $orden['id_despachos']; ?>">Eliminar</a></li>
+                    </button>
+<button href="#" class="eliminar btn-eliminar btn btn-danger" data-id="<?php echo $orden['id_orden_despachos']; ?>">Eliminar</button></li>
                 </ul>
             </div>
         </div>
