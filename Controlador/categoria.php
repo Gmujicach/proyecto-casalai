@@ -1,6 +1,6 @@
 <?php
 ob_start();
-require_once 'Modelo/rol.php';
+require_once 'Modelo/categoria.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -12,37 +12,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     switch ($accion) {
         case 'registrar':
-            $rol = new Rol();
-            $rol->setNombreRol($_POST['nombre_rol']);
+            $categoria = new Categoria();
+            $categoria->setNombreCategoria($_POST['nombre_categoria']);
 
-            if ($rol->existeNombreRol($_POST['nombre_rol'])) {
+            if ($categoria->existeNombreCategoria($_POST['nombre_categoria'])) {
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'El nombre del rol ya existe'
+                    'message' => 'El nombre de la cartegoria ya existe'
                 ]);
                 exit;
             }
 
-            if ($rol->registrarRol()) {
-                $rolRegistrado = $rol->obtenerUltimoRol();
+            if ($categoria->registrarCategoria()) {
+                $categoriaRegistrado = $categoria->obtenerUltimoCategoria();
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'Rol registrado correctamente',
-                    'rol' => $rolRegistrado
+                    'message' => 'Categoria registrada correctamente',
+                    'categoria' => $categoriaRegistrado
                 ]);
             } else {
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'Error al registrar el rol'
+                    'message' => 'Error al registrar la categoria'
                 ]);
             }
             exit;
         
-        case 'consultar_roles':
-            $rol = new Rol();
-            $roles_obt = $rol->consultarRoles();
+        case 'consultar_categorias':
+            $categoria = new Categoria();
+            $categorias_obt = $categoria->consultarCategorias();
 
-            echo json_encode($roles_obt);
+            echo json_encode($categorias_obt);
             exit;
         
         case 'obtener_rol':
