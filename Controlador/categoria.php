@@ -45,52 +45,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo json_encode($categorias_obt);
             exit;
         
-        case 'obtener_rol':
-            $id_rol = $_POST['id_rol'];
+        case 'obtener_categoria':
+            $id_categoria = $_POST['id_categoria'];
 
-            if ($id_rol !== null) {
-                $rol = new Rol();
-                $rol_obt = $rol->obtenerRolPorId($id_rol);
+            if ($id_categoria !== null) {
+                $categoria = new Categoria();
+                $categoria_obt = $categoria->obtenerCategoriaPorId($id_categoria);
 
-                if ($rol_obt !== null) {
-                    echo json_encode($rol_obt);
+                if ($categoria_obt !== null) {
+                    echo json_encode($categoria_obt);
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Rol no encontrado']);
+                    echo json_encode(['status' => 'error', 'message' => 'Categoria no encontrada']);
                 }
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'ID de rol no proporcionado']);
+                echo json_encode(['status' => 'error', 'message' => 'ID de la categoria no proporcionada']);
             }
             exit;
 
         case 'modificar':
-            $id_rol  = $_POST['id_rol'];
-            $rol = new Rol();
-            $rol->setIdRol($id_rol);
-            $rol->setNombreRol($_POST['nombre_rol']);
+            $id_categoria  = $_POST['id_categoria'];
+            $categoria = new Categoria();
+            $categoria->setIdCategoria($id_categoria);
+            $categoria->setNombreCategoria($_POST['nombre_categoria']);
             
-            if ($rol->existeNombreRol($_POST['nombre_rol'], $id_rol)) {
+            if ($categoria->existeNombreCategoria($_POST['nombre_categoria'], $id_categoria)) {
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'El nombre del rol ya existe'
+                    'message' => 'El nombre de la categoria ya existe'
                 ]);
                 exit;
             }
             
-            if ($rol->modificarRol($id_rol)) {
+            if ($categoria->modificarCategoria($id_categoria)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el rol']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al modificar la categoria']);
             }
             exit;
 
         case 'eliminar':
-            $id_rol = $_POST['id_rol'];
-            $rol = new Rol();
+            $id_categoria = $_POST['id_categoria'];
+            $categoria = new Categoria();
 
-            if ($rol->eliminarRol($id_rol)) {
+            if ($categoria->eliminarCategoria($id_categoria)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el rol']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la categoria']);
             }
             exit;
 
@@ -100,14 +100,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-function consultarRoles() {
-    $rol = new Rol();
-    return $rol->consultarRoles();
+function consultarCategorias() {
+    $categoria = new Categoria();
+    return $categoria->consultarCategorias();
 }
 
-$pagina = "rol";
+$pagina = "categoria";
 if (is_file("Vista/" . $pagina . ".php")) {
-    $roles = consultarRoles();
+    $categorias = consultarCategorias();
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
