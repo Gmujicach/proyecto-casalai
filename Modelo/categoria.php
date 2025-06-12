@@ -12,39 +12,39 @@ class Categoria extends BD {
     }
 
     public function getIdCategoria() { 
-        return $this->id_rol; 
+        return $this->id_categoria; 
     }
-    public function setIdCategoria($id_rol) { 
-        $this->id = $id_rol; 
+    public function setIdCategoria($id_categoria) { 
+        $this->id_categoria = $id_categoria; 
     }
 
     public function getNombreCategoria() { 
-        return $this->nombre_rol; 
+        return $this->nombre_categoria; 
     }
-    public function setNombreCategoria($nombre_rol) { 
-        $this->nombre_rol = $nombre_rol; 
+    public function setNombreCategoria($nombre_categoria) { 
+        $this->nombre_categoria = $nombre_categoria; 
     } 
 
-    public function registrarRol() {
-        return $this->r_Rol();
+    public function registrarCategoria() {
+        return $this->r_Categoria();
     }
-    private function r_Rol() {
-        $sql = "INSERT INTO tbl_rol (nombre_rol) VALUES (:nombre_rol)";
+    private function r_Categoria() {
+        $sql = "INSERT INTO tbl_categoria (nombre_categoria) VALUES (:nombre_categoria)";
         
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':nombre_rol', $this->nombre_rol);
+        $stmt->bindParam(':nombre_categoria', $this->nombre_categoria);
 
         return $stmt->execute();
     }
 
-    public function existeNombreRol($nombre_rol, $excluir_id = null) {
-        return $this->existeNomRol($nombre_rol, $excluir_id); 
+    public function existeNombreCategoria($nombre_categoria, $excluir_id = null) {
+        return $this->existeNomCategoria($nombre_categoria, $excluir_id); 
     }
-    private function existeNomRol($nombre_rol, $excluir_id) {
-        $sql = "SELECT COUNT(*) FROM tbl_rol WHERE nombre_rol = ?";
-        $params = [$nombre_rol];
+    private function existeNomCategoria($nombre_categoria, $excluir_id) {
+        $sql = "SELECT COUNT(*) FROM tbl_categoria WHERE nombre_categoria = ?";
+        $params = [$nombre_categoria];
         if ($excluir_id !== null) {
-            $sql .= " AND id_rol != ?";
+            $sql .= " AND id_categoria != ?";
             $params[] = $excluir_id;
         }
         $stmt = $this->conex->prepare($sql);
@@ -52,73 +52,73 @@ class Categoria extends BD {
         return $stmt->fetchColumn() > 0;
     }
 
-    public function obtenerUltimoRol() {
-        return $this->obtUltimoRol(); 
+    public function obtenerUltimoCategoria() {
+        return $this->obtUltimoCategoria(); 
     }
-    private function obtUltimoRol() {
+    private function obtUltimoCategoria() {
         try {
-            $sql = "SELECT * FROM tbl_rol ORDER BY id_rol DESC LIMIT 1";
+            $sql = "SELECT * FROM tbl_categoria ORDER BY id_categoria DESC LIMIT 1";
             $stmt = $this->conex->prepare($sql);
             $stmt->execute();
-            $rol = $stmt->fetch(PDO::FETCH_ASSOC);
+            $categoria = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->conex = null;
-            return $rol ? $rol : null;
+            return $categoria ? $categoria : null;
         } catch (PDOException $e) {
-            error_log("Error al obtener el último rol: " . $e->getMessage());
+            error_log("Error al obtener la última categoria: " . $e->getMessage());
             $this->conex = null;
             return null;
         }
     }
 
-    public function obtenerRolPorId($id_rol) {
-        return $this->rolporid($id_rol); 
+    public function obtenerCategoriaPorId($id_categoria) {
+        return $this->categoriaporid($id_categoria); 
     }
-    private function rolporid($id_rol) {
-        $sql = "SELECT id_rol, nombre_rol FROM tbl_rol WHERE id_rol = :id_rol";
+    private function categoriaporid($id_categoria) {
+        $sql = "SELECT id_categoria, nombre_categoria FROM tbl_categoria WHERE id_categoria = :id_categoria";
 
         $stmt = $this->conex->prepare($sql);
-        $stmt->execute([$id_rol]);
-        $roles = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->execute([$id_categoria]);
+        $categorias = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->conex = null;
-        return $roles;
+        return $categorias;
     }
 
-    public function consultarRoles() {
-        return $this->c_roles(); 
+    public function consultarCategorias() {
+        return $this->c_categorias(); 
     }
-    private function c_roles() {
-        $sql = "SELECT id_rol, nombre_rol FROM tbl_rol";
+    private function c_categorias() {
+        $sql = "SELECT id_categoria, nombre_categoria FROM tbl_categoria";
 
         $stmt = $this->conex->prepare($sql);
         $stmt->execute();
-        $roles_obt = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $categorias_obt = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->conex = null;
-        return $roles_obt;
+        return $categorias_obt;
     }
 
-    public function modificarRol($id_rol) {
-        return $this->m_rol($id_rol); 
+    public function modificarCategoria($id_categoria) {
+        return $this->m_categoria($id_categoria); 
     }
-    private function m_rol($id_rol) {
-        $sql = "UPDATE tbl_rol SET nombre_rol = :nombre_rol WHERE id_rol = :id_rol";
+    private function m_categoria($id_categoria) {
+        $sql = "UPDATE tbl_categoria SET nombre_categoria = :nombre_categoria WHERE id_categoria = :id_categoria";
 
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_rol', $id_rol);
-        $stmt->bindParam(':nombre_rol', $this->nombre_rol);
+        $stmt->bindParam(':id_categoria', $id_categoria);
+        $stmt->bindParam(':nombre_categoria', $this->nombre_categoria);
 
         $result = $stmt->execute();
         $this->conex = null;
         return $result;
     }
 
-    public function eliminarRol($id_rol) {
-        return $this->e_rol($id_rol); 
+    public function eliminarCategoria($id_categoria) {
+        return $this->e_categoria($id_categoria); 
     }
-    private function e_rol($id_rol) {
-        $sql = "DELETE FROM tbl_rol WHERE id_rol = :id_rol";
+    private function e_categoria($id_categoria) {
+        $sql = "DELETE FROM tbl_categoria WHERE id_categoria = :id_categoria";
         
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_rol', $id_rol);
+        $stmt->bindParam(':id_categoria', $id_categoria);
         
         $result = $stmt->execute();
         $this->conex = null;
