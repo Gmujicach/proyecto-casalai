@@ -10,44 +10,64 @@
     <?php include 'header.php'; ?>
 </head>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 <?php include 'NewNavBar.php'; ?>
 
-<div class="formulario-responsivo">
-    <div class="fondo-form">
-        <form id="registrarCuenta" action="" method="POST">
-            <input type="hidden" name="accion" value="registrar">
-            <h3 class="titulo-form">Incluir Cuenta Bancaria</h3>
-            
-            <div class="envolver-form">
-                <input type="text" placeholder="Nombre del banco" class="control-form" id="nombre_banco" name="nombre_banco" maxlength="20" required>
-                <span class="span-value" id="snombre_banco"></span>
-            </div>
-            <div class="envolver-form">
-                <input type="text" placeholder="Número de cuenta" class="control-form" id="numero_cuenta" name="numero_cuenta" maxlength="23" required>
-                <span class="span-value" id="snumero_cuenta"></span>
-            </div>
-            <div class="envolver-form">
-                <input type="text" placeholder="RIF" class="control-form" id="rif_cuenta" name="rif_cuenta" maxlength="12" required>
-                <span class="span-value" id="srif_cuenta"></span>
-            </div>
-            <div class="envolver-form">
-                <input type="text" placeholder="Número de teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" maxlength="13" required>
-                <span class="span-value" id="stelefono_cuenta"></span>
-            </div>
-            <div class="envolver-form">
-                <input type="email" placeholder="Correo electrónico" class="control-form" id="correo_cuenta" name="correo_cuenta" maxlength="50" required>
-                <span class="span-value" id="scorreo_cuenta"></span>
-            </div>
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-            <button class="boton-form" type="submit">Registrar</button>
-            <button class="boton-reset" type="reset">Reset</button>
-
-        </form>
+<div class="modal fade modal-registrar" id="registrarCuentaModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="registrarCuenta" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarCuentaModalLabel">Incluir Cuenta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="envolver-form">
+                        <label for="nombre_banco">Nombre del Banco</label>
+                        <input type="text" placeholder="Nombre del banco" class="control-form" id="nombre_banco" name="nombre_banco" maxlength="20" required>
+                        <span class="span-value" id="snombre_banco"></span>
+                    </div>
+                    <div class="envolver-form">
+                        <label for="numero_cuenta">Número de Cuenta</label>
+                        <input type="text" placeholder="Número de cuenta" class="control-form" id="numero_cuenta" name="numero_cuenta" maxlength="23" required>
+                        <span class="span-value" id="snumero_cuenta"></span>
+                    </div>
+                    <div class="envolver-form">
+                        <label for="rif_cuenta">RIF</label>
+                        <input type="text" placeholder="RIF" class="control-form" id="rif_cuenta" name="rif_cuenta" maxlength="12" required>
+                        <span class="span-value" id="srif_cuenta"></span>
+                    </div>
+                    <div class="envolver-form">
+                        <label for="telefono_cuenta">Número de Teléfono</label>
+                        <input type="text" placeholder="Número de teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" maxlength="13" required>
+                        <span class="span-value" id="stelefono_cuenta"></span>
+                    </div>
+                    <div class="envolver-form">
+                        <label for="correo_cuenta">Correo Electrónico</label>
+                        <input type="email" placeholder="Correo electrónico" class="control-form" id="correo_cuenta" name="correo_cuenta" maxlength="50" required>
+                        <span class="span-value" id="scorreo_cuenta"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 <div class="contenedor-tabla">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirCuenta" class="btn-incluir">
+            Incluir Cuenta Bancaria
+        </button>
+    </div>
     <h3>Lista de Cuentas Bancarias</h3>
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
@@ -60,32 +80,29 @@
                 <th>Teléfono</th>
                 <th>Correo</th>
                 <th>Estatus</th>
-
             </tr>
         </thead>
         <tbody>
             <?php foreach ($cuentabancos as $cuenta): ?>
                 <tr data-id="<?php echo $cuenta['id_cuenta']; ?>">
-                                        <td>
-                        <span>
-                            <div class="acciones-boton">
-
-
-                                            <button class="btn btn-primary btn-modificar"
-                                            data-id="<?php echo $cuenta['id_cuenta']; ?>"
-                                            data-nombre="<?php echo htmlspecialchars($cuenta['nombre_banco']); ?>"
-                                            data-numero="<?php echo htmlspecialchars($cuenta['numero_cuenta']); ?>"
-                                            data-rif="<?php echo htmlspecialchars($cuenta['rif_cuenta']); ?>"
-                                            data-telefono="<?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?>"
-                                            data-correo="<?php echo htmlspecialchars($cuenta['correo_cuenta']); ?>"
-                                            >Modificar</button>
-
-                                            <button class="btn btn-danger btn-eliminar"
-                                            data-id="<?php echo $cuenta['id_cuenta']; ?>"
-                                            >Eliminar</button>
-
+                    <td>
+                        <ul>
+                            <div>
+                                <button class="btn-modificar"
+                                data-id="<?php echo $cuenta['id_cuenta']; ?>"
+                                data-nombre="<?php echo htmlspecialchars($cuenta['nombre_banco']); ?>"
+                                data-numero="<?php echo htmlspecialchars($cuenta['numero_cuenta']); ?>"
+                                data-rif="<?php echo htmlspecialchars($cuenta['rif_cuenta']); ?>"
+                                data-telefono="<?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?>"
+                                data-correo="<?php echo htmlspecialchars($cuenta['correo_cuenta']); ?>"
+                                >Modificar</button>
                             </div>
-                        </span>
+                            <div>
+                                <button class="btn-eliminar"
+                                data-id="<?php echo $cuenta['id_cuenta']; ?>"
+                                >Eliminar</button>
+                            </div>
+                        </ul>
                     </td>
                     <td><?php echo htmlspecialchars($cuenta['id_cuenta']); ?></td>
                     <td><?php echo htmlspecialchars($cuenta['nombre_banco']); ?></td>
@@ -101,20 +118,18 @@
                             <?php echo htmlspecialchars($cuenta['estado']); ?>
                         </span>
                     </td>
-
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 </div>
 
-<!-- Modal para modificar cuenta -->
 <div class="modal fade modal-modificar" id="modificarCuentaModal" tabindex="-1" role="dialog" aria-labelledby="modificarCuentaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="modificarCuenta" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificarCuentaModalLabel">Modificar Cuenta Bancaria</h5>
+                    <h5 class="titulo-form" id="modificarCuentaModalLabel">Modificar Cuenta Bancaria</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -174,7 +189,6 @@ $(document).ready(function() {
 </script>
 </body>
 </html>
-
 <?php
 } else {
     header("Location: ?pagina=acceso-denegado");
