@@ -8,66 +8,78 @@
     <?php include 'header.php'; ?>
     <title>Gestionar Proveedores</title>
 </head>
+
 <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
+<?php include 'NewNavBar.php'; ?>
 
-    <?php include 'NewNavBar.php'; ?>
+<div class="modal fade modal-registrar" id="registrarProveedorModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="incluirproveedor" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarProveedorModalLabel">Incluir Proveedor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="grupo-form">
+                        <input type="text" placeholder="Nombre Proveedor" class="control-form" id="nombre_proveedor" name="nombre_proveedor" required>
+                        <span id="snombre_proveedor"></span>
 
+                        <input type="text" placeholder="R.I.F del Proveedor" class="control-form" id="rif_proveedor" name="rif_proveedor" required>
+                        <span id="srif_proveedor"></span>
+                    </div>
 
-<div class="formulario-responsivo">
-    <div class="fondo-form">
-    <form id="incluirproveedor" action="" method="POST" action="">
-        <input type="hidden" name="accion" value="ingresar">
-        <h3 class="titulo-form">INCLUIR PROVEEDOR</h3>
+                    <div class="grupo-form">
+                        <input type="text" placeholder="Nombre Representante" class="control-form" id="nombre_representante" name="nombre_representante" required>
+                        <span id="snombre_representante"></span>
 
-        <div class="grupo-form">
-            <input type="text" placeholder="Nombre Proveedor" class="control-form" id="nombre_proveedor" name="nombre_proveedor" required>
-            <span id="snombre_proveedor"></span>
+                        <input type="text" placeholder="R.I.F del Representante" class="control-form" id="rif_representante" name="rif_representante" required>
+                        <span id="srif_representante"></span>
+                    </div>
 
-            <input type="text" placeholder="R.I.F del Proveedor" class="control-form" id="rif_proveedor" name="rif_proveedor" required>
-            <span id="srif_proveedor"></span>
+                    <div class="envolver-form">
+                        <input type="text" placeholder="Correo" class="control-form" id="correo_proveedor" name="correo_proveedor" required>
+                        <span id="scorreo_proveedor"></span>
+                    </div>
+
+                    <div class="envolver-form">
+                        <input type="text" placeholder="Direccion" class="control-form" id="direccion_proveedor" name="direccion_proveedor" required>
+                        <span id="sdireccion_proveedor"></span>
+                    </div>
+
+                    <div class="grupo-form">
+                        <input type="text" placeholder="Telefono Principal" class="control-form" id="telefono_1" name="telefono_1" required>
+                        <span id="stelefono_1"></span>
+
+                        <input type="text" placeholder="Telefono Secundario" class="control-form" id="telefono_2" name="telefono_2" required>
+                        <span id="stelefono_2"></span>
+                    </div>
+
+                    <div class="envolver-form">
+                        <textarea class="control-form" maxlength="50" id="observacion" name="observacion" rows="3" placeholder="Escriba alguna Observaciones que se deba tener en cuenta..."></textarea>
+                        <span id="sobservacion"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
+            </form>
         </div>
-
-        <div class="grupo-form">
-            <input type="text" placeholder="Nombre Representante" class="control-form" id="nombre_representante" name="nombre_representante" required>
-            <span id="snombre_representante"></span>
-
-            <input type="text" placeholder="R.I.F del Representante" class="control-form" id="rif_representante" name="rif_representante" required>
-            <span id="srif_representante"></span>
-        </div>
-
-        <div class="envolver-form">
-            <input type="text" placeholder="Correo" class="control-form" id="correo_proveedor" name="correo_proveedor" required>
-            <span id="scorreo_proveedor"></span>
-        </div>
-
-        <div class="envolver-form">
-            <input type="text" placeholder="Direccion" class="control-form" id="direccion_proveedor" name="direccion_proveedor" required>
-            <span id="sdireccion_proveedor"></span>
-        </div>
-
-        
-
-        <div class="grupo-form">
-            <input type="text" placeholder="Telefono Principal" class="control-form" id="telefono_1" name="telefono_1" required>
-            <span id="stelefono_1"></span>
-
-            <input type="text" placeholder="Telefono Secundario" class="control-form" id="telefono_2" name="telefono_2" required>
-            <span id="stelefono_2"></span>
-        </div>
-
-        <div class="envolver-form">
-            <textarea class="control-form" maxlength="50" id="observacion" name="observacion" rows="3" placeholder="Escriba alguna Observaciones que se deba tener en cuenta..."></textarea>
-            <span id="sobservacion"></span>
-        </div>
-
-        <button class="boton-form" type="submit">Registrar</button>
-    </form>
     </div>
 </div>
 
-    <!--== LISTADO DE CONSULTA ==-->
 <div class="contenedor-tabla">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirProveedor" class="btn-incluir">
+            Incluir Proveedor
+        </button>
+    </div>
     <h3>LISTA DE PROVEEDORES</h3>
 
     <table class="tablaConsultas" id="tablaConsultas">
@@ -105,16 +117,14 @@
                                             data-target="#modificar_usuario_modal">
                                             Modificar
                                         </button>
-                                   
-                                    <button type=""button" class="btn btn-danger btn-eliminar eliminar" data-id="<?php echo $proveedor['id_proveedor']; ?>">Eliminar</button>
+                                  
+                                    <button type="button" class="btn btn-danger btn-eliminar eliminar" data-id="<?php echo $proveedor['id_proveedor']; ?>">Eliminar</button>
                                     </div>
-
                 </td>
                 <td>
                     <span class="campo-nombres">
                     <?php echo htmlspecialchars($proveedor['nombre']); ?>
                     </span>
-                   
                 </td>
                 <td>
                     <span class="campo-correo">
