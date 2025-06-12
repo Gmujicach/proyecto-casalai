@@ -65,7 +65,6 @@ case 'modificar':
     $usuario = new Usuarios();
     $usuario->setId($id_usuario);
     $usuario->setUsername($_POST['nombre_usuario']);
-    $usuario->setClave($_POST['clave_usuario']);
     $usuario->setNombre($_POST['nombre']);
     $usuario->setApellido($_POST['apellido_usuario']);
     $usuario->setCorreo($_POST['correo_usuario']);
