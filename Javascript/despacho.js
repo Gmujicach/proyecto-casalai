@@ -42,6 +42,15 @@ $('body').removeClass('modal-open');
     });
 });
 
+    $('#btnIncluirDespacho').on('click', function() {
+        $('#f')[0].reset();
+        $('#scorrelativo').text('');
+        $('#registrarDespachoModal').modal('show');
+    });
+
+    $(document).on('click', '#registrarDespachoModal .close', function() {
+        $('#registrarDespachoModal').modal('hide');
+    });
 });
 
 carga_productos();    //boton para levantar modal de productos
