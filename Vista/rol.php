@@ -97,7 +97,7 @@
                     <input type="hidden" id="modificar_id_rol" name="id_rol">
                     <div class="form-group">
                         <label for="modificar_nombre_rol">Nombre del Rol</label>
-                        <input type="text" class="form-control" id="modificar_nombre_rol" name="nombre_rol" maxlength="25" required>
+                        <input type="text" class="form-control" id="modificar_nombre_rol" name="nombre_rol" maxlength="15" required>
                         <span class="span-value-modal" id="smnombre_rol"></span>
                     </div>
                 </div>

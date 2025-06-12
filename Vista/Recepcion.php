@@ -27,7 +27,8 @@
                 <div class="modal-body">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
-                        <input type="text" placeholder="Correlativo del producto" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
+                        <label for="correlativo">Correlativo del producto</label>
+                        <input type="text" placeholder="Correlativo" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
                         <span id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
@@ -73,7 +74,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="boton-form" id="registrar" name="registrar">Registrar Recepción</button>
+                    <button type="button" class="boton-form" id="registrar" name="registrar">Registrar</button>
                     <button class="boton-reset" type="reset">Reset</button>
                 </div>
             </form>

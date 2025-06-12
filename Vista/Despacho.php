@@ -10,99 +10,112 @@
     <title>Gestionar Despacho</title>
 </head>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 <?php include 'NewNavBar.php'; ?>
 
-	<div class="formulario-responsivo">
-    <div class="fondo-form">
-		<section class="container">
-			<form method="post" action="" id="f">
-				<input type="hidden" name="accion" id="accion" style="display:none" />
-				<h3 class="titulo-form">Incluir Despacho</h3>
-					<br>
-						<div class="grupo-form">
-							<input type="text" placeholder="Correlativo del producto" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
-							<span id="scorrelativo"></span>
-						
-							<select class="form-select" name="cliente" id="cliente">
-								<option value='disabled' disabled selected>Seleccione el Cliente</option>
-								<?php
-								foreach ($proveedores  as $proveedor) {
-									echo "<option value='" . $proveedor['id_clientes'] . "'>" . $proveedor['nombre'] . "</option>";
-								} ?>
-							</select>
-						</div>
-			
-						<div class="envolver-form">
-							<input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
-							<input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
-							<button type="button" class="boton-form" id="listado" name="listado">Lista de Productos</button>
-						</div>
-					
-						<div class="row">
-							<div class="col">
-								<hr />
-							</div>
-						</div>
-					
-						<div class="table-responsive card shadow">
-							<table class="tabla" id="tablarecepcion">
-								<thead class="">
-									<tr>
-										<th>Acción</th>
-										<th style="display:none">Cl</th>
-										<th>Codigo</th>
-										<th>Nombre</th>
-										<th>Modelo</th>
-										<th>Marca</th>
-										<th>Serial</th>
-										<th>Cantidad</th>
-									</tr>
-								</thead>
-								<tbody class="" id="recepcion1">
-								</tbody>
-							</table>
-						</div>
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-					<div>
-						<button type="button" class="boton-form" id="registrar" name="registrar">Registrar Recepción</button>
-					</div>
-				</form>
-			
+<div class="modal fade modal-registrar" id="registrarDespachoModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="f" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarDespachoModalLabel">Incluir Despacho</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="envolver-form">
+                        <label for="correlativo">Correlativo del producto</label>
+                        <input type="text" placeholder="Correlativo" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
+                        <span id="scorrelativo"></span>
+                    </div>
+                    <div class="envolver-form">
+                        <select class="form-select" name="cliente" id="cliente">
+                            <option value='disabled' disabled selected>Seleccione el Cliente</option>
+                            <?php
+                            foreach ($proveedores  as $proveedor) {
+                                echo "<option value='" . $proveedor['id_clientes'] . "'>" . $proveedor['nombre'] . "</option>";
+                            } ?>
+                        </select>
+                    </div>
+        
+                    <div class="envolver-form">
+                        <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
+                        <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
+                        <button type="button" class="boton-form" id="listado" name="listado">Lista de Productos</button>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col">
+                            <hr />
+                        </div>
+                    </div>
+                
+                    <div class="table-responsive card shadow">
+                        <table class="tabla" id="tablarecepcion">
+                            <thead class="">
+                                <tr>
+                                    <th>Acción</th>
+                                    <th style="display:none">Cl</th>
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
+                                    <th>Modelo</th>
+                                    <th>Marca</th>
+                                    <th>Serial</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody class="" id="recepcion1">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="boton-form" id="registrar" name="registrar">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
+            </form>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="modalp">
-  <div class="modal-dialog" role="document" style="max-width: none; width: auto;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Listado de productos</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-3">
-        <table class="table table-striped table-hover m-0">
-          <thead class="text-center">
-            <tr>
-              <th style="display:none">Id</th>
-              <th>Código</th>
-              <th>Nombre</th>
-              <th>Modelo</th>
-              <th>Marca</th>
-              <th>Serial</th>
-            </tr>
-          </thead>
-          <tbody class="text-center" id="listadop">
-            <!-- Aquí se insertan los productos -->
-          </tbody>
-        </table>
-      </div>
+            <div class="modal fade" tabindex="-1" role="dialog" id="modalp">
+                <div class="modal-dialog" role="document" style="max-width: none; width: auto;">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Listado de productos</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-3">
+                        <table class="table table-striped table-hover m-0">
+                        <thead class="text-center">
+                            <tr>
+                            <th style="display:none">Id</th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Modelo</th>
+                            <th>Marca</th>
+                            <th>Serial</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center" id="listadop">
+                        </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-		</section>
-	</div>
-	</div>					
+<div class="contenedor-tabla">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirDespacho" class="btn-incluir">
+            Incluir Recepción
+        </button>
+    </div>
 
-	<div class="contenedor-tabla">
 	<h3>Lista de Despachos</h3>
 		<table class="tablaConsultas" id="tablaConsultas">
 <thead>
@@ -112,7 +125,7 @@
     <th>CLIENTE</th>
     <th>PRODUCTO</th>
     <th>CANTIDAD</th>
-    <th>MODIFICACIÓN</th>
+    <th>ACCIÓN</th>
 </tr>
 </thead>
 <tbody>
