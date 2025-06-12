@@ -187,16 +187,18 @@ foreach ($despachos as $despacho):
 
     <?php if (!in_array($key, $rendered)): ?>
         <td rowspan="<?= $rowspans[$key] ?>">
-            <button class="btn-modificar"
-                data-bs-toggle="modal"
-                data-bs-target="#modalModificar"
-                data-iddespacho="<?= htmlspecialchars($despacho['id_despachos']) ?>"
-                data-correlativo="<?= htmlspecialchars($despacho['correlativo']) ?>"
-                data-fecha="<?= htmlspecialchars($despacho['fecha_despacho']) ?>"
-                data-cliente="<?= htmlspecialchars($despacho['id_clientes']) ?>"
-                data-productos='<?= json_encode($productosPorDespacho[$id], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
-                Modificar
-            </button>
+            <ul>
+                <button class="btn-modificar"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalModificar"
+                    data-iddespacho="<?= htmlspecialchars($despacho['id_despachos']) ?>"
+                    data-correlativo="<?= htmlspecialchars($despacho['correlativo']) ?>"
+                    data-fecha="<?= htmlspecialchars($despacho['fecha_despacho']) ?>"
+                    data-cliente="<?= htmlspecialchars($despacho['id_clientes']) ?>"
+                    data-productos='<?= json_encode($productosPorDespacho[$id], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                    Modificar
+                </button>
+            </ul>
         </td>
         <?php $rendered[] = $key; ?>
     <?php endif; ?>
@@ -220,7 +222,7 @@ foreach ($despachos as $despacho):
   <div class="modal-dialog modal-lg"> <!-- modal-lg para más espacio -->
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalModificarLabel">Modificar Recepción</h5>
+        <h5 class="titulo-form" id="modalModificarLabel">Modificar Recepción</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
