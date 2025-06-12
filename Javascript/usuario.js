@@ -94,57 +94,71 @@ $(document).ready(function () {
         );
     });
 
-    function validarEnvioUsuario() {
-        let valido = true;
+function validarEnvioUsuario() {
+    let valido = true;
 
-        let nombre = $("#nombre");
-        nombre.val(space(nombre.val()).trim());
-        if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, nombre, $("#snombre"), "*Solo letras, de 2 a 30 caracteres*") == 0) {
-            valido = false;
-        }
-
-        let apellido_usuario = $("#apellido");
-        apellido_usuario.val(space(apellido_usuario.val()).trim());
-        if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, apellido_usuario, $("#sapellido"), "*Solo letras, de 2 a 30 caracteres*") == 0) {
-            valido = false;
-        }
-
-        let nombre_usuario = $("#nombre_usuario");
-        nombre_usuario.val(space(nombre_usuario.val()).trim());
-        if (validarKeyUp(/^[a-zA-Z0-9_]{4,20}$/, nombre_usuario, $("#snombre_usuario"), "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*") == 0) {
-            valido = false;
-        }
-
-        let telefono_usuario = $("#telefono_usuario");
-        if (validarKeyUp(/^\d{4}-\d{3}-\d{4}$/, telefono_usuario, $("#stelefono_usuario"), "*Formato válido: 04XX-XXX-XXXX*") == 0) {
-            valido = false;
-        }
-
-        let correo_usuario = $("#correo_usuario");
-        if (validarKeyUp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, correo_usuario, $("#scorreo_usuario"), "*Formato válido: example@gmail.com*") == 0) {
-            valido = false;
-        }
-
-        let clave_usuario = $("#clave_usuario");
-        if (validarKeyUp(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/, clave_usuario, $("#sclave_usuario"), "*Solo letras y números, de 6 a 15 caracteres*") == 0) {
-            valido = false;
-        }
-
-        let clave_confirmar = $("#clave_confirmar");
-        if (validarKeyUp(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/, clave_confirmar, $("#sclave_confirmar"), "*Solo letras y números, de 6 a 15 caracteres*") == 0) {
-            valido = false;
-        }
-
-        if (clave_usuario.val() !== clave_confirmar.val()) {
-            $("#sclave_confirmar").text("*Las contraseñas no coinciden*");
-            valido = false;
-        }
-
-        if (!valido) {
-            mensajes('error', 4000, 'Verifique los campos', 'Corrija los errores antes de continuar');
-        }
-        return valido;
+    let nombre = $("#nombre");
+    nombre.val(space(nombre.val()).trim());
+    if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, nombre, $("#snombre"), "*Solo letras, de 2 a 30 caracteres*") == 0) {
+        valido = false;
     }
+
+    let apellido_usuario = $("#apellido");
+    apellido_usuario.val(space(apellido_usuario.val()).trim());
+    if (validarKeyUp(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/, apellido_usuario, $("#sapellido"), "*Solo letras, de 2 a 30 caracteres*") == 0) {
+        valido = false;
+    }
+
+    let nombre_usuario = $("#nombre_usuario");
+    nombre_usuario.val(space(nombre_usuario.val()).trim());
+    if (validarKeyUp(/^[a-zA-Z0-9_]{4,20}$/, nombre_usuario, $("#snombre_usuario"), "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*") == 0) {
+        valido = false;
+    }
+
+    let telefono_usuario = $("#telefono_usuario");
+    if (validarKeyUp(/^\d{4}-\d{3}-\d{4}$/, telefono_usuario, $("#stelefono_usuario"), "*Formato válido: 04XX-XXX-XXXX*") == 0) {
+        valido = false;
+    }
+
+    let correo_usuario = $("#correo_usuario");
+    if (validarKeyUp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, correo_usuario, $("#scorreo_usuario"), "*Formato válido: example@gmail.com*") == 0) {
+        valido = false;
+    }
+
+    let clave_usuario = $("#clave_usuario");
+    if (validarKeyUp(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/, clave_usuario, $("#sclave_usuario"), "*Solo letras y números, de 6 a 15 caracteres*") == 0) {
+        valido = false;
+    }
+
+    let clave_confirmar = $("#clave_confirmar");
+    if (validarKeyUp(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/, clave_confirmar, $("#sclave_confirmar"), "*Solo letras y números, de 6 a 15 caracteres*") == 0) {
+        valido = false;
+    }
+
+    if (clave_usuario.val() !== clave_confirmar.val()) {
+        $("#sclave_confirmar").text("*Las contraseñas no coinciden*");
+        valido = false;
+    }
+
+    // VALIDACIÓN DEL TIPO DE USUARIO
+let rango = $("#rango");
+if (!rango.val()) {
+    rango.addClass('is-invalid');
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Debe seleccionar el ROL de usuario a crear'
+    });
+    return false; // Detener aquí para que no muestre el mensaje general
+} else {
+    rango.removeClass('is-invalid');
+}
+
+    if (!valido) {
+        mensajes('error', 4000, 'Verifique los campos', 'Corrija los errores antes de continuar');
+    }
+    return valido;
+}
 
     function agregarFilaUsuario(usuario) {
         const nuevaFila = `
