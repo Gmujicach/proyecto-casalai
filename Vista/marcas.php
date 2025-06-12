@@ -89,7 +89,7 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
         <div class="modal-content">
             <form id="modificarMarca" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificarMarcaModalLabel">Modificar Marca</h5>
+                    <h5 class="titulo-form" id="modificarMarcaModalLabel">Modificar Marca</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
