@@ -11,17 +11,17 @@ class Categoria extends BD {
         $this->conex = $conexion->getConexion();
     }
 
-    public function getIdRol() { 
+    public function getIdCategoria() { 
         return $this->id_rol; 
     }
-    public function setIdRol($id_rol) { 
+    public function setIdCategoria($id_rol) { 
         $this->id = $id_rol; 
     }
 
-    public function getNombreRol() { 
+    public function getNombreCategoria() { 
         return $this->nombre_rol; 
     }
-    public function setNombreRol($nombre_rol) { 
+    public function setNombreCategoria($nombre_rol) { 
         $this->nombre_rol = $nombre_rol; 
     } 
 

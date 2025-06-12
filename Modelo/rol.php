@@ -11,12 +11,11 @@ class Rol extends BD {
         $this->conex = $conexion->getConexion();
     }
 
-    // Getters y Setters
     public function getIdRol() { 
         return $this->id_rol; 
     }
     public function setIdRol($id_rol) { 
-        $this->id = $id_rol; 
+        $this->id_rol = $id_rol; 
     }
 
     public function getNombreRol() { 
