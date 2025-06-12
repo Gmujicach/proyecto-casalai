@@ -181,7 +181,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <form id="modificarusuario" method="POST">
-                        <div class="modal-header">
+                        <div class="modal-header titulo-form">
                             <h5 class="modal-title" id="modificar_usuario_modal_label">Modificar Usuario</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -221,14 +221,9 @@
                                 <span class="span-value-modal" id="smodificarcorreo_usuario"></span>
                             </div>
                             <div class="form-group">
-                                <label for="modificarclave_usuario">Contraseña del Usuario</label>
-                                <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario"
-                                    maxlength="15" required>
-                                <span class="span-value-modal" id="smodificarclave_usuario"></span>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="rango">Categorias</label>
-                                <select class="custom-select" id="rango" name="rango">
+                                <label for="rango">Rol de Usuario</label>
+                                <select class="form-select form-select-lg mb-3" id="rango" name="rango">
+                                    <option value="" hidden>Seleccione el tipo de usuarioa a crear</option>
                                     <option value="usuario">Usuario</option>
                                     <option value="Administrador">Administrador</option>
                                     <option value="Almacenista">Almacenista</option>

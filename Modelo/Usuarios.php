@@ -180,7 +180,6 @@ public function modificarUsuario($id_usuario) {
 
     $sql = "UPDATE tbl_usuarios SET 
                 username = :username, 
-                " . (!empty($this->clave) ? "`password` = :clave, " : "") . "
                 rango = :rango,
                 nombres = :nombre,
                 apellidos = :apellido,
