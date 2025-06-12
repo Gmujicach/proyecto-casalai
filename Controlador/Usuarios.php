@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario->setApellido($_POST['apellido_usuario']);
             $usuario->setCorreo($_POST['correo_usuario']);
             $usuario->setTelefono($_POST['telefono_usuario']);
+            $usuario->setRango($_POST['rango']);
 
             if ($usuario->existeUsuario($_POST['nombre_usuario'])) {
                 echo json_encode([

@@ -61,11 +61,10 @@
                                 <label for="rango">Rol de Usuario</label>
                                 <select class="form-select form-select-lg mb-3" id="rango" name="rango">
                                     <option value="" hidden>Seleccione el tipo de usuarioa a crear</option>
-                                    <option value="usuario">Usuario</option>
-                                    <option value="Administrador">Administrador</option>
-                                    <option value="Almacenista">Almacenista</option>
-                                    <option value="Cliente">Cliente</option>
-                                    <option value="Desarrollador">Desarrollador</option>
+                                    <option value="1">Administrador</option>
+                                    <option value="2">Almacenista</option>
+                                    <option value="3">Cliente</option>
+                                    <option value="4">Desarrollador</option>
                                 </select>
                             </div>
 
@@ -127,7 +126,7 @@
                                             data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
                                             data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
                                             data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
-                                            data-rango="<?php echo htmlspecialchars($usuario['rango']); ?>">
+                                            data-rango="<?php echo htmlspecialchars($usuario['id_rol']); ?>">
                                             Modificar
                                         </button>
                                     </div>
@@ -160,7 +159,7 @@
                             </td>
                             <td>
                                 <span class="campo-rango">
-                                    <?php echo htmlspecialchars($usuario['rango']); ?>
+                                    <?php echo htmlspecialchars($usuario['nombre_rol']); ?>
                                 </span>
                             </td>
                             <td>
@@ -222,13 +221,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="rango">Rol de Usuario</label>
-                                <select class="form-select form-select-lg mb-3" id="rango" name="rango">
-                                    <option value="" hidden>Seleccione el tipo de usuarioa a crear</option>
-                                    <option value="usuario">Usuario</option>
-                                    <option value="Administrador">Administrador</option>
-                                    <option value="Almacenista">Almacenista</option>
-                                    <option value="Cliente">Cliente</option>
-                                    <option value="Desarrollador">Desarrollador</option>
+                                <select class="form-select form-select-lg mb-3" id="modificar_rango" name="rango">
+                                    <option value="" hidden>Seleccione el tipo de usuario a crear</option>
+                                    <option value="1">Administrador</option>
+                                    <option value="2">Almacenista</option>
+                                    <option value="3">Cliente</option>
+                                    <option value="4">Desarrollador</option>
                                 </select>
                             </div>
                         </div>
