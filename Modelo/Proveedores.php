@@ -22,7 +22,6 @@ class Proveedores extends BD {
         $this->conex = $conexion->getConexion();
     }
 
-    // Getters y Setters
     public function getNombre() {
         return $this->nombre;
     }
