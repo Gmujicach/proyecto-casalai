@@ -282,7 +282,7 @@ foreach ($caracteristicas as $clave => $valor) {
 
                     <!-- AQUÍ cambia: mostramos el nombre de la categoría -->
                     <td>
-                        <?php echo htmlspecialchars($producto['nombre_caracteristicas']); ?>
+                        <?php echo htmlspecialchars($producto['nombre_categoria']); ?>
                     </td>
 
                     <td>
