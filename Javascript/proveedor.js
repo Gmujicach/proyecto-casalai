@@ -1,4 +1,14 @@
 $(document).ready(function () {
+    // Formato automático para teléfono ####-###-####
+    $("#telefono").on("input", function() {
+        let valor = $(this).val().replace(/\D/g, '');
+        if(valor.length > 4 && valor.length <= 7)
+            valor = valor.slice(0,4) + '-' + valor.slice(4);
+        else if(valor.length > 7)
+            valor = valor.slice(0,4) + '-' + valor.slice(4,7) + '-' + valor.slice(7,11);
+        $(this).val(valor);
+    });
+    
     $(document).on('click', '.modificar', function() {
     var boton = $(this);
 
