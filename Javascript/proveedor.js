@@ -407,8 +407,12 @@ $(document).ready(function () {
         });
     }
 
-
-    
+    $(document).on('click', '.btn-modificar', function () {
+        $('#modificar_id_rol').val($(this).data('id'));
+        $('#modificar_nombre_rol').val($(this).data('nombre'));
+        $('#smnombre_rol').text('');
+        $('#modificarRolModal').modal('show');
+    });
 
 
 
