@@ -210,13 +210,13 @@ $(document).ready(function () {
     });
 
     $("#modificar_nombre_banco").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("modificar_nombre_banco");
         nombre.value = Espacios(nombre.value);
     });
     $("#modificar_nombre_banco").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/,
             $(this),
             $("#smnombre_banco"),
             "*El formato solo permite letras y mínimo 3 caracteres*"
@@ -442,7 +442,7 @@ $(document).ready(function () {
         nombre.value = space(nombre.value).trim();
 
         if(validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/,
             $("#nombre_banco"),
             $("#snombre_banco"),
             "*El nombre debe tener solo letras*"
@@ -456,11 +456,11 @@ $(document).ready(function () {
             $("#snumero_cuenta"),
             "*Formato correcto: 01XX-XXXX-XX-XXXXXXXXXX*"
         )==0){
-            mensajes('error',4000,'Verifique el número de cuenta','Debe tener 20 dígitos separados por "-"');
+            mensajes('error',4000,'Verifique el número de cuenta','Debe tener 20 dígitos');
             return false;
         }
         else if(validarKeyUp(
-            /^[VEJPG]-\d{8}-\d$/,
+            /^[VEJPG]-\d{8}-\d{1}$/,
             $("#rif_cuenta"),
             $("#srif_cuenta"),
             "*Formato correcto: J-12345678-9*"
@@ -474,7 +474,7 @@ $(document).ready(function () {
             $("#stelefono_cuenta"),
             "*Formato correcto: 04XX-XXX-XXXX*"
         )==0){
-            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos separados por "-"');
+            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
             return false;
         }
         else if(validarKeyUp(
@@ -491,7 +491,7 @@ $(document).ready(function () {
 
     function validarCuenta(datos) {
         let errores = [];
-        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/.test(datos.nombre_banco)) {
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/.test(datos.nombre_banco)) {
             errores.push("El nombre debe tener solo letras.");
         }
         if (!/^\d{4}-\d{4}-\d{2}-\d{10}$/.test(datos.numero_cuenta)) {

@@ -182,6 +182,146 @@ $(document).ready(function () {
         );
     });
 
+    function validarEnvioProveedor(){
+        let nombre_p = document.getElementById("nombre_proveedor");
+        nombre_p.value = space(nombre_p.value).trim();
+
+        let nombre_r = document.getElementById("nombre_representante");
+        nombre_r.value = space(nombre_r.value).trim();
+
+        let direccion = document.getElementById("direccion_proveedor");
+        direccion.value = space(direccion.value).trim();
+
+        let observacion = document.getElementById("observacion");
+        observacion.value = space(observacion.value).trim();
+
+        if(validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/,
+            $("#nombre_proveedor"),
+            $("#snombre_proveedor"),
+            "*El nombre debe tener solo letras*"
+        )==0){
+            mensajes('error',4000,'Verifique el nombre del proveedor','Debe tener solo letras');
+            return false;
+        }
+
+        else if(validarKeyUp(
+            /^[VEJPG]-\d{8}-\d{1}$/,
+            $("#rif_proveedor"),
+            $("#srif_proveedor"),
+            "*Formato correcto: J-12345678-9*"
+        )==0){
+            mensajes('error',4000,'Verifique el RIF','Formato incorrecto');
+            return false;
+        }
+
+        else if(validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/,
+            $("#nombre_representante"),
+            $("#snombre_representante"),
+            "*El nombre debe tener solo letras*"
+        )==0){
+            mensajes('error',4000,'Verifique el nombre del representante','Debe tener solo letras');
+            return false;
+        }
+
+        else if(validarKeyUp(
+            /^[VEJPG]-\d{8}-\d{1}$/,
+            $("#rif_representante"),
+            $("#srif_representante"),
+            "*Formato correcto: J-12345678-9*"
+        )==0){
+            mensajes('error',4000,'Verifique el RIF','Formato incorrecto');
+            return false;
+        }
+
+        else if(validarKeyUp(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $("#correo_proveedor"),
+            $("#scorreo_proveedor"),
+            "*Formato correcto: example@gmail.com*"
+        )==0){
+            mensajes('error',4000,'Verifique el correo','Correo no válido');
+            return false;
+        }
+
+        else if(validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $("#direccion_proveedor"),
+            $("#sdireccion_proveedor"),
+            "*Puede haber letras y números*"
+        )==0){
+            mensajes('error',4000,'Verifique la dirección','Debe tener solo letras y números');
+            return false;
+        }
+
+        else if(validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $("#telefono_1"),
+            $("#stelefono_1"),
+            "*Formato correcto: 04XX-XXX-XXXX*"
+        )==0){
+            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
+            return false;
+        }
+
+        else if(validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $("#telefono_2"),
+            $("#stelefono_2"),
+            "*Formato correcto: 04XX-XXX-XXXX*"
+        )==0){
+            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
+            return false;
+        }
+        return true;
+    }
+
+    function agregarFilaProveedor(proveedor) {
+    const nuevaFila = `
+        <tr data-id="${proveedor.id_proveedor}">
+            <td>
+                <ul>
+                    <div>
+                        <button class="btn-modificar"
+                            data-id="${proveedor.id_proveedor}"
+                            data-nombre="${proveedor.nombre}"
+                            data-rif-proveedor="${proveedor.rif_proveedor}"
+                            data-persona-contacto="${proveedor.persona_contacto}"
+                            data-rif-representante="${proveedor.rif_representante}"
+                            data-correo="${proveedor.correo}"
+                            data-direccion="${proveedor.direccion}"
+                            data-telefono="${proveedor.telefono_proveedor}"
+                            data-telefono-secundario="${proveedor.telefono_secundario}"
+                            data-observaciones="${proveedor.observaciones}">
+                            Modificar
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn-eliminar"
+                            data-id="${proveedor.id_proveedor}">
+                            Eliminar
+                        </button>
+                    </div>
+                </ul>
+            </td>
+            <td><span class="campo-nombres">${proveedor.nombre}</span></td>
+            <td><span class="campo-correo">${proveedor.correo}</span></td>
+            <td><span class="campo-telefono">${proveedor.rif_proveedor}</span></td>
+            <td><span class="campo-nombres">${proveedor.telefono}</span></td>
+            <td class="campo-estado">
+            <span 
+                class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
+                data-id="${proveedor.id_proveedor}" 
+                style="cursor: pointer;">
+                ${proveedor.estado}
+            </span>
+            </td>
+        </tr>
+    `;
+        $('#tablaConsultas tbody').append(nuevaFila);
+    }
+
 ///////
     
     $(document).on('click', '.modificar', function() {

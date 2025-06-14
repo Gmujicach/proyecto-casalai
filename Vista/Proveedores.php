@@ -85,7 +85,6 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                
                 <th>Acciones</th>
                 <th>Nombre</th>
                 <th>Correo</th>
@@ -104,13 +103,13 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                             <button class="btn-modificar" 
                                 data-id="<?php echo $proveedor['id_proveedor']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($proveedor['nombre']); ?>"
+                                data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
                                 data-persona-contacto="<?php echo htmlspecialchars($proveedor['presona_contacto']); ?>"
+                                data-rif-representante="<?php echo htmlspecialchars($proveedor['rif_representante']); ?>"
+                                data-correo="<?php echo htmlspecialchars($proveedor['correo']); ?>"
                                 data-direccion="<?php echo htmlspecialchars($proveedor['direccion']); ?>"
                                 data-telefono="<?php echo htmlspecialchars($proveedor['telefono']); ?>"
-                                data-correo="<?php echo htmlspecialchars($proveedor['correo']); ?>"
                                 data-telefono-secundario="<?php echo htmlspecialchars($proveedor['telefono_secundario']); ?>"
-                                data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
-                                data-rif-representante="<?php echo htmlspecialchars($proveedor['rif_representante']); ?>"
                                 data-observaciones="<?php echo htmlspecialchars($proveedor['observaciones']); ?>"
                                 >Modificar
                             </button>
@@ -145,7 +144,6 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     <span 
                       class="campo-estatus <?php echo ($proveedor['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
                       data-id="<?php echo $proveedor['id_proveedor']; ?>"
-                      onclick="cambiarEstatus(<?php echo $proveedor['id_proveedor']; ?>, '<?php echo $proveedor['estado']; ?>')"
                       style="cursor: pointer;">
                       <?php echo htmlspecialchars($proveedor['estado']); ?>
                     </span>

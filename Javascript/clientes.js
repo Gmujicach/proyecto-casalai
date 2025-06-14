@@ -108,7 +108,7 @@ $(document).ready(function () {
             mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos separados por "-"');
             return false;
         }
-        if(validarKeyUp(
+        else if(validarKeyUp(
             /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
             $("#direccion"),
             $("#sdireccion"),
