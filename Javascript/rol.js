@@ -5,13 +5,13 @@ $(document).ready(function () {
     }
 
     $("#nombre_rol").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("nombre_rol");
         nombre.value = space(nombre.value);
     });
     $("#nombre_rol").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,25}$/,
             $(this),
             $("#snombre_rol"),
             "*El formato solo permite letras*"

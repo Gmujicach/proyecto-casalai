@@ -4,13 +4,13 @@ $(document).ready(function () {
   }
 
   $("#nombre").on("keypress", function (e) {
-    validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]*$/, e);
+    validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
     let nombre = document.getElementById("nombre");
     nombre.value = space(nombre.value);
   });
   $("#nombre").on("keyup", function () {
     validarKeyUp(
-      /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/,
+      /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,30}$/,
       $(this),
       $("#snombre"),
       "*Solo letras, de 2 a 30 caracteres*"

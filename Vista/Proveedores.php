@@ -61,7 +61,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     </div>
 
                     <div class="envolver-form">
-                        <textarea class="control-form" maxlength="50" id="observacion" name="observacion" rows="3" placeholder="Escriba alguna Observaciones que se deba tener en cuenta..."></textarea>
+                        <textarea class="control-form" maxlength="50" id="observacion" name="observacion" rows="3" placeholder="Escriba alguna observación que se deba tener en cuenta"></textarea>
                         <span id="sobservacion"></span>
                     </div>
                 </div>
@@ -95,31 +95,31 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
             </tr>
         </thead>
 
-
         <tbody>
         <?php foreach ($proveedores as $proveedor): ?>
             <tr data-id="<?php echo $proveedor['id_proveedor']; ?>">
-                                <td>
-                        <div class="acciones-boton">
-
-                                        <button type="button" class="btn btn-primary btn-modificar modificar" 
-                                            data-id="<?php echo $proveedor['id_proveedor']; ?>"
-                                            data-nombre="<?php echo htmlspecialchars($proveedor['nombre']); ?>"
-                                            data-persona-contacto="<?php echo htmlspecialchars($proveedor['presona_contacto']); ?>"
-                                            data-direccion="<?php echo htmlspecialchars($proveedor['direccion']); ?>"
-                                            data-telefono="<?php echo htmlspecialchars($proveedor['telefono']); ?>"
-                                            data-correo="<?php echo htmlspecialchars($proveedor['correo']); ?>"
-                                            data-telefono-secundario="<?php echo htmlspecialchars($proveedor['telefono_secundario']); ?>"
-                                            data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
-                                            data-rif-representante="<?php echo htmlspecialchars($proveedor['rif_representante']); ?>"
-                                            data-observaciones="<?php echo htmlspecialchars($proveedor['observaciones']); ?>"
-                                            data-toggle="modal" 
-                                            data-target="#modificar_usuario_modal">
-                                            Modificar
-                                        </button>
-                                  
-                                    <button type="button" class="btn btn-danger btn-eliminar eliminar" data-id="<?php echo $proveedor['id_proveedor']; ?>">Eliminar</button>
-                                    </div>
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar" 
+                                data-id="<?php echo $proveedor['id_proveedor']; ?>"
+                                data-nombre="<?php echo htmlspecialchars($proveedor['nombre']); ?>"
+                                data-persona-contacto="<?php echo htmlspecialchars($proveedor['presona_contacto']); ?>"
+                                data-direccion="<?php echo htmlspecialchars($proveedor['direccion']); ?>"
+                                data-telefono="<?php echo htmlspecialchars($proveedor['telefono']); ?>"
+                                data-correo="<?php echo htmlspecialchars($proveedor['correo']); ?>"
+                                data-telefono-secundario="<?php echo htmlspecialchars($proveedor['telefono_secundario']); ?>"
+                                data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
+                                data-rif-representante="<?php echo htmlspecialchars($proveedor['rif_representante']); ?>"
+                                data-observaciones="<?php echo htmlspecialchars($proveedor['observaciones']); ?>"
+                                >Modificar
+                            </button>
+                        </div>
+                        <div>
+                              <button class="btn-eliminar" 
+                              data-id="<?php echo $proveedor['id_proveedor']; ?>">Eliminar</button>
+                        </div>
+                    </ul>
                 </td>
                 <td>
                     <span class="campo-nombres">
@@ -142,16 +142,14 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     </span>
                 </td>
                 <td class="campo-estado">
-                      <span 
-  class="campo-estatus <?php echo ($proveedor['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
-  data-id="<?php echo $proveedor['id_proveedor']; ?>"
-  onclick="cambiarEstatus(<?php echo $proveedor['id_proveedor']; ?>, '<?php echo $proveedor['estado']; ?>')"
-  style="cursor: pointer;">
-  <?php echo htmlspecialchars($proveedor['estado']); ?>
-</span>
+                    <span 
+                      class="campo-estatus <?php echo ($proveedor['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+                      data-id="<?php echo $proveedor['id_proveedor']; ?>"
+                      onclick="cambiarEstatus(<?php echo $proveedor['id_proveedor']; ?>, '<?php echo $proveedor['estado']; ?>')"
+                      style="cursor: pointer;">
+                      <?php echo htmlspecialchars($proveedor['estado']); ?>
+                    </span>
                 </td>
-                
-
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -180,25 +178,23 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     <td><?php echo htmlspecialchars($producto['stock']); ?></td>
                     <td><?php echo htmlspecialchars($producto['stock_minimo']); ?></td>            
                     <td>
-                        <span>
-                            <div class="acciones-boton">
-                               
-                                            <button 
-                                                type="button" 
-                                                class="btn btn-primary modificar" 
-                                                id="modificarProductoBtn"
-                                                data-toggle="modal" 
-                                                data-target="#modificarProductoModal" 
-                                                data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
-                                                data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
-                                                data-modelo="<?php echo htmlspecialchars($producto['nombre_modelo']); ?>"
-                                                data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
-                                                data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
-                                            >
-                                                Realizar Pedido
-                                            </button>
+                        <ul>
+                            <div>
+                                <button 
+                                    type="button" 
+                                    class="btn-modificar" 
+                                    id="modificarProductoBtn"
+                                    data-toggle="modal" 
+                                    data-target="#modificarProductoModal" 
+                                    data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
+                                    data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
+                                    data-modelo="<?php echo htmlspecialchars($producto['nombre_modelo']); ?>"
+                                    data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
+                                    data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
+                                >Realizar Pedido
+                                </button>
                             </div>
-                        </span>
+                        </ul>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -206,24 +202,21 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
     </table>
 </div>
 
-<!-- Modal de modificación -->
 <div class="modal fade" id="modificarProductoModal" tabindex="-1" role="dialog" aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
         <div class="modal-header">
-          <h5 class="modal-title" id="modificarProductoModalLabel">Realizar Pedido</h5>
+          <h5 class="titulo-form" id="modificarProductoModalLabel">Realizar Pedido</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
 
         <div class="modal-body">
-          <!-- Acciones ocultas -->
           <input type="hidden" name="accion" value="realizar_pedido">
           <input type="hidden" id="modificarIdProducto" name="id_producto">
 
-          <!-- Campos -->
           <div class="form-group">
             <label for="modificarNombreProducto">Nombre del producto</label>
             <input type="text" maxlength="50" class="form-control" id="modificarNombreProducto" name="nombre_producto" readonly>
@@ -333,7 +326,6 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
 
   <?php include 'footer.php'; ?>
   <script src="Javascript/proveedor.js"></script>
-  <script src="Javascript/validaciones.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     // Escuchar el clic en cualquier botón con clase "modificar"
