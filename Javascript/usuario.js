@@ -213,7 +213,7 @@ $(document).ready(function () {
     return valido;
   }
 
-  function agregarFilaUsuario(usuario) {
+function agregarFilaUsuario(usuario) {
     const tabla = $("#tablaConsultas").DataTable();
     const nuevaFila = [
       `<ul>
@@ -226,7 +226,7 @@ $(document).ready(function () {
                     data-correo="${usuario.correo}"
                     data-telefono="${usuario.telefono}"
                     data-clave=""
-                    data-rango="${usuario.rango}">
+                    data-rango="${usuario.id_rol}">
                     Modificar
                 </button>
             </div>
@@ -241,14 +241,14 @@ $(document).ready(function () {
       `<span class="campo-correo">${usuario.correo}</span>`,
       `<span class="campo-usuario">${usuario.username}</span>`,
       `<span class="campo-telefono">${usuario.telefono}</span>`,
-      `<span class="campo-rango">${usuario.rango}</span>`,
+      `<span class="campo-rango">${usuario.nombre_rol}</span>`, // <--- Aquí
       `<span class="campo-estatus habilitado" data-id="${usuario.id_usuario}" style="cursor: pointer;">
             habilitado
         </span>`,
     ];
     const rowNode = tabla.row.add(nuevaFila).draw(false).node();
     $(rowNode).attr("data-id", usuario.id_usuario);
-  }
+}
 
   function resetUsuario() {
     $("#nombre").val("");
@@ -462,65 +462,56 @@ $(document).ready(function () {
         text: "El usuario se ha modificado correctamente",
       });
 
-      const tabla = $("#tablaConsultas").DataTable();
-      const id = $("#modificar_id_usuario").val();
-      const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
-      const nombres = $("#modificarnombre").val();
-      const apellidos = $("#modificarapellido_usuario").val();
-      const username = $("#modificarnombre_usuario").val();
-      const correo = $("#modificarcorreo_usuario").val();
-      const telefono = $("#modificartelefono_usuario").val();
-      const rango = $("#modificar_rango").val(); // Usa el nuevo id
-      const estatus = fila.node()
-        ? $(fila.node()).find(".campo-estatus").text().trim()
-        : "habilitado";
+const tabla = $("#tablaConsultas").DataTable();
+const id = $("#modificar_id_usuario").val();
+const fila = tabla.row(`tr[data-id="${id}"]`);
+const usuario = response.usuario;
 
-      fila
-        .data([
-          `<ul>
-      <div>
-          <button class="btn-modificar"
-              data-id="${id}"
-              data-username="${username}"
-              data-nombres="${nombres}"
-              data-apellidos="${apellidos}"
-              data-correo="${correo}"
-              data-telefono="${telefono}"
-              data-clave=""
-              data-rango="${rango}">
-              Modificar
-          </button>
-      </div>
-      <div>
-          <button class="btn-eliminar"
-              data-id="${id}">
-              Eliminar
-          </button>
-      </div>
-  </ul>`,
-          `<span class="campo-nombres">${nombres} ${apellidos}</span>`,
-          `<span class="campo-correo">${correo}</span>`,
-          `<span class="campo-usuario">${username}</span>`,
-          `<span class="campo-telefono">${telefono}</span>`,
-          `<span class="campo-rango">${rango}</span>`,
-          `<span class="campo-estatus ${
-            estatus === "habilitado" ? "habilitado" : "inhabilitado"
-          }"
-      data-id="${id}" style="cursor: pointer;">
-      ${estatus}
-  </span>`,
-        ])
-        .draw(false);
+if (fila.length) {
+  fila.data([
+    `<ul>
+        <div>
+            <button class="btn-modificar"
+                data-id="${usuario.id_usuario}"
+                data-username="${usuario.username}"
+                data-nombres="${usuario.nombres}"
+                data-apellidos="${usuario.apellidos}"
+                data-correo="${usuario.correo}"
+                data-telefono="${usuario.telefono}"
+                data-clave=""
+                data-rango="${usuario.id_rol}">
+                Modificar
+            </button>
+        </div>
+        <div>
+            <button class="btn-eliminar"
+                data-id="${usuario.id_usuario}">
+                Eliminar
+            </button>
+        </div>
+    </ul>`,
+    `<span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>`,
+    `<span class="campo-correo">${usuario.correo}</span>`,
+    `<span class="campo-usuario">${usuario.username}</span>`,
+    `<span class="campo-telefono">${usuario.telefono}</span>`,
+    `<span class="campo-rango">${usuario.nombre_rol}</span>`,
+    `<span class="campo-estatus ${
+      usuario.estatus === "habilitado" ? "habilitado" : "inhabilitado"
+    }" data-id="${usuario.id_usuario}" style="cursor: pointer;">
+        ${usuario.estatus}
+    </span>`,
+  ]).draw(false);
 
-      // Actualiza los data-* del botón Modificar
-      const filaNode = fila.node();
-      const botonModificar = $(filaNode).find(".btn-modificar");
-      botonModificar.data("username", username);
-      botonModificar.data("nombres", nombres);
-      botonModificar.data("apellidos", apellidos);
-      botonModificar.data("correo", correo);
-      botonModificar.data("telefono", telefono);
-      botonModificar.data("rango", rango);
+  // Actualiza los data-* del botón Modificar
+  const filaNode = fila.node();
+  const botonModificar = $(filaNode).find(".btn-modificar");
+  botonModificar.data("username", usuario.username);
+  botonModificar.data("nombres", usuario.nombres);
+  botonModificar.data("apellidos", usuario.apellidos);
+  botonModificar.data("correo", usuario.correo);
+  botonModificar.data("telefono", usuario.telefono);
+  botonModificar.data("rango", usuario.id_rol);
+}
     } else {
       Swal.fire({
         icon: "error",

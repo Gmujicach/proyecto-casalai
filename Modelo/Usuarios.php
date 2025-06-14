@@ -166,13 +166,16 @@ public function ingresarUsuario() {
     }
 
     // Obtener Producto por ID
-    public function obtenerUsuarioPorId($id_usuario) {
-        $query = "SELECT * FROM tbl_usuarios WHERE id_usuario = ?";
-        $stmt = $this->conex->prepare($query);
-        $stmt->execute([$id_usuario]);
-        $usuarios = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $usuarios;
-    }
+public function obtenerUsuarioPorId($id_usuario) {
+    $query = "SELECT usuarios.*, rol.nombre_rol 
+              FROM tbl_usuarios AS usuarios
+              INNER JOIN tbl_rol AS rol ON usuarios.id_rol = rol.id_rol
+              WHERE usuarios.id_usuario = ?";
+    $stmt = $this->conex->prepare($query);
+    $stmt->execute([$id_usuario]);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $usuario;
+}
 
     // Modificar Producto
 public function modificarUsuario($id_usuario) {
