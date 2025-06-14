@@ -130,13 +130,13 @@ $(document).ready(function () {
     });
 
     $("#modificar_nombre_rol").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("modificar_nombre_rol");
         nombre.value = space(nombre.value);
     });
     $("#modificar_nombre_rol").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,25}$/,
             $(this),
             $("#smnombre_rol"),
             "*El formato solo permite letras*"
@@ -145,7 +145,7 @@ $(document).ready(function () {
 
     function validarRol(datos) {
         let errores = [];
-        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/.test(datos.nombre_rol)) {
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,25}$/.test(datos.nombre_rol)) {
             errores.push("El nombre debe tener solo letras.");
         }
         return errores;

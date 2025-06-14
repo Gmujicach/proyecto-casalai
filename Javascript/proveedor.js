@@ -322,6 +322,135 @@ $(document).ready(function () {
         $('#tablaConsultas tbody').append(nuevaFila);
     }
 
+    function resetProveedor() {
+        $("#nombre").val('');
+        $("#rif_proveedor").val('');
+        $("#presona_contacto").val('');
+        $("#rif_representante").val('');
+        $("#correo").val('');
+        $("#direccion").val('');
+        $("#telefono").val('');
+        $("#telefono_secundario").val('');
+        $("#observaciones").val('');
+        $("#snombre").text('');
+        $("#srif_proveedor").text('');
+        $("#spresona_contacto").text('');
+        $("#srif_representante").text('');
+        $("#scorreo").text('');
+        $("#sdireccion").text('');
+        $("#stelefono").text('');
+        $("#stelefono_secundario").text('');
+        $("#sobservaciones").text('');
+    }
+
+    $('#btnIncluirProveedor').on('click', function() {
+        $('#incluirproveedor')[0].reset();
+        $("#snombre").text('');
+        $("#srif_proveedor").text('');
+        $("#spresona_contacto").text('');
+        $("#srif_representante").text('');
+        $("#scorreo").text('');
+        $("#sdireccion").text('');
+        $("#stelefono").text('');
+        $("#stelefono_secundario").text('');
+        $("#sobservaciones").text('');
+        $('#registrarProveedorModal').modal('show');
+    });
+
+    $('#registrarRol').on('submit', function(e) {
+        e.preventDefault();
+
+        if(validarEnvioProveedor()){
+            var datos = new FormData(this);
+            datos.append('accion', 'registrar');
+            enviarAjax(datos, function(respuesta){
+                if(respuesta.status === "success" || respuesta.resultado === "success"){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: respuesta.message || respuesta.msg || 'Proveedor registrado correctamente'
+                    });
+                    agregarFilaProveedor(respuesta.proveedor);
+                    resetProveedor();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: respuesta.message || respuesta.msg || 'No se pudo registrar el proveedor'
+                    });
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '#registrarProveedorModal .close', function() {
+        $('#registrarProveedorModal').modal('hide');
+    });
+
+    function enviarAjax(datos, callback) {
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: datos,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (respuesta) {
+                if (typeof respuesta === "string") {
+                    respuesta = JSON.parse(respuesta);
+                }
+                if(callback) callback(respuesta);
+            },
+            error: function () {
+                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
+            }
+        });
+    }
+
+
+    
+
+
+
+    function mensajes(icono, tiempo, titulo, mensaje){
+        Swal.fire({
+            icon: icono,
+            timer: tiempo,
+            title: titulo,
+            text: mensaje,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        });
+    }
+
+    function validarKeyPress(er, e) {
+        key = e.keyCode;
+        tecla = String.fromCharCode(key);
+        a = er.test(tecla);
+
+        if (!a) {
+            e.preventDefault();
+        }
+    }
+
+    function validarKeyUp(er, etiqueta, etiquetamensaje, mensaje) {
+        a = er.test(etiqueta.val());
+
+        if (a) {
+            etiquetamensaje.text("");
+            return 1;
+        } else {
+            etiquetamensaje.text(mensaje);
+            return 0;
+        }
+    }
+
+    function space(str) {
+        const regex = /\s{2,}/g;
+        var str = str.replace(regex, ' ');
+        return str;
+    }
+
 ///////
     
     $(document).on('click', '.modificar', function() {
