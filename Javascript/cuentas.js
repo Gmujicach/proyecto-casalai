@@ -5,14 +5,14 @@ $(document).ready(function () {
     }
 
     $("#nombre_banco").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("nombre_banco");
         nombre.value = space(nombre.value);
     });
 
     $("#nombre_banco").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/,
             $(this),
             $("#snombre_banco"),
             "*El formato solo permite letras*"
@@ -22,7 +22,6 @@ $(document).ready(function () {
     $("#numero_cuenta").on("keypress", function(e){
         validarKeyPress(/^[0-9-]*$/, e);
     });
-
     $("#numero_cuenta").on("keyup", function(){
         validarKeyUp(
             /^\d{4}-\d{4}-\d{2}-\d{10}$/,
@@ -31,24 +30,55 @@ $(document).ready(function () {
             "*Formato válido: 01XX-XXXX-XX-XXXXXXXXXX*"
         );
     });
-
-    $("#rif_cuenta").on("keypress", function(e){
-        validarKeyPress(/^[vejpg0-9-\b]*$/i, e);
+    $("#numero_cuenta").on("input", function() {
+        let valor_nc = $(this).val().replace(/\D/g, '');
+        if(valor_nc.length > 4 && valor_nc.length <= 8)
+            valor_nc = valor_nc.slice(0,4) + '-' + valor_nc.slice(4);
+        else if(valor_nc.length > 8 && valor_nc.length <= 10)
+            valor_nc = valor_nc.slice(0,4) + '-' + valor_nc.slice(4,8) + '-' + valor_nc.slice(8,10);
+        else if(valor_nc.length > 10)
+            valor_nc = valor_nc.slice(0,4) + '-' + valor_nc.slice(4,8) + '-' + valor_nc.slice(8,10) + '-' + valor_nc.slice(10,20);
+        $(this).val(valor_nc);
     });
 
-    $("#rif_cuenta").on("keyup", function(){
+    $("#rif_cuenta").on("keypress", function(e){ 
+        validarKeyPress(/^[VEJPG0-9]$/i, e); 
+    });
+    $("#rif_cuenta").on("keyup", function(){ 
         validarKeyUp(
-            /^[VEJPG]-\d{8}-\d$/,
+            /^[VEJPG]-\d{8}-\d{1}$/,
             $(this),
             $("#srif_cuenta"),
             "*Formato válido: J-12345678-9*"
         );
     });
+    $("#rif_cuenta").on("input", function() {
+        let valor = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+        let resultado = '';
+        if (valor.length > 0) {
+            let letra = valor.charAt(0);
+            if ('VEJPG'.includes(letra)) {
+                resultado = letra;
+            } else {
+                resultado = '';
+            }
+
+            let numeros = valor.substring(1).replace(/\D/g, '');
+
+            if (numeros.length > 0) {
+                resultado += '-' + numeros.substring(0, 8);
+                if (numeros.length > 8) {
+                    resultado += '-' + numeros.substring(8, 9);
+                }
+            }
+        }
+        $(this).val(resultado);
+    });
 
     $("#telefono_cuenta").on("keypress", function(e){
         validarKeyPress(/^[0-9-]*$/, e);
     });
-
     $("#telefono_cuenta").on("keyup", function(){
         validarKeyUp(
             /^\d{4}-\d{3}-\d{4}$/,
@@ -56,6 +86,14 @@ $(document).ready(function () {
             $("#stelefono_cuenta"),
             "*Formato válido: 04XX-XXX-XXXX*"
         );
+    });
+    $("#telefono_cuenta").on("input", function() {
+        let valor = $(this).val().replace(/\D/g, '');
+        if(valor.length > 4 && valor.length <= 7)
+            valor = valor.slice(0,4) + '-' + valor.slice(4);
+        else if(valor.length > 7)
+            valor = valor.slice(0,4) + '-' + valor.slice(4,7) + '-' + valor.slice(7,11);
+        $(this).val(valor);
     });
 
     $("#correo_cuenta").on("keypress", function (e) {
@@ -172,13 +210,13 @@ $(document).ready(function () {
     });
 
     $("#modificar_nombre_banco").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("modificar_nombre_banco");
         nombre.value = Espacios(nombre.value);
     });
     $("#modificar_nombre_banco").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/,
             $(this),
             $("#smnombre_banco"),
             "*El formato solo permite letras y mínimo 3 caracteres*"
@@ -404,7 +442,7 @@ $(document).ready(function () {
         nombre.value = space(nombre.value).trim();
 
         if(validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/,
             $("#nombre_banco"),
             $("#snombre_banco"),
             "*El nombre debe tener solo letras*"
@@ -418,11 +456,11 @@ $(document).ready(function () {
             $("#snumero_cuenta"),
             "*Formato correcto: 01XX-XXXX-XX-XXXXXXXXXX*"
         )==0){
-            mensajes('error',4000,'Verifique el número de cuenta','Debe tener 20 dígitos separados por "-"');
+            mensajes('error',4000,'Verifique el número de cuenta','Debe tener 20 dígitos');
             return false;
         }
         else if(validarKeyUp(
-            /^[VEJPG]-\d{8}-\d$/,
+            /^[VEJPG]-\d{8}-\d{1}$/,
             $("#rif_cuenta"),
             $("#srif_cuenta"),
             "*Formato correcto: J-12345678-9*"
@@ -436,7 +474,7 @@ $(document).ready(function () {
             $("#stelefono_cuenta"),
             "*Formato correcto: 04XX-XXX-XXXX*"
         )==0){
-            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos separados por "-"');
+            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
             return false;
         }
         else if(validarKeyUp(
@@ -453,7 +491,7 @@ $(document).ready(function () {
 
     function validarCuenta(datos) {
         let errores = [];
-        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{3,20}$/.test(datos.nombre_banco)) {
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/.test(datos.nombre_banco)) {
             errores.push("El nombre debe tener solo letras.");
         }
         if (!/^\d{4}-\d{4}-\d{2}-\d{10}$/.test(datos.numero_cuenta)) {

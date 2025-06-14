@@ -4,78 +4,78 @@ $(document).ready(function () {
         mensajes("warning", 4000, "Atención", $("#mensajes").html());
     }
 
-    $("#nombre_rol").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
-        let nombre = document.getElementById("nombre_rol");
+    $("#nombre_categoria").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]*$/, e);
+        let nombre = document.getElementById("nombre_categoria");
         nombre.value = space(nombre.value);
     });
-    $("#nombre_rol").on("keyup", function(){
+    $("#nombre_categoria").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,25}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,20}$/,
             $(this),
-            $("#snombre_rol"),
-            "*El formato solo permite letras*"
+            $("#snombre_categoria"),
+            "*El formato permite letras y números*"
         );
     });
 
-    function validarEnvioRol(){
-        let nombre = document.getElementById("nombre_rol");
+    function validarEnvioCategoria(){
+        let nombre = document.getElementById("nombre_categoria");
         nombre.value = space(nombre.value).trim();
 
         if(validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
-            $("#nombre_rol"),
-            $("#snombre_rol"),
-            "*El nombre debe tener solo letras*"
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,20}$/,
+            $("#nombre_categoria"),
+            $("#snombre_categoria"),
+            "*El nombre debe tener letras y/o números*"
         )==0){
-            mensajes('error',4000,'Verifique el nombre del rol','Debe tener solo letras');
+            mensajes('error',4000,'Verifique el nombre de la categoria','Debe tener letras y/o números');
             return false;
         }
         return true;
     }
 
-    function agregarFilaRol(rol) {
+    function agregarFilaCategoria(categoria) {
         const nuevaFila = `
-            <tr data-id="${rol.id_rol}">
+            <tr data-id="${categoria.id_categoria}">
                 <td>
-                    <ul>
+                    <Categoria>
                         <div>
                             <button class="btn-modificar"
-                                data-id="${rol.id_rol}"
-                                data-nombre="${rol.nombre_rol}">
+                                data-id="${categoria.id_categoria}"
+                                data-nombre="${categoria.nombre_categoria}">
                                 Modificar
                             </button>
                         </div>
                         <div>
                             <button class="btn-eliminar"
-                                data-id="${rol.id_rol}">
+                                data-id="${categoria.id_categoria}">
                                 Eliminar
                             </button>
                         </div>
-                    </ul>
+                    </Categoria
                 </td>
-                <td>${rol.id_rol}</td>
-                <td>${rol.nombre_rol}</td>
+                <td>${categoria.id_categoria}</td>
+                <td>${categoria.nombre_categoria}</td>
             </tr>
         `;
         $('#tablaConsultas tbody').append(nuevaFila);
     }
 
-    function resetRol() {
-        $("#nombre_rol").val('');
-        $("#snombre_rol").text('');
+    function resetCategoria() {
+        $("#nombre_categoria").val('');
+        $("#snombre_categoria").text('');
     }
 
-    $('#btnIncluirRol').on('click', function() {
-        $('#registrarRol')[0].reset();
-        $('#snombre_rol').text('');
-        $('#registrarRolModal').modal('show');
+    $('#btnIncluirCategoria').on('click', function() {
+        $('#registrarCategoria')[0].reset();
+        $('#snombre_categoria').text('');
+        $('#registrarCategoriaModal').modal('show');
     });
 
-    $('#registrarRol').on('submit', function(e) {
+    $('#registrarCategoria').on('submit', function(e) {
         e.preventDefault();
 
-        if(validarEnvioRol()){
+        if(validarEnvioCategoria()){
             var datos = new FormData(this);
             datos.append('accion', 'registrar');
             enviarAjax(datos, function(respuesta){
@@ -83,23 +83,23 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Rol registrado correctamente'
+                        text: respuesta.message || respuesta.msg || 'Categoria registrada correctamente'
                     });
-                    agregarFilaRol(respuesta.rol);
-                    resetRol();
+                    agregarFilaCategoria(respuesta.categoria);
+                    resetCategoria();
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: respuesta.message || respuesta.msg || 'No se pudo registrar el rol'
+                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la categoria'
                     });
                 }
             });
         }
     });
 
-    $(document).on('click', '#registrarRolModal .close', function() {
-        $('#registrarRolModal').modal('hide');
+    $(document).on('click', '#registrarCategoriaModal .close', function() {
+        $('#registrarCategoriaModal').modal('hide');
     });
 
     function enviarAjax(datos, callback) {
@@ -123,42 +123,42 @@ $(document).ready(function () {
     }
 
     $(document).on('click', '.btn-modificar', function () {
-        $('#modificar_id_rol').val($(this).data('id'));
-        $('#modificar_nombre_rol').val($(this).data('nombre'));
-        $('#smnombre_rol').text('');
-        $('#modificarRolModal').modal('show');
+        $('#modificar_id_categoria').val($(this).data('id'));
+        $('#modificar_nombre_categoria').val($(this).data('nombre'));
+        $('#smnombre_categoria').text('');
+        $('#modificarCategoriaModal').modal('show');
     });
 
-    $("#modificar_nombre_rol").on("keypress", function(e){
+    $("#modificar_nombre_categoria").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
-        let nombre = document.getElementById("modificar_nombre_rol");
+        let nombre = document.getElementById("modificar_nombre_categoria");
         nombre.value = space(nombre.value);
     });
-    $("#modificar_nombre_rol").on("keyup", function(){
+    $("#modificar_nombre_categoria").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,25}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,20}$/,
             $(this),
-            $("#smnombre_rol"),
-            "*El formato solo permite letras*"
+            $("#smnombre_categoria"),
+            "*El formato permite letras y números*"
         );
     });
 
-    function validarRol(datos) {
+    function validarCategoria(datos) {
         let errores = [];
-        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,25}$/.test(datos.nombre_rol)) {
-            errores.push("El nombre debe tener solo letras.");
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,20}$/.test(datos.nombre_categoria)) {
+            errores.push("El nombre debe tener letras y/o números.");
         }
         return errores;
     }
 
-    $('#modificarRol').on('submit', function(e) {
+    $('#modificarCategoria').on('submit', function(e) {
         e.preventDefault();
 
         const datos = {
-            nombre_rol: $('#modificar_nombre_rol').val()
+            nombre_categoria: $('#modificar_nombre_categoria').val()
         };
 
-        const errores = validarRol(datos);
+        const errores = validarCategoria(datos);
 
         if (errores.length > 0) {
             Swal.fire({
@@ -180,15 +180,15 @@ $(document).ready(function () {
             dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
-                    $('#modificarRolModal').modal('hide');
+                    $('#modificarCategoriaModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Modificado',
-                        text: 'El rol se ha modificado correctamente'
+                        text: 'La categoria se ha modificado correctamente'
                     });
 
-                    const id = $('#modificar_id_rol').val();
-                    const nombre = $('#modificar_nombre_rol').val();
+                    const id = $('#modificar_id_categoria').val();
+                    const nombre = $('#modificar_nombre_categoria').val();
 
                     const fila = $('tr[data-id="' + id + '"]');
                     fila.find('td').eq(2).text(nombre);
@@ -199,19 +199,19 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: response.message || 'No se pudo modificar el rol'
+                        text: response.message || 'No se pudo modificar la categoria'
                     });
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar el rol:', textStatus, errorThrown);
-                muestraMensaje('Error al modificar el rol.');
+                console.error('Error al modificar la categoria:', textStatus, errorThrown);
+                muestraMensaje('Error al modificar la categoria.');
             }
         });
     });
 
-    $(document).on('click', '#modificarRolModal .close', function() {
-        $('#modificarRolModal').modal('hide');
+    $(document).on('click', '#modificarCategoriaModal .close', function() {
+        $('#modificarCategoriaModal').modal('hide');
     });
 
     $(document).on('click', '.btn-eliminar', function (e) {
@@ -226,18 +226,18 @@ $(document).ready(function () {
             confirmButtonText: 'Sí, eliminarla!'
         }).then((result) => {
             if (result.isConfirmed) {
-                var id_rol = $(this).data('id');
+                var id_categoria = $(this).data('id');
                 var datos = new FormData();
                 datos.append('accion', 'eliminar');
-                datos.append('id_rol', id_rol);
+                datos.append('id_categoria', id_categoria);
                 enviarAjax(datos, function(respuesta){
                     if (respuesta.status === 'success') {
                         Swal.fire(
                             'Eliminada!',
-                            'El rol ha sido eliminada.',
+                            'La ccategoria ha sido eliminada.',
                             'success'
                         );
-                        eliminarFilaRol(id_rol);
+                        eliminarFilaCategoria(id_categoria);
                     } else {
                         Swal.fire('Error', respuesta.message, 'error');
                     }
@@ -246,8 +246,8 @@ $(document).ready(function () {
         });
     });
 
-    function eliminarFilaRol(id_rol) {
-        $(`#tablaConsultas tbody tr[data-id="${id_rol}"]`).remove();
+    function eliminarFilaCategoria(id_categoria) {
+        $(`#tablaConsultas tbody tr[data-id="${id_categoria}"]`).remove();
     }
 
     function mensajes(icono, tiempo, titulo, mensaje){

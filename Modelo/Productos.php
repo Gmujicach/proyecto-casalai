@@ -983,7 +983,7 @@ public function obtenerProductos() {
 SELECT 
     tbl_productos.*, 
     tbl_modelos.nombre_modelo, 
-    tbl_categoria.nombre_caracteristicas 
+    tbl_categoria.nombre_categoria 
 FROM tbl_productos 
 INNER JOIN tbl_modelos 
     ON tbl_productos.id_modelo = tbl_modelos.id_modelo 
@@ -999,7 +999,7 @@ ORDER BY tbl_productos.id_producto ASC;
     // 2. Agregar características específicas por categoría
     foreach ($productos as &$producto) {
         $idProducto = $producto['id_producto'];
-        $categoria = strtolower($producto['nombre_caracteristicas']); // debe ser como se llama la tabla
+        $categoria = strtolower($producto['nombre_categoria']); // debe ser como se llama la tabla
 
         switch ($categoria) {
             case 'impresora':
@@ -1041,7 +1041,7 @@ ORDER BY tbl_productos.id_producto ASC;
     $queryProductos = '
         SELECT tbl_productos.*, 
                tbl_modelos.nombre_modelo, 
-               tbl_categoria.nombre_caracteristicas 
+               tbl_categoria.nombre_categoria 
         FROM tbl_productos 
         INNER JOIN tbl_modelos 
             ON tbl_productos.id_modelo = tbl_modelos.id_modelo 

@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         case 'consultar_roles':
             $rol = new Rol();
-            $roles_obt = $rol->consultarRol();
+            $roles_obt = $rol->consultarRoles();
 
             echo json_encode($roles_obt);
             exit;

@@ -79,19 +79,19 @@ CREATE TABLE `tbl_cartucho_tinta` (
 
 CREATE TABLE `tbl_categoria` (
   `id_categoria` int(2) NOT NULL,
-  `nombre_caracteristicas` varchar(20) NOT NULL
+  `nombre_categoria` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `tbl_categoria`
 --
 
-INSERT INTO `tbl_categoria` (`id_categoria`, `nombre_caracteristicas`) VALUES
+INSERT INTO `tbl_categoria` (`id_categoria`, `nombre_categoria`) VALUES
 (1, 'Impresora'),
 (2, 'Protector de Voltaje'),
 (3, 'Tinta'),
 (4, 'Cartucho'),
-(5, 'tbl_otros');
+(5, 'Otros');
 
 -- --------------------------------------------------------
 

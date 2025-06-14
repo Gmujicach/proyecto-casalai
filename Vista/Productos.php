@@ -24,123 +24,129 @@
 
 <?php include 'NewNavBar.php'; ?>
 
-<div class="formulario-responsivo">
-  <div class="fondo-form">
-    <form id="incluirProductoForm" action="" method="POST">
-      <input type="hidden" name="accion" value="ingresar">
-      <h3 class="titulo-form">📦 Incluir Nuevo Producto</h3>
+<div class="modal fade modal-registrar" id="registrarProductoModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="incluirProductoForm" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarProductoModalLabel">Incluir Producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="envolver-form">
+                      <label for="nombre_producto">Nombre del producto</label>
+                      <input type="text" placeholder="Ej: Impresora Epson L3150" maxlength="15" class="form-control" id="nombre_producto" name="nombre_producto" required>
+                      <small class="form-text text-muted">Debe tener al menos 3 caracteres.</small>
+                    </div>
 
-      <!-- Nombre del producto -->
-      <div class="envolver-form">
-        <label for="nombre_producto">Nombre del producto</label>
-        <input type="text" placeholder="Ej: Impresora Epson L3150" maxlength="15" class="form-control" id="nombre_producto" name="nombre_producto" required>
-        <small class="form-text text-muted">Debe tener al menos 3 caracteres.</small>
-      </div>
-<div class="envolver-form">
-  <label for="imagen">Imagen del producto</label>
-  <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*" required>
-  <small class="form-text text-muted">Seleccione una imagen clara del producto (JPG, PNG, etc.).</small>
-  <div id="previewImagen" style="margin-top: 10px;">
-    <img id="imagenPreview" src="#" alt="Vista previa" style="display: none; max-height: 150px; border-radius: 8px; border: 1px solid #ccc; padding: 5px;">
-  </div>
+                    <div class="envolver-form">
+                      <label for="imagen">Imagen del producto</label>
+                      <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*" required>
+                      <small class="form-text text-muted">Seleccione una imagen clara del producto (JPG, PNG, etc.).</small>
+                      <div id="previewImagen" style="margin-top: 10px;">
+                        <img id="imagenPreview" src="#" alt="Vista previa" style="display: none; max-height: 150px; border-radius: 8px; border: 1px solid #ccc; padding: 5px;">
+                      </div>
+                    </div>
+                  <br>
+                    <!-- Descripción -->
+                    <div class="envolver-form">
+                      <label for="descripcion_producto">Descripción del producto</label>
+                      <textarea maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" rows="2" placeholder="Ej: Impresora multifuncional a color con WiFi"></textarea>
+                      <small class="form-text text-muted">Breve descripción (máx. 50 caracteres).</small>
+                    </div>
+                  <br>
+                    <!-- Modelo -->
+                    <div class="envolver-form">
+                      <label for="Modelo">Modelo</label>
+                      <select class="form-select" id="Modelo" name="Modelo" required>
+                        <option value="">Seleccione un modelo</option>
+                        <?php foreach ($modelos as $modelo): ?>
+                          <option value="<?= $modelo['tbl_modelos']; ?>">
+                            <?= $modelo['nombre_modelo'] . ' (' . $modelo['tbl_marcas'] . ')' ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                      <small class="form-text text-muted">Seleccione el modelo asociado al producto.</small>
+                    </div>
+                  <br>
+                    <!-- Stock -->
+                    <div class="envolver-form" style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                      <div style="flex: 1;">
+                        <label for="Stock_Actual">Stock Actual</label>
+                        <input type="number" class="form-control" id="Stock_Actual" name="Stock_Actual" min="1" required placeholder="Ej: 10">
+                        <small class="form-text text-muted">Cantidad actualmente disponible.</small>
+                      </div>
+                      <div style="flex: 1;">
+                        <label for="Stock_Maximo">Stock Máximo</label>
+                        <input type="number" class="form-control" id="Stock_Maximo" name="Stock_Maximo" min="1" required placeholder="Ej: 100">
+                        <small class="form-text text-muted">Capacidad máxima en inventario.</small>
+                      </div>
+                      <div style="flex: 1;">
+                        <label for="Stock_Minimo">Stock Mínimo</label>
+                        <input type="number" class="form-control" id="Stock_Minimo" name="Stock_Minimo" min="1" required placeholder="Ej: 5">
+                        <small class="form-text text-muted">Cantidad mínima antes de alertar reposición.</small>
+                      </div>
+                    </div>
+                  <br>
+                    <!-- Garantía -->
+                    <div class="envolver-form">
+                      <label for="Clausula_garantia">Cláusula de garantía</label>
+                      <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="2" placeholder="Ej: Garantía válida por 6 meses en defectos de fábrica."></textarea>
+                      <small class="form-text text-muted">Opcional. Especificar condiciones de garantía.</small>
+                    </div>
+                  <br>  
+                    <!-- Categoría -->
+                    <div class="envolver-form">
+                      <label for="Categoria">Categoría</label>
+                      <select class="form-select" id="Categoria" name="Categoria" required onchange="mostrarCamposCategoria(this.value)">
+                        <option value="">Seleccione una categoría</option>
+                        <option value="1">IMPRESORA</option>
+                        <option value="3">TINTA</option>
+                        <option value="4">CARTUCHO DE TINTA</option>
+                        <option value="2">PROTECTOR DE VOLTAJE</option>
+                        <option value="5">OTROS</option>
+                      </select>
+                      <small class="form-text text-muted">Según la categoría, se mostrarán campos adicionales.</small>
+                    </div>
+                    <!-- Campos dinámicos por categoría -->
+                    <div id="caracteristicasCategoria" class="envolver-form"></div>
+                  <br>
+                    <!-- Serial y Precio -->
+                    <div class="envolver-form" style="display: flex; gap: 1rem;">
+                      <div style="flex: 2;">
+                        <label for="Seriales">Código Serial</label>
+                        <input type="text" class="form-control" id="Seriales" name="Seriales" maxlength="10" placeholder="Ej: EPSON1234" required>
+                        <small class="form-text text-muted">Debe ser único y válido.</small>
+                      </div>
+                      <div style="flex: 1;">
+                        <label for="Precio">Precio ($)</label>
+                        <input class="form-control" id="Precio" name="Precio" min="1" step="1" placeholder="Ej: 100" required>
+                        <small class="form-text text-muted">Precio unitario del producto.</small>
+                      </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-      <br>
-
-      <!-- Descripción -->
-      <div class="envolver-form">
-        <label for="descripcion_producto">Descripción del producto</label>
-        <textarea maxlength="50" class="form-control" id="descripcion_producto" name="descripcion_producto" rows="2" placeholder="Ej: Impresora multifuncional a color con WiFi"></textarea>
-        <small class="form-text text-muted">Breve descripción (máx. 50 caracteres).</small>
-      </div>
-      <br>
-
-      <!-- Modelo -->
-      <div class="envolver-form">
-        <label for="Modelo">Modelo</label>
-        <select class="form-select" id="Modelo" name="Modelo" required>
-          <option value="">Seleccione un modelo</option>
-          <?php foreach ($modelos as $modelo): ?>
-            <option value="<?= $modelo['tbl_modelos']; ?>">
-              <?= $modelo['nombre_modelo'] . ' (' . $modelo['tbl_marcas'] . ')' ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-        <small class="form-text text-muted">Seleccione el modelo asociado al producto.</small>
-      </div>
-      <br>
-
-      <!-- Stock -->
-      <div class="envolver-form" style="display: flex; flex-wrap: wrap; gap: 1rem;">
-        <div style="flex: 1;">
-          <label for="Stock_Actual">Stock Actual</label>
-          <input type="number" class="form-control" id="Stock_Actual" name="Stock_Actual" min="1" required placeholder="Ej: 10">
-          <small class="form-text text-muted">Cantidad actualmente disponible.</small>
-        </div>
-        <div style="flex: 1;">
-          <label for="Stock_Maximo">Stock Máximo</label>
-          <input type="number" class="form-control" id="Stock_Maximo" name="Stock_Maximo" min="1" required placeholder="Ej: 100">
-          <small class="form-text text-muted">Capacidad máxima en inventario.</small>
-        </div>
-        <div style="flex: 1;">
-          <label for="Stock_Minimo">Stock Mínimo</label>
-          <input type="number" class="form-control" id="Stock_Minimo" name="Stock_Minimo" min="1" required placeholder="Ej: 5">
-          <small class="form-text text-muted">Cantidad mínima antes de alertar reposición.</small>
-        </div>
-      </div>
-      <br>
-
-      <!-- Garantía -->
-      <div class="envolver-form">
-        <label for="Clausula_garantia">Cláusula de garantía</label>
-        <textarea class="form-control" maxlength="50" id="Clausula_garantia" name="Clausula_garantia" rows="2" placeholder="Ej: Garantía válida por 6 meses en defectos de fábrica."></textarea>
-        <small class="form-text text-muted">Opcional. Especificar condiciones de garantía.</small>
-      </div>
-      <br>  
-
-      <!-- Categoría -->
-      <div class="envolver-form">
-        <label for="Categoria">Categoría</label>
-        <select class="form-select" id="Categoria" name="Categoria" required onchange="mostrarCamposCategoria(this.value)">
-          <option value="">Seleccione una categoría</option>
-          <option value="1">IMPRESORA</option>
-          <option value="3">TINTA</option>
-          <option value="4">CARTUCHO DE TINTA</option>
-          <option value="2">PROTECTOR DE VOLTAJE</option>
-          <option value="5">OTROS</option>
-        </select>
-        <small class="form-text text-muted">Según la categoría, se mostrarán campos adicionales.</small>
-      </div>
-
-      <!-- Campos dinámicos por categoría -->
-      <div id="caracteristicasCategoria" class="envolver-form"></div>
-      <br>
-
-      <!-- Serial y Precio -->
-      <div class="envolver-form" style="display: flex; gap: 1rem;">
-        <div style="flex: 2;">
-          <label for="Seriales">Código Serial</label>
-          <input type="text" class="form-control" id="Seriales" name="Seriales" maxlength="10" placeholder="Ej: EPSON1234" required>
-          <small class="form-text text-muted">Debe ser único y válido.</small>
-        </div>
-        <div style="flex: 1;">
-          <label for="Precio">Precio ($)</label>
-          <input class="form-control" id="Precio" name="Precio" min="1" step="1" placeholder="Ej: 100" required>
-          <small class="form-text text-muted">Precio unitario del producto.</small>
-        </div>
-      </div>
-
-      <!-- Botones -->
-      <div class="envolver-form">
-      <button class="boton-form" type="submit">Registrar Producto</button>
-      <button class="boton-reset" type="reset">Limpiar Formulario</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 
 <div class="contenedor-tabla">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirProducto" class="btn-incluir">
+            Incluir Producto
+        </button>
+    </div>
+
     <h3>Lista de Productos</h3>
+
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
@@ -162,92 +168,86 @@
         <tbody>
             <?php foreach ($productos as $producto): ?>
                 <tr>
-                                      <td>
-                        <span>
-                            <div class="acciones-boton">
+                    <td>
+                        <ul>
+                            <div>
+                              <?php
+                              $caracteristicas = $producto['caracteristicas'] ?? [];
 
-                                            <!-- Botón Modificar -->
-<?php
-$caracteristicas = $producto['caracteristicas'] ?? [];
-
-$atributosExtra = '';
-foreach ($caracteristicas as $clave => $valor) {
-    $atributosExtra .= ' data-' . htmlspecialchars($clave) . '="' . htmlspecialchars($valor) . '"';
-}
-?>
-
-
-<button 
-    type="button" 
-    class="btn btn-primary  btn-modificar" 
-    data-toggle="modal" 
-    data-target="#modificarProductoModal" 
-    data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
-    data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
-    data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
-    data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
-    data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
-    data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
-    data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
-    data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
-    data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
-    data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
-    data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
-    <?php
-        // Lógica para la imagen igual que en la tabla
-        $id = $producto['id_producto'];
-        $ruta_base = 'IMG/Productos/';
-        $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
-        $ruta_imagen = '';
-        foreach ($extensiones as $ext) {
-            if (file_exists($ruta_base .'producto_'. $id . '.' . $ext)) {
-                $ruta_imagen = $ruta_base .'producto_' . $id . '.' . $ext;
-                break;
-            }
-        }
-        $data_imagen = !empty($ruta_imagen) ? $ruta_imagen : 'IMG/no-disponible.png';
-        echo 'data-imagen="' . htmlspecialchars($data_imagen) . '"';
-        echo $atributosExtra;
-    ?>
->
-    Modificar
-</button>
-
-                                            <!-- Botón Eliminar -->
-                                            <button 
-                                                data-id="<?php echo $producto['id_producto']; ?>" 
-                                                class="btn btn-danger btn-eliminar eliminar"
-                                            >
-                                                Eliminar
-                                            </button>
-                                      
+                              $atributosExtra = '';
+                              foreach ($caracteristicas as $clave => $valor) {
+                                  $atributosExtra .= ' data-' . htmlspecialchars($clave) . '="' . htmlspecialchars($valor) . '"';
+                              }
+                              ?>
+                                <button 
+                                    type="button" 
+                                    class="btn-modificar" 
+                                    data-toggle="modal" 
+                                    data-target="#modificarProductoModal" 
+                                    data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
+                                    data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
+                                    data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
+                                    data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
+                                    data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
+                                    data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
+                                    data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
+                                    data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
+                                    data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
+                                    data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
+                                    data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
+                                    <?php
+                                        // Lógica para la imagen igual que en la tabla
+                                        $id = $producto['id_producto'];
+                                        $ruta_base = 'IMG/Productos/';
+                                        $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
+                                        $ruta_imagen = '';
+                                        foreach ($extensiones as $ext) {
+                                            if (file_exists($ruta_base .'producto_'. $id . '.' . $ext)) {
+                                                $ruta_imagen = $ruta_base .'producto_' . $id . '.' . $ext;
+                                                break;
+                                            }
+                                        }
+                                        $data_imagen = !empty($ruta_imagen) ? $ruta_imagen : 'IMG/no-disponible.png';
+                                        echo 'data-imagen="' . htmlspecialchars($data_imagen) . '"';
+                                        echo $atributosExtra;
+                                    ?>
+                                >Modificar
+                                </button>
                             </div>
-                        </span>
+                            <div>
+                                <button 
+                                    data-id="<?php echo $producto['id_producto']; ?>" 
+                                    class="btn-eliminar"
+                                >
+                                    Eliminar
+                                </button>
+                            </div>
+                        </ul>
                     </td>
                     <td>
                       <?php echo htmlspecialchars($producto['id_producto']); ?>
                     </td>
-<td>
-  <?php
-    $id = $producto['id_producto'];
-    $ruta_base = 'IMG/Productos/';
-    $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
+                    <td>
+                      <?php
+                        $id = $producto['id_producto'];
+                        $ruta_base = 'IMG/Productos/';
+                        $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
 
-    $ruta_imagen = '';
-    foreach ($extensiones as $ext) {
-        if (file_exists($ruta_base .'producto_'. $id . '.' . $ext)) {
-            $ruta_imagen = $ruta_base .'producto_' . $id . '.' . $ext;
-            break;
-        }
-    }
+                        $ruta_imagen = '';
+                        foreach ($extensiones as $ext) {
+                            if (file_exists($ruta_base .'producto_'. $id . '.' . $ext)) {
+                                $ruta_imagen = $ruta_base .'producto_' . $id . '.' . $ext;
+                                break;
+                            }
+                        }
 
-    if (!empty($ruta_imagen)) {
-        echo '<img src="' . htmlspecialchars($ruta_imagen) . '" alt="Foto del producto" class="foto-producto">';
-    } else {
-        echo '<img src="IMG/no-disponible.png" alt="No disponible" class="foto-producto">';
-    }
-  ?>
-</td>
+                        if (!empty($ruta_imagen)) {
+                            echo '<img src="' . htmlspecialchars($ruta_imagen) . '" alt="Foto del producto" class="foto-producto">';
+                        } else {
+                            echo '<img src="IMG/no-disponible.png" alt="No disponible" class="foto-producto">';
+                        }
+                      ?>
+                    </td>
 
                     <td>
                       <span class="campo-nombres">
@@ -282,22 +282,22 @@ foreach ($caracteristicas as $clave => $valor) {
 
                     <!-- AQUÍ cambia: mostramos el nombre de la categoría -->
                     <td>
-                        <?php echo htmlspecialchars($producto['nombre_caracteristicas']); ?>
+                        <?php echo htmlspecialchars($producto['nombre_categoria']); ?>
                     </td>
 
                     <td>
                       <span class="precio"><?php echo htmlspecialchars($producto['precio']); ?></span>
-                     </span>
+                    </span>
                         <span class="moneda">USD</span>
                 
                     </td>
-                                    <td>
-                    <span class="campo-estatus <?php echo ($producto['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
-                      onclick="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
-                        style="cursor: pointer;">
-                        <?php echo htmlspecialchars($producto['estado']); ?>
-                    </span>
-                </td>
+                    <td>
+                      <span class="campo-estatus <?php echo ($producto['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+                        onclick="cambiarEstatus(<?php echo $producto['id_producto']; ?>, '<?php echo $producto['estado']; ?>')"
+                          style="cursor: pointer;">
+                          <?php echo htmlspecialchars($producto['estado']); ?>
+                      </span>
+                    </td>
 
                 </tr>
             <?php endforeach; ?>
@@ -318,7 +318,7 @@ foreach ($caracteristicas as $clave => $valor) {
     <div class="modal-content">
       <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
         <div class="modal-header">
-          <h5 class="modal-title" id="modificarProductoModalLabel">Modificar Producto</h5>
+          <h5 class="titulo-form" id="modificarProductoModalLabel">Modificar Producto</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

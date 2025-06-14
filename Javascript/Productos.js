@@ -146,6 +146,15 @@ document.querySelectorAll('.btn-modificar').forEach(btn => {
     });
 });
 
+    $('#btnIncluirProducto').on('click', function() {
+        $('#incluirProductoForm')[0].reset();
+        $('#registrarProductoModal').modal('show');
+    });
+
+    $(document).on('click', '#registrarProductoModal .close', function() {
+        $('#registrarProductoModal').modal('hide');
+    });
+
 $('#incluirProductoForm').on('submit', function(event) {
     event.preventDefault();
 
@@ -202,6 +211,7 @@ $('#incluirProductoForm').on('submit', function(event) {
 } else if (precio <= 0) {
     errores.push("El precio debe ser mayor a 0.");
 }
+
 $('#Precio').val($('#Precio').val().replace(',', '.'));
 
     // VALIDACIONES ADICIONALES POR CATEGORÍA

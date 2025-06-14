@@ -4,7 +4,7 @@ require_once 'Config/config.php';
 class Proveedores extends BD {
     
     private $conex;
-    private $id;
+    private $id_proveedor;
     private $nombre;
     private $representante;
     private $rif1;
@@ -22,7 +22,6 @@ class Proveedores extends BD {
         $this->conex = $conexion->getConexion();
     }
 
-    // Getters y Setters
     public function getNombre() {
         return $this->nombre;
     }
@@ -95,28 +94,31 @@ class Proveedores extends BD {
         $this->observacion = $observacion;
     }
 
-    public function getId() {
-        return $this->id;
+    public function getIdProveedor() {
+        return $this->id_proveedor;
     }
 
-    public function setId($id) {
-        $this->id = $id;
+    public function setIdProveedor($id_proveedor) {
+        $this->id_proveedor = $id_proveedor;
     }
     
 
-     // Método para guardar el proveedor
-
-     public function validarProveedor() {
-        $sql = "SELECT COUNT(*) FROM tbl_proveedores WHERE nombre = :nombre";
+    public function existeNombreProveedor($nombre, $excluir_id = null) {
+        return $this->existeNomProveedor($nombre, $excluir_id); 
+    }
+    private function existeNomProveedor($nombre, $excluir_id) {
+        $sql = "SELECT COUNT(*) FROM tbl_proveedores WHERE nombre = ?";
+        $params = [$nombre];
+        if ($excluir_id !== null) {
+            $sql .= " AND id_marca != ?";
+            $params[] = $excluir_id;
+        }
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':nombre', $this->nombre);
-        $stmt->execute();
-        $count = $stmt->fetchColumn();
-    
-        // Retorna true si no existe un producto con el mismo nombre
-        return $count == 0;
+        $stmt->execute($params);
+        return $stmt->fetchColumn() > 0;
     }
 
+/*
     public function validarProveedorRif() {
         $sql = "SELECT COUNT(*) FROM tbl_proveedores WHERE rif_proveedor = :rif1";
         $stmt = $this->conex->prepare($sql);
@@ -127,43 +129,65 @@ class Proveedores extends BD {
         // Retorna true si no existe un producto con el mismo nombre
         return $count == 0;
     }
+*/
 
-public function ingresarProveedor() {
-    $sql = "INSERT INTO tbl_proveedores (`nombre`, `presona_contacto`, `direccion`, `telefono`, `telefono_secundario`, `rif_representante`, `rif_proveedor`, `correo`, `observaciones`)
-            VALUES (:nombre, :representante, :direccion, :telefono1, :telefono2, :rif2, :rif1, :correo, :observacion)";
-    $stmt = $this->conex->prepare($sql);
-    $stmt->bindParam(':nombre', $this->nombre);
-    $stmt->bindParam(':representante', $this->representante);
-    $stmt->bindParam(':direccion', $this->direccion);
-    $stmt->bindParam(':telefono1', $this->telefono1);
-    $stmt->bindParam(':telefono2', $this->telefono2);
-    $stmt->bindParam(':rif1', $this->rif1);
-    $stmt->bindParam(':rif2', $this->rif2);
-    $stmt->bindParam(':correo', $this->correo);
-    $stmt->bindParam(':observacion', $this->observacion);
-
-    if ($stmt->execute()) {
-        $ultimoId = $this->conex->lastInsertId();
-        return $this->obtenerProveedorPorId($ultimoId);
-    } else {
-        return false;
+    public function registrarProveedor() {
+        return $this->r_proveedor();
     }
-}
+    private function r_proveedor() {
+        $sql = "INSERT INTO tbl_proveedores (`nombre`, `presona_contacto`, `direccion`, `telefono`, `telefono_secundario`, `rif_representante`, `rif_proveedor`, `correo`, `observaciones`)
+                VALUES (:nombre, :representante, :direccion, :telefono1, :telefono2, :rif2, :rif1, :correo, :observacion)";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':nombre', $this->nombre);
+        $stmt->bindParam(':representante', $this->representante);
+        $stmt->bindParam(':direccion', $this->direccion);
+        $stmt->bindParam(':telefono1', $this->telefono1);
+        $stmt->bindParam(':telefono2', $this->telefono2);
+        $stmt->bindParam(':rif1', $this->rif1);
+        $stmt->bindParam(':rif2', $this->rif2);
+        $stmt->bindParam(':correo', $this->correo);
+        $stmt->bindParam(':observacion', $this->observacion);
 
-    // Obtener Producto por ID
-    public function obtenerProveedorPorId($id) {
+        return $stmt->execute();
+    }
+
+    public function obtenerUltimoProveedor() {
+        return $this->obtUltimoProveedor(); 
+    }
+    private function obtUltimoProveedor() {
+        try {
+            $sql = "SELECT * FROM tbl_proveedores ORDER BY id_proveedor DESC LIMIT 1";
+            $stmt = $this->conex->prepare($sql);
+            $stmt->execute();
+            $proveedor = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->conex = null;
+            return $proveedor ? $proveedor : null;
+        } catch (PDOException $e) {
+            error_log("Error al obtener el último proveedor: " . $e->getMessage());
+            $this->conex = null;
+            return null;
+        }
+    }
+
+    public function obtenerProveedorPorId($id_proveedor) {
+        return $this->obtProveedorPorId($id_proveedor);
+    }
+    private function obtProveedorPorId($id_proveedor) {
         $query = "SELECT * FROM tbl_proveedores WHERE id_proveedor = ?";
         $stmt = $this->conex->prepare($query);
-        $stmt->execute([$id]);
+        $stmt->execute([$id_proveedor]);
         $proveedores = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->conex = null;
         return $proveedores;
     }
 
-    // Modificar Producto
-    public function modificarProveedor($id) {
+    public function modificarProveedor($id_proveedor) {
+        return $this->m_proveedor($id_proveedor);
+    }
+    private function m_proveedor($id_proveedor) {
         $sql = "UPDATE tbl_proveedores SET nombre = :nombre, presona_contacto = :representante, direccion = :direccion, telefono = :telefono1, telefono_secundario = :telefono2, rif_representante = :rif2, rif_proveedor = :rif1, correo = :correo, observaciones = :observacion WHERE id_proveedor = :id_proveedor";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_proveedor', $id);
+        $stmt->bindParam(':id_proveedor', $id_proveedor);
         $stmt->bindParam(':nombre', $this->nombre);
         $stmt->bindParam(':representante', $this->representante);
         $stmt->bindParam(':direccion', $this->direccion);
@@ -177,22 +201,24 @@ public function ingresarProveedor() {
         return $stmt->execute();
     }
 
-    public function eliminarProveedor($id) {
-    $sql = "DELETE FROM tbl_proveedores WHERE id_proveedor = :id";
-    $stmt = $this->conex->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    return $stmt->execute();
-}
+    public function eliminarProveedor($id_proveedor) {
+        return $this->e_proveedor($id_proveedor);
+    }
+    private function e_proveedor($id_proveedor) {
+        $sql = "DELETE FROM tbl_proveedores WHERE id_proveedor = :id_proveedor";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':id_proveedor', $id_proveedor);
+        
+        $result = $stmt->execute();
+        $this->conex = null;
+        return $result;
+    }
 
     public function getproveedores() {
-        // Punto de depuración: Iniciando getmarcas
-        //echo "Iniciando getmarcas.<br>";
-        
-        // Primera consulta para obtener datos de marcas
+        return $this->g_proveedores();
+    }
+    private function g_proveedores() {
         $queryproveedores = 'SELECT * FROM ' . $this->tableproveedor;
-        
-        // Punto de depuración: Query de marcas preparada
-        //echo "Query de marcas preparada: " . $querymarcas . "<br>";
         
         $stmtproveedores = $this->conex->prepare($queryproveedores);
         $stmtproveedores->execute();
@@ -201,12 +227,15 @@ public function ingresarProveedor() {
         return $proveedores;
     }
 
-            public function cambiarEstatus($nuevoEstatus) {
+    public function cambiarEstatus($nuevoEstatus) {
+        return $this->cam_Estatus($nuevoEstatus); 
+    }
+    private function cam_Estatus($nuevoEstatus) {
         try {
-            $sql = "UPDATE tbl_proveedores SET estado = :estatus WHERE id_proveedor = :id";
+            $sql = "UPDATE tbl_proveedores SET estado = :estatus WHERE id_proveedor = :id_proveedor";
             $stmt = $this->conex->prepare($sql);
             $stmt->bindParam(':estatus', $nuevoEstatus);
-            $stmt->bindParam(':id', $this->id);
+            $stmt->bindParam(':id_proveedor', $this->id_proveedor);
             
             return $stmt->execute();
         } catch (PDOException $e) {

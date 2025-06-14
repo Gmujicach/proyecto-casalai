@@ -12,7 +12,6 @@ class marca extends BD {
         $this->conex = $conexion->getConexion();
     }
 
-    // Getters y Setters
     public function getnombre_marca() {
         return $this->nombre_marca;
     }
@@ -66,7 +65,7 @@ class marca extends BD {
             $this->conex = null;
             return $marca ? $marca : null;
         } catch (PDOException $e) {
-            error_log("Error al obtener la última cuenta: " . $e->getMessage());
+            error_log("Error al obtener la última marca: " . $e->getMessage());
             $this->conex = null;
             return null;
         }
