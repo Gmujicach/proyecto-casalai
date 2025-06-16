@@ -200,10 +200,11 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
     </table>
 </div>
 
-<div class="modal fade" id="modificarProductoModal" tabindex="-1" role="dialog" aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
+<div class="modal fade" id="modificarProductoModal" tabindex="-1" role="dialog" 
+aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
+      <form id="modificarProductoForm" method="POST">
         <div class="modal-header">
           <h5 class="titulo-form" id="modificarProductoModalLabel">Realizar Pedido</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
