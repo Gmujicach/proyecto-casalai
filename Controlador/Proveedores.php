@@ -66,16 +66,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_proveedor = $_POST['id_proveedor'];
             $proveedor = new Proveedores();
             $proveedor->setIdProveedor($id_proveedor);
-            $proveedor->setNombre($_POST['nombre']);
+            $proveedor->setNombre($_POST['nombre_proveedor']);
             $proveedor->setRif1($_POST['rif_proveedor']);
-            $proveedor->setRepresentante($_POST['persona_contacto']);
+            $proveedor->setRepresentante($_POST['nombre_representante']);
             $proveedor->setRif2($_POST['rif_representante']);
-            $proveedor->setCorreo($_POST['correo']);
-            $proveedor->setObservacion($_POST['observaciones']);
-            $proveedor->setTelefono1($_POST['telefono']);
-            $proveedor->setTelefono2($_POST['telefono_secundario']);
-            $proveedor->setDireccion($_POST['direccion']);
-
+            $proveedor->setCorreo($_POST['correo_proveedor']);
+            $proveedor->setDireccion($_POST['direccion_proveedor']);
+            $proveedor->setTelefono1($_POST['telefono_1']);
+            $proveedor->setTelefono2($_POST['telefono_2']);
+            $proveedor->setObservacion($_POST['observacion']);
             
             if ($proveedor->existeNombreProveedor($_POST['nombre_proveedor'], $id_proveedor)) {
                 echo json_encode([
