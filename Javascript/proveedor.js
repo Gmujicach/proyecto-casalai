@@ -745,6 +745,46 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('click', '#modificarProveedorModal .close', function() {
+        $('#modificarProveedorModal').modal('hide');
+    });
+
+    $(document).on('click', '.btn-eliminar', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarla!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var id_proveedor = $(this).data('id');
+                var datos = new FormData();
+                datos.append('accion', 'eliminar');
+                datos.append('id_proveedor', id_proveedor);
+                enviarAjax(datos, function(respuesta){
+                    if (respuesta.status === 'success') {
+                        Swal.fire(
+                            'Eliminada!',
+                            'El proveedor ha sido eliminada.',
+                            'success'
+                        );
+                        eliminarFilaProveedor(id_proveedor);
+                    } else {
+                        Swal.fire('Error', respuesta.message, 'error');
+                    }
+                });
+            }
+        });
+    });
+
+    function eliminarFilaProveedor(id_proveedor) {
+        $(`#tablaConsultas tbody tr[data-id="${id_proveedor}"]`).remove();
+    }
+
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
             icon: icono,
@@ -786,21 +826,6 @@ $(document).ready(function () {
 
 ///////
     
-    $(document).on('click', '.modificar', function() {
-    var boton = $(this);
-
-    $('#modificar_id_proveedor').val(boton.data('id'));
-    $('#modificar_nombre_proveedor').val(boton.data('nombre'));
-    $('#modificar_persona_contacto').val(boton.data('persona-contacto'));
-    $('#modificar_direccion').val(boton.data('direccion'));
-    $('#modificar_telefono').val(boton.data('telefono'));
-    $('#modificar_correo').val(boton.data('correo'));
-    $('#modificar_telefono_secundario').val(boton.data('telefono-secundario'));
-    $('#modificar_rif_proveedor').val(boton.data('rif-proveedor'));
-    $('#modificar_rif_representante').val(boton.data('rif-representante'));
-    $('#modificar_observaciones').val(boton.data('observaciones'));
-
-    $('#modificar_usuario_modal').modal('show');
 });
 
     // Cargar datos del marcas en el modal al abrir
@@ -1085,7 +1110,7 @@ $(document).on('click', '.eliminar', function (e) {
             }
         });
     });
-});
+
 
 function agregarFilaProveedor(proveedor) {
     const tabla = $('#tablaConsultas').DataTable();
