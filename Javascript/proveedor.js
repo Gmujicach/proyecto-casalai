@@ -874,7 +874,7 @@ $(document).ready(function () {
         return str;
     }
 });
-
+/*
     // Cargar datos del marcas en el modal al abrir
         $(document).on('click', '#modificarProductoBtn', function() {
         var boton = $(this);
@@ -903,9 +903,9 @@ $(document).ready(function () {
     document.getElementById('modificarNombreProducto').value = nombre;
     document.getElementById('modificarModelo').value = modelo;
   });
-});
+});*/
 
-    
+    /*
     // Enviar datos de modificación por AJAX al controlador PHP
     $('#modificarProveedorForm').on('submit', function(e) {
         e.preventDefault();
@@ -948,4 +948,4 @@ $('body').css('padding-right', '');
                 muestraMensaje('Error al modificar el Proveedor.');
             }
         });
-    });
+    });*/
