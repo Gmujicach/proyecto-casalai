@@ -19,12 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $proveedor->setRepresentante($_POST['nombre_representante']);
             $proveedor->setRif2($_POST['rif_representante']);
             $proveedor->setCorreo($_POST['correo_proveedor']);
-            $proveedor->setObservacion($_POST['observacion']);
+            $proveedor->setDireccion($_POST['direccion_proveedor']);
             $proveedor->setTelefono1($_POST['telefono_1']);
             $proveedor->setTelefono2($_POST['telefono_2']);
-            $proveedor->setDireccion($_POST['direccion_proveedor']);
+            $proveedor->setObservacion($_POST['observacion']);
             
-            if ($proveedor->existeNombreProveedor($_POST['nombre'])) {
+            if ($proveedor->existeNombreProveedor($_POST['nombre_proveedor'])) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El nombre del proveedor ya existe'
@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $proveedor->setDireccion($_POST['direccion']);
 
             
-            if ($proveedor->existeNombreProveedor($_POST['nombre'], $id_proveedor)) {
+            if ($proveedor->existeNombreProveedor($_POST['nombre_proveedor'], $id_proveedor)) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El nombre del proveedor ya existe'

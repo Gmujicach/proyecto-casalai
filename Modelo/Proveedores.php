@@ -107,10 +107,10 @@ class Proveedores extends BD {
         return $this->existeNomProveedor($nombre, $excluir_id); 
     }
     private function existeNomProveedor($nombre, $excluir_id) {
-        $sql = "SELECT COUNT(*) FROM tbl_proveedores WHERE nombre = ?";
+        $sql = "SELECT COUNT(*) FROM tbl_proveedores WHERE nombre_proveedor = ?";
         $params = [$nombre];
         if ($excluir_id !== null) {
-            $sql .= " AND id_marca != ?";
+            $sql .= " AND id_proveedor != ?";
             $params[] = $excluir_id;
         }
         $stmt = $this->conex->prepare($sql);
@@ -136,7 +136,7 @@ class Proveedores extends BD {
     }
     private function r_proveedor() {
         $sql = "INSERT INTO tbl_proveedores (`nombre_proveedor`, `rif_proveedor`, `nombre_representante`, `rif_representante`, `correo_proveedor`, `direccion_proveedor`, `telefono_1`, `telefono_2`, `observacion`)
-                VALUES (:nombre, :representante, :direccion, :telefono1, :telefono2, :rif2, :rif1, :correo, :observacion)";
+                VALUES (:nombre, :rif1, :representante, :rif2, :correo, :direccion, :telefono1, :telefono2, :observacion)";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre', $this->nombre);
         $stmt->bindParam(':rif1', $this->rif1);
