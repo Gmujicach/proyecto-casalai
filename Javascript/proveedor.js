@@ -163,7 +163,7 @@ $(document).ready(function () {
         let valor_t2 = $(this).val().replace(/\D/g, '');
         if(valor_t2.length > 4 && valor_t2.length <= 7)
             valor_t2 = valor_t2.slice(0,4) + '-' + valor_t2.slice(4);
-        else if(valor_t1.length > 7)
+        else if(valor_t2.length > 7)
             valor_t2 = valor_t2.slice(0,4) + '-' + valor_t2.slice(4,7) + '-' + valor_t2.slice(7,11);
         $(this).val(valor_t2);
     });

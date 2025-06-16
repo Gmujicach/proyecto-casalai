@@ -135,17 +135,17 @@ class Proveedores extends BD {
         return $this->r_proveedor();
     }
     private function r_proveedor() {
-        $sql = "INSERT INTO tbl_proveedores (`nombre`, `presona_contacto`, `direccion`, `telefono`, `telefono_secundario`, `rif_representante`, `rif_proveedor`, `correo`, `observaciones`)
+        $sql = "INSERT INTO tbl_proveedores (`nombre_proveedor`, `rif_proveedor`, `nombre_representante`, `rif_representante`, `correo_proveedor`, `direccion_proveedor`, `telefono_1`, `telefono_2`, `observacion`)
                 VALUES (:nombre, :representante, :direccion, :telefono1, :telefono2, :rif2, :rif1, :correo, :observacion)";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre', $this->nombre);
+        $stmt->bindParam(':rif1', $this->rif1);
         $stmt->bindParam(':representante', $this->representante);
+        $stmt->bindParam(':rif2', $this->rif2);
+        $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':direccion', $this->direccion);
         $stmt->bindParam(':telefono1', $this->telefono1);
         $stmt->bindParam(':telefono2', $this->telefono2);
-        $stmt->bindParam(':rif1', $this->rif1);
-        $stmt->bindParam(':rif2', $this->rif2);
-        $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':observacion', $this->observacion);
 
         return $stmt->execute();
@@ -185,17 +185,17 @@ class Proveedores extends BD {
         return $this->m_proveedor($id_proveedor);
     }
     private function m_proveedor($id_proveedor) {
-        $sql = "UPDATE tbl_proveedores SET nombre = :nombre, presona_contacto = :representante, direccion = :direccion, telefono = :telefono1, telefono_secundario = :telefono2, rif_representante = :rif2, rif_proveedor = :rif1, correo = :correo, observaciones = :observacion WHERE id_proveedor = :id_proveedor";
+        $sql = "UPDATE tbl_proveedores SET nombre_proveedor = :nombre, rif_proveedor = :rif1, nombre_representante = :representante, rif_representante = :rif2, correo_proveedor = :correo, direccion_proveedor = :direccion, telefono_1 = :telefono1, telefono_2 = :telefono2, observacion = :observacion WHERE id_proveedor = :id_proveedor";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_proveedor', $id_proveedor);
         $stmt->bindParam(':nombre', $this->nombre);
+        $stmt->bindParam(':rif1', $this->rif1);
         $stmt->bindParam(':representante', $this->representante);
+        $stmt->bindParam(':rif2', $this->rif2);
+        $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':direccion', $this->direccion);
         $stmt->bindParam(':telefono1', $this->telefono1);
         $stmt->bindParam(':telefono2', $this->telefono2);
-        $stmt->bindParam(':rif1', $this->rif1);
-        $stmt->bindParam(':rif2', $this->rif2);
-        $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':observacion', $this->observacion);
         
         return $stmt->execute();
