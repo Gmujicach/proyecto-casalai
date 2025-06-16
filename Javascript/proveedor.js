@@ -654,7 +654,7 @@ $(document).ready(function () {
         return errores;
     }
 
-    $('#modificarProducto').on('submit', function(e) {
+    $('#modificarProveedor').on('submit', function(e) {
         e.preventDefault();
 
         const datos = {
