@@ -86,10 +86,15 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
         <thead>
             <tr>
                 <th>Acciones</th>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>R.I.F</th>
-                <th>Telefono</th>
+                <th>Nombre del Proveedor</th>
+                <th>RIF del Proveedor</th>
+                <th>Nombre del Proveedor</th>
+                <th>RIF del Representante</th>
+                <th>Correo del Proveedor</th>
+                <th>Dirección del Proveedor</th>
+                <th>Teléfono Principal</th>
+                <th>Telefono Secundario</th>
+                <th>Observación</th>
                 <th>Estado</th>
             </tr>
         </thead>

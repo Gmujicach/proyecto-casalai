@@ -622,6 +622,129 @@ $(document).ready(function () {
         );
     });
 
+    function validarProveedor(datos) {
+        let errores = [];
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/.test(datos.nombre_proveedor)) {
+            errores.push("El nombre debe tener solo letras.");
+        }
+        if (!/^[VEJPG]-\d{8}-\d$/.test(datos.rif_proveedor)) {
+            errores.push("Formato válido: J-12345678-9.");
+        }
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/.test(datos.nombre_representante)) {
+            errores.push("El nombre debe tener solo letras.");
+        }
+        if (!/^[VEJPG]-\d{8}-\d$/.test(datos.rif_representante)) {
+            errores.push("Formato válido: J-12345678-9.");
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo_proveedor)) {
+            errores.push("Formato válido: example@gmail.com");
+        }
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/.test(datos.direccion_proveedor)) {
+            errores.push("La dirección debe tener letras y/o números.");
+        }
+        if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono_1)) {
+            errores.push("Formato válido: 04XX-XXX-XXXX.");
+        }
+        if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono_2)) {
+            errores.push("Formato válido: 04XX-XXX-XXXX.");
+        }
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/.test(datos.observacion)) {
+            errores.push("La observación debe tener letras y/o números.");
+        }
+        return errores;
+    }
+
+    $('#modificarProducto').on('submit', function(e) {
+        e.preventDefault();
+
+        const datos = {
+            nombre_proveedor: $('#modificar_nombre_proveedor').val(),
+            rif_proveedor: $('#modificar_rif_proveedor').val(),
+            nombre_representante: $('#modificar_nombre_representante').val(),
+            rif_representante: $('#modificar_rif_representante').val(),
+            correo_proveedor: $('#modificar_correo_proveedor').val(),
+            direccion_proveedor: $('#modificar_direccion_proveedor').val(),
+            telefono_1: $('#modificar_telefono_1').val(),
+            telefono_2: $('#modificar_telefono_2').val(),
+            observacion: $('#modificar_observacion').val()
+        };
+
+        const errores = validarProveedor(datos);
+
+        if (errores.length > 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de validación',
+                html: errores.join('<br>')
+            });
+            return;
+        }
+
+        var formData = new FormData(this);
+        formData.append('accion', 'modificar');
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#modificarProveedorModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: 'El proveedor se ha modificado correctamente'
+                    });
+
+                    const id = $('#modificar_id_proveedor').val();
+                    const nombre_proveedor = $('#modificar_nombre_proveedor').val();
+                    const rif_proveedor = $('#modificar_rif_proveedor').val();
+                    const nombre_representante = $('#modificar_nombre_representante').val();
+                    const rif_representante = $('#modificar_rif_representante').val();
+                    const correo_proveedor = $('#modificar_correo_proveedor').val();
+                    const direccion_proveedor = $('#modificar_direccion_proveedor').val();
+                    const telefono_1 = $('#modificar_telefono_1').val();
+                    const telefono_2 = $('#modificar_telefono_2').val();
+                    const observacion = $('#modificar_observacion').val();
+
+                    const fila = $('tr[data-id="' + id + '"]');
+                    fila.find('td').eq(1).text(nombre_proveedor);
+                    fila.find('td').eq(2).text(rif_proveedor);
+                    fila.find('td').eq(3).text(nombre_representante);
+                    fila.find('td').eq(4).text(rif_representante);
+                    fila.find('td').eq(5).text(correo_proveedor);
+                    fila.find('td').eq(6).text(direccion_proveedor);
+                    fila.find('td').eq(7).text(telefono_1);
+                    fila.find('td').eq(8).text(telefono_2);
+                    fila.find('td').eq(9).text(observacion);
+
+                    const botonModificar = fila.find('.btn-modificar');
+                    botonModificar.data('nombre_proveedor', nombre_proveedor);
+                    botonModificar.data('rif_proveedor', rif_proveedor);
+                    botonModificar.data('nombre_representante', nombre_representante);
+                    botonModificar.data('rif_representante', rif_representante);
+                    botonModificar.data('correo_proveedor', correo_proveedor);
+                    botonModificar.data('direccion_proveedor', direccion_proveedor);
+                    botonModificar.data('telefono_1', telefono_1);
+                    botonModificar.data('telefono_2', telefono_2);
+                    botonModificar.data('observacion', observacion);
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'No se pudo modificar el proveedor'
+                    });
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error al modificar el porveedor:', textStatus, errorThrown);
+                muestraMensaje('Error al modificar el proveedor.');
+            }
+        });
+    });
+
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
             icon: icono,
