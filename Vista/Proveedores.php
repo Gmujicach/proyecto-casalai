@@ -93,7 +93,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                 <th>Correo del Proveedor</th>
                 <th>Dirección del Proveedor</th>
                 <th>Teléfono Principal</th>
-                <th>Telefono Secundario</th>
+                <th>Teléfono Secundario</th>
                 <th>Observación</th>
                 <th>Estado</th>
             </tr>
