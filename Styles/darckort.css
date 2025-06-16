@@ -438,3 +438,16 @@ transform: translateY(0%);
 .btn-accion i {
   font-size: 1rem;           /* mismo alto que el texto */
 }
+  .caracteristica-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-end;
+  }
+  .caracteristica-item input,
+  .caracteristica-item select {
+    flex: 1;
+  }
+  .caracteristica-item .btn-eliminar {
+    flex: 0 0 auto;
+  }

@@ -82,10 +82,16 @@ case 'modificar':
     }
 
     if ($usuario->modificarUsuario($id_usuario)) {
-        echo json_encode(['status' => 'success']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
-    }
+    // Obtener el usuario actualizado con el nombre del rol
+    $usuarioActualizado = $usuario->obtenerUsuarioPorId($id_usuario);
+    // Si tu método obtenerUsuarioPorId no hace el JOIN con tbl_rol, cámbialo para que lo haga
+    echo json_encode([
+        'status' => 'success',
+        'usuario' => $usuarioActualizado
+    ]);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
+}
     exit;
 
         case 'eliminar':

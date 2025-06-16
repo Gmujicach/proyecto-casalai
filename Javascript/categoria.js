@@ -34,6 +34,55 @@ $(document).ready(function () {
         return true;
     }
 
+    function validarCaracteristicas() {
+    let validacionCorrecta = true;
+    let mensajeError = '';
+
+    const regexNombre = /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ]+(?: [a-zA-ZÁÉÍÓÚñÑáéíóúüÜ]+)*$/;
+
+    $('.caracteristica-item').each(function(index, item) {
+        const nombre = $(item).find('input[name*="[nombre]"]');
+        const tipo = $(item).find('select[name*="[tipo]"]');
+        const max = $(item).find('input[name*="[max]"]');
+
+        const nombreVal = $.trim(nombre.val());
+
+        if (nombreVal === '') {
+            mensajeError = 'El nombre de una característica está vacío.';
+            nombre.focus();
+            validacionCorrecta = false;
+            return false;
+        }
+
+        if (!regexNombre.test(nombreVal)) {
+            mensajeError = 'El nombre de la característica solo puede contener letras y un espacio entre palabras.';
+            nombre.focus();
+            validacionCorrecta = false;
+            return false;
+        }
+
+        if (tipo.val() === '') {
+            mensajeError = 'Debe seleccionar un tipo para cada característica.';
+            tipo.focus();
+            validacionCorrecta = false;
+            return false;
+        }
+
+        if ($.trim(max.val()) === '' || parseInt(max.val()) <= 0) {
+            mensajeError = 'El campo "Máx. caracteres" debe ser mayor a 0.';
+            max.focus();
+            validacionCorrecta = false;
+            return false;
+        }
+    });
+
+    if (!validacionCorrecta) {
+        mensajes('error', 4000, 'Error de validación', mensajeError);
+    }
+
+    return validacionCorrecta;
+}
+
     function agregarFilaCategoria(categoria) {
         const nuevaFila = `
             <tr data-id="${categoria.id_categoria}">
@@ -75,7 +124,7 @@ $(document).ready(function () {
     $('#registrarCategoria').on('submit', function(e) {
         e.preventDefault();
 
-        if(validarEnvioCategoria()){
+        if(validarEnvioCategoria() && validarCaracteristicas()) {
             var datos = new FormData(this);
             datos.append('accion', 'registrar');
             enviarAjax(datos, function(respuesta){
@@ -86,6 +135,7 @@ $(document).ready(function () {
                         text: respuesta.message || respuesta.msg || 'Categoria registrada correctamente'
                     });
                     agregarFilaCategoria(respuesta.categoria);
+                    $('#registrarCategoriaModal').modal('hide');    
                     resetCategoria();
                 } else {
                     Swal.fire({
@@ -249,6 +299,54 @@ $(document).ready(function () {
     function eliminarFilaCategoria(id_categoria) {
         $(`#tablaConsultas tbody tr[data-id="${id_categoria}"]`).remove();
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('registrarCategoria');
+        const contenedor = document.getElementById('caracteristicasContainer');
+        const btnAgregar = document.getElementById('agregarCaracteristica');
+
+        let contador = 0;
+        const maxCaracteristicas = 5;
+
+        const crearInputCaracteristica = (id, puedeEliminar = true) => {
+            const div = document.createElement('div');
+            div.classList.add('caracteristica-item');
+            div.dataset.index = id;
+
+            div.innerHTML = `
+                <input type="text" name="caracteristicas[${id}][nombre]" placeholder="Nombre" class="form-control" maxlength="20" required>
+                <select name="caracteristicas[${id}][tipo]" class="form-select" required>
+                    <option value="">Tipo</option>
+                    <option value="int">Entero</option>
+                    <option value="float">Decimal</option>
+                    <option value="string">Texto</option>
+                </select>
+                <input type="number" name="caracteristicas[${id}][max]" placeholder="Máx. caracteres" class="form-control" min="1" max="255" required>
+                ${puedeEliminar ? `<button type="button" class="btn btn-danger btn-eliminar-caracteristicas">✖</button>` : ''}
+            `;
+
+            if (puedeEliminar) {
+                div.querySelector('.btn-eliminar-caracteristicas').addEventListener('click', () => {
+                    contenedor.removeChild(div);
+                    contador--;
+                    btnAgregar.disabled = false;
+                });
+            }
+
+            contenedor.appendChild(div);
+        };
+
+        crearInputCaracteristica(contador++, false);
+
+        btnAgregar.addEventListener('click', () => {
+            if (contador < maxCaracteristicas) {
+                crearInputCaracteristica(contador++);
+                if (contador === maxCaracteristicas) {
+                    btnAgregar.disabled = true;
+                }
+            }
+        });
+    });
 
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
