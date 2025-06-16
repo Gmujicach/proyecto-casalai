@@ -109,6 +109,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case 'cambiar_estado':
             $id_proveedor = $_POST['id_proveedor'];
             $nuevoEstatus = $_POST['nuevo_estatus'];
+
+            if (!in_array($nuevoEstatus, ['habilitado', 'inhabilitado'])) {
+                echo json_encode(['status' => 'error', 'message' => 'Estado no válido']);
+                exit;
+            }
+
             $proveedor = new Proveedores();
             $proveedor->setIdProveedor($id_proveedor);
             if ($proveedor->cambiarEstatus($nuevoEstatus)) {
