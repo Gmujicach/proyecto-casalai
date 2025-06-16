@@ -28,41 +28,41 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="grupo-form">
                         <input type="text" placeholder="Nombre Proveedor" class="control-form" id="nombre_proveedor" name="nombre_proveedor" required>
-                        <span class="span-value-modal" id="snombre_proveedor"></span>
+                        <span class="span-value" id="snombre_proveedor"></span>
 
-                        <input type="text" placeholder="R.I.F del Proveedor" class="control-form" id="rif_proveedor" name="rif_proveedor" required>
-                        <span class="span-value-modal" id="srif_proveedor"></span>
+                        <input type="text" placeholder="RIF del Proveedor" class="control-form" id="rif_proveedor" name="rif_proveedor" required>
+                        <span class="span-value" id="srif_proveedor"></span>
                     </div>
 
                     <div class="grupo-form">
                         <input type="text" placeholder="Nombre Representante" class="control-form" id="nombre_representante" name="nombre_representante" required>
-                        <span class="span-value-modal" id="snombre_representante"></span>
+                        <span class="span-value" id="snombre_representante"></span>
 
-                        <input type="text" placeholder="R.I.F del Representante" class="control-form" id="rif_representante" name="rif_representante" required>
-                        <span class="span-value-modal" id="srif_representante"></span>
+                        <input type="text" placeholder="RIF del Representante" class="control-form" id="rif_representante" name="rif_representante" required>
+                        <span class="span-value" id="srif_representante"></span>
                     </div>
 
                     <div class="envolver-form">
                         <input type="text" placeholder="Correo" class="control-form" id="correo_proveedor" name="correo_proveedor" required>
-                        <span class="span-value-modal" id="scorreo_proveedor"></span>
+                        <span class="span-value" id="scorreo_proveedor"></span>
                     </div>
 
                     <div class="envolver-form">
                         <input type="text" placeholder="Direccion" class="control-form" id="direccion_proveedor" name="direccion_proveedor" required>
-                        <span class="span-value-modal" id="sdireccion_proveedor"></span>
+                        <span class="span-value" id="sdireccion_proveedor"></span>
                     </div>
 
                     <div class="grupo-form">
                         <input type="text" placeholder="Telefono Principal" class="control-form" id="telefono_1" name="telefono_1" required>
-                        <span class="span-value-modal" id="stelefono_1"></span>
+                        <span class="span-value" id="stelefono_1"></span>
 
                         <input type="text" placeholder="Telefono Secundario" class="control-form" id="telefono_2" name="telefono_2" required>
-                        <span class="span-value-modal" id="stelefono_2"></span>
+                        <span class="span-value" id="stelefono_2"></span>
                     </div>
 
                     <div class="envolver-form">
                         <textarea class="control-form" maxlength="50" id="observacion" name="observacion" rows="3" placeholder="Escriba alguna observación que se deba tener en cuenta"></textarea>
-                        <span class="span-value-modal" id="sobservacion"></span>
+                        <span class="span-value" id="sobservacion"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
