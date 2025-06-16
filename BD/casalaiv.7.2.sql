@@ -597,25 +597,17 @@ CREATE TABLE `tbl_protector_voltaje` (
 
 CREATE TABLE `tbl_proveedores` (
   `id_proveedor` int(11) NOT NULL,
-  `nombre` varchar(255) NOT NULL,
-  `presona_contacto` varchar(255) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `correo` varchar(255) DEFAULT NULL,
-  `direccion` text DEFAULT NULL,
-  `rif_representante` varchar(20) DEFAULT NULL,
-  `rif_proveedor` varchar(20) DEFAULT NULL,
-  `telefono_secundario` varchar(20) DEFAULT NULL,
-  `observaciones` text DEFAULT NULL,
+  `nombre_proveedor` varchar(50) NOT NULL,
+  `rif_proveedor` varchar(15) DEFAULT NULL,
+  `nombre_representante` varchar(50) DEFAULT NULL,
+  `rif_representante` varchar(15) DEFAULT NULL,
+  `correo_proveedor` varchar(50) DEFAULT NULL,
+  `direccion_proveedor` text DEFAULT NULL,
+  `telefono_1` varchar(15) DEFAULT NULL,
+  `telefono_2` varchar(15) DEFAULT NULL,
+  `observacion` text DEFAULT NULL,
   `estado` enum('habilitado','inhabilitado') NOT NULL DEFAULT 'habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tbl_proveedores`
---
-
-INSERT INTO `tbl_proveedores` (`id_proveedor`, `nombre`, `presona_contacto`, `telefono`, `correo`, `direccion`, `rif_representante`, `rif_proveedor`, `telefono_secundario`, `observaciones`) VALUES
-(1, 'Servicios Técnicos', 'Brayan Mendoza', '04145555556', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo'),
-(1000, 'Thunder Net', 'Diego Lopez', '0424-5329515', NULL, 'Avenida Lara', 'V-317663160', 'J-406452157', '0414-5413366', 'El Mejor');
 
 -- --------------------------------------------------------
 

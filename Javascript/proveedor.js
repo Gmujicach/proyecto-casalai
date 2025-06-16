@@ -274,6 +274,15 @@ $(document).ready(function () {
             mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
             return false;
         }
+        else if(validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $("#observacion"),
+            $("#sobservacion"),
+            "*Puede haber letras y números*"
+        )==0){
+            mensajes('error',4000,'Verifique la observación','Debe tener solo letras y números');
+            return false;
+        }
         return true;
     }
 
@@ -285,15 +294,15 @@ $(document).ready(function () {
                     <div>
                         <button class="btn-modificar"
                             data-id="${proveedor.id_proveedor}"
-                            data-nombre="${proveedor.nombre}"
+                            data-nombre-proveedor="${proveedor.nombre_proveedor}"
                             data-rif-proveedor="${proveedor.rif_proveedor}"
-                            data-persona-contacto="${proveedor.persona_contacto}"
+                            data-nombre-representante="${proveedor.nombre_representante}"
                             data-rif-representante="${proveedor.rif_representante}"
-                            data-correo="${proveedor.correo}"
-                            data-direccion="${proveedor.direccion}"
-                            data-telefono="${proveedor.telefono_proveedor}"
-                            data-telefono-secundario="${proveedor.telefono_secundario}"
-                            data-observaciones="${proveedor.observaciones}">
+                            data-correo-proveedor="${proveedor.correo_proveedor}"
+                            data-direccion-proveedor="${proveedor.direccion_proveedor}"
+                            data-telefono-1="${proveedor.telefono_1}"
+                            data-telefono-2="${proveedor.telefono_2}"
+                            data-observacion="${proveedor.observacion}">
                             Modificar
                         </button>
                     </div>
@@ -408,13 +417,205 @@ $(document).ready(function () {
     }
 
     $(document).on('click', '.btn-modificar', function () {
-        $('#modificar_id_rol').val($(this).data('id'));
-        $('#modificar_nombre_rol').val($(this).data('nombre'));
-        $('#smnombre_rol').text('');
-        $('#modificarRolModal').modal('show');
+        $('#modificar_id_proveedor').val($(this).data('id'));
+        $('#modificar_nombre_proveedor').val($(this).data('nombre'));
+        $('#modificar_rif_proveedor').val($(this).data('rif-proveedor'));
+        $('#modificar_persona_contacto').val($(this).data('persona-contacto'));
+        $('#modificar_rif_representante').val($(this).data('rif-representante'));
+        $('#modificar_correo').val($(this).data('correo'));
+        $('#modificar_direccion').val($(this).data('direccion'));
+        $('#modificar_telefono').val($(this).data('telefono'));
+        $('#modificar_telefono_secundario').val($(this).data('telefono-secundario'));
+        $('#observaciones').val($(this).data('observaciones'));
+        $('#smnombre').text('');
+        $('#smrif_proveedor').text('');
+        $('#smpersona_contacto').text('');
+        $('#smrif_representante').text('');
+        $('#smcorreo').text('');
+        $('#smdireccion').text('');
+        $('#smtelefono').text('');
+        $('#smtelefono_secundario').text('');
+        $('#smobservaciones').text('');
+        $('#modificarProveedorModal').modal('show');
     });
 
+    $("#nombre_proveedor").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
+        let nombre_p = document.getElementById("nombre_proveedor");
+        nombre_p.value = space(nombre_p.value);
+    });
+    $("#nombre_proveedor").on("keyup", function () {
+        validarKeyUp(
+        /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/,
+        $(this),
+        $("#snombre_proveedor"),
+        "*Solo letras, de 2 a 50 caracteres*"
+        );
+    });
 
+    $("#rif_proveedor").on("keypress", function(e){
+        validarKeyPress(/^[vejpg0-9-\b]*$/i, e);
+    });
+    $("#rif_proveedor").on("keyup", function(){
+        validarKeyUp(
+            /^[VEJPG]-\d{8}-\d$/,
+            $(this),
+            $("#srif_proveedor"),
+            "*Formato válido: J-12345678-9*"
+        );
+    });
+    $("#rif_representante").on("input", function() {
+        let valor_rp = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+        let resultado_rp = '';
+        if (valor_rp.length > 0) {
+            let letra_rp = valor_rp.charAt(0);
+            if ('VEJPG'.includes(letra_rp)) {
+                resultado_rp = letra_rp;
+            } else {
+                resultado_rp = '';
+            }
+
+            let numeros_rp = valor_rp.substring(1).replace(/\D/g, '');
+
+            if (numeros_rp.length > 0) {
+                resultado_rp += '-' + numeros_rp.substring(0, 8);
+                if (numeros_rp.length > 8) {
+                    resultado_rp += '-' + numeros_rp.substring(8, 9);
+                }
+            }
+        }
+        $(this).val(resultado_rp);
+    });
+
+    $("#nombre_representante").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
+        let nombre_r = document.getElementById("nombre_representante");
+        nombre_r.value = space(nombre_r.value);
+    });
+    $("#nombre_representante").on("keyup", function () {
+        validarKeyUp(
+        /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/,
+        $(this),
+        $("#snombre_representante"),
+        "*Solo letras, de 2 a 50 caracteres*"
+        );
+    });
+
+    $("#rif_representante").on("keypress", function(e){
+        validarKeyPress(/^[VEJPG0-9-\b]*$/i, e);
+    });
+    $("#rif_representante").on("keyup", function(){
+        validarKeyUp(
+            /^[VEJPG]-\d{8}-\d$/,
+            $(this),
+            $("#srif_representante"),
+            "*Formato válido: J-12345678-9*"
+        );
+    });
+    $("#rif_representante").on("input", function() {
+        let valor_rr = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+        let resultado_rr = '';
+        if (valor_rr.length > 0) {
+            let letra_rr = valor_rr.charAt(0);
+            if ('VEJPG'.includes(letra_rr)) {
+                resultado_rr = letra_rr;
+            } else {
+                resultado_rr = '';
+            }
+
+            let numeros_rr = valor_rr.substring(1).replace(/\D/g, '');
+
+            if (numeros_rr.length > 0) {
+                resultado_rr += '-' + numeros_rr.substring(0, 8);
+                if (numeros_rr.length > 8) {
+                    resultado_rr += '-' + numeros_rr.substring(8, 9);
+                }
+            }
+        }
+        $(this).val(resultado_rr);
+    });
+
+    $("#correo_proveedor").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
+    });
+    $("#correo_proveedor").on("keyup", function(){
+        validarKeyUp(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $(this),
+            $("#scorreo_proveedor"),
+            "*Formato válido: example@gmail.com*"
+        );
+    });
+
+    $("#direccion_proveedor").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
+        let direccion = document.getElementById("direccion_proveedor");
+        direccion.value = space(direccion.value);
+    });
+    $("#direccion_proveedor").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $(this),
+            $("#sdireccion_proveedor"),
+            "*El formato permite letras y números*"
+        );
+    });
+
+    $("#telefono_1").on("keypress", function(e){
+        validarKeyPress(/^[0-9-]*$/, e);
+    });
+    $("#telefono_1").on("keyup", function(){
+        validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $(this),
+            $("#stelefono_1"),
+            "*Formato válido: 04XX-XXX-XXXX*"
+        );
+    });
+    $("#telefono_1").on("input", function() {
+        let valor_t1 = $(this).val().replace(/\D/g, '');
+        if(valor_t1.length > 4 && valor_t1.length <= 7)
+            valor_t1 = valor_t1.slice(0,4) + '-' + valor_t1.slice(4);
+        else if(valor_t1.length > 7)
+            valor_t1 = valor_t1.slice(0,4) + '-' + valor_t1.slice(4,7) + '-' + valor_t1.slice(7,11);
+        $(this).val(valor_t1);
+    });
+
+    $("#telefono_2").on("keypress", function(e){
+        validarKeyPress(/^[0-9-]*$/, e);
+    });
+    $("#telefono_2").on("keyup", function(){
+        validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $(this),
+            $("#stelefono_2"),
+            "*Formato válido: 04XX-XXX-XXXX*"
+        );
+    });
+    $("#telefono_2").on("input", function() {
+        let valor_t2 = $(this).val().replace(/\D/g, '');
+        if(valor_t2.length > 4 && valor_t2.length <= 7)
+            valor_t2 = valor_t2.slice(0,4) + '-' + valor_t2.slice(4);
+        else if(valor_t1.length > 7)
+            valor_t2 = valor_t2.slice(0,4) + '-' + valor_t2.slice(4,7) + '-' + valor_t2.slice(7,11);
+        $(this).val(valor_t2);
+    });
+
+    $("#observacion").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
+        let observacion = document.getElementById("observacion");
+        observacion.value = space(observacion.value);
+    });
+    $("#observacion").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $(this),
+            $("#sobservacion"),
+            "*El formato permite letras y números*"
+        );
+    });
 
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
