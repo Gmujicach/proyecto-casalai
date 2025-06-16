@@ -371,7 +371,7 @@ $(document).ready(function () {
         $('#registrarProveedorModal').modal('show');
     });
 
-    $('#registrarRol').on('submit', function(e) {
+    $('#incluirproveedor').on('submit', function(e) {
         e.preventDefault();
 
         if(validarEnvioProveedor()){
