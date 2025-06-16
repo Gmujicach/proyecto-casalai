@@ -122,24 +122,49 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                 </td>
                 <td>
                     <span class="campo-nombres">
-                    <?php echo htmlspecialchars($proveedor['nombre']); ?>
+                    <?php echo htmlspecialchars($proveedor['nombre_proveedor']); ?>
                     </span>
                 </td>
-                <td>
-                    <span class="campo-correo">
-                    <?php echo htmlspecialchars($proveedor['correo']); ?>
-                    </span>
-                </td> 
                 <td>
                     <span class="campo-nombres">
                     <?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="campo-telefono">
-                    <?php echo htmlspecialchars($proveedor['telefono']); ?>
+                    <span class="campo-nombres">
+                    <?php echo htmlspecialchars($proveedor['nombre_representante']); ?>
                     </span>
                 </td>
+                <td>
+                    <span class="campo-nombres">
+                    <?php echo htmlspecialchars($proveedor['rif_representante']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-correo">
+                    <?php echo htmlspecialchars($proveedor['correo_proveedor']); ?>
+                    </span>
+                </td> 
+                <td>
+                    <span class="campo-nombres">
+                    <?php echo htmlspecialchars($proveedor['direccion_proveedor']); ?>
+                    </span>
+                </td> 
+                <td>
+                    <span class="campo-telefono">
+                    <?php echo htmlspecialchars($proveedor['telefono_1']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-telefono">
+                    <?php echo htmlspecialchars($proveedor['telefono_2']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-nombres">
+                    <?php echo htmlspecialchars($proveedor['observacion']); ?>
+                    </span>
+                </td> 
                 <td class="campo-estado">
                     <span 
                       class="campo-estatus <?php echo ($proveedor['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 

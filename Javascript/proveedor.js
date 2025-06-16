@@ -314,10 +314,15 @@ $(document).ready(function () {
                     </div>
                 </ul>
             </td>
-            <td><span class="campo-nombres">${proveedor.nombre}</span></td>
-            <td><span class="campo-correo">${proveedor.correo}</span></td>
-            <td><span class="campo-telefono">${proveedor.rif_proveedor}</span></td>
-            <td><span class="campo-nombres">${proveedor.telefono}</span></td>
+            <td><span class="campo-nombres">${proveedor.nombre_proveedor}</span></td>
+            <td><span class="campo-nombres">${proveedor.rif_proveedor}</span></td>
+            <td><span class="campo-nombres">${proveedor.nombre_representante}</span></td>
+            <td><span class="campo-nombres">${proveedor.rif_representante}</span></td>
+            <td><span class="campo-correo">${proveedor.correo_proveedor}</span></td>
+            <td><span class="campo-nombres">${proveedor.direccion_proveedor}</span></td>
+            <td><span class="campo-telefono">${proveedor.telefono_1}</span></td>
+            <td><span class="campo-telefono">${proveedor.telefono_2}</span></td>
+            <td><span class="campo-nombres">${proveedor.observacion}</span></td>
             <td class="campo-estado">
             <span 
                 class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
@@ -332,37 +337,37 @@ $(document).ready(function () {
     }
 
     function resetProveedor() {
-        $("#nombre").val('');
+        $("#nombre_proveedor").val('');
         $("#rif_proveedor").val('');
-        $("#presona_contacto").val('');
+        $("#nombre_representante").val('');
         $("#rif_representante").val('');
-        $("#correo").val('');
-        $("#direccion").val('');
-        $("#telefono").val('');
-        $("#telefono_secundario").val('');
-        $("#observaciones").val('');
-        $("#snombre").text('');
+        $("#correo_proveedor").val('');
+        $("#direccion_proveedor").val('');
+        $("#telefono_1").val('');
+        $("#telefono_2").val('');
+        $("#observacion").val('');
+        $("#snombre_proveedor").text('');
         $("#srif_proveedor").text('');
-        $("#spresona_contacto").text('');
+        $("#snombre_representante").text('');
         $("#srif_representante").text('');
-        $("#scorreo").text('');
-        $("#sdireccion").text('');
-        $("#stelefono").text('');
-        $("#stelefono_secundario").text('');
-        $("#sobservaciones").text('');
+        $("#scorreo_proveedor").text('');
+        $("#sdireccion_proveedor").text('');
+        $("#stelefono_1").text('');
+        $("#stelefono_2").text('');
+        $("#sobservacion").text('');
     }
 
     $('#btnIncluirProveedor').on('click', function() {
         $('#incluirproveedor')[0].reset();
-        $("#snombre").text('');
+        $("#snombre_proveedor").text('');
         $("#srif_proveedor").text('');
-        $("#spresona_contacto").text('');
+        $("#snombre_representante").text('');
         $("#srif_representante").text('');
-        $("#scorreo").text('');
-        $("#sdireccion").text('');
-        $("#stelefono").text('');
-        $("#stelefono_secundario").text('');
-        $("#sobservaciones").text('');
+        $("#scorreo_proveedor").text('');
+        $("#sdireccion_proveedor").text('');
+        $("#stelefono_1").text('');
+        $("#stelefono_2").text('');
+        $("#sobservacion").text('');
         $('#registrarProveedorModal').modal('show');
     });
 
@@ -418,24 +423,24 @@ $(document).ready(function () {
 
     $(document).on('click', '.btn-modificar', function () {
         $('#modificar_id_proveedor').val($(this).data('id'));
-        $('#modificar_nombre_proveedor').val($(this).data('nombre'));
+        $('#modificar_nombre_proveedor').val($(this).data('nombre-proveedor'));
         $('#modificar_rif_proveedor').val($(this).data('rif-proveedor'));
-        $('#modificar_persona_contacto').val($(this).data('persona-contacto'));
+        $('#modificar_nombre_representante').val($(this).data('nombre-representante'));
         $('#modificar_rif_representante').val($(this).data('rif-representante'));
-        $('#modificar_correo').val($(this).data('correo'));
-        $('#modificar_direccion').val($(this).data('direccion'));
-        $('#modificar_telefono').val($(this).data('telefono'));
-        $('#modificar_telefono_secundario').val($(this).data('telefono-secundario'));
-        $('#observaciones').val($(this).data('observaciones'));
-        $('#smnombre').text('');
+        $('#modificar_correo_proveedor').val($(this).data('correo-proveedor'));
+        $('#modificar_direccion_proveedor').val($(this).data('direccion-proveedor'));
+        $('#modificar_telefono_1').val($(this).data('telefono-1'));
+        $('#modificar_telefono_2').val($(this).data('telefono-2'));
+        $('#modificar_observacion').val($(this).data('observacion'));
+        $('#smnombre_proveedor').text('');
         $('#smrif_proveedor').text('');
-        $('#smpersona_contacto').text('');
+        $('#smnombre_representante').text('');
         $('#smrif_representante').text('');
-        $('#smcorreo').text('');
-        $('#smdireccion').text('');
-        $('#smtelefono').text('');
-        $('#smtelefono_secundario').text('');
-        $('#smobservaciones').text('');
+        $('#smcorreo_proveedor').text('');
+        $('#smdireccion_proveedor').text('');
+        $('#smtelefono_1').text('');
+        $('#smtelefono_2').text('');
+        $('#smobservacion').text('');
         $('#modificarProveedorModal').modal('show');
     });
 
