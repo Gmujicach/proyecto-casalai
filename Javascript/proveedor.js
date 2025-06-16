@@ -29,7 +29,7 @@ $(document).ready(function () {
             "*Formato válido: J-12345678-9*"
         );
     });
-    $("#rif_representante").on("input", function() {
+    $("#rif_proveedor").on("input", function() {
         let valor_rp = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
 
         let resultado_rp = '';
@@ -444,32 +444,32 @@ $(document).ready(function () {
         $('#modificarProveedorModal').modal('show');
     });
 
-    $("#nombre_proveedor").on("keypress", function (e) {
+    $("#modificar_nombre_proveedor").on("keypress", function (e) {
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
-        let nombre_p = document.getElementById("nombre_proveedor");
+        let nombre_p = document.getElementById("modificar_nombre_proveedor");
         nombre_p.value = space(nombre_p.value);
     });
-    $("#nombre_proveedor").on("keyup", function () {
+    $("#modificar_nombre_proveedor").on("keyup", function () {
         validarKeyUp(
         /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/,
         $(this),
-        $("#snombre_proveedor"),
+        $("#smnombre_proveedor"),
         "*Solo letras, de 2 a 50 caracteres*"
         );
     });
 
-    $("#rif_proveedor").on("keypress", function(e){
+    $("#modificar_rif_proveedor").on("keypress", function(e){
         validarKeyPress(/^[vejpg0-9-\b]*$/i, e);
     });
-    $("#rif_proveedor").on("keyup", function(){
+    $("#modificar_rif_proveedor").on("keyup", function(){
         validarKeyUp(
             /^[VEJPG]-\d{8}-\d$/,
             $(this),
-            $("#srif_proveedor"),
+            $("#smrif_proveedor"),
             "*Formato válido: J-12345678-9*"
         );
     });
-    $("#rif_representante").on("input", function() {
+    $("#modificar_rif_proveedor").on("input", function() {
         let valor_rp = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
 
         let resultado_rp = '';
@@ -493,32 +493,32 @@ $(document).ready(function () {
         $(this).val(resultado_rp);
     });
 
-    $("#nombre_representante").on("keypress", function (e) {
+    $("#modificar_nombre_representante").on("keypress", function (e) {
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
-        let nombre_r = document.getElementById("nombre_representante");
+        let nombre_r = document.getElementById("modificar_nombre_representante");
         nombre_r.value = space(nombre_r.value);
     });
-    $("#nombre_representante").on("keyup", function () {
+    $("#modificar_nombre_representante").on("keyup", function () {
         validarKeyUp(
         /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/,
         $(this),
-        $("#snombre_representante"),
+        $("#smnombre_representante"),
         "*Solo letras, de 2 a 50 caracteres*"
         );
     });
 
-    $("#rif_representante").on("keypress", function(e){
+    $("#modificar_rif_representante").on("keypress", function(e){
         validarKeyPress(/^[VEJPG0-9-\b]*$/i, e);
     });
-    $("#rif_representante").on("keyup", function(){
+    $("#modificar_rif_representante").on("keyup", function(){
         validarKeyUp(
             /^[VEJPG]-\d{8}-\d$/,
             $(this),
-            $("#srif_representante"),
+            $("#smrif_representante"),
             "*Formato válido: J-12345678-9*"
         );
     });
-    $("#rif_representante").on("input", function() {
+    $("#modificar_rif_representante").on("input", function() {
         let valor_rr = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
 
         let resultado_rr = '';
@@ -542,10 +542,10 @@ $(document).ready(function () {
         $(this).val(resultado_rr);
     });
 
-    $("#correo_proveedor").on("keypress", function (e) {
+    $("#modificar_correo_proveedor").on("keypress", function (e) {
         validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
     });
-    $("#correo_proveedor").on("keyup", function(){
+    $("#modificar_correo_proveedor").on("keyup", function(){
         validarKeyUp(
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             $(this),
@@ -554,32 +554,32 @@ $(document).ready(function () {
         );
     });
 
-    $("#direccion_proveedor").on("keypress", function(e){
+    $("#modificar_direccion_proveedor").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
-        let direccion = document.getElementById("direccion_proveedor");
+        let direccion = document.getElementById("modificar_direccion_proveedor");
         direccion.value = space(direccion.value);
     });
-    $("#direccion_proveedor").on("keyup", function(){
+    $("#modificar_direccion_proveedor").on("keyup", function(){
         validarKeyUp(
             /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
             $(this),
-            $("#sdireccion_proveedor"),
+            $("#smdireccion_proveedor"),
             "*El formato permite letras y números*"
         );
     });
 
-    $("#telefono_1").on("keypress", function(e){
+    $("#modificar_telefono_1").on("keypress", function(e){
         validarKeyPress(/^[0-9-]*$/, e);
     });
-    $("#telefono_1").on("keyup", function(){
+    $("#modificar_telefono_1").on("keyup", function(){
         validarKeyUp(
             /^\d{4}-\d{3}-\d{4}$/,
             $(this),
-            $("#stelefono_1"),
+            $("#smtelefono_1"),
             "*Formato válido: 04XX-XXX-XXXX*"
         );
     });
-    $("#telefono_1").on("input", function() {
+    $("#modificar_telefono_1").on("input", function() {
         let valor_t1 = $(this).val().replace(/\D/g, '');
         if(valor_t1.length > 4 && valor_t1.length <= 7)
             valor_t1 = valor_t1.slice(0,4) + '-' + valor_t1.slice(4);
@@ -588,18 +588,18 @@ $(document).ready(function () {
         $(this).val(valor_t1);
     });
 
-    $("#telefono_2").on("keypress", function(e){
+    $("#modificar_telefono_2").on("keypress", function(e){
         validarKeyPress(/^[0-9-]*$/, e);
     });
-    $("#telefono_2").on("keyup", function(){
+    $("#modificar_telefono_2").on("keyup", function(){
         validarKeyUp(
             /^\d{4}-\d{3}-\d{4}$/,
             $(this),
-            $("#stelefono_2"),
+            $("#smtelefono_2"),
             "*Formato válido: 04XX-XXX-XXXX*"
         );
     });
-    $("#telefono_2").on("input", function() {
+    $("#modificar_telefono_2").on("input", function() {
         let valor_t2 = $(this).val().replace(/\D/g, '');
         if(valor_t2.length > 4 && valor_t2.length <= 7)
             valor_t2 = valor_t2.slice(0,4) + '-' + valor_t2.slice(4);
@@ -608,16 +608,16 @@ $(document).ready(function () {
         $(this).val(valor_t2);
     });
 
-    $("#observacion").on("keypress", function(e){
+    $("#modificar_observacion").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
-        let observacion = document.getElementById("observacion");
+        let observacion = document.getElementById("modificar_observacion");
         observacion.value = space(observacion.value);
     });
-    $("#observacion").on("keyup", function(){
+    $("#modificar_observacion").on("keyup", function(){
         validarKeyUp(
             /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
             $(this),
-            $("#sobservacion"),
+            $("#smobservacion"),
             "*El formato permite letras y números*"
         );
     });
