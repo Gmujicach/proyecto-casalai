@@ -611,6 +611,9 @@ CREATE TABLE `tbl_proveedores` (
 
 -- --------------------------------------------------------
 
+INSERT INTO `tbl_proveedores` (`id_proveedor`, `nombre_proveedor`, `rif_proveedor`, `nombre_representante`, `rif_representante`, `correo_proveedor`, `direccion_proveedor`, `telefono_1`, `telefono_2`, `observacion`) VALUES
+(1, 'Servicios Técnicos', 'Brayan Mendoza', '04145555555', 'ejemplo@gmail', 'calle 32 con carrera 18 y 19', '112235432', '423555423', '04241587101', 'Buen Amigo');
+
 --
 -- Estructura de tabla para la tabla `tbl_recepcion_productos`
 --
