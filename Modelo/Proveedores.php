@@ -101,7 +101,6 @@ class Proveedores extends BD {
     public function setIdProveedor($id_proveedor) {
         $this->id_proveedor = $id_proveedor;
     }
-    
 
     public function existeNombreProveedor($nombre, $excluir_id = null) {
         return $this->existeNomProveedor($nombre, $excluir_id); 
@@ -117,19 +116,6 @@ class Proveedores extends BD {
         $stmt->execute($params);
         return $stmt->fetchColumn() > 0;
     }
-
-/*
-    public function validarProveedorRif() {
-        $sql = "SELECT COUNT(*) FROM tbl_proveedores WHERE rif_proveedor = :rif1";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':rif1', $this->rif1);
-        $stmt->execute();
-        $count = $stmt->fetchColumn();
-    
-        // Retorna true si no existe un producto con el mismo nombre
-        return $count == 0;
-    }
-*/
 
     public function registrarProveedor() {
         return $this->r_proveedor();
