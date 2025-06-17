@@ -106,6 +106,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     <ul>
                         <div>
                             <button class="btn-modificar" 
+                            id="modificarProveedorBtn"
                                 data-id="<?php echo $proveedor['id_proveedor']; ?>"
                                 data-nombre-proveedor="<?php echo htmlspecialchars($proveedor['nombre_proveedor']); ?>"
                                 data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
@@ -340,7 +341,7 @@ aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
             <select class="form-select" id="Proveedor" name="proveedor" required>
               <option value="">Seleccionar Proveedor</option>
               <option value="<?php echo $proveedor['id_proveedor']; ?>">
-                <?php echo $proveedor['nombre']; ?>
+                <?php echo $proveedor['nombre_proveedor']; ?>
               </option>
             </select>
           </div>
