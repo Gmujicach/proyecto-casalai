@@ -361,8 +361,13 @@ aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
   </div>
 </div>
 
-  <?php include 'footer.php'; ?>
-  <script src="Javascript/proveedor.js"></script>
+<?php include 'footer.php'; ?>
+<script src="Javascript/proveedor.js"></script>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/datatable.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     // Escuchar el clic en cualquier botón con clase "modificar"
@@ -384,10 +389,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
-
-<script src="public/js/jquery.dataTables.min.js"></script>
-<script src="public/js/dataTables.bootstrap5.min.js"></script>
-<script src="public/js/datatable.js"></script>
 <script>
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
