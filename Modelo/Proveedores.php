@@ -101,16 +101,15 @@ class Proveedores extends BD {
     public function setIdProveedor($id_proveedor) {
         $this->id_proveedor = $id_proveedor;
     }
-    
 
     public function existeNombreProveedor($nombre, $excluir_id = null) {
         return $this->existeNomProveedor($nombre, $excluir_id); 
     }
     private function existeNomProveedor($nombre, $excluir_id) {
-        $sql = "SELECT COUNT(*) FROM tbl_proveedores WHERE nombre = ?";
+        $sql = "SELECT COUNT(*) FROM tbl_proveedores WHERE nombre_proveedor = ?";
         $params = [$nombre];
         if ($excluir_id !== null) {
-            $sql .= " AND id_marca != ?";
+            $sql .= " AND id_proveedor != ?";
             $params[] = $excluir_id;
         }
         $stmt = $this->conex->prepare($sql);
@@ -118,34 +117,21 @@ class Proveedores extends BD {
         return $stmt->fetchColumn() > 0;
     }
 
-/*
-    public function validarProveedorRif() {
-        $sql = "SELECT COUNT(*) FROM tbl_proveedores WHERE rif_proveedor = :rif1";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':rif1', $this->rif1);
-        $stmt->execute();
-        $count = $stmt->fetchColumn();
-    
-        // Retorna true si no existe un producto con el mismo nombre
-        return $count == 0;
-    }
-*/
-
     public function registrarProveedor() {
         return $this->r_proveedor();
     }
     private function r_proveedor() {
-        $sql = "INSERT INTO tbl_proveedores (`nombre`, `presona_contacto`, `direccion`, `telefono`, `telefono_secundario`, `rif_representante`, `rif_proveedor`, `correo`, `observaciones`)
-                VALUES (:nombre, :representante, :direccion, :telefono1, :telefono2, :rif2, :rif1, :correo, :observacion)";
+        $sql = "INSERT INTO tbl_proveedores (`nombre_proveedor`, `rif_proveedor`, `nombre_representante`, `rif_representante`, `correo_proveedor`, `direccion_proveedor`, `telefono_1`, `telefono_2`, `observacion`)
+                VALUES (:nombre, :rif1, :representante, :rif2, :correo, :direccion, :telefono1, :telefono2, :observacion)";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre', $this->nombre);
+        $stmt->bindParam(':rif1', $this->rif1);
         $stmt->bindParam(':representante', $this->representante);
+        $stmt->bindParam(':rif2', $this->rif2);
+        $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':direccion', $this->direccion);
         $stmt->bindParam(':telefono1', $this->telefono1);
         $stmt->bindParam(':telefono2', $this->telefono2);
-        $stmt->bindParam(':rif1', $this->rif1);
-        $stmt->bindParam(':rif2', $this->rif2);
-        $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':observacion', $this->observacion);
 
         return $stmt->execute();
@@ -185,17 +171,17 @@ class Proveedores extends BD {
         return $this->m_proveedor($id_proveedor);
     }
     private function m_proveedor($id_proveedor) {
-        $sql = "UPDATE tbl_proveedores SET nombre = :nombre, presona_contacto = :representante, direccion = :direccion, telefono = :telefono1, telefono_secundario = :telefono2, rif_representante = :rif2, rif_proveedor = :rif1, correo = :correo, observaciones = :observacion WHERE id_proveedor = :id_proveedor";
+        $sql = "UPDATE tbl_proveedores SET nombre_proveedor = :nombre, rif_proveedor = :rif1, nombre_representante = :representante, rif_representante = :rif2, correo_proveedor = :correo, direccion_proveedor = :direccion, telefono_1 = :telefono1, telefono_2 = :telefono2, observacion = :observacion WHERE id_proveedor = :id_proveedor";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_proveedor', $id_proveedor);
         $stmt->bindParam(':nombre', $this->nombre);
+        $stmt->bindParam(':rif1', $this->rif1);
         $stmt->bindParam(':representante', $this->representante);
+        $stmt->bindParam(':rif2', $this->rif2);
+        $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':direccion', $this->direccion);
         $stmt->bindParam(':telefono1', $this->telefono1);
         $stmt->bindParam(':telefono2', $this->telefono2);
-        $stmt->bindParam(':rif1', $this->rif1);
-        $stmt->bindParam(':rif2', $this->rif2);
-        $stmt->bindParam(':correo', $this->correo);
         $stmt->bindParam(':observacion', $this->observacion);
         
         return $stmt->execute();

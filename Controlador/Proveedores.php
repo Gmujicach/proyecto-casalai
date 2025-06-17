@@ -19,12 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $proveedor->setRepresentante($_POST['nombre_representante']);
             $proveedor->setRif2($_POST['rif_representante']);
             $proveedor->setCorreo($_POST['correo_proveedor']);
-            $proveedor->setObservacion($_POST['observacion']);
+            $proveedor->setDireccion($_POST['direccion_proveedor']);
             $proveedor->setTelefono1($_POST['telefono_1']);
             $proveedor->setTelefono2($_POST['telefono_2']);
-            $proveedor->setDireccion($_POST['direccion_proveedor']);
+            $proveedor->setObservacion($_POST['observacion']);
             
-            if ($proveedor->existeNombreProveedor($_POST['nombre'])) {
+            if ($proveedor->existeNombreProveedor($_POST['nombre_proveedor'])) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El nombre del proveedor ya existe'
@@ -66,18 +66,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_proveedor = $_POST['id_proveedor'];
             $proveedor = new Proveedores();
             $proveedor->setIdProveedor($id_proveedor);
-            $proveedor->setNombre($_POST['nombre']);
+            $proveedor->setNombre($_POST['nombre_proveedor']);
             $proveedor->setRif1($_POST['rif_proveedor']);
-            $proveedor->setRepresentante($_POST['persona_contacto']);
+            $proveedor->setRepresentante($_POST['nombre_representante']);
             $proveedor->setRif2($_POST['rif_representante']);
-            $proveedor->setCorreo($_POST['correo']);
-            $proveedor->setObservacion($_POST['observaciones']);
-            $proveedor->setTelefono1($_POST['telefono']);
-            $proveedor->setTelefono2($_POST['telefono_secundario']);
-            $proveedor->setDireccion($_POST['direccion']);
-
+            $proveedor->setCorreo($_POST['correo_proveedor']);
+            $proveedor->setDireccion($_POST['direccion_proveedor']);
+            $proveedor->setTelefono1($_POST['telefono_1']);
+            $proveedor->setTelefono2($_POST['telefono_2']);
+            $proveedor->setObservacion($_POST['observacion']);
             
-            if ($proveedor->existeNombreProveedor($_POST['nombre'], $id_proveedor)) {
+            if ($proveedor->existeNombreProveedor($_POST['nombre_proveedor'], $id_proveedor)) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El nombre del proveedor ya existe'
@@ -86,7 +85,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             
             if ($proveedor->modificarProveedor($id_proveedor)) {
-                echo json_encode(['status' => 'success']);
+                $proveedorActualizado = $proveedor->obtenerProveedorPorId($id_proveedor);
+
+                echo json_encode([
+                    'status' => 'success',
+                    'proveedor' => $proveedorActualizado
+                ]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar el proveedor']);
             }
@@ -109,6 +113,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case 'cambiar_estado':
             $id_proveedor = $_POST['id_proveedor'];
             $nuevoEstatus = $_POST['nuevo_estatus'];
+
+            if (!in_array($nuevoEstatus, ['habilitado', 'inhabilitado'])) {
+                echo json_encode(['status' => 'error', 'message' => 'Estado no válido']);
+                exit;
+            }
+
             $proveedor = new Proveedores();
             $proveedor->setIdProveedor($id_proveedor);
             if ($proveedor->cambiarEstatus($nuevoEstatus)) {

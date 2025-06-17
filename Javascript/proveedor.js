@@ -29,7 +29,7 @@ $(document).ready(function () {
             "*Formato válido: J-12345678-9*"
         );
     });
-    $("#rif_representante").on("input", function() {
+    $("#rif_proveedor").on("input", function() {
         let valor_rp = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
 
         let resultado_rp = '';
@@ -163,7 +163,7 @@ $(document).ready(function () {
         let valor_t2 = $(this).val().replace(/\D/g, '');
         if(valor_t2.length > 4 && valor_t2.length <= 7)
             valor_t2 = valor_t2.slice(0,4) + '-' + valor_t2.slice(4);
-        else if(valor_t1.length > 7)
+        else if(valor_t2.length > 7)
             valor_t2 = valor_t2.slice(0,4) + '-' + valor_t2.slice(4,7) + '-' + valor_t2.slice(7,11);
         $(this).val(valor_t2);
     });
@@ -274,6 +274,15 @@ $(document).ready(function () {
             mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos');
             return false;
         }
+        else if(validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $("#observacion"),
+            $("#sobservacion"),
+            "*Puede haber letras y números*"
+        )==0){
+            mensajes('error',4000,'Verifique la observación','Debe tener solo letras y números');
+            return false;
+        }
         return true;
     }
 
@@ -285,15 +294,15 @@ $(document).ready(function () {
                     <div>
                         <button class="btn-modificar"
                             data-id="${proveedor.id_proveedor}"
-                            data-nombre="${proveedor.nombre}"
+                            data-nombre-proveedor="${proveedor.nombre_proveedor}"
                             data-rif-proveedor="${proveedor.rif_proveedor}"
-                            data-persona-contacto="${proveedor.persona_contacto}"
+                            data-nombre-representante="${proveedor.nombre_representante}"
                             data-rif-representante="${proveedor.rif_representante}"
-                            data-correo="${proveedor.correo}"
-                            data-direccion="${proveedor.direccion}"
-                            data-telefono="${proveedor.telefono_proveedor}"
-                            data-telefono-secundario="${proveedor.telefono_secundario}"
-                            data-observaciones="${proveedor.observaciones}">
+                            data-correo-proveedor="${proveedor.correo_proveedor}"
+                            data-direccion-proveedor="${proveedor.direccion_proveedor}"
+                            data-telefono-1="${proveedor.telefono_1}"
+                            data-telefono-2="${proveedor.telefono_2}"
+                            data-observacion="${proveedor.observacion}">
                             Modificar
                         </button>
                     </div>
@@ -305,10 +314,15 @@ $(document).ready(function () {
                     </div>
                 </ul>
             </td>
-            <td><span class="campo-nombres">${proveedor.nombre}</span></td>
-            <td><span class="campo-correo">${proveedor.correo}</span></td>
-            <td><span class="campo-telefono">${proveedor.rif_proveedor}</span></td>
-            <td><span class="campo-nombres">${proveedor.telefono}</span></td>
+            <td><span class="campo-nombres">${proveedor.nombre_proveedor}</span></td>
+            <td><span class="campo-nombres">${proveedor.rif_proveedor}</span></td>
+            <td><span class="campo-nombres">${proveedor.nombre_representante}</span></td>
+            <td><span class="campo-nombres">${proveedor.rif_representante}</span></td>
+            <td><span class="campo-correo">${proveedor.correo_proveedor}</span></td>
+            <td><span class="campo-nombres">${proveedor.direccion_proveedor}</span></td>
+            <td><span class="campo-telefono">${proveedor.telefono_1}</span></td>
+            <td><span class="campo-telefono">${proveedor.telefono_2}</span></td>
+            <td><span class="campo-nombres">${proveedor.observacion}</span></td>
             <td class="campo-estado">
             <span 
                 class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
@@ -323,41 +337,41 @@ $(document).ready(function () {
     }
 
     function resetProveedor() {
-        $("#nombre").val('');
+        $("#nombre_proveedor").val('');
         $("#rif_proveedor").val('');
-        $("#presona_contacto").val('');
+        $("#nombre_representante").val('');
         $("#rif_representante").val('');
-        $("#correo").val('');
-        $("#direccion").val('');
-        $("#telefono").val('');
-        $("#telefono_secundario").val('');
-        $("#observaciones").val('');
-        $("#snombre").text('');
+        $("#correo_proveedor").val('');
+        $("#direccion_proveedor").val('');
+        $("#telefono_1").val('');
+        $("#telefono_2").val('');
+        $("#observacion").val('');
+        $("#snombre_proveedor").text('');
         $("#srif_proveedor").text('');
-        $("#spresona_contacto").text('');
+        $("#snombre_representante").text('');
         $("#srif_representante").text('');
-        $("#scorreo").text('');
-        $("#sdireccion").text('');
-        $("#stelefono").text('');
-        $("#stelefono_secundario").text('');
-        $("#sobservaciones").text('');
+        $("#scorreo_proveedor").text('');
+        $("#sdireccion_proveedor").text('');
+        $("#stelefono_1").text('');
+        $("#stelefono_2").text('');
+        $("#sobservacion").text('');
     }
 
     $('#btnIncluirProveedor').on('click', function() {
         $('#incluirproveedor')[0].reset();
-        $("#snombre").text('');
+        $("#snombre_proveedor").text('');
         $("#srif_proveedor").text('');
-        $("#spresona_contacto").text('');
+        $("#snombre_representante").text('');
         $("#srif_representante").text('');
-        $("#scorreo").text('');
-        $("#sdireccion").text('');
-        $("#stelefono").text('');
-        $("#stelefono_secundario").text('');
-        $("#sobservaciones").text('');
+        $("#scorreo_proveedor").text('');
+        $("#sdireccion_proveedor").text('');
+        $("#stelefono_1").text('');
+        $("#stelefono_2").text('');
+        $("#sobservacion").text('');
         $('#registrarProveedorModal').modal('show');
     });
 
-    $('#registrarRol').on('submit', function(e) {
+    $('#incluirproveedor').on('submit', function(e) {
         e.preventDefault();
 
         if(validarEnvioProveedor()){
@@ -407,14 +421,459 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on('click', '.btn-modificar', function () {
-        $('#modificar_id_rol').val($(this).data('id'));
-        $('#modificar_nombre_rol').val($(this).data('nombre'));
-        $('#smnombre_rol').text('');
-        $('#modificarRolModal').modal('show');
+    $("#modificar_nombre_proveedor").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
+        let nombre_p = document.getElementById("modificar_nombre_proveedor");
+        nombre_p.value = space(nombre_p.value);
+    });
+    $("#modificar_nombre_proveedor").on("keyup", function () {
+        validarKeyUp(
+        /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/,
+        $(this),
+        $("#smnombre_proveedor"),
+        "*Solo letras, de 2 a 50 caracteres*"
+        );
     });
 
+    $("#modificar_rif_proveedor").on("keypress", function(e){
+        validarKeyPress(/^[vejpg0-9-\b]*$/i, e);
+    });
+    $("#modificar_rif_proveedor").on("keyup", function(){
+        validarKeyUp(
+            /^[VEJPG]-\d{8}-\d$/,
+            $(this),
+            $("#smrif_proveedor"),
+            "*Formato válido: J-12345678-9*"
+        );
+    });
+    $("#modificar_rif_proveedor").on("input", function() {
+        let valor_rp = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
 
+        let resultado_rp = '';
+        if (valor_rp.length > 0) {
+            let letra_rp = valor_rp.charAt(0);
+            if ('VEJPG'.includes(letra_rp)) {
+                resultado_rp = letra_rp;
+            } else {
+                resultado_rp = '';
+            }
+
+            let numeros_rp = valor_rp.substring(1).replace(/\D/g, '');
+
+            if (numeros_rp.length > 0) {
+                resultado_rp += '-' + numeros_rp.substring(0, 8);
+                if (numeros_rp.length > 8) {
+                    resultado_rp += '-' + numeros_rp.substring(8, 9);
+                }
+            }
+        }
+        $(this).val(resultado_rp);
+    });
+
+    $("#modificar_nombre_representante").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
+        let nombre_r = document.getElementById("modificar_nombre_representante");
+        nombre_r.value = space(nombre_r.value);
+    });
+    $("#modificar_nombre_representante").on("keyup", function () {
+        validarKeyUp(
+        /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/,
+        $(this),
+        $("#smnombre_representante"),
+        "*Solo letras, de 2 a 50 caracteres*"
+        );
+    });
+
+    $("#modificar_rif_representante").on("keypress", function(e){
+        validarKeyPress(/^[VEJPG0-9-\b]*$/i, e);
+    });
+    $("#modificar_rif_representante").on("keyup", function(){
+        validarKeyUp(
+            /^[VEJPG]-\d{8}-\d$/,
+            $(this),
+            $("#smrif_representante"),
+            "*Formato válido: J-12345678-9*"
+        );
+    });
+    $("#modificar_rif_representante").on("input", function() {
+        let valor_rr = $(this).val().toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+        let resultado_rr = '';
+        if (valor_rr.length > 0) {
+            let letra_rr = valor_rr.charAt(0);
+            if ('VEJPG'.includes(letra_rr)) {
+                resultado_rr = letra_rr;
+            } else {
+                resultado_rr = '';
+            }
+
+            let numeros_rr = valor_rr.substring(1).replace(/\D/g, '');
+
+            if (numeros_rr.length > 0) {
+                resultado_rr += '-' + numeros_rr.substring(0, 8);
+                if (numeros_rr.length > 8) {
+                    resultado_rr += '-' + numeros_rr.substring(8, 9);
+                }
+            }
+        }
+        $(this).val(resultado_rr);
+    });
+
+    $("#modificar_correo_proveedor").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
+    });
+    $("#modificar_correo_proveedor").on("keyup", function(){
+        validarKeyUp(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $(this),
+            $("#scorreo_proveedor"),
+            "*Formato válido: example@gmail.com*"
+        );
+    });
+
+    $("#modificar_direccion_proveedor").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
+        let direccion = document.getElementById("modificar_direccion_proveedor");
+        direccion.value = space(direccion.value);
+    });
+    $("#modificar_direccion_proveedor").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $(this),
+            $("#smdireccion_proveedor"),
+            "*El formato permite letras y números*"
+        );
+    });
+
+    $("#modificar_telefono_1").on("keypress", function(e){
+        validarKeyPress(/^[0-9-]*$/, e);
+    });
+    $("#modificar_telefono_1").on("keyup", function(){
+        validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $(this),
+            $("#smtelefono_1"),
+            "*Formato válido: 04XX-XXX-XXXX*"
+        );
+    });
+    $("#modificar_telefono_1").on("input", function() {
+        let valor_t1 = $(this).val().replace(/\D/g, '');
+        if(valor_t1.length > 4 && valor_t1.length <= 7)
+            valor_t1 = valor_t1.slice(0,4) + '-' + valor_t1.slice(4);
+        else if(valor_t1.length > 7)
+            valor_t1 = valor_t1.slice(0,4) + '-' + valor_t1.slice(4,7) + '-' + valor_t1.slice(7,11);
+        $(this).val(valor_t1);
+    });
+
+    $("#modificar_telefono_2").on("keypress", function(e){
+        validarKeyPress(/^[0-9-]*$/, e);
+    });
+    $("#modificar_telefono_2").on("keyup", function(){
+        validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $(this),
+            $("#smtelefono_2"),
+            "*Formato válido: 04XX-XXX-XXXX*"
+        );
+    });
+    $("#modificar_telefono_2").on("input", function() {
+        let valor_t2 = $(this).val().replace(/\D/g, '');
+        if(valor_t2.length > 4 && valor_t2.length <= 7)
+            valor_t2 = valor_t2.slice(0,4) + '-' + valor_t2.slice(4);
+        else if(valor_t2.length > 7)
+            valor_t2 = valor_t2.slice(0,4) + '-' + valor_t2.slice(4,7) + '-' + valor_t2.slice(7,11);
+        $(this).val(valor_t2);
+    });
+
+    $("#modificar_observacion").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
+        let observacion = document.getElementById("modificar_observacion");
+        observacion.value = space(observacion.value);
+    });
+    $("#modificar_observacion").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $(this),
+            $("#smobservacion"),
+            "*El formato permite letras y números*"
+        );
+    });
+
+    function validarProveedor(datos) {
+        let errores = [];
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/.test(datos.nombre_proveedor)) {
+            errores.push("El nombre debe tener solo letras.");
+        }
+        if (!/^[VEJPG]-\d{8}-\d$/.test(datos.rif_proveedor)) {
+            errores.push("Formato válido: J-12345678-9.");
+        }
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/.test(datos.nombre_representante)) {
+            errores.push("El nombre debe tener solo letras.");
+        }
+        if (!/^[VEJPG]-\d{8}-\d$/.test(datos.rif_representante)) {
+            errores.push("Formato válido: J-12345678-9.");
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo_proveedor)) {
+            errores.push("Formato válido: example@gmail.com");
+        }
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/.test(datos.direccion_proveedor)) {
+            errores.push("La dirección debe tener letras y/o números.");
+        }
+        if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono_1)) {
+            errores.push("Formato válido: 04XX-XXX-XXXX.");
+        }
+        if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono_2)) {
+            errores.push("Formato válido: 04XX-XXX-XXXX.");
+        }
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/.test(datos.observacion)) {
+            errores.push("La observación debe tener letras y/o números.");
+        }
+        return errores;
+    }
+
+    $(document).on('click', '.btn-modificar', function () {
+        $('#modificar_id_proveedor').val($(this).data('id'));
+        $('#modificar_nombre_proveedor').val($(this).data('nombre-proveedor'));
+        $('#modificar_rif_proveedor').val($(this).data('rif-proveedor'));
+        $('#modificar_nombre_representante').val($(this).data('nombre-representante'));
+        $('#modificar_rif_representante').val($(this).data('rif-representante'));
+        $('#modificar_correo_proveedor').val($(this).data('correo-proveedor'));
+        $('#modificar_direccion_proveedor').val($(this).data('direccion-proveedor'));
+        $('#modificar_telefono_1').val($(this).data('telefono-1'));
+        $('#modificar_telefono_2').val($(this).data('telefono-2'));
+        $('#modificar_observacion').val($(this).data('observacion'));
+        
+        $('#smnombre_proveedor').text('');
+        $('#smrif_proveedor').text('');
+        $('#smnombre_representante').text('');
+        $('#smrif_representante').text('');
+        $('#smcorreo_proveedor').text('');
+        $('#smdireccion_proveedor').text('');
+        $('#smtelefono_1').text('');
+        $('#smtelefono_2').text('');
+        $('#smobservacion').text('');
+        $('#modificarProveedorModal').modal('show');
+    });
+
+    $('#modificarProveedor').on('submit', function(e) {
+        e.preventDefault();
+
+        const datos = {
+            nombre_proveedor: $('#modificar_nombre_proveedor').val(),
+            rif_proveedor: $('#modificar_rif_proveedor').val(),
+            nombre_representante: $('#modificar_nombre_representante').val(),
+            rif_representante: $('#modificar_rif_representante').val(),
+            correo_proveedor: $('#modificar_correo_proveedor').val(),
+            direccion_proveedor: $('#modificar_direccion_proveedor').val(),
+            telefono_1: $('#modificar_telefono_1').val(),
+            telefono_2: $('#modificar_telefono_2').val(),
+            observacion: $('#modificar_observacion').val()
+        };
+
+        const errores = validarProveedor(datos);
+
+        if (errores.length > 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de validación',
+                html: errores.join('<br>')
+            });
+            return;
+        }
+
+        var formData = new FormData(this);
+        formData.append('accion', 'modificar');
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#modificarProveedorModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: 'El proveedor se ha modificado correctamente'
+                    });
+
+                    /*const id = $('#modificar_id_proveedor').val();
+                    const nombre_proveedor = $('#modificar_nombre_proveedor').val();
+                    const rif_proveedor = $('#modificar_rif_proveedor').val();
+                    const nombre_representante = $('#modificar_nombre_representante').val();
+                    const rif_representante = $('#modificar_rif_representante').val();
+                    const correo_proveedor = $('#modificar_correo_proveedor').val();
+                    const direccion_proveedor = $('#modificar_direccion_proveedor').val();
+                    const telefono_1 = $('#modificar_telefono_1').val();
+                    const telefono_2 = $('#modificar_telefono_2').val();
+                    const observacion = $('#modificar_observacion').val();*/
+
+                    const tabla = $("#tablaConsultas").DataTable();
+                    const id = $("#modificar_id_proveedor").val();
+                    const fila = tabla.row(`tr[data-id="${id}"]`);
+                    const proveedor = response.proveedor;
+
+                    /*const tabla = $('#tablaConsultas').DataTable();
+                    const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);*/
+                    if (fila.length) {
+                        fila.data([
+                            `<ul>
+                                <div>
+                                    <button class="btn-modificar"
+                                        data-id="${proveedor.id}"
+                                        data-nombre-proveedor="${proveedor.nombre_proveedor}"
+                                        data-rif-proveedor="${proveedor.rif_proveedor}"
+                                        data-nombre-representante="${proveedor.nombre_representante}"
+                                        data-rif-representante="${proveedor.rif_representante}"
+                                        data-correo-proveedor="${proveedor.correo_proveedor}"
+                                        data-direccion-proveedor="${proveedor.direccion_proveedor}"
+                                        data-telefono-1="${proveedor.telefono_1}"
+                                        data-telefono-2="${proveedor.telefono_2}"
+                                        data-observacion="${proveedor.observacion}">
+                                        Modificar
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="btn-eliminar"
+                                        data-id="${proveedor.id}">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </ul>`,
+                            `<span class="campo-nombres">${proveedor.nombre_proveedor}</span>`,
+                            `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
+                            `<span class="campo-nombres">${proveedor.nombre_representante}</span>`,
+                            `<span class="campo-nombres">${proveedor.rif_representante}</span>`,
+                            `<span class="campo-correo">${proveedor.correo_proveedor}</span>`,
+                            `<span class="campo-nombres">${proveedor.direccion_proveedor}</span>`,
+                            `<span class="campo-telefono">${proveedor.telefono_1}</span>`,
+                            `<span class="campo-telefono">${proveedor.telefono_2}</span>`,
+                            `<span class="campo-nombres">${proveedor.observacion}</span>`,
+                            `<span class="campo-estatus ${proveedor.estado === "habilitado" ? "habilitado" : "inhabilitado"}"
+                                data-id="${proveedor.id_proveedor}" 
+                                style="cursor: pointer;">
+                                ${proveedor.estado}
+                            </span>`,
+                        ]).draw(false);
+
+                        const filaNode = fila.node();
+                        const botonModificar = $(filaNode).find(".btn-modificar");
+                        botonModificar.data('nombre_proveedor', proveedor.nombre_proveedor);
+                        botonModificar.data('rif_proveedor', proveedor.rif_proveedor);
+                        botonModificar.data('nombre_representante', proveedor.nombre_representante);
+                        botonModificar.data('rif_representante', proveedor.rif_representante);
+                        botonModificar.data('correo_proveedor', proveedor.correo_proveedor);
+                        botonModificar.data('direccion_proveedor', proveedor.direccion_proveedor);
+                        botonModificar.data('telefono_1', proveedor.telefono_1);
+                        botonModificar.data('telefono_2', proveedor.telefono_2);
+                        botonModificar.data('observacion', proveedor.observacion);
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'No se pudo modificar el proveedor'
+                    });
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error al modificar el porveedor:', textStatus, errorThrown);
+                muestraMensaje('Error al modificar el proveedor.');
+            }
+        });
+    });
+
+    $(document).on('click', '#modificarProveedorModal .close', function() {
+        $('#modificarProveedorModal').modal('hide');
+    });
+
+    $(document).on('click', '.btn-eliminar', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarla!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var id_proveedor = $(this).data('id');
+                var datos = new FormData();
+                datos.append('accion', 'eliminar');
+                datos.append('id_proveedor', id_proveedor);
+                enviarAjax(datos, function(respuesta){
+                    if (respuesta.status === 'success') {
+                        Swal.fire(
+                            'Eliminada!',
+                            'El proveedor ha sido eliminada.',
+                            'success'
+                        );
+                        eliminarFilaProveedor(id_proveedor);
+                    } else {
+                        Swal.fire('Error', respuesta.message, 'error');
+                    }
+                });
+            }
+        });
+    });
+
+    function eliminarFilaProveedor(id_proveedor) {
+        $(`#tablaConsultas tbody tr[data-id="${id_proveedor}"]`).remove();
+    }
+
+
+
+    
+    $(document).on('click', '.campo-estatus', function() {
+        const id_proveedor = $(this).data('id');
+        cambiarEstatus(id_proveedor);
+    });
+
+    function cambiarEstatus(id_proveedor) {
+        const span = $(`span.campo-estatus[data-id="${id_proveedor}"]`);
+        const estatusActual = span.text().trim();
+        const nuevoEstatus = estatusActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
+        
+        span.addClass('cambiando');
+            
+        $.ajax({
+            url: '',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                accion: 'cambiar_estado',
+                id_proveedor: id_proveedor,
+                nuevo_estatus: nuevoEstatus
+            },
+            success: function(data) {
+                span.removeClass('cambiando');
+                if (data.status === 'success') {
+                    span.text(nuevoEstatus);
+                    span.removeClass('habilitado inhabilitado').addClass(nuevoEstatus);
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Estatus actualizado!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    span.text(estatusActual);
+                    span.removeClass('habilitado inhabilitado').addClass(estatusActual);
+                    Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                span.removeClass('cambiando');
+                span.text(estatusActual);
+                span.removeClass('habilitado inhabilitado').addClass(estatusActual);
+                Swal.fire('Error', 'Error en la conexión', 'error');
+            }
+        });
+    }
 
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
@@ -454,26 +913,8 @@ $(document).ready(function () {
         var str = str.replace(regex, ' ');
         return str;
     }
-
-///////
-    
-    $(document).on('click', '.modificar', function() {
-    var boton = $(this);
-
-    $('#modificar_id_proveedor').val(boton.data('id'));
-    $('#modificar_nombre_proveedor').val(boton.data('nombre'));
-    $('#modificar_persona_contacto').val(boton.data('persona-contacto'));
-    $('#modificar_direccion').val(boton.data('direccion'));
-    $('#modificar_telefono').val(boton.data('telefono'));
-    $('#modificar_correo').val(boton.data('correo'));
-    $('#modificar_telefono_secundario').val(boton.data('telefono-secundario'));
-    $('#modificar_rif_proveedor').val(boton.data('rif-proveedor'));
-    $('#modificar_rif_representante').val(boton.data('rif-representante'));
-    $('#modificar_observaciones').val(boton.data('observaciones'));
-
-    $('#modificar_usuario_modal').modal('show');
 });
-
+/*
     // Cargar datos del marcas en el modal al abrir
         $(document).on('click', '#modificarProductoBtn', function() {
         var boton = $(this);
@@ -502,46 +943,9 @@ $(document).ready(function () {
     document.getElementById('modificarNombreProducto').value = nombre;
     document.getElementById('modificarModelo').value = modelo;
   });
-});
+});*/
 
-    $(document).on('click', '.btn-modificar', function() {
-        var id_proveedor = $(this).data('id');
-
-        // Establecer el id_producto en el campo oculto del formulario de modificación
-        $('#modificar_id_proveedor').val(id_proveedor);
-
-        // Realizar una solicitud AJAX para obtener los datos del marcas desde la base de datos
-        $.ajax({
-            url: '', // Ruta al controlador PHP que maneja las peticiones
-            type: 'POST',
-            dataType: 'json',
-            data: { id_proveedor: id_proveedor, accion: 'obtener_proveedor' },
-            success: function(proveedores) {
-                console.log('Datos del Proveedor obtenidos:', proveedores);
-                // Llenar los campos del formulario con los datos obtenidos del marcas
-                $('#modificarnombre_proveedor').val(proveedores.nombre);
-                $('#modificarrif_proveedor').val(proveedores.rif_proveedor);
-                $('#modificarnombre_representante').val(proveedores.presona_contacto);
-                $('#modificarrif_representante').val(proveedores.rif_representante);
-                $('#modificardireccion_proveedor').val(proveedores.direccion);
-                $('#modificartelefono_1').val(proveedores.telefono);
-                $('#modificartelefono_2').val(proveedores.telefono_secundario);
-                $('#modificarcorreo_proveedor').val(proveedores.correo);
-                $('#modificarobservacion').val(proveedores.observaciones);
-                
-                // Ajustar la imagen si se maneja la carga de imágenes
-                // $('#modificarImagen').val(marcas.imagen);
-
-                // Mostrar el modal de modificación después de llenar los datos
-                $('#modificar_proveedor_modal').modal('show');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error en la solicitud AJAX:', textStatus, errorThrown);
-                muestraMensaje('Error al cargar los datos del Proveedor.');
-            }
-        });
-    });
-
+    /*
     // Enviar datos de modificación por AJAX al controlador PHP
     $('#modificarProveedorForm').on('submit', function(e) {
         e.preventDefault();
@@ -584,282 +988,4 @@ $('body').css('padding-right', '');
                 muestraMensaje('Error al modificar el Proveedor.');
             }
         });
-    });
-
-function actualizarFilaProveedor(proveedor) {
-    const tabla = $('#tablaConsultas').DataTable();
-    $('#tablaConsultas tbody tr').each(function() {
-        if ($(this).attr('data-id') == proveedor.id_proveedor) {
-            tabla.row(this).data([
-                `<div class="acciones-boton">
-                    <button type="button" class="btn btn-primary btn-modificar modificar" 
-                        data-id="${proveedor.id_proveedor}"
-                        data-nombre="${proveedor.nombre}"
-                        data-persona-contacto="${proveedor.presona_contacto}"
-                        data-direccion="${proveedor.direccion}"
-                        data-telefono="${proveedor.telefono}"
-                        data-correo="${proveedor.correo}"
-                        data-telefono-secundario="${proveedor.telefono_secundario}"
-                        data-rif-proveedor="${proveedor.rif_proveedor}"
-                        data-rif-representante="${proveedor.rif_representante}"
-                        data-observaciones="${proveedor.observaciones}"
-                        data-toggle="modal" 
-                        data-target="#modificar_usuario_modal">
-                        Modificar
-                    </button>
-                    <button type="button" class="btn btn-danger btn-eliminar eliminar" data-id="${proveedor.id_proveedor}">Eliminar</button>
-                </div>`,
-                `<span class="campo-nombres">${proveedor.nombre}</span>`,
-                `<span class="campo-correo">${proveedor.correo}</span>`,
-                `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
-                `<span class="campo-telefono">${proveedor.telefono}</span>`,
-                `<span class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
-                    data-id="${proveedor.id_proveedor}"
-                    onclick="cambiarEstatus(${proveedor.id_proveedor}, '${proveedor.estado}')"
-                    style="cursor: pointer;">
-                    ${proveedor.estado}
-                </span>`
-            ]).draw(false);
-        }
-    });
-}
-
-$(document).on('click', '.acciones-boton .vertical', function(e) {
-    e.stopPropagation();
-    $('.desplegable').not($(this).siblings('.desplegable')).hide();
-    $(this).siblings('.desplegable').toggle();
-});
-
-$(document).on('click', function() {
-    $('.desplegable').hide();
-});
-
-    // Función para eliminar el proveedor
-$(document).on('click', '.eliminar', function (e) {
-    e.preventDefault();
-    var id_proveedor = $(this).data('id');
-    
-    Swal.fire({
-        title: '¿Está seguro?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminarlo!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            var datos = new FormData();
-            datos.append('accion', 'eliminar');
-            datos.append('id_proveedor', id_proveedor);
-            
-            $.ajax({
-                url: '', // La misma página
-                type: 'POST',
-                data: datos,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    try {
-                        var respuesta = JSON.parse(response);
-                        if (respuesta.status === 'success') {
-                            Swal.fire(
-                                'Eliminado!',
-                                'El proveedor ha sido eliminado.',
-                                'success'
-                            );
-                            // Elimina la fila de la tabla y actualiza el paginador
-                            const tabla = $('#tablaConsultas').DataTable();
-                            $('#tablaConsultas tbody tr').each(function() {
-                                if ($(this).attr('data-id') == id_proveedor) {
-                                    tabla.row(this).remove().draw(false);
-                                }
-                            });
-                        } else {
-                            Swal.fire(
-                                'Error!',
-                                respuesta.message || 'Error al eliminar el proveedor',
-                                'error'
-                            );
-                        }
-                    } catch (e) {
-                        Swal.fire(
-                            'Error!',
-                            'Error al procesar la respuesta del servidor',
-                            'error'
-                        );
-                    }
-                },
-                error: function(xhr, status, error) {
-                    Swal.fire(
-                        'Error!',
-                        'Error en la solicitud AJAX: ' + error,
-                        'error'
-                    );
-                }
-            });
-        }
-    });
-});
-
-    // Función para incluir un nuevo producto
-    $('#incluirproveedor').on('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-    try {
-        const data = JSON.parse(response);
-        if (data.status === 'success') {
-            Swal.fire({
-                title: 'Éxito',
-                text: 'Proveedor ingresado exitosamente',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
-                // Supón que el backend retorna el proveedor insertado en data.proveedor
-                if (data.proveedor) {
-                    agregarFilaProveedor(data.proveedor);
-                }
-                $('#incluirproveedor')[0].reset();
-                $('#incluirproveedor input, #incluirproveedor textarea').val('');
-            });
-        } else {
-            Swal.fire({
-                title: 'Error',
-                text: data.message || 'Error al ingresar el Proveedor',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            });
-        }
-    } catch (e) {
-        Swal.fire({
-            title: 'Error',
-            text: 'Error al procesar la respuesta del servidor',
-            icon: 'error',
-            confirmButtonText: 'Aceptar'
-        });
-    }
-},
-            error: function(xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Error en la solicitud AJAX: ' + error,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        });
-    });
-});
-
-function agregarFilaProveedor(proveedor) {
-    const tabla = $('#tablaConsultas').DataTable();
-    const nuevaFila = tabla.row.add([
-        `<div class="acciones-boton">
-            <button type="button" class="btn btn-primary btn-modificar modificar" 
-                data-id="${proveedor.id_proveedor}"
-                data-nombre="${proveedor.nombre}"
-                data-persona-contacto="${proveedor.presona_contacto}"
-                data-direccion="${proveedor.direccion}"
-                data-telefono="${proveedor.telefono}"
-                data-correo="${proveedor.correo}"
-                data-telefono-secundario="${proveedor.telefono_secundario}"
-                data-rif-proveedor="${proveedor.rif_proveedor}"
-                data-rif-representante="${proveedor.rif_representante}"
-                data-observaciones="${proveedor.observaciones}"
-                data-toggle="modal" 
-                data-target="#modificar_usuario_modal">
-                Modificar
-            </button>
-            <button type="button" class="btn btn-danger btn-eliminar eliminar" data-id="${proveedor.id_proveedor}">Eliminar</button>
-        </div>`,
-        `<span class="campo-nombres">${proveedor.nombre}</span>`,
-        `<span class="campo-correo">${proveedor.correo}</span>`,
-        `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
-        `<span class="campo-telefono">${proveedor.telefono}</span>`,
-        `<span class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
-            data-id="${proveedor.id_proveedor}"
-            onclick="cambiarEstatus(${proveedor.id_proveedor}, '${proveedor.estado}')"
-            style="cursor: pointer;">
-            ${proveedor.estado}
-        </span>`
-    ]).draw(false).node();
-    $(nuevaFila).attr('data-id', proveedor.id_proveedor);
-}
-
-// Función genérica para enviar AJAX
-function enviarAjax(datos, callback) {
-    console.log("Enviando datos AJAX: ", datos); // Punto de depuración
-    $.ajax({
-        url: '', // Asegúrate de que la URL apunte al controlador correcto
-        type: 'POST',
-        contentType: false,
-        data: datos,
-        processData: false,
-        cache: false,
-        success: function (respuesta) {
-            console.log("Respuesta del servidor: ", respuesta); // Punto de depuración
-            callback(JSON.parse(respuesta));
-        },
-        error: function () {
-            console.error('Error en la solicitud AJAX');
-            muestraMensaje('Error en la solicitud AJAX');
-        }
-    });
-}
-
-function cambiarEstatus(idUsuario) {
-    const span = $(`span.campo-estatus[data-id="${idUsuario}"]`);
-    const estatusActual = span.text().trim().toLowerCase();
-    const nuevoEstatus = estatusActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
-
-    span.addClass('cambiando');
-
-    $.ajax({
-        url: '',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            accion: 'cambiar_estado',
-            id_proveedor: idUsuario,
-            nuevo_estatus: nuevoEstatus
-        },
-        success: function(data) {
-            span.removeClass('cambiando');
-            if (data.status === 'success') {
-                span.text(nuevoEstatus);
-                span.removeClass('habilitado inhabilitado').addClass(nuevoEstatus);
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Estatus actualizado!',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            } else {
-                span.text(estatusActual);
-                span.removeClass('habilitado inhabilitado').addClass(estatusActual);
-                Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
-            }
-        },
-        error: function(xhr, status, error) {
-            span.removeClass('cambiando');
-            span.text(estatusActual);
-            span.removeClass('habilitado inhabilitado').addClass(estatusActual);
-            Swal.fire('Error', 'Error en la conexión', 'error');
-        }
-    });
-}
-// Función genérica para mostrar mensajes
-function muestraMensaje(mensaje) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje
-    });
-}
+    });*/
