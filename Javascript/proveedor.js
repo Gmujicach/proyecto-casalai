@@ -421,29 +421,6 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on('click', '.btn-modificar', function () {
-        $('#modificar_id_proveedor').val($(this).data('id'));
-        $('#modificar_nombre_proveedor').val($(this).data('nombre-proveedor'));
-        $('#modificar_rif_proveedor').val($(this).data('rif-proveedor'));
-        $('#modificar_nombre_representante').val($(this).data('nombre-representante'));
-        $('#modificar_rif_representante').val($(this).data('rif-representante'));
-        $('#modificar_correo_proveedor').val($(this).data('correo-proveedor'));
-        $('#modificar_direccion_proveedor').val($(this).data('direccion-proveedor'));
-        $('#modificar_telefono_1').val($(this).data('telefono-1'));
-        $('#modificar_telefono_2').val($(this).data('telefono-2'));
-        $('#modificar_observacion').val($(this).data('observacion'));
-        $('#smnombre_proveedor').text('');
-        $('#smrif_proveedor').text('');
-        $('#smnombre_representante').text('');
-        $('#smrif_representante').text('');
-        $('#smcorreo_proveedor').text('');
-        $('#smdireccion_proveedor').text('');
-        $('#smtelefono_1').text('');
-        $('#smtelefono_2').text('');
-        $('#smobservacion').text('');
-        $('#modificarProveedorModal').modal('show');
-    });
-
     $("#modificar_nombre_proveedor").on("keypress", function (e) {
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
         let nombre_p = document.getElementById("modificar_nombre_proveedor");
@@ -654,6 +631,30 @@ $(document).ready(function () {
         return errores;
     }
 
+    $(document).on('click', '.btn-modificar', function () {
+        $('#modificar_id_proveedor').val($(this).data('id'));
+        $('#modificar_nombre_proveedor').val($(this).data('nombre-proveedor'));
+        $('#modificar_rif_proveedor').val($(this).data('rif-proveedor'));
+        $('#modificar_nombre_representante').val($(this).data('nombre-representante'));
+        $('#modificar_rif_representante').val($(this).data('rif-representante'));
+        $('#modificar_correo_proveedor').val($(this).data('correo-proveedor'));
+        $('#modificar_direccion_proveedor').val($(this).data('direccion-proveedor'));
+        $('#modificar_telefono_1').val($(this).data('telefono-1'));
+        $('#modificar_telefono_2').val($(this).data('telefono-2'));
+        $('#modificar_observacion').val($(this).data('observacion'));
+        
+        $('#smnombre_proveedor').text('');
+        $('#smrif_proveedor').text('');
+        $('#smnombre_representante').text('');
+        $('#smrif_representante').text('');
+        $('#smcorreo_proveedor').text('');
+        $('#smdireccion_proveedor').text('');
+        $('#smtelefono_1').text('');
+        $('#smtelefono_2').text('');
+        $('#smobservacion').text('');
+        $('#modificarProveedorModal').modal('show');
+    });
+
     $('#modificarProveedor').on('submit', function(e) {
         e.preventDefault();
 
@@ -698,7 +699,7 @@ $(document).ready(function () {
                         text: 'El proveedor se ha modificado correctamente'
                     });
 
-                    const id = $('#modificar_id_proveedor').val();
+                    /*const id = $('#modificar_id_proveedor').val();
                     const nombre_proveedor = $('#modificar_nombre_proveedor').val();
                     const rif_proveedor = $('#modificar_rif_proveedor').val();
                     const nombre_representante = $('#modificar_nombre_representante').val();
@@ -707,52 +708,68 @@ $(document).ready(function () {
                     const direccion_proveedor = $('#modificar_direccion_proveedor').val();
                     const telefono_1 = $('#modificar_telefono_1').val();
                     const telefono_2 = $('#modificar_telefono_2').val();
-                    const observacion = $('#modificar_observacion').val();
+                    const observacion = $('#modificar_observacion').val();*/
 
-                    const tabla = $('#tablaConsultas').DataTable();
-                    const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
-                    fila.data([
-                        `<ul>
-                            <div>
-                                <button class="btn-modificar"
-                                    data-id="${id}"
-                                    data-nombre-proveedor="${nombre_proveedor}"
-                                    data-rif-proveedor="${rif_proveedor}"
-                                    data-nombre-representante="${nombre_representante}"
-                                    data-rif-representante="${rif_representante}"
-                                    data-correo-proveedor="${correo_proveedor}"
-                                    data-direccion-proveedor="${direccion_proveedor}"
-                                    data-telefono-1="${telefono_1}"
-                                    data-telefono-2="${telefono_2}"
-                                    data-observacion="${observacion}">
-                                    Modificar
-                                </button>
-                            </div>
-                            <div>
-                                <button class="btn-eliminar"
-                                    data-id="${id}">
-                                    Eliminar
-                                </button>
-                            </div>
-                        </ul>
-                        <span class="campo-nombres">${nombre_proveedor}</span>
-                        <span class="campo-nombres">${rif_proveedor}</span>
-                        <span class="campo-nombres">${nombre_representante}</span>
-                        <span class="campo-nombres">${rif_representante}</span>
-                        <span class="campo-correo">${correo_proveedor}</span>
-                        <span class="campo-nombres">${direccion_proveedor}</span>
-                        <span class="campo-telefono">${telefono_1}</span>
-                        <span class="campo-telefono">${telefono_2}</span>
-                        <span class="campo-nombres">${observacion}</span>
-                        <td class="campo-estado">
-                            <span 
-                                class="campo-estatus habilitado" 
-                                data-id="${id}" 
+                    const tabla = $("#tablaConsultas").DataTable();
+                    const id = $("#modificar_id_proveedor").val();
+                    const fila = tabla.row(`tr[data-id="${id}"]`);
+                    const proveedor = response.proveedor;
+
+                    /*const tabla = $('#tablaConsultas').DataTable();
+                    const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);*/
+                    if (fila.length) {
+                        fila.data([
+                            `<ul>
+                                <div>
+                                    <button class="btn-modificar"
+                                        data-id="${proveedor.id}"
+                                        data-nombre-proveedor="${proveedor.nombre_proveedor}"
+                                        data-rif-proveedor="${proveedor.rif_proveedor}"
+                                        data-nombre-representante="${proveedor.nombre_representante}"
+                                        data-rif-representante="${proveedor.rif_representante}"
+                                        data-correo-proveedor="${proveedor.correo_proveedor}"
+                                        data-direccion-proveedor="${proveedor.direccion_proveedor}"
+                                        data-telefono-1="${proveedor.telefono_1}"
+                                        data-telefono-2="${proveedor.telefono_2}"
+                                        data-observacion="${proveedor.observacion}">
+                                        Modificar
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="btn-eliminar"
+                                        data-id="${proveedor.id}">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </ul>`,
+                            `<span class="campo-nombres">${proveedor.nombre_proveedor}</span>`,
+                            `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
+                            `<span class="campo-nombres">${proveedor.nombre_representante}</span>`,
+                            `<span class="campo-nombres">${proveedor.rif_representante}</span>`,
+                            `<span class="campo-correo">${proveedor.correo_proveedor}</span>`,
+                            `<span class="campo-nombres">${proveedor.direccion_proveedor}</span>`,
+                            `<span class="campo-telefono">${proveedor.telefono_1}</span>`,
+                            `<span class="campo-telefono">${proveedor.telefono_2}</span>`,
+                            `<span class="campo-nombres">${proveedor.observacion}</span>`,
+                            `<span class="campo-estatus ${proveedor.estado === "habilitado" ? "habilitado" : "inhabilitado"}"
+                                data-id="${proveedor.id_proveedor}" 
                                 style="cursor: pointer;">
-                                habilitado
-                            </span>
-                        </td>`
-                    ]).draw(false);
+                                ${proveedor.estado}
+                            </span>`,
+                        ]).draw(false);
+
+                        const filaNode = fila.node();
+                        const botonModificar = $(filaNode).find(".btn-modificar");
+                        botonModificar.data('nombre_proveedor', proveedor.nombre_proveedor);
+                        botonModificar.data('rif_proveedor', proveedor.rif_proveedor);
+                        botonModificar.data('nombre_representante', proveedor.nombre_representante);
+                        botonModificar.data('rif_representante', proveedor.rif_representante);
+                        botonModificar.data('correo_proveedor', proveedor.correo_proveedor);
+                        botonModificar.data('direccion_proveedor', proveedor.direccion_proveedor);
+                        botonModificar.data('telefono_1', proveedor.telefono_1);
+                        botonModificar.data('telefono_2', proveedor.telefono_2);
+                        botonModificar.data('observacion', proveedor.observacion);
+                    }
                 } else {
                     Swal.fire({
                         icon: 'error',
