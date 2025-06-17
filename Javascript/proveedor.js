@@ -631,7 +631,7 @@ $(document).ready(function () {
         return errores;
     }
 
-    $(document).on('click', '#modificarProveedorBtn', function () {
+    $(document).on('click', '#modificarProveedor', function () {
         $('#modificar_id_proveedor').val($(this).data('id'));
         $('#modificar_nombre_proveedor').val($(this).data('nombre-proveedor'));
         $('#modificar_rif_proveedor').val($(this).data('rif-proveedor'));
@@ -699,24 +699,11 @@ $(document).ready(function () {
                         text: 'El proveedor se ha modificado correctamente'
                     });
 
-                    /*const id = $('#modificar_id_proveedor').val();
-                    const nombre_proveedor = $('#modificar_nombre_proveedor').val();
-                    const rif_proveedor = $('#modificar_rif_proveedor').val();
-                    const nombre_representante = $('#modificar_nombre_representante').val();
-                    const rif_representante = $('#modificar_rif_representante').val();
-                    const correo_proveedor = $('#modificar_correo_proveedor').val();
-                    const direccion_proveedor = $('#modificar_direccion_proveedor').val();
-                    const telefono_1 = $('#modificar_telefono_1').val();
-                    const telefono_2 = $('#modificar_telefono_2').val();
-                    const observacion = $('#modificar_observacion').val();*/
-
                     const tabla = $("#tablaConsultas").DataTable();
                     const id = $("#modificar_id_proveedor").val();
                     const fila = tabla.row(`tr[data-id="${id}"]`);
                     const proveedor = response.proveedor;
 
-                    /*const tabla = $('#tablaConsultas').DataTable();
-                    const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);*/
                     if (fila.length) {
                         fila.data([
                             `<ul>
