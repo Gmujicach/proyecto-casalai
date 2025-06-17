@@ -85,7 +85,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             
             if ($proveedor->modificarProveedor($id_proveedor)) {
-                echo json_encode(['status' => 'success']);
+                $proveedorActualizado = $proveedor->obtenerProveedorPorId($id_proveedor);
+
+                echo json_encode([
+                    'status' => 'success',
+                    'usuario' => $proveedorActualizado
+                ]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar el proveedor']);
             }
