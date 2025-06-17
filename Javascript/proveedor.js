@@ -709,27 +709,50 @@ $(document).ready(function () {
                     const telefono_2 = $('#modificar_telefono_2').val();
                     const observacion = $('#modificar_observacion').val();
 
-                    const fila = $('tr[data-id="' + id + '"]');
-                    fila.find('td').eq(1).text(nombre_proveedor);
-                    fila.find('td').eq(2).text(rif_proveedor);
-                    fila.find('td').eq(3).text(nombre_representante);
-                    fila.find('td').eq(4).text(rif_representante);
-                    fila.find('td').eq(5).text(correo_proveedor);
-                    fila.find('td').eq(6).text(direccion_proveedor);
-                    fila.find('td').eq(7).text(telefono_1);
-                    fila.find('td').eq(8).text(telefono_2);
-                    fila.find('td').eq(9).text(observacion);
-
-                    const botonModificar = fila.find('.btn-modificar');
-                    botonModificar.data('nombre_proveedor', nombre_proveedor);
-                    botonModificar.data('rif_proveedor', rif_proveedor);
-                    botonModificar.data('nombre_representante', nombre_representante);
-                    botonModificar.data('rif_representante', rif_representante);
-                    botonModificar.data('correo_proveedor', correo_proveedor);
-                    botonModificar.data('direccion_proveedor', direccion_proveedor);
-                    botonModificar.data('telefono_1', telefono_1);
-                    botonModificar.data('telefono_2', telefono_2);
-                    botonModificar.data('observacion', observacion);
+                    const tabla = $('#tablaConsultas').DataTable();
+                    const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
+                    fila.data([
+                        `<ul>
+                            <div>
+                                <button class="btn-modificar"
+                                    data-id="${id}"
+                                    data-nombre-proveedor="${nombre_proveedor}"
+                                    data-rif-proveedor="${rif_proveedor}"
+                                    data-nombre-representante="${nombre_representante}"
+                                    data-rif-representante="${rif_representante}"
+                                    data-correo-proveedor="${correo_proveedor}"
+                                    data-direccion-proveedor="${direccion_proveedor}"
+                                    data-telefono-1="${telefono_1}"
+                                    data-telefono-2="${telefono_2}"
+                                    data-observacion="${observacion}">
+                                    Modificar
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn-eliminar"
+                                    data-id="${id}">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </ul>
+                        <span class="campo-nombres">${nombre_proveedor}</span>
+                        <span class="campo-nombres">${rif_proveedor}</span>
+                        <span class="campo-nombres">${nombre_representante}</span>
+                        <span class="campo-nombres">${rif_representante}</span>
+                        <span class="campo-correo">${correo_proveedor}</span>
+                        <span class="campo-nombres">${direccion_proveedor}</span>
+                        <span class="campo-telefono">${telefono_1}</span>
+                        <span class="campo-telefono">${telefono_2}</span>
+                        <span class="campo-nombres">${observacion}</span>
+                        <td class="campo-estado">
+                            <span 
+                                class="campo-estatus habilitado" 
+                                data-id="${id}" 
+                                style="cursor: pointer;">
+                                habilitado
+                            </span>
+                        </td>`
+                    ]).draw(false);
                 } else {
                     Swal.fire({
                         icon: 'error',
