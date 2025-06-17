@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 echo json_encode([
                     'status' => 'success',
-                    'usuario' => $proveedorActualizado
+                    'proveedor' => $proveedorActualizado
                 ]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar el proveedor']);
