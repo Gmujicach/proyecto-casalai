@@ -3,27 +3,24 @@ ob_start();
 require_once 'Modelo/categoria.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-    if (isset($_POST['accion'])) {
-        $accion = $_POST['accion'];
-    } else {
-        $accion = '';
-    }
+
+    $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
 
     switch ($accion) {
         case 'registrar':
             $categoria = new Categoria();
             $categoria->setNombreCategoria($_POST['nombre_categoria']);
+            $caracteristicas = isset($_POST['caracteristicas']) ? $_POST['caracteristicas'] : [];
 
             if ($categoria->existeNombreCategoria($_POST['nombre_categoria'])) {
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'El nombre de la cartegoria ya existe'
+                    'message' => 'El nombre de la categoria ya existe'
                 ]);
                 exit;
             }
 
-            if ($categoria->registrarCategoria()) {
+            if ($categoria->registrarCategoria($caracteristicas)) {
                 $categoriaRegistrado = $categoria->obtenerUltimoCategoria();
                 echo json_encode([
                     'status' => 'success',
@@ -37,21 +34,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ]);
             }
             exit;
-        
+
         case 'consultar_categorias':
             $categoria = new Categoria();
             $categorias_obt = $categoria->consultarCategorias();
-
             echo json_encode($categorias_obt);
             exit;
-        
+
         case 'obtener_categoria':
             $id_categoria = $_POST['id_categoria'];
-
             if ($id_categoria !== null) {
                 $categoria = new Categoria();
                 $categoria_obt = $categoria->obtenerCategoriaPorId($id_categoria);
-
                 if ($categoria_obt !== null) {
                     echo json_encode($categoria_obt);
                 } else {
@@ -64,19 +58,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         case 'modificar':
             $id_categoria  = $_POST['id_categoria'];
+            $nuevo_nombre = $_POST['nombre_categoria'];
+            $caracteristicas = isset($_POST['caracteristicas']) ? $_POST['caracteristicas'] : [];
             $categoria = new Categoria();
             $categoria->setIdCategoria($id_categoria);
-            $categoria->setNombreCategoria($_POST['nombre_categoria']);
-            
-            if ($categoria->existeNombreCategoria($_POST['nombre_categoria'], $id_categoria)) {
+            $categoria->setNombreCategoria($nuevo_nombre);
+
+            if ($categoria->existeNombreCategoria($nuevo_nombre, $id_categoria)) {
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El nombre de la categoria ya existe'
                 ]);
                 exit;
             }
-            
-            if ($categoria->modificarCategoria($id_categoria)) {
+
+            if ($categoria->modificarCategoria($id_categoria, $nuevo_nombre, $caracteristicas)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar la categoria']);
@@ -86,17 +82,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case 'eliminar':
             $id_categoria = $_POST['id_categoria'];
             $categoria = new Categoria();
-
-            if ($categoria->eliminarCategoria($id_categoria)) {
-                echo json_encode(['status' => 'success']);
+            $resultado = $categoria->eliminarCategoria($id_categoria);
+            if (is_array($resultado) && isset($resultado['status']) && $resultado['status'] === 'error') {
+                echo json_encode(['status' => 'error', 'message' => $resultado['mensaje']]);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la categoria']);
+                echo json_encode(['status' => 'success']);
             }
             exit;
 
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
-        exit;
+            exit;
     }
 }
 
