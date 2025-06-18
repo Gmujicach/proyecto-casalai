@@ -811,9 +811,6 @@ $(document).ready(function () {
         tabla.row(fila).remove().draw();
     }
 
-
-
-    
     $(document).on('click', '.campo-estatus', function() {
         const id_proveedor = $(this).data('id');
         cambiarEstatus(id_proveedor);
@@ -861,6 +858,86 @@ $(document).ready(function () {
         });
     }
 
+    $(document).on('click', '#btnPedidoProducto', function() {
+        var boton = $(this);
+    
+        $('#modificarIdProducto').val(boton.data('id'));
+        $('#modificarNombreProducto').val(boton.data('nombre'));
+        $('#modificarModelo').val(boton.data('modelo'));
+        $('#modificarStockMinimo').val(boton.data('stockminimo'));
+    
+        $('#PedidoProductoModal').modal('show');
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('PedidoProductoModal');
+        modal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+
+            // Obtener datos del botón
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            const modelo = button.closest('tr').children[2].textContent; // Usa la celda de la tabla
+
+            // Llenar el modal
+            document.getElementById('modificarIdProducto').value = id;
+            document.getElementById('modificarNombreProducto').value = nombre;
+            document.getElementById('modificarModelo').value = modelo;
+        });
+    });
+
+    // Enviar datos de modificación por AJAX al controlador PHP
+    $('#FormPedidoProducto').on('submit', function(e) {
+        e.preventDefault();
+
+        // Crear un objeto FormData con los datos del formulario
+        var formData = new FormData(this);
+        formData.append('accion', 'modificar');
+
+        // Enviar la solicitud AJAX al controlador PHP
+        $.ajax({
+            url: '',
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            data: formData,
+            success: function(response) {
+                response = JSON.parse(response);
+                if (response.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: 'El pedido se realizó correctamente'
+                    }).then(function() {
+                        
+                        if (response.proveedor) {
+                            actualizarFilaProveedor(response.proveedor);
+                        }
+                        $('#modificar_usuario_modal').modal('hide');
+                        $('.modal-backdrop').remove();
+                        $('body').removeClass('modal-open');
+                        $('body').css('padding-right', '');
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'No se pudo realizar el pedido al proveedor'
+                    });
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error al realizar el pedido:', textStatus, errorThrown);
+                muestraMensaje('Error al realizar el pedido.');
+            }
+        });
+    });
+
+    $(document).on('click', '#PedidoProductoModal .close', function() {
+        $('#PedidoProductoModal').modal('hide');
+    });
+
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
             icon: icono,
@@ -900,78 +977,3 @@ $(document).ready(function () {
         return str;
     }
 });
-/*
-    // Cargar datos del marcas en el modal al abrir
-        $(document).on('click', '#modificarProductoBtn', function() {
-        var boton = $(this);
-    
-        // Llenar los campos del formulario con los datos del botón
-        $('#modificarIdProducto').val(boton.data('id'));
-        $('#modificarNombreProducto').val(boton.data('nombre'));
-        $('#modificarModelo').val(boton.data('modelo'));
-        $('#modificarStockMinimo').val(boton.data('stockminimo'));
-    
-        // Mostrar el modal
-        $('#modificarProductoModal').modal('show');
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-  const modal = document.getElementById('modificarProductoModal');
-  modal.addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget;
-
-    // Obtener datos del botón
-    const id = button.getAttribute('data-id');
-    const nombre = button.getAttribute('data-nombre');
-    const modelo = button.closest('tr').children[2].textContent; // Usa la celda de la tabla
-
-    // Llenar el modal
-    document.getElementById('modificarIdProducto').value = id;
-    document.getElementById('modificarNombreProducto').value = nombre;
-    document.getElementById('modificarModelo').value = modelo;
-  });
-});*/
-
-    /*
-    // Enviar datos de modificación por AJAX al controlador PHP
-    $('#modificarProveedorForm').on('submit', function(e) {
-        e.preventDefault();
-
-        // Crear un objeto FormData con los datos del formulario
-        var formData = new FormData(this);
-        formData.append('accion', 'modificar');
-
-        // Enviar la solicitud AJAX al controlador PHP
-        $.ajax({
-            url: '', // Asegúrate de que la URL sea correcta
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: formData,
-            success: function(response) {
-    response = JSON.parse(response);
-    if (response.status === 'success') {
-        Swal.fire({
-            icon: 'success',
-            title: 'Modificado',
-            text: 'El Proveedor se ha modificado correctamente'
-        }).then(function() {
-            // Supón que el backend retorna el proveedor modificado en response.proveedor
-            if (response.proveedor) {
-                actualizarFilaProveedor(response.proveedor);
-            }
-            $('#modificar_usuario_modal').modal('hide');
-$('.modal-backdrop').remove();
-$('body').removeClass('modal-open');
-$('body').css('padding-right', '');
-        });
-    } else {
-        muestraMensaje(response.message);
-    }
-},
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar el Proveedor:', textStatus, errorThrown);
-                muestraMensaje('Error al modificar el Proveedor.');
-            }
-        });
-    });*/
