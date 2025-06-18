@@ -293,7 +293,7 @@ $(document).ready(function () {
                 <ul>
                     <div>
                         <button class="btn-modificar"
-                            id="modificarProductoBtn"
+                            id="btnModificarProveedor"
                             data-id="${proveedor.id_proveedor}"
                             data-nombre-proveedor="${proveedor.nombre_proveedor}"
                             data-rif-proveedor="${proveedor.rif_proveedor}"
@@ -632,7 +632,7 @@ $(document).ready(function () {
         return errores;
     }
 
-    $('#modificarProveedorbtn').on('click', function() {
+    $('#btnModificarProveedor').on('click', function() {
         $('#modificar_id_proveedor').val($(this).data('id'));
         $('#modificar_nombre_proveedor').val($(this).data('nombre-proveedor'));
         $('#modificar_rif_proveedor').val($(this).data('rif-proveedor'));
@@ -710,7 +710,7 @@ $(document).ready(function () {
                             `<ul>
                                 <div>
                                     <button class="btn-modificar"
-                                        id="modificarProductoBtn"
+                                        id="btnModificarProveedor"
                                         data-id="${proveedor.id}"
                                         data-nombre-proveedor="${proveedor.nombre_proveedor}"
                                         data-rif-proveedor="${proveedor.rif_proveedor}"
