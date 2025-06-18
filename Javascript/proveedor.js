@@ -632,7 +632,7 @@ $(document).ready(function () {
         return errores;
     }
 
-    $('#btnModificarProveedor').on('click', function() {
+    $(document).on('click', '#btnModificarProveedor', function () {
         $('#modificar_id_proveedor').val($(this).data('id'));
         $('#modificar_nombre_proveedor').val($(this).data('nombre-proveedor'));
         $('#modificar_rif_proveedor').val($(this).data('rif-proveedor'));
