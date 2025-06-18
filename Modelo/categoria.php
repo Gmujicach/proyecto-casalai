@@ -143,12 +143,35 @@ class Categoria extends BD {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function obtenerCategoriaPorId($id_categoria) {
-        $sql = "SELECT id_categoria, nombre_categoria FROM tbl_categoria WHERE id_categoria = :id_categoria";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->execute([$id_categoria]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+
+public function obtenerCategoriaPorId($id_categoria) {
+    $sql = "SELECT id_categoria, nombre_categoria FROM tbl_categoria WHERE id_categoria = :id_categoria";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->execute([$id_categoria]);
+    $categoria = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Obtener características de la tabla dinámica
+    $this->nombre_categoria = $categoria['nombre_categoria'];
+    $tabla = $this->generarNombreTabla();
+    $caracteristicas = [];
+    $cols = $this->conex->query("SHOW COLUMNS FROM `$tabla`")->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($cols as $col) {
+        if (!in_array($col['Field'], ['id', 'id_producto'])) {
+            $tipo = 'string';
+            if (strpos($col['Type'], 'int') !== false) $tipo = 'int';
+            elseif (strpos($col['Type'], 'float') !== false) $tipo = 'float';
+            $max = 255;
+            if (preg_match('/varchar\((\d+)\)/i', $col['Type'], $m)) $max = $m[1];
+            $caracteristicas[] = [
+                'nombre' => str_replace('_', ' ', ucfirst($col['Field'])),
+                'tipo' => $tipo,
+                'max' => $max
+            ];
+        }
     }
+    $categoria['caracteristicas'] = $caracteristicas;
+    return $categoria;
+}
 
     public function consultarCategorias() {
         $sql = "SELECT id_categoria, nombre_categoria FROM tbl_categoria";

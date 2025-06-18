@@ -112,33 +112,42 @@
             </table>
         </div>
 
-        <div class="modal fade modal-modificar" id="modificarCategoriaModal" tabindex="-1" role="dialog"
-            aria-labelledby="modificarCategoriaModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form id="modificarCategoria" method="POST">
-                        <div class="modal-header">
-                            <h5 class="titulo-form" id="modificarCategoriaModalLabel">Modificar Categoria</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" id="modificar_id_categoria" name="id_categoria">
-                            <div class="form-group">
-                                <label for="modificar_nombre_categoria">Nombre de la categoria</label>
-                                <input type="text" class="form-control" id="modificar_nombre_categoria"
-                                    name="nombre_categoria" maxlength="20" required>
-                                <span class="span-value-modal" id="smnombre_categoria"></span>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Modificar</button>
-                        </div>
-                    </form>
+
+<!-- Modal Modificar Categoría -->
+<div class="modal fade modal-modificar" id="modificarCategoriaModal" tabindex="-1" role="dialog"
+    aria-labelledby="modificarCategoriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="modificarCategoria" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="modificarCategoriaModalLabel">Modificar Categoría</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
+                <div class="modal-body">
+                    <input type="hidden" id="modificar_id_categoria" name="id_categoria">
+                    <div class="form-group">
+                        <label for="modificar_nombre_categoria">Nombre de la categoría</label>
+                        <input type="text" class="form-control" id="modificar_nombre_categoria"
+                            name="nombre_categoria" maxlength="20" required>
+                        <span class="span-value-modal" id="smnombre_categoria"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Características</label>
+                        <div id="modificar_caracteristicasContainer"></div>
+                        <button type="button" class="btn btn-sm btn-success mt-2" id="modificar_agregarCaracteristica">
+                            + Agregar característica
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Modificar</button>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
 
         <?php include 'footer.php'; ?>
         <script src="Javascript/categoria.js"></script>

@@ -347,6 +347,192 @@ $(document).ready(function () {
             }
         });
     });
+    // ...código existente...
+
+// Utilidad para crear inputs de características en el modal de modificar
+function crearInputCaracteristicaMod(id, nombre = '', tipo = '', max = '', puedeEliminar = true) {
+    const div = document.createElement('div');
+    div.classList.add('caracteristica-item');
+    div.dataset.index = id;
+
+    div.innerHTML = `
+        <input type="text" name="caracteristicas[${id}][nombre]" placeholder="Nombre" class="form-control" maxlength="20" required value="${nombre}">
+        <select name="caracteristicas[${id}][tipo]" class="form-select" required>
+            <option value="">Tipo</option>
+            <option value="int" ${tipo === 'int' ? 'selected' : ''}>Entero</option>
+            <option value="float" ${tipo === 'float' ? 'selected' : ''}>Decimal</option>
+            <option value="string" ${tipo === 'string' ? 'selected' : ''}>Texto</option>
+        </select>
+        <input type="number" name="caracteristicas[${id}][max]" placeholder="Máx. caracteres" class="form-control" min="1" max="255" required value="${max}">
+        ${puedeEliminar ? `<button type="button" class="btn btn-danger btn-eliminar-caracteristicas">✖</button>` : ''}
+    `;
+
+    if (puedeEliminar) {
+        div.querySelector('.btn-eliminar-caracteristicas').addEventListener('click', () => {
+            div.parentNode.removeChild(div);
+            modificarContador--;
+            modificarBtnAgregar.disabled = false;
+        });
+    }
+
+    return div;
+}
+
+let modificarContador = 0;
+const modificarMaxCaracteristicas = 5;
+let modificarBtnAgregar = null;
+
+// Abrir modal de modificar y cargar datos
+$(document).on('click', '.btn-modificar', function () {
+    const id = $(this).data('id');
+    $('#modificar_id_categoria').val(id);
+    $('#smnombre_categoria').text('');
+
+    // AJAX para obtener datos de la categoría y sus características
+    const datos = new FormData();
+    datos.append('accion', 'obtener_categoria');
+    datos.append('id_categoria', id);
+
+    $.ajax({
+        url: '',
+        type: 'POST',
+        data: datos,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function (categoria) {
+            $('#modificar_nombre_categoria').val(categoria.nombre_categoria);
+
+            // Limpiar y cargar características
+            const contenedor = document.getElementById('modificar_caracteristicasContainer');
+            contenedor.innerHTML = '';
+            modificarContador = 0;
+
+            // Si tu backend retorna un array de características, úsalo aquí
+            if (categoria.caracteristicas && Array.isArray(categoria.caracteristicas)) {
+                categoria.caracteristicas.forEach((carac, idx) => {
+                    const puedeEliminar = idx !== 0;
+                    contenedor.appendChild(crearInputCaracteristicaMod(modificarContador++, carac.nombre, carac.tipo, carac.max, puedeEliminar));
+                });
+            } else {
+                // Si no hay características, agrega una vacía no eliminable
+                contenedor.appendChild(crearInputCaracteristicaMod(modificarContador++, '', '', '', false));
+            }
+
+            // Habilitar o deshabilitar el botón de agregar
+            modificarBtnAgregar = document.getElementById('modificar_agregarCaracteristica');
+            modificarBtnAgregar.disabled = modificarContador >= modificarMaxCaracteristicas;
+
+            $('#modificarCategoriaModal').modal('show');
+        },
+        error: function () {
+            Swal.fire('Error', 'No se pudo obtener la categoría.', 'error');
+        }
+    });
+});
+
+// Agregar característica en el modal de modificar
+$(document).on('click', '#modificar_agregarCaracteristica', function () {
+    const contenedor = document.getElementById('modificar_caracteristicasContainer');
+    if (modificarContador < modificarMaxCaracteristicas) {
+        contenedor.appendChild(crearInputCaracteristicaMod(modificarContador++));
+        if (modificarContador === modificarMaxCaracteristicas) {
+            this.disabled = true;
+        }
+    }
+});
+
+// Enviar modificación por AJAX
+$('#modificarCategoria').on('submit', function (e) {
+    e.preventDefault();
+
+    // Validación similar a la de registrar
+    let validacionCorrecta = true;
+    let mensajeError = '';
+    const regexNombre = /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ]+(?: [a-zA-ZÁÉÍÓÚñÑáéíóúüÜ]+)*$/;
+
+    $('#modificar_caracteristicasContainer .caracteristica-item').each(function(index, item) {
+        const nombre = $(item).find('input[name*="[nombre]"]');
+        const tipo = $(item).find('select[name*="[tipo]"]');
+        const max = $(item).find('input[name*="[max]"]');
+
+        const nombreVal = $.trim(nombre.val());
+
+        if (nombreVal === '') {
+            mensajeError = 'El nombre de una característica está vacío.';
+            nombre.focus();
+            validacionCorrecta = false;
+            return false;
+        }
+
+        if (!regexNombre.test(nombreVal)) {
+            mensajeError = 'El nombre de la característica solo puede contener letras y un espacio entre palabras.';
+            nombre.focus();
+            validacionCorrecta = false;
+            return false;
+        }
+
+        if (tipo.val() === '') {
+            mensajeError = 'Debe seleccionar un tipo para cada característica.';
+            tipo.focus();
+            validacionCorrecta = false;
+            return false;
+        }
+
+        if ($.trim(max.val()) === '' || parseInt(max.val()) <= 0) {
+            mensajeError = 'El campo "Máx. caracteres" debe ser mayor a 0.';
+            max.focus();
+            validacionCorrecta = false;
+            return false;
+        }
+    });
+
+    if (!validacionCorrecta) {
+        Swal.fire('Error de validación', mensajeError, 'error');
+        return;
+    }
+
+    var formData = new FormData(this);
+    formData.append('accion', 'modificar');
+
+    $.ajax({
+        url: '',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                $('#modificarCategoriaModal').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Modificado',
+                    text: 'La categoría se ha modificado correctamente'
+                });
+
+                // Actualiza la fila en la tabla
+                const id = $('#modificar_id_categoria').val();
+                const nombre = $('#modificar_nombre_categoria').val();
+                const fila = $('tr[data-id="' + id + '"]');
+                fila.find('td').eq(2).text(nombre);
+
+                // Actualiza el data-nombre del botón modificar
+                const botonModificar = fila.find('.btn-modificar');
+                botonModificar.data('nombre', nombre);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message || 'No se pudo modificar la categoría'
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            Swal.fire('Error', 'Error al modificar la categoría.', 'error');
+        }
+    });
+});
 
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
