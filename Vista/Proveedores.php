@@ -341,7 +341,7 @@ aria-labelledby="PedidoProductoModalLabel" aria-hidden="true">
     <div class="modal-content">
       <form id="FormPedidoProducto" method="POST">
         <div class="modal-header">
-          <h5 class="titulo-form" id="PedidoProductoModalLabel">Realizar Pedido al Proveedor</h5>
+          <h5 class="titulo-form" id="PedidoProductoModalLabel">Realizar Pedido</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
