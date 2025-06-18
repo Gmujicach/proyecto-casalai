@@ -293,6 +293,7 @@ $(document).ready(function () {
                 <ul>
                     <div>
                         <button class="btn-modificar"
+                            id="modificarProductoBtn"
                             data-id="${proveedor.id_proveedor}"
                             data-nombre-proveedor="${proveedor.nombre_proveedor}"
                             data-rif-proveedor="${proveedor.rif_proveedor}"
@@ -709,6 +710,7 @@ $(document).ready(function () {
                             `<ul>
                                 <div>
                                     <button class="btn-modificar"
+                                        id="modificarProductoBtn"
                                         data-id="${proveedor.id}"
                                         data-nombre-proveedor="${proveedor.nombre_proveedor}"
                                         data-rif-proveedor="${proveedor.rif_proveedor}"
