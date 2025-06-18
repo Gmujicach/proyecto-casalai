@@ -105,8 +105,8 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                 <td>
                     <ul>
                         <div>
-                            <button class="btn-modificar" 
-                            id="modificarProveedorBtn"
+                            <button class="btn-modificar"
+                                id="modificarProductoBtn"
                                 data-id="<?php echo $proveedor['id_proveedor']; ?>"
                                 data-nombre-proveedor="<?php echo htmlspecialchars($proveedor['nombre_proveedor']); ?>"
                                 data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
@@ -235,7 +235,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
 aria-labelledby="modificarProveedorModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form id="modificarProveedor" method="POST">
+      <form id="modificarProveedorbtn" method="POST">
         <div class="modal-header">
           <h5 class="titulo-form" id="modificarProveedorModalLabel">Modificar Proveedor</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
