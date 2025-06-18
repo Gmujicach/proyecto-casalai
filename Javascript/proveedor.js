@@ -711,7 +711,7 @@ $(document).ready(function () {
                                 <div>
                                     <button class="btn-modificar"
                                         id="btnModificarProveedor"
-                                        data-id="${proveedor.id}"
+                                        data-id="${proveedor.id_proveedor}"
                                         data-nombre-proveedor="${proveedor.nombre_proveedor}"
                                         data-rif-proveedor="${proveedor.rif_proveedor}"
                                         data-nombre-representante="${proveedor.nombre_representante}"
@@ -726,7 +726,7 @@ $(document).ready(function () {
                                 </div>
                                 <div>
                                     <button class="btn-eliminar"
-                                        data-id="${proveedor.id}">
+                                        data-id="${proveedor.id_proveedor}">
                                         Eliminar
                                     </button>
                                 </div>
