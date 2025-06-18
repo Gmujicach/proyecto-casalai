@@ -314,13 +314,13 @@ $(document).ready(function () {
                 </div>
             </ul>`,
             `<span class="campo-nombres">${proveedor.nombre_proveedor}</span>`,
-            `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
+            `<span class="campo-rif.correo">${proveedor.rif_proveedor}</span>`,
             `<span class="campo-nombres">${proveedor.nombre_representante}</span>`,
-            `<span class="campo-nombres">${proveedor.rif_representante}</span>`,
-            `<span class="campo-correo">${proveedor.correo_proveedor}</span>`,
+            `<span class="campo-rif.correo">${proveedor.rif_representante}</span>`,
+            `<span class="campo-rif-correo">${proveedor.correo_proveedor}</span>`,
             `<span class="campo-nombres">${proveedor.direccion_proveedor}</span>`,
-            `<span class="campo-telefono">${proveedor.telefono_1}</span>`,
-            `<span class="campo-telefono">${proveedor.telefono_2}</span>`,
+            `<span class="campo-numeros">${proveedor.telefono_1}</span>`,
+            `<span class="campo-numeros">${proveedor.telefono_2}</span>`,
             `<span class="campo-nombres">${proveedor.observacion}</span>`,
             `<span class="campo-estatus ${proveedor.estado === "habilitado" ? "habilitado" : "inhabilitado"}"
                 data-id="${proveedor.id_proveedor}" 
@@ -727,13 +727,13 @@ $(document).ready(function () {
                                 </div>
                             </ul>`,
                             `<span class="campo-nombres">${proveedor.nombre_proveedor}</span>`,
-                            `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
+                            `<span class="campo-rif-correo">${proveedor.rif_proveedor}</span>`,
                             `<span class="campo-nombres">${proveedor.nombre_representante}</span>`,
-                            `<span class="campo-nombres">${proveedor.rif_representante}</span>`,
-                            `<span class="campo-correo">${proveedor.correo_proveedor}</span>`,
+                            `<span class="campo-rif-correo">${proveedor.rif_representante}</span>`,
+                            `<span class="campo-rif-correo">${proveedor.correo_proveedor}</span>`,
                             `<span class="campo-nombres">${proveedor.direccion_proveedor}</span>`,
-                            `<span class="campo-telefono">${proveedor.telefono_1}</span>`,
-                            `<span class="campo-telefono">${proveedor.telefono_2}</span>`,
+                            `<span class="campo-numeros">${proveedor.telefono_1}</span>`,
+                            `<span class="campo-numeros">${proveedor.telefono_2}</span>`,
                             `<span class="campo-nombres">${proveedor.observacion}</span>`,
                             `<span class="campo-estatus ${proveedor.estado === "habilitado" ? "habilitado" : "inhabilitado"}"
                                 data-id="${proveedor.id_proveedor}" 
