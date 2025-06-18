@@ -106,7 +106,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     <ul>
                         <div>
                             <button class="btn-modificar"
-                                id="btnModificarProveedor"
+                                id="ModificarProveedor"
                                 data-id="<?php echo $proveedor['id_proveedor']; ?>"
                                 data-nombre-proveedor="<?php echo htmlspecialchars($proveedor['nombre_proveedor']); ?>"
                                 data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
