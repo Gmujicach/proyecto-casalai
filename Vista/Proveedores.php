@@ -140,7 +140,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     </span>
                 </td>
                 <td>
-                    <span class="campo-nombres">
+                    <span class="campo-rif-correo">
                     <?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>
                     </span>
                 </td>
@@ -150,12 +150,12 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     </span>
                 </td>
                 <td>
-                    <span class="campo-nombres">
+                    <span class="campo-rif-correo">
                     <?php echo htmlspecialchars($proveedor['rif_representante']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="campo-correo">
+                    <span class="campo-rif-correo">
                     <?php echo htmlspecialchars($proveedor['correo_proveedor']); ?>
                     </span>
                 </td> 
@@ -165,12 +165,12 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                     </span>
                 </td> 
                 <td>
-                    <span class="campo-telefono">
+                    <span class="campo-numeros">
                     <?php echo htmlspecialchars($proveedor['telefono_1']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="campo-telefono">
+                    <span class="campo-numeros">
                     <?php echo htmlspecialchars($proveedor['telefono_2']); ?>
                     </span>
                 </td>
@@ -198,31 +198,22 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
     <table class="tabla"class="tablaConsultas" id="">
         <thead>
             <tr>
+                <th>Acción</th>
                 <th>ID</th>
                 <th>Producto</th>
                 <th>Modelo</th>
                 <th>Stock Actual</th>
                 <th>Stock Mínimo</th>
-                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($productos as $producto): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($producto['id_producto']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['nombre_modelo']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['stock']); ?></td>
-                    <td><?php echo htmlspecialchars($producto['stock_minimo']); ?></td>            
                     <td>
                         <ul>
                             <div>
-                                <button 
-                                    type="button" 
-                                    class="btn-modificar" 
-                                    id="btnModificarProducto"
-                                    data-toggle="modal" 
-                                    data-target="#modificarProductoModal" 
+                                <button class="btn-pedido" 
+                                    id="btnPedidoProducto"
                                     data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
                                     data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
                                     data-modelo="<?php echo htmlspecialchars($producto['nombre_modelo']); ?>"
@@ -232,6 +223,31 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                                 </button>
                             </div>
                         </ul>
+                    </td>
+                    <td>
+                        <span class="campo-numeros">
+                          <?php echo htmlspecialchars($producto['id_producto']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                          <?php echo htmlspecialchars($producto['nombre_producto']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                          <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-stock-actual-negativo">
+                          <?php echo htmlspecialchars($producto['stock']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-stock-minimo">
+                          <?php echo htmlspecialchars($producto['stock_minimo']); ?>
+                        </span>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -319,13 +335,13 @@ aria-labelledby="modificarProveedorModalLabel" aria-hidden="true">
   </div>
 </div>
 
-<div class="modal fade" id="modificarProductoModal" tabindex="-1" role="dialog" 
-aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
+<div class="modal fade modal-modificar" id="PedidoProductoModal" tabindex="-1" role="dialog" 
+aria-labelledby="PedidoProductoModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form id="modificarProductoForm" method="POST">
+      <form id="FormPedidoProducto" method="POST">
         <div class="modal-header">
-          <h5 class="titulo-form" id="modificarProductoModalLabel">Realizar Pedido</h5>
+          <h5 class="titulo-form" id="PedidoProductoModalLabel">Realizar Pedido al Proveedor</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -362,7 +378,6 @@ aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary">Confirmar Pedido</button>
         </div>
       </form>
