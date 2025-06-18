@@ -293,7 +293,7 @@ $(document).ready(function () {
                 <ul>
                     <div>
                         <button class="btn-modificar"
-                            id="ModificarProveedor"
+                            id="btnModificarProveedor"
                             data-id="${proveedor.id_proveedor}"
                             data-nombre-proveedor="${proveedor.nombre_proveedor}"
                             data-rif-proveedor="${proveedor.rif_proveedor}"
@@ -632,7 +632,7 @@ $(document).ready(function () {
         return errores;
     }
 
-    $(document).on('click', '#ModificarProveedor', function () {
+    $(document).on('click', '#btnModificarProveedor', function () {
         $('#modificar_id_proveedor').val($(this).data('id'));
         $('#modificar_nombre_proveedor').val($(this).data('nombre-proveedor'));
         $('#modificar_rif_proveedor').val($(this).data('rif-proveedor'));
@@ -656,7 +656,7 @@ $(document).ready(function () {
         $('#modificarProveedorModal').modal('show');
     });
 
-    $('#btnModificarProveedor').on('submit', function(e) {
+    $('#FormModificarProveedor').on('submit', function(e) {
         e.preventDefault();
 
         const datos = {
@@ -710,7 +710,7 @@ $(document).ready(function () {
                             `<ul>
                                 <div>
                                     <button class="btn-modificar"
-                                        id="ModificarProveedor"
+                                        id="btnModificarProveedor"
                                         data-id="${proveedor.id}"
                                         data-nombre-proveedor="${proveedor.nombre_proveedor}"
                                         data-rif-proveedor="${proveedor.rif_proveedor}"

@@ -63,6 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         case 'modificar':
+            ob_clean();
+            header('Content-Type: application/json; charset=utf-8');
             $id_proveedor = $_POST['id_proveedor'];
             $proveedor = new Proveedores();
             $proveedor->setIdProveedor($id_proveedor);
