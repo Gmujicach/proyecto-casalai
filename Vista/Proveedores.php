@@ -212,7 +212,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                                 <button 
                                     type="button" 
                                     class="btn-modificar" 
-                                    id="btnModificarProveedor"
+                                    id="btnModificarProducto"
                                     data-toggle="modal" 
                                     data-target="#modificarProductoModal" 
                                     data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
