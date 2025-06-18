@@ -293,7 +293,7 @@ $(document).ready(function () {
                 <ul>
                     <div>
                         <button class="btn-modificar"
-                            id="btnModificarProveedor"
+                            id="ModificarProveedor"
                             data-id="${proveedor.id_proveedor}"
                             data-nombre-proveedor="${proveedor.nombre_proveedor}"
                             data-rif-proveedor="${proveedor.rif_proveedor}"
@@ -656,7 +656,7 @@ $(document).ready(function () {
         $('#modificarProveedorModal').modal('show');
     });
 
-    $('#modificarProveedor').on('submit', function(e) {
+    $('#btnModificarProveedor').on('submit', function(e) {
         e.preventDefault();
 
         const datos = {
@@ -710,7 +710,7 @@ $(document).ready(function () {
                             `<ul>
                                 <div>
                                     <button class="btn-modificar"
-                                        id="btnModificarProveedor"
+                                        id="ModificarProveedor"
                                         data-id="${proveedor.id}"
                                         data-nombre-proveedor="${proveedor.nombre_proveedor}"
                                         data-rif-proveedor="${proveedor.rif_proveedor}"
