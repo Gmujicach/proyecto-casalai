@@ -27,41 +27,49 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                 <div class="modal-body">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="grupo-form">
-                        <input type="text" placeholder="Nombre Proveedor" class="control-form" id="nombre_proveedor" name="nombre_proveedor" maxlength="50" required>
+                        <label for="nombre_proveedor">Nombre del Proveedor</label>
+                        <input type="text" placeholder="Nombre: Proveedor" class="control-form" id="nombre_proveedor" name="nombre_proveedor" maxlength="50" required>
                         <span class="span-value" id="snombre_proveedor"></span>
 
-                        <input type="text" placeholder="RIF del Proveedor" class="control-form" id="rif_proveedor" name="rif_proveedor" maxlength="12" required>
+                        <label for="rif_proveedor">RIF del Proveedor</label>                     
+                        <input type="text" placeholder="RIF: Proveedor" class="control-form" id="rif_proveedor" name="rif_proveedor" maxlength="12" required>
                         <span class="span-value" id="srif_proveedor"></span>
                     </div>
 
                     <div class="grupo-form">
-                        <input type="text" placeholder="Nombre Representante" class="control-form" id="nombre_representante" name="nombre_representante" maxlength="50" required>
+                        <label for="nombre_representante">Nombre del Representante</label>
+                        <input type="text" placeholder="Nombre: Representante" class="control-form" id="nombre_representante" name="nombre_representante" maxlength="50" required>
                         <span class="span-value" id="snombre_representante"></span>
 
-                        <input type="text" placeholder="RIF del Representante" class="control-form" id="rif_representante" name="rif_representante" maxlength="12" required>
+                        <label for="rif_representante">RIF del Representante</label>
+                        <input type="text" placeholder="RIF: Representante" class="control-form" id="rif_representante" name="rif_representante" maxlength="12" required>
                         <span class="span-value" id="srif_representante"></span>
                     </div>
 
                     <div class="envolver-form">
-                        <input type="text" placeholder="Correo" class="control-form" id="correo_proveedor" name="correo_proveedor" maxlength="50" required>
+                        <label for="correo_proveedor">Correo del Proveedor</label>
+                        <input type="text" placeholder="Correo electrónico" class="control-form" id="correo_proveedor" name="correo_proveedor" maxlength="50" required>
                         <span class="span-value" id="scorreo_proveedor"></span>
                     </div>
 
                     <div class="envolver-form">
-                        <input type="text" placeholder="Direccion" class="control-form" id="direccion_proveedor" name="direccion_proveedor" maxlength="100" required>
+                        <label for="direccion_proveedor">Dirección del Proveedor</label>
+                        <input type="text" placeholder="Dirección" class="control-form" id="direccion_proveedor" name="direccion_proveedor" rows="3" maxlength="100" required>
                         <span class="span-value" id="sdireccion_proveedor"></span>
                     </div>
 
                     <div class="grupo-form">
-                        <input type="text" placeholder="Telefono Principal" class="control-form" id="telefono_1" name="telefono_1" maxlength="13" required>
+                        <label for="telefono_1">Teléfonos del Proveedor</label>
+                        <input type="text" placeholder="Teléfono Principal" class="control-form" id="telefono_1" name="telefono_1" maxlength="13" required>
                         <span class="span-value" id="stelefono_1"></span>
 
-                        <input type="text" placeholder="Telefono Secundario" class="control-form" id="telefono_2" name="telefono_2" maxlength="13" required>
+                        <input type="text" placeholder="Teléfono Secundario" class="control-form" id="telefono_2" name="telefono_2" maxlength="13" required>
                         <span class="span-value" id="stelefono_2"></span>
                     </div>
 
                     <div class="envolver-form">
-                        <textarea class="control-form" id="observacion" name="observacion" maxlength="100" rows="3" placeholder="Escriba alguna observación que se deba tener en cuenta"></textarea>
+                        <label for="nombre_proveedor">Nombre del Proveedor</label>
+                        <textarea class="control-form" placeholder="Escriba alguna observación a tomar en cuenta" id="observacion" name="observacion" maxlength="100" rows="3"></textarea>
                         <span class="span-value" id="sobservacion"></span>
                     </div>
                 </div>
