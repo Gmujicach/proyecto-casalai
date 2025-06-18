@@ -287,54 +287,49 @@ $(document).ready(function () {
     }
 
     function agregarFilaProveedor(proveedor) {
-    const nuevaFila = `
-        <tr data-id="${proveedor.id_proveedor}">
-            <td>
-                <ul>
-                    <div>
-                        <button class="btn-modificar"
-                            id="btnModificarProveedor"
-                            data-id="${proveedor.id_proveedor}"
-                            data-nombre-proveedor="${proveedor.nombre_proveedor}"
-                            data-rif-proveedor="${proveedor.rif_proveedor}"
-                            data-nombre-representante="${proveedor.nombre_representante}"
-                            data-rif-representante="${proveedor.rif_representante}"
-                            data-correo-proveedor="${proveedor.correo_proveedor}"
-                            data-direccion-proveedor="${proveedor.direccion_proveedor}"
-                            data-telefono-1="${proveedor.telefono_1}"
-                            data-telefono-2="${proveedor.telefono_2}"
-                            data-observacion="${proveedor.observacion}">
-                            Modificar
-                        </button>
-                    </div>
-                    <div>
-                        <button class="btn-eliminar"
-                            data-id="${proveedor.id_proveedor}">
-                            Eliminar
-                        </button>
-                    </div>
-                </ul>
-            </td>
-            <td><span class="campo-nombres">${proveedor.nombre_proveedor}</span></td>
-            <td><span class="campo-nombres">${proveedor.rif_proveedor}</span></td>
-            <td><span class="campo-nombres">${proveedor.nombre_representante}</span></td>
-            <td><span class="campo-nombres">${proveedor.rif_representante}</span></td>
-            <td><span class="campo-correo">${proveedor.correo_proveedor}</span></td>
-            <td><span class="campo-nombres">${proveedor.direccion_proveedor}</span></td>
-            <td><span class="campo-telefono">${proveedor.telefono_1}</span></td>
-            <td><span class="campo-telefono">${proveedor.telefono_2}</span></td>
-            <td><span class="campo-nombres">${proveedor.observacion}</span></td>
-            <td class="campo-estado">
-            <span 
-                class="campo-estatus ${proveedor.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
+        const tabla = $('#tablaConsultas').DataTable();
+        const nuevaFila = [
+            `<ul>
+                <div>
+                    <button class="btn-modificar"
+                        id="btnModificarProveedor"
+                        data-id="${proveedor.id_proveedor}"
+                        data-nombre-proveedor="${proveedor.nombre_proveedor}"
+                        data-rif-proveedor="${proveedor.rif_proveedor}"
+                        data-nombre-representante="${proveedor.nombre_representante}"
+                        data-rif-representante="${proveedor.rif_representante}"
+                        data-correo-proveedor="${proveedor.correo_proveedor}"
+                        data-direccion-proveedor="${proveedor.direccion_proveedor}"
+                        data-telefono-1="${proveedor.telefono_1}"
+                        data-telefono-2="${proveedor.telefono_2}"
+                        data-observacion="${proveedor.observacion}">
+                        Modificar
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-eliminar"
+                        data-id="${proveedor.id_proveedor}">
+                        Eliminar
+                    </button>
+                </div>
+            </ul>`,
+            `<span class="campo-nombres">${proveedor.nombre_proveedor}</span>`,
+            `<span class="campo-nombres">${proveedor.rif_proveedor}</span>`,
+            `<span class="campo-nombres">${proveedor.nombre_representante}</span>`,
+            `<span class="campo-nombres">${proveedor.rif_representante}</span>`,
+            `<span class="campo-correo">${proveedor.correo_proveedor}</span>`,
+            `<span class="campo-nombres">${proveedor.direccion_proveedor}</span>`,
+            `<span class="campo-telefono">${proveedor.telefono_1}</span>`,
+            `<span class="campo-telefono">${proveedor.telefono_2}</span>`,
+            `<span class="campo-nombres">${proveedor.observacion}</span>`,
+            `<span class="campo-estatus ${proveedor.estado === "habilitado" ? "habilitado" : "inhabilitado"}"
                 data-id="${proveedor.id_proveedor}" 
                 style="cursor: pointer;">
                 ${proveedor.estado}
-            </span>
-            </td>
-        </tr>
-    `;
-        $('#tablaConsultas tbody').append(nuevaFila);
+            </span>`
+        ];
+        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
+        $(rowNode).attr('data-id', proveedor.id_proveedor);
     }
 
     function resetProveedor() {
@@ -811,7 +806,9 @@ $(document).ready(function () {
     });
 
     function eliminarFilaProveedor(id_proveedor) {
-        $(`#tablaConsultas tbody tr[data-id="${id_proveedor}"]`).remove();
+        const tabla = $('#tablaConsultas').DataTable();
+        const fila = $(`#tablaConsultas tbody tr[data-id="${id_proveedor}"]`);
+        tabla.row(fila).remove().draw();
     }
 
 
