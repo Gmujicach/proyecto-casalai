@@ -102,7 +102,7 @@ $(document).ready(function () {
 
     $("#correo_cuenta").on("keyup", function(){
         validarKeyUp(
-            /^[^\sñÑ@]+@[^\s@]+\.[^\s@]+$/,
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             $(this),
             $("#scorreo_cuenta"),
             "*Formato válido: example@gmail.com*"
@@ -150,7 +150,7 @@ $(document).ready(function () {
             return false;
         }
         else if(validarKeyUp(
-            /^[^\sñÑ@]+@[^\s@]+\.[^\s@]+$/,
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             $("#correo_cuenta"),
             $("#scorreo_cuenta"),
             "*Formato correcto: example@gmail.com*"
@@ -377,7 +377,7 @@ $(document).ready(function () {
 
     $("#modificar_correo_cuenta").on("keyup", function(){
         validarKeyUp(
-            /^[^\sñÑ@]+@[^\s@]+\.[^\s@]+$/,
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             $(this),
             $("#smcorreo_cuenta"),
             "*El correo electrónico no es válido*"
@@ -398,7 +398,7 @@ $(document).ready(function () {
         if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono_cuenta)) {
             errores.push("Formato correcto: 04XX-XXX-XXXX.");
         }
-        if (!/^[^\sñÑ@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo_cuenta)) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo_cuenta)) {
             errores.push("Formato correcto: example@gmail.com.");
         }
         return errores;
