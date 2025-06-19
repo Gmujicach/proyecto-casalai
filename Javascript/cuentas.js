@@ -493,8 +493,7 @@ $(document).ready(function () {
                             `<span class="campo-rif-correo">${cuenta.rif_cuenta}</span>`,
                             `<span class="campo-numeros">${cuenta.telefono_cuenta}</span>`,
                             `<span class="campo-rif-correo">${cuenta.correo_cuenta}</span>`,
-                            `<span 
-                                class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
+                            `<span class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
                                 data-id="${cuenta.id_cuenta}" 
                                 style="cursor: pointer;">
                                 ${cuenta.estado}
