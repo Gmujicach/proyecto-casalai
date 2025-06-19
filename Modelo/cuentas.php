@@ -126,7 +126,7 @@ class Cuentabanco extends BD {
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_cuenta', $id_cuenta);
         $stmt->execute();
-        $cuenta_obt = $stmt->fetch(PDO::FETCH_ASSOC); // Devuelve un solo registro
+        $cuenta_obt = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->db = null;
         return $cuenta_obt;
     }
@@ -161,9 +161,7 @@ class Cuentabanco extends BD {
         $stmt->bindParam(':correo_cuenta', $this->correo_cuenta);
         $stmt->bindParam(':id_cuenta', $id_cuenta);
         
-        $result = $stmt->execute();
-        $this->db = null;
-        return $result;
+        return $stmt->execute();
     }
 
     public function eliminarCuentabanco($id_cuenta) {
