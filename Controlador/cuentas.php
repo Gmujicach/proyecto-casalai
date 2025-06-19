@@ -88,11 +88,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
-                $cuentabancoActualizado = $cuentabanco->obtenerCuentaPorId($id_cuenta);
+                $cuentabancoActualizada = $cuentabanco->obtenerCuentaPorId($id_cuenta);
 
                 echo json_encode([
                     'status' => 'success',
-                    'cuenta' => $cuentabancoActualizado
+                    'cuenta' => $cuentabancoActualizada
                 ]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar la cuenta']);

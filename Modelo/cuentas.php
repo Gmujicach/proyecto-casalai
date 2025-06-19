@@ -121,10 +121,10 @@ class Cuentabanco extends BD {
     }
     private function cuentaporid($id_cuenta) {
         $query = "SELECT * FROM tbl_cuentas WHERE id_cuenta = ?";
-        $stmt = $this->conex->prepare($query);
+        $stmt = $this->db->prepare($query);
         $stmt->execute([$id_cuenta]);
         $cuenta_obt = $stmt->fetch(PDO::FETCH_ASSOC);
-        $this->conex = null;
+        $this->db = null;
         return $cuenta_obt;
     }
 
