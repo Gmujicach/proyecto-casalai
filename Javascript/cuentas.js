@@ -492,13 +492,13 @@ $(document).ready(function () {
                             `<span class="campo-numeros">${cuenta.numero_cuenta}</span>`,
                             `<span class="campo-rif-correo">${cuenta.rif_cuenta}</span>`,
                             `<span class="campo-numeros">${cuenta.telefono_cuenta}</span>`,
-                            `<span class="campo-rif_correo">${cuenta.correo_cuenta}</span>`,
+                            `<span class="campo-rif-correo">${cuenta.correo_cuenta}</span>`,
                             `<span 
                                 class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
                                 data-id="${cuenta.id_cuenta}" 
                                 style="cursor: pointer;">
                                 ${cuenta.estado}
-                            </span>`
+                            </span>`,
                         ]).draw(false);
 
                         const filaNode = fila.node();
