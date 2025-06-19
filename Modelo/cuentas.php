@@ -151,12 +151,12 @@ class Cuentabanco extends BD {
         WHERE id_cuenta = :id_cuenta";
 
         $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_cuenta', $id_cuenta);
         $stmt->bindParam(':nombre_banco', $this->nombre_banco);
         $stmt->bindParam(':numero_cuenta', $this->numero_cuenta);
         $stmt->bindParam(':rif_cuenta', $this->rif_cuenta);
         $stmt->bindParam(':telefono_cuenta', $this->telefono_cuenta);
         $stmt->bindParam(':correo_cuenta', $this->correo_cuenta);
-        $stmt->bindParam(':id_cuenta', $id_cuenta);
         
         return $stmt->execute();
     }
