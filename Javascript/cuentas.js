@@ -262,7 +262,7 @@ $(document).ready(function () {
         $('#registrarCuentaModal').modal('hide');
     });
 
-    /*function enviarAjax(datos, callback) {
+    function enviarAjax(datos, callback) {
         let esFormData = (typeof datos === "object" && typeof datos.append === "function");
         $.ajax({
             url: '',
@@ -272,26 +272,6 @@ $(document).ready(function () {
             contentType: !esFormData ? 'application/x-www-form-urlencoded; charset=UTF-8' : false,
             dataType: 'json',
             success: function (respuesta) {
-                if(callback) callback(respuesta);
-            },
-            error: function () {
-                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
-            }
-        });
-    }*/
-
-    function enviarAjax(datos, callback) {
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: datos,
-            contentType: false,
-            processData: false,
-            cache: false,
-            success: function (respuesta) {
-                if (typeof respuesta === "string") {
-                    respuesta = JSON.parse(respuesta);
-                }
                 if(callback) callback(respuesta);
             },
             error: function () {
