@@ -1,13 +1,15 @@
 <?php
-require_once 'Conexion.php';
+require_once 'Config/Config.php';
 
-class Carrito {
+class Carrito extends BD{
     private $conex;
 
+
     public function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
+        $conexion = new BD('P');
+        $this->conex = $conexion->getConexion();
     }
+
 
     // Métodos básicos del carrito
     public function crearCarrito($id_cliente) {
@@ -60,7 +62,7 @@ class Carrito {
         $sql = "SELECT cd.id_carrito_detalle, p.id_producto, p.nombre_producto AS nombre, 
                        cd.cantidad, p.precio, (cd.cantidad * p.precio) AS subtotal
                 FROM tbl_carritodetalle cd
-                INNER JOIN productos p ON cd.id_producto = p.id_producto
+                INNER JOIN tbl_productos p ON cd.id_producto = p.id_producto
                 WHERE cd.id_carrito = :id_carrito";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_carrito', $id_carrito);
@@ -118,55 +120,62 @@ class Carrito {
     }
 
     // Métodos para compras
-    public function registrarCompra($id_carrito, $id_cliente) {
-        try {
-            $this->conex->beginTransaction();
-            
-            // Obtener los detalles del carrito
-            $detallesCarrito = $this->obtenerProductosDelCarrito($id_carrito);
-            
-            // Calcular el total de la compra
-            $total = 0;
-            foreach ($detallesCarrito as $detalle) {
-                $total += $detalle['subtotal'];
+public function registrarCompra($id_carrito, $id_cliente, $productos)
+{
+    try {
+        // Validar que todos los productos estén completos antes de iniciar la transacción
+        foreach ($productos as $detalle) {
+            if (empty($detalle['id_producto']) || empty($detalle['cantidad']) || !is_numeric($detalle['cantidad'])) {
+                error_log("Producto con datos incompletos o inválidos: " . json_encode($detalle));
+                throw new Exception("Uno o más productos tienen datos incompletos o inválidos.");
             }
-            
-            // Insertar la compra
-            $sqlCompra = "INSERT INTO facturas (fecha, cliente, descuento, estatus) 
-                          VALUES (NOW(), :id_cliente, 0, 'Completada')";
-            $stmtCompra = $this->conex->prepare($sqlCompra);
-            $stmtCompra->bindParam(':id_cliente', $id_cliente);
-            $stmtCompra->execute();
-            $id_factura = $this->conex->lastInsertId();
-            
-            // Insertar los detalles de la compra
-            foreach ($detallesCarrito as $detalle) {
-                $sqlDetalle = "INSERT INTO factura_detalle (factura_id, id_producto, cantidad) 
-                               VALUES (:id_factura, :id_producto, :cantidad)";
-                $stmtDetalle = $this->conex->prepare($sqlDetalle);
-                $stmtDetalle->bindParam(':id_factura', $id_factura);
-                $stmtDetalle->bindParam(':id_producto', $detalle['id_producto']);
-                $stmtDetalle->bindParam(':cantidad', $detalle['cantidad']);
-                $stmtDetalle->execute();
-                
-                // Actualizar stock del producto
-                $sqlUpdateStock = "UPDATE productos SET stock = stock - :cantidad 
-                                   WHERE id_producto = :id_producto";
-                $stmtUpdateStock = $this->conex->prepare($sqlUpdateStock);
-                $stmtUpdateStock->bindParam(':cantidad', $detalle['cantidad']);
-                $stmtUpdateStock->bindParam(':id_producto', $detalle['id_producto']);
-                $stmtUpdateStock->execute();
-            }
-            
-            // Vaciar el carrito
-            $this->eliminarTodoElCarrito($id_carrito);
-            
-            $this->conex->commit();
-            return true;
-        } catch (PDOException $e) {
-            $this->conex->rollBack();
-            error_log("Error al registrar compra: " . $e->getMessage());
-            return false;
         }
-    }
+
+        // Iniciar transacción
+        $this->conex->beginTransaction();
+
+        // Insertar la factura principal
+        $sqlCompra = "INSERT INTO tbl_facturas (fecha, cliente, descuento, estatus) 
+                      VALUES (NOW(), :id_cliente, 0, 'Borrador')";
+        $stmtCompra = $this->conex->prepare($sqlCompra);
+        $stmtCompra->bindValue(':id_cliente', $id_cliente);
+        $stmtCompra->execute();
+        $id_factura = $this->conex->lastInsertId();
+
+        // Preparar consultas para detalle y stock
+        $sqlDetalle = "INSERT INTO tbl_factura_detalle (factura_id, id_producto, cantidad) 
+                       VALUES (:id_factura, :id_producto, :cantidad)";
+        $stmtDetalle = $this->conex->prepare($sqlDetalle);
+
+        $sqlUpdateStock = "UPDATE tbl_productos SET stock = stock - :cantidad WHERE id_producto = :id_producto";
+        $stmtUpdateStock = $this->conex->prepare($sqlUpdateStock);
+
+        // Insertar cada detalle de producto
+        foreach ($productos as $detalle) {
+            $stmtDetalle->bindValue(':id_factura', $id_factura);
+            $stmtDetalle->bindValue(':id_producto', $detalle['id_producto']);
+            $stmtDetalle->bindValue(':cantidad', $detalle['cantidad']);
+            $stmtDetalle->execute();
+
+            $stmtUpdateStock->bindValue(':cantidad', $detalle['cantidad']);
+            $stmtUpdateStock->bindValue(':id_producto', $detalle['id_producto']);
+            $stmtUpdateStock->execute();
+        }
+
+        // Vaciar el carrito
+        $this->eliminarTodoElCarrito($id_carrito);
+
+        // Confirmar la transacción
+        $this->conex->commit();
+        return true;
+    } catch (Exception $e) {
+    $this->conex->rollBack();
+    error_log("Error al registrar compra: " . $e->getMessage());
+    return ['error' => $e->getMessage()];
+}
+
+}
+
+
+
 }
