@@ -149,7 +149,8 @@ aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
     </table>
 </div>
 
-<div class="modal fade modal-modificar" id="modificarCuentaModal" tabindex="-1" role="dialog" aria-labelledby="modificarCuentaModalLabel" aria-hidden="true">
+<div class="modal fade modal-modificar" id="modificarCuentaModal" tabindex="-1" role="dialog" 
+aria-labelledby="modificarCuentaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="modificarCuenta" method="POST">
