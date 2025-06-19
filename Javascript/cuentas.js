@@ -465,48 +465,50 @@ $(document).ready(function () {
                     const fila = tabla.row(`tr[data-id="${id}"]`);
                     const cuenta = response.cuenta;
 
-                    fila.data([
-                        `<ul>
-                            <div>
-                                <button class="btn-modificar"
-                                    id="btnModificarCuenta"
-                                    data-id="${cuenta.id_cuenta}"
-                                    data-nombre="${cuenta.nombre_banco}"
-                                    data-numero="${cuenta.numero_cuenta}"
-                                    data-rif="${cuenta.rif_cuenta}"
-                                    data-telefono="${cuenta.telefono_cuenta}"
-                                    data-correo="${cuenta.correo_cuenta}">
-                                    Modificar
-                                </button>
-                            </div>
-                            <div>
-                                <button class="btn-eliminar"
-                                    data-id="${cuenta.id_cuenta}">
-                                    Eliminar
-                                </button>
-                            </div>
-                        </ul>`,
-                        `<span class="campo-numeros">${cuenta.id_cuenta}</span>`,
-                        `<span class="campo-nombres">${cuenta.nombre_banco}</span>`,
-                        `<span class="campo-numeros">${cuenta.numero_cuenta}</span>`,
-                        `<span class="campo-rif-correo">${cuenta.rif_cuenta}</span>`,
-                        `<span class="campo-numeros">${cuenta.telefono_cuenta}</span>`,
-                        `<span class="campo-rif_correo">${cuenta.correo_cuenta}</span>`,
-                        `<span 
-                            class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
-                            data-id="${cuenta.id_cuenta}" 
-                            style="cursor: pointer;">
-                            ${cuenta.estado}
-                        </span>`
-                    ]).draw(false);
+                    if (fila.length) {
+                        fila.data([
+                            `<ul>
+                                <div>
+                                    <button class="btn-modificar"
+                                        id="btnModificarCuenta"
+                                        data-id="${cuenta.id_cuenta}"
+                                        data-nombre="${cuenta.nombre_banco}"
+                                        data-numero="${cuenta.numero_cuenta}"
+                                        data-rif="${cuenta.rif_cuenta}"
+                                        data-telefono="${cuenta.telefono_cuenta}"
+                                        data-correo="${cuenta.correo_cuenta}">
+                                        Modificar
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="btn-eliminar"
+                                        data-id="${cuenta.id_cuenta}">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </ul>`,
+                            `<span class="campo-numeros">${cuenta.id_cuenta}</span>`,
+                            `<span class="campo-nombres">${cuenta.nombre_banco}</span>`,
+                            `<span class="campo-numeros">${cuenta.numero_cuenta}</span>`,
+                            `<span class="campo-rif-correo">${cuenta.rif_cuenta}</span>`,
+                            `<span class="campo-numeros">${cuenta.telefono_cuenta}</span>`,
+                            `<span class="campo-rif_correo">${cuenta.correo_cuenta}</span>`,
+                            `<span 
+                                class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
+                                data-id="${cuenta.id_cuenta}" 
+                                style="cursor: pointer;">
+                                ${cuenta.estado}
+                            </span>`
+                        ]).draw(false);
 
-                    const filaNode = fila.node();
-                    const botonModificar = $(filaNode).find(".btn-modificar");
-                    botonModificar.data('nombre_banco', cuenta.nombre_banco);
-                    botonModificar.data('numero_cuenta', cuenta.numero_cuenta);
-                    botonModificar.data('rif_cuenta', cuenta.rif_cuenta);
-                    botonModificar.data('telefono_cuenta', cuenta.telefono_cuenta);
-                    botonModificar.data('correo_cuenta', cuenta.correo_cuenta);
+                        const filaNode = fila.node();
+                        const botonModificar = $(filaNode).find(".btn-modificar");
+                        botonModificar.data('nombre_banco', cuenta.nombre_banco);
+                        botonModificar.data('numero_cuenta', cuenta.numero_cuenta);
+                        botonModificar.data('rif_cuenta', cuenta.rif_cuenta);
+                        botonModificar.data('telefono_cuenta', cuenta.telefono_cuenta);
+                        botonModificar.data('correo_cuenta', cuenta.correo_cuenta);
+                    }
                 } else {
                     Swal.fire({
                         icon: 'error',
