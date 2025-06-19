@@ -29,12 +29,12 @@ aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
                         <label for="nombre_banco">Nombre del Banco</label>
-                        <input type="text" placeholder="Nombre del banco" class="control-form" id="nombre_banco" name="nombre_banco" maxlength="20" required>
+                        <input type="text" placeholder="Nombre" class="control-form" id="nombre_banco" name="nombre_banco" maxlength="20" required>
                         <span class="span-value" id="snombre_banco"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="numero_cuenta">Número de Cuenta</label>
-                        <input type="text" placeholder="Número de cuenta" class="control-form" id="numero_cuenta" name="numero_cuenta" maxlength="23" required>
+                        <input type="text" placeholder="N° cuenta" class="control-form" id="numero_cuenta" name="numero_cuenta" maxlength="23" required>
                         <span class="span-value" id="snumero_cuenta"></span>
                     </div>
                     <div class="envolver-form">
@@ -44,12 +44,12 @@ aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
                     </div>
                     <div class="envolver-form">
                         <label for="telefono_cuenta">Número de Teléfono</label>
-                        <input type="text" placeholder="Número de teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" maxlength="13" required>
+                        <input type="text" placeholder="Teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" maxlength="13" required>
                         <span class="span-value" id="stelefono_cuenta"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="correo_cuenta">Correo Electrónico</label>
-                        <input type="email" placeholder="Correo electrónico" class="control-form" id="correo_cuenta" name="correo_cuenta" maxlength="50" required>
+                        <input type="email" placeholder="Correo" class="control-form" id="correo_cuenta" name="correo_cuenta" maxlength="50" required>
                         <span class="span-value" id="scorreo_cuenta"></span>
                     </div>
                 </div>
@@ -89,6 +89,7 @@ aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
                         <ul>
                             <div>
                                 <button class="btn-modificar"
+                                id="btnModificarCuenta"
                                 data-id="<?php echo $cuenta['id_cuenta']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($cuenta['nombre_banco']); ?>"
                                 data-numero="<?php echo htmlspecialchars($cuenta['numero_cuenta']); ?>"
@@ -104,12 +105,36 @@ aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
                             </div>
                         </ul>
                     </td>
-                    <td><?php echo htmlspecialchars($cuenta['id_cuenta']); ?></td>
-                    <td><?php echo htmlspecialchars($cuenta['nombre_banco']); ?></td>
-                    <td><?php echo htmlspecialchars($cuenta['numero_cuenta']); ?></td>
-                    <td><?php echo htmlspecialchars($cuenta['rif_cuenta']); ?></td>
-                    <td><?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?></td>
-                    <td><?php echo htmlspecialchars($cuenta['correo_cuenta']); ?></td>
+                    <td>
+                        <span class="campo-numeros">
+                            <?php echo htmlspecialchars($cuenta['id_cuenta']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                            <?php echo htmlspecialchars($cuenta['nombre_banco']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-numeros">
+                            <?php echo htmlspecialchars($cuenta['numero_cuenta']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-rif-correo">
+                            <?php echo htmlspecialchars($cuenta['rif_cuenta']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-numeros">
+                            <?php echo htmlspecialchars($cuenta['telefono_cuenta']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-rif-correo">
+                            <?php echo htmlspecialchars($cuenta['correo_cuenta']); ?>
+                        </span>
+                    </td>
                     <td>
                         <span 
                             class="campo-estatus <?php echo ($cuenta['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
