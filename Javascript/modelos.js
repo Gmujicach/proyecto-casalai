@@ -1,77 +1,211 @@
 $(document).ready(function () {
-    // Cargar datos del marcas en el modal al abrir
-    $(document).on('click', '.btn-modificar', function() {
-        var id_modelo = $(this).data('id');
 
-        // Establecer el id_producto en el campo oculto del formulario de modificación
-        $('#modificar_id_modelos').val(id_modelo);
-
-        // Realizar una solicitud AJAX para obtener los datos del modelos desde la base de datos
-        $.ajax({
-            url: '', // Ruta al controlador PHP que maneja las peticiones
-            type: 'POST',
-            dataType: 'json',
-            data: { id_modelo: id_modelo, accion: 'obtener_modelo' },
-            success: function(modelos) {
-                console.log('Datos de la Marca obtenidos:', modelos);
-                // Llenar los campos del formulario con los datos obtenidos del modelos
-                $('#modificarnombre_modelo').val(modelos.nombre_modelo);
-                
-                // Ajustar la imagen si se maneja la carga de imágenes
-                // $('#modificarImagen').val(modelos.imagen);
-
-                // Mostrar el modal de modificación después de llenar los datos
-                $('#modificar_modelos_modal').modal('show');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error en la solicitud AJAX:', textStatus, errorThrown);
-                muestraMensaje('Error al cargar los datos del modelo.');
-            }
-        });
+    // Validación en tiempo real para registro
+    $("#nombre_modelo").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]*$/, e);
+        let nombre = document.getElementById("nombre_modelo");
+        nombre.value = space(nombre.value);
+    });
+    $("#nombre_modelo").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]{1,25}$/,
+            $(this),
+            $("#snombre_modelo"),
+            "*El formato permite letras, números y (-/)*"
+        );
     });
 
-    // Enviar datos de modificación por AJAX al controlador PHP
-    $('#modificarmodelos').on('submit', function(e) {
+    function validarEnvioModelo(){
+        let nombre = document.getElementById("nombre_modelo");
+        nombre.value = space(nombre.value).trim();
+
+        if(validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]{1,25}$/,
+            $("#nombre_modelo"),
+            $("#snombre_modelo"),
+            "*El nombre permite letras, números y (-/)*"
+        )==0){
+            mensajes('error',4000,'Verifique el nombre del modelo','se permite letras, números y (-/)');
+            return false;
+        }
+        return true;
+    }
+
+    function agregarFilaModelo(modelo) {
+        const nuevaFila = `
+            <tr data-id="${modelo.id_modelo}">
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                data-id="${modelo.id_modelo}"
+                                data-marcaid="${modelo.id_marca}"
+                                data-nombre="${modelo.nombre_modelo}">
+                                Modificar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
+                                data-id="${modelo.id_modelo}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+                <td>${modelo.id_modelo}</td>
+                <td>${modelo.nombre_marca}</td>
+                <td>${modelo.nombre_modelo}</td>
+            </tr>
+        `;
+        const tabla = $('#tablaConsultas').DataTable();
+        tabla.row.add($(nuevaFila)).draw(false);
+        tabla.page('last').draw('page');
+    }
+
+    function resetModelo() {
+        $("#id_marca").val('');
+        $("#nombre_modelo").val('');
+        $("#snombre_modelo").text('');
+    }
+
+    $('#btnIncluirModelo').on('click', function() {
+        $('#registrarModelo')[0].reset();
+        $('#snombre_modelo').text('');
+        $('#registrarModeloModal').modal('show');
+    });
+
+    $('#registrarModelo').on('submit', function(e) {
         e.preventDefault();
 
-        // Crear un objeto FormData con los datos del formulario
-        var formData = new FormData(this);
-        formData.append('accion', 'modificar');
-
-        // Enviar la solicitud AJAX al controlador PHP
-        $.ajax({
-            url: '', // Asegúrate de que la URL sea correcta
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: formData,
-            success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                response = JSON.parse(response); // Asegúrate de que la respuesta sea un objeto JSON
-                if (response.status === 'success') {
-                    $('#modificarmodelosModal').modal('hide');
+        if(validarEnvioModelo()){
+            var datos = new FormData(this);
+            datos.append('accion', 'registrar');
+            enviarAjax(datos, function(respuesta){
+                if(respuesta.status === "success" || respuesta.resultado === "success"){
                     Swal.fire({
                         icon: 'success',
-                        title: 'Modificado',
-                        text: 'El Modelo se ha modificado correctamente'
-                    }).then(function() {
-                        location.reload(); // Recargar la página al modificar un producto
+                        title: 'Éxito',
+                        text: respuesta.message || respuesta.msg || 'Modelo registrado correctamente'
                     });
+                    agregarFilaModelo(respuesta.modelo);
+                    resetModelo();
                 } else {
-                    muestraMensaje(response.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: respuesta.message || respuesta.msg || 'No se pudo registrar el modelo'
+                    });
                 }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar el modelo:', textStatus, errorThrown);
-                muestraMensaje('Error al modificar el modelo.');
+            });
+        }
+    });
+
+    $(document).on('click', '#registrarModeloModal .close', function() {
+        $('#registrarModeloModal').modal('hide');
+    });
+
+    $(document).on('click', '.btn-modificar', function () {
+        $('#modificar_id_modelo').val($(this).data('id'));
+        llenarSelectMarcasModal($(this).data('marcaid'));
+        $('#modificar_nombre_modelo').val($(this).data('nombre'));
+        $('#smnombre_modelo').text('');
+        $('#modificarModeloModal').modal('show');
+    });
+
+    $("#modificar_nombre_modelo").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]*$/, e);
+        let nombre = document.getElementById("modificar_nombre_modelo");
+        nombre.value = space(nombre.value);
+    });
+    $("#modificar_nombre_modelo").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]{1,25}$/,
+            $(this),
+            $("#smnombre_modelo"),
+            "*El formato permite letras, números y (-/)*"
+        );
+    });
+
+    $('#modificarModelo').on('submit', function(e) {
+        e.preventDefault();
+
+        let nombreModelo = $("#modificar_nombre_modelo").val().trim();
+        let idMarca = $("#modificar_marca_modelo").val();
+        let nombreMarca = $("#modificar_marca_modelo option:selected").text();
+
+        if(!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9-/\s\b]{1,25}$/.test(nombreModelo)){
+            Swal.fire('Error', 'El nombre solo permite letras, números y (-/)', 'error');
+            return;
+        }
+
+        var datos = new FormData(this);
+        datos.append('accion', 'modificar');
+        enviarAjax(datos, function(respuesta){
+            if(respuesta.status === "success" || respuesta.resultado === "success"){
+            $('#modificarModeloModal').modal('hide');
+            Swal.fire({
+                icon: 'success',
+                title: 'Modificado',
+                text: respuesta.message || 'El modelo se ha modificado correctamente'
+            });
+
+            // Actualizar la fila en la tabla con el mismo formato
+            let modelo = respuesta.modelo; // El backend debe retornar el modelo actualizado
+            let fila = $(`tr[data-id="${modelo.id_modelo}"]`);
+            const nuevaFila = `
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                data-id="${modelo.id_modelo}"
+                                data-marcaid="${modelo.id_marca}"
+                                data-nombre="${modelo.nombre_modelo}">
+                                Modificar
+                            </button>
+                            <button class="btn-eliminar"
+                                data-id="${modelo.id_modelo}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+                <td>${modelo.id_modelo}</td>
+                <td>${modelo.nombre_marca}</td>
+                <td>${modelo.nombre_modelo}</td>
+            `;
+            const tabla = $('#tablaConsultas').DataTable();
+            tabla.row(fila).data($(nuevaFila)).draw(false);
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: respuesta.message || 'No se pudo modificar el modelo'
+                });
             }
         });
     });
 
-    // Función para eliminar el producto
-    $(document).on('click', '.btn-eliminar', function (e) {
-        e.preventDefault(); // Evitar la redirección predeterminada del enlace
+    $(document).on('click', '#modificarModeloModal .close', function() {
+        $('#modificarModeloModal').modal('hide');
+    });
+
+    function llenarSelectMarcasModal(idSeleccionada) {
+        let select = $('#modificar_marca_modelo');
+        select.empty();
+        select.append('<option value="">Seleccione una marca</option>');
+        window.marcasDisponibles.forEach(function(marca) {
+            let selected = marca.id_marca == idSeleccionada ? 'selected' : '';
+            select.append(`<option value="${marca.id_marca}" ${selected}>${marca.nombre_marca}</option>`);
+        });
+    }
+
+    $(document).on('click', '#modificarMarcaModal .close', function() {
+        $('#modificarMarcaModal').modal('hide');
+    });
+
+    $(document).on('click', '.btn-eliminar', function () {
+        let id_modelo = $(this).data('id');
         Swal.fire({
             title: '¿Está seguro?',
             text: "¡No podrás revertir esto!",
@@ -82,105 +216,70 @@ $(document).ready(function () {
             confirmButtonText: 'Sí, eliminarlo!'
         }).then((result) => {
             if (result.isConfirmed) {
-                var id = $(this).data('id');
-                console.log("ID del Modelo a eliminar: ", id); // Punto de depuración
                 var datos = new FormData();
                 datos.append('accion', 'eliminar');
-                datos.append('id', id);
-                enviarAjax(datos, function (respuesta) {
+                datos.append('id_modelo', id_modelo);
+                enviarAjax(datos, function(respuesta){
                     if (respuesta.status === 'success') {
-                        Swal.fire(
-                            'Eliminado!',
-                            'El Modelo ha sido eliminado.',
-                            'success'
-                        ).then(function() {
-                            location.reload(); // Recargar la página al eliminar un producto
-                        });
+                        Swal.fire('Eliminado!', 'El modelo ha sido eliminado.', 'success');
+                        const tabla = $('#tablaConsultas').DataTable();
+                        const fila = $(`#tablaConsultas tbody tr[data-id="${id_modelo}"]`);
+                        tabla.row(fila).remove().draw();
                     } else {
-                        muestraMensaje(respuesta.message);
+                        Swal.fire('Error', respuesta.message, 'error');
                     }
                 });
             }
         });
     });
 
-    // Función para incluir un nuevo producto
-    $('#incluirmodelos').on('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
+    function enviarAjax(datos, callback) {
         $.ajax({
             url: '',
             type: 'POST',
-            data: formData,
+            data: datos,
             contentType: false,
             processData: false,
-            success: function(response) {
-                try {
-                    const data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            title: 'Éxito',
-                            text: 'Modelo ingresado exitosamente',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.message || 'Error al ingresar el Modelo',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    }
-                } catch (e) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Error al procesar la respuesta del servidor',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
+            cache: false,
+            success: function (respuesta) {
+                if (typeof respuesta === "string") {
+                    respuesta = JSON.parse(respuesta);
                 }
+                if(callback) callback(respuesta);
             },
-            error: function(xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Error en la solicitud AJAX: ' + error,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
+            error: function () {
+                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
             }
         });
-    });
-});
+    }
 
-// Función genérica para enviar AJAX
-function enviarAjax(datos, callback) {
-    console.log("Enviando datos AJAX: ", datos); // Punto de depuración
-    $.ajax({
-        url: '', // Asegúrate de que la URL apunte al controlador correcto
-        type: 'POST',
-        contentType: false,
-        data: datos,
-        processData: false,
-        cache: false,
-        success: function (respuesta) {
-            console.log("Respuesta del servidor: ", respuesta); // Punto de depuración
-            callback(JSON.parse(respuesta));
-        },
-        error: function () {
-            console.error('Error en la solicitud AJAX');
-            muestraMensaje('Error en la solicitud AJAX');
+    function validarKeyPress(regex, e) {
+        let key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (!regex.test(key)) {
+            e.preventDefault();
+            return false;
         }
-    });
-}
-
-// Función genérica para mostrar mensajes
-function muestraMensaje(mensaje) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje
-    });
-}
+        return true;
+    }
+    function validarKeyUp(regex, input, span, mensaje) {
+        if (!regex.test(input.val())) {
+            span.text(mensaje);
+            return 0;
+        } else {
+            span.text('');
+            return 1;
+        }
+    }
+    function space(text) {
+        return text.replace(/\s{2,}/g, ' ');
+    }
+    function mensajes(tipo, tiempo, titulo, texto) {
+        Swal.fire({
+            icon: tipo,
+            title: titulo,
+            text: texto,
+            timer: tiempo,
+            showConfirmButton: false
+        });
+    }
+});

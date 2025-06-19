@@ -1,15 +1,15 @@
 <?php
-require_once 'config.php';
+require_once 'Config/config.php';
 
 class modelo extends BD{
     private $id_marca;
     private $conex;
     private $nombre_modelo;
-    private $id;
+    private $id_modelo;
 
-    function __construct() {
-        parent::__construct();
-        $this->conex = parent::conexion();
+    public function __construct() {
+        $conexion = new BD('P');
+        $this->conex = $conexion->getConexion();
     }
 
     // Getters y Setters
@@ -30,25 +30,32 @@ class modelo extends BD{
     }
 
     
-    public function getId() {
-        return $this->id;
+    public function getIdModelo() {
+        return $this->id_modelo;
     }
-    public function setId($id) {
-        $this->id = $id;
+    public function setIdModelo($id_modelo) {
+        $this->id_modelo = $id_modelo;
     }
 
-    public function validarmodelo() {
-        $sql = "SELECT COUNT(*) FROM tbl_modelos WHERE nombre_modelo = :nombre_modelo";
+    public function existeNombreModelo($nombre_modelo, $excluir_id = null) {
+        return $this->existeNomModelo($nombre_modelo, $excluir_id);
+    }
+    private function existeNomModelo($nombre_modelo, $excluir_id) {
+        $sql = "SELECT COUNT(*) FROM tbl_modelos WHERE nombre_modelo = ?";
+        $params = [$nombre_modelo];
+        if ($excluir_id !== null) {
+            $sql .= " AND id_modelo != ?";
+            $params[] = $excluir_id;
+        }
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
-        $stmt->execute();
-        $count = $stmt->fetchColumn();
-    
-        // Retorna true si no existe un producto con el mismo nombre
-        return $count == 0;
+        $stmt->execute($params);
+        return $stmt->fetchColumn() > 0;
     }
 
-    public function ingresarmodelos() {
+    public function registrarModelo() {
+        return $this->r_modelos();
+    }
+    private function r_modelos() {
         $sql = "INSERT INTO tbl_modelos (nombre_modelo, id_marca)
                 VALUES (:nombre_modelo, :id_marca)";
         $stmt = $this->conex->prepare($sql);
@@ -58,16 +65,38 @@ class modelo extends BD{
         return $stmt->execute();
     }
 
-    // Obtener Producto por ID
-    public function obtenermodelosPorId($id) {
-        $query = "SELECT * FROM tbl_modelos WHERE id_modelo = ?";
-        $stmt = $this->conex->prepare($query);
-        $stmt->execute([$id]);
-        $modelos = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $modelos;
+    public function obtenerUltimoModelo() {
+        return $this->obtUltimoModelo();
+    }
+    private function obtUltimoModelo() {
+        $sql = "SELECT m.id_modelo, m.nombre_modelo, m.id_marca, ma.nombre_marca
+            FROM tbl_modelos m
+            JOIN tbl_marcas ma ON m.id_marca = ma.id_marca
+            ORDER BY m.id_modelo DESC LIMIT 1";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute();
+        $modelo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->conex = null;
+        return $modelo ? $modelo : null;
+    }
+
+    // Obtener Modelo por ID
+    public function obtenerModeloPorId($id_modelo) {
+        return $this->obtModeloPorId($id_modelo);
+    }
+    private function obtModeloPorId($id_modelo) {
+        $sql = "SELECT * FROM tbl_modelos WHERE id_modelo = ?";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute([$id_modelo]);
+        $modelo = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->conex = null;
+        return $modelo;
     }
 
     public function getmarcas() {
+        return $this->g_marcas();
+    }
+    private function g_marcas() {
         $query = "SELECT id_marca, nombre_marca FROM tbl_marcas";
         $stmt = $this->conex->query($query);
 
@@ -80,30 +109,43 @@ class modelo extends BD{
         }
     }
 
-    // Modificar Producto
-    public function modificarmodelos($id) {
+    // Modificar Modelo
+    public function modificarModelo($id_modelo) {
+        return $this->m_modelo($id_modelo);
+    }
+    private function m_modelo($id_modelo) {
         $sql = "UPDATE tbl_modelos SET nombre_modelo = :nombre_modelo WHERE id_modelo = :id_modelo";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_modelo', $id);
+        $stmt->bindParam(':id_modelo', $id_modelo);
         $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
-        
-        return $stmt->execute();
+        $result = $stmt->execute();
+        $this->conex = null;
+        return $result;
     }
 
-    // Eliminar Producto
-    public function eliminarmodelos($id) {
-        $sql = "DELETE FROM tbl_modelos WHERE id_modelo = :id";
+    // Eliminar Modelo
+    public function eliminarModelo($id_modelo) {
+        return $this->e_modelo($id_modelo);
+    }
+    public function e_modelo($id_modelo) {
+        $sql = "DELETE FROM tbl_modelos WHERE id_modelo = :id_modelo";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        return $stmt->execute();
+        $stmt->bindParam(':id_modelo', $id_modelo);
+        $result = $stmt->execute();
+        $this->conex = null;
+        return $result;
     }
 
-    public function getmodelos() {
+    public function getModelos() {
+        return $this->g_modelos();
+    }
+    public function g_modelos() {
         // Punto de depuración: Iniciando getmarcas
         //echo "Iniciando getmarcas.<br>";
         
         // Primera consulta para obtener datos de marcas
         $querymodelos = 'SELECT mo.id_modelo,
+                                mo.id_marca,
                                 mo.nombre_modelo,
                                 ma.nombre_marca 
                                 FROM tbl_modelos AS mo
@@ -119,5 +161,4 @@ class modelo extends BD{
     }
     
 }
-
 ?>

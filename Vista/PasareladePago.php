@@ -1,18 +1,9 @@
-<?php
-
-
-
-if (!isset($_SESSION['name'])) {
-
- 	header('Location: .');
- 	exit();
- }
-?>
+<?php if ($_SESSION['rango'] == 'Cliente' ) { ?>
 
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
-<body>
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 
 <?php include 'NewNavBar.php'; ?>
@@ -75,7 +66,7 @@ if (!isset($_SESSION['name'])) {
     <span id="smonto"></span>
   </div>
 
-  <input type="text" name="id_factura" value="<?php echo $id_factura; ?>" hidden>
+  <input type="text" name="id_factura" value="<?php echo $idFactura; ?>" hidden>
   <button class="boton-form" type="submit">Registrar</button>
 </form>
 
@@ -134,3 +125,10 @@ if (!isset($_SESSION['name'])) {
 
 
 </html>
+
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado");
+    exit;
+}
+?>

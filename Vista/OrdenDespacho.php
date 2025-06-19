@@ -1,18 +1,15 @@
-<?php
+<?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Cliente' ) { ?>
 
+<!DOCTYPE html>
+<html lang="es">
 
-
-if (!isset($_SESSION['name'])) {
-
- 	header('Location: .');
- 	exit();
- }
-?>
-
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
-<body>
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 
 <?php include 'NewNavBar.php'; ?>
@@ -35,8 +32,9 @@ if (!isset($_SESSION['name'])) {
             <input type="text" placeholder="Correlativo" class="control-form" id="correlativo" name="correlativo" required>
             <span id="scorrelativo"></span>
         </div>
+        <br>
         <div class="envolver-form">
-            <select name="factura" id="factura" class="control-form" required>
+            <select name="factura" id="factura" class="form-select" required>
                 <option value="" disabled selected>Seleccionar Factura</option>
                 <?php foreach ($facturas as $factura): ?>
                     <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
@@ -58,45 +56,33 @@ if (!isset($_SESSION['name'])) {
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
-                <th><input type="checkbox"></th>
                 <th>Correlativo</th>
                 <th>Fecha</th>
                 <th>Factura</th>
-                <th></th>
-                <th><i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                </th>
+                <th>Ver Mas</th>
+                <th>Acciones</th>
             </tr>
         </thead>
 
         <tbody>
         <?php foreach ($ordendespacho as $orden): ?>
             <tr>
-    <td><input type="checkbox"></td>
     <td><span class="campo-correlativo"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
     <td><span class="campo-fecha"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
     <td><span class="campo-factura"><?php echo htmlspecialchars($orden['activo']); ?></span></td>
     <td><span><a href="#" class="">Ver Mas</a></span></td>
     <td>
         <div class="acciones-boton">
-            <i class="vertical">
-                <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-            </i>
-            <div class="desplegable">
-                <ul>
-                    <li><a href="#">Ver</a></li>
-                    <li>
-                    <a href="#" class="modificar" 
-                        data-id="<?php echo $orden['id_despachos']; ?>" 
+
+                    <button href="#" class="btn  btn-primary btn-modificar modificar" 
+                        data-id="<?php echo $orden['id_orden_despachos']; ?>" 
                         data-fecha="<?php echo $orden['fecha_despacho']; ?>"
                         data-correlativo="<?php echo $orden['correlativo']; ?>"
                         data-factura="<?php echo $orden['id_factura']; ?>"
                         data-bs-toggle="modal" 
                         data-bs-target="#modificar_orden_modal">Modificar
-                    </a>
-                    </li>
-                    <li><a href="#" class="eliminar" data-id="<?php echo $orden['id_despachos']; ?>">Eliminar</a></li>
+                    </button>
+<button href="#" class="eliminar btn-eliminar btn btn-danger" data-id="<?php echo $orden['id_orden_despachos']; ?>">Eliminar</button></li>
                 </ul>
             </div>
         </div>
@@ -193,7 +179,26 @@ if (!isset($_SESSION['name'])) {
 <script src="Javascript/usuario.js"></script>
 <script src="Javascript/validaciones.js"></script>
 <script src="Javascript/ordendespacho.js"></script>
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/datatable.js"></script>
+<script>
+$(document).ready(function() {
+    $('#tablaConsultas').DataTable({
+        language: {
+            url: 'Public/js/es-ES.json'
+        }
+    });
+});
+</script>
 </body>
 
 
 </html>
+
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado");
+    exit;
+}
+?>

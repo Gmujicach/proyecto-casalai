@@ -393,39 +393,61 @@ transform: translateY(0%);
   background-color: #c82333;
 }
 
-
-/*catalogo*/
-
-.titulo{
-  font-size: 40px;
-  text-align: center;
-  color: #090909;
-  margin-bottom: 40px;
-}
-/* Contenedor principal del catálogo */
-.container {
+/* Asegura disposición en columnas (no en fila) */
+.contenedor-principal {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin: 0 auto;
   padding: 20px;
+}
+
+.contenedor-tabla {
   width: 100%;
-  max-width: 1200px;
+  max-width: 900px;
+  margin-top: 30px;
 }
 
-.bottom-tabs {
-  display: flex;
+.dataTables_wrapper {
+  width: 100% !important;
+}
+
+.foto-producto {
+  width: 100px;         /* Cambia según tu diseño */
+  height: 100px;        /* Igual que el ancho para cuadrado */
+  object-fit: contain;  /* Mantiene la proporción sin recorte */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px;
+  background-color: #f9f9f9;
+}
+
+/* ===== Botones de acción uniformes ===== */
+.btn-accion {
+  /* mismo ancho y alto mínimo para ambos */
+  min-width: 115px;          /* ajusta a tu gusto */
+  padding: .35rem .75rem;    /* idéntico relleno */
+  font-size: .875rem;        /* texto consistente */
+  line-height: 1.25;         /* centra verticalmente */
+  display: inline-flex;      /* alinea icono + texto */
+  align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  gap: .25rem;               /* espacio icono-texto */
 }
 
-
-
-/* Estilo activo o al pasar el mouse */
-.catalogo-tabs a:hover,
-.catalogo-tabs a.active {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
+/* Si usas Bootstrap 5 + Icons: mantén iconos centrados */
+.btn-accion i {
+  font-size: 1rem;           /* mismo alto que el texto */
 }
+  .caracteristica-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-end;
+  }
+  .caracteristica-item input,
+  .caracteristica-item select {
+    flex: 1;
+  }
+  .caracteristica-item .btn-eliminar {
+    flex: 0 0 auto;
+  }

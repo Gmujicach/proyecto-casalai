@@ -1,184 +1,139 @@
-<?php
-
-
-
-if (!isset($_SESSION['name'])) {
-
- 	header('Location: .');
- 	exit();
- }
-?>
+<?php if ($_SESSION['rango'] == 'Administrador') { ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestionar Marcas</title>
-  <?php include 'header.php'; ?>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Marcas</title>
+    <?php include 'header.php'; ?>
 </head>
-<body>
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <?php include 'NewNavBar.php'; ?>
 
-<div class="container"> 
-<form id="incluirmarcas" action="" method="POST" class="formulario-1">
-    <input type="hidden" name="accion" value="ingresar">
-    <h3 class="display-4 text-center">INCLUIR MARCA</h3>
-    <div class="form-row">
-        <div class="form-group col-md-12">
-            <label for="nombre_marca">Nombre de la Marca</label>
-            <input type="text" placeholder="Escriba el nombre de la marca que desee Registrar" maxlength="15" class="form-control" id="nombre_marca" name="nombre_marca" required>
-            <span id="snombre_marca"></span>
-        </div>
-    </div>
-    <div class="form-group d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary btn-lg">Registrar Marca</button>
-    </div>
-</form>
-    </div>
-
-
-    <div class="contenedor-tabla">
-    <h3>LISTA DE USUARIOS</h3>
-
-    <table class="tablaConsultas" id="tablaConsultas">
-        <thead>
-            <tr>
-                <th><input type="checkbox"></th>
-                <th>Nombre Marca</th>
-                <th></th>
-                <th><i class="vertical">
-                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                    </i>
-                </th>
-            </tr>
-        </thead>
-
-        <tbody>
-        <?php foreach ($marcas as $marcas): ?>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>
-                    <span class="nombre-usuario">
-                    <?php echo htmlspecialchars($marcas['nombre_marca']); ?>
-                    </span>
-                </td>
-                <td>
-                    <span>
-                        <a href="#"class="">Ver Mas</a>
-                    </span>
-                </td>
-                <td>
-                    <span>
-                        <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                            <div class="desplegable">
-                                <ul>
-                                    <li><a href="#">Ver</a></li>
-                                    <li><a href="#" class="modificar" data-toggle="modal" data-target="#modificar_usuario_modal" onclick="obtenerUsuario(<?php echo $usuario['id_marca']; ?>)">Modificar</a></li>
-                                    <li><a href="#" class="eliminar" onclick="eliminarUsuario(<?php echo $usuario['id_marca']; ?>)">Eliminar</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </span>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-        <tfoot>
-    <tr>
-        <td>Filas por Página: 
-            <select id="filasPorPagina" onchange="cambiarFilasPorPagina(this.value)">
-                <option value="10" <?= $filasPorPagina == 10 ? 'selected' : '' ?>>10</option>
-                <option value="20" <?= $filasPorPagina == 20 ? 'selected' : '' ?>>20</option>
-                <option value="50" <?= $filasPorPagina == 50 ? 'selected' : '' ?>>50</option>
-                <option value="100" <?= $filasPorPagina == 100 ? 'selected' : '' ?>>100</option>
-            </select>
-        </td>
-        <td><?= "$inicio-$fin de $totalMarcas" ?></td>
-        <td>
-            <a href="?pagina=<?= max(1, $paginaActual - 1) ?>&filas=<?= $filasPorPagina ?>">
-                <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
-            </a>
-        </td>
-        <td>
-            <a href="?pagina=<?= min(ceil($totalMarcas / $filasPorPagina), $paginaActual + 1) ?>&filas=<?= $filasPorPagina ?>">
-                <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
-            </a>
-        </td>
-    </tr>
-</tfoot>
-    </table>
-
-
-
-
-<!-- Modal de modificación -->
-    <div class="modal fade" id="modificar_usuario_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
+<div class="modal fade modal-registrar" id="registrarMarcaModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="modificarusuario" method="POST" enctype="multipart/form-data">
+            <form id="registrarMarca" method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modificar_usuario_modal_label">Modificar Usuario</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="titulo-form" id="registrarMarcaModalLabel">Incluir Marca</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
                 <div class="modal-body">
-                    <!-- Campos del formulario de modificación -->
-                    <input type="hidden" id="modificar_id_usuario" name="id_usuario">
-                    <div class="form-group">
-                        <label for="modificarnombre_usuario">Nombre del Usuario</label>
-                        <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario" maxlength="15" required>
-                        <span id="smodificarnombre_usuario"></span>
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="envolver-form">
+                        <label for="nombre_marca">Nombre de la Marca</label>
+                        <input type="text" placeholder="Nombre de la Marca" class="control-form" id="nombre_marca" name="nombre_marca" maxlength="25" required>
+                        <span class="span-value" id="snombre_marca"></span>
                     </div>
-                    <div class="form-group">
-                        <label for="modificarclave_usuario">Contraseña del Usuario</label>
-                        <input type="text" class="form-control" id="modificarclave_usuario" name="clave_usuario" required>
-                        <span id="smodificarclave_usuario"></span>
-                    </div>
-                    <div class="form-group col-md-4">
-                                    <label for="rango">Categorias</label>
-                                    <select class="custom-select" id="rango" name="rango">
-                                    <option value="USUARIO">Usuario</option>
-                                                        <option value="admin">Administrador</option>
-                                                        <option value="almacen">Almacen</option>    
-                                    </select>
-                                </div>
-                    
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-cerrar" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Modificar</button>
                 </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
                 </div>
-                
             </form>
         </div>
     </div>
 </div>
 
-<script>
-function cambiarFilasPorPagina(filas) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('filas', filas);
-    url.searchParams.set('pagina', 1); // Resetear a primera página
-    window.location.href = url.toString();
-}
-</script>
-<script src="public/bootstrap/js/sidebar.js"></script>
-  <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="public/js/jquery-3.7.1.min.js"></script>
-  <script src="public/js/jquery.dataTables.min.js"></script>
-  <script src="public/js/dataTables.bootstrap5.min.js"></script>
-  <script src="public/js/datatable.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
+<div class="contenedor-tabla">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirMarca" class="btn-incluir">
+            Incluir Marca
+        </button>
+    </div>
+
+    <h3>Lista de Marcas</h3>
+    
+    <table class="tablaConsultas" id="tablaConsultas">
+        <thead>
+            <tr> 
+                <th>Acciones</th>
+                <th>ID</th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach ($marcas as $marca): ?>
+                <tr data-id="<?php echo $marca['id_marca']; ?>">        
+                    <td>
+                        <ul>
+                            <div>
+                                <button class="btn-modificar"
+                                data-id="<?php echo $marca['id_marca']; ?>"
+                                data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
+                                >Modificar</button>
+                            </div>
+                            <div>
+                                <button class="btn-eliminar"
+                                data-id="<?php echo $marca['id_marca']; ?>"
+                                >Eliminar</button>
+                            </div>
+                        </ul>
+                    </td>
+                    <td><?php echo htmlspecialchars($marca['id_marca']); ?></td>
+                    <td><?php echo htmlspecialchars($marca['nombre_marca']); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table> 
+</div>
+
+<div class="modal fade modal-modificar" id="modificarMarcaModal" tabindex="-1" role="dialog" aria-labelledby="modificarMarcaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="modificarMarca" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="modificarMarcaModalLabel">Modificar Marca</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="modificar_id_marca" name="id_marca">
+                    <div class="form-group">
+                        <label for="modificar_nombre_marca">Nombre de la Marca</label>
+                        <input type="text" class="form-control" id="modificar_nombre_marca" name="nombre_marca" maxlength="25" required>
+                        <span class="span-value-modal" id="smnombre_marca"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Modificar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php include 'footer.php'; ?>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="Javascript/marcas.js"></script>
-<script src="Javascript/validaciones.js"></script>
+
+<script src="public/bootstrap/js/sidebar.js"></script>
+
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/datatable.js"></script>
+<script>
+$(document).ready(function() {
+    $('#tablaConsultas').DataTable({
+        language: {
+            url: 'Public/js/es-ES.json'
+        }
+    });
+});
+</script>
 </body>
 </html>
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado");
+    exit;
+}
+?>

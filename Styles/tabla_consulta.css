@@ -10,6 +10,7 @@
     --header-font-color: #5b91d8;
     --tbody-text-color: #5b91d8;
     --tbody-text-color-600: #5b91d8;
+    --tbody-text-color-mora: #9553cc;
     --primary-bg-color: #e6e6f2;
     --primary-accent-color: #6d5bd0;
     --success-bg-color: #cdffcd;
@@ -19,24 +20,86 @@
     --alert-bg-color: #ffeccc;
     --alert-accent-color: #ce8500;
 }
+
 .contenedor-tabla a{
     text-decoration: none;
     color: var(--active);
     font-size: 14px;
 }
 
+/* CONTENEDOR PRINCIPAL */
 .contenedor-tabla {
-    box-sizing: border-box;
-    position: relative;
     display: flex;
-    flex-direction: column; /* Cambia la dirección del flex a columna */
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Alinea el contenido al inicio (arriba) */
-    padding: 20px; /* Añade padding en todos los lados */
-    background: #fff;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* CONTENEDOR DE TABLA */
+.tabla-wrapper {
+    position: relative;
+    z-index: 1; /* Establece un contexto de apilamiento */
+}
+
+/* CONTENEDOR DE SCROLL */
+.tabla-scroll {
+    width: 100%;
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    position: relative;
+    z-index: 1; /* Nivel base */
+}
+
+/* TABLA */
+.tablaConsultas {
+    position: static; /* Asegura que no cree un nuevo contexto de apilamiento */
+    z-index: auto;
+}
+
+/* SCROLLBAR */
+.tabla-scroll::-webkit-scrollbar {
+    width: 12px;
+    z-index: 0; /* Nivel inferior */
+}
+
+.tabla-scroll::-webkit-scrollbar-thumb {
+    background: var(--primary);
     border-radius: 6px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-    height: 100vh; /* Mantienes la altura si es necesario */
+    border: 3px solid white;
+    position: relative;
+    z-index: 0;
+}
+
+.acciones-boton.active .desplegable {
+    display: block;
+}*/
+
+/* HEADER CENTRADO */
+.contenedor-tabla h3 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* CELDAS CENTRADAS */
+.tablaConsultas th,
+.tablaConsultas td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* RESPONSIVE PARA MÓVILES */
+@media (max-width: 768px) {
+    .tabla-scroll {
+        width: 100vw;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
 }
 
 .contenedor-tabla h3 {
@@ -47,6 +110,26 @@
     font-size: 25px;
     margin-bottom: 25px;
     width: 100%; /* Asegura que ocupe todo el ancho */
+}
+
+.space-btn-incluir {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.btn-incluir{
+    font-size: 1rem; 
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background-color:#2ac94f;
+    cursor: pointer;
+    color: #fff;
+    transition: 0.5s;
+}
+.btn-incluir:hover {
+    background-color: #21a141;
 }
 
 table{
@@ -68,17 +151,29 @@ table thead{
 }
 
 table tr th{
+    text-align: center;
     padding: 10px 15px;
 }
 
 table thead tr th i{
-    font-size: 24   px;
+    font-size: 24px;
 }
 
 table tbody tr td{
+    text-align: center;
     position: relative;
     padding: 14px 12px;
+    min-width: 150px;
     border-bottom: 1px solid var(--primary-800 ); 
+}
+
+table tbody tr td ul{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin: 0;
 }
 
 table tbody tr:hover{
@@ -98,12 +193,32 @@ table tbody tr td .campo-nombres{
     font-weight: 500;
 }
 
-table tbody tr td .campo-correo{
+table tbody tr td .campo-rif-correo{
     display: block;
+    color: var(--tbody-text-color-mora);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+table tbody tr td .campo-numeros{
+    display: inline-block;
     color: var(--tbody-text-color);
     font-size: 16px;
     font-weight: 500;
-    margin-top: 3px;
+}
+
+table tbody tr td .campo-stock-actual-negativo{
+    display: inline-block;
+    color: var(--danger-accent-color);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+table tbody tr td .campo-stock-minimo{
+    display: inline-block;
+    color: var(--alert-accent-color);
+    font-size: 16px;
+    font-weight: 500;
 }
 
 table tbody tr td .campo-rango{
@@ -136,6 +251,24 @@ table tbody tr td .campo-estatus::before {
     left: 10px;
 }
 
+table tbody tr td .campo-estatus-pagos{
+    position: relative;
+    display: inline-block;
+    padding: 3px 15px 3px 25px; /* Más padding a la izquierda para el círculo */
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+/* Círculo indicador (base) */
+table tbody tr td .campo-estatus-pagos::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    border-radius: 100%;
+    top: 11px;
+    left: 0px;
+}
 /* Estilo para "habilitado" */
 table tbody tr td .campo-estatus.habilitado {
     color: var(--success-accent-color);
@@ -154,6 +287,81 @@ table tbody tr td .campo-estatus.inhabilitado::before {
     background: var(--danger-accent-color);
 }
 
+/* POR REVISIÓN */
+:root {
+    --success-accent-color: #28a745;  /* Verde */
+    --success-bg-color: #d4edda;
+
+    --danger-accent-color: #dc3545;   /* Rojo */
+    --danger-bg-color: #f8d7da;
+
+    --warning-accent-color: #6c757d;  /* Gris para "En Proceso" */
+    --warning-bg-color: #e2e3e5;
+
+    --info-accent-color: #007bff;     /* Azul para "Pago Incompleto" */
+    --info-bg-color: #d1ecf1;
+}
+
+/* EN PROCESO */
+table tbody tr td .campo-estatus-pagos.en-proceso {
+    color: var(--warning-accent-color);
+    background: var(--warning-bg-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+table tbody tr td .campo-estatus-pagos.en-proceso::before {
+    background: var(--warning-accent-color);
+}
+
+/* PAGO PROCESADO */
+table tbody tr td .campo-estatus-pagos.pago-procesado {
+    color: var(--success-accent-color);
+    background: var(--success-bg-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+table tbody tr td .campo-estatus-pagos.pago-procesado::before {
+    background: var(--success-accent-color);
+}
+
+/* PAGO NO ENCONTRADO */
+table tbody tr td .campo-estatus-pagos.pago-no-encontrado {
+    color: var(--danger-accent-color);
+    background: var(--danger-bg-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+table tbody tr td .campo-estatus-pagos.pago-no-encontrado::before {
+    background: var(--danger-accent-color);
+}
+
+/* PAGO INCOMPLETO */
+table tbody tr td .campo-estatus-pagos.pago-incompleto {
+    color: var(--info-accent-color);
+    background: var(--info-bg-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+table tbody tr td .campo-estatus-pagos.pago-incompleto::before {
+    background: var(--info-accent-color);
+}
+
 /* Estilo para Precios */
 
 table tbody tr td .precio{
@@ -161,7 +369,7 @@ table tbody tr td .precio{
     color: var(--secundary);
     font-size: 16px;
     font-weight: 500;
-    text-align: right;
+    text-align: center;
 }
 
 table tbody tr td .moneda{
@@ -169,56 +377,7 @@ table tbody tr td .moneda{
     color: var(--tbody-text-color);
     font-size: 16px;
     font-weight: 400;
-    text-align: right;
-}
-
-table tbody tr td .acciones-boton{
-    text-decoration: none;
-    color: var(--tbody-text-color);
-    cursor: pointer;
-}
-
-table tbody tr td .acciones-boton i{
-    font-size: 25px;
-}
-
-table tbody tr td .acciones-boton i:hover{
-    color: var(--primary);
-}
-
-table tbody tr td .acciones-boton .desplegable{
-    background: #fff;
-    width: 120px;
-    border-radius: 6px;
-    padding: 4px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    position: absolute;
-    top: 0px;
-    left: 54px;
-    display: none;
-}
-table tbody tr td .acciones-boton.active .desplegable{
-    display: block;
-}
-
-table tbody tr td .acciones-boton .desplegable ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-table tbody tr td .acciones-boton .desplegable ul li{
-    padding: 10px 15px;
-    color: var(--tbody-text-color);
-    font-size: 14px;
-    cursor: pointer;
-}
-table tbody tr td .acciones-boton .desplegable ul li:hover{
-    background: var(--light-primary);
-    color: var(--primary);
-}
-table tbody tr td .acciones-boton .desplegable ul li a{
-    text-decoration: none;
-    color: var(--tbody-text-color);
+    text-align: center;
 }
 
 table tfoot{
@@ -238,4 +397,72 @@ table tfoot tr td{
 
 table tfoot tr td span a i{
     font-size: 25px;
+}
+
+.btn-modificar{
+    border-radius: 10px;
+    border: none;
+    width: 100px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #5995fd;
+    font-size: 15px;
+    color: #fff;
+    transition: 0.5s;
+}
+
+.btn-modificar:hover {
+    background-color: #4d84e2;
+}
+
+.btn-eliminar{
+    border-radius: 10px;
+    border: none;
+    width: 100px;
+    height: 40px;
+    margin-top: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fc2727;
+    font-size: 15px;
+    color: #fff;
+    transition: 0.5s;
+}
+
+.btn-eliminar:hover {
+    background-color: #da2d2d;
+}
+
+.btn-pedido{
+    border-radius: 10px;
+    border: none;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2ac94f;
+    font-size: 15px;
+    color: #fff;
+    transition: 0.5s;
+}
+
+.btn-pedido:hover {
+    background-color: #21a141;
+}
+
+/* Ajustes para el menú desplegable */
+.tabla-scroll {
+    position: relative;
+    z-index: 1; /* Mantén este valor bajo para el contenedor de scroll */
+}
+
+.tabla-scroll {
+    overflow-y: overlay; /* Esto puede ayudar en algunos navegadores */
 }

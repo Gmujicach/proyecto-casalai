@@ -1,3 +1,5 @@
+<?php if ($_SESSION['rango'] == 'Administrador') {?>
+
 <?php require_once 'Modelo/Despacho.php' ; require_once 'Controlador/factura.php' ; ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -186,3 +188,11 @@
         <?php include 'footer.php'; ?>
         <script src="Javascript/validaciones.js"></script>
     </body>
+
+    </html>
+    <?php
+} else {
+    header("Location: ?pagina=acceso-denegado"); 
+    exit;
+}
+?>

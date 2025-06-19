@@ -1,0 +1,125 @@
+/* Fondo del modal */
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    border: none;
+    padding: 0;
+}
+
+/* Header del modal */
+.modal-header {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 20px 24px 12px 24px;
+    position: relative;
+}
+
+/* Título centrado */
+.modal-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+}
+
+/* Botón cerrar (X) */
+.close {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    font-size: 1.7rem;
+    color: #1976d2;
+    opacity: 1;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+    z-index: 2;
+}
+.close:hover {
+    color: #0d47a1;
+    opacity: 0.8;
+    text-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
+}
+
+/* Cuerpo del modal */
+.modal-body {
+    padding: 18px 24px 8px 24px;
+}
+
+/* Inputs igual que el formulario de registro */
+.modal-modificar .form-control {
+    border: 1px solid #bdbdbd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 1rem;
+    color: #222;
+    background: #f7f9fa;
+    transition: border-color 0.2s;
+}
+
+.modal-modificar .form-control:focus {
+    border-color: #1976d2;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.08);
+}
+
+/* Etiquetas */
+.modal-modificar .form-group label {
+    font-size: 1rem;
+    color: #1976d2;
+    font-weight: 500;
+    margin-top: 12px;
+    margin-bottom: 4px;
+}
+
+/* Footer del modal */
+.modal-footer {
+    border-top: none;
+    padding: 16px 24px 20px 24px;
+    display: flex;
+    justify-content: flex-end;
+    background: transparent;
+}
+
+/* Botón Modificar igual que el botón Registrar */
+.modal-modificar .btn-primary {
+    background-color: #5995fd;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 28px;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+}
+
+.modal-modificar .btn-primary:hover,
+.modal-modificar .btn-primary:focus {
+    background-color: #4d84e2;
+    color: #fff;
+}
+
+.modal-modificar .span-value-modal{
+    color:#ff0000c7;
+    font-style: italic;
+    margin-top: 3px;
+    margin-bottom: 7px;
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .modal-content {
+        padding: 0;
+    }
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}

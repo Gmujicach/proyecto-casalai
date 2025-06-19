@@ -7,7 +7,7 @@ use Dompdf\Dompdf; //Declaracion del espacio de trabajo
 //llamda al archivo que contiene la clase
 //datos, en ella posteriormente se colcora el codigo
 //para enlazar a su base de datos
-require_once 'config.php';
+require_once 'Config/config.php';
 
 //declaracion de la clase usuarios que hereda de la clase datos
 //la herencia se declara con la palabra extends y no es mas 
@@ -46,7 +46,7 @@ class rusuarios extends BD{
 		//clases anteriores, en este caso la consulta sera sobre la tabla usuarios
 		//y tendra como parametros para filtro la cedula y el usuario
 		
-		$co = $this->conecta();
+		$co = $this->getConexion();
 		$co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		try{
 			

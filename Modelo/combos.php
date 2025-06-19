@@ -1,15 +1,15 @@
 <?php
-require_once 'Conexion.php';
+require_once 'Config/config.php';
 
-class Combos {
+class Combos extends BD {
     private $conex;
     //private $productos;
 
     public function __construct() {
-        $this->conex = new Conexion();
-        $this->conex = $this->conex->Conex();
-        //$this->productos = new Productos();
+        $conexion = new BD('P');
+        $this->conex = $conexion->getConexion();
     }
+    
     //Metodos para los combos
     public function obtenerCombos() {
         $sql = "SELECT id_combo, id_producto, cantidad FROM tbl_combo";

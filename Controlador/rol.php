@@ -15,11 +15,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $rol = new Rol();
             $rol->setNombreRol($_POST['nombre_rol']);
 
-            if ($rol->registrarRol()) {
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al registrar el rol']);
+            if ($rol->existeNombreRol($_POST['nombre_rol'])) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El nombre del rol ya existe'
+                ]);
+                exit;
             }
+
+            if ($rol->registrarRol()) {
+                $rolRegistrado = $rol->obtenerUltimoRol();
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Rol registrado correctamente',
+                    'rol' => $rolRegistrado
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Error al registrar el rol'
+                ]);
+            }
+            exit;
+        
+        case 'consultar_roles':
+            $rol = new Rol();
+            $roles_obt = $rol->consultarRoles();
+
+            echo json_encode($roles_obt);
             exit;
         
         case 'obtener_rol':
@@ -37,27 +60,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'ID de rol no proporcionado']);
             }
-            break;
-        
-        case 'consultar_cuentas':
-            $rol = new Rol();
-            $roles_obt = $rol->consultarRoles();
-
-            echo json_encode($roles_obt);
             exit;
 
         case 'modificar':
-            $id_rol = $_POST['id_rol'];
+            $id_rol  = $_POST['id_rol'];
             $rol = new Rol();
-            $rol->setIdRol($id_rol); // Establecer el ID de la rol
+            $rol->setIdRol($id_rol);
             $rol->setNombreRol($_POST['nombre_rol']);
+            
+            if ($rol->existeNombreRol($_POST['nombre_rol'], $id_rol)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El nombre del rol ya existe'
+                ]);
+                exit;
+            }
             
             if ($rol->modificarRol($id_rol)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar el rol']);
             }
-            break;
+            exit;
 
         case 'eliminar':
             $id_rol = $_POST['id_rol'];
@@ -76,11 +100,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+function consultarRoles() {
+    $rol = new Rol();
+    return $rol->consultarRoles();
+}
+
 $pagina = "rol";
 if (is_file("Vista/" . $pagina . ".php")) {
+    $roles = consultarRoles();
     require_once("Vista/" . $pagina . ".php");
 } else {
-    echo "La página no existe"; // Mensaje si la vista no existe
+    echo "Página en construcción";
 }
 
 ob_end_flush();

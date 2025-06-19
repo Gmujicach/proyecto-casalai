@@ -12,6 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     switch ($accion) {
         case 'registrar':
+            header('Content-Type: application/json; charset=utf-8');
             $cuentabanco = new Cuentabanco();
             $cuentabanco->setNombreBanco($_POST['nombre_banco']);
             $cuentabanco->setNumeroCuenta($_POST['numero_cuenta']);
@@ -19,10 +20,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
             $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
 
+            if ($cuentabanco->existeNumeroCuenta($_POST['numero_cuenta'])) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El número de cuenta ya existe'
+                ]);
+                exit;
+            }
+
             if ($cuentabanco->registrarCuentabanco()) {
-                // Suponiendo que puedes obtener los datos luego de registrar
-                $cuentaRegistrada = $cuentabanco->obtenerUltimaCuenta(); // <-- deberías tener este método o algo similar
-            
+                $cuentaRegistrada = $cuentabanco->obtenerUltimaCuenta();
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Cuenta registrada correctamente',
@@ -34,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'message' => 'Error al registrar la cuenta'
                 ]);
             }
-            
             exit;
         
         case 'obtener_cuenta':
@@ -52,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'ID de cuenta no proporcionado']);
             }
-            break;
+            exit;
         
         case 'consultar_cuentas':
             $cuentabanco = new Cuentabanco();
@@ -61,28 +67,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo json_encode($cuentas_obt);
             exit;
 
-            case 'modificar':
-                ob_clean(); // limpia cualquier salida previa
-                header('Content-Type: application/json; charset=utf-8');
-            
-                $id_cuenta = $_POST['id_cuenta'];
-                $cuentabanco = new Cuentabanco();
-                $cuentabanco->setIdCuenta($id_cuenta);
-                $cuentabanco->setNombreBanco($_POST['nombre_banco']);
-                $cuentabanco->setNumeroCuenta($_POST['numero_cuenta']);
-                $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
-                $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
-                $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
-            
-                if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al modificar la cuenta']);
-                }
-            
-                exit; // detiene el script para evitar salida extra
-             // Finaliza el script para evitar salidas extra
-            
+        case 'modificar':
+            ob_clean();
+            header('Content-Type: application/json; charset=utf-8');
+            $id_cuenta = $_POST['id_cuenta'];
+            $cuentabanco = new Cuentabanco();
+            $cuentabanco->setIdCuenta($id_cuenta);
+            $cuentabanco->setNombreBanco($_POST['nombre_banco']);
+            $cuentabanco->setNumeroCuenta($_POST['numero_cuenta']);
+            $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
+            $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
+            $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
+
+            if ($cuentabanco->existeNumeroCuenta($_POST['numero_cuenta'], $id_cuenta)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El número de cuenta ya existe'
+                ]);
+                exit;
+            }
+
+            if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
+                $cuentabancoActualizado = $cuentabanco->obtenerCuentaPorId($id_cuenta);
+
+                echo json_encode([
+                    'status' => 'success',
+                    'cuenta' => $cuentabancoActualizado
+                ]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Error al modificar la cuenta']);
+            }
+            exit;
 
         case 'eliminar':
             $id_cuenta = $_POST['id_cuenta'];
@@ -99,20 +114,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_cuenta = $_POST['id_cuenta'];
             $nuevoEstado = $_POST['estado'];
             
-            if (!in_array($nuevoEstado, ['Habilitado', 'Inhabilitado'])) {
+            if (!in_array($nuevoEstado, ['habilitado', 'inhabilitado'])) {
                 echo json_encode(['status' => 'error', 'message' => 'Estado no válido']);
                 exit;
             }
             
             $cuentabanco = new Cuentabanco();
-            $cuentabanco->setId($id_cuenta);
+            $cuentabanco->setIdCuenta($id_cuenta);
             
-            if ($cuentabanco->estadoCuenta($nuevoEstado)) {
+            if ($cuentabanco->cambiarEstado($nuevoEstado)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estado']);
             }
-            break;
+            exit;
 
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);

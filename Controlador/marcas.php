@@ -1,12 +1,9 @@
 <?php
 ob_start();
-
 require_once 'Modelo/marcas.php';
-require_once 'Modelo/Paginador.php';
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtiene la acción enviada en la solicitud POST
+
     if (isset($_POST['accion'])) {
         $accion = $_POST['accion'];
     } else {
@@ -14,65 +11,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
-        case 'ingresar':
+        case 'registrar':
+            header('Content-Type: application/json; charset=utf-8');
             $marca = new marca();
             $marca->setnombre_marca($_POST['nombre_marca']);
             
-            if (!$marca->validarmarca()) {
-                echo json_encode(['status' => 'error', 'message' => 'Esta Marca ya existe']);
+            if ($marca->existeNombreMarca($_POST['nombre_marca'])) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El nombre de la marca ya existe'
+                ]);
+                exit;
             }
-            else {
-                if ($marca->ingresarmarcas()) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar la Marca']);
-                }
+
+            if ($marca->registrarMarca()) {
+                $marcaRegistrada = $marca->obtenerUltimaMarca();
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Marca registrada correctamente',
+                    'marca' => $marcaRegistrada
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Error al registrar la marca'
+                ]);
             }
-            break;
+            exit;
 
         case 'obtener_marcas':
-            $id = $_POST['id_marca'];
-            if ($id !== null) {
+            $id_marca = $_POST['id_marca'];
+            if ($id_marca !== null) {
                 $marca = new marca();
-                $marca = $marca->obtenermarcasPorId($id);
+                $marca = $marca->obtenermarcasPorId($id_marca);
                 if ($marca !== null) {
                     echo json_encode($marca);
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Marca no encontrado']);
+                    echo json_encode(['status' => 'error', 'message' => 'Marca no encontrada']);
                 }
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'ID de Marca no proporcionado']);
             }
-            break;
+            exit;
 
         case 'modificar':
-            $id = $_POST['id_marca'];
+            ob_clean();
+            header('Content-Type: application/json; charset=utf-8');
+            $id_marca = $_POST['id_marca'];
             $marca = new marca();
-            $marca->setId($id);
+            $marca->setIdMarca($id_marca);
             $marca->setnombre_marca($_POST['nombre_marca']);
+
+            if ($marca->existeNombreMarca($_POST['nombre_marca'], $id_marca)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El nombre de la marca ya existe'
+                ]);
+                exit;
+            }
             
-            if ($marca->modificarmarcas($id)) {
+            if ($marca->modificarmarcas($id_marca)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al modificar la marca']);
             }
-            break;
+            exit;
 
         case 'eliminar':
-            $id = $_POST['id'];
-            $marcaModel = new marca();
-            if ($marcaModel->eliminarmarcas($id)) {
+            $id_marca = $_POST['id_marca'];
+            $marca = new marca();
+            if ($marca->eliminarmarcas($id_marca)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la marca']);
             }
-            break;
+            exit;
 
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
-            break;
+        break;
     }
-    exit;
 }
 
 
@@ -81,38 +99,8 @@ function getmarcas() {
     return $marca->getmarcas();
 }
 
-$pagina = "Marcas";
+$pagina = "marcas";
 if (is_file("Vista/" . $pagina . ".php")) {
-
-    $paginaActual = $_GET['pagina'] ?? 1;
-    $filasPorPagina = $_GET['filas'] ?? 10;
-    
-    // Crear instancia del paginador
-    $paginador = new Paginador(); // Asegúrate de tener $this->conex disponible
-    
-    // Obtener datos paginados
-    $resultados = $paginador->paginar(
-        'tbl_marcas', // Cambia por 'tbl_marcas' si es necesario
-        $paginaActual,
-        $filasPorPagina
-    );
-    
-    // Calcular valores para la vista
-    $paginaActual = intval($paginaActual); // Asegura que sea un número entero
-    $inicio = ($paginaActual - 1) * $filasPorPagina + 1;
-    $fin = min($paginaActual * $filasPorPagina, $resultados['total']);
-    $totalMarcas = $resultados['total'];
-    
-    // Pasar a la vista
-    $datosVista = [
-        'marcas' => $resultados['datos'], // Cambia por 'marcas' si es necesario
-        'inicio' => $inicio,
-        'fin' => $fin,
-        'totalUsuarios' => $totalMarcas, // Cambia por 'totalMarcas' si es necesario
-        'paginaActual' => $paginaActual,
-        'filasPorPagina' => $filasPorPagina
-    ];
-
     $marcas = getmarcas();
     require_once("Vista/" . $pagina . ".php");
 } else {

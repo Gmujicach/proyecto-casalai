@@ -6,28 +6,46 @@ if (!is_file("Modelo/" . $pagina . ".php")) {
 require_once("Modelo/" . $pagina . ".php");
 if (is_file("Vista/" . $pagina . ".php")) {
     if (!empty($_POST)) {
-
         $o = new Login();
-        $h= $_POST['accion'];
-       // echo  $h;
-        if ($_POST['accion'] == 'acceder') {
+        $h = $_POST['accion'];
+
+        if ($h == 'acceder') {
             $o->set_username($_POST['username']);
             $o->set_password($_POST['password']);
             $m = $o->existe();
             if ($m['resultado'] == 'existe') {
-                session_destroy(); 	
-                session_start(); 
+                session_destroy();
+                session_start();
                 $_SESSION['name'] = $m['mensaje'];
-                $_SESSION['rango']= $m['rango'];
+                $_SESSION['rango'] = $m['rango'];
+                $_SESSION['id_usuario'] = $m['id_usuario'];
                 header('Location: ?pagina=Dashboard');
- 
                 die();
-            } else{
+            } else {
                 $mensaje = $m['mensaje'];
-             
-                /* echo "<script>alert('Error en username y/o password!!!');</script>"; */
-               /*  echo  json_encode($o->existe()); */
             }
+        }
+
+        // NUEVO: Registro doble usuario + cliente
+        if ($h == 'registrar') {
+            // Recibe los datos del formulario
+            $datos = [
+                'nombre_usuario' => $_POST['nombre_usuario'],
+                'clave' => $_POST['clave'],
+                'nombre' => $_POST['nombre'],
+                'apellido' => $_POST['apellido'],
+                'correo' => $_POST['correo'],
+                'telefono' => $_POST['telefono'],
+                'cedula' => $_POST['cedula'],
+                'direccion' => $_POST['direccion']
+            ];
+            // Llama al método del modelo
+            $resultado = $o->registrarUsuarioYCliente($datos);
+            if ($resultado['status'] == 'success') {
+    $mensaje = '<span class="success">' . $resultado['mensaje'] . '</span>';
+} else {
+    $mensaje = '<span class="error">' . $resultado['mensaje'] . '</span>';
+}
         }
     }
 

@@ -8,7 +8,7 @@ class Paginador extends BD {
 
     function __construct() {
         parent::__construct();
-        $this->conex = parent::conexion();
+        $this->conex = parent::getConexion();
     }
 
     public function paginar($tabla, $pagina = 1, $filasPorPagina = 10, $condiciones = '') {

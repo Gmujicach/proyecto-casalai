@@ -5,7 +5,6 @@ require_once 'Modelo/modelos.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtiene la acción enviada en la solicitud POST
     if (isset($_POST['accion'])) {
         $accion = $_POST['accion'];
     } else {
@@ -13,28 +12,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
-        case 'ingresar':
+        case 'registrar':
+            header('Content-Type: application/json; charset=utf-8');
             $modelo = new modelo();
             $modelo->setnombre_modelo($_POST['nombre_modelo']);
             $modelo->setid_marca($_POST['id_marca']);
 
-            if (!$modelo->validarmodelo()) {
-                echo json_encode(['status' => 'error', 'message' => 'Este Modelo ya existe']);
+            if ($modelo->existeNombreModelo($_POST['nombre_modelo'])) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El modelo ya existe'
+                ]);
+                exit;
             }
-            else {
-                if ($modelo->ingresarmodelos()) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el Modelo']);
-                }
+
+            if ($modelo->registrarModelo()) {
+                $modeloRegistrado = $modelo->obtenerUltimoModelo();
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Modelo registrado correctamente',
+                    'modelo' => $modeloRegistrado
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Error al registrar el modelo'
+                ]);
             }
-            break;
+            exit;
 
         case 'obtener_modelo':
-            $id = $_POST['id_modelo'] ;
-            if ($id !== null) {
+            $id_modelo = $_POST['id_modelo'] ;
+            if ($id_modelo !== null) {
                 $modelo = new modelo();
-                $modelo = $modelo->obtenermodelosPorId($id);
+                $modelo = $modelo->obtenerModeloPorId($id);
                 if ($modelo !== null) {
                     echo json_encode($modelo);
                 } else {
@@ -43,25 +54,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'ID de modelo no proporcionado']);
             }
-            break;
+            exit;
 
         case 'modificar':
-            $id = $_POST['id_modelo'];
+            $id_modelo= $_POST['id_modelo'];
             $modelo = new modelo();
-            $modelo->setId($id);
+            $modelo->setIdModelo($id_modelo);
             $modelo->setnombre_modelo($_POST['nombre_modelo']);
             
-            if ($modelo->modificarmodelos($id)) {
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el modelo']);
+            if ($modelo->existeNombreModelo($_POST['nombre_modelo'], $id_modelo)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El modelo ya existe'
+                ]);
+                exit;
             }
-            break;
+
+            if ($modelo->modificarModelo($id_modelo)) {
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Modelo modificado correctamente'
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Error al modificar el modelo'
+                ]);
+            }
+            exit;
 
         case 'eliminar':
-            $id = $_POST['id'];
-            $modeloModel = new modelo();
-            if ($modeloModel->eliminarmodelos($id)) {
+            $id_modelo = $_POST['id_modelo'];
+            $modelo = new modelo();
+            if ($modelo->eliminarModelo($id_modelo)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el modelo']);
@@ -77,9 +102,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-function getmodelos() {
+function getModelos() {
     $modelo = new modelo();
-    return $modelo->getmodelos();
+    return $modelo->getModelos();
 }
 
 function getmarcas() {
@@ -90,7 +115,7 @@ function getmarcas() {
 $pagina = "Modelos";
 if (is_file("Vista/" . $pagina . ".php")) {
 
-    $modelos = getmodelos();
+    $modelos = getModelos();
     $marcas = getmarcas();
     require_once("Vista/" . $pagina . ".php");
 } else {

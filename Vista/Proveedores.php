@@ -1,14 +1,4 @@
-<?php
-
-
-
-if (!isset($_SESSION['name'])) {
-
- 	header('Location: .');
- 	exit();
- }
-?>
-
+<?php if ($_SESSION['rango'] == 'Administrador') { ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,227 +8,426 @@ if (!isset($_SESSION['name'])) {
     <?php include 'header.php'; ?>
     <title>Gestionar Proveedores</title>
 </head>
-<body>
 
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-    <?php include 'NewNavBar.php'; ?>
+<?php include 'NewNavBar.php'; ?>
 
+<div class="modal fade modal-registrar" id="registrarProveedorModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="incluirproveedor" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarProveedorModalLabel">Incluir Proveedor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="registrar">
+                    <div class="grupo-form">
+                        <label for="nombre_proveedor">Nombre del Proveedor</label>
+                        <input type="text" placeholder="Nombre: Proveedor" class="control-form" id="nombre_proveedor" name="nombre_proveedor" maxlength="50" required>
+                        <span class="span-value" id="snombre_proveedor"></span>
 
-<div class="contenedor">
-    <!--== INICIO DEL CONTENIDO ==-->
-    <section class="container">
-        <div class="row my-5">
-            <div class="col-sm-12 col-md-12 col-lg-12">
-
-        
-            
-            <form id="incluirproveedor" action="" method="POST" class="formulario-1">
-            <input type="hidden" name="accion" value="ingresar">
-                    <h3 class="display-4 text-center">INCLUIR PROVEEDOR</h3>
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-label mt-4" for="nombre_proveedor">Nombre del Proveedor</label>
-                            <input class="form-control" maxlength="15" type="text" id="nombre_proveedor" name="nombre_proveedor" placeholder="">
-                            <span id="snombre_proveedor"></span>
-                        </div>
-                        <div class="col">
-                            <label class="form-label mt-4" for="rif_proveedor">Rif del Proveedor</label>
-                            <input class="form-control" maxlength="10" type="text" id="rif_proveedor" name="rif_proveedor" placeholder="">
-                        </div>
+                        <label for="rif_proveedor">RIF del Proveedor</label>                     
+                        <input type="text" placeholder="RIF: Proveedor" class="control-form" id="rif_proveedor" name="rif_proveedor" maxlength="12" required>
+                        <span class="span-value" id="srif_proveedor"></span>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-label mt-4" for="nombre_representante">Nombre del Representante</label>
-                            <input class="form-control" maxlength="15" type="text" id="nombre_representante" name="nombre_representante" placeholder="">
-                        </div>
 
-                        <div class="col">
-                            <label class="form-label mt-4" for="rif_representante">Rif del Representante</label>
-                            <input class="form-control" maxlength="10" type="text" id="rif_representante" name="rif_representante" placeholder="">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-label mt-4" for="direccion_proveedor">Direccion</label>
-                            <input class="form-control" maxlength="50" type="text" id="direccion_proveedor" name="direccion_proveedor" placeholder="">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-label mt-4" for="telefono_1">Telefono Principal</label>
-                            <input class="form-control" maxlength="11" type="text" id="telefono_1" name="telefono_1" placeholder="">
-                        </div>
-                        <div class="col">
-                            <label class="form-label mt-4" for="telefono_2">Telefono Secundario</label>
-                            <input class="form-control" maxlength="11" type="text" id="telefono_2" name="telefono_2" placeholder="">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-label mt-4" for="correo_proveedor">Correo de Contacto</label>
-                            <input class="form-control" type="text" id="correo_proveedor" name="correo_proveedor" placeholder="">
-                        </div>
-                    </div>
-                    <label class="form-label" for="observacion">Observaciones</label>
-                    <textarea class="form-control" maxlength="50" id="observacion" name="observacion" rows="3" placeholder="Escriba alguna Observaciones que se deba tener en cuenta..."></textarea>
+                    <div class="grupo-form">
+                        <label for="nombre_representante">Nombre del Representante</label>
+                        <input type="text" placeholder="Nombre: Representante" class="control-form" id="nombre_representante" name="nombre_representante" maxlength="50" required>
+                        <span class="span-value" id="snombre_representante"></span>
 
-
-                    <div class="row">
-                        <div class="form-group d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary btn-lg">Registrar</button>
-                        </div>
+                        <label for="rif_representante">RIF del Representante</label>
+                        <input type="text" placeholder="RIF: Representante" class="control-form" id="rif_representante" name="rif_representante" maxlength="12" required>
+                        <span class="span-value" id="srif_representante"></span>
                     </div>
-                </form>
-            </div>
+
+                    <div class="envolver-form">
+                        <label for="correo_proveedor">Correo del Proveedor</label>
+                        <input type="text" placeholder="Correo electrónico" class="control-form" id="correo_proveedor" name="correo_proveedor" maxlength="50" required>
+                        <span class="span-value" id="scorreo_proveedor"></span>
+                    </div>
+
+                    <div class="envolver-form">
+                        <label for="direccion_proveedor">Dirección del Proveedor</label>
+                        <input type="text" placeholder="Dirección" class="control-form" id="direccion_proveedor" name="direccion_proveedor" rows="3" maxlength="100" required>
+                        <span class="span-value" id="sdireccion_proveedor"></span>
+                    </div>
+
+                    <div class="grupo-form">
+                        <label for="telefono_1">Teléfonos del Proveedor</label>
+                        <input type="text" placeholder="Teléfono Principal" class="control-form" id="telefono_1" name="telefono_1" maxlength="13" required>
+                        <span class="span-value" id="stelefono_1"></span>
+
+                        <input type="text" placeholder="Teléfono Secundario" class="control-form" id="telefono_2" name="telefono_2" maxlength="13" required>
+                        <span class="span-value" id="stelefono_2"></span>
+                    </div>
+
+                    <div class="envolver-form">
+                        <label for="nombre_proveedor">Nombre del Proveedor</label>
+                        <textarea class="control-form" placeholder="Escriba alguna observación a tomar en cuenta" id="observacion" name="observacion" maxlength="100" rows="3"></textarea>
+                        <span class="span-value" id="sobservacion"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
+            </form>
         </div>
-    </section>
-    <!--== FIN DEL CONTENIDO ==-->
+    </div>
+</div>
 
-    <!--== LISTADO DE CONSULTA ==-->
+<div class="contenedor-tabla">
+    <div class="space-btn-incluir">
+        <button id="btnIncluirProveedor" class="btn-incluir">
+            Incluir Proveedor
+        </button>
+    </div>
+    <h3>LISTA DE PROVEEDORES</h3>
 
-    <div class="contenedor-tabla">
-    <h1 class="titulo-tabla display-5 text-center">LISTA DE PROVEEDORES</h1>
-    <table class="tabla">
+    <table class="tablaConsultas" id="tablaConsultas">
         <thead>
             <tr>
                 <th>Acciones</th>
-                <th>Nombre</th>
-                <th>Direccion</th>
-                <th>Telefono</th>
-                <th>R.I.F</th>
-                <th>Correo</th>
+                <th>Nombre del Proveedor</th>
+                <th>RIF del Proveedor</th>
+                <th>Nombre del Proveedor</th>
+                <th>RIF del Representante</th>
+                <th>Correo del Proveedor</th>
+                <th>Dirección del Proveedor</th>
+                <th>Teléfono Principal</th>
+                <th>Teléfono Secundario</th>
+                <th>Observación</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        <?php foreach ($proveedores as $proveedor): ?>
+            <tr data-id="<?php echo $proveedor['id_proveedor']; ?>">
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                id="btnModificarProveedor"
+                                data-id="<?php echo $proveedor['id_proveedor']; ?>"
+                                data-nombre-proveedor="<?php echo htmlspecialchars($proveedor['nombre_proveedor']); ?>"
+                                data-rif-proveedor="<?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>"
+                                data-nombre-representante="<?php echo htmlspecialchars($proveedor['nombre_representante']); ?>"
+                                data-rif-representante="<?php echo htmlspecialchars($proveedor['rif_representante']); ?>"
+                                data-correo-proveedor="<?php echo htmlspecialchars($proveedor['correo_proveedor']); ?>"
+                                data-direccion-proveedor="<?php echo htmlspecialchars($proveedor['direccion_proveedor']); ?>"
+                                data-telefono-1="<?php echo htmlspecialchars($proveedor['telefono_1']); ?>"
+                                data-telefono-2="<?php echo htmlspecialchars($proveedor['telefono_2']); ?>"
+                                data-observacion="<?php echo htmlspecialchars($proveedor['observacion']); ?>"
+                                >Modificar
+                            </button>
+                        </div>
+                        <div>
+                              <button class="btn-eliminar" 
+                              data-id="<?php echo $proveedor['id_proveedor']; ?>">Eliminar</button>
+                        </div>
+                    </ul>
+                </td>
+                <td>
+                    <span class="campo-nombres">
+                    <?php echo htmlspecialchars($proveedor['nombre_proveedor']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-rif-correo">
+                    <?php echo htmlspecialchars($proveedor['rif_proveedor']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-nombres">
+                    <?php echo htmlspecialchars($proveedor['nombre_representante']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-rif-correo">
+                    <?php echo htmlspecialchars($proveedor['rif_representante']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-rif-correo">
+                    <?php echo htmlspecialchars($proveedor['correo_proveedor']); ?>
+                    </span>
+                </td> 
+                <td>
+                    <span class="campo-nombres">
+                    <?php echo htmlspecialchars($proveedor['direccion_proveedor']); ?>
+                    </span>
+                </td> 
+                <td>
+                    <span class="campo-numeros">
+                    <?php echo htmlspecialchars($proveedor['telefono_1']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-numeros">
+                    <?php echo htmlspecialchars($proveedor['telefono_2']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-nombres">
+                    <?php echo htmlspecialchars($proveedor['observacion']); ?>
+                    </span>
+                </td> 
+                <td class="campo-estado">
+                    <span 
+                      class="campo-estatus <?php echo ($proveedor['estado'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>" 
+                      data-id="<?php echo $proveedor['id_proveedor']; ?>"
+                      style="cursor: pointer;">
+                      <?php echo htmlspecialchars($proveedor['estado']); ?>
+                    </span>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="contenedor-tabla">
+    <h3>Lista de Productos Con Bajo Stock</h3>
+    <table class="tabla"class="tablaConsultas" id="">
+        <thead>
+            <tr>
+                <th>Acción</th>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Modelo</th>
+                <th>Stock Actual</th>
+                <th>Stock Mínimo</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($proveedores as $proveedor): ?>
+            <?php foreach ($productos as $producto): ?>
                 <tr>
                     <td>
-                        <!-- Botón Modificar que abre el modal -->
-                        <button type="button" class="btn btn-modificar" data-toggle="modal" data-target="#modificarProductoModal" data-id="<?php echo htmlspecialchars($proveedor['id_proveedor']); ?>">
-                        Modificar
-                        </button>
-                        <br>
-                        <!-- Botón Eliminar -->
-                        <a href="#" data-id="<?php echo htmlspecialchars($proveedor['id_proveedor']); ?>" class="btn btn-eliminar">Eliminar</a>
+                        <ul>
+                            <div>
+                                <button class="btn-pedido" 
+                                    id="btnPedidoProducto"
+                                    data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
+                                    data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
+                                    data-modelo="<?php echo htmlspecialchars($producto['nombre_modelo']); ?>"
+                                    data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
+                                    data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
+                                >Realizar Pedido
+                                </button>
+                            </div>
+                        </ul>
                     </td>
-                    <td><?php echo htmlspecialchars($proveedor['nombre']); ?></td>
-                    <td><?php echo htmlspecialchars($proveedor['direccion']); ?></td>
-                    <td><?php echo htmlspecialchars($proveedor['telefono']); ?></td>
-                    <td><?php echo htmlspecialchars($proveedor['rif_proveedor']); ?></td>
-                    <td><?php echo htmlspecialchars($proveedor['correo']); ?></td>
+                    <td>
+                        <span class="campo-numeros">
+                          <?php echo htmlspecialchars($producto['id_producto']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                          <?php echo htmlspecialchars($producto['nombre_producto']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                          <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-stock-actual-negativo">
+                          <?php echo htmlspecialchars($producto['stock']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-stock-minimo">
+                          <?php echo htmlspecialchars($producto['stock_minimo']); ?>
+                        </span>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-                        <!-- MODAL -->
-<div class="modal fade" id="modificar_proveedor_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_proveedor_modal_label" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <form id="modificarproveedor" method="POST" enctype="multipart/form-data">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modificar_proveedor_modal_label">Modificar Proveedor</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <!-- Campos del formulario de modificación -->
-                                                <input type="hidden" id="modificar_id_proveedor" name="id_proveedor">
-                                                <div class="form-group">
-                                                    <div class="col">
-                                                        <label for="modificarnombre_proveedor">Nombre del Proveedor</label>
-                                                        <input type="text" class="form-control" id="modificarnombre_proveedor" name="nombre_proveedor" maxlength="15" required>
-                                                        <span id="smodificarnombre_proveedor"></span>
-                                                    </div>
-
-                                                    <div class="col">
-                                                        <label for="modificarrif_proveedor">R.I.F del Proveedor</label>
-                                                        <input type="text" class="form-control" id="modificarrif_proveedor" name="rif_proveedor" maxlength="15" required>
-                                                        <span id="smodificarrif_proveedor"></span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="col">
-                                                        <label for="modificarnombre_representante">Nombre del Representante</label>
-                                                        <input type="text" class="form-control" id="modificarnombre_representante" name="nombre_representante" maxlength="15" required>
-                                                        <span id="smodificarnombre_representante"></span>
-                                                    </div>
-
-                                                    <div class="col">
-                                                        <label for="modificarrif_representante">R.I.F del Representante</label>
-                                                        <input type="text" class="form-control" id="modificarrif_representante" name="rif_representante" maxlength="15" required>
-                                                        <span id="smodificarrif_representante"></span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                   
-                                                        <label for="modificardireccion_proveedor">Direccion</label>
-                                                        <input type="text" class="form-control" id="modificardireccion_proveedor" name="direccion_proveedor" maxlength="15" required>
-                                                        <span id="smodificardireccion_proveedor"></span>
-                                                    
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="col">
-                                                        <label for="modificartelefono_1">Telefono del Proveedor</label>
-                                                        <input type="text" class="form-control" id="modificartelefono_1" name="telefono_1" maxlength="15" required>
-                                                        <span id="smodificartelefono_1"></span>
-                                                    </div>
-
-                                                    <div class="col">
-                                                        <label for="modificartelefono_2">Telefono del Representante</label>
-                                                        <input type="text" class="form-control" id="modificartelefono_2" name="telefono_2" maxlength="15" required>
-                                                        <span id="smodificartelefono_2"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                   
-                                                   <label for="modificarcorreo_proveedor">Correo</label>
-                                                   <input type="text" class="form-control" id="modificarcorreo_proveedor" name="correo_proveedor" maxlength="15" required>
-                                                   <span id="smodificarcorreo_proveedor"></span>
-                                               
-                                                </div>
-
-                                                <div class="form-group">
-                                                        
-                                                        <label for="modificarobservacion">observacion</label>
-                                                        <input type="text" class="form-control" id="modificarobservacion" name="observacion" maxlength="30" required>
-                                                        <span id="smodificarobservacion"></span>
-                                                    
-                                                </div>
-                                            
-                                                </div>
-                                                <div class="modal-footer">
-                                                <button type="button" class="btn btn-cerrar" data-bs-dismiss="modal">Cancelar</button>
-                                                <button type="submit" class="btn btn-primary">Modificar</button>
-                                            </div>
-                                            </div>
-                                            
-                                        </form>
-                                    </div>
-    </div>
-
-                        <!-- FIN DEL MODAL -->
-                    <div class="row">
-                        <div class="col">
-                            <button class="btn" name="" type="button" id="pdfproveedores" name="pdfproveedores"><a href="?pagina=pdfproveedores">GENERAR REPORTE</a></button>
-                        </div>
-                    </div>
-
-    </div>
-
-                
-            
-
-            
-    </form>
 </div>
 
-  <?php include 'footer.php'; ?>
-  <script src="Javascript/proveedor.js"></script>
-  <script src="Javascript/validaciones.js"></script>
+<div class="modal fade modal-modificar" id="modificarProveedorModal" tabindex="-1" role="dialog"
+aria-labelledby="modificarProveedorModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="FormModificarProveedor" method="POST">
+        <div class="modal-header">
+          
+          <h5 class="titulo-form" id="modificarProveedorModalLabel">Modificar Proveedor</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" id="modificar_id_proveedor" name="id_proveedor">
+          <input type="hidden" name="accion" value="modificar">
+
+          <div class="form-group">
+            <label for="modificar_nombre_proveedor">Nombre del Proveedor</label>
+            <input type="text" class="form-control" id="modificar_nombre_proveedor" name="nombre_proveedor" maxlength="50" required>
+            <span class="span-value-modal" id="smnombre_proveedor"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_rif_proveedor">RIF del Proveedor</label>
+            <input type="text" class="form-control" id="modificar_rif_proveedor" name="rif_proveedor" maxlength="12" required>
+            <span class="span-value-modal" id="smrif_proveedor"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_nombre_representante">Nombre del Representante</label>
+            <input type="text" class="form-control" id="modificar_nombre_representante" name="nombre_representante" maxlength="50" required>
+            <span class="span-value-modal" id="smnombre_representante"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_rif_representante">RIF del Representante</label>
+            <input type="text" class="form-control" id="modificar_rif_representante" name="rif_representante" maxlength="12" required>
+            <span class="span-value-modal" id="smrif_representante"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_correo_proveedor">Correo</label>
+            <input type="email" class="form-control" id="modificar_correo_proveedor" name="correo_proveedor" maxlength="50" required>
+            <span class="span-value-modal" id="smcorreo_proveedor"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_direccion_proveedor">Dirección</label>
+            <input type="text" class="form-control" id="modificar_direccion_proveedor" name="direccion_proveedor" maxlength="100" required>
+            <span class="span-value-modal" id="smdireccion_proveedor"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_telefono_1">Teléfono Principal</label>
+            <input type="text" class="form-control" id="modificar_telefono_1" name="telefono_1" maxlength="13" required>
+            <span class="span-value-modal" id="smtelefono_1"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_telefono_2">Teléfono Secundario</label>
+            <input type="text" class="form-control" id="modificar_telefono_2" name="telefono_2" maxlength="13" required>
+            <span class="span-value-modal" id="smtelefono_2"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="modificar_observacion">Observación</label>
+            <textarea class="form-control" id="modificar_observacion" name="observacion" maxlength="100" rows="3"></textarea>
+            <span class="span-value-modal" id="smobservacion"></span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Modificar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade modal-modificar" id="PedidoProductoModal" tabindex="-1" role="dialog" 
+aria-labelledby="PedidoProductoModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form id="FormPedidoProducto" method="POST">
+        <div class="modal-header">
+          <h5 class="titulo-form" id="PedidoProductoModalLabel">Realizar Pedido</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" name="accion" value="realizar_pedido">
+          <input type="hidden" id="modificarIdProducto" name="id_producto">
+
+          <div class="form-group">
+            <label for="modificarNombreProducto">Nombre del producto</label>
+            <input type="text" maxlength="50" class="form-control" id="modificarNombreProducto" name="nombre_producto" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="modificarModelo">Modelo</label>
+            <input type="text" maxlength="50" class="form-control" id="modificarModelo" name="modelo" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="Proveedor">Proveedor</label>
+            <select class="form-select" id="Proveedor" name="proveedor" required>
+              <option value="">Seleccionar Proveedor</option>
+              <option value="<?php echo $proveedor['id_proveedor']; ?>">
+                <?php echo $proveedor['nombre_proveedor']; ?>
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="modificarStockMinimo">Cantidad a Pedir</label>
+            <input type="number" min="1" class="form-control" id="modificarStockMinimo" name="cantidad_pedir" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Confirmar Pedido</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<?php include 'footer.php'; ?>
+<script src="Javascript/proveedor.js"></script>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/datatable.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Escuchar el clic en cualquier botón con clase "modificar"
+    document.querySelectorAll('.modificar').forEach(button => {
+        button.addEventListener('click', function () {
+            // Obtener los datos del botón
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
+            const modelo = this.dataset.modelo;
+            const stockactual = this.dataset.stockactual;
+            const stockminimo = this.dataset.stockminimo;
+
+            // Llenar los campos del modal
+            document.getElementById('modal-id').value = id;
+            document.getElementById('modal-nombre').value = nombre;
+            document.getElementById('modal-modelo').value = modelo;
+            document.getElementById('modal-stockminimo').value = stockminimo;
+        });
+    });
+});
+</script>
+<script>
+$(document).ready(function() {
+    $('#tablaConsultas').DataTable({
+        language: {
+            url: 'Public/js/es-ES.json'
+        }
+    });
+});
+</script>
 </body>
 </html>
+
+<?php
+} else {
+    header("Location: ?pagina=acceso-denegado");
+    exit;
+}
+?>

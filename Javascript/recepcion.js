@@ -1,9 +1,58 @@
+$(document).ready(function () {
+    $(document).on('submit', '#formularioEdicion', function(e) {
+        e.preventDefault();
 
-$(document).ready(function(){
-    // Si estoy aca es porque l
-    carga_productos();
+        var formData = new FormData(this);
+        formData.append('accion', 'modificarRecepcion');
+
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(response) {
+                try {
+                    response = typeof response === "object" ? response : JSON.parse(response);
+                } catch (e) {
+                    Swal.fire('Error', 'Respuesta inesperada del servidor', 'error');
+                    return;
+                }
+
+                if (response.status === 'success') {
+                    $('#modalModificar').modal('hide');
+                    setTimeout(function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Modificado',
+                            text: response.message
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }, 500);
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function() {
+                Swal.fire('Error', 'Error al modificar la recepción.', 'error');
+            }
+        });
+    });
     
-    //boton para levantar modal de productos
+    $('#btnIncluirRecepcion').on('click', function() {
+        $('#f')[0].reset();
+        $('#scorrelativo').text('');
+        $('#registrarRecepcionModal').modal('show');
+    });
+
+    $(document).on('click', '#registrarRecepcionModal .close', function() {
+        $('#registrarRecepcionModal').modal('hide');
+    });
+});
+
+carga_productos();    //boton para levantar modal de productos
     $("#listado").on("click",function(){
         $("#modalp").modal("show");
     });
@@ -14,7 +63,7 @@ $(document).ready(function(){
     });
     
     $("#correlativo").on("keyup",function(){
-        validarkeyup(/^[1-9]{4,10}$/,$(this),
+        validarkeyup(/^[0-9]{4,10}$/,$(this),
         $("#scorrelativo"),"Se permite de 4 a 10 carácteres");
         if ($("#correlativo").val().length <= 9) {
 			var datos = new FormData();
@@ -71,8 +120,7 @@ $(document).ready(function(){
     });
         
         
-    });
-
+    
     function validarenvio(){
         
         var proveedorseleccionado = $("#proveedor").val();
@@ -80,7 +128,7 @@ $(document).ready(function(){
             muestraMensaje("info",4000,"Por favor, seleccione un proveedor!"); 
             return false;
         }
-        else if(validarkeyup(/^[1-9]{4,10}$/,$("#correlativo"),
+        else if(validarkeyup(/^[0-9]{4,10}$/,$("#correlativo"),
             $("#scorrelativo"),"Se permite de 4 a 10 carácteres")==0){
             muestraMensaje("info",4000,"el correlativo debe coincidir con el formato");
                            
@@ -155,7 +203,7 @@ $(document).ready(function(){
             var l = `
               <tr>
                <td>
-               <button type="button" class="btn" onclick="borrarp(this)">Eliminar</button>
+               <button type="button" class="btn-eliminar-pr" onclick="borrarp(this)">Eliminar</button>
                </td>
                <td style="display:none">
                    <input type="text" name="producto[]" style="display:none"
@@ -170,11 +218,21 @@ $(document).ready(function(){
                <td>`+
                         $(linea).find("td:eq(2)").text()+
                `</td>
-               <td>
-                  <input type="text" value="1" name="cantidad[]" "/>
-               </td>
-               
-               
+               <td>`+
+                        $(linea).find("td:eq(3)").text()+
+               `</td>
+                <td>`+
+                        $(linea).find("td:eq(4)").text()+
+               `</td>
+               <td>`+
+                        $(linea).find("td:eq(5)").text()+
+               `</td>
+                <td>
+                    <input type="number" class="numerico" name="costo[]" min="0.01" step="0.01" value="1" required>
+                </td>
+                <td>
+                    <input type="number" class="numerico" name="cantidad[]" min="1" step="1" value="1" required>
+                </td>
                </tr>`;
             $("#recepcion1").append(l);
         }
@@ -191,17 +249,14 @@ $(document).ready(function(){
     }
 
 
-    function muestraMensaje(icono,tiempo,titulo,mensaje){
-
-        Swal.fire({
-        icon:icono,
-        timer:tiempo,	
-        title:titulo,
-        html:mensaje,
-        showConfirmButton:true,
-        confirmButtonText:'Aceptar',
-        });
-    }
+function muestraMensaje(tipo, tiempo, titulo, mensaje) {
+    Swal.fire({
+        icon: tipo,
+        title: titulo,
+        text: mensaje,
+        timer: tiempo || 3000
+    });
+}
     
     //Funcion que muestra el modal con un mensaje
     
@@ -273,9 +328,9 @@ $(document).ready(function(){
                         $('#listadop').html(lee.mensaje);
                     }
                     else if(lee.resultado=='registrar'){
-                        muestraMensaje('success', 6000,'REGISTRAR', lee.mensaje);
-                        borrar();
-                    }else if (lee.resultado == "encontro") {		
+    muestraMensaje('success', 6000, 'REGISTRAR', lee.mensaje);
+    borrar();
+}else if (lee.resultado == "encontro") {		
                         if (lee.mensaje == 'El numero de correlativo ya existe!') {
                             muestraMensaje('success', 6000,'Atencion', lee.mensaje);
                         }		

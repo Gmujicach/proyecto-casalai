@@ -15,38 +15,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Switch para manejar diferentes acciones
     switch ($accion) {
-        case 'ingresar':
-            // Crear una nueva instancia del modelo Productos
-            $Producto = new Productos();
-            // Asigna los valores del formulario a las propiedades del producto
-            $Producto->setNombreP($_POST['nombre_producto']);
-            $Producto->setDescripcionP($_POST['descripcion_producto']);
-            $Producto->setIdModelo($_POST['Modelo']);
-            $Producto->setStockActual($_POST['Stock_Actual']);
-            $Producto->setStockMax($_POST['Stock_Maximo']);
-            $Producto->setStockMin($_POST['Stock_Minimo']);
-            $Producto->setClausulaDeGarantia($_POST['Clausula_garantia']);
-            $Producto->setCodigo($_POST['Seriales']);
-            $Producto->setCategoria($_POST['Categoria']);
-            $Producto->setPrecio($_POST['Precio']);
-            
-            // Validación del nombre del producto
-            if (!$Producto->validarNombreProducto()) {
-                echo json_encode(['status' => 'error', 'message' => 'Este Producto ya existe']);
-            }
-            // Validación del código interno del producto
-            elseif (!$Producto->validarCodigoProducto()) {
-                echo json_encode(['status' => 'error', 'message' => 'Este Código Interno ya existe']);
-            }
-            // Si ambas validaciones pasan, se intenta ingresar el producto
-            else {
-                if ($Producto->ingresarProducto()) {
-                    echo json_encode(['status' => 'success']);
-                } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el producto']);
-                }
-            }
-            break;
+case 'ingresar':
+    // Crear una nueva instancia del modelo Productos
+    $Producto = new Productos();
+
+    // Asignar valores generales del producto
+    $Producto->setNombreP($_POST['nombre_producto']);
+    $Producto->setDescripcionP($_POST['descripcion_producto']);
+    $Producto->setIdModelo($_POST['Modelo']);
+    $Producto->setStockActual($_POST['Stock_Actual']);
+    $Producto->setStockMax($_POST['Stock_Maximo']);
+    $Producto->setStockMin($_POST['Stock_Minimo']);
+    $Producto->setClausulaDeGarantia($_POST['Clausula_garantia']);
+    $Producto->setCodigo($_POST['Seriales']);
+    $Producto->setCategoria($_POST['Categoria']);
+    $Producto->setPrecio($_POST['Precio']);
+
+    // Validación del nombre del producto
+    if (!$Producto->validarNombreProducto()) {
+        echo json_encode(['status' => 'error', 'message' => 'Este Producto ya existe']);
+    }
+    // Validación del código interno del producto
+    elseif (!$Producto->validarCodigoProducto()) {
+        echo json_encode(['status' => 'error', 'message' => 'Este Código Interno ya existe']);
+    }
+    // Si ambas validaciones pasan, se intenta ingresar el producto
+    else {
+        // Aquí pasamos todos los datos del formulario a ingresarProducto()
+        $resultado = $Producto->ingresarProducto($_POST);
+
+
+if ($resultado) {
+    $id_producto = $resultado;
+    $respuesta = [
+        'status' => 'success',
+        'id_producto' => $id_producto
+    ];
+
+    // Procesar imagen (si existe)
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+        $directorio = "IMG/Productos/";
+
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0755, true); // crea la carpeta si no existe
+        }
+
+        $nombre_original = $_FILES['imagen']['name'];
+        $extension = pathinfo($nombre_original, PATHINFO_EXTENSION);
+
+        // Nombre único basado en ID del producto + timestamp para evitar sobrescritura
+        $nombre_nuevo = "producto_" . $id_producto . "_" .$resultado;
+
+        $ruta_destino = $directorio . $nombre_nuevo;
+
+        if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
+            // Aquí podrías guardar la ruta en la base de datos si lo deseas
+            $respuesta['imagen'] = $nombre_nuevo;
+            $respuesta['mensaje'] = "Producto registrado e imagen guardada correctamente.";
+        } else {
+            $respuesta['imagen'] = null;
+            $respuesta['mensaje'] = "Producto registrado, pero error al guardar la imagen.";
+        }
+    } else {
+        $respuesta['mensaje'] = "Producto registrado correctamente.";
+    }
+
+    echo json_encode($respuesta);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el producto']);
+}
+
+    }
+    break;
+
         
         case 'obtener_producto':
             // Obtiene el ID del producto desde el formulario
@@ -67,38 +108,129 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             break;
 
-        case 'modificar':
-            // Obtiene el ID del producto y asigna los valores del formulario a las propiedades del producto
-            $id = $_POST['id_producto'];
-            $Producto = new Productos();
-            $Producto->setId($id);
-            $Producto->setNombreP($_POST['nombre_producto']);
-            $Producto->setDescripcionP($_POST['descripcion_producto']);
-            $Producto->setIdModelo($_POST['Modelo']);
-            $Producto->setStockActual($_POST['Stock_Actual']);
-            $Producto->setStockMax($_POST['Stock_Maximo']);
-            $Producto->setStockMin($_POST['Stock_Minimo']);
-            $Producto->setClausulaDeGarantia($_POST['Clausula_garantia']);
-            $Producto->setCodigo($_POST['Seriales']);
-            $Producto->setCategoria($_POST['Categoria']);
-            $Producto->setPrecio($_POST['Precio']);
-            
-            // Intento de modificar el producto y devuelve una respuesta en formato JSON
-            if ($Producto->modificarProducto($id)) {
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
-            }
+case 'modificar':
+    $id = $_POST['id_producto'];
+
+    $Producto = new Productos();
+    $Producto->setId($id);
+    $Producto->setNombreP($_POST['nombre_producto']);
+    $Producto->setDescripcionP($_POST['descripcion_producto']);
+    $Producto->setIdModelo($_POST['Modelo']);
+    $Producto->setStockActual($_POST['Stock_Actual']);
+    $Producto->setStockMax($_POST['Stock_Maximo']);
+    $Producto->setStockMin($_POST['Stock_Minimo']);
+    $Producto->setClausulaDeGarantia($_POST['Clausula_garantia']);
+    $Producto->setCodigo($_POST['Seriales']);
+    $Producto->setCategoria($_POST['Categoria']);
+    $Producto->setPrecio($_POST['Precio']);
+
+    // Campos específicos por categoría
+    $categoria = $_POST['Categoria'];
+
+    switch ($categoria) {
+        case '1': // IMPRESORA
+            $Producto->setPeso($_POST['peso'] ?? null);
+            $Producto->setAlto($_POST['alto'] ?? null);
+            $Producto->setAncho($_POST['ancho'] ?? null);
+            $Producto->setLargo($_POST['largo'] ?? null);
             break;
 
+        case '2': // PROTECTOR DE VOLTAJE
+            $Producto->setVoltajeEntrada($_POST['voltaje_entrada'] ?? null);
+            $Producto->setVoltajeSalida($_POST['voltaje_salida'] ?? null);
+            $Producto->setTomas($_POST['tomas'] ?? null);
+            $Producto->setCapacidad($_POST['capacidad'] ?? null);
+            break;
+
+        case '3': // TINTA
+            $Producto->setNumero($_POST['numero'] ?? null);
+            $Producto->setColor($_POST['color'] ?? null);
+            $Producto->setTipo($_POST['tipo'] ?? null);
+            $Producto->setVolumen($_POST['volumen'] ?? null);
+            break;
+
+        case '4': // CARTUCHO DE TINTA
+            $Producto->setNumero($_POST['numero'] ?? null);
+            $Producto->setColor($_POST['color'] ?? null);
+            $Producto->setCapacidad($_POST['capacidad'] ?? null);
+            break;
+
+        case '5': // OTROS
+            $Producto->setDescripcionOtros($_POST['descripcion_otros'] ?? null);
+            break;
+    }
+
+    // Guardar los cambios
+    if ($Producto->modificarProducto($id)) {
+
+if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+    $id = $_POST['id_producto'];
+    $directorio = "IMG/Productos/";
+    if (!is_dir($directorio)) {
+        mkdir($directorio, 0755, true);
+    }
+
+    // Eliminar imagen anterior si existe (buscando por extensiones)
+    $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
+    foreach ($extensiones as $ext) {
+        $ruta_antigua = $directorio . 'producto_' . $id . '.' . $ext;
+        if (file_exists($ruta_antigua)) {
+            unlink($ruta_antigua);
+        }
+    }
+
+    // Guardar la nueva imagen con el mismo formato de nombre
+    $nombre_original = $_FILES['imagen']['name'];
+    $extension = strtolower(pathinfo($nombre_original, PATHINFO_EXTENSION));
+    $nombre_nuevo = "producto_" . $id . "." . $extension;
+    $ruta_destino = $directorio . $nombre_nuevo;
+
+    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al modificar la imagen del producto']);
+    }
+} else {
+    echo json_encode(['status' => 'success']);
+}
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
+    }
+    break;
+
+
         case 'eliminar':
-            // Obtiene el ID del producto y llama al método para eliminarlo
-            $id = $_POST['id'];
-            $productoModel = new Productos();
-            if ($productoModel->eliminarProducto($id)) {
+            $id_producto = $_POST['id_producto']; // Cambiado para coincidir con el nombre enviado
+            if ($id_producto === null) {
+                echo json_encode(['status' => 'error', 'message' => 'ID del Producto no proporcionado']);
+                exit;
+            }
+            $producto = new Productos();
+$response = $producto->eliminarProducto($id_producto);
+if ($response['success']) {
+    echo json_encode(['status' => 'success', 'message' => $response['message']]);
+} else {
+    echo json_encode(['status' => 'error', 'message' => $response['message']]);
+}
+            break;
+            
+            case 'cambiar_estatus':
+            $id = $_POST['id_producto'];
+            $nuevoEstatus = $_POST['nuevo_estatus'];
+            
+            // Validación básica
+            if (!in_array($nuevoEstatus, ['habilitado', 'inhabilitado'])) {
+                echo json_encode(['status' => 'error', 'message' => 'Estatus no válido']);
+                exit;
+            }
+            
+            $producto = new Productos();
+            $producto->setId($id);
+            
+            if ($producto->cambiarEstatus($nuevoEstatus)) {
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
             }
             break;
 

@@ -1,193 +1,544 @@
 $(document).ready(function () {
-    // Cargar datos del clientes en el modal al abrir
-    $(document).on('click', '.btn-modificar', function() {
-        var id_clientes = $(this).data('id');
 
-        // Establecer el id_producto en el campo oculto del formulario de modificación
-        $('#modificar_id_clientes').val(id_clientes);
+    // MENSAJE //
+    if($.trim($("#mensajes").text()) != ""){
+        mensajes("warning", 4000, "Atención", $("#mensajes").html());
+    }
 
-        // Realizar una solicitud AJAX para obtener los datos del clientes desde la base de datos
-        $.ajax({
-            url: '', // Ruta al controlador PHP que maneja las peticiones
-            type: 'POST',
-            dataType: 'json',
-            data: { id_clientes: id_clientes, accion: 'obtener_clientes' },
-            success: function(clientes) {
-                console.log('Datos del Cliente obtenidos:', clientes);
-                // Llenar los campos del formulario con los datos obtenidos del clientes
-                $('#modificarnombre').val(clientes.nombre);
-                $('#modificardireccion').val(clientes.direccion);
-                $('#modificartelefono').val(clientes.telefono);
-                $('#modificarcedula').val(clientes.cedula);
-                $('#modificarcorreo').val(clientes.correo);
-                $('#modificaractivo').val(clientes.activo);
-                
-                // Ajustar la imagen si se maneja la carga de imágenes
-                // $('#modificarImagen').val(clientes.imagen);
-
-                // Mostrar el modal de modificación después de llenar los datos
-                $('#modificar_clientes_modal').modal('show');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error en la solicitud AJAX:', textStatus, errorThrown);
-                muestraMensaje('Error al cargar los datos del Cliente.');
-            }
-        });
+    $("#nombre").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
+        let nombre = document.getElementById("nombre");
+        nombre.value = space(nombre.value);
     });
 
+    $("#nombre").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,100}$/,
+            $(this),
+            $("#snombre"),
+            "*El formato solo permite letras*"
+        );
+    });
 
-    // Enviar datos de modificación por AJAX al controlador PHP
+    $("#cedula").on("keypress", function(e){
+        validarKeyPress(/^[VEJPG0-9-.\b]*$/, e);
+    });
+
+    $("#cedula").on("keyup", function(){
+        validarKeyUp(
+            /^[VEJPG0-9-.\b]{6,12}$/,
+            $(this),
+            $("#scedula"),
+            "*El formato solo permite números y (V,E,J,P,G,-.)*"
+        );
+    });
+
+    $("#telefono").on("keypress", function(e){
+        validarKeyPress(/^[0-9-]*$/, e);
+    });
+
+    $("#telefono").on("keyup", function(){
+        validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $(this),
+            $("#stelefono"),
+            "*Formato válido: 04XX-XXX-XXXX*"
+        );
+    });
+
+    $("#direccion").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
+        let direccion = document.getElementById("direccion");
+        direccion.value = space(direccion.value);
+    });
+
+    $("#direccion").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $(this),
+            $("#sdireccion"),
+            "*El formato permite letras y números*"
+        );
+    });
+
+    $("#correo").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
+    });
+
+    $("#correo").on("keyup", function(){
+        validarKeyUp(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $(this),
+            $("#scorreo"),
+            "*Formato válido: example@gmail.com*"
+        );
+    });
+
+    function validarEnvioCliente(){
+        let nombre = document.getElementById("nombre");
+        nombre.value = space(nombre.value).trim();
+
+        let direccion = document.getElementById("direccion");
+        direccion.value = space(direccion.value).trim();
+
+        if(validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,100}$/,
+            $("#nombre"),
+            $("#snombre"),
+            "*El nombre debe tener solo letras*"
+        )==0){
+            mensajes('error',4000,'Verifique el nombre','Debe tener solo letras');
+            return false;
+        }
+        else if(validarKeyUp(
+            /^[VEJPG0-9-.\b]{6,12}$/,
+            $("#cedula"),
+            $("#scedula"),
+            "*El formato solo permite números y (V,E,J,P,G,-.)*"
+        )==0){
+            mensajes('error',4000,'Verifique el número de cedula/RIF','El formato solo permite números y (V,E,J,P,G,-.)');
+            return false;
+        }
+        else if(validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $("#telefono"),
+            $("#stelefono"),
+            "*Formato correcto: 04XX-XXX-XXXX*"
+        )==0){
+            mensajes('error',4000,'Verifique el teléfono','Debe tener 11 dígitos separados por "-"');
+            return false;
+        }
+        else if(validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $("#direccion"),
+            $("#sdireccion"),
+            "*Puede haber letras y números*"
+        )==0){
+            mensajes('error',4000,'Verifique la dirección','Debe tener solo letras y números');
+            return false;
+        }
+        else if(validarKeyUp(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $("#correo"),
+            $("#scorreo"),
+            "*Formato correcto: example@gmail.com*"
+        )==0){
+            mensajes('error',4000,'Verifique el correo','Correo no válido');
+            return false;
+        }
+        return true;
+    }
+
+    function agregarFilaCliente(cliente) {
+        const tabla = $('#tablaConsultas').DataTable();
+        const nuevaFila = [
+            `<ul>
+                <div>
+                    <button class="btn-modificar"
+                        data-id="${cliente.id_clientes}"
+                        data-nombre="${cliente.nombre}"
+                        data-cedula="${cliente.cedula}"
+                        data-direccion="${cliente.direccion}"
+                        data-telefono="${cliente.telefono}"
+                        data-correo="${cliente.correo}">
+                        Modificar
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-eliminar"
+                        data-id="${cliente.id_clientes}">
+                        Eliminar
+                    </button>
+                </div>
+            </ul>`,
+            cliente.nombre,
+            cliente.cedula,
+            cliente.direccion,
+            cliente.telefono,
+            cliente.correo
+        ];
+        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
+        $(rowNode).attr('data-id', cliente.id_clientes);
+    }
+
+    function resetCliente() {
+        $("#nombre").val('');
+        $("#cedula").val('');
+        $("#direccion").val('');
+        $("#telefono").val('');
+        $("#correo").val('');
+        $("#snombre").text('');
+        $("#scedula").text('');
+        $("#sdireccion").text('');
+        $("#stelefono").text('');
+        $("#scorreo").text('');
+    }
+
+    $('#btnIncluirCliente').on('click', function() {
+        $('#ingresarclientes')[0].reset();
+        $('#snombre').text('');
+        $('#scedula').text('');
+        $('#sdireccion').text('');
+        $('#stelefono').text('');
+        $('#scorreo').text('');
+        $('#registrarClienteModal').modal('show');
+    });
+
+    $('#ingresarclientes').on('submit', function(e) {
+    e.preventDefault();
+
+        if(validarEnvioCliente()){
+            var datos = new FormData(this);
+            datos.append('accion', 'registrar');
+            
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: datos,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(respuesta){
+                    if(respuesta.status === "success"){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: respuesta.message || 'Cliente registrado correctamente'
+                        }).then(() => {
+                            if(respuesta.status === "success" && respuesta.cliente){
+                                agregarFilaCliente(respuesta.cliente);
+                                resetCliente();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: respuesta.message || 'Error al registrar el cliente'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de conexión',
+                        text: 'Ocurrió un error al comunicarse con el servidor'
+                    });
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '#registrarClienteModal .close', function() {
+        $('#registrarClienteModal').modal('hide');
+    });
+
+    function enviarAjax(datos, callback) {
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: datos,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (respuesta) {
+                if (typeof respuesta === "string") {
+                    respuesta = JSON.parse(respuesta);
+                }
+                if(callback) callback(respuesta);
+            },
+            error: function () {
+                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
+            }
+        });
+    }
+
+    // Cargar datos del clientes en el modal al abrir
+        $(document).on('click', '.btn-modificar', function () {
+        $('#modificar_id_clientes').val($(this).data('id'));
+        $('#modificarnombre').val($(this).data('nombre'));
+        $('#modificarcedula').val($(this).data('cedula'));
+        $('#modificardireccion').val($(this).data('direccion'));
+        $('#modificartelefono').val($(this).data('telefono'));
+        $('#modificarcorreo').val($(this).data('correo'));
+        $('#smodificarnombre').text('');
+        $('#smodificarcedula').text('');
+        $('#smodificardireccion').text('');
+        $('#smodificartelefono').text('');
+        $('#smodificarcorreo').text('');
+        $('#modificar_clientes_modal').modal('show');
+    });
+
+    $("#modificarnombre").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
+        let nombre = document.getElementById("nombre");
+        nombre.value = space(nombre.value);
+    });
+
+    $("#modificarnombre").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,100}$/,
+            $(this),
+            $("#smodificarnombre"),
+            "*El formato solo permite letras*"
+        );
+    });
+
+    $("#modificarcedula").on("keypress", function(e){
+        validarKeyPress(/^[VEJPG0-9-.\b]*$/, e);
+    });
+
+    $("#modificarcedula").on("keyup", function(){
+        validarKeyUp(
+            /^[VEJPG0-9-.\b]{6,12}$/,
+            $(this),
+            $("#smodificarcedula"),
+            "*El formato solo permite números y (V,E,J,P,G,-.)*"
+        );
+    });
+
+    // TELÉFONO
+    $("#modificartelefono").on("keypress", function(e){
+        validarKeyPress(/^[0-9-]*$/, e);
+    });
+
+    $("#modificartelefono").on("keyup", function(){
+        validarKeyUp(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $(this),
+            $("#smodificartelefono"),
+            "*Formato válido: 04XX-XXX-XXXX*"
+        );
+    });
+
+    $("#modificardireccion").on("keypress", function(e){
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
+        let direccion = document.getElementById("direccion");
+        direccion.value = space(direccion.value);
+    });
+
+    $("#modificardireccion").on("keyup", function(){
+        validarKeyUp(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+            $(this),
+            $("#smodificardireccion"),
+            "*El formato permite letras y números*"
+        );
+    });
+
+    $("#modificarcorreo").on("keypress", function (e) {
+        validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
+    });
+
+    $("#modificarcorreo").on("keyup", function(){
+        validarKeyUp(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $(this),
+            $("#smodificarcorreo"),
+            "*Formato válido: example@gmail.com*"
+        );
+    });
+
+    function validarCliente(datos) {
+        let errores = [];
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,100}$/.test(datos.nombre)) {
+            errores.push("El nombre debe tener solo letras.");
+        }
+        if (!/^[VEJPG0-9-.\b]*$/.test(datos.cedula)) {
+            errores.push("El formato solo permite números y (V,E,J,P,G,-.)");
+        }
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/.test(datos.direccion)) {
+            errores.push("El formato permite letras y números.");
+        }
+        if (!/^\d{4}-\d{3}-\d{4}$/.test(datos.telefono)) {
+            errores.push("Formato correcto: 04XX-XXX-XXXX.");
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo)) {
+            errores.push("Formato correcto: example@gmail.com.");
+        }
+        return errores;
+    }
+
     $('#modificarclientes').on('submit', function(e) {
         e.preventDefault();
 
-        // Crear un objeto FormData con los datos del formulario
+        const datos = {
+            nombre: $('#modificarnombre').val(),
+            cedula: $('#modificarcedula').val(),
+            direccion: $('#modificardireccion').val(),
+            telefono: $('#modificartelefono').val(),
+            correo: $('#modificarcorreo').val()
+        }
+
+        const errores = validarCliente(datos);
+
+        if (errores.length > 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de validación',
+                html: errores.join('<br>')
+            });
+            return;
+        }
+
         var formData = new FormData(this);
         formData.append('accion', 'modificar');
 
-        // Enviar la solicitud AJAX al controlador PHP
         $.ajax({
-            url: '', // Asegúrate de que la URL sea correcta
+            url: '',
             type: 'POST',
             processData: false,
             contentType: false,
             cache: false,
             data: formData,
+            dataType: 'json', // <-- Asegúrate de esto
             success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                response = JSON.parse(response); // Asegúrate de que la respuesta sea un objeto JSON
-                if (response.status === 'success') {
-                    $('#modificarProductoModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: 'El Cliente se ha modificado correctamente'
-                    }).then(function() {
-                        location.reload(); // Recargar la página al modificar un producto
-                    });
-                } else {
-                    muestraMensaje(response.message);
+if (response.status === 'success') {
+    $('#modificar_clientes_modal').modal('hide');
+    Swal.fire({
+        icon: 'success',
+        title: 'Modificado',
+        text: 'El Cliente se ha modificado correctamente'
+    });
+
+    const id = $('#modificar_id_clientes').val();
+    const nombre = $('#modificarnombre').val();
+    const cedula = $('#modificarcedula').val();
+    const direccion = $('#modificardireccion').val();
+    const telefono = $('#modificartelefono').val();
+    const correo = $('#modificarcorreo').val();
+
+const tabla = $('#tablaConsultas').DataTable();
+const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
+fila.data([
+    `<ul>
+        <div>
+            <button class="btn-modificar"
+                data-id="${id}"
+                data-nombre="${nombre}"
+                data-cedula="${cedula}"
+                data-direccion="${direccion}"
+                data-telefono="${telefono}"
+                data-correo="${correo}">
+                Modificar
+            </button>
+        </div>
+        <div>
+            <button class="btn-eliminar"
+                data-id="${id}">
+                Eliminar
+            </button>
+        </div>
+    </ul>`,
+    nombre,
+    cedula,
+    direccion,
+    telefono,
+    correo
+]).draw(false);
+} else {
+                    muestraMensaje(response.message || 'No se pudo modificar el cliente');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar el Cliente:', textStatus, errorThrown);
                 muestraMensaje('Error al modificar el Cliente.');
             }
         });
     });
 
-    // Función para eliminar el producto
+    $(document).on('click', '#modificar_clientes_modal .close', function() {
+        $('#modificar_clientes_modal').modal('hide');
+    });
+
     $(document).on('click', '.btn-eliminar', function (e) {
-        e.preventDefault(); // Evitar la redirección predeterminada del enlace
-        Swal.fire({
-            title: '¿Está seguro?',
-            text: "¡No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminarlo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                var id = $(this).data('id');
-                console.log("ID de el Cliente a eliminar: ", id); // Punto de depuración
-                var datos = new FormData();
-                datos.append('accion', 'eliminar');
-                datos.append('id', id);
-                enviarAjax(datos, function (respuesta) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminarlo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var datos = new FormData();
+            datos.append('accion', 'eliminar');
+            datos.append('id_clientes', id);
+            
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: datos,
+                processData: false,
+                contentType: false,
+                success: function (respuesta) {
                     if (respuesta.status === 'success') {
                         Swal.fire(
                             'Eliminado!',
-                            'El Cliente ha sido eliminado.',
+                            'El cliente ha sido eliminado.',
                             'success'
-                        ).then(function() {
-                            location.reload(); // Recargar la página al eliminar un producto
-                        });
+                        );
+                        eliminarFilaCliente(id);
                     } else {
                         muestraMensaje(respuesta.message);
                     }
-                });
-            }
-        });
-    });
-
-    // Función para incluir un nuevo producto
-    $('#incluirclientes').on('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                try {
-                    const data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            title: 'Éxito',
-                            text: 'Cliente ingresado exitosamente',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.message || 'Error al ingresar el Cliente',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    }
-                } catch (e) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Error al procesar la respuesta del servidor',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
+                },
+                error: function () {
+                    muestraMensaje('Error en la solicitud AJAX');
                 }
-            },
-            error: function(xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Error en la solicitud AJAX: ' + error,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        });
+            });
+        }
     });
 });
 
-// Función genérica para enviar AJAX
-function enviarAjax(datos, callback) {
-    console.log("Enviando datos AJAX: ", datos); // Punto de depuración
-    $.ajax({
-        url: '', // Asegúrate de que la URL apunte al controlador correcto
-        type: 'POST',
-        contentType: false,
-        data: datos,
-        processData: false,
-        cache: false,
-        success: function (respuesta) {
-            console.log("Respuesta del servidor: ", respuesta); // Punto de depuración
-            callback(JSON.parse(respuesta));
-        },
-        error: function () {
-            console.error('Error en la solicitud AJAX');
-            muestraMensaje('Error en la solicitud AJAX');
+    function eliminarFilaCliente(id_clientes) {
+        const tabla = $('#tablaConsultas').DataTable();
+        const fila = $(`#tablaConsultas tbody tr[data-id="${id_clientes}"]`);
+        tabla.row(fila).remove().draw();
+    }
+
+    // Función genérica para mostrar mensajes
+    function mensajes(icono, tiempo, titulo, mensaje){
+        Swal.fire({
+            icon: icono,
+            timer: tiempo,
+            title: titulo,
+            text: mensaje,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        });
+    }
+
+    // Utilidades de validación
+    function validarKeyPress(er, e) {
+        key = e.keyCode;
+        tecla = String.fromCharCode(key);
+        a = er.test(tecla);
+
+        if (!a) {
+            e.preventDefault();
         }
-    });
-}
+    }
 
-// Función genérica para mostrar mensajes
-function muestraMensaje(mensaje) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje
-    });
-}
+    function validarKeyUp(er, etiqueta, etiquetamensaje, mensaje) {
+        a = er.test(etiqueta.val());
 
+        if (a) {
+            etiquetamensaje.text("");
+            return 1;
+        } else {
+            etiquetamensaje.text(mensaje);
+            return 0;
+        }
+    }
+
+    function space(str) {
+        const regex = /\s{2,}/g;
+        var str = str.replace(regex, ' ');
+        return str;
+    }
+});
