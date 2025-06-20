@@ -78,6 +78,7 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
                                 id="btnModificarModelo"
                                 data-id="<?php echo $modelo['id_modelo']; ?>"
                                 data-marcaid="<?php echo htmlspecialchars($modelo['id_marca']); ?>"
+                                data-nombremarca="<?php echo htmlspecialchars($modelo['nombre_marca']); ?>"
                                 data-nombre="<?php echo htmlspecialchars($modelo['nombre_modelo']); ?>"
                                 >Modificar</button>
                             </div>

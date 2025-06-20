@@ -40,6 +40,7 @@ $(document).ready(function () {
                         id="btnModificarModelo"
                         data-id="${modelo.id_modelo}"
                         data-marcaid="${modelo.id_marca}"
+                        data-nombremarca="${modelo.nombre_marca}"
                         data-nombre="${modelo.nombre_modelo}">
                         Modificar
                     </button>
@@ -159,6 +160,7 @@ $(document).ready(function () {
                                     id="btnModificarModelo"
                                     data-id="${modelo.id_modelo}"
                                     data-marcaid="${modelo.id_marca}"
+                                    data-nombremarca="${modelo.nombre_marca}"
                                     data-nombre="${modelo.nombre_modelo}">
                                     Modificar
                                 </button>
@@ -178,6 +180,7 @@ $(document).ready(function () {
                     const filaNode = fila.node();
                     const botonModificar = $(filaNode).find(".btn-modificar");
                     botonModificar.data('marcaid', modelo.id_marca);
+                    botonModificar.data('nombremarca', modelo.nombre_marca);
                     botonModificar.data('nombre', modelo.nombre_modelo);
                 }
             } else {
