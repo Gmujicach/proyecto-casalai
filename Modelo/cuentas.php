@@ -120,13 +120,10 @@ class Cuentabanco extends BD {
         return $this->cuentaporid($id_cuenta); 
     }
     private function cuentaporid($id_cuenta) {
-        $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta 
-        FROM tbl_cuentas WHERE id_cuenta = :id_cuenta";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_cuenta', $id_cuenta);
-        $stmt->execute();
-        $cuenta_obt = $stmt->fetch(PDO::FETCH_ASSOC); // Devuelve un solo registro
+        $query = "SELECT * FROM tbl_cuentas WHERE id_cuenta = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id_cuenta]);
+        $cuenta_obt = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->db = null;
         return $cuenta_obt;
     }
@@ -154,16 +151,14 @@ class Cuentabanco extends BD {
         WHERE id_cuenta = :id_cuenta";
 
         $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_cuenta', $id_cuenta);
         $stmt->bindParam(':nombre_banco', $this->nombre_banco);
         $stmt->bindParam(':numero_cuenta', $this->numero_cuenta);
         $stmt->bindParam(':rif_cuenta', $this->rif_cuenta);
         $stmt->bindParam(':telefono_cuenta', $this->telefono_cuenta);
         $stmt->bindParam(':correo_cuenta', $this->correo_cuenta);
-        $stmt->bindParam(':id_cuenta', $id_cuenta);
         
-        $result = $stmt->execute();
-        $this->db = null;
-        return $result;
+        return $stmt->execute();
     }
 
     public function eliminarCuentabanco($id_cuenta) {

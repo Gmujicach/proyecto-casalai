@@ -10,6 +10,7 @@
     --header-font-color: #5b91d8;
     --tbody-text-color: #5b91d8;
     --tbody-text-color-600: #5b91d8;
+    --tbody-text-color-mora: #9553cc;
     --primary-bg-color: #e6e6f2;
     --primary-accent-color: #6d5bd0;
     --success-bg-color: #cdffcd;
@@ -192,17 +193,30 @@ table tbody tr td .campo-nombres{
     font-weight: 500;
 }
 
-table tbody tr td .campo-correo{
+table tbody tr td .campo-rif-correo{
     display: block;
+    color: var(--tbody-text-color-mora);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+table tbody tr td .campo-numeros{
+    display: inline-block;
     color: var(--tbody-text-color);
     font-size: 16px;
     font-weight: 500;
-    margin-top: 3px;
 }
 
-table tbody tr td .campo-telefono{
+table tbody tr td .campo-stock-actual-negativo{
     display: inline-block;
-    color: var(--tbody-text-color);
+    color: var(--danger-accent-color);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+table tbody tr td .campo-stock-minimo{
+    display: inline-block;
+    color: var(--alert-accent-color);
     font-size: 16px;
     font-weight: 500;
 }
@@ -422,6 +436,25 @@ table tfoot tr td span a i{
 
 .btn-eliminar:hover {
     background-color: #da2d2d;
+}
+
+.btn-pedido{
+    border-radius: 10px;
+    border: none;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2ac94f;
+    font-size: 15px;
+    color: #fff;
+    transition: 0.5s;
+}
+
+.btn-pedido:hover {
+    background-color: #21a141;
 }
 
 /* Ajustes para el menú desplegable */

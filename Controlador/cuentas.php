@@ -79,7 +79,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
             $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
 
-            // Validar que el número de cuenta no exista en otra cuenta
             if ($cuentabanco->existeNumeroCuenta($_POST['numero_cuenta'], $id_cuenta)) {
                 echo json_encode([
                     'status' => 'error',
@@ -89,7 +88,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
-                echo json_encode(['status' => 'success']);
+                $cuentabancoActualizada = $cuentabanco->obtenerCuentaPorId($id_cuenta);
+
+                echo json_encode([
+                    'status' => 'success',
+                    'cuenta' => $cuentabancoActualizada
+                ]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar la cuenta']);
             }
