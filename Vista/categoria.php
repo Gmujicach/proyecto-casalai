@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     div.innerHTML = `
       <input type="text" name="caracteristicas[${id}][nombre]" placeholder="Nombre" class="form-control" maxlength="20" required>
       <select name="caracteristicas[${id}][tipo]" class="form-select" required>
-        <option value="">Tipo</option>
+        <option value="" disable hidden>Tipo</option>
         <option value="int">Entero</option>
         <option value="float">Decimal</option>
         <option value="string">Texto</option>

@@ -308,33 +308,47 @@ $(document).ready(function () {
         let contador = 0;
         const maxCaracteristicas = 5;
 
-        const crearInputCaracteristica = (id, puedeEliminar = true) => {
-            const div = document.createElement('div');
-            div.classList.add('caracteristica-item');
-            div.dataset.index = id;
+const crearInputCaracteristica = (id, puedeEliminar = true) => {
+    const div = document.createElement('div');
+    div.classList.add('caracteristica-item');
+    div.dataset.index = id;
 
-            div.innerHTML = `
-                <input type="text" name="caracteristicas[${id}][nombre]" placeholder="Nombre" class="form-control" maxlength="20" required>
-                <select name="caracteristicas[${id}][tipo]" class="form-select" required>
-                    <option value="">Tipo</option>
-                    <option value="int">Entero</option>
-                    <option value="float">Decimal</option>
-                    <option value="string">Texto</option>
-                </select>
-                <input type="number" name="caracteristicas[${id}][max]" placeholder="Máx. caracteres" class="form-control" min="1" max="255" required>
-                ${puedeEliminar ? `<button type="button" class="btn btn-danger btn-eliminar-caracteristicas">✖</button>` : ''}
-            `;
+    div.innerHTML = `
+        <input type="text" name="caracteristicas[${id}][nombre]" placeholder="Nombre" class="form-control" maxlength="20" required>
+        <select name="caracteristicas[${id}][tipo]" class="form-select tipo-caracteristica" required>
+            <option value="" disable hidden>Tipo</option>
+            <option value="int">Entero</option>
+            <option value="float">Decimal</option>
+            <option value="string">Texto</option>
+        </select>
+        <input type="number" name="caracteristicas[${id}][max]" placeholder="Máx. caracteres" class="form-control max-caracteres" min="1" max="255" style="display:none;">
+        ${puedeEliminar ? `<button type="button" class="btn btn-danger btn-eliminar-caracteristicas">✖</button>` : ''}
+    `;
 
-            if (puedeEliminar) {
-                div.querySelector('.btn-eliminar-caracteristicas').addEventListener('click', () => {
-                    contenedor.removeChild(div);
-                    contador--;
-                    btnAgregar.disabled = false;
-                });
-            }
+    // Mostrar/ocultar el campo de max según el tipo
+    const selectTipo = div.querySelector('.tipo-caracteristica');
+    const inputMax = div.querySelector('.max-caracteres');
+    selectTipo.addEventListener('change', function() {
+        if (this.value === 'string') {
+            inputMax.style.display = '';
+            inputMax.required = true;
+        } else {
+            inputMax.style.display = 'none';
+            inputMax.value = '';
+            inputMax.required = false;
+        }
+    });
 
-            contenedor.appendChild(div);
-        };
+    if (puedeEliminar) {
+        div.querySelector('.btn-eliminar-caracteristicas').addEventListener('click', () => {
+            contenedor.removeChild(div);
+            contador--;
+            btnAgregar.disabled = false;
+        });
+    }
+
+    contenedor.appendChild(div);
+};
 
         crearInputCaracteristica(contador++, false);
 
@@ -357,15 +371,29 @@ function crearInputCaracteristicaMod(id, nombre = '', tipo = '', max = '', puede
 
     div.innerHTML = `
         <input type="text" name="caracteristicas[${id}][nombre]" placeholder="Nombre" class="form-control" maxlength="20" required value="${nombre}">
-        <select name="caracteristicas[${id}][tipo]" class="form-select" required>
-            <option value="">Tipo</option>
+        <select name="caracteristicas[${id}][tipo]" class="form-select tipo-caracteristica" required>
+            <option value="" disable hidden>Tipo</option>
             <option value="int" ${tipo === 'int' ? 'selected' : ''}>Entero</option>
             <option value="float" ${tipo === 'float' ? 'selected' : ''}>Decimal</option>
             <option value="string" ${tipo === 'string' ? 'selected' : ''}>Texto</option>
         </select>
-        <input type="number" name="caracteristicas[${id}][max]" placeholder="Máx. caracteres" class="form-control" min="1" max="255" required value="${max}">
+        <input type="number" name="caracteristicas[${id}][max]" placeholder="Máx. caracteres" class="form-control max-caracteres" min="1" max="255" value="${tipo === 'string' ? max : ''}" style="${tipo === 'string' ? '' : 'display:none;'}">
         ${puedeEliminar ? `<button type="button" class="btn btn-danger btn-eliminar-caracteristicas">✖</button>` : ''}
     `;
+
+    // Mostrar/ocultar el campo de max según el tipo
+    const selectTipo = div.querySelector('.tipo-caracteristica');
+    const inputMax = div.querySelector('.max-caracteres');
+    selectTipo.addEventListener('change', function() {
+        if (this.value === 'string') {
+            inputMax.style.display = '';
+            inputMax.required = true;
+        } else {
+            inputMax.style.display = 'none';
+            inputMax.value = '';
+            inputMax.required = false;
+        }
+    });
 
     if (puedeEliminar) {
         div.querySelector('.btn-eliminar-caracteristicas').addEventListener('click', () => {
@@ -478,13 +506,16 @@ $('#modificarCategoria').on('submit', function (e) {
             validacionCorrecta = false;
             return false;
         }
-
-        if ($.trim(max.val()) === '' || parseInt(max.val()) <= 0) {
-            mensajeError = 'El campo "Máx. caracteres" debe ser mayor a 0.';
-            max.focus();
-            validacionCorrecta = false;
-            return false;
-        }
+        
+        
+       if (tipo.val() === 'string') {
+    if ($.trim(max.val()) === '' || parseInt(max.val()) <= 0) {
+        mensajeError = 'El campo "Máx. caracteres" debe ser mayor a 0.';
+        max.focus();
+        validacionCorrecta = false;
+        return false;
+    }
+}
     });
 
     if (!validacionCorrecta) {
