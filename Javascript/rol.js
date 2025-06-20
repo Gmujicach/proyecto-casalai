@@ -269,7 +269,9 @@ $(document).ready(function () {
     });
 
     function eliminarFilaRol(id_rol) {
-        $(`#tablaConsultas tbody tr[data-id="${id_rol}"]`).remove();
+        const tabla = $('#tablaConsultas').DataTable();
+        const fila = $(`#tablaConsultas tbody tr[data-id="${id_rol}"]`);
+        tabla.row(fila).remove().draw();
     }
 
     function mensajes(icono, tiempo, titulo, mensaje){
