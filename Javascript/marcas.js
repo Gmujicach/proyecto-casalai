@@ -120,13 +120,6 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on('click', '#btnModificarMarca', function () {
-        $('#modificar_id_marca').val($(this).data('id'));
-        $('#modificar_nombre_marca').val($(this).data('nombre'));
-        $('#smnombre_marca').text('');
-        $('#modificarMarcaModal').modal('show');
-    });
-
     $("#modificar_nombre_marca").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
         let nombre = document.getElementById("modificar_nombre_marca");
@@ -149,6 +142,13 @@ $(document).ready(function () {
         return errores;
     }
 
+    $(document).on('click', '#btnModificarMarca', function () {
+        $('#modificar_id_marca').val($(this).data('id'));
+        $('#modificar_nombre_marca').val($(this).data('nombre'));
+        $('#smnombre_marca').text('');
+        $('#modificarMarcaModal').modal('show');
+    });
+    
     $('#modificarMarca').on('submit', function(e) {
         e.preventDefault();
 
