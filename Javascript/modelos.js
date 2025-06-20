@@ -115,7 +115,7 @@ $(document).ready(function () {
         );
     });
 
-    $(document).on('click', '#btnModificarMarca', function () {
+    $(document).on('click', '#btnModificarModelo', function () {
         $('#modificar_id_modelo').val($(this).data('id'));
         llenarSelectMarcasModal($(this).data('marcaid'));
         $('#modificar_nombre_modelo').val($(this).data('nombre'));
