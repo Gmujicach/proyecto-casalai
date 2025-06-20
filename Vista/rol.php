@@ -64,6 +64,7 @@
                         <ul>
                             <div>
                                 <button class="btn-modificar"
+                                id="btnPedidoProducto"
                                 data-id="<?php echo $rol['id_rol']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($rol['nombre_rol']); ?>"
                                 >Modificar</button>
@@ -75,8 +76,16 @@
                             </div>
                         </ul>
                     </td>
-                    <td><?php echo htmlspecialchars($rol['id_rol']); ?></td>
-                    <td><?php echo htmlspecialchars($rol['nombre_rol']); ?></td>
+                    <td>
+                        <span class="campo-numeros">
+                            <?php echo htmlspecialchars($rol['id_rol']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                            <?php echo htmlspecialchars($rol['nombre_rol']); ?>
+                        </span>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
