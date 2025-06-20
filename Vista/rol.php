@@ -26,7 +26,7 @@
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
                         <label for="nombre_rol">Nombre del Rol</label>
-                        <input type="text" placeholder="Nombre del Rol" class="control-form" id="nombre_rol" name="nombre_rol" maxlength="15" required>
+                        <input type="text" placeholder="Nombre" class="control-form" id="nombre_rol" name="nombre_rol" maxlength="15" required>
                         <span class="span-value" id="snombre_rol"></span>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                         <ul>
                             <div>
                                 <button class="btn-modificar"
-                                id="btnPedidoProducto"
+                                id="btnModificarRol"
                                 data-id="<?php echo $rol['id_rol']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($rol['nombre_rol']); ?>"
                                 >Modificar</button>

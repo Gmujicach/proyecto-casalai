@@ -35,30 +35,29 @@ $(document).ready(function () {
     }
 
     function agregarFilaRol(rol) {
-        const nuevaFila = `
-            <tr data-id="${rol.id_rol}">
-                <td>
-                    <ul>
-                        <div>
-                            <button class="btn-modificar"
-                                data-id="${rol.id_rol}"
-                                data-nombre="${rol.nombre_rol}">
-                                Modificar
-                            </button>
-                        </div>
-                        <div>
-                            <button class="btn-eliminar"
-                                data-id="${rol.id_rol}">
-                                Eliminar
-                            </button>
-                        </div>
-                    </ul>
-                </td>
-                <td>${rol.id_rol}</td>
-                <td>${rol.nombre_rol}</td>
-            </tr>
-        `;
-        $('#tablaConsultas tbody').append(nuevaFila);
+        const tabla = $('#tablaConsultas').DataTable();
+        const nuevaFila = [
+            `<ul>
+                <div>
+                    <button class="btn-modificar"
+                        id="btnModificarRol"
+                        data-id="${rol.id_rol}"
+                        data-nombre="${rol.nombre_rol}">
+                        Modificar
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-eliminar"
+                        data-id="${rol.id_rol}">
+                        Eliminar
+                    </button>
+                </div>
+            </ul>`,
+            `<span class="campo-numeros">${rol.id_rol}</span>`,
+            `<span class="campo-nombres">${rol.nombre_rol}</span>`
+        ];
+        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
+        $(rowNode).attr('data-id', rol.id_rol);
     }
 
     function resetRol() {
@@ -122,7 +121,7 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on('click', '.btn-modificar', function () {
+    $(document).on('click', '#btnModificarRol', function () {
         $('#modificar_id_rol').val($(this).data('id'));
         $('#modificar_nombre_rol').val($(this).data('nombre'));
         $('#smnombre_rol').text('');
@@ -187,14 +186,37 @@ $(document).ready(function () {
                         text: 'El rol se ha modificado correctamente'
                     });
 
-                    const id = $('#modificar_id_rol').val();
-                    const nombre = $('#modificar_nombre_rol').val();
+                    const tabla = $("#tablaConsultas").DataTable();
+                    const id = $("#modificar_id_rol").val();
+                    const fila = tabla.row(`tr[data-id="${id}"]`);
+                    const rol = response.rol;
 
-                    const fila = $('tr[data-id="' + id + '"]');
-                    fila.find('td').eq(2).text(nombre);
+                    if (fila.length) {
+                        fila.data([
+                            `<ul>
+                                <div>
+                                    <button class="btn-modificar"
+                                        id="btnModificarRol"
+                                        data-id="${rol.id_rol}"
+                                        data-nombre="${rol.nombre_rol}">
+                                        Modificar
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="btn-eliminar"
+                                        data-id="${rol.id_rol}">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </ul>`,
+                            `<span class="campo-numeros">${rol.id_rol}</span>`,
+                            `<span class="campo-nombres">${rol.nombre_rol}</span>`
+                        ]).draw(false);
 
-                    const botonModificar = fila.find('.btn-modificar');
-                    botonModificar.data('nombre', nombre);
+                        const filaNode = fila.node();
+                        const botonModificar = $(filaNode).find(".btn-modificar");
+                        botonModificar.data('nombre', rol.nombre_rol);
+                    }
                 } else {
                     Swal.fire({
                         icon: 'error',

@@ -105,9 +105,7 @@ class Rol extends BD {
         $stmt->bindParam(':id_rol', $id_rol);
         $stmt->bindParam(':nombre_rol', $this->nombre_rol);
 
-        $result = $stmt->execute();
-        $this->conex = null;
-        return $result;
+        return $stmt->execute();
     }
 
     public function eliminarRol($id_rol) {
