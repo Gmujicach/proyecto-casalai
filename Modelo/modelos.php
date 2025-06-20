@@ -80,7 +80,6 @@ class modelo extends BD{
         return $modelo ? $modelo : null;
     }
 
-    // Obtener Modelo por ID
     public function obtenerModeloPorId($id_modelo) {
         return $this->obtModeloPorId($id_modelo);
     }
@@ -118,9 +117,8 @@ class modelo extends BD{
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_modelo', $id_modelo);
         $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
-        $result = $stmt->execute();
-        $this->conex = null;
-        return $result;
+        
+        return $stmt->execute();
     }
 
     // Eliminar Modelo

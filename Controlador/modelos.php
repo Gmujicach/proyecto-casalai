@@ -71,9 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($modelo->modificarModelo($id_modelo)) {
+                $modeloActualizado = $modelo->obtenerModeloPorId($id_modelo);
+
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'Modelo modificado correctamente'
+                    'modelo' => $modeloActualizado
                 ]);
             } else {
                 echo json_encode([

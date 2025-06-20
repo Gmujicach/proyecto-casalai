@@ -36,7 +36,8 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
                         </select>
                     </div>
                     <div class="envolver-form">
-                        <input type="text" placeholder="Nombre del modelo" class="control-form" id="nombre_modelo" name="nombre_modelo" maxlength="25" required>
+                        <label for="nombre_marca">Nombre del modelo</label>
+                        <input type="text" placeholder="Nombre" class="control-form" id="nombre_modelo" name="nombre_modelo" maxlength="25" required>
                         <span class="span-value" id="snombre_modelo"></span>
                     </div>
                 </div>
@@ -74,6 +75,7 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
                         <ul>
                             <div>
                                 <button class="btn-modificar"
+                                id="btnModificarModelo"
                                 data-id="<?php echo $modelo['id_modelo']; ?>"
                                 data-marcaid="<?php echo htmlspecialchars($modelo['id_marca']); ?>"
                                 data-nombre="<?php echo htmlspecialchars($modelo['nombre_modelo']); ?>"
@@ -86,9 +88,21 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
                             </div>
                         </ul>
                     </td>
-                    <td><?php echo htmlspecialchars($modelo['id_modelo']); ?></td>
-                    <td><?php echo htmlspecialchars($modelo['nombre_marca']); ?></td>
-                    <td><?php echo htmlspecialchars($modelo['nombre_modelo']); ?></td>
+                    <td>
+                        <span class="campo-numeros">
+                            <?php echo htmlspecialchars($modelo['id_modelo']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                            <?php echo htmlspecialchars($modelo['nombre_marca']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                            <?php echo htmlspecialchars($modelo['nombre_modelo']); ?>
+                        </span>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
