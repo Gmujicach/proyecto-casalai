@@ -35,30 +35,29 @@ $(document).ready(function () {
     }
 
     function agregarFilaMarca(marca) {
-        const nuevaFila = `
-            <tr data-id="${marca.id_marca}">
-                <td>
-                    <ul>
-                        <div>
-                            <button class="btn-modificar"
-                                data-id="${marca.id_marca}"
-                                data-nombre="${marca.nombre_marca}">
-                                Modificar
-                            </button>
-                        </div>
-                        <div>
-                            <button class="btn-eliminar"
-                                data-id="${marca.id_marca}">
-                                Eliminar
-                            </button>
-                        </div>
-                    </ul>
-                </td>
-                <td>${marca.id_marca}</td>
-                <td>${marca.nombre_marca}</td>
-            </tr>
-        `;
-        $('#tablaConsultas tbody').append(nuevaFila);
+        const tabla = $('#tablaConsultas').DataTable();
+        const nuevaFila = [
+            `<ul>
+                <div>
+                    <button class="btn-modificar"
+                        id="btnModificarMarca"
+                        data-id="${marca.id_marca}"
+                        data-nombre="${marca.nombre_marca}">
+                        Modificar
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-eliminar"
+                        data-id="${marca.id_marca}">
+                        Eliminar
+                    </button>
+                </div>
+            </ul>`,
+            `<span class="campo-numeros">${marca.id_marca}</span>`,
+            `<span class="campo-nombres">${marca.nombre_marca}</span>`
+        ];
+        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
+        $(rowNode).attr('data-id', marca.id_marca);
     }
 
     function resetMarca() {
@@ -121,7 +120,7 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on('click', '.btn-modificar', function () {
+    $(document).on('click', '#btnModificarMarca', function () {
         $('#modificar_id_marca').val($(this).data('id'));
         $('#modificar_nombre_marca').val($(this).data('nombre'));
         $('#smnombre_marca').text('');
@@ -186,31 +185,37 @@ $(document).ready(function () {
                     text: 'La marca se ha modificado correctamente'
                 });
 
-                const id = $('#modificar_id_marca').val();
-                const nombre = $('#modificar_nombre_marca').val();
+                const tabla = $("#tablaConsultas").DataTable();
+                const id = $("#modificar_id_marca").val();
+                const fila = tabla.row(`tr[data-id="${id}"]`);
+                const marca = response.marca;
 
-                const fila = $(`tr[data-id="${id}"]`);
-                fila.html(`
-                    <td>
-                        <ul>
+                if (fila.length) {
+                    fila.data([
+                        `<ul>
                             <div>
                                 <button class="btn-modificar"
-                                    data-id="${id}"
-                                    data-nombre="${nombre}">
+                                    id="btnModificarMarca"
+                                    data-id="${marca.id_marca}"
+                                    data-nombre="${marca.nombre_marca}">
                                     Modificar
                                 </button>
                             </div>
                             <div>
                                 <button class="btn-eliminar"
-                                    data-id="${id}">
+                                    data-id="${marca.id_marca}">
                                     Eliminar
                                 </button>
                             </div>
-                        </ul>
-                    </td>
-                    <td>${id}</td>
-                    <td>${nombre}</td>
-                `);
+                        </ul>`,
+                        `<span class="campo-numeros">${marca.id_marca}</span>`,
+                        `<span class="campo-nombres">${marca.nombre_marca}</span>`
+                    ]).draw(false);
+
+                    const filaNode = fila.node();
+                    const botonModificar = $(filaNode).find(".btn-modificar");
+                    botonModificar.data('nombre', marca.nombre_marca);
+                }
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -263,7 +268,9 @@ $(document).ready(function () {
     });
 
     function eliminarFilaMarca(id_marca) {
-        $(`#tablaConsultas tbody tr[data-id="${id_marca}"]`).remove();
+        const tabla = $('#tablaConsultas').DataTable();
+        const fila = $(`#tablaConsultas tbody tr[data-id="${id_marca}"]`);
+        tabla.row(fila).remove().draw();
     }
 
     function mensajes(icono, tiempo, titulo, mensaje){
