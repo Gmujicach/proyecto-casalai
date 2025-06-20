@@ -27,7 +27,7 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
                         <label for="nombre_marca">Nombre de la Marca</label>
-                        <input type="text" placeholder="Nombre de la Marca" class="control-form" id="nombre_marca" name="nombre_marca" maxlength="25" required>
+                        <input type="text" placeholder="Nombre" class="control-form" id="nombre_marca" name="nombre_marca" maxlength="25" required>
                         <span class="span-value" id="snombre_marca"></span>
                     </div>
                 </div>
@@ -65,6 +65,7 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
                         <ul>
                             <div>
                                 <button class="btn-modificar"
+                                id="btnModificarMarca"
                                 data-id="<?php echo $marca['id_marca']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
                                 >Modificar</button>
@@ -76,8 +77,16 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
                             </div>
                         </ul>
                     </td>
-                    <td><?php echo htmlspecialchars($marca['id_marca']); ?></td>
-                    <td><?php echo htmlspecialchars($marca['nombre_marca']); ?></td>
+                    <td>
+                        <span class="campo-numeros">
+                            <?php echo htmlspecialchars($marca['id_marca']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                            <?php echo htmlspecialchars($marca['nombre_marca']); ?>
+                        </span>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
