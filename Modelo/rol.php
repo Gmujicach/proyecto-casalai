@@ -74,13 +74,12 @@ class Rol extends BD {
         return $this->rolporid($id_rol); 
     }
     private function rolporid($id_rol) {
-        $sql = "SELECT id_rol, nombre_rol FROM tbl_rol WHERE id_rol = :id_rol";
-
-        $stmt = $this->conex->prepare($sql);
+        $query = "SELECT * FROM tbl_rol WHERE id_rol = ?";
+        $stmt = $this->conex->prepare($query);
         $stmt->execute([$id_rol]);
-        $roles = $stmt->fetch(PDO::FETCH_ASSOC);
+        $rol_obt = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->conex = null;
-        return $roles;
+        return $rol_obt;
     }
 
     public function consultarRoles() {
