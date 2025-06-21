@@ -125,6 +125,7 @@ class modelo extends BD{
         $sql = "UPDATE tbl_modelos SET nombre_modelo = :nombre_modelo WHERE id_modelo = :id_modelo";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_modelo', $id_modelo);
+        $stmt->bindParam(':id_marca', $this->id_marca);
         $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
         
         return $stmt->execute();
