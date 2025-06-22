@@ -71,7 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             
             if ($marca->modificarmarcas($id_marca)) {
-                echo json_encode(['status' => 'success']);
+                $marcaActualizada = $marca->obtenermarcasPorId($id_marca);
+
+                echo json_encode([
+                    'status' => 'success',
+                    'marca' => $marcaActualizada
+                ]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar la marca']);
             }

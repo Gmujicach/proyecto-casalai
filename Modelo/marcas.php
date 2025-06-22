@@ -92,9 +92,7 @@ class marca extends BD {
         $stmt->bindParam(':id_marca', $id_marca);
         $stmt->bindParam(':nombre_marca', $this->nombre_marca);
         
-        $result = $stmt->execute();
-        $this->conex = null;
-        return $result;
+        return $stmt->execute();
     }
 
     public function eliminarmarcas($id_marca) {

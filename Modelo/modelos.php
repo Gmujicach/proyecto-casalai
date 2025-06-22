@@ -80,18 +80,26 @@ class modelo extends BD{
         return $modelo ? $modelo : null;
     }
 
-    // Obtener Modelo por ID
     public function obtenerModeloPorId($id_modelo) {
         return $this->obtModeloPorId($id_modelo);
     }
     private function obtModeloPorId($id_modelo) {
+        $sql = "SELECT m.*, ma.nombre_marca 
+                FROM tbl_modelos m
+                JOIN tbl_marcas ma ON m.id_marca = ma.id_marca
+                WHERE m.id_modelo = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id_modelo]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    /*private function obtModeloPorId($id_modelo) {
         $sql = "SELECT * FROM tbl_modelos WHERE id_modelo = ?";
         $stmt = $this->conex->prepare($sql);
         $stmt->execute([$id_modelo]);
         $modelo = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->conex = null;
         return $modelo;
-    }
+    }*/
 
     public function getmarcas() {
         return $this->g_marcas();
@@ -117,10 +125,10 @@ class modelo extends BD{
         $sql = "UPDATE tbl_modelos SET nombre_modelo = :nombre_modelo WHERE id_modelo = :id_modelo";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id_modelo', $id_modelo);
+        $stmt->bindParam(':id_marca', $this->id_marca);
         $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
-        $result = $stmt->execute();
-        $this->conex = null;
-        return $result;
+        
+        return $stmt->execute();
     }
 
     // Eliminar Modelo

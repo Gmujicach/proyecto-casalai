@@ -26,7 +26,7 @@
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
                         <label for="nombre_rol">Nombre del Rol</label>
-                        <input type="text" placeholder="Nombre del Rol" class="control-form" id="nombre_rol" name="nombre_rol" maxlength="15" required>
+                        <input type="text" placeholder="Nombre" class="control-form" id="nombre_rol" name="nombre_rol" maxlength="15" required>
                         <span class="span-value" id="snombre_rol"></span>
                     </div>
                 </div>
@@ -64,6 +64,7 @@
                         <ul>
                             <div>
                                 <button class="btn-modificar"
+                                id="btnModificarRol"
                                 data-id="<?php echo $rol['id_rol']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($rol['nombre_rol']); ?>"
                                 >Modificar</button>
@@ -75,8 +76,16 @@
                             </div>
                         </ul>
                     </td>
-                    <td><?php echo htmlspecialchars($rol['id_rol']); ?></td>
-                    <td><?php echo htmlspecialchars($rol['nombre_rol']); ?></td>
+                    <td>
+                        <span class="campo-numeros">
+                            <?php echo htmlspecialchars($rol['id_rol']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                            <?php echo htmlspecialchars($rol['nombre_rol']); ?>
+                        </span>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

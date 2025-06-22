@@ -77,7 +77,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             
             if ($rol->modificarRol($id_rol)) {
-                echo json_encode(['status' => 'success']);
+                $rolActualizado = $rol->obtenerRolPorId($id_rol);
+
+                echo json_encode([
+                    'status' => 'success',
+                    'rol' => $rolActualizado
+                ]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar el rol']);
             }
