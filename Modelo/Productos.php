@@ -319,8 +319,17 @@ public function ingresarProducto($datosCategoria) {
     }
 }
 
-    
-
+   
+public function actualizarstockProducto($id_producto, $cantidad) {
+    // Disminuir el stock según la cantidad vendida
+    $sql = "UPDATE tbl_productos 
+            SET stock = stock - :cantidad
+            WHERE id_producto = :id_producto";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->bindParam(':cantidad', $cantidad, PDO::PARAM_INT);
+    $stmt->bindParam(':id_producto', $id_producto, PDO::PARAM_INT);
+    return $stmt->execute();
+}
     public function obtenerProductoPorId($id) {
         $query = "SELECT * FROM tbl_productos WHERE id_producto = ?";
         $stmt = $this->conex->prepare($query);

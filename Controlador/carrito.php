@@ -130,6 +130,18 @@ case 'registrar_compra':
                 echo json_encode(['status' => 'error', 'message' => $resultado['error']]);
             } elseif ($resultado === true) {
                 // Todo fue exitoso
+                $obj_producto = new Productos();
+                $productos = $factura->getIdProducto();
+                $cantidades = $factura->getCantidad();
+
+                // Actualizar el stock de cada producto
+                foreach ($productos as $index => $id_producto) {
+                    $cantidad = $cantidades[$index];
+                    if (!$obj_producto->actualizarStockProducto($id_producto, $cantidad)) {
+                        echo json_encode(['status' => 'error', 'message' => 'Error al actualizar el stock del producto']);
+                        return;
+                    }
+                }
                 $carrito = new Carrito();   
                 $carritoCliente = $carrito->obtenerCarritoPorCliente($_SESSION['id_usuario']);
                 $id_carrito = $carritoCliente['id_carrito'];
