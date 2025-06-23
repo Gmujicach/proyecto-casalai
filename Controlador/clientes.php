@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         case 'eliminar':
-            $id = $_POST['id'];
+            $id = $_POST['id_clientes'];
             $clientesModel = new cliente();
             if ($clientesModel->eliminarclientes($id)) {
                 echo json_encode(['status' => 'success']);

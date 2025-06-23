@@ -156,9 +156,9 @@ class cliente extends BD {
         return $this->e_cliente($id);
     }
     private function e_cliente($id) {
-        $sql = "DELETE FROM tbl_clientes WHERE id_clientes = :id";
+        $sql = "DELETE FROM tbl_clientes WHERE id_clientes = :id_clientes";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id_clientes', $id);
         $result = $stmt->execute();
         $this->conex = null;
         return $result;

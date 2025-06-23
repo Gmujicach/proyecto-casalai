@@ -475,8 +475,6 @@ $(document).ready(function () {
 
     $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault();
-        var id = $(this).data('id');
-        
         Swal.fire({
             title: '¿Está seguro?',
             text: "¡No podrás revertir esto!",
@@ -484,42 +482,32 @@ $(document).ready(function () {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminarlo!'
+            confirmButtonText: 'Sí, eliminarla!'
         }).then((result) => {
             if (result.isConfirmed) {
+                var id_clientes = $(this).data('id');
                 var datos = new FormData();
                 datos.append('accion', 'eliminar');
-                datos.append('id_clientes', id);
-                
-                $.ajax({
-                    url: '',
-                    type: 'POST',
-                    data: datos,
-                    processData: false,
-                    contentType: false,
-                    success: function (respuesta) {
-                        if (respuesta.status === 'success') {
-                            Swal.fire(
-                                'Eliminado!',
-                                'El cliente ha sido eliminado.',
-                                'success'
-                            );
-                            eliminarFilaCliente(id);
-                        } else {
-                            muestraMensaje(respuesta.message);
-                        }
-                    },
-                    error: function () {
-                        muestraMensaje('Error en la solicitud AJAX');
+                datos.append('id_clientes', id_clientes);
+                enviarAjax(datos, function(respuesta){
+                    if (respuesta.status === 'success') {
+                        Swal.fire(
+                            'Eliminada!',
+                            'El proveedor ha sido eliminada.',
+                            'success'
+                        );
+                        eliminarFilaProveedor(id_clientes);
+                    } else {
+                        Swal.fire('Error', respuesta.message, 'error');
                     }
                 });
             }
         });
     });
 
-    function eliminarFilaCliente(id) {
+    function eliminarFilaProveedor(id_clientes) {
         const tabla = $('#tablaConsultas').DataTable();
-        const fila = $(`#tablaConsultas tbody tr[data-id="${id}"]`);
+        const fila = $(`#tablaConsultas tbody tr[data-id="${id_clientes}"]`);
         tabla.row(fila).remove().draw();
     }
 
