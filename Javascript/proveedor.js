@@ -314,9 +314,9 @@ $(document).ready(function () {
                 </div>
             </ul>`,
             `<span class="campo-nombres">${proveedor.nombre_proveedor}</span>`,
-            `<span class="campo-rif.correo">${proveedor.rif_proveedor}</span>`,
+            `<span class="campo-rif-correo">${proveedor.rif_proveedor}</span>`,
             `<span class="campo-nombres">${proveedor.nombre_representante}</span>`,
-            `<span class="campo-rif.correo">${proveedor.rif_representante}</span>`,
+            `<span class="campo-rif-correo">${proveedor.rif_representante}</span>`,
             `<span class="campo-rif-correo">${proveedor.correo_proveedor}</span>`,
             `<span class="campo-nombres">${proveedor.direccion_proveedor}</span>`,
             `<span class="campo-numeros">${proveedor.telefono_1}</span>`,

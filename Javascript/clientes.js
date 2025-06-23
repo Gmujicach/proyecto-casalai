@@ -45,6 +45,14 @@ $(document).ready(function () {
             "*Formato válido: 04XX-XXX-XXXX*"
         );
     });
+    $("#telefono").on("input", function() {
+        let valor_t1 = $(this).val().replace(/\D/g, '');
+        if(valor_t1.length > 4 && valor_t1.length <= 7)
+            valor_t1 = valor_t1.slice(0,4) + '-' + valor_t1.slice(4);
+        else if(valor_t1.length > 7)
+            valor_t1 = valor_t1.slice(0,4) + '-' + valor_t1.slice(4,7) + '-' + valor_t1.slice(7,11);
+        $(this).val(valor_t1);
+    });
 
     $("#direccion").on("keypress", function(e){
         validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
@@ -135,6 +143,7 @@ $(document).ready(function () {
             `<ul>
                 <div>
                     <button class="btn-modificar"
+                        id="btnModificarCliente"
                         data-id="${cliente.id_clientes}"
                         data-nombre="${cliente.nombre}"
                         data-cedula="${cliente.cedula}"
@@ -151,11 +160,11 @@ $(document).ready(function () {
                     </button>
                 </div>
             </ul>`,
-            cliente.nombre,
-            cliente.cedula,
-            cliente.direccion,
-            cliente.telefono,
-            cliente.correo
+            `<span class="campo-nombres">${cliente.nombre}</span>`,
+            `<span class="campo-rif-correo">${cliente.cedula}</span>`,
+            `<span class="campo-nombres">${cliente.direccion}</span>`,
+            `<span class="campo-numeros">${cliente.telefono}</span>`,
+            `<span class="campo-rif-correo">${cliente.correo}</span>`
         ];
         const rowNode = tabla.row.add(nuevaFila).draw(false).node();
         $(rowNode).attr('data-id', cliente.id_clientes);
@@ -254,8 +263,7 @@ $(document).ready(function () {
         });
     }
 
-    // Cargar datos del clientes en el modal al abrir
-        $(document).on('click', '.btn-modificar', function () {
+    $(document).on('click', '#btnModificarCliente', function () {
         $('#modificar_id_clientes').val($(this).data('id'));
         $('#modificarnombre').val($(this).data('nombre'));
         $('#modificarcedula').val($(this).data('cedula'));
@@ -298,7 +306,6 @@ $(document).ready(function () {
         );
     });
 
-    // TELÉFONO
     $("#modificartelefono").on("keypress", function(e){
         validarKeyPress(/^[0-9-]*$/, e);
     });
@@ -310,6 +317,14 @@ $(document).ready(function () {
             $("#smodificartelefono"),
             "*Formato válido: 04XX-XXX-XXXX*"
         );
+    });
+    $("#modificartelefono").on("input", function() {
+        let valor_t1 = $(this).val().replace(/\D/g, '');
+        if(valor_t1.length > 4 && valor_t1.length <= 7)
+            valor_t1 = valor_t1.slice(0,4) + '-' + valor_t1.slice(4);
+        else if(valor_t1.length > 7)
+            valor_t1 = valor_t1.slice(0,4) + '-' + valor_t1.slice(4,7) + '-' + valor_t1.slice(7,11);
+        $(this).val(valor_t1);
     });
 
     $("#modificardireccion").on("keypress", function(e){
@@ -392,52 +407,59 @@ $(document).ready(function () {
             contentType: false,
             cache: false,
             data: formData,
-            dataType: 'json', // <-- Asegúrate de esto
+            dataType: 'json',
             success: function(response) {
-if (response.status === 'success') {
-    $('#modificar_clientes_modal').modal('hide');
-    Swal.fire({
-        icon: 'success',
-        title: 'Modificado',
-        text: 'El Cliente se ha modificado correctamente'
-    });
+            if (response.status === 'success') {
+                $('#modificar_clientes_modal').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Modificado',
+                    text: 'El Cliente se ha modificado correctamente'
+                });
 
-    const id = $('#modificar_id_clientes').val();
-    const nombre = $('#modificarnombre').val();
-    const cedula = $('#modificarcedula').val();
-    const direccion = $('#modificardireccion').val();
-    const telefono = $('#modificartelefono').val();
-    const correo = $('#modificarcorreo').val();
+                const tabla = $("#tablaConsultas").DataTable();
+                const id = $("#modificar_id_clientes").val();
+                const fila = tabla.row(`tr[data-id="${id}"]`);
+                const cliente = response.cliente;
 
-const tabla = $('#tablaConsultas').DataTable();
-const fila = tabla.row(`#tablaConsultas tbody tr[data-id="${id}"]`);
-fila.data([
-    `<ul>
-        <div>
-            <button class="btn-modificar"
-                data-id="${id}"
-                data-nombre="${nombre}"
-                data-cedula="${cedula}"
-                data-direccion="${direccion}"
-                data-telefono="${telefono}"
-                data-correo="${correo}">
-                Modificar
-            </button>
-        </div>
-        <div>
-            <button class="btn-eliminar"
-                data-id="${id}">
-                Eliminar
-            </button>
-        </div>
-    </ul>`,
-    nombre,
-    cedula,
-    direccion,
-    telefono,
-    correo
-]).draw(false);
-} else {
+                if (fila.length) {
+                    fila.data([
+                        `<ul>
+                            <div>
+                                <button class="btn-modificar"
+                                    id="btnModificarCliente"
+                                    data-id="${cliente.id_clientes}"
+                                    data-nombre="${cliente.nombre}"
+                                    data-cedula="${cliente.cedula}"
+                                    data-direccion="${cliente.direccion}"
+                                    data-telefono="${cliente.telefono}"
+                                    data-correo="${cliente.correo}">
+                                    Modificar
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn-eliminar"
+                                    data-id="${cliente.id_clientes}">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </ul>`,
+                        `<span class="campo-nombres">${cliente.nombre}</span>`,
+                        `<span class="campo-rif-correo">${cliente.cedula}</span>`,
+                        `<span class="campo-nombres">${cliente.direccion}</span>`,
+                        `<span class="campo-numeros">${cliente.telefono}</span>`,
+                        `<span class="campo-rif-correo">${cliente.correo}</span>`
+                    ]).draw(false);
+
+                    const filaNode = fila.node();
+                    const botonModificar = $(filaNode).find(".btn-modificar");
+                    botonModificar.data('nombre', cliente.nombre);
+                    botonModificar.data('cedula', cliente.cedula);
+                    botonModificar.data('direccion', cliente.direccion);
+                    botonModificar.data('telefono', cliente.telefono);
+                    botonModificar.data('correo', cliente.correo);
+                }
+            } else {
                     muestraMensaje(response.message || 'No se pudo modificar el cliente');
                 }
             },
@@ -452,56 +474,55 @@ fila.data([
     });
 
     $(document).on('click', '.btn-eliminar', function (e) {
-    e.preventDefault();
-    var id = $(this).data('id');
-    
-    Swal.fire({
-        title: '¿Está seguro?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminarlo!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            var datos = new FormData();
-            datos.append('accion', 'eliminar');
-            datos.append('id_clientes', id);
-            
-            $.ajax({
-                url: '',
-                type: 'POST',
-                data: datos,
-                processData: false,
-                contentType: false,
-                success: function (respuesta) {
-                    if (respuesta.status === 'success') {
-                        Swal.fire(
-                            'Eliminado!',
-                            'El cliente ha sido eliminado.',
-                            'success'
-                        );
-                        eliminarFilaCliente(id);
-                    } else {
-                        muestraMensaje(respuesta.message);
+        e.preventDefault();
+        var id = $(this).data('id');
+        
+        Swal.fire({
+            title: '¿Está seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var datos = new FormData();
+                datos.append('accion', 'eliminar');
+                datos.append('id_clientes', id);
+                
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: datos,
+                    processData: false,
+                    contentType: false,
+                    success: function (respuesta) {
+                        if (respuesta.status === 'success') {
+                            Swal.fire(
+                                'Eliminado!',
+                                'El cliente ha sido eliminado.',
+                                'success'
+                            );
+                            eliminarFilaCliente(id);
+                        } else {
+                            muestraMensaje(respuesta.message);
+                        }
+                    },
+                    error: function () {
+                        muestraMensaje('Error en la solicitud AJAX');
                     }
-                },
-                error: function () {
-                    muestraMensaje('Error en la solicitud AJAX');
-                }
-            });
-        }
+                });
+            }
+        });
     });
-});
 
-    function eliminarFilaCliente(id_clientes) {
+    function eliminarFilaCliente(id) {
         const tabla = $('#tablaConsultas').DataTable();
-        const fila = $(`#tablaConsultas tbody tr[data-id="${id_clientes}"]`);
+        const fila = $(`#tablaConsultas tbody tr[data-id="${id}"]`);
         tabla.row(fila).remove().draw();
     }
 
-    // Función genérica para mostrar mensajes
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
             icon: icono,
@@ -513,7 +534,6 @@ fila.data([
         });
     }
 
-    // Utilidades de validación
     function validarKeyPress(er, e) {
         key = e.keyCode;
         tecla = String.fromCharCode(key);

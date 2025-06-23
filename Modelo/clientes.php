@@ -66,23 +66,14 @@ class cliente extends BD {
     public function setId($id) {
         $this->id = $id;
     }
-/*
-    public function validaCedulaCliente() {
-        $sql = "SELECT COUNT(*) FROM tbl_clientes WHERE cedula = :cedula";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':cedula', $this->cedula);
-        $stmt->execute();
-        $count = $stmt->fetchColumn();
-    
-        // Retorna true si no existe un producto con el mismo nombre
-        return $count == 0;
-    }
-*/
+
     public function ingresarclientes() {
+        return $this->r_cliente();
+    }
+    private function r_cliente() {
         $sql = "INSERT INTO tbl_clientes (`nombre`, `cedula`, `direccion`, `telefono`, `correo`, `activo`)
                 VALUES (:nombre, :cedula, :direccion, :telefono, :correo, 1)";
         $stmt = $this->conex->prepare($sql);
-        // Asignar valores a los parámetros
         $stmt->bindParam(':nombre', $this->nombre);
         $stmt->bindParam(':direccion', $this->direccion);
         $stmt->bindParam(':telefono', $this->telefono);
@@ -125,54 +116,59 @@ class cliente extends BD {
         }
     }
 
-    // Obtener Producto por ID
     public function obtenerclientesPorId($id) {
+        return $this->obtClientePorId($id);
+    }
+    private function obtClientePorId($id) {
         $query = "SELECT * FROM tbl_clientes WHERE id_clientes = ?";
         $stmt = $this->conex->prepare($query);
         $stmt->execute([$id]);
         $clientes = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->conex = null;
         return $clientes;
     }
 
-    // Modificar Producto
     public function modificarclientes($id) {
-    $sql = "UPDATE tbl_clientes SET nombre = :nombre, cedula = :cedula, direccion = :direccion, telefono = :telefono, correo = :correo, activo = :activo WHERE id_clientes = :id_clientes";
-    $stmt = $this->conex->prepare($sql);
-    $stmt->bindParam(':id_clientes', $id);
-    $stmt->bindParam(':nombre', $this->nombre);
-    $stmt->bindParam(':direccion', $this->direccion);
-    $stmt->bindParam(':telefono', $this->telefono);
-    $stmt->bindParam(':cedula', $this->cedula);
-    $stmt->bindParam(':correo', $this->correo);
-    $stmt->bindParam(':activo', $this->activo);
-    
-    return $stmt->execute();
-}
-
-function eliminar_l($id) {
-    $sql = "UPDATE tbl_clientes SET activo = 0 WHERE id_clientes = :id_clientes";
-    $conexion = $this->conex->prepare($sql);
-    $conexion->bindParam(':id_clientes', $id);
-    return $conexion->execute();
-}
-
-    // Eliminar cliente
-    public function eliminarclientes($id) {
-        $sql = "DELETE FROM tbl_clientes WHERE id_clientes = :id";
+        return $this->m_cliente($id);
+    }
+    private function m_cliente($id) {
+        $sql = "UPDATE tbl_clientes SET nombre = :nombre, cedula = :cedula, direccion = :direccion, telefono = :telefono, correo = :correo, activo = :activo WHERE id_clientes = :id_clientes";
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':id_clientes', $id);
+        $stmt->bindParam(':nombre', $this->nombre);
+        $stmt->bindParam(':direccion', $this->direccion);
+        $stmt->bindParam(':telefono', $this->telefono);
+        $stmt->bindParam(':cedula', $this->cedula);
+        $stmt->bindParam(':correo', $this->correo);
+        $stmt->bindParam(':activo', $this->activo);
+        
         return $stmt->execute();
     }
 
+    function eliminar_l($id) {
+        $sql = "UPDATE tbl_clientes SET activo = 0 WHERE id_clientes = :id_clientes";
+        $conexion = $this->conex->prepare($sql);
+        $conexion->bindParam(':id_clientes', $id);
+        return $conexion->execute();
+    }
+
+    public function eliminarclientes($id) {
+        return $this->e_cliente($id);
+    }
+    private function e_cliente($id) {
+        $sql = "DELETE FROM tbl_clientes WHERE id_clientes = :id";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $result = $stmt->execute();
+        $this->conex = null;
+        return $result;
+    }
+
     public function getclientes() {
-        // Punto de depuración: Iniciando getclientes
-        //echo "Iniciando getclientes.<br>";
-        
-        // Primera consulta para obtener datos de marcas
+        return $this->g_clientes();
+    }
+    private function g_clientes() {
         $queryclientes = 'SELECT * FROM ' . $this->tableclientes;
-        
-        // Punto de depuración: Query de marcas preparada
-        //echo "Query de marcas preparada: " . $querymarcas . "<br>";
         
         $stmtclientes = $this->conex->prepare($queryclientes);
         $stmtclientes->execute();
