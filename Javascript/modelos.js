@@ -32,32 +32,33 @@ $(document).ready(function () {
     }
 
     function agregarFilaModelo(modelo) {
+        const nuevaFila = `
+            <tr data-id="${modelo.id_modelo}">
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                id="btnModificarModelo"
+                                data-id="${modelo.id_modelo}"
+                                data-marcaid="${modelo.id_marca}"
+                                data-nombre="${modelo.nombre_modelo}">
+                                Modificar
+                            </button>
+                            <button class="btn-eliminar"
+                                data-id="${modelo.id_modelo}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+                <td><span class="campo-numeros">${modelo.id_modelo}</span></td>
+                <td><span class="campo-nombres">${modelo.nombre_marca}</span></td>
+                <td><span class="campo-nombres">${modelo.nombre_modelo}</span></td>
+            </tr>
+        `;
         const tabla = $('#tablaConsultas').DataTable();
-        const nuevaFila = [
-            `<ul>
-                <div>
-                    <button class="btn-modificar"
-                        id="btnModificarModelo"
-                        data-id="${modelo.id_modelo}"
-                        data-marcaid="${modelo.id_marca}"
-                        data-nombremarca="${modelo.nombre_marca}"
-                        data-nombre="${modelo.nombre_modelo}">
-                        Modificar
-                    </button>
-                </div>
-                <div>
-                    <button class="btn-eliminar"
-                        data-id="${modelo.id_modelo}">
-                        Eliminar
-                    </button>
-                </div>
-            </ul>`,
-            `<span class="campo-numeros">${modelo.id_modelo}</span>`,
-            `<span class="campo-nombres">${modelo.nombre_marca}</span>`,
-            `<span class="campo-nombres">${modelo.nombre_modelo}</span>`
-        ];
-        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
-        $(rowNode).attr('data-id', modelo.id_modelo);
+        tabla.row.add($(nuevaFila)).draw(false);
+        tabla.page('last').draw('page');
     }
 
     function resetModelo() {
@@ -116,7 +117,7 @@ $(document).ready(function () {
         );
     });
 
-    $(document).on('click', '#btnModificarModelo', function () {
+    $(document).on('click', '.btn-modificar', function () {
         $('#modificar_id_modelo').val($(this).data('id'));
         llenarSelectMarcasModal($(this).data('marcaid'));
         $('#modificar_nombre_modelo').val($(this).data('nombre'));
@@ -141,48 +142,39 @@ $(document).ready(function () {
         enviarAjax(datos, function(respuesta){
             if(respuesta.status === "success" || respuesta.resultado === "success"){
                 $('#modificarModeloModal').modal('hide');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Modificado',
-                    text: respuesta.message || 'El modelo se ha modificado correctamente'
-                });
-
-                const tabla = $("#tablaConsultas").DataTable();
-                const id = $("#modificar_id_modelo").val();
-                const fila = tabla.row(`tr[data-id="${id}"]`);
-                const modelo = respuesta.modelo;
-
-                if (fila.length) {
-                    fila.data([
-                        `<ul>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: respuesta.message || 'El modelo se ha modificado correctamente'
+                    });
+                    // Actualizar la fila en la tabla con el mismo formato
+                let modelo = respuesta.modelo; // El backend debe retornar el modelo actualizado
+                let fila = $(`tr[data-id="${modelo.id_modelo}"]`);
+                const nuevaFila = `
+                    <td>
+                        <ul>
                             <div>
                                 <button class="btn-modificar"
                                     id="btnModificarModelo"
                                     data-id="${modelo.id_modelo}"
                                     data-marcaid="${modelo.id_marca}"
-                                    data-nombremarca="${modelo.nombre_marca}"
                                     data-nombre="${modelo.nombre_modelo}">
                                     Modificar
                                 </button>
-                            </div>
-                            <div>
                                 <button class="btn-eliminar"
                                     data-id="${modelo.id_modelo}">
                                     Eliminar
                                 </button>
                             </div>
-                        </ul>`,
-                        `<span class="campo-numeros">${modelo.id_modelo}</span>`,
-                        `<span class="campo-nombres">${modelo.nombre_marca}</span>`,
-                        `<span class="campo-nombres">${modelo.nombre_modelo}</span>`
-                    ]).draw(false);
-
-                    const filaNode = fila.node();
-                    const botonModificar = $(filaNode).find(".btn-modificar");
-                    botonModificar.data('marcaid', modelo.id_marca);
-                    botonModificar.data('nombremarca', modelo.nombre_marca);
-                    botonModificar.data('nombre', modelo.nombre_modelo);
-                }
+                        </ul>
+                    </td>
+                    <td><span class="campo-numeros">${modelo.id_modelo}</span></td>
+                    <td><span class="campo-nombres">${modelo.nombre_marca}</span></td>
+                    <td><span class="campo-nombres">${modelo.nombre_modelo}</span></td>
+                `;
+                const tabla = $('#tablaConsultas').DataTable();
+                tabla.row(fila).data($(nuevaFila)).draw(false);
+                
             } else {
                 Swal.fire({
                     icon: 'error',
