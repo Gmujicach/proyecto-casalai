@@ -107,31 +107,6 @@ $(document).ready(function () {
         ];
         const rowNode = tabla.row.add(nuevaFila).draw(false).node();
         $(rowNode).attr('data-id', categoria.id_categoria);
-
-        /*const nuevaFila = `
-            <tr data-id="${categoria.id_categoria}">
-                <td>
-                    <Categoria>
-                        <div>
-                            <button class="btn-modificar"
-                                data-id="${categoria.id_categoria}"
-                                data-nombre="${categoria.nombre_categoria}">
-                                Modificar
-                            </button>
-                        </div>
-                        <div>
-                            <button class="btn-eliminar"
-                                data-id="${categoria.id_categoria}">
-                                Eliminar
-                            </button>
-                        </div>
-                    </Categoria
-                </td>
-                <td>${categoria.id_categoria}</td>
-                <td>${categoria.nombre_categoria}</td>
-            </tr>
-        `;
-        $('#tablaConsultas tbody').append(nuevaFila);*/
     }
 
     function resetCategoria() {
@@ -342,11 +317,7 @@ $(document).ready(function () {
             }
         });
     });
-/*
-    function eliminarFilaCategoria(id_categoria) {
-        $(`#tablaConsultas tbody tr[data-id="${id_categoria}"]`).remove();
-    }
-*/
+
     function eliminarFilaCategoria(id_categoria) {
         const tabla = $('#tablaConsultas').DataTable();
         const fila = $(`#tablaConsultas tbody tr[data-id="${id_categoria}"]`);
