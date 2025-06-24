@@ -73,7 +73,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($categoria->modificarCategoria($id_categoria, $nuevo_nombre, $caracteristicas)) {
-                echo json_encode(['status' => 'success']);
+                $categoriaActualizada = $categoria->obtenerCategoriaPorId($id_categoria);
+
+                echo json_encode([
+                    'status' => 'success',
+                    'categoria' => $categoriaActualizada
+                ]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar la categoria']);
             }

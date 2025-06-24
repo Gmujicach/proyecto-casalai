@@ -95,7 +95,9 @@
                             <td>
                                 <ul>
                                     <div>
-                                        <button class="btn-modificar" data-id="<?php echo $categoria['id_categoria']; ?>"
+                                        <button class="btn-modificar"
+                                            id="btnModificarCategoria"
+                                            data-id="<?php echo $categoria['id_categoria']; ?>"
                                             data-nombre="<?php echo htmlspecialchars($categoria['nombre_categoria']); ?>">Modificar</button>
                                     </div>
                                     <div>
@@ -104,8 +106,16 @@
                                     </div>
                                 </ul>
                             </td>
-                            <td><?php echo htmlspecialchars($categoria['id_categoria']); ?></td>
-                            <td><?php echo htmlspecialchars($categoria['nombre_categoria']); ?></td>
+                            <td>
+                                <span class="campo-numeros">
+                                    <?php echo htmlspecialchars($categoria['id_categoria']); ?>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="campo-nombres">
+                                    <?php echo htmlspecialchars($categoria['nombre_categoria']); ?>
+                                </span>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
