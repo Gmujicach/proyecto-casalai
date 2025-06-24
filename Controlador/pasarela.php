@@ -92,12 +92,9 @@ $listadocuentas = $cuentaModel->consultarCuentabanco();
     }
     break;
             case 'eliminar':
-                // Crear una nueva instancia del modelo Productos
                 $pasarela = new PasareladePago();
                 $id = $_POST['id_detalles'];
                 $pasarela->setIdDetalles($id);
-                
-                // Intento de eliminar el producto y devuelve una respuesta en formato JSON
                 if ($pasarela->pasarelaTransaccion('Eliminar')) {
                     echo json_encode(['status' => 'success']);
                 } else {
