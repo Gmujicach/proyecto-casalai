@@ -60,7 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_modelo= $_POST['id_modelo'];
             $modelo = new modelo();
             $modelo->setIdModelo($id_modelo);
-            $modelo->setid_marca($_POST['id_marca']); 
             $modelo->setnombre_modelo($_POST['nombre_modelo']);
             
             if ($modelo->existeNombreModelo($_POST['nombre_modelo'], $id_modelo)) {
@@ -72,11 +71,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($modelo->modificarModelo($id_modelo)) {
-                $modeloActualizado = $modelo->obtenerModeloPorId($id_modelo);
-
                 echo json_encode([
                     'status' => 'success',
-                    'modelo' => $modeloActualizado
+                    'message' => 'Modelo modificado correctamente'
                 ]);
             } else {
                 echo json_encode([

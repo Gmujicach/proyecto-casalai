@@ -5,16 +5,16 @@ $(document).ready(function () {
     }
 
     $("#nombre_marca").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]*$/, e);
         let nombre = document.getElementById("nombre_marca");
         nombre.value = space(nombre.value);
     });
     $("#nombre_marca").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,25}$/,
             $(this),
             $("#snombre_marca"),
-            "*El formato solo permite letras*"
+            "*El formato permite letras y números*"
         );
     });
 
@@ -23,12 +23,12 @@ $(document).ready(function () {
         nombre.value = space(nombre.value).trim();
 
         if(validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,25}$/,
             $("#nombre_marca"),
             $("#snombre_marca"),
-            "*El nombre debe tener solo letras*"
+            "*El nombre debe tener letras y/o números*"
         )==0){
-            mensajes('error',4000,'Verifique el nombre de la marca','Debe tener solo letras');
+            mensajes('error',4000,'Verifique el nombre de la marca','Debe tener letras y/o números');
             return false;
         }
         return true;
@@ -121,23 +121,23 @@ $(document).ready(function () {
     }
 
     $("#modificar_nombre_marca").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9\s\b]*$/, e);
         let nombre = document.getElementById("modificar_nombre_marca");
         nombre.value = space(nombre.value);
     });
     $("#modificar_nombre_marca").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/,
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9\s\b]{2,25}$/,
             $(this),
             $("#smnombre_marca"),
-            "*El formato solo permite letras*"
+            "*El formato permite letras y números*"
         );
     });
 
     function validarMarca(datos) {
         let errores = [];
-        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s\b]{2,25}$/.test(datos.nombre_marca)) {
-            errores.push("El nombre debe tener solo letras.");
+        if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ0-9\s\b]{2,25}$/.test(datos.nombre_marca)) {
+            errores.push("El nombre debe tener letras y/o números.");
         }
         return errores;
     }

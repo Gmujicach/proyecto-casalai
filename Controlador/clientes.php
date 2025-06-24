@@ -80,16 +80,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($cliente->modificarclientes($id)) {
-                echo json_encode(['status' => 'success']);
+                $clienteModificado = $cliente->obtenerclientesPorId($id);
+                echo json_encode([
+                    'status' => 'success',
+                    'cliente' => $clienteModificado
+                ]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar el cliente']);
             }
             exit;
 
         case 'eliminar':
-            $id = $_POST['id'];
+            $id = $_POST['id_clientes'];
             $clientesModel = new cliente();
-            if ($clientesModel->eliminar_l($id)) {
+            if ($clientesModel->eliminarclientes($id)) {
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Cliente']);

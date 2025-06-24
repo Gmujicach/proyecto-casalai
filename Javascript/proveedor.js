@@ -5,13 +5,13 @@ $(document).ready(function () {
     }
 
     $("#nombre_proveedor").on("keypress", function (e) {
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s]*$/, e);
         let nombre_p = document.getElementById("nombre_proveedor");
         nombre_p.value = space(nombre_p.value);
     });
     $("#nombre_proveedor").on("keyup", function () {
         validarKeyUp(
-        /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/,
+        /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s]{2,50}$/,
         $(this),
         $("#snombre_proveedor"),
         "*Solo letras, de 2 a 50 caracteres*"
@@ -196,12 +196,12 @@ $(document).ready(function () {
         observacion.value = space(observacion.value).trim();
 
         if(validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{3,20}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{3,20}$/,
             $("#nombre_proveedor"),
             $("#snombre_proveedor"),
-            "*El nombre debe tener solo letras*"
+            "*El nombre debe tener letras y/o números*"
         )==0){
-            mensajes('error',4000,'Verifique el nombre del proveedor','Debe tener solo letras');
+            mensajes('error',4000,'Verifique el nombre del proveedor','Debe tener letras y/o números');
             return false;
         }
 
@@ -314,9 +314,9 @@ $(document).ready(function () {
                 </div>
             </ul>`,
             `<span class="campo-nombres">${proveedor.nombre_proveedor}</span>`,
-            `<span class="campo-rif.correo">${proveedor.rif_proveedor}</span>`,
+            `<span class="campo-rif-correo">${proveedor.rif_proveedor}</span>`,
             `<span class="campo-nombres">${proveedor.nombre_representante}</span>`,
-            `<span class="campo-rif.correo">${proveedor.rif_representante}</span>`,
+            `<span class="campo-rif-correo">${proveedor.rif_representante}</span>`,
             `<span class="campo-rif-correo">${proveedor.correo_proveedor}</span>`,
             `<span class="campo-nombres">${proveedor.direccion_proveedor}</span>`,
             `<span class="campo-numeros">${proveedor.telefono_1}</span>`,
@@ -418,13 +418,13 @@ $(document).ready(function () {
     }
 
     $("#modificar_nombre_proveedor").on("keypress", function (e) {
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s]*$/, e);
         let nombre_p = document.getElementById("modificar_nombre_proveedor");
         nombre_p.value = space(nombre_p.value);
     });
     $("#modificar_nombre_proveedor").on("keyup", function () {
         validarKeyUp(
-        /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/,
+        /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s]{2,50}$/,
         $(this),
         $("#smnombre_proveedor"),
         "*Solo letras, de 2 a 50 caracteres*"
@@ -597,8 +597,8 @@ $(document).ready(function () {
 
     function validarProveedor(datos) {
         let errores = [];
-        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,50}$/.test(datos.nombre_proveedor)) {
-            errores.push("El nombre debe tener solo letras.");
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s]{2,50}$/.test(datos.nombre_proveedor)) {
+            errores.push("El nombre debe tener letras y/o números.");
         }
         if (!/^[VEJPG]-\d{8}-\d$/.test(datos.rif_proveedor)) {
             errores.push("Formato válido: J-12345678-9.");

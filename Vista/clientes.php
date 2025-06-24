@@ -27,18 +27,23 @@ aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
                 <div class="modal-body">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
-                        <input class="control-form" placeholder="Nombre completo" maxlength="100" type="text" id="nombre" name="nombre" required>
+                        <label for="nombre">Nombre Completo</label>
+                        <input class="control-form" placeholder="Nombres y apellidos" maxlength="100" type="text" id="nombre" name="nombre" required>
                         <span class="span-value" id="snombre"></span>
                     </div>
 
-                    <div class="grupo-form">
+                    <div class="envolver-form">
+                        <label for="cedula_o_rif">Cedula o RIF</label>
                         <input class="control-form" placeholder="Cedula/Rif" maxlength="12" type="text" id="cedula" name="cedula" required>
                         <span class="span-value" id="scedula"></span>
-                    
+                    </div>
+
+                    <div class="envolver-form">
+                        <label for="telefono">Numero de Teléfono</label>
                         <input class="control-form" placeholder="Teléfono" maxlength="13" type="text" id="telefono" name="telefono" required>
                         <span class="span-value" id="stelefono"></span>
                     </div>
-                <br>
+                    
                     <div class="envolver-form">
                         <label for="Direccion">Dirección</label>
                         <textarea class="form-control" maxlength="100" id="direccion" name="direccion" rows="3"></textarea>
@@ -46,7 +51,8 @@ aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
                     </div>
                     
                     <div class="envolver-form">
-                        <input class="control-form" placeholder="Correo electrónico" type="text" id="correo" name="correo" maxlength="50" required>
+                        <label for="correo">Correo Electrónico</label>
+                        <input class="control-form" placeholder="Correo" type="text" id="correo" name="correo" maxlength="50" required>
                         <span class="span-value" id="scorreo"></span>
                     </div>
                 </div>
@@ -86,6 +92,7 @@ aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
                         <ul>
                             <div>
                                 <button class="btn-modificar"
+                                    id="btnModificarCliente"
                                     data-id="<?php echo htmlspecialchars($cliente['id_clientes']); ?>"
                                     data-nombre="<?php echo htmlspecialchars($cliente['nombre']); ?>"
                                     data-cedula="<?php echo htmlspecialchars($cliente['cedula']); ?>"
@@ -103,11 +110,31 @@ aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
                             </div>
                         </ul>
                     </td>
-                    <td><?php echo htmlspecialchars($cliente['nombre']); ?></td>
-                    <td><?php echo htmlspecialchars($cliente['cedula']); ?></td>
-                    <td><?php echo htmlspecialchars($cliente['direccion']); ?></td>
-                    <td><?php echo htmlspecialchars($cliente['telefono']); ?></td>
-                    <td><?php echo htmlspecialchars($cliente['correo']); ?></td>
+                    <td>
+                        <span class="campo-nombres">
+                            <?php echo htmlspecialchars($cliente['nombre']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-rif-correo">
+                            <?php echo htmlspecialchars($cliente['cedula']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-nombres">
+                            <?php echo htmlspecialchars($cliente['direccion']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-numeros">
+                            <?php echo htmlspecialchars($cliente['telefono']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="campo-rif-correo">
+                            <?php echo htmlspecialchars($cliente['correo']); ?>
+                        </span>
+                    </td>
                 </tr>
                 <?php } ?>
             <?php endforeach; ?>
@@ -115,7 +142,8 @@ aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
     </table>
 </div>
 
-<div class="modal fade modal-modificar" id="modificar_clientes_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
+<div class="modal fade modal-modificar" id="modificar_clientes_modal" tabindex="-1" role="dialog" 
+aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="modificarclientes" method="POST">
