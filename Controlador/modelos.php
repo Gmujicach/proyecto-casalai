@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $modelo = new modelo();
             $modelo->setIdModelo($id_modelo);
             $modelo->setnombre_modelo($_POST['nombre_modelo']);
-            
+            $modelo->setid_marca($_POST['id_marca']);
             if ($modelo->existeNombreModelo($_POST['nombre_modelo'], $id_modelo)) {
                 echo json_encode([
                     'status' => 'error',
@@ -70,17 +70,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             }
 
-            if ($modelo->modificarModelo($id_modelo)) {
-                echo json_encode([
-                    'status' => 'success',
-                    'message' => 'Modelo modificado correctamente'
-                ]);
-            } else {
-                echo json_encode([
-                    'status' => 'error',
-                    'message' => 'Error al modificar el modelo'
-                ]);
-            }
+if ($modelo->modificarModelo($id_modelo)) {
+    $modeloActualizado = $modelo->obtenerModeloConMarcaPorId($id_modelo);
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'Modelo modificado correctamente',
+        'modelo' => $modeloActualizado
+    ]);
+} else {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Error al modificar el modelo'
+    ]);
+}
             exit;
 
         case 'eliminar':

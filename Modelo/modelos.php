@@ -110,15 +110,14 @@ class modelo extends BD{
     public function modificarModelo($id_modelo) {
         return $this->m_modelo($id_modelo);
     }
-    private function m_modelo($id_modelo) {
-        $sql = "UPDATE tbl_modelos SET nombre_modelo = :nombre_modelo WHERE id_modelo = :id_modelo";
-        $stmt = $this->conex->prepare($sql);
-        $stmt->bindParam(':id_modelo', $id_modelo);
-        //$stmt->bindParam(':id_marca', $this->id_marca);
-        $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
-        
-        return $stmt->execute();
-    }
+   private function m_modelo($id_modelo) {
+    $sql = "UPDATE tbl_modelos SET nombre_modelo = :nombre_modelo, id_marca = :id_marca WHERE id_modelo = :id_modelo";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->bindParam(':id_modelo', $id_modelo);
+    $stmt->bindParam(':id_marca', $this->id_marca);
+    $stmt->bindParam(':nombre_modelo', $this->nombre_modelo);
+    return $stmt->execute();
+}
 
     public function eliminarModelo($id_modelo) {
         return $this->e_modelo($id_modelo);
@@ -132,6 +131,15 @@ class modelo extends BD{
         return $result;
     }
 
+    public function obtenerModeloConMarcaPorId($id_modelo) {
+    $sql = "SELECT m.id_modelo, m.nombre_modelo, m.id_marca, ma.nombre_marca
+            FROM tbl_modelos m
+            JOIN tbl_marcas ma ON m.id_marca = ma.id_marca
+            WHERE m.id_modelo = ?";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->execute([$id_modelo]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
     public function getModelos() {
         return $this->g_modelos();
     }
@@ -141,7 +149,8 @@ class modelo extends BD{
                                 mo.nombre_modelo,
                                 ma.nombre_marca 
                                 FROM tbl_modelos AS mo
-                                INNER JOIN tbl_marcas AS ma ON mo.id_marca = ma.id_marca';
+                                INNER JOIN tbl_marcas AS ma ON mo.id_marca = ma.id_marca
+                                ORDER BY mo.id_modelo ASC';
         
         
         
