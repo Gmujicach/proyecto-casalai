@@ -23,7 +23,7 @@ $(document).ready(function () {
         nombre.value = space(nombre.value).trim();
 
         if(validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,20}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,20}$/,
             $("#nombre_categoria"),
             $("#snombre_categoria"),
             "*El nombre debe tener letras y/o números*"
@@ -84,7 +84,31 @@ $(document).ready(function () {
 }
 
     function agregarFilaCategoria(categoria) {
-        const nuevaFila = `
+        const tabla = $('#tablaConsultas').DataTable();
+        const nuevaFila = [
+            `<ul>
+                <div>
+                    <button class="btn-modificar"
+                        id="btnModificarCategoria"
+                        data-id="${categoria.id_categoria}"
+                        data-nombre="${categoria.nombre_categoria}">
+                        Modificar
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-eliminar"
+                        data-id="${categoria.id_categoria}">
+                        Eliminar
+                    </button>
+                </div>
+            </ul>`,
+            `<span class="campo-numeros">${categoria.id_categoria}</span>`,
+            `<span class="campo-nombres">${categoria.nombre_categoria}</span>`
+        ];
+        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
+        $(rowNode).attr('data-id', categoria.id_categoria);
+
+        /*const nuevaFila = `
             <tr data-id="${categoria.id_categoria}">
                 <td>
                     <Categoria>
@@ -107,7 +131,7 @@ $(document).ready(function () {
                 <td>${categoria.nombre_categoria}</td>
             </tr>
         `;
-        $('#tablaConsultas tbody').append(nuevaFila);
+        $('#tablaConsultas tbody').append(nuevaFila);*/
     }
 
     function resetCategoria() {
@@ -172,21 +196,14 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on('click', '.btn-modificar', function () {
-        $('#modificar_id_categoria').val($(this).data('id'));
-        $('#modificar_nombre_categoria').val($(this).data('nombre'));
-        $('#smnombre_categoria').text('');
-        $('#modificarCategoriaModal').modal('show');
-    });
-
     $("#modificar_nombre_categoria").on("keypress", function(e){
-        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]*$/, e);
+        validarKeyPress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]*$/, e);
         let nombre = document.getElementById("modificar_nombre_categoria");
         nombre.value = space(nombre.value);
     });
     $("#modificar_nombre_categoria").on("keyup", function(){
         validarKeyUp(
-            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,20}$/,
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,20}$/,
             $(this),
             $("#smnombre_categoria"),
             "*El formato permite letras y números*"
@@ -195,11 +212,18 @@ $(document).ready(function () {
 
     function validarCategoria(datos) {
         let errores = [];
-        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,20}$/.test(datos.nombre_categoria)) {
+        if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9\s\b]{2,20}$/.test(datos.nombre_categoria)) {
             errores.push("El nombre debe tener letras y/o números.");
         }
         return errores;
     }
+
+    $(document).on('click', '#btnModificarCategoria', function () {
+        $('#modificar_id_categoria').val($(this).data('id'));
+        $('#modificar_nombre_categoria').val($(this).data('nombre'));
+        $('#smnombre_categoria').text('');
+        $('#modificarCategoriaModal').modal('show');
+    });
 
     $('#modificarCategoria').on('submit', function(e) {
         e.preventDefault();
@@ -237,14 +261,37 @@ $(document).ready(function () {
                         text: 'La categoria se ha modificado correctamente'
                     });
 
-                    const id = $('#modificar_id_categoria').val();
-                    const nombre = $('#modificar_nombre_categoria').val();
+                    const tabla = $("#tablaConsultas").DataTable();
+                    const id = $("#modificar_id_categoria").val();
+                    const fila = tabla.row(`tr[data-id="${id}"]`);
+                    const categoria = response.categoria;
 
-                    const fila = $('tr[data-id="' + id + '"]');
-                    fila.find('td').eq(2).text(nombre);
+                    if (fila.length) {
+                        fila.data([
+                            `<ul>
+                                <div>
+                                    <button class="btn-modificar"
+                                        id="btnModificarCategoria"
+                                        data-id="${categoria.id_categoria}"
+                                        data-nombre="${categoria.nombre_categoria}">
+                                        Modificar
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="btn-eliminar"
+                                        data-id="${categoria.id_categoria}">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </ul>`,
+                            `<span class="campo-numeros">${categoria.id_categoria}</span>`,
+                            `<span class="campo-nombres">${categoria.nombre_categoria}</span>`
+                        ]).draw(false);
 
-                    const botonModificar = fila.find('.btn-modificar');
-                    botonModificar.data('nombre', nombre);
+                        const filaNode = fila.node();
+                        const botonModificar = $(filaNode).find(".btn-modificar");
+                        botonModificar.data('nombre', categoria.nombre_categoria);
+                    }
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -295,9 +342,15 @@ $(document).ready(function () {
             }
         });
     });
-
+/*
     function eliminarFilaCategoria(id_categoria) {
         $(`#tablaConsultas tbody tr[data-id="${id_categoria}"]`).remove();
+    }
+*/
+    function eliminarFilaCategoria(id_categoria) {
+        const tabla = $('#tablaConsultas').DataTable();
+        const fila = $(`#tablaConsultas tbody tr[data-id="${id_categoria}"]`);
+        tabla.row(fila).remove().draw();
     }
 
     document.addEventListener('DOMContentLoaded', () => {

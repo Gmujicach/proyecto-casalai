@@ -78,7 +78,7 @@ aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
             <tr>
                 <th>Acciones</th>
                 <th>Nombre del Cliente</th>
-                <th>Cedula</th>
+                <th>Cedula/RIF</th>
                 <th>Dirección</th>
                 <th>Teléfono</th>
                 <th>Correo</th>
