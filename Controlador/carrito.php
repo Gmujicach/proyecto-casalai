@@ -112,16 +112,7 @@ case 'registrar_compra':
     $cantidades = $_POST['cantidad'] ?? [];
     $factura->setIdProducto($productos);
     $factura->setCantidad($cantidades);
-   /*
-    $carrito = new Carrito();
-    $carritoCliente = $carrito->obtenerCarritoPorCliente($id_cliente);
-    $id_carrito = $carritoCliente['id_carrito'];
-    if ($carritoCliente) {
-        $id_carrito = $carritoCliente['id_carrito'];
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'No se encontró un carrito para este cliente.']);
-    }
-    */
+
         try {
             $resultado = $factura->facturaTransaccion("Ingresar");
 
