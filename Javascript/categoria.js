@@ -566,15 +566,37 @@ $('#modificarCategoria').on('submit', function (e) {
                     text: 'La categoría se ha modificado correctamente'
                 });
 
-                // Actualiza la fila en la tabla
-                const id = $('#modificar_id_categoria').val();
-                const nombre = $('#modificar_nombre_categoria').val();
-                const fila = $('tr[data-id="' + id + '"]');
-                fila.find('td').eq(2).text(nombre);
+                    const tabla = $("#tablaConsultas").DataTable();
+                    const id = $("#modificar_id_categoria").val();
+                    const fila = tabla.row(`tr[data-id="${id}"]`);
+                    const categoria = response.categoria;
 
-                // Actualiza el data-nombre del botón modificar
-                const botonModificar = fila.find('.btn-modificar');
-                botonModificar.data('nombre', nombre);
+                    if (fila.length) {
+                        fila.data([
+                            `<ul>
+                                <div>
+                                    <button class="btn-modificar"
+                                        id="btnModificarCategoria"
+                                        data-id="${categoria.id_categoria}"
+                                        data-nombre="${categoria.nombre_categoria}">
+                                        Modificar
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="btn-eliminar"
+                                        data-id="${categoria.id_categoria}">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </ul>`,
+                            `<span class="campo-numeros">${categoria.id_categoria}</span>`,
+                            `<span class="campo-nombres">${categoria.nombre_categoria}</span>`
+                        ]).draw(false);
+
+                        const filaNode = fila.node();
+                        const botonModificar = $(filaNode).find(".btn-modificar");
+                        botonModificar.data('nombre', categoria.nombre_categoria);
+                    }
             } else {
                 Swal.fire({
                     icon: 'error',
