@@ -270,7 +270,9 @@
     </div>
   </div>
 </div>
-
+<script>
+const proveedoresDisponibles = <?= json_encode($proveedores) ?>;
+</script>
 	<script>
 const productosDisponibles = <?= json_encode($productos) ?>;
 
@@ -283,7 +285,6 @@ $(document).on('click', '.btn-modificar', function (e) {
     let proveedor = $(this).data('proveedor');
     let productos = $(this).data('productos');
 
-    // Si productos viene como string, conviértelo a objeto
     if (typeof productos === "string") {
         try {
             productos = JSON.parse(productos);
@@ -291,19 +292,24 @@ $(document).on('click', '.btn-modificar', function (e) {
             productos = [];
         }
     }
+    console.log("Productos para el modal:", productos);
 
     // Llenar campos básicos
     $('#modalIdRecepcion').val(idRecepcion);
     $('#modalCorrelativo').val(correlativo);
     $('#modalFecha').val(fecha);
 
-    // Llenar select de proveedor
+        // Llenar select de proveedor con opciones
     let selectProveedor = $('#modalProveedor');
     selectProveedor.empty();
-    selectProveedor.append('<option value="disabled" disabled>Seleccione un Proveedor</option>');
-    <?php foreach ($proveedores as $prov): ?>
-        selectProveedor.append('<option value="<?= $prov['id_proveedor'] ?>"><?= addslashes($prov['nombre']) ?></option>');
-    <?php endforeach; ?>
+    selectProveedor.append('<option value="">Seleccione un proveedor</option>');
+    proveedoresDisponibles.forEach(function(prov) {
+        selectProveedor.append(
+            `<option value="${prov.id_proveedor}">${prov.nombre_proveedor}</option>`
+        );
+    });
+
+    // Llenar select de proveedor
     selectProveedor.val(proveedor);
 
     // Generar HTML de productos existentes
@@ -346,7 +352,6 @@ $(document).on('click', '.btn-modificar', function (e) {
     // Mostrar modal
     $('#modalModificar').modal('show');
 });
-
 // Función para crear un nuevo bloque vacío de producto
 function crearBloqueProducto(productosDisponibles) {
     return `

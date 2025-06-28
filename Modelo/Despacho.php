@@ -269,7 +269,7 @@ function listadoproductos(){
         $r = array();
         try {
             // Preparar la consulta para buscar el número de factura en tbl_recepcion_productos
-            $stmt = $co->prepare("SELECT * FROM tbl_recepcion_productos WHERE correlativo = :correlativo");
+            $stmt = $co->prepare("SELECT * FROM tbl_despachos WHERE correlativo = :correlativo");
             $stmt->execute(['correlativo' => $this->correlativo]);
             
             // Obtener los resultados
