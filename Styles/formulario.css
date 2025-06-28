@@ -23,7 +23,7 @@ input, select, button{
     padding: 10px 0;
     color: #1f66df;
     text-transform: uppercase;
-    font-weight: 700;
+    font-weight: 700px;
     font-size: 25px;
 }
 
@@ -32,51 +32,52 @@ input, select, button{
 }
 
 .modal-registrar {
-    min-height: 100vh;
-    background-size: cover;
-    background-repeat: no-repeat;
-    display: flex;
+    /*position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;*/
+    background: rgba(0,0,0,0.2);
+    /*display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;*/
+    z-index: 1050;
+}
+
+.modal-content {
+    padding: 30px;
+    background: #fff;
+    width: 900px;
+    max-width: 98vw;
+    margin: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    border-radius: 12px;
+}
+
+.modal-content form {
+    width: 100%;
+    padding: 20px 30px;
 }
 
 .modal-registrar label {
     font-size: 1rem;
     color: #1976d2;
-    font-weight: 500;
+    font-weight: 500px;
     margin-top: 12px;
     margin-bottom: 4px;
 }
 
-.modal-content {
-    padding: 20px;
-    background: #fff;
-    max-width: 950px;
-    margin: auto;
+.grupo-form {
     display: flex;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.modal-content form{
     width: 100%;
-    padding: 20px 45px;
+    gap: 10px;
 }
 
-.modal-content h3{
-    text-transform: uppercase;
-    font-size: 55px;
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.grupo-form{
-    display: flex;
-}
-
-.grupo-form input{
-    width: 50%;
-    margin-right: 10px;
-    margin-left: 10px;
+.grupo-form input,
+.grupo-form select {
+    flex: 1 1 0;
+    width: 100%;
+    margin-right: 0;
 }
 
 .envolver-form{
@@ -112,7 +113,6 @@ input, select, button{
 
 .form-select{
     margin-right: 10px;
-    margin-left: 10px;
 }
 
 select{
