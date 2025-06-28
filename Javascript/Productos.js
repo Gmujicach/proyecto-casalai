@@ -36,7 +36,24 @@ document.querySelectorAll('.btn-modificar').forEach(btn => {
       // agrega más si es necesario
     };
 
-    mostrarCamposCategoria(categoria, 'modificar', dataExtra);
+   // mostrarCamposCategoria(categoria, 'modificar', dataExtra);
+   const tabla = categoria;
+const categoriaObj = categoriasDinamicas.find(cat => cat.tabla === tabla);
+const contenedor = $('#caracteristicasCategoriaModificar');
+contenedor.empty();
+
+if (categoriaObj) {
+    categoriaObj.caracteristicas.forEach(carac => {
+        let input = '';
+        let valor = dataExtra[carac.nombre] || '';
+        if (carac.tipo === 'int' || carac.tipo === 'float') {
+            input = `<input type="number" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" value="${valor}" placeholder="${carac.nombre}" ${carac.tipo === 'int' ? 'step="1"' : 'step="0.01"'} required>`;
+        } else {
+            input = `<input type="text" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" value="${valor}" maxlength="${carac.max}" placeholder="${carac.nombre}" required>`;
+        }
+        contenedor.append(`<div class="mb-2 col-md-6"><label>${carac.nombre}</label>${input}</div>`);
+    });
+}
             // Mostrar el modal
         $('#modificarProductoModal').modal('show');
   });
@@ -157,6 +174,8 @@ document.querySelectorAll('.btn-modificar').forEach(btn => {
 
 $('#incluirProductoForm').on('submit', function(event) {
     event.preventDefault();
+ 
+ 
 
     // Validaciones antes del envío
     let errores = [];
@@ -173,7 +192,15 @@ $('#incluirProductoForm').on('submit', function(event) {
     const precio = Number(precioInput);
     const precioRegex = /^\d+(\.\d{0,2})?$/;
 
+    // Solo letras, números y espacios
+    const regexTexto = /^[a-zA-Z0-9ÁÉÍÓÚáéíóúñÑ\s]+$/;
 
+    if (!regexTexto.test(nombre)) {
+        errores.push("El nombre del producto solo puede contener letras, números y espacios.");
+    }
+    if (descripcion && !regexTexto.test(descripcion)) {
+        errores.push("La descripción solo puede contener letras, números y espacios.");
+    }
     if (nombre.length < 3) {
         errores.push("El nombre del producto debe tener al menos 3 caracteres.");
     }
@@ -198,6 +225,10 @@ $('#incluirProductoForm').on('submit', function(event) {
         errores.push("El Stock Mínimo debe ser menor al Stock Máximo.");
     }
 
+    if (isNaN(stockActual) || stockActual < 0) {
+    errores.push("El Stock Actual debe ser mayor o igual a 0.");
+}
+
     if (!categoria) {
         errores.push("Debe seleccionar una categoría.");
     }
@@ -215,58 +246,7 @@ $('#incluirProductoForm').on('submit', function(event) {
 $('#Precio').val($('#Precio').val().replace(',', '.'));
 
     // VALIDACIONES ADICIONALES POR CATEGORÍA
-    switch (categoria) {
-        case '1': // IMPRESORA
-            const peso = parseFloat($('[name="peso"]').val());
-            const alto = parseFloat($('[name="alto"]').val());
-            const ancho = parseFloat($('[name="ancho"]').val());
-            const largo = parseFloat($('[name="largo"]').val());
-
-            if (isNaN(peso) || peso <= 0) errores.push("El peso debe ser un número mayor a 0.");
-            if (isNaN(alto) || alto <= 0) errores.push("El alto debe ser un número mayor a 0.");
-            if (isNaN(ancho) || ancho <= 0) errores.push("El ancho debe ser un número mayor a 0.");
-            if (isNaN(largo) || largo <= 0) errores.push("El largo debe ser un número mayor a 0.");
-            break;
-
-        case '2': // PROTECTOR DE VOLTAJE
-            const voltajeEntrada = $('[name="voltaje_entrada"]').val().trim();
-            const voltajeSalida = $('[name="voltaje_salida"]').val().trim();
-            const tomas = parseInt($('[name="tomas"]').val());
-            const capacidad = parseFloat($('[name="capacidad"]').val());
-
-            if (!/^\d+(V|v)$/.test(voltajeEntrada)) errores.push("Voltaje de entrada inválido (ej. 120V).");
-            if (!/^\d+(V|v)$/.test(voltajeSalida)) errores.push("Voltaje de salida inválido (ej. 110V).");
-            if (isNaN(tomas) || tomas <= 0) errores.push("La cantidad de tomas debe ser un número mayor a 0.");
-            if (isNaN(capacidad) || capacidad <= 0) errores.push("La capacidad debe ser un número mayor a 0.");
-            break;
-
-        case '3': // TINTA
-            const numeroTinta = parseInt($('[name="numero"]').val());
-            const colorTinta = $('[name="color"]').val().trim();
-            const tipoTinta = $('[name="tipo"]').val().trim();
-            const volumen = parseInt($('[name="volumen"]').val());
-
-            if (isNaN(numeroTinta) || numeroTinta < 0) errores.push("El número de tinta debe ser un número válido.");
-            if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/.test(colorTinta)) errores.push("El color debe contener solo letras.");
-            if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/.test(tipoTinta)) errores.push("El tipo de tinta debe contener solo letras.");
-            if (isNaN(volumen) || volumen <= 0) errores.push("El volumen debe ser mayor a 0.");
-            break;
-
-        case '4': // CARTUCHO DE TINTA
-            const numeroCartucho = parseInt($('[name="numero"]').val());
-            const colorCartucho = $('[name="color"]').val().trim();
-            const capacidadCartucho = parseInt($('[name="capacidad"]').val());
-
-            if (isNaN(numeroCartucho) || numeroCartucho < 0) errores.push("El número de cartucho debe ser válido.");
-            if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/.test(colorCartucho)) errores.push("El color del cartucho debe contener solo letras.");
-            if (isNaN(capacidadCartucho) || capacidadCartucho <= 0) errores.push("La capacidad del cartucho debe ser mayor a 0.");
-            break;
-
-        case '5': // OTROS
-            const descripcionOtros = $('[name="descripcion_otros"]').val().trim();
-            if (descripcionOtros.length < 3) errores.push("La descripción adicional debe tener al menos 3 caracteres.");
-            break;
-    }
+ 
 
     if (errores.length > 0) {
         Swal.fire({
@@ -280,7 +260,17 @@ $('#Precio').val($('#Precio').val().replace(',', '.'));
 
     // Si pasa validación, continuar con el envío AJAX
     const formData = new FormData(this);
-
+    let datos = {};
+    for (let [key, value] of formData.entries()) {
+        datos[key] = value;
+    }
+    // Mostrar en consola y en un alert bonito
+    console.log("Datos enviados:", datos);
+    Swal.fire({
+        title: 'Datos enviados',
+        html: '<pre style="text-align:left;">' + JSON.stringify(datos, null, 2) + '</pre>',
+        width: 600
+    });
     $.ajax({
         url: '',
         type: 'POST',
@@ -300,30 +290,20 @@ $('#Precio').val($('#Precio').val().replace(',', '.'));
                         location.reload();
                     });
                 } else {
-                    Swal.fire({
-                        title: 'Error',
-                        text: data.message || 'Error al ingresar el producto',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                }
-            } catch (e) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Error al procesar la respuesta del servidor',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        },
-        error: function(xhr, status, error) {
+            console.error("Error al registrar producto:", data.message);
             Swal.fire({
-                title: 'Error',
-                text: 'Error en la solicitud AJAX: ' + error,
                 icon: 'error',
-                confirmButtonText: 'Aceptar'
+                title: 'Error',
+                text: data.message || 'No se pudo registrar el producto'
             });
         }
+    } catch (e) {
+        console.error("Error al parsear respuesta:", e, response);
+    }
+},
+error: function(xhr, status, error) {
+    console.error("Error AJAX:", status, error, xhr.responseText);
+}
     });
 });
 

@@ -31,7 +31,6 @@ case 'ingresar':
     $Producto->setCategoria($_POST['Categoria']);
     $Producto->setPrecio($_POST['Precio']);
 
-    // Validación del nombre del producto
     if (!$Producto->validarNombreProducto()) {
         echo json_encode(['status' => 'error', 'message' => 'Este Producto ya existe']);
     }
@@ -42,15 +41,20 @@ case 'ingresar':
     // Si ambas validaciones pasan, se intenta ingresar el producto
     else {
         // Aquí pasamos todos los datos del formulario a ingresarProducto()
-        $resultado = $Producto->ingresarProducto($_POST);
-
-
-if ($resultado) {
-    $id_producto = $resultado;
-    $respuesta = [
-        'status' => 'success',
-        'id_producto' => $id_producto
-    ];
+try {
+    $resultado = $Producto->ingresarProducto($_POST);
+    if ($resultado) {
+        $id_producto = $resultado;
+        $respuesta = [
+            'status' => 'success',
+            'id_producto' => $id_producto
+        ];
+        echo json_encode($respuesta);
+    }
+} catch (Exception $e) {
+    // Devuelve el error al frontend para verlo en la consola JS
+    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+}
 
     // Procesar imagen (si existe)
     if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
@@ -79,12 +83,6 @@ if ($resultado) {
     } else {
         $respuesta['mensaje'] = "Producto registrado correctamente.";
     }
-
-    echo json_encode($respuesta);
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el producto']);
-}
-
     }
     break;
 
@@ -108,10 +106,12 @@ if ($resultado) {
             }
             break;
 
+
 case 'modificar':
     $id = $_POST['id_producto'];
-
     $Producto = new Productos();
+
+    // Asignar valores generales del producto
     $Producto->setId($id);
     $Producto->setNombreP($_POST['nombre_producto']);
     $Producto->setDescripcionP($_POST['descripcion_producto']);
@@ -121,80 +121,47 @@ case 'modificar':
     $Producto->setStockMin($_POST['Stock_Minimo']);
     $Producto->setClausulaDeGarantia($_POST['Clausula_garantia']);
     $Producto->setCodigo($_POST['Seriales']);
-    $Producto->setCategoria($_POST['Categoria']);
     $Producto->setPrecio($_POST['Precio']);
 
-    // Campos específicos por categoría
-    $categoria = $_POST['Categoria'];
-
-    switch ($categoria) {
-        case '1': // IMPRESORA
-            $Producto->setPeso($_POST['peso'] ?? null);
-            $Producto->setAlto($_POST['alto'] ?? null);
-            $Producto->setAncho($_POST['ancho'] ?? null);
-            $Producto->setLargo($_POST['largo'] ?? null);
-            break;
-
-        case '2': // PROTECTOR DE VOLTAJE
-            $Producto->setVoltajeEntrada($_POST['voltaje_entrada'] ?? null);
-            $Producto->setVoltajeSalida($_POST['voltaje_salida'] ?? null);
-            $Producto->setTomas($_POST['tomas'] ?? null);
-            $Producto->setCapacidad($_POST['capacidad'] ?? null);
-            break;
-
-        case '3': // TINTA
-            $Producto->setNumero($_POST['numero'] ?? null);
-            $Producto->setColor($_POST['color'] ?? null);
-            $Producto->setTipo($_POST['tipo'] ?? null);
-            $Producto->setVolumen($_POST['volumen'] ?? null);
-            break;
-
-        case '4': // CARTUCHO DE TINTA
-            $Producto->setNumero($_POST['numero'] ?? null);
-            $Producto->setColor($_POST['color'] ?? null);
-            $Producto->setCapacidad($_POST['capacidad'] ?? null);
-            break;
-
-        case '5': // OTROS
-            $Producto->setDescripcionOtros($_POST['descripcion_otros'] ?? null);
-            break;
-    }
+    // El campo Categoria es el nombre de la tabla dinámica (ej: cat_herramientas)
+    // El campo tabla_categoria también debe estar presente (igual que en registro)
+    // El array carac[] contiene las características dinámicas
 
     // Guardar los cambios
-    if ($Producto->modificarProducto($id)) {
-
-if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
-    $id = $_POST['id_producto'];
-    $directorio = "IMG/Productos/";
-    if (!is_dir($directorio)) {
-        mkdir($directorio, 0755, true);
-    }
-
-    // Eliminar imagen anterior si existe (buscando por extensiones)
-    $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
-    foreach ($extensiones as $ext) {
-        $ruta_antigua = $directorio . 'producto_' . $id . '.' . $ext;
-        if (file_exists($ruta_antigua)) {
-            unlink($ruta_antigua);
+    try {
+        if ($Producto->modificarProducto($id, $_POST)) {
+            // Procesar imagen (si existe)
+            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+                $directorio = "IMG/Productos/";
+                if (!is_dir($directorio)) {
+                    mkdir($directorio, 0755, true);
+                }
+                // Eliminar imagen anterior si existe (buscando por extensiones)
+                $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
+                foreach ($extensiones as $ext) {
+                    $ruta_antigua = $directorio . 'producto_' . $id . '.' . $ext;
+                    if (file_exists($ruta_antigua)) {
+                        unlink($ruta_antigua);
+                    }
+                }
+                // Guardar la nueva imagen con el mismo formato de nombre
+                $nombre_original = $_FILES['imagen']['name'];
+                $extension = strtolower(pathinfo($nombre_original, PATHINFO_EXTENSION));
+                $nombre_nuevo = "producto_" . $id . "." . $extension;
+                $ruta_destino = $directorio . $nombre_nuevo;
+                if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
+                    echo json_encode(['status' => 'success']);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Error al modificar la imagen del producto']);
+                }
+            } else {
+                echo json_encode(['status' => 'success']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
         }
-    }
-
-    // Guardar la nueva imagen con el mismo formato de nombre
-    $nombre_original = $_FILES['imagen']['name'];
-    $extension = strtolower(pathinfo($nombre_original, PATHINFO_EXTENSION));
-    $nombre_nuevo = "producto_" . $id . "." . $extension;
-    $ruta_destino = $directorio . $nombre_nuevo;
-
-    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
-        echo json_encode(['status' => 'success']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error al modificar la imagen del producto']);
-    }
-} else {
-    echo json_encode(['status' => 'success']);
-}
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
+    } catch (Exception $e) {
+        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
     }
     break;
 
@@ -254,7 +221,14 @@ function obtenerProductos() {
     $producto = new Producto();
     return $producto->obtenerProductos();
 }
+$productoModel = new Productos();
+$categoriasDinamicas = $productoModel->obtenerCategoriasDinamicas();
 
+if (empty($categoriasDinamicas)) {
+    $mostrarFormulario = false;
+} else {
+    $mostrarFormulario = true;
+}
 // Asigna el nombre de la página
 $pagina = "Productos";
 // Verifica si el archivo de vista existe
