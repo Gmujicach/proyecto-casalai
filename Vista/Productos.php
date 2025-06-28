@@ -411,7 +411,7 @@
                   <select class="form-select" id="modificarCategoria" name="Categoria" required>
                     <option value="">Seleccionar Categoría</option>
                     <?php foreach ($categoriasDinamicas as $cat): ?>
-<option value="<?= $cat['tabla'] ?>" data-tabla="<?= $cat['tabla'] ?>">
+                      <option value="<?= $cat['tabla'] ?>" data-tabla="<?= $cat['tabla'] ?>">
                         <?= htmlspecialchars($cat['nombre_categoria']) ?>
                       </option>
                     <?php endforeach; ?>
@@ -467,6 +467,26 @@
           });
         }
       });
+
+      $('#modificarCategoria').on('change', function () {
+    const tabla = $(this).val();
+    $('#modificar_tabla_categoria').val(tabla);
+    const categoria = categoriasDinamicas.find(cat => cat.tabla === tabla);
+    const contenedor = $('#caracteristicasCategoriaModificar');
+    contenedor.empty();
+
+    if (categoria) {
+        categoria.caracteristicas.forEach(carac => {
+            let input = '';
+            if (carac.tipo === 'int' || carac.tipo === 'float') {
+                input = `<input type="number" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" placeholder="${carac.nombre}" ${carac.tipo === 'int' ? 'step="1"' : 'step="0.01"'} required>`;
+            } else {
+                input = `<input type="text" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" maxlength="${carac.max}" placeholder="${carac.nombre}" required>`;
+            }
+            contenedor.append(`<div class="mb-2 col-md-6"><label>${carac.nombre}</label>${input}</div>`);
+        });
+    }
+});
     </script>
     <script>
 const categoriasDinamicas = <?php echo json_encode($categoriasDinamicas); ?>;
@@ -493,55 +513,57 @@ $(document).ready(function () {
     });
 
     // Al abrir el modal de modificar, carga los datos del producto y sus características
-    $(document).on('click', '.btn-modificar', function () {
-        // Cargar datos generales
-        $('#modificarIdProducto').val($(this).data('id'));
-        $('#modificarNombreProducto').val($(this).data('nombre'));
-        $('#modificarDescripcionProducto').val($(this).data('descripcion'));
-        $('#modificarModelo').val($(this).data('modelo'));
-        $('#modificarStockActual').val($(this).data('stockactual'));
-        $('#modificarStockMaximo').val($(this).data('stockmaximo'));
-        $('#modificarStockMinimo').val($(this).data('stockminimo'));
-        $('#modificarClausulaGarantia').val($(this).data('clausula'));
-        $('#modificarSeriales').val($(this).data('seriales'));
-        $('#modificarPrecio').val($(this).data('precio'));
-        $('#modificarCategoria').val($(this).data('tabla_categoria') || $(this).data('categoria')).trigger('change');
-        $('#modificar_tabla_categoria').val($(this).data('tabla_categoria') || $(this).data('categoria'));
+$(document).on('click', '.btn-modificar', function () {
+    // 1. Datos generales
+    $('#modificarIdProducto').val($(this).data('id'));
+    $('#modificarNombreProducto').val($(this).data('nombre'));
+    $('#modificarDescripcionProducto').val($(this).data('descripcion'));
+    $('#modificarModelo').val($(this).data('modelo'));
+    $('#modificarStockActual').val($(this).data('stockactual'));
+    $('#modificarStockMaximo').val($(this).data('stockmaximo'));
+    $('#modificarStockMinimo').val($(this).data('stockminimo'));
+    $('#modificarClausulaGarantia').val($(this).data('clausula'));
+    $('#modificarSeriales').val($(this).data('seriales'));
+    $('#modificarPrecio').val($(this).data('precio'));
 
-        // Espera a que los campos dinámicos se generen y luego coloca los valores
-        setTimeout(() => {
-            const tabla = $(this).data('tabla_categoria') || $(this).data('categoria');
-            const categoria = categoriasDinamicas.find(cat => cat.tabla === tabla);
-            if (categoria) {
-                categoria.caracteristicas.forEach(carac => {
-                    const valor = $(this).data(carac.nombre);
-                    if (valor !== undefined) {
-                        $(`#modificar_${carac.nombre}`).val(valor);
-                    }
-                });
-            }
-        }, 200);
+    // 2. Categoría y tabla dinámica
+    const tablaCategoria = $(this).data('tabla_categoria');
+    $('#modificarCategoria').val(tablaCategoria).trigger('change');
+    $('#modificar_tabla_categoria').val(tablaCategoria);
 
-        // Imagen
-        const imagen = $(this).data('imagen');
-        const preview = document.getElementById('modificarImagenPreview');
-        preview.src = imagen;
-        preview.style.display = 'block';
-        document.getElementById('modificarImagen').value = '';
-        document.getElementById('modificarImagen').onchange = function (event) {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                };
-                reader.readAsDataURL(this.files[0]);
-            } else {
-                preview.src = imagen;
-            }
-        };
+    // 3. Imagen
+    const imagen = $(this).data('imagen');
+    const preview = document.getElementById('modificarImagenPreview');
+    preview.src = imagen;
+    preview.style.display = 'block';
+    document.getElementById('modificarImagen').value = '';
+    document.getElementById('modificarImagen').onchange = function (event) {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        } else {
+            preview.src = imagen;
+        }
+    };
 
-        $('#modificarProductoModal').modal('show');
-    });
+    // 4. Espera a que los campos dinámicos se generen y luego coloca los valores
+    setTimeout(() => {
+        const categoriaObj = categoriasDinamicas.find(cat => cat.tabla === tablaCategoria);
+        if (categoriaObj) {
+            categoriaObj.caracteristicas.forEach(carac => {
+                const valor = $(this).data(carac.nombre);
+                if (valor !== undefined) {
+                    $(`#modificar_${carac.nombre}`).val(valor);
+                }
+            });
+        }
+    }, 200);
+
+    $('#modificarProductoModal').modal('show');
+});
 });
     </script>
   </body>

@@ -11,8 +11,9 @@ document.querySelectorAll('.btn-modificar').forEach(btn => {
     document.getElementById('modificarClausulaGarantia').value = this.dataset.clausula;
     document.getElementById('modificarSeriales').value = this.dataset.seriales;
     document.getElementById('modificarPrecio').value = this.dataset.precio;
-    document.getElementById('modificarCategoria').value = this.dataset.categoria;
-
+ const tablaCategoria = this.dataset.tabla_categoria;
+$('#modificarCategoria').val(tablaCategoria).trigger('change');
+$('#modificar_tabla_categoria').val(tablaCategoria);
     const categoria = this.dataset.categoria;
 
     const dataExtra = {
