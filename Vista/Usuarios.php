@@ -60,7 +60,7 @@
                             <div>
                                 <label for="rango">Rol de Usuario</label>
                                 <select class="form-select form-select-lg mb-3" id="rango" name="rango">
-                                    <option value="" hidden>Seleccione el tipo de usuarioa a crear</option>
+                                    <option value="" hidden>Seleccione el tipo de usuario a crear</option>
                                     <option value="1">Administrador</option>
                                     <option value="2">Almacenista</option>
                                     <option value="3">Cliente</option>
