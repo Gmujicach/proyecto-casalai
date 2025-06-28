@@ -229,7 +229,7 @@ for ($i = 0; $i < $cap; $i++) {
 	public function obtenerproveedor(){
         $co = $this->getConexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $p = $co->prepare("SELECT id_proveedor,nombre FROM tbl_proveedores ");
+        $p = $co->prepare("SELECT id_proveedor,nombre_proveedor FROM tbl_proveedores ");
         $p->execute();
         $r = $p->fetchAll(PDO::FETCH_ASSOC);
         return $r;
@@ -329,7 +329,7 @@ public function getrecepcion() {
     $queryrecepciones = 
     'SELECT d.id_detalle_recepcion_productos,
         r.id_recepcion, pro.id_producto, pr.id_proveedor,
-        r.fecha, r.correlativo, pr.nombre, pro.nombre_producto, d.cantidad, d.costo
+        r.fecha, r.correlativo, pr.nombre_proveedor, pro.nombre_producto, d.cantidad, d.costo
     FROM tbl_recepcion_productos AS r 
     INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
     INNER JOIN tbl_proveedores AS pr ON pr.id_proveedor = r.id_proveedor 

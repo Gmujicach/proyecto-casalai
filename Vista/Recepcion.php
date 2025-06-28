@@ -36,7 +36,7 @@
                             <option value='disabled' disabled selected>Seleccione un Proveedor</option>
                             <?php
                             foreach ($proveedores  as $proveedor) {
-                                echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre'] . "</option>";
+                                echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre_proveedor'] . "</option>";
                             } ?>
                         </select>
                     </div>
@@ -138,7 +138,7 @@
         usort($recepciones, function($a, $b) {
             if ($a['fecha'] == $b['fecha']) {
                 if ($a['correlativo'] == $b['correlativo']) {
-                    if ($a['nombre'] == $b['nombre']) {
+                    if ($a['nombre_proveedor'] == $b['nombre_proveedor']) {
                         return strcmp($a['nombre_producto'], $b['nombre_producto']);
                     }
                     return strcmp($a['nombre'], $b['nombre']);
@@ -163,7 +163,7 @@
             ];
         }
         foreach ($recepciones as $recepcion) {
-            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre'];
+            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
             if (!isset($rowspans[$key])) {
                 $rowspans[$key] = 1;
             } else {
@@ -172,13 +172,13 @@
         }
         $rendered = [];
         foreach ($recepciones as $recepcion):
-            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre'];
+            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
         ?>
         <tr>
             <?php if (!in_array($key, $rendered)): ?>
                 <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['fecha']) ?></td>
                 <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['correlativo']) ?></td>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['nombre']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['nombre_proveedor']) ?></td>
             <?php endif; ?>
 
             <td><?= htmlspecialchars($recepcion['nombre_producto']) ?></td>
