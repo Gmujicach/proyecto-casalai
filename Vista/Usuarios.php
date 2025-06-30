@@ -178,7 +178,7 @@
 
         <div class="modal fade modal-modificar" id="modificar_usuario_modal" tabindex="-1" role="dialog"
             aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <form id="modificarusuario" method="POST">
                         <div class="modal-header titulo-form">

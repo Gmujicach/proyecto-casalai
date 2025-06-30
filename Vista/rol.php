@@ -13,7 +13,7 @@
 <?php include 'NewNavBar.php'; ?>
 
 <div class="modal fade modal-registrar" id="registrarRolModal" tabindex="-1" role="dialog" aria-labelledby="registrarRolModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="registrarRol" method="POST">
                 <div class="modal-header">
@@ -93,7 +93,7 @@
 </div>
 
 <div class="modal fade modal-modificar" id="modificarRolModal" tabindex="-1" role="dialog" aria-labelledby="modificarRolModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="modificarRol" method="POST">
                 <div class="modal-header">

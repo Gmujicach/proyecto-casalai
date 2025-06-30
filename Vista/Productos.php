@@ -28,7 +28,7 @@
 
     <div class="modal fade modal-registrar" id="registrarProductoModal" tabindex="-1" role="dialog"
       aria-labelledby="registrarProductoModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <?php if (!$mostrarFormulario): ?>
             <div class="alert alert-warning mt-4">
@@ -325,7 +325,7 @@ foreach ($caracteristicas as $clave => $valor) {
     <!-- Modal de modificación -->
     <div class="modal fade modal-modificar" id="modificarProductoModal" tabindex="-1" role="dialog"
       aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
             <div class="modal-header">
