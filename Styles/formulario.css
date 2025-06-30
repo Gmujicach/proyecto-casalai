@@ -87,18 +87,16 @@ input, select, button{
 
 .grupo-interno label {
     margin-bottom: 4px;
+    margin-left: 10px;
 }
 
 .grupo-interno input,
 .grupo-interno select {
     width: 100%;
-    margin-bottom: 4px;
 }
 
 .grupo-interno span {
-    font-size: 0.95em;
-    color: #ff0000c7;
-    margin-top: 2px;
+    margin-left: 10px;
 }
 
 .envolver-form{
