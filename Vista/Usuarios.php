@@ -17,7 +17,7 @@
 
         <div class="modal fade modal-registrar" id="registrarUsuarioModal" tabindex="-1" role="dialog"
             aria-labelledby="registrarUsuarioModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <form id="incluirusuario" method="POST">
                         <div class="modal-header">
@@ -29,15 +29,18 @@
                         <div class="modal-body">
                             <input type="hidden" name="accion" value="registrar">
                             <div class="grupo-form">
-                                <label for="nombre">Nombre</label>
-                                <input type="text" placeholder="Nombre" class="control-form" id="nombre" name="nombre"
-                                    maxlength="30" required>
-                                <span class="span-value" id="snombre"></span>
-
-                                <label for="apellido_usuario">Apellido</label>
-                                <input type="text" placeholder="Apellido" class="control-form" id="apellido_usuario"
-                                    name="apellido_usuario" maxlength="30" required>
-                                <span class="span-value" id="sapellido"></span>
+                                <div class="grupo-interno">
+                                    <label for="nombre">Nombre</label>
+                                    <input type="text" placeholder="Nombre" class="control-form" id="nombre" name="nombre"
+                                        maxlength="30" required>
+                                    <span class="span-value" id="snombre"></span>
+                                </div>
+                                <div class="grupo-interno">
+                                    <label for="apellido_usuario">Apellido</label>
+                                    <input type="text" placeholder="Apellido" class="control-form" id="apellido_usuario"
+                                        name="apellido_usuario" maxlength="30" required>
+                                    <span class="span-value" id="sapellido"></span>
+                                </div>
                             </div>
                             <div class="envolver-form">
                                 <label for="nombre">Nombre de Usuario</label>
@@ -57,7 +60,7 @@
                                     id="correo_usuario" name="correo_usuario" maxlength="50" required>
                                 <span class="span-value" id="scorreo_usuario"></span>
                             </div>
-                            <div>
+                            <div class="envolver-form">
                                 <label for="rango">Rol de Usuario</label>
                                 <select class="form-select form-select-lg mb-3" id="rango" name="rango">
                                     <option value="" hidden>Seleccione el tipo de usuario a crear</option>
@@ -67,8 +70,6 @@
                                     <option value="4">Desarrollador</option>
                                 </select>
                             </div>
-
-
                             <div class="envolver-form">
                                 <label for="clave_usuario">Contraseña</label>
                                 <input type="password" placeholder="Contraseña" class="control-form" id="clave_usuario"
