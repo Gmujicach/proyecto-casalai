@@ -120,7 +120,7 @@
                   <select class="form-select" id="Categoria" name="Categoria" required>
                     <option value="">Seleccione una categoría</option>
                     <?php foreach ($categoriasDinamicas as $cat): ?>
-                      $(document).ready(function() {
+                      
                       <option value="<?= $cat['tabla'] ?>" data-tabla="<?= $cat['tabla'] ?>">
                         <?= htmlspecialchars($cat['nombre_categoria']) ?>
                       </option>
@@ -186,59 +186,7 @@
         </thead>
         <tbody>
           <?php foreach ($productos as $producto): ?>
-            <tr>
-              <td>
-                <ul>
-                  <div>
-                    <?php
-                    $caracteristicas = $producto['caracteristicas'] ?? [];
-
-                    $atributosExtra = '';
-                    foreach ($caracteristicas as $clave => $valor) {
-                      $atributosExtra .= ' data-' . htmlspecialchars($clave) . '="' . htmlspecialchars($valor) . '"';
-                    }
-                    ?>
-                    <button type="button" class="btn-modificar" data-toggle="modal" data-target="#modificarProductoModal"
-                      data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
-                      data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
-                      data-descripcion="<?php echo htmlspecialchars($producto['descripcion_producto']); ?>"
-                      data-modelo="<?php echo htmlspecialchars($producto['id_modelo']); ?>"
-                      data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
-                      data-stockmaximo="<?php echo htmlspecialchars($producto['stock_maximo']); ?>"
-                      data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
-                      data-seriales="<?php echo htmlspecialchars($producto['serial']); ?>"
-                      data-clausula="<?php echo htmlspecialchars($producto['clausula_garantia']); ?>"
-                      data-categoria="<?php echo htmlspecialchars($producto['id_categoria']); ?>"
-                      data-precio="<?php echo htmlspecialchars($producto['precio']); ?>" <?php
-                         // Lógica para la imagen igual que en la tabla
-                         $id = $producto['id_producto'];
-                         $ruta_base = 'IMG/Productos/';
-                         $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
-                         $ruta_imagen = '';
-                         foreach ($extensiones as $ext) {
-                           if (file_exists($ruta_base . 'producto_' . $id . '.' . $ext)) {
-                             $ruta_imagen = $ruta_base . 'producto_' . $id . '.' . $ext;
-                             break;
-                           }
-                         }
-                         $data_imagen = !empty($ruta_imagen) ? $ruta_imagen : 'IMG/no-disponible.png';
-                         echo 'data-imagen="' . htmlspecialchars($data_imagen) . '"';
-                         echo $atributosExtra;
-                         ?>>Modificar
-                    </button>
-                  </div>
-                  <div>
-                    <button data-id="<?php echo $producto['id_producto']; ?>" class="btn-eliminar">
-                      Eliminar
-                    </button>
-                  </div>
-                </ul>
-              </td>
-              <td>
-                <?php echo htmlspecialchars($producto['id_producto']); ?>
-              </td>
-              <td>
-                <?php
+                            <?php
                 $id = $producto['id_producto'];
                 $ruta_base = 'IMG/Productos/';
                 $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
@@ -250,6 +198,50 @@
                     break;
                   }
                 }
+                ?>
+            <tr>
+              <td>
+                <ul>
+                  <div>
+<?php
+$caracteristicas = $producto['caracteristicas'] ?? [];
+$atributosExtra = '';
+foreach ($caracteristicas as $clave => $valor) {
+    if ($clave === 'id' || $clave === 'id_producto') continue; // omitir claves técnicas
+    // camelCase para JS
+    $claveCamel = preg_replace_callback('/_([a-z])/', function ($m) { return strtoupper($m[1]); }, strtolower($clave));
+    $atributosExtra .= ' data-' . $claveCamel . '="' . htmlspecialchars($valor) . '"';
+}
+?>
+<button type="button" class="btn-modificar"
+    data-id="<?= htmlspecialchars($producto['id_producto']); ?>"
+    data-nombre="<?= htmlspecialchars($producto['nombre_producto']); ?>"
+    data-descripcion="<?= htmlspecialchars($producto['descripcion_producto']); ?>"
+    data-modelo="<?= htmlspecialchars($producto['id_modelo']); ?>"
+    data-stockactual="<?= htmlspecialchars($producto['stock']); ?>"
+    data-stockmaximo="<?= htmlspecialchars($producto['stock_maximo']); ?>"
+    data-stockminimo="<?= htmlspecialchars($producto['stock_minimo']); ?>"
+    data-seriales="<?= htmlspecialchars($producto['serial']); ?>"
+    data-clausula="<?= htmlspecialchars($producto['clausula_garantia']); ?>"
+    data-categoria="<?= htmlspecialchars('cat_' . strtolower(str_replace(' ', '_', $producto['nombre_categoria']))); ?>"
+    data-tabla_categoria="<?= htmlspecialchars('cat_' . strtolower(str_replace(' ', '_', $producto['nombre_categoria']))); ?>"
+    data-precio="<?= htmlspecialchars($producto['precio']); ?>"
+    data-imagen="<?= htmlspecialchars($ruta_imagen); ?>"
+    <?= $atributosExtra; ?>
+>Modificar</button>
+                  </div>
+                  <div>
+                    <button data-id="<?php echo $producto['id_producto']; ?>" class="btn-eliminar eliminar">
+                      Eliminar
+                    </button>
+                  </div>
+                </ul>
+              </td>
+              <td>
+                <?php echo htmlspecialchars($producto['id_producto']); ?>
+              </td>
+              <td>
+<?php
 
                 if (!empty($ruta_imagen)) {
                   echo '<img src="' . htmlspecialchars($ruta_imagen) . '" alt="Foto del producto" class="foto-producto">';
@@ -318,14 +310,17 @@
       </table>
     </div>
 
-    <div class="row">
-      <div class="col">
-        <button class="btn" name="" type="button" id="pdfproductos" name="pdfproductos"><a
-            href="?pagina=pdfproductos">GENERAR REPORTE</a></button>
-      </div>
-    </div>
+
     </div>
 
+
+<div style="margin-top: 20px; text-align: right;">
+  <form action="Controlador/ReporteProductos.php" method="post" target="_blank" style="display:inline;">
+    <button type="submit" class="btn btn-success">
+      Descargar Reporte de Productos por Categoría
+    </button>
+  </form>
+</div>
 
     <!-- Modal de modificación -->
     <div class="modal fade modal-modificar" id="modificarProductoModal" tabindex="-1" role="dialog"
@@ -411,9 +406,9 @@
                   <select class="form-select" id="modificarCategoria" name="Categoria" required>
                     <option value="">Seleccionar Categoría</option>
                     <?php foreach ($categoriasDinamicas as $cat): ?>
-                      <option value="<?= $cat['tabla'] ?>" data-tabla="<?= $cat['tabla'] ?>">
-                        <?= htmlspecialchars($cat['nombre_categoria']) ?>
-                      </option>
+<option value="<?= $cat['tabla'] ?>" data-tabla="<?= $cat['tabla'] ?>">
+    <?= htmlspecialchars($cat['nombre_categoria']) ?>
+</option>
                     <?php endforeach; ?>
                   </select>
                 </div>
@@ -489,83 +484,32 @@
 });
     </script>
     <script>
-const categoriasDinamicas = <?php echo json_encode($categoriasDinamicas); ?>;
+
 $(document).ready(function () {
     // Genera los campos dinámicos al cambiar la categoría en el modal de modificar
-    $('#modificarCategoria').on('change', function () {
-        const tabla = $(this).find(':selected').data('tabla');
-        $('#modificar_tabla_categoria').val(tabla);
-        const categoria = categoriasDinamicas.find(cat => cat.tabla === tabla);
-        const contenedor = $('#caracteristicasCategoriaModificar');
-        contenedor.empty();
+$('#modificarCategoria').on('change', function () {
+    const tabla = $(this).val();
+    $('#modificar_tabla_categoria').val(tabla);
+    const categoria = categoriasDinamicas.find(cat => cat.tabla === tabla);
+    const contenedor = $('#caracteristicasCategoriaModificar');
+    contenedor.empty();
 
-        if (categoria) {
-            categoria.caracteristicas.forEach(carac => {
-                let input = '';
-                if (carac.tipo === 'int' || carac.tipo === 'float') {
-                    input = `<input type="number" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" placeholder="${carac.nombre}" ${carac.tipo === 'int' ? 'step="1"' : 'step="0.01"'} required>`;
-                } else {
-                    input = `<input type="text" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" maxlength="${carac.max}" placeholder="${carac.nombre}" required>`;
-                }
-                contenedor.append(`<div class="mb-2 col-md-6"><label>${carac.nombre}</label>${input}</div>`);
-            });
-        }
-    });
-
-    // Al abrir el modal de modificar, carga los datos del producto y sus características
-$(document).on('click', '.btn-modificar', function () {
-    // 1. Datos generales
-    $('#modificarIdProducto').val($(this).data('id'));
-    $('#modificarNombreProducto').val($(this).data('nombre'));
-    $('#modificarDescripcionProducto').val($(this).data('descripcion'));
-    $('#modificarModelo').val($(this).data('modelo'));
-    $('#modificarStockActual').val($(this).data('stockactual'));
-    $('#modificarStockMaximo').val($(this).data('stockmaximo'));
-    $('#modificarStockMinimo').val($(this).data('stockminimo'));
-    $('#modificarClausulaGarantia').val($(this).data('clausula'));
-    $('#modificarSeriales').val($(this).data('seriales'));
-    $('#modificarPrecio').val($(this).data('precio'));
-
-    // 2. Categoría y tabla dinámica
-    const tablaCategoria = $(this).data('tabla_categoria');
-    $('#modificarCategoria').val(tablaCategoria).trigger('change');
-    $('#modificar_tabla_categoria').val(tablaCategoria);
-
-    // 3. Imagen
-    const imagen = $(this).data('imagen');
-    const preview = document.getElementById('modificarImagenPreview');
-    preview.src = imagen;
-    preview.style.display = 'block';
-    document.getElementById('modificarImagen').value = '';
-    document.getElementById('modificarImagen').onchange = function (event) {
-        if (this.files && this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-            };
-            reader.readAsDataURL(this.files[0]);
-        } else {
-            preview.src = imagen;
-        }
-    };
-
-    // 4. Espera a que los campos dinámicos se generen y luego coloca los valores
-    setTimeout(() => {
-        const categoriaObj = categoriasDinamicas.find(cat => cat.tabla === tablaCategoria);
-        if (categoriaObj) {
-            categoriaObj.caracteristicas.forEach(carac => {
-                const valor = $(this).data(carac.nombre);
-                if (valor !== undefined) {
-                    $(`#modificar_${carac.nombre}`).val(valor);
-                }
-            });
-        }
-    }, 200);
-
-    $('#modificarProductoModal').modal('show');
+    if (categoria) {
+categoria.caracteristicas.forEach(carac => {
+    let input = '';
+    if (carac.tipo === 'int' || carac.tipo === 'float') {
+        input = `<input type="number" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" placeholder="${carac.nombre}" ${carac.tipo === 'int' ? 'step="1"' : 'step="0.01"'} required>`;
+    } else {
+        input = `<input type="text" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" maxlength="${carac.max}" placeholder="${carac.nombre}" required>`;
+    }
+    contenedor.append(`<div class="mb-2 col-md-6"><label>${carac.nombre}</label>${input}</div>`);
 });
+    }
 });
+
+
     </script>
+       
   </body>
 
   </html>

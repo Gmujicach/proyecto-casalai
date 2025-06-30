@@ -23,7 +23,7 @@ input, select, button{
     padding: 10px 0;
     color: #1f66df;
     text-transform: uppercase;
-    font-weight: 700px;
+    font-weight: 700;
     font-size: 25px;
 }
 
@@ -32,52 +32,51 @@ input, select, button{
 }
 
 .modal-registrar {
-    /*position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;*/
-    background: rgba(0,0,0,0.2);
-    /*display: flex;
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
     align-items: center;
-    justify-content: center;*/
-    z-index: 1050;
-}
-
-.modal-content {
-    padding: 30px;
-    background: #fff;
-    width: 900px;
-    max-width: 98vw;
-    margin: auto;
-    box-shadow: 0 0 20px rgba(0,0,0,0.15);
-    border-radius: 12px;
-}
-
-.modal-content form {
-    width: 100%;
-    padding: 20px 30px;
+    justify-content: center;
 }
 
 .modal-registrar label {
     font-size: 1rem;
     color: #1976d2;
-    font-weight: 500px;
+    font-weight: 500;
     margin-top: 12px;
     margin-bottom: 4px;
 }
 
-.grupo-form {
+.modal-content {
+    padding: 20px;
+    background: #fff;
+    max-width: 950px;
+    margin: auto;
     display: flex;
-    width: 100%;
-    gap: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.grupo-form input,
-.grupo-form select {
-    flex: 1 1 0;
+.modal-content form{
     width: 100%;
-    margin-right: 0;
+    padding: 20px 45px;
+}
+
+.modal-content h3{
+    text-transform: uppercase;
+    font-size: 55px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.grupo-form{
+    display: flex;
+}
+
+.grupo-form input{
+    width: 50%;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .envolver-form{
@@ -113,6 +112,7 @@ input, select, button{
 
 .form-select{
     margin-right: 10px;
+    margin-left: 10px;
 }
 
 select{
@@ -185,4 +185,39 @@ select option[value=""] [disabled]{
     .boton-reset{
         margin-top: 10px;
     }
+}
+
+/* Mejora visual del modal de modificación */
+#modificarProductoModal .modal-content {
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(60,60,60,0.18);
+    background: #f8f9fa;
+}
+#modificarProductoModal .modal-header {
+    background: #007bff;
+    color: #fff;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+#modificarProductoModal .modal-footer {
+    background: #f1f3f6;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+#modificarProductoModal label {
+    font-weight: 600;
+    color: #333;
+}
+#modificarProductoModal input, #modificarProductoModal textarea, #modificarProductoModal select {
+    border-radius: 8px;
+    border: 1px solid #bdbdbd;
+    background: #fff;
+}
+#modificarProductoModal .form-group, #modificarProductoModal .form-row {
+    margin-bottom: 1rem;
+}
+#modificarProductoModal .btn-primary {
+    border-radius: 8px;
+    padding: 8px 24px;
+    font-weight: 600;
 }

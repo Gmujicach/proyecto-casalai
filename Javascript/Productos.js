@@ -1,64 +1,46 @@
 $(document).ready(function () {
-document.querySelectorAll('.btn-modificar').forEach(btn => {
-  btn.addEventListener('click', function () {
-    document.getElementById('modificarIdProducto').value = this.dataset.id;
-    document.getElementById('modificarNombreProducto').value = this.dataset.nombre;
-    document.getElementById('modificarDescripcionProducto').value = this.dataset.descripcion;
-    document.getElementById('modificarModelo').value = this.dataset.modelo;
-    document.getElementById('modificarStockActual').value = this.dataset.stockactual;
-    document.getElementById('modificarStockMaximo').value = this.dataset.stockmaximo;
-    document.getElementById('modificarStockMinimo').value = this.dataset.stockminimo;
-    document.getElementById('modificarClausulaGarantia').value = this.dataset.clausula;
-    document.getElementById('modificarSeriales').value = this.dataset.seriales;
-    document.getElementById('modificarPrecio').value = this.dataset.precio;
- const tablaCategoria = this.dataset.tabla_categoria;
-$('#modificarCategoria').val(tablaCategoria).trigger('change');
-$('#modificar_tabla_categoria').val(tablaCategoria);
-    const categoria = this.dataset.categoria;
+    // Al abrir el modal de modificar, carga los datos del producto y sus características
+$(document).on('click', '.btn-modificar', function () {
+    // 1. Datos generales
+    $('#modificarIdProducto').val(this.dataset.id);
+    $('#modificarNombreProducto').val(this.dataset.nombre);
+    $('#modificarDescripcionProducto').val(this.dataset.descripcion);
+    $('#modificarModelo').val(this.dataset.modelo);
+    $('#modificarStockActual').val(this.dataset.stockactual);
+    $('#modificarStockMaximo').val(this.dataset.stockmaximo);
+    $('#modificarStockMinimo').val(this.dataset.stockminimo);
+    $('#modificarClausulaGarantia').val(this.dataset.clausula);
+    $('#modificarSeriales').val(this.dataset.seriales);
+    $('#modificarPrecio').val(this.dataset.precio);
 
-    const dataExtra = {
-      alto: this.dataset.alto,
-      ancho: this.dataset.ancho,
-      color: this.dataset.color,
-      capacidad: this.dataset.capacidad,
-      voltaje: this.dataset.voltaje,
-      peso: this.dataset.peso,
-      largo: this.dataset.largo,
-      numero: this.dataset.numero,
-      tipo: this.dataset.tipo,
-      volumen: this.dataset.volumen,
-      tomas: this.dataset.tomas,
-      voltaje_entrada: this.dataset.voltaje_entrada,
-      voltaje_salida: this.dataset.voltaje_salida,
-      capacidad_bateria: this.dataset.capacidad,
-      descripcion_otros: this.dataset.descripcion_otros,
+    // 2. Categoría y tabla dinámica
+    const tablaCategoria = this.dataset.tabla_categoria || this.dataset.categoria;
+    $('#modificarCategoria').val(tablaCategoria).trigger('change');
+    $('#modificar_tabla_categoria').val(tablaCategoria);
 
-    
-      // agrega más si es necesario
-    };
+    // 3. Imagen
+     const imagen = this.dataset.imagen;
+    const preview = document.getElementById('modificarImagenPreview');
+    preview.src = imagen;
+    preview.style.display = 'block';
 
-   // mostrarCamposCategoria(categoria, 'modificar', dataExtra);
-   const tabla = categoria;
-const categoriaObj = categoriasDinamicas.find(cat => cat.tabla === tabla);
-const contenedor = $('#caracteristicasCategoriaModificar');
-contenedor.empty();
-
-if (categoriaObj) {
-    categoriaObj.caracteristicas.forEach(carac => {
-        let input = '';
-        let valor = dataExtra[carac.nombre] || '';
-        if (carac.tipo === 'int' || carac.tipo === 'float') {
-            input = `<input type="number" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" value="${valor}" placeholder="${carac.nombre}" ${carac.tipo === 'int' ? 'step="1"' : 'step="0.01"'} required>`;
-        } else {
-            input = `<input type="text" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" value="${valor}" maxlength="${carac.max}" placeholder="${carac.nombre}" required>`;
+    // Espera a que los campos dinámicos se generen y luego coloca los valores
+    setTimeout(() => {
+        const categoriaObj = categoriasDinamicas.find(cat => cat.tabla === tablaCategoria);
+        if (categoriaObj) {
+            categoriaObj.caracteristicas.forEach(carac => {
+                // camelCase para dataset
+                const camelName = carac.nombre.replace(/_([a-z])/g, g => g[1].toUpperCase());
+                const valor = this.dataset[camelName];
+                if (valor !== undefined) {
+                    $(`#modificar_${carac.nombre}`).val(valor);
+                }
+            });
         }
-        contenedor.append(`<div class="mb-2 col-md-6"><label>${carac.nombre}</label>${input}</div>`);
-    });
-}
-            // Mostrar el modal
-        $('#modificarProductoModal').modal('show');
-  });
+    }, 200);
+    $('#modificarProductoModal').modal('show');
 });
+
 
     
     
@@ -66,11 +48,16 @@ if (categoriaObj) {
     
     $('#modificarProductoForm').on('submit', function(e) {
         e.preventDefault();
-
+        $('#modificar_tabla_categoria').val($('#modificarCategoria').val());
        
         var formData = new FormData(this);
         formData.append('accion', 'modificar');
-
+    let datos = {};
+    for (let [key, value] of formData.entries()) {
+        datos[key] = value;
+    }
+    alert('Datos enviados al controlador:\n' + JSON.stringify(datos, null, 2));
+    console.log('Datos enviados al controlador:\n' + JSON.stringify(datos, null, 2))
        
         $.ajax({
             url: '', 

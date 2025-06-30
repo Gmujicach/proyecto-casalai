@@ -152,7 +152,10 @@ public function ingresarUsuario() {
     }
     private function obtUltimoUsu() {
         try {
-            $sql = "SELECT * FROM tbl_usuarios ORDER BY id_usuario DESC LIMIT 1";
+            $sql = "SELECT usuarios.*, rol.nombre_rol 
+                FROM tbl_usuarios AS usuarios
+                INNER JOIN tbl_rol AS rol ON usuarios.id_rol = rol.id_rol
+                ORDER BY usuarios.id_usuario DESC LIMIT 1";
             $stmt = $this->conex->prepare($sql);
             $stmt->execute();
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -34,11 +34,12 @@ $(document).ready(function () {
         return true;
     }
 
-    function validarCaracteristicas() {
+function validarCaracteristicas() {
     let validacionCorrecta = true;
     let mensajeError = '';
 
     const regexNombre = /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ]+(?: [a-zA-ZÁÉÍÓÚñÑáéíóúüÜ]+)*$/;
+    let hayString = false;
 
     $('.caracteristica-item').each(function(index, item) {
         const nombre = $(item).find('input[name*="[nombre]"]');
@@ -68,13 +69,21 @@ $(document).ready(function () {
             return false;
         }
 
-        if ($.trim(max.val()) === '' || parseInt(max.val()) <= 0) {
-            mensajeError = 'El campo "Máx. caracteres" debe ser mayor a 0.';
-            max.focus();
-            validacionCorrecta = false;
-            return false;
+        if (tipo.val() === 'string') {
+            hayString = true;
+            if ($.trim(max.val()) === '' || parseInt(max.val()) <= 0) {
+                mensajeError = 'El campo "Máx. caracteres" debe ser mayor a 0.';
+                max.focus();
+                validacionCorrecta = false;
+                return false;
+            }
         }
     });
+
+    // Si no hay ninguna característica tipo string, no validar el campo max
+    if (!hayString) {
+        // No hacer nada, no hay validación extra
+    }
 
     if (!validacionCorrecta) {
         mensajes('error', 4000, 'Error de validación', mensajeError);

@@ -189,17 +189,31 @@ document.addEventListener('DOMContentLoaded', () => {
     div.classList.add('caracteristica-item');
     div.dataset.index = id;
 
-    div.innerHTML = `
-      <input type="text" name="caracteristicas[${id}][nombre]" placeholder="Nombre" class="form-control" maxlength="20" required>
-      <select name="caracteristicas[${id}][tipo]" class="form-select" required>
-        <option value="" disable hidden>Tipo</option>
-        <option value="int">Entero</option>
-        <option value="float">Decimal</option>
-        <option value="string">Texto</option>
-      </select>
-      <input type="number" name="caracteristicas[${id}][max]" placeholder="Máx. caracteres" class="form-control" min="1" max="255" required>
-      ${puedeEliminar ? `<button type="button" class="btn btn-danger btn-eliminar-caracteristicas">✖</button>` : ''}
-    `;
+div.innerHTML = `
+  <input type="text" name="caracteristicas[${id}][nombre]" placeholder="Nombre" class="form-control" maxlength="20" required>
+  <select name="caracteristicas[${id}][tipo]" class="form-select" required>
+    <option value="" disable hidden>Tipo</option>
+    <option value="int">Entero</option>
+    <option value="float">Decimal</option>
+    <option value="string">Texto</option>
+  </select>
+  <input type="number" name="caracteristicas[${id}][max]" placeholder="Máx. caracteres" class="form-control" min="1" max="255" style="display:none;" required>
+  ${puedeEliminar ? `<button type="button" class="btn btn-danger btn-eliminar-caracteristicas">✖</button>` : ''}
+`;
+
+// Mostrar/ocultar el input de max solo si es tipo string
+const selectTipo = div.querySelector('select[name="caracteristicas[' + id + '][tipo]"]');
+const inputMax = div.querySelector('input[name="caracteristicas[' + id + '][max]"]');
+selectTipo.addEventListener('change', function() {
+  if (this.value === 'string') {
+    inputMax.style.display = '';
+    inputMax.required = true;
+  } else {
+    inputMax.style.display = 'none';
+    inputMax.required = false;
+    inputMax.value = '';
+  }
+});
 
     if (puedeEliminar) {
       div.querySelector('.btn-eliminar-caracteristicas').addEventListener('click', () => {

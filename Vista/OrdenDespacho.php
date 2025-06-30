@@ -14,41 +14,58 @@
 
 <?php include 'NewNavBar.php'; ?>
 
-<div class="formulario-responsivo">
-    <div class="fondo-form">
-    <form id="incluirordendepacho" action="" method="POST">
-        <input type="hidden" name="accion" value="ingresar">
-        <h3 class="titulo-form">Generar órdenes de despacho</h3>
 
-        <!-- <div class="grupo-form">
-            <input type="date" placeholder="Nombre" class="control-form" id="fecha" name="fecha" required>
-            <span id="sfecha"></span>
-        </div> -->
-        <div class="envolver-form">
-            <input type="date" placeholder="" class="control-form" id="fecha" name="fecha" required>
-            <span id="sfecha"></span>
-        </div>
-        <div class="envolver-form">
-            <input type="text" placeholder="Correlativo" class="control-form" id="correlativo" name="correlativo" required>
-            <span id="scorrelativo"></span>
-        </div>
-        <br>
-        <div class="envolver-form">
-            <select name="factura" id="factura" class="form-select" required>
-                <option value="" disabled selected>Seleccionar Factura</option>
-                <?php foreach ($facturas as $factura): ?>
-                    <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
-                        <?php echo htmlspecialchars($factura['fecha']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <button class="boton-form" type="submit">Registrar</button>
-    </form>
-    </div>
+<!-- Botón para abrir el modal de registro de orden de despacho -->
+<div class="space-btn-incluir">
+    <button id="btnIncluirOrden" class="btn-incluir">
+        Incluir Orden de Despacho
+    </button>
 </div>
 
+<!-- Modal para registrar orden de despacho -->
+<div class="modal fade modal-registrar" id="registrarOrdenModal" tabindex="-1" role="dialog" aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="incluirordendepacho" method="POST">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="registrarOrdenModalLabel">Incluir Orden de Despacho</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="accion" value="ingresar">
+                    <div class="envolver-form">
+                        <label for="fecha">Fecha</label>
+                        <input type="date" class="control-form" id="fecha" name="fecha" required>
+                        <span class="span-value" id="sfecha"></span>
+                    </div>
+                    <div class="envolver-form">
+                        <label for="correlativo">Correlativo</label>
+                        <input type="text" class="control-form" id="correlativo" name="correlativo" required>
+                        <span class="span-value" id="scorrelativo"></span>
+                    </div>
+                    <div class="envolver-form">
+                        <label for="factura">Factura</label>
+                        <select name="factura" id="factura" class="form-select" required>
+                            <option value="" disabled selected>Seleccionar Factura</option>
+                            <?php foreach ($facturas as $factura): ?>
+                                <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
+                                    <?php echo htmlspecialchars($factura['fecha']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="span-value" id="sfactura"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="boton-form" type="submit">Registrar</button>
+                    <button class="boton-reset" type="reset">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="contenedor-tabla">
     <h3>LISTA DE ORDENES</h3>
@@ -188,6 +205,14 @@ $(document).ready(function() {
         language: {
             url: 'Public/js/es-ES.json'
         }
+    });
+});
+</script>
+<!-- Botón para abrir el modal (puedes colocarlo donde prefieras) -->
+<script>
+$(document).ready(function() {
+    $('#btnIncluirOrden').on('click', function() {
+        $('#registrarOrdenModal').modal('show');
     });
 });
 </script>

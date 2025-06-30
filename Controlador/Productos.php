@@ -15,8 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Switch para manejar diferentes acciones
     switch ($accion) {
+
 case 'ingresar':
-    // Crear una nueva instancia del modelo Productos
     $Producto = new Productos();
 
     // Asignar valores generales del producto
@@ -33,59 +33,47 @@ case 'ingresar':
 
     if (!$Producto->validarNombreProducto()) {
         echo json_encode(['status' => 'error', 'message' => 'Este Producto ya existe']);
-    }
-    // Validación del código interno del producto
-    elseif (!$Producto->validarCodigoProducto()) {
+    } elseif (!$Producto->validarCodigoProducto()) {
         echo json_encode(['status' => 'error', 'message' => 'Este Código Interno ya existe']);
-    }
-    // Si ambas validaciones pasan, se intenta ingresar el producto
-    else {
-        // Aquí pasamos todos los datos del formulario a ingresarProducto()
-try {
-    $resultado = $Producto->ingresarProducto($_POST);
-    if ($resultado) {
-        $id_producto = $resultado;
-        $respuesta = [
-            'status' => 'success',
-            'id_producto' => $id_producto
-        ];
-        echo json_encode($respuesta);
-    }
-} catch (Exception $e) {
-    // Devuelve el error al frontend para verlo en la consola JS
-    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
-}
-
-    // Procesar imagen (si existe)
-    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
-        $directorio = "IMG/Productos/";
-
-        if (!is_dir($directorio)) {
-            mkdir($directorio, 0755, true); // crea la carpeta si no existe
-        }
-
-        $nombre_original = $_FILES['imagen']['name'];
-        $extension = pathinfo($nombre_original, PATHINFO_EXTENSION);
-
-        // Nombre único basado en ID del producto + timestamp para evitar sobrescritura
-        $nombre_nuevo = "producto_" . $id_producto . "_" .$resultado;
-
-        $ruta_destino = $directorio . $nombre_nuevo;
-
-        if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
-            // Aquí podrías guardar la ruta en la base de datos si lo deseas
-            $respuesta['imagen'] = $nombre_nuevo;
-            $respuesta['mensaje'] = "Producto registrado e imagen guardada correctamente.";
-        } else {
-            $respuesta['imagen'] = null;
-            $respuesta['mensaje'] = "Producto registrado, pero error al guardar la imagen.";
-        }
     } else {
-        $respuesta['mensaje'] = "Producto registrado correctamente.";
-    }
+        try {
+            $resultado = $Producto->ingresarProducto($_POST);
+            if ($resultado) {
+                $id_producto = $resultado;
+                $respuesta = [
+                    'status' => 'success',
+                    'id_producto' => $id_producto
+                ];
+
+                // Procesar imagen (si existe)
+                if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+                    $directorio = "IMG/Productos/";
+                    if (!is_dir($directorio)) {
+                        mkdir($directorio, 0755, true);
+                    }
+                    $nombre_original = $_FILES['imagen']['name'];
+                    $extension = strtolower(pathinfo($nombre_original, PATHINFO_EXTENSION));
+                    $nombre_nuevo = "producto_" . $id_producto . "." . $extension;
+                    $ruta_destino = $directorio . $nombre_nuevo;
+
+                    if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
+                        $respuesta['imagen'] = $nombre_nuevo;
+                        $respuesta['mensaje'] = "Producto registrado e imagen guardada correctamente.";
+                    } else {
+                        $respuesta['imagen'] = null;
+                        $respuesta['mensaje'] = "Producto registrado, pero error al guardar la imagen.";
+                    }
+                } else {
+                    $respuesta['mensaje'] = "Producto registrado correctamente.";
+                }
+
+                echo json_encode($respuesta);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
     break;
-
         
         case 'obtener_producto':
             // Obtiene el ID del producto desde el formulario

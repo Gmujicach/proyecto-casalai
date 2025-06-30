@@ -190,19 +190,7 @@ aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
     </div>
 </div>
     <?php include 'footer.php'; ?>
-    <div class="containera"> <!-- todo el contenido ira dentro de esta etiqueta-->
 
-<form method="post" action="" id="f" target="_blank">
-<div class="containera">
-    <div class="row">
-        <div class="col">
-               <button type="button" class="btn btn-primary" id="pdfclientes" name="pdfclientes"><a href="?pagina=pdfclientes">GENERAR REPORTE</button>
-        </div>
-        
-    </div>
-</div>
-</form>
-</div> <!-- fin de container -->
 
 </div>
 

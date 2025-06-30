@@ -1,3 +1,34 @@
+
+<!-- Footer de la página -->
+
+<!-- Footer de la página -->
+<footer class="footer-fijo text-center text-lg-start bg-light text-muted">
+  <div class="text-center p-4" style="background-color: #f1f1f1;">
+    © 2023 Copyright: CasaLai C.A/ Paula R - Braynt M - Simon F - Diego L - Gabriel M
+  </div>
+</footer>
+
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.footer-fijo {
+    margin-top: auto;
+    width: 100%;
+    background: #f8f9fa;
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+}
+</style>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const sidebar = document.querySelector(".sidebar");
@@ -20,11 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
 <script src="Javascript/tabla.js"></script>
 <script src="Javascript/new_menu.js"></script>
 
-<!-- Footer de la página -->
-<footer class="footer text-center text-lg-start bg-light text-muted">
-  <div class="text-center p-4" style="background-color: #f1f1f1;">
-    © 2023 Copyright: CasaLai C.A/ Paula R - Braynt M - Simon F - Diego L - Gabriel M
-  </div>
     <!-- Bootstrap JS -->
   <script src='Public/bootstrap/js/bootstrap.bundle.min.js'></script>
   <script src="Public/bootstrap/js/bootstrap.bundle.min.js"></script>

@@ -1,5 +1,5 @@
 <?php
-require_once 'Config/Config.php';
+require_once __DIR__ . '/../Config/Config.php';
 
 class Productos extends BD{
     private $conex;
@@ -368,32 +368,60 @@ public function obtenerCategoriasDinamicas() {
         return $productos;
     }
 
+
+public function obtenerReporteCategorias() {
+    $sql = "SELECT c.nombre_categoria, COUNT(p.id_producto) as cantidad
+            FROM tbl_categoria c
+            LEFT JOIN tbl_productos p ON c.id_categoria = p.id_categoria
+            GROUP BY c.id_categoria, c.nombre_categoria
+            ORDER BY cantidad DESC";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 public function modificarProducto($id, $datosCategoria) {
     try {
         $this->conex->beginTransaction();
 
-        // 1. Obtener el nombre de la tabla dinámica y deducir el nombre de la categoría
-        if (empty($datosCategoria['tabla_categoria'])) {
+        // 1. Obtener la categoría actual del producto
+        $sqlActual = "SELECT c.nombre_categoria 
+                      FROM tbl_productos p
+                      INNER JOIN tbl_categoria c ON p.id_categoria = c.id_categoria
+                      WHERE p.id_producto = :id_producto";
+        $stmtActual = $this->conex->prepare($sqlActual);
+        $stmtActual->bindParam(':id_producto', $id);
+        $stmtActual->execute();
+        $nombreCategoriaActual = $stmtActual->fetchColumn();
+        $tablaCategoriaActual = 'cat_' . strtolower(str_replace(' ', '_', $nombreCategoriaActual));
+
+        // 2. Obtener la nueva tabla de categoría
+        if (empty($datosCategoria['Categoria'])) {
             throw new Exception("No se especificó la tabla de categoría.");
         }
-        $tablaCategoria = $datosCategoria['tabla_categoria']; // Ejemplo: cat_herramientas
+        $tablaCategoriaNueva = $datosCategoria['Categoria']; // Ejemplo: cat_herramientas
 
-        // Deducir el nombre de la categoría (sin 'cat_', reemplazar '_' por ' ')
-        $nombreCategoria = str_replace('_', ' ', ucfirst(str_replace('cat_', '', $tablaCategoria)));
+        // 3. Si la categoría cambió, elimina los datos de la tabla dinámica anterior
+        if ($tablaCategoriaActual !== $tablaCategoriaNueva) {
+            $sqlDelete = "DELETE FROM `$tablaCategoriaActual` WHERE id_producto = :id_producto";
+            $stmtDelete = $this->conex->prepare($sqlDelete);
+            $stmtDelete->bindParam(':id_producto', $id);
+            $stmtDelete->execute();
+        }
 
-        // 2. Buscar el id_categoria en tbl_categoria usando el nombre
+        // 4. Buscar el id_categoria en tbl_categoria usando el nombre
+        $nombreCategoriaNueva = str_replace('_', ' ', ucfirst(str_replace('cat_', '', $tablaCategoriaNueva)));
         $sqlCatId = "SELECT id_categoria FROM tbl_categoria WHERE LOWER(nombre_categoria) = LOWER(:nombre_categoria) LIMIT 1";
         $stmtCatId = $this->conex->prepare($sqlCatId);
-        $stmtCatId->bindParam(':nombre_categoria', $nombreCategoria);
+        $stmtCatId->bindParam(':nombre_categoria', $nombreCategoriaNueva);
         $stmtCatId->execute();
         $idCategoria = $stmtCatId->fetchColumn();
 
         if (!$idCategoria) {
             $this->conex->rollBack();
-            throw new Exception("No se encontró la categoría '$nombreCategoria' en la base de datos.");
+            throw new Exception("No se encontró la categoría '$nombreCategoriaNueva' en la base de datos.");
         }
 
-        // 3. Actualizar producto principal
+        // 5. Actualizar producto principal
         $sql = "UPDATE tbl_productos 
                 SET serial = :serial_p,
                     nombre_producto = :nombre_producto,
@@ -421,14 +449,14 @@ public function modificarProducto($id, $datosCategoria) {
         $stmt->bindParam(':precio', $this->precio);
         $stmt->execute();
 
-        // 4. Actualizar o insertar características dinámicas
-        if (!empty($tablaCategoria) && !empty($datosCategoria['carac']) && is_array($datosCategoria['carac'])) {
+        // 6. Actualizar o insertar características dinámicas en la nueva tabla
+        if (!empty($tablaCategoriaNueva) && !empty($datosCategoria['carac']) && is_array($datosCategoria['carac'])) {
             $caracteristicas = $datosCategoria['carac'];
             $campos = array_keys($caracteristicas);
             $placeholders = array_map(function($k){ return ':' . $k; }, $campos);
 
-            // Verifica si ya existen características para este producto
-            $sqlCheck = "SELECT COUNT(*) FROM `$tablaCategoria` WHERE id_producto = :id_producto";
+            // Verifica si ya existen características para este producto en la nueva tabla
+            $sqlCheck = "SELECT COUNT(*) FROM `$tablaCategoriaNueva` WHERE id_producto = :id_producto";
             $stmtCheck = $this->conex->prepare($sqlCheck);
             $stmtCheck->bindParam(':id_producto', $id);
             $stmtCheck->execute();
@@ -440,7 +468,7 @@ public function modificarProducto($id, $datosCategoria) {
                 foreach ($campos as $campo) {
                     $set[] = "`$campo` = :$campo";
                 }
-                $sqlCat = "UPDATE `$tablaCategoria` SET " . implode(', ', $set) . " WHERE id_producto = :id_producto";
+                $sqlCat = "UPDATE `$tablaCategoriaNueva` SET " . implode(', ', $set) . " WHERE id_producto = :id_producto";
                 $stmtCat = $this->conex->prepare($sqlCat);
                 $stmtCat->bindParam(':id_producto', $id);
                 foreach ($caracteristicas as $campo => $valor) {
@@ -453,7 +481,7 @@ public function modificarProducto($id, $datosCategoria) {
                 }
             } else {
                 // INSERT dinámico
-                $sqlCat = "INSERT INTO `$tablaCategoria` (id_producto, " . implode(',', $campos) . ") VALUES (:id_producto, " . implode(',', $placeholders) . ")";
+                $sqlCat = "INSERT INTO `$tablaCategoriaNueva` (id_producto, " . implode(',', $campos) . ") VALUES (:id_producto, " . implode(',', $placeholders) . ")";
                 $stmtCat = $this->conex->prepare($sqlCat);
                 $stmtCat->bindParam(':id_producto', $id);
                 foreach ($caracteristicas as $campo => $valor) {
@@ -1001,41 +1029,24 @@ ORDER BY tbl_productos.id_producto ASC;
     $productos = $stmtProductos->fetchAll(PDO::FETCH_ASSOC);
 
     // 2. Agregar características específicas por categoría
-    foreach ($productos as &$producto) {
-        $idProducto = $producto['id_producto'];
-        $categoria = strtolower($producto['nombre_categoria']); // debe ser como se llama la tabla
-
-        switch ($categoria) {
-            case 'impresora':
-                $sql = "SELECT * FROM tbl_impresoras WHERE id_producto = :id";
-                break;
-            case 'protector de voltaje':
-                $sql = "SELECT * FROM tbl_protector_voltaje WHERE id_producto = :id";
-                break;
-            case 'tinta':
-                $sql = "SELECT * FROM tbl_tintas WHERE id_producto = :id";
-                break;
-            case 'cartucho':
-                $sql = "SELECT * FROM tbl_cartucho_tinta WHERE id_producto = :id";
-                break;
-            case 'otros':
-                $sql = "SELECT * FROM tbl_otros WHERE id_producto = :id";
-                break;
-            default:
-                $sql = null;
-                break;
-        }
-
-        if ($sql) {
-            $stmt = $this->conex->prepare($sql);
-            $stmt->bindParam(':id', $idProducto, PDO::PARAM_INT);
-            $stmt->execute();
-            $caracteristicas = $stmt->fetch(PDO::FETCH_ASSOC);
-            $producto['caracteristicas'] = $caracteristicas ?: [];
-        } else {
-            $producto['caracteristicas'] = [];
-        }
+foreach ($productos as &$producto) {
+    $idProducto = $producto['id_producto'];
+    $nombreTabla = 'cat_' . strtolower(str_replace(' ', '_', $producto['nombre_categoria']));
+    $sql = "SHOW TABLES LIKE :tabla";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->execute([':tabla' => $nombreTabla]);
+    if ($stmt->fetch()) {
+        $sqlCarac = "SELECT * FROM `$nombreTabla` WHERE id_producto = :id";
+        $stmtCarac = $this->conex->prepare($sqlCarac);
+        $stmtCarac->bindParam(':id', $idProducto, PDO::PARAM_INT);
+        $stmtCarac->execute();
+        $caracteristicas = $stmtCarac->fetch(PDO::FETCH_ASSOC);
+        $producto['caracteristicas'] = $caracteristicas ?: [];
+    } else {
+        $producto['caracteristicas'] = [];
     }
+}
+    
 
     return $productos;
 }
