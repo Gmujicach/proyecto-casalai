@@ -67,6 +67,8 @@ public function registrar($idproducto, $cantidad, $costo) {
 
             $descripcion = "Compra: ";
             $monto_total = 0;
+
+// ...dentro del for de registrar...
 for ($i = 0; $i < $cap; $i++) {
     $sqlDetalle = "INSERT INTO tbl_detalle_recepcion_productos (id_recepcion, id_producto, cantidad, costo) 
                    VALUES (:idRecepcion, :idProducto, :cantidad, :costo)";
@@ -77,24 +79,24 @@ for ($i = 0; $i < $cap; $i++) {
     $stmtDetalle->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
     $stmtDetalle->execute();
 
+    $idDetalle = $co->lastInsertId(); // <--- OBTIENE EL ID DEL DETALLE
+
     // Obtener nombre del producto
     $sqlNombre = "SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?";
     $stmtNombre = $co->prepare($sqlNombre);
     $stmtNombre->execute([$idproducto[$i]]);
     $nombreProducto = $stmtNombre->fetchColumn();
 
-    // Para el egreso
-    $descripcion .= "{$nombreProducto} (x{$cantidad[$i]}), ";
-    $monto_total += $costo[$i] * $cantidad[$i];
+    $descripcion = "Compra: {$nombreProducto} (x{$cantidad[$i]})";
+
+    $monto_total = $costo[$i] * $cantidad[$i];
+
+    // Registrar egreso en tbl_ingresos_egresos para este detalle
+    $sqlEgreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_detalle_recepcion_productos)
+                  VALUES ('egreso', ?, ?, ?, 1, ?)";
+    $stmtEgreso = $co->prepare($sqlEgreso);
+    $stmtEgreso->execute([$monto_total, $descripcion, $tiempo, $idDetalle]);
 }
-            $descripcion = rtrim($descripcion, ', ');
-
-            // Registrar egreso en tbl_ingresos_egresos
-            $sqlEgreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_detalle_recepcion_productos)
-                          VALUES ('egreso', ?, ?, ?, 1, ?)";
-            $stmtEgreso = $co->prepare($sqlEgreso);
-            $stmtEgreso->execute([$monto_total, $descripcion, $tiempo, $idRecepcion]);
-
             $d['resultado'] = 'registrar';
             $d['mensaje'] = 'Se registró la nota de entrada correctamente y el egreso fue registrado.';
         } catch (Exception $e) {
@@ -140,15 +142,25 @@ public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetal
         $idsConservados = array_filter($iddetalle);
         $idsEliminar = array_diff($detallesExistentes, $idsConservados);
 
-        if (!empty($idsEliminar)) {
-            $in = implode(',', array_fill(0, count($idsEliminar), '?'));
-            $sqlDelete = "DELETE FROM tbl_detalle_recepcion_productos WHERE id_detalle_recepcion_productos IN ($in)";
-            $stmt = $co->prepare($sqlDelete);
-            foreach (array_values($idsEliminar) as $k => $id) {
-                $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
-            }
-            $stmt->execute();
-        }
+
+if (!empty($idsEliminar)) {
+    $in = implode(',', array_fill(0, count($idsEliminar), '?'));
+    // Elimina egresos asociados
+    $sqlDeleteEgresos = "DELETE FROM tbl_ingresos_egresos WHERE id_detalle_recepcion_productos IN ($in)";
+    $stmt = $co->prepare($sqlDeleteEgresos);
+    foreach (array_values($idsEliminar) as $k => $id) {
+        $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+
+    // Elimina detalles
+    $sqlDelete = "DELETE FROM tbl_detalle_recepcion_productos WHERE id_detalle_recepcion_productos IN ($in)";
+    $stmt = $co->prepare($sqlDelete);
+    foreach (array_values($idsEliminar) as $k => $id) {
+        $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
+    }
+    $stmt->execute();
+}
 
         // Insertar o actualizar productos
         $cap = count($idproducto);
@@ -157,7 +169,7 @@ public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetal
 
 for ($i = 0; $i < $cap; $i++) {
     if (!empty($iddetalle[$i])) {
-        // Producto existente → actualizar
+        // Producto existente → actualizar detalle
         $sqlUpdate = "UPDATE tbl_detalle_recepcion_productos 
                       SET id_producto = :idproducto, cantidad = :cantidad, costo = :costo 
                       WHERE id_detalle_recepcion_productos = :iddetalle";
@@ -167,8 +179,23 @@ for ($i = 0; $i < $cap; $i++) {
         $stmt->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
         $stmt->bindParam(':iddetalle', $iddetalle[$i], PDO::PARAM_INT);
         $stmt->execute();
+
+        // Actualizar egreso existente
+        $sqlNombre = "SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?";
+        $stmtNombre = $co->prepare($sqlNombre);
+        $stmtNombre->execute([$idproducto[$i]]);
+        $nombreProducto = $stmtNombre->fetchColumn();
+
+        $descripcion = "Compra: {$nombreProducto} (x{$cantidad[$i]})";
+        $monto_total = $costo[$i] * $cantidad[$i];
+
+        $sqlEgreso = "UPDATE tbl_ingresos_egresos 
+                      SET monto = ?, descripcion = ?, fecha = ?, estado = 1 
+                      WHERE id_detalle_recepcion_productos = ?";
+        $stmtEgreso = $co->prepare($sqlEgreso);
+        $stmtEgreso->execute([$monto_total, $descripcion, $this->fecha, $iddetalle[$i]]);
     } else {
-        // Producto nuevo → insertar
+        // Producto nuevo → insertar detalle
         $sqlInsert = "INSERT INTO tbl_detalle_recepcion_productos (id_recepcion, id_producto, cantidad, costo) 
                       VALUES (:idRecepcion, :idproducto, :cantidad, :costo)";
         $stmt = $co->prepare($sqlInsert);
@@ -177,38 +204,24 @@ for ($i = 0; $i < $cap; $i++) {
         $stmt->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
         $stmt->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
         $stmt->execute();
+
+        $idDetalle = $co->lastInsertId();
+
+        // Insertar egreso para este detalle
+        $sqlNombre = "SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?";
+        $stmtNombre = $co->prepare($sqlNombre);
+        $stmtNombre->execute([$idproducto[$i]]);
+        $nombreProducto = $stmtNombre->fetchColumn();
+
+        $descripcion = "Compra: {$nombreProducto} (x{$cantidad[$i]})";
+        $monto_total = $costo[$i] * $cantidad[$i];
+
+        $sqlEgreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_detalle_recepcion_productos)
+                      VALUES ('egreso', ?, ?, ?, 1, ?)";
+        $stmtEgreso = $co->prepare($sqlEgreso);
+        $stmtEgreso->execute([$monto_total, $descripcion, $this->fecha, $idDetalle]);
     }
-    // Obtener nombre del producto
-    $sqlNombre = "SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?";
-    $stmtNombre = $co->prepare($sqlNombre);
-    $stmtNombre->execute([$idproducto[$i]]);
-    $nombreProducto = $stmtNombre->fetchColumn();
-
-    // Para el egreso
-    $descripcion .= "{$nombreProducto} (x{$cantidad[$i]}), ";
-    $monto_total += $costo[$i] * $cantidad[$i];
 }
-        $descripcion = rtrim($descripcion, ', ');
-
-        // Actualizar o insertar egreso en tbl_ingresos_egresos
-        $sqlCheck = "SELECT id_finanzas FROM tbl_ingresos_egresos WHERE id_detalle_recepcion_productos = ?";
-        $stmt = $co->prepare($sqlCheck);
-        $stmt->execute([$idRecepcion]);
-        $egreso = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($egreso) {
-            // Actualizar egreso existente
-            $sqlEgreso = "UPDATE tbl_ingresos_egresos SET monto = ?, descripcion = ?, fecha = ?, estado = 1 WHERE id_detalle_recepcion_productos = ?";
-            $stmt = $co->prepare($sqlEgreso);
-            $stmt->execute([$monto_total, $descripcion, $this->fecha, $idRecepcion]);
-        } else {
-            // Insertar nuevo egreso
-            $sqlEgreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_detalle_recepcion_productos)
-                          VALUES ('egreso', ?, ?, ?, 1, ?)";
-            $stmt = $co->prepare($sqlEgreso);
-            $stmt->execute([$monto_total, $descripcion, $this->fecha, $idRecepcion]);
-        }
-
         $co->commit();
         $d['resultado'] = 'modificarRecepcion';
         $d['mensaje'] = 'Se modificó la recepción y sus productos correctamente, y el egreso fue actualizado.';

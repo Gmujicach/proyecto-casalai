@@ -506,42 +506,7 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
     <script src="Javascript/despacho.js"></script>
     <script src="Javascript/validaciones.js"></script>
-    <script>
-function mostrarDatosFormulario(formId) {
-    const form = document.getElementById(formId);
-    const formData = new FormData(form);
-    const datos = {};
 
-    for (let [clave, valor] of formData.entries()) {
-        // Si el nombre termina en [], guárdalo como array
-        if (clave.endsWith('[]')) {
-            const key = clave.slice(0, -2); // quita los corchetes
-            if (!datos[key]) {
-                datos[key] = [];
-            }
-            datos[key].push(valor);
-        } else {
-            // Si ya existe la clave, conviértelo en array
-            if (datos[clave]) {
-                if (!Array.isArray(datos[clave])) {
-                    datos[clave] = [datos[clave]];
-                }
-                datos[clave].push(valor);
-            } else {
-                datos[clave] = valor;
-            }
-        }
-    }
-
-    console.log("Datos del formulario:", datos);
-    alert(JSON.stringify(datos, null, 2));
-}
-
-// Ejecutar cuando se hace clic en "Registrar Recepción"
-document.getElementById('registrar').addEventListener('click', function () {
-    mostrarDatosFormulario('f');
-});
-</script>
 
 </body>
 

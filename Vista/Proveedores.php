@@ -493,6 +493,7 @@ $(document).ready(function() {
 const labelsProveedores = <?= json_encode(array_column($reporteSuministroProveedores, 'nombre_proveedor')) ?>;
 const dataProveedores = <?= json_encode(array_column($reporteSuministroProveedores, 'cantidad')) ?>;
 const ctxProveedores = document.getElementById('graficoSuministroProveedores').getContext('2d');
+console.log(dataProveedores);
 new Chart(ctxProveedores, {
     type: 'bar',
     data: {
