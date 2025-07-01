@@ -32,7 +32,7 @@
                         <span id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
-                        <label for="rango">Proveedor</label>
+                        <label for="proveedor">Proveedor</label>
                         <select class="form-select" name="proveedor" id="proveedor">
                             <option value='disabled' disabled selected>Seleccione un Proveedor</option>
                             <?php

@@ -33,6 +33,7 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
                         <span id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
+                        <label for="cliente">Cliente</label>
                         <select class="form-select" name="cliente" id="cliente">
                             <option value='disabled' disabled selected>Seleccione el Cliente</option>
                             <?php
@@ -80,14 +81,16 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
             </form>
 
             <div class="modal fade" tabindex="-1" role="dialog" id="modalp">
-                <div class="modal-dialog" role="document" style="max-width: none; width: auto;">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Listado de productos</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="titulo-form">Listado de productos</h5>
+                        <button type="button" class="close-2" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                     </div>
-                    <div class="modal-body p-3">
-                        <table class="table table-striped table-hover m-0">
+                    <div class="modal-body">
+                        <table class="tablaConsultas">
                         <thead class="text-center">
                             <tr>
                             <th style="display:none">Id</th>

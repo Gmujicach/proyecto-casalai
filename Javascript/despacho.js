@@ -51,6 +51,10 @@ $('body').removeClass('modal-open');
     $(document).on('click', '#registrarDespachoModal .close', function() {
         $('#registrarDespachoModal').modal('hide');
     });
+
+    $(document).on('click', '#modalp .close-2', function() {
+        $('#modalp').modal('hide');
+    });
 });
 
 carga_productos();    //boton para levantar modal de productos
