@@ -82,7 +82,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
 
                     <div class="envolver-form">
                         <label for="observacion">Observación</label>
-                        <textarea class="control-form" placeholder="Escriba alguna observación a tomar en cuenta" id="observacion" name="observacion" maxlength="100" rows="3"></textarea>
+                        <textarea class="form-control" placeholder="Escriba alguna observación a tomar en cuenta" id="observacion" name="observacion" maxlength="100" rows="3"></textarea>
                         <span class="span-value" id="sobservacion"></span>
                     </div>
                 </div>
