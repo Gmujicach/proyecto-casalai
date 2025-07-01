@@ -1,5 +1,5 @@
 <?php
-require_once 'Config/config.php';
+require_once __DIR__ . '/../Config/Config.php';
 
 class Usuarios extends BD {
     
