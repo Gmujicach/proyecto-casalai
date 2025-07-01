@@ -76,9 +76,11 @@
     <p><b>Total de Ingresos:</b> <?= number_format($totalIngresos,2) ?></p>
     <p><b>Total de Egresos:</b> <?= number_format($totalEgresos,2) ?></p>
     <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
-        <div style="flex:1; min-width:320px;">
-            <canvas id="graficoFinanzas" width="400" height="260"></canvas>
-        </div>
+        <div style="flex:1; min-width:320px; max-width:500px;">
+    <div style="width:100%;max-width:480px;margin:0 auto;">
+        <canvas id="graficoFinanzas" width="480" height="320" style="background:#fff;"></canvas>
+    </div>
+</div>
         <div style="flex:1; min-width:320px;">
             <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
                 <thead>
@@ -117,6 +119,7 @@
     </div>
 </div>
 <?php include 'footer.php'; ?>
+<script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="Javascript/finanza.js"></script>
@@ -124,43 +127,49 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+// ...otros scripts...
 const labelsFinanzas = <?= json_encode(array_map(function($m){ return date('M Y', strtotime($m.'-01')); }, $meses)) ?>;
 const dataIngresos = <?= json_encode(array_values(array_map(function($m) use ($ingresosPorMes){ return isset($ingresosPorMes[$m]) ? (float)$ingresosPorMes[$m] : 0; }, $meses))) ?>;
 const dataEgresos = <?= json_encode(array_values(array_map(function($m) use ($egresosPorMes){ return isset($egresosPorMes[$m]) ? (float)$egresosPorMes[$m] : 0; }, $meses))) ?>;
 
-const ctxFinanzas = document.getElementById('graficoFinanzas').getContext('2d');
-new Chart(ctxFinanzas, {
-    type: 'bar',
-    data: {
-        labels: labelsFinanzas,
-        datasets: [
-            {
-                label: 'Ingresos',
-                data: dataIngresos,
-                backgroundColor: 'rgba(39, 174, 96, 0.7)',
-                borderColor: 'rgba(39, 174, 96, 1)',
-                borderWidth: 1
-            },
-            {
-                label: 'Egresos',
-                data: dataEgresos,
-                backgroundColor: 'rgba(231, 76, 60, 0.7)',
-                borderColor: 'rgba(231, 76, 60, 1)',
-                borderWidth: 1
-            }
-        ]
-    },
-    options: {
-        plugins: {
-            legend: { display: true, position: 'top' },
-            title: { display: true, text: 'Ingresos vs Egresos por Mes' }
+const canvasFinanzas = document.getElementById('graficoFinanzas');
+console.log(labelsFinanzas, dataIngresos, dataEgresos, canvasFinanzas);
+
+if (canvasFinanzas) {
+    const ctxFinanzas = canvasFinanzas.getContext('2d');
+    new Chart(ctxFinanzas, {
+        type: 'bar',
+        data: {
+            labels: labelsFinanzas,
+            datasets: [
+                {
+                    label: 'Ingresos',
+                    data: dataIngresos,
+                    backgroundColor: 'rgba(39, 174, 96, 0.7)',
+                    borderColor: 'rgba(39, 174, 96, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Egresos',
+                    data: dataEgresos,
+                    backgroundColor: 'rgba(231, 76, 60, 0.7)',
+                    borderColor: 'rgba(231, 76, 60, 1)',
+                    borderWidth: 1
+                }
+            ]
         },
-        scales: {
-            x: { beginAtZero: true },
-            y: { beginAtZero: true }
+        options: {
+            plugins: {
+                legend: { display: true, position: 'top' },
+                title: { display: true, text: 'Ingresos vs Egresos por Mes' }
+            },
+            scales: {
+                x: { beginAtZero: true },
+                y: { beginAtZero: true }
+            }
         }
-    }
-});
+    });
+}
 
 document.getElementById('descargarPDFFinanzas').addEventListener('click', function () {
     const { jsPDF } = window.jspdf;

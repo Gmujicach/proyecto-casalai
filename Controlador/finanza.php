@@ -64,6 +64,8 @@ function agruparPorMes($registros) {
 $ingresosPorMes = agruparPorMes($finanzas['ingresos']);
 $egresosPorMes = agruparPorMes($finanzas['egresos']);
 
+
+
 $meses = array_unique(array_merge(array_keys($ingresosPorMes), array_keys($egresosPorMes)));
 sort($meses);
 
