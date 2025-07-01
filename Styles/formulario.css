@@ -72,11 +72,29 @@ input, select, button{
 
 .grupo-form{
     display: flex;
+    width: 100%;
+    gap: 16px;
 }
 
-.grupo-form input{
-    width: 50%;
+.grupo-interno {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-width: 0;
     margin-right: 10px;
+    margin-left: 10px;
+}
+
+.grupo-interno label {
+    margin-bottom: 4px;
+}
+
+.grupo-interno input,
+.grupo-interno select {
+    width: 100%;
+}
+
+.grupo-interno span {
     margin-left: 10px;
 }
 
@@ -113,7 +131,6 @@ input, select, button{
 
 .form-select{
     margin-right: 10px;
-    margin-left: 10px;
 }
 
 select{
