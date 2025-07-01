@@ -277,7 +277,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
 
 <!-- Reporte estadístico de productos suministrados por proveedor -->
 <div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-    <h2 style="text-align:center;">Top 10 Proveedores por Productos Suministrados</h2>
+    <h3 style="text-align:center; color:#1f66df;">Top 10 Proveedores por Productos Suministrados</h3>
     <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
         <div style="flex:1; min-width:320px;">
             <canvas id="graficoSuministroProveedores" width="400" height="260"></canvas>

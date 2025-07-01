@@ -27,25 +27,29 @@ aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="accion" value="registrar">
-                    <div class="envolver-form">
-                        <label for="nombre_banco">Nombre del Banco</label>
-                        <input type="text" placeholder="Nombre" class="control-form" id="nombre_banco" name="nombre_banco" maxlength="20" required>
-                        <span class="span-value" id="snombre_banco"></span>
+                    <div class="grupo-form">
+                        <div class="grupo-interno">
+                            <label for="nombre_banco">Nombre del Banco</label>
+                            <input type="text" placeholder="Nombre" class="control-form" id="nombre_banco" name="nombre_banco" maxlength="20" required>
+                            <span class="span-value" id="snombre_banco"></span>
+                        </div>
+                        <div class="grupo-interno">
+                            <label for="numero_cuenta">Número de Cuenta</label>
+                            <input type="text" placeholder="N° cuenta" class="control-form" id="numero_cuenta" name="numero_cuenta" maxlength="23" required>
+                            <span class="span-value" id="snumero_cuenta"></span>
+                        </div>
                     </div>
-                    <div class="envolver-form">
-                        <label for="numero_cuenta">Número de Cuenta</label>
-                        <input type="text" placeholder="N° cuenta" class="control-form" id="numero_cuenta" name="numero_cuenta" maxlength="23" required>
-                        <span class="span-value" id="snumero_cuenta"></span>
-                    </div>
-                    <div class="envolver-form">
-                        <label for="rif_cuenta">RIF</label>
-                        <input type="text" placeholder="RIF" class="control-form" id="rif_cuenta" name="rif_cuenta" maxlength="12" required>
-                        <span class="span-value" id="srif_cuenta"></span>
-                    </div>
-                    <div class="envolver-form">
-                        <label for="telefono_cuenta">Número de Teléfono</label>
-                        <input type="text" placeholder="Teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" maxlength="13" required>
-                        <span class="span-value" id="stelefono_cuenta"></span>
+                    <div class="grupo-form">
+                        <div class="grupo-interno">
+                            <label for="rif_cuenta">RIF</label>
+                            <input type="text" placeholder="RIF" class="control-form" id="rif_cuenta" name="rif_cuenta" maxlength="12" required>
+                            <span class="span-value" id="srif_cuenta"></span>
+                        </div>
+                        <div class="grupo-interno">
+                            <label for="telefono_cuenta">Número de Teléfono</label>
+                            <input type="text" placeholder="Teléfono" class="control-form" id="telefono_cuenta" name="telefono_cuenta" maxlength="13" required>
+                            <span class="span-value" id="stelefono_cuenta"></span>
+                        </div>
                     </div>
                     <div class="envolver-form">
                         <label for="correo_cuenta">Correo Electrónico</label>
