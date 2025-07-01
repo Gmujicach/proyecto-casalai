@@ -159,7 +159,7 @@
       <div class="panels-container">
         <div class="panel left-panel">
           <div class="content">
-            <h3>¿Aun no te has Registrado?</h3>
+            <h3>¿Aun no te has registrado?</h3>
             <p>
               
             </p>
@@ -176,7 +176,7 @@
               
             </p>
             <button class="btn transparent" id="iniciar-sesion-btn">
-              Iniciar Sesion
+              Iniciar Sesión
             </button>
           </div>
           <img src="img/register.svg" class="image" alt="" />
