@@ -56,8 +56,8 @@
                             </div>
                             <div class="envolver-form">
                                 <label for="correo_usuario">Correo Electrónico</label>
-                                <input type="text" placeholder="ejemplo@gmail.com" class="control-form"
-                                    id="correo_usuario" name="correo_usuario" maxlength="50" required>
+                                <input type="text" placeholder="ejemplo@gmail.com" class="control-form" id="correo_usuario"
+                                    name="correo_usuario" maxlength="50" required>
                                 <span class="span-value" id="scorreo_usuario"></span>
                             </div>
                             <div class="envolver-form">
@@ -72,8 +72,8 @@
                             </div>
                             <div class="envolver-form">
                                 <label for="clave_usuario">Contraseña</label>
-                                <input type="password" placeholder="Crea una contraseña" class="control-form" id="clave_usuario"
-                                    name="clave_usuario" maxlength="15" required>
+                                <input type="password" placeholder="Crea una contraseña" class="control-form"
+                                    id="clave_usuario" name="clave_usuario" maxlength="15" required>
                                 <span class="span-value" id="sclave_usuario"></span>
                             </div>
                             <div class="envolver-form">
@@ -175,6 +175,116 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Reporte estadístico de usuarios por rol -->
+        <div class="reporte-container"
+            style="max-width: 900px; margin: 40px auto; background: #fff; padding: 32px 24px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+            <h2 style="text-align:center;">Reporte de Usuarios por Rol</h2>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+                <div style="flex:1; min-width:220px; text-align:center;">
+                    <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
+                        <canvas id="graficoRoles" width="220" height="220"></canvas>
+                    </div>
+                </div>
+                <div style="flex:2; min-width:320px;">
+                    <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Rol</th>
+                                <th>Cantidad de Usuarios</th>
+                                <th>Porcentaje (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($reporteRoles)): ?>
+                                <?php foreach ($reporteRoles as $rol): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($rol['nombre_rol']) ?></td>
+                                        <td><?= $rol['cantidad'] ?></td>
+                                        <td><?= $rol['porcentaje'] ?>%</td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="3" style="text-align:center;">No hay datos</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Total</th>
+                                <th><?= $totalRoles ?></th>
+                                <th>100%</th>
+                            </tr>
+                            
+
+                        </tfoot>
+                    </table>
+                </div>
+            </div>   
+     <div style="text-align:center; margin-top:20px;">
+    <button id="descargarPDFUsuarios" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
+        Descargar Reporte de Usuarios por Rol
+    </button>
+</div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+document.getElementById('descargarPDFUsuarios').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'a4'
+    });
+
+    const reporte = document.querySelector('.reporte-container');
+    html2canvas(reporte).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const imgWidth = pageWidth - 40;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+        doc.save('Reporte_Usuarios_Rol.pdf');
+    });
+});
+</script>
+        <script>
+            const labelsRoles = <?= json_encode(array_column($reporteRoles ?? [], 'nombre_rol')) ?>;
+            const dataRoles = <?= json_encode(array_column($reporteRoles ?? [], 'cantidad')) ?>;
+            function generarColoresRoles(n) {
+                const colores = [];
+                for (let i = 0; i < n; i++) {
+                    const hue = Math.round((360 / n) * i);
+                    colores.push(`hsl(${hue}, 70%, 60%)`);
+                }
+                return colores;
+            }
+            const coloresRoles = generarColoresRoles(labelsRoles.length || 1);
+            const ctxRoles = document.getElementById('graficoRoles').getContext('2d');
+            new Chart(ctxRoles, {
+                type: 'pie',
+                data: {
+                    labels: labelsRoles.length ? labelsRoles : ['Sin datos'],
+                    datasets: [{
+                        data: dataRoles.length ? dataRoles : [1],
+                        backgroundColor: coloresRoles,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: true, position: 'bottom' },
+                        title: { display: true, text: 'Distribución de Usuarios por Rol' }
+                    }
+                }
+            });
+        </script>
 
         <div class="modal fade modal-modificar" id="modificar_usuario_modal" tabindex="-1" role="dialog"
             aria-labelledby="modificar_usuario_modal_label" aria-hidden="true">

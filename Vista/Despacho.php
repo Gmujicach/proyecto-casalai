@@ -115,110 +115,228 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
 <div class="contenedor-tabla">
     <div class="space-btn-incluir">
         <button id="btnIncluirDespacho" class="btn-incluir">
-            Incluir Recepción
+            Incluir Despacho
         </button>
     </div>
 
-	<h3>Lista de Despachos</h3>
-		<table class="tablaConsultas" id="tablaConsultas">
-<thead>
-<tr>
-    <th>FECHA</th>
-    <th>CORRELATIVO</th>
-    <th>CLIENTE</th>
-    <th>PRODUCTO</th>
-    <th>CANTIDAD</th>
-    <th>ACCIÓN</th>
-</tr>
-</thead>
-<tbody>
-    <?php
-// Agrupar productos por despacho
-$productosPorDespacho = [];
-foreach ($despachos as $fila) {
-    $id = $fila['id_despachos'];
-    if (!isset($productosPorDespacho[$id])) {
-        $productosPorDespacho[$id] = [];
-    }
-    $productosPorDespacho[$id][] = [
-        'id_producto' => $fila['id_producto'],
-        'cantidad' => $fila['cantidad'],
-        'id_detalle' => $fila['id_detalle'] ?? '', // si tienes iddetalle
-        // agrega más campos si necesitas
-    ];
-}
-?>
-<?php
 
-usort($despachos, function($a, $b) {
-    if ($a['fecha_despacho'] == $b['fecha_despacho']) {
-        if ($a['correlativo'] == $b['correlativo']) {
-            if ($a['nombre_cliente'] == $b['nombre_cliente']) {
-                return strcmp($a['nombre_producto'], $b['nombre_producto']);
+<h3>Lista de Despachos</h3>
+<table class="tablaConsultas" id="tablaConsultas">
+    <thead>
+        <tr>
+            <th>FECHA</th>
+            <th>CORRELATIVO</th>
+            <th>CLIENTE</th>
+            <th>PRODUCTO</th>
+            <th>CANTIDAD</th>
+            <th>ACCIÓN</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // Agrupar productos por despacho
+        $productosPorDespacho = [];
+        foreach ($despachos as $fila) {
+            $id = $fila['id_despachos'];
+            if (!isset($productosPorDespacho[$id])) {
+                $productosPorDespacho[$id] = [];
             }
-            return strcmp($a['nombre_cliente'], $b['nombre_cliente']);
+            $productosPorDespacho[$id][] = [
+                'id_producto' => $fila['id_producto'],
+                'cantidad' => $fila['cantidad'],
+                'id_detalle' => $fila['id_detalle'] ?? '',
+                // agrega más campos si necesitas
+            ];
         }
-        return strcmp($a['correlativo'], $b['correlativo']);
+
+        if (empty($despachos)): ?>
+            <tr>
+                <td colspan="6" style="text-align:center;">No se han despachado productos.</td>
+            </tr>
+        <?php
+        else:
+            usort($despachos, function($a, $b) {
+                if ($a['fecha_despacho'] == $b['fecha_despacho']) {
+                    if ($a['correlativo'] == $b['correlativo']) {
+                        if ($a['nombre_cliente'] == $b['nombre_cliente']) {
+                            return strcmp($a['nombre_producto'], $b['nombre_producto']);
+                        }
+                        return strcmp($a['nombre_cliente'], $b['nombre_cliente']);
+                    }
+                    return strcmp($a['correlativo'], $b['correlativo']);
+                }
+                return strcmp($a['fecha_despacho'], $b['fecha_despacho']);
+            });
+
+            // Agrupar para rowspan
+            $rowspans = [];
+            foreach ($despachos as $despacho) {
+                $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
+                if (!isset($rowspans[$key])) {
+                    $rowspans[$key] = 1;
+                } else {
+                    $rowspans[$key]++;
+                }
+            }
+            $rendered = [];
+            foreach ($despachos as $despacho):
+                $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
+                $id = $despacho['id_despachos'];
+        ?>
+        <tr>
+            <?php if (!in_array($key, $rendered)): ?>
+                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['fecha_despacho']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['correlativo']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['nombre_cliente']) ?></td>
+            <?php endif; ?>
+
+            <td><?= htmlspecialchars($despacho['nombre_producto']) ?></td>
+            <td><?= htmlspecialchars($despacho['cantidad']) ?></td>
+
+            <?php if (!in_array($key, $rendered)): ?>
+                <td rowspan="<?= $rowspans[$key] ?>">
+                    <ul>
+                        <button class="btn-modificar"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalModificar"
+                            data-iddespacho="<?= htmlspecialchars($despacho['id_despachos']) ?>"
+                            data-correlativo="<?= htmlspecialchars($despacho['correlativo']) ?>"
+                            data-fecha="<?= htmlspecialchars($despacho['fecha_despacho']) ?>"
+                            data-cliente="<?= htmlspecialchars($despacho['id_clientes']) ?>"
+                            data-productos='<?= json_encode($productosPorDespacho[$id], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                            Modificar
+                        </button>
+                    </ul>
+                </td>
+                <?php $rendered[] = $key; ?>
+            <?php endif; ?>
+        </tr>
+        <?php endforeach;
+        endif; ?>
+    </tbody>
+</table>
+	</div>
+<?php
+// Calcula totales y agrupación para el reporte
+$totalDespachos = count($despachos);
+
+// Agrupa productos y suma cantidades
+$productosDespachados = [];
+foreach ($despachos as $d) {
+    $nombre = $d['nombre_producto'];
+    $cantidad = (int)$d['cantidad'];
+    if (!isset($productosDespachados[$nombre])) {
+        $productosDespachados[$nombre] = 0;
     }
-    return strcmp($a['fecha_despacho'], $b['fecha_despacho']);
+    $productosDespachados[$nombre] += $cantidad;
+}
+$totalProductosDespachados = array_sum($productosDespachados);
+?>
+
+<!-- Reporte estadístico de Despachos -->
+<div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+    <h2 style="text-align:center;">Reporte de Despachos</h2>
+    <p><b>Total de Despachos:</b> <?= $totalDespachos ?></p>
+    <p><b>Total de Productos Despachados:</b> <?= $totalProductosDespachados ?></p>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+        <div style="flex:1; min-width:220px; text-align:center;">
+            <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
+                <canvas id="graficoProductosDespachados" width="220" height="220"></canvas>
+            </div>
+        </div>
+        <div style="flex:2; min-width:320px;">
+            <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad Despachada</th>
+                        <th>Porcentaje (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($productosDespachados as $nombre => $cantidad): 
+                        $porcentaje = $totalProductosDespachados > 0 ? round(($cantidad / $totalProductosDespachados) * 100, 2) : 0;
+                    ?>
+                        <tr>
+                            <td><?= htmlspecialchars($nombre) ?></td>
+                            <td><?= $cantidad ?></td>
+                            <td><?= $porcentaje ?>%</td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th><?= $totalProductosDespachados ?></th>
+                        <th>100%</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <div style="text-align:center; margin-top:20px;">
+                <button id="descargarPDFDespacho" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
+                    Descargar Reporte de Despachos
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts para gráfica y PDF -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const labelsDespacho = <?= json_encode(array_keys($productosDespachados)) ?>;
+const dataDespacho = <?= json_encode(array_values($productosDespachados)) ?>;
+function generarColores(n) {
+    const colores = [];
+    for (let i = 0; i < n; i++) {
+        const hue = Math.round((360 / n) * i);
+        colores.push(`hsl(${hue}, 70%, 60%)`);
+    }
+    return colores;
+}
+const coloresDespacho = generarColores(labelsDespacho.length || 1);
+const ctxDespacho = document.getElementById('graficoProductosDespachados').getContext('2d');
+new Chart(ctxDespacho, {
+    type: 'pie',
+    data: {
+        labels: labelsDespacho.length ? labelsDespacho : ['Sin datos'],
+        datasets: [{
+            data: dataDespacho.length ? dataDespacho : [1],
+            backgroundColor: coloresDespacho,
+            borderColor: '#fff',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { display: true, position: 'bottom' },
+            title: { display: true, text: 'Productos más despachados' }
+        }
+    }
 });
 
-// Agrupar para rowspan
-$rowspans = [];
-foreach ($despachos as $despacho) {
-    $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
-    if (!isset($rowspans[$key])) {
-        $rowspans[$key] = 1;
-    } else {
-        $rowspans[$key]++;
-    }
-}
-$rendered = [];
-foreach ($despachos as $despacho):
-    $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
-    $id = $despacho['id_despachos'];
-?>
-<tr>
-    <?php if (!in_array($key, $rendered)): ?>
-        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['fecha_despacho']) ?></td>
-        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['correlativo']) ?></td>
-        <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['nombre_cliente']) ?></td>
-    <?php endif; ?>
+document.getElementById('descargarPDFDespacho').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'a4'
+    });
 
-    <td><?= htmlspecialchars($despacho['nombre_producto']) ?></td>
-    <td><?= htmlspecialchars($despacho['cantidad']) ?></td>
+    const reporte = document.querySelector('.reporte-container');
+    html2canvas(reporte).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const imgWidth = pageWidth - 40;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
 
-    <?php if (!in_array($key, $rendered)): ?>
-        <td rowspan="<?= $rowspans[$key] ?>">
-            <ul>
-                <button class="btn-modificar"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalModificar"
-                    data-iddespacho="<?= htmlspecialchars($despacho['id_despachos']) ?>"
-                    data-correlativo="<?= htmlspecialchars($despacho['correlativo']) ?>"
-                    data-fecha="<?= htmlspecialchars($despacho['fecha_despacho']) ?>"
-                    data-cliente="<?= htmlspecialchars($despacho['id_clientes']) ?>"
-                    data-productos='<?= json_encode($productosPorDespacho[$id], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
-                    Modificar
-                </button>
-            </ul>
-        </td>
-        <?php $rendered[] = $key; ?>
-    <?php endif; ?>
-</tr>
-<?php endforeach; ?>
-</tbody>
-		</table>
-	</div>
-
-		<div class="table-container">
-						
-						<div class="row">
-							<div class="col">
-								<button class="btn" name="" type="button" id="pdfrepecion" name="pdfrecepcion"><a href="?pagina=pdfrecepcion">GENERAR REPORTE</a></button>
-							</div>
-						</div>
-		</div>
+        doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+        doc.save('Reporte_Despachos.pdf');
+    });
+});
+</script>
 		<?php include 'footer.php'; ?>
 	
 <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">

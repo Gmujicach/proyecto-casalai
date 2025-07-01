@@ -120,61 +120,67 @@
         </button>
     </div>
 
-	<h3>Lista de Recepciones</h3>
 
-	<table class="tablaConsultas" id="tablaConsultas">
-		<thead>
-			<tr>
-				<th>FECHA</th>
-				<th>CORRELATIVO</th>
-				<th>PROVEEDOR</th>
-				<th>PRODUCTO</th>
-				<th>CANTIDAD</th>
-				<th>COSTOS DE INVERSION</th>
-				<th>ACCIÓN</th>
-			</tr>
-		</thead>
+<h3>Lista de Recepciones</h3>
 
-        <tbody>
+<table class="tablaConsultas" id="tablaConsultas">
+    <thead>
+        <tr>
+            <th>FECHA</th>
+            <th>CORRELATIVO</th>
+            <th>PROVEEDOR</th>
+            <th>PRODUCTO</th>
+            <th>CANTIDAD</th>
+            <th>COSTOS DE INVERSION</th>
+            <th>ACCIÓN</th>
+        </tr>
+    </thead>
+    <tbody>
         <?php
-        usort($recepciones, function($a, $b) {
-            if ($a['fecha'] == $b['fecha']) {
-                if ($a['correlativo'] == $b['correlativo']) {
-                    if ($a['nombre_proveedor'] == $b['nombre_proveedor']) {
-                        return strcmp($a['nombre_producto'], $b['nombre_producto']);
+        if (empty($recepciones)): ?>
+            <tr>
+                <td colspan="7" style="text-align:center;">No se han registrado recepciones.</td>
+            </tr>
+        <?php
+        else:
+            usort($recepciones, function($a, $b) {
+                if ($a['fecha'] == $b['fecha']) {
+                    if ($a['correlativo'] == $b['correlativo']) {
+                        if ($a['nombre_proveedor'] == $b['nombre_proveedor']) {
+                            return strcmp($a['nombre_producto'], $b['nombre_producto']);
+                        }
+                        return strcmp($a['nombre_proveedor'], $b['nombre_proveedor']);
                     }
-                    return strcmp($a['nombre'], $b['nombre']);
+                    return strcmp($a['correlativo'], $b['correlativo']);
                 }
-                return strcmp($a['correlativo'], $b['correlativo']);
-            }
-            return strcmp($a['fecha'], $b['fecha']);
-        });
+                return strcmp($a['fecha'], $b['fecha']);
+            });
 
-        $rowspans = [];
-        $dataProductosPorRecepcion = [];
-        foreach ($recepciones as $fila) {
-            $id = $fila['id_recepcion'];
-            if (!isset($dataProductosPorRecepcion[$id])) {
-                $dataProductosPorRecepcion[$id] = [];
+            $rowspans = [];
+            $dataProductosPorRecepcion = [];
+            foreach ($recepciones as $fila) {
+                $id = $fila['id_recepcion'];
+                if (!isset($dataProductosPorRecepcion[$id])) {
+                    $dataProductosPorRecepcion[$id] = [];
+                }
+                $dataProductosPorRecepcion[$id][] = [
+                    'id_producto' => $fila['id_producto'],
+                    'cantidad' => $fila['cantidad'],
+                    'costo' => $fila['costo'],
+                    'iddetalles' => $fila['id_detalle_recepcion_productos'] ?? '',
+                ];
             }
-            $dataProductosPorRecepcion[$id][] = [
-                'id_producto' => $fila['id_producto'],
-                'cantidad' => $fila['cantidad'],
-                'costo' => $fila['costo'],
-                'iddetalles' => $fila['id_detalle_recepcion_productos'] ?? '',
-            ];
-        }
-        foreach ($recepciones as $recepcion) {
-            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
-            if (!isset($rowspans[$key])) {
-                $rowspans[$key] = 1;
-            } else {
-                $rowspans[$key]++;
+            foreach ($recepciones as $recepcion) {
+                $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
+                if (!isset($rowspans[$key])) {
+                    $rowspans[$key] = 1;
+                } else {
+                    $rowspans[$key]++;
+                }
             }
-        }
-        $rendered = [];
-        foreach ($recepciones as $recepcion):
-            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
+            $rendered = [];
+            foreach ($recepciones as $recepcion):
+                $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
         ?>
         <tr>
             <?php if (!in_array($key, $rendered)): ?>
@@ -205,12 +211,58 @@
                 <?php $rendered[] = $key; ?>
             <?php endif; ?>
         </tr>
-        <?php endforeach; ?>
-        </tbody>
-
-		</table>
+        <?php endforeach;
+        endif; ?>
+    </tbody>
+</table>
 	</div>
 
+<div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+    <h2 style="text-align:center;">Reporte de Recepciones</h2>
+    <p><b>Total de Recepciones:</b> <?= $totalRecepciones ?></p>
+    <p><b>Total de Productos Recibidos:</b> <?= $totalProductosRecibidos ?></p>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+        <div style="flex:1; min-width:220px; text-align:center;">
+            <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
+                <canvas id="graficoProductosRecibidos" width="220" height="220"></canvas>
+            </div>
+        </div>
+        <div style="flex:2; min-width:320px;">
+            <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad Recibida</th>
+                        <th>Porcentaje (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($productosRecibidos as $nombre => $cantidad): 
+                        $porcentaje = $totalProductosRecibidos > 0 ? round(($cantidad / $totalProductosRecibidos) * 100, 2) : 0;
+                    ?>
+                        <tr>
+                            <td><?= htmlspecialchars($nombre) ?></td>
+                            <td><?= $cantidad ?></td>
+                            <td><?= $porcentaje ?>%</td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th><?= $totalProductosRecibidos ?></th>
+                        <th>100%</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <div style="text-align:center; margin-top:20px;">
+                <button id="descargarPDFRecepcion" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
+                    Descargar Reporte de Recepciones
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 		<div class="table-container">
 						
 						<div class="row">
@@ -395,7 +447,61 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const labelsRecepcion = <?= json_encode(array_keys($productosRecibidos)) ?>;
+const dataRecepcion = <?= json_encode(array_values($productosRecibidos)) ?>;
+function generarColores(n) {
+    const colores = [];
+    for (let i = 0; i < n; i++) {
+        const hue = Math.round((360 / n) * i);
+        colores.push(`hsl(${hue}, 70%, 60%)`);
+    }
+    return colores;
+}
+const coloresRecepcion = generarColores(labelsRecepcion.length || 1);
+const ctxRecepcion = document.getElementById('graficoProductosRecibidos').getContext('2d');
+new Chart(ctxRecepcion, {
+    type: 'pie',
+    data: {
+        labels: labelsRecepcion.length ? labelsRecepcion : ['Sin datos'],
+        datasets: [{
+            data: dataRecepcion.length ? dataRecepcion : [1],
+            backgroundColor: coloresRecepcion,
+            borderColor: '#fff',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { display: true, position: 'bottom' },
+            title: { display: true, text: 'Productos más recibidos' }
+        }
+    }
+});
 
+document.getElementById('descargarPDFRecepcion').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'a4'
+    });
+
+    const reporte = document.querySelector('.reporte-container');
+    html2canvas(reporte).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const imgWidth = pageWidth - 40;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+        doc.save('Reporte_Recepciones.pdf');
+    });
+});
+</script>
 </body>
 </html>
 
