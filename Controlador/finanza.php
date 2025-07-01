@@ -39,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Consulta automática para la vista
+// Consulta automática para la vista
 function consultarFinanzas() {
     $finanza = new Finanza();
     return [
@@ -47,9 +48,30 @@ function consultarFinanzas() {
     ];
 }
 
+$finanzas = consultarFinanzas(); // <-- PRIMERO OBTÉN LOS DATOS
+
+// Agrupar ingresos y egresos por mes
+function agruparPorMes($registros) {
+    $res = [];
+    foreach ($registros as $r) {
+        $mes = date('Y-m', strtotime($r['fecha']));
+        if (!isset($res[$mes])) $res[$mes] = 0;
+        $res[$mes] += $r['monto'];
+    }
+    return $res;
+}
+
+$ingresosPorMes = agruparPorMes($finanzas['ingresos']);
+$egresosPorMes = agruparPorMes($finanzas['egresos']);
+
+$meses = array_unique(array_merge(array_keys($ingresosPorMes), array_keys($egresosPorMes)));
+sort($meses);
+
+$totalIngresos = array_sum(array_column($finanzas['ingresos'], 'monto'));
+$totalEgresos = array_sum(array_column($finanzas['egresos'], 'monto'));
+
 $pagina = "finanza";
 if (is_file("Vista/" . $pagina . ".php")) {
-    $finanzas = consultarFinanzas();
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
