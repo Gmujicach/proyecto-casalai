@@ -81,12 +81,13 @@
             </form>
 
             <div class="modal fade" tabindex="-1" role="dialog" id="modalp">
-				<div class="modal-dialog " role="document">
+				<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title">Listado de productos</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-							</button>
+							<h5 class="titulo-form">Listado de productos</h5>
+							<button type="button" class="close-2" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
 						</div>
 						<div class="modal-body">
 							<table class="table table-striped table-hover">
