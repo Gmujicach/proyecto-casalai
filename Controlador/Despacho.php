@@ -289,7 +289,20 @@ foreach ($despachos as $despacho):
     $despachos = getdespacho();
     $proveedores = $k->obtenercliente();
     $productos = $k->consultarproductos();
+// Total de despachos
+$totalDespachos = count($despachos);
 
+// Total de productos despachados y agrupados por producto
+$productosDespachados = [];
+foreach ($despachos as $d) {
+    $nombre = $d['nombre_producto'];
+    $cantidad = (int)$d['cantidad'];
+    if (!isset($productosDespachados[$nombre])) {
+        $productosDespachados[$nombre] = 0;
+    }
+    $productosDespachados[$nombre] += $cantidad;
+}
+$totalProductosDespachados = array_sum($productosDespachados);
     require_once("vista/" . $pagina . ".php");
 
 } else {
