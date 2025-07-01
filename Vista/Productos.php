@@ -325,7 +325,7 @@ foreach ($caracteristicas as $clave => $valor) {
 </div>
 
 <div class="reporte-container" style="max-width: 1000px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
-  <h2 style="text-align: center; margin-bottom: 20px;">Reporte de Productos por Categoría</h2>
+  <h3 style="text-align: center; margin-bottom: 20px; color:#1f66df;">Reporte de Productos por Categoría</h3>
 
   <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 40px;">
     <!-- Gráfica -->

@@ -235,7 +235,7 @@ $totalProductosDespachados = array_sum($productosDespachados);
 
 <!-- Reporte estadístico de Despachos -->
 <div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-    <h2 style="text-align:center;">Reporte de Despachos</h2>
+    <h3 style="text-align:center; color:#1f66df;">Reporte de Despachos</h3>
     <p><b>Total de Despachos:</b> <?= $totalDespachos ?></p>
     <p><b>Total de Productos Despachados:</b> <?= $totalProductosDespachados ?></p>
     <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
