@@ -32,6 +32,7 @@
                         <span id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
+                        <label for="rango">Proveedor</label>
                         <select class="form-select" name="proveedor" id="proveedor">
                             <option value='disabled' disabled selected>Seleccione un Proveedor</option>
                             <?php
@@ -80,15 +81,16 @@
             </form>
 
             <div class="modal fade" tabindex="-1" role="dialog" id="modalp">
-				<div class="modal-dialog " role="document">
+				<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title">Listado de productos</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-							</button>
+							<h5 class="titulo-form">Listado de productos</h5>
+							<button type="button" class="close-2" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
 						</div>
 						<div class="modal-body">
-							<table class="table table-striped table-hover">
+							<table class="tablaConsultas">
 								<thead class="text-center">
 									<tr>
 										<th style="display:none">Id</th>
@@ -276,7 +278,6 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="titulo-form" id="modalModificarLabel">Modificar Recepción</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
 <form id="formularioEdicion">

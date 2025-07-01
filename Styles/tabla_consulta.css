@@ -231,16 +231,14 @@ table tbody tr td .campo-rango{
     border-radius: 20px;
 }
 
-/* Estilo base para el span */
 table tbody tr td .campo-estatus{
     position: relative;
     display: inline-block;
-    padding: 3px 15px 3px 25px; /* Más padding a la izquierda para el círculo */
+    padding: 3px 15px 3px 25px;
     font-size: 14px;
     border-radius: 20px;
 }
 
-/* Círculo indicador (base) */
 table tbody tr td .campo-estatus::before {
     content: '';
     width: 8px;
@@ -254,12 +252,11 @@ table tbody tr td .campo-estatus::before {
 table tbody tr td .campo-estatus-pagos{
     position: relative;
     display: inline-block;
-    padding: 3px 15px 3px 25px; /* Más padding a la izquierda para el círculo */
+    padding: 3px 15px 3px 25px;
     font-size: 14px;
     border-radius: 20px;
 }
 
-/* Círculo indicador (base) */
 table tbody tr td .campo-estatus-pagos::before {
     content: '';
     width: 8px;
@@ -302,7 +299,6 @@ table tbody tr td .campo-estatus.inhabilitado::before {
     --info-bg-color: #d1ecf1;
 }
 
-/* EN PROCESO */
 table tbody tr td .campo-estatus-pagos.en-proceso {
     color: var(--warning-accent-color);
     background: var(--warning-bg-color);
@@ -317,7 +313,6 @@ table tbody tr td .campo-estatus-pagos.en-proceso::before {
     background: var(--warning-accent-color);
 }
 
-/* PAGO PROCESADO */
 table tbody tr td .campo-estatus-pagos.pago-procesado {
     color: var(--success-accent-color);
     background: var(--success-bg-color);
@@ -332,7 +327,6 @@ table tbody tr td .campo-estatus-pagos.pago-procesado::before {
     background: var(--success-accent-color);
 }
 
-/* PAGO NO ENCONTRADO */
 table tbody tr td .campo-estatus-pagos.pago-no-encontrado {
     color: var(--danger-accent-color);
     background: var(--danger-bg-color);
@@ -347,7 +341,6 @@ table tbody tr td .campo-estatus-pagos.pago-no-encontrado::before {
     background: var(--danger-accent-color);
 }
 
-/* PAGO INCOMPLETO */
 table tbody tr td .campo-estatus-pagos.pago-incompleto {
     color: var(--info-accent-color);
     background: var(--info-bg-color);
@@ -361,8 +354,6 @@ table tbody tr td .campo-estatus-pagos.pago-incompleto {
 table tbody tr td .campo-estatus-pagos.pago-incompleto::before {
     background: var(--info-accent-color);
 }
-
-/* Estilo para Precios */
 
 table tbody tr td .precio{
     display: block;
@@ -457,12 +448,11 @@ table tfoot tr td span a i{
     background-color: #21a141;
 }
 
-/* Ajustes para el menú desplegable */
 .tabla-scroll {
     position: relative;
-    z-index: 1; /* Mantén este valor bajo para el contenedor de scroll */
+    z-index: 1;
 }
 
 .tabla-scroll {
-    overflow-y: overlay; /* Esto puede ayudar en algunos navegadores */
+    overflow-y: overlay;
 }
