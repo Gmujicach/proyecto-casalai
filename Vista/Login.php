@@ -98,7 +98,7 @@
 </style>
 
 <form method="post" id="registro-usuario-cliente" class="registrar-form">
-  <h2 class="title">Registrarse</h2>
+  <h2 class="title">Registro</h2>
 
   <div class="input-row">
     <div class="input-field">
@@ -159,12 +159,12 @@
       <div class="panels-container">
         <div class="panel left-panel">
           <div class="content">
-            <h3>¿Aun no te Registrar?</h3>
+            <h3>¿Aun no te has Registrado?</h3>
             <p>
               
             </p>
             <button class="btn transparent" id="registrar-btn">
-              Registrar
+              Registrate
             </button>
           </div>
           <img src="img/log.svg" class="image" alt="" />
