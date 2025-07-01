@@ -51,12 +51,8 @@ input, select, button{
 .modal-content {
     padding: 20px;
     background: #fff;
-<<<<<<< HEAD
     width: 700px;
     max-width: 98vw;
-=======
-    max-width: 950px;
->>>>>>> b864d3e30326b9e8c9afa0a65c4f078462fb005e
     margin: auto;
     display: flex;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);

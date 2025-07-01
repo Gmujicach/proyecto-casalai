@@ -19,6 +19,7 @@
         background: #fff;
       }
     </style>
+    
   </head>
 
   <body class="fondo"
@@ -322,6 +323,97 @@ foreach ($caracteristicas as $clave => $valor) {
   </form>
 </div>
 
+<div class="reporte-container" style="max-width: 1000px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
+  <h2 style="text-align: center; margin-bottom: 20px;">Reporte de Productos por Categoría</h2>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 40px;">
+    <!-- Gráfica -->
+    <div style="flex: 1; min-width: 300px; text-align: center;">
+      <canvas id="graficoPastel" width="300" height="300"></canvas>
+    </div>
+
+    <!-- Tabla -->
+    <div style="flex: 1; min-width: 300px;">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Categoría</th>
+            <th>Cantidad</th>
+            <th>Porcentaje (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if (!empty($reporteCategorias)): ?>
+            <?php foreach ($reporteCategorias as $cat): ?>
+              <tr>
+                <td><?= htmlspecialchars($cat['nombre_categoria']) ?></td>
+                <td><?= $cat['cantidad'] ?></td>
+                <td><?= $cat['porcentaje'] ?>%</td>
+              </tr>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <tr><td colspan="3" style="text-align:center;">No hay datos</td></tr>
+          <?php endif; ?>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Total</th>
+            <th><?= $totalCategorias ?></th>
+            <th>100%</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:30px;">
+    <button id="descargarPDF" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
+      Descargar PDF
+    </button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const labels = <?= json_encode(array_column($reporteCategorias ?? [], 'nombre_categoria')) ?>;
+    const data = <?= json_encode(array_column($reporteCategorias ?? [], 'cantidad')) ?>;
+
+    function generarColores(n) {
+      const colores = [];
+      for (let i = 0; i < n; i++) {
+        const hue = Math.round((360 / n) * i);
+        colores.push(`hsl(${hue}, 70%, 60%)`);
+      }
+      return colores;
+    }
+
+    const colores = generarColores(labels.length || 1);
+    const ctx = document.getElementById('graficoPastel').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels.length ? labels : ['Sin datos'],
+        datasets: [{
+          data: data.length ? data : [1],
+          backgroundColor: colores,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          },
+          title: {
+            display: true,
+            text: 'Distribución de Productos por Categoría'
+          }
+        }
+      }
+    });
+  </script>
+</div>
     <!-- Modal de modificación -->
     <div class="modal fade modal-modificar" id="modificarProductoModal" tabindex="-1" role="dialog"
       aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
@@ -425,92 +517,34 @@ foreach ($caracteristicas as $clave => $valor) {
 
 
 
-<!-- Reporte estadístico de productos por categoría -->
-<?php if (!empty($reporteCategorias) && $totalCategorias > 0): ?>
-<div class="reporte-estadistico" ...>
-  <h4>Reporte Estadístico de Productos por Categoría</h4>
-  <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
-    <div style="flex:1; min-width:320px; text-align:center;">
-      <canvas id="graficoPastel" width="400" height="400"></canvas>
-    </div>
-    <div style="flex:1; min-width:320px;">
-      <!-- tabla aquí -->
-      
-        <table style="margin:0 auto; border-collapse:collapse; width:90%; background:#fafbfc; border-radius:8px; overflow:hidden; font-size:1.1rem;">
-          <thead>
-            <tr>
-              <th style="background:#2980b9; color:#fff; padding:8px;">Categoría</th>
-              <th style="background:#2980b9; color:#fff; padding:8px;">Cantidad</th>
-              <th style="background:#2980b9; color:#fff; padding:8px;">Porcentaje (%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($reporteCategorias as $cat): 
-              $porcentaje = $totalCategorias > 0 ? round(($cat['cantidad'] / $totalCategorias) * 100, 2) : 0;
-            ?>
-            <tr>
-              <td style="padding:8px;"><?= htmlspecialchars($cat['nombre_categoria']) ?></td>
-              <td style="padding:8px;"><?= $cat['cantidad'] ?></td>
-              <td style="padding:8px;"><?= $porcentaje ?> %</td>
-            </tr>
-            <?php endforeach; ?>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th style="background:#eaf6ff;">Total</th>
-              <th style="background:#eaf6ff;"><?= $totalCategorias ?></th>
-              <th style="background:#eaf6ff;">100 %</th>
-            </tr>
-          </tfoot>
-          <div style="margin-top:20px; text-align:right;">
-  <button id="descargarPDF" class="btn btn-success" style="padding:12px 28px; font-size:17px; border-radius:8px; background:#27ae60; color:#fff; border:none; cursor:pointer;"
-    <?php if (empty($reporteCategorias) || $totalCategorias == 0) echo 'disabled'; ?>>
-    Descargar PDF
-  </button>
-</div>
-        </table>
-      </div>
-    </div>
-  <?php endif; ?>
-</div>
-<?php if (!empty($reporteCategorias) && $totalCategorias > 0): ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const labels = <?= json_encode(array_column($reporteCategorias, 'nombre_categoria')) ?>;
-  const data = <?= json_encode(array_column($reporteCategorias, 'cantidad')) ?>;
-  function generarColores(n) {
-    const colores = [];
-    for (let i = 0; i < n; i++) {
-      const hue = Math.round((360 / n) * i);
-      colores.push(`hsl(${hue}, 70%, 60%)`);
-    }
-    return colores;
-  }
-  const colores = generarColores(labels.length);
-  const ctx = document.getElementById('graficoPastel').getContext('2d');
-  new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: labels,
-      datasets: [{
-        data: data,
-        backgroundColor: colores,
-        borderColor: '#fff',
-        borderWidth: 2
-      }]
-    },
-    options: {
-      plugins: {
-        legend: { display: true, position: 'bottom' },
-        title: { display: true, text: 'Distribución de Productos por Categoría' }
-      }
-    }
+  document.getElementById('descargarPDF').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'a4'
+    });
+
+    const reporte = document.querySelector('.reporte-container');
+    html2canvas(reporte).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const imgWidth = pageWidth - 40;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+
+      doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+      doc.save('Reporte_Productos_Categorias.pdf');
+    });
   });
-});
 </script>
-<?php endif; ?>
+
+
+
     <script src="public/bootstrap/js/sidebar.js"></script>
     <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="public/js/jquery-3.7.1.min.js"></script>
@@ -520,6 +554,9 @@ document.addEventListener('DOMContentLoaded', function() {
     <script src="public/js/jquery.dataTables.min.js"></script>
     <script src="public/js/dataTables.bootstrap5.min.js"></script>
     <script src="public/js/datatable.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script>
       $(document).ready(function () {
         $('#tablaConsultas').DataTable({
@@ -594,9 +631,41 @@ categoria.caracteristicas.forEach(carac => {
 });
     }
 });
-
+});
 
     </script>
+<script>
+  document.getElementById('descargarPDF').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'a4'
+    });
+
+    const reporte = document.querySelector('.reporte-container');
+    html2canvas(reporte).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const imgWidth = pageWidth - 40;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+
+      let y = 20;
+      if (imgHeight > pageHeight) {
+        const pages = Math.ceil(imgHeight / pageHeight);
+        for (let i = 0; i < pages; i++) {
+          if (i > 0) doc.addPage();
+          doc.addImage(imgData, 'PNG', 20, y - i * pageHeight, imgWidth, imgHeight);
+        }
+      } else {
+        doc.addImage(imgData, 'PNG', 20, y, imgWidth, imgHeight);
+      }
+
+      doc.save('Reporte_Productos_Categorias.pdf');
+    });
+  });
+</script>
 
 
   </body>
