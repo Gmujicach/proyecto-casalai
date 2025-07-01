@@ -15,7 +15,7 @@
 
 <div class="modal fade modal-registrar" id="registrarClienteModal" tabindex="-1" role="dialog" 
 aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="ingresarclientes" method="POST">
                 <div class="modal-header">
@@ -144,7 +144,7 @@ aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
 
 <div class="modal fade modal-modificar" id="modificar_clientes_modal" tabindex="-1" role="dialog" 
 aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="modificarclientes" method="POST">
                 <div class="modal-header">

@@ -16,7 +16,7 @@
 
 <div class="modal fade modal-registrar" id="registrarCuentaModal" tabindex="-1" role="dialog" 
 aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="registrarCuenta" method="POST">
                 <div class="modal-header">
@@ -151,7 +151,7 @@ aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
 
 <div class="modal fade modal-modificar" id="modificarCuentaModal" tabindex="-1" role="dialog" 
 aria-labelledby="modificarCuentaModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="modificarCuenta" method="POST">
                 <div class="modal-header">

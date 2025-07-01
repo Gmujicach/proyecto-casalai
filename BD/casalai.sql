@@ -533,15 +533,16 @@ CREATE TABLE `tbl_productos` (
   `stock_maximo` int(3) DEFAULT NULL,
   `clausula_garantia` varchar(150) NOT NULL,
   `precio` float(10,2) DEFAULT NULL,
-  `estado` varchar(20) DEFAULT '1'
+  `estado` varchar(20) DEFAULT '1',
+  `imagen` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Ruta de la imagen del producto en formato IMGProductosproducto_X.jpeg donde X es el id_producto'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `tbl_productos`
 --
 
-INSERT INTO `tbl_productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`) VALUES
-(28, '0001', 'Impresora Super', 'Impresora multifuncional con función wifi', 6, 11, 50, 10, 100, 'Garantia Valida hasta los 3 meses ', 1000.00, 'habilitado'),
+INSERT INTO `tbl_productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`, `imagen`) VALUES
+(28, '0001', 'Impresora Super', 'Impresora multifuncional con función wifi', 6, 11, 50, 10, 100, 'Garantia Valida hasta los 3 meses ', 1000.00, 'habilitado', 'IMG\\Productos\\Lucid_Realism_Create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
 (29, '0002', 'Impresora Maxi', 'Impresora de Punta de fibra de vidrio para oficina', 37, 11, 50, 10, 100, 'Garantía para 1 mes', 1500.00, 'habilitado'),
 (30, '0003', 'Impresora KING', 'Impresora de Escáner Laser de Ultima Generación', 34, 11, 50, 10, 100, 'Garantía valida en los primeros 365 días', 2000.00, 'habilitado'),
 (31, '0004', 'Colormedia', 'Tintas multicolor para Impresoras Epson', 16, 12, 20, 10, 50, 'Sin Garantía', 10.00, 'habilitado'),

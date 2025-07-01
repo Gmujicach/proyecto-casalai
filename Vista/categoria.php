@@ -32,7 +32,7 @@
 
         <div class="modal fade modal-registrar" id="registrarCategoriaModal" tabindex="-1" role="dialog"
             aria-labelledby="registrarCategoriaModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <form id="registrarCategoria" method="POST">
                         <div class="modal-header">
@@ -122,11 +122,9 @@
             </table>
         </div>
 
-
-<!-- Modal Modificar Categoría -->
 <div class="modal fade modal-modificar" id="modificarCategoriaModal" tabindex="-1" role="dialog"
     aria-labelledby="modificarCategoriaModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="modificarCategoria" method="POST">
                 <div class="modal-header">
