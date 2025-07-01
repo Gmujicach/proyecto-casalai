@@ -6,6 +6,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Gestionar Productos</title>
     <?php include 'header.php'; ?>
     <style>
@@ -28,7 +29,7 @@
 
     <div class="modal fade modal-registrar" id="registrarProductoModal" tabindex="-1" role="dialog"
       aria-labelledby="registrarProductoModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-dialog" role="document">
         <div class="modal-content">
           <?php if (!$mostrarFormulario): ?>
             <div class="alert alert-warning mt-4">
@@ -162,7 +163,7 @@
         </button>
       </div>
 
-      <h3>Lista de Productos</h3>
+      <h3>Listado de Productos</h3>
 
       <table class="tablaConsultas" id="tablaConsultas">
         <thead>
@@ -321,11 +322,10 @@ foreach ($caracteristicas as $clave => $valor) {
     </button>
   </form>
 </div>
-
     <!-- Modal de modificación -->
     <div class="modal fade modal-modificar" id="modificarProductoModal" tabindex="-1" role="dialog"
       aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-dialog" role="document">
         <div class="modal-content">
           <form id="modificarProductoForm" method="POST" enctype="multipart/form-data">
             <div class="modal-header">
@@ -423,6 +423,122 @@ foreach ($caracteristicas as $clave => $valor) {
       </div>
     </div>
 
+
+        <div style="text-align:center; margin-top:20px;">
+            <button id="descargarPDF" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
+                Descargar PDF
+            </button>
+        </div>
+    </div>
+
+<!-- Reporte estadístico de productos por categoría -->
+<div class="reporte-estadistico" style="margin:40px auto 0 auto; max-width:1100px; background:#fff; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08); padding:32px 24px;">
+  <h4 style="color:#2c3e50;">Reporte Estadístico de Productos por Categoría</h4>
+  <?php if (empty($reporteCategorias) || $totalCategorias == 0): ?>
+    <div style="color:#c0392b; font-size:18px; margin:20px 0;">No hay productos registrados en ninguna categoría.</div>
+  <?php else: ?>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+      <div style="flex:1; min-width:320px; text-align:center;">
+        <canvas id="graficoPastel" width="400" height="400"></canvas>
+        <div style="margin-top:20px;">
+          <button id="descargarPDF" class="btn btn-success" style="padding:12px 28px; font-size:17px; border-radius:8px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
+            Descargar PDF
+          </button>
+        </div>
+      </div>
+      <div style="flex:1; min-width:320px;">
+        <table style="margin:0 auto; border-collapse:collapse; width:90%; background:#fafbfc; border-radius:8px; overflow:hidden; font-size:1.1rem;">
+          <thead>
+            <tr>
+              <th style="background:#2980b9; color:#fff; padding:8px;">Categoría</th>
+              <th style="background:#2980b9; color:#fff; padding:8px;">Cantidad</th>
+              <th style="background:#2980b9; color:#fff; padding:8px;">Porcentaje (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($reporteCategorias as $cat): 
+              $porcentaje = $totalCategorias > 0 ? round(($cat['cantidad'] / $totalCategorias) * 100, 2) : 0;
+            ?>
+            <tr>
+              <td style="padding:8px;"><?= htmlspecialchars($cat['nombre_categoria']) ?></td>
+              <td style="padding:8px;"><?= $cat['cantidad'] ?></td>
+              <td style="padding:8px;"><?= $porcentaje ?> %</td>
+            </tr>
+            <?php endforeach; ?>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th style="background:#eaf6ff;">Total</th>
+              <th style="background:#eaf6ff;"><?= $totalCategorias ?></th>
+              <th style="background:#eaf6ff;">100 %</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  <?php endif; ?>
+</div>
+<?php if (!empty($reporteCategorias) && $totalCategorias > 0): ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const labels = <?= json_encode(array_column($reporteCategorias, 'nombre_categoria')) ?>;
+    const data = <?= json_encode(array_column($reporteCategorias, 'cantidad')) ?>;
+    function generarColores(n) {
+      const colores = [];
+      for (let i = 0; i < n; i++) {
+        const hue = Math.round((360 / n) * i);
+        colores.push(`hsl(${hue}, 70%, 60%)`);
+      }
+      return colores;
+    }
+    const colores = generarColores(labels.length);
+    const ctx = document.getElementById('graficoPastel').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: colores,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { display: true, position: 'bottom' },
+          title: { display: true, text: 'Distribución de Productos por Categoría' }
+        }
+      }
+    });
+
+    // Descargar PDF al hacer clic en el botón
+    document.getElementById('descargarPDF').addEventListener('click', function() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: 'landscape',
+        unit: 'pt',
+        format: 'a4'
+      });
+
+      const reporte = document.querySelector('.reporte-estadistico');
+      html2canvas(reporte, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const imgWidth = pageWidth - 40;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight > pageHeight - 40 ? pageHeight - 40 : imgHeight);
+        doc.save('Reporte_Productos_Categorias.pdf');
+      });
+    });
+  });
+</script>
+<?php endif; ?>
     <script src="public/bootstrap/js/sidebar.js"></script>
     <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="public/js/jquery-3.7.1.min.js"></script>
@@ -483,6 +599,7 @@ foreach ($caracteristicas as $clave => $valor) {
     }
 });
     </script>
+    
     <script>
 
 $(document).ready(function () {
@@ -509,7 +626,46 @@ categoria.caracteristicas.forEach(carac => {
 
 
     </script>
-       
+
+<!-- ...otros scripts... -->
+
+<?php if (!empty($reporteCategorias) && $totalCategorias > 0): ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const labels = <?= json_encode(array_column($reporteCategorias, 'nombre_categoria')) ?>;
+    const data = <?= json_encode(array_column($reporteCategorias, 'cantidad')) ?>;
+    function generarColores(n) {
+      const colores = [];
+      for (let i = 0; i < n; i++) {
+        const hue = Math.round((360 / n) * i);
+        colores.push(`hsl(${hue}, 70%, 60%)`);
+      }
+      return colores;
+    }
+    const colores = generarColores(labels.length);
+    const ctx = document.getElementById('graficoPastel').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: colores,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { display: true, position: 'bottom' },
+          title: { display: true, text: 'Distribución de Productos por Categoría' }
+        }
+      }
+    });
+  });
+</script>
+<?php endif; ?>
   </body>
 
   </html>

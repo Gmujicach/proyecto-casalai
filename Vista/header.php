@@ -11,4 +11,5 @@
 <!-- Bootstrap 5 JavaScript (para habilitar la funcionalidad de acordeón) -->
 
 <script src="Javascript/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href='Public/bootstrap/css/bootstrap.min.css' rel='stylesheet'>

@@ -15,7 +15,7 @@
 <?php include 'NewNavBar.php'; ?>
 
 <div class="modal fade modal-registrar" id="registrarRecepcionModal" tabindex="-1" role="dialog" aria-labelledby="registrarRecepcionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="f" method="POST">
                 <div class="modal-header">
@@ -220,7 +220,7 @@
 		<?php include 'footer.php'; ?>
 	
 <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-dialog modal-lg"> <!-- modal-lg para más espacio -->
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="titulo-form" id="modalModificarLabel">Modificar Recepción</h5>

@@ -15,7 +15,7 @@
 
 <div class="modal fade modal-registrar" id="registrarProveedorModal" tabindex="-1" role="dialog" 
 aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="incluirproveedor" method="POST">
                 <div class="modal-header">
@@ -257,7 +257,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
 
 <div class="modal fade modal-modificar" id="modificarProveedorModal" tabindex="-1" role="dialog"
 aria-labelledby="modificarProveedorModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="FormModificarProveedor" method="POST">
         <div class="modal-header">
@@ -337,7 +337,7 @@ aria-labelledby="modificarProveedorModalLabel" aria-hidden="true">
 
 <div class="modal fade modal-modificar" id="PedidoProductoModal" tabindex="-1" role="dialog" 
 aria-labelledby="PedidoProductoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form id="FormPedidoProducto" method="POST">
         <div class="modal-header">

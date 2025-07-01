@@ -14,7 +14,7 @@
 
 <div class="modal fade modal-registrar" id="registrarMarcaModal" tabindex="-1" role="dialog" 
 aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="registrarMarca" method="POST">
                 <div class="modal-header">
@@ -94,7 +94,7 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
 </div>
 
 <div class="modal fade modal-modificar" id="modificarMarcaModal" tabindex="-1" role="dialog" aria-labelledby="modificarMarcaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form id="modificarMarca" method="POST">
                 <div class="modal-header">
