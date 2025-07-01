@@ -212,6 +212,29 @@ function obtenerProductos() {
 $productoModel = new Productos();
 $categoriasDinamicas = $productoModel->obtenerCategoriasDinamicas();
 
+$reporteCategorias = $productoModel->obtenerReporteCategorias();
+
+if (!$reporteCategorias || !is_array($reporteCategorias)) {
+    $reporteCategorias = [];
+}
+
+$totalCategorias = array_sum(array_column($reporteCategorias, 'cantidad'));
+foreach ($reporteCategorias as &$cat) {
+    $cat['porcentaje'] = $totalCategorias > 0 ? round(($cat['cantidad'] / $totalCategorias) * 100, 2) : 0;
+}
+unset($cat);
+// DEPURACIÓN: Mostrar datos en el log y en pantalla (solo para desarrollo)
+error_log("DEBUG - reporteCategorias: " . print_r($reporteCategorias, true));
+error_log("DEBUG - totalCategorias: " . $totalCategorias);
+
+if (isset($_GET['debug']) && $_GET['debug'] == 1) {
+    echo "<pre style='background:#eee;padding:10px;'>";
+    echo "reporteCategorias:\n";
+    print_r($reporteCategorias);
+    echo "\ntotalCategorias: $totalCategorias\n";
+    echo "</pre>";
+}
+
 if (empty($categoriasDinamicas)) {
     $mostrarFormulario = false;
 } else {
@@ -225,7 +248,9 @@ if (is_file("Vista/" . $pagina . ".php")) {
     $modelos = obtenerModelos();
     $productos = obtenerProductos();
     // Incluye el archivo de vista
-    require_once("Vista/" . $pagina . ".php");
+
+
+        require_once("Vista/" . $pagina . ".php");
 } else {
     // Muestra un mensaje si la página está en construcción
     echo "Página en construcción";

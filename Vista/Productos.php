@@ -423,6 +423,94 @@ foreach ($caracteristicas as $clave => $valor) {
       </div>
     </div>
 
+
+
+<!-- Reporte estadístico de productos por categoría -->
+<?php if (!empty($reporteCategorias) && $totalCategorias > 0): ?>
+<div class="reporte-estadistico" ...>
+  <h4>Reporte Estadístico de Productos por Categoría</h4>
+  <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+    <div style="flex:1; min-width:320px; text-align:center;">
+      <canvas id="graficoPastel" width="400" height="400"></canvas>
+    </div>
+    <div style="flex:1; min-width:320px;">
+      <!-- tabla aquí -->
+      
+        <table style="margin:0 auto; border-collapse:collapse; width:90%; background:#fafbfc; border-radius:8px; overflow:hidden; font-size:1.1rem;">
+          <thead>
+            <tr>
+              <th style="background:#2980b9; color:#fff; padding:8px;">Categoría</th>
+              <th style="background:#2980b9; color:#fff; padding:8px;">Cantidad</th>
+              <th style="background:#2980b9; color:#fff; padding:8px;">Porcentaje (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($reporteCategorias as $cat): 
+              $porcentaje = $totalCategorias > 0 ? round(($cat['cantidad'] / $totalCategorias) * 100, 2) : 0;
+            ?>
+            <tr>
+              <td style="padding:8px;"><?= htmlspecialchars($cat['nombre_categoria']) ?></td>
+              <td style="padding:8px;"><?= $cat['cantidad'] ?></td>
+              <td style="padding:8px;"><?= $porcentaje ?> %</td>
+            </tr>
+            <?php endforeach; ?>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th style="background:#eaf6ff;">Total</th>
+              <th style="background:#eaf6ff;"><?= $totalCategorias ?></th>
+              <th style="background:#eaf6ff;">100 %</th>
+            </tr>
+          </tfoot>
+          <div style="margin-top:20px; text-align:right;">
+  <button id="descargarPDF" class="btn btn-success" style="padding:12px 28px; font-size:17px; border-radius:8px; background:#27ae60; color:#fff; border:none; cursor:pointer;"
+    <?php if (empty($reporteCategorias) || $totalCategorias == 0) echo 'disabled'; ?>>
+    Descargar PDF
+  </button>
+</div>
+        </table>
+      </div>
+    </div>
+  <?php endif; ?>
+</div>
+<?php if (!empty($reporteCategorias) && $totalCategorias > 0): ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const labels = <?= json_encode(array_column($reporteCategorias, 'nombre_categoria')) ?>;
+  const data = <?= json_encode(array_column($reporteCategorias, 'cantidad')) ?>;
+  function generarColores(n) {
+    const colores = [];
+    for (let i = 0; i < n; i++) {
+      const hue = Math.round((360 / n) * i);
+      colores.push(`hsl(${hue}, 70%, 60%)`);
+    }
+    return colores;
+  }
+  const colores = generarColores(labels.length);
+  const ctx = document.getElementById('graficoPastel').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colores,
+        borderColor: '#fff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: true, position: 'bottom' },
+        title: { display: true, text: 'Distribución de Productos por Categoría' }
+      }
+    }
+  });
+});
+</script>
+<?php endif; ?>
     <script src="public/bootstrap/js/sidebar.js"></script>
     <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="public/js/jquery-3.7.1.min.js"></script>
@@ -509,7 +597,8 @@ categoria.caracteristicas.forEach(carac => {
 
 
     </script>
-       
+
+
   </body>
 
   </html>
