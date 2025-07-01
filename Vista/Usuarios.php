@@ -62,7 +62,7 @@
                             </div>
                             <div class="envolver-form">
                                 <label for="rango">Rol de Usuario</label>
-                                <select class="form-select form-select-lg mb-3" id="rango" name="rango">
+                                <select class="form-select" id="rango" name="rango">
                                     <option value="" hidden>Seleccione el rol del usuario</option>
                                     <option value="1">Administrador</option>
                                     <option value="2">Almacenista</option>
