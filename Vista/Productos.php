@@ -6,6 +6,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Gestionar Productos</title>
     <?php include 'header.php'; ?>
     <style>
@@ -163,7 +164,7 @@
         </button>
       </div>
 
-      <h3>Lista de Productos</h3>
+      <h3>Listado de Productos</h3>
 
       <table class="tablaConsultas" id="tablaConsultas">
         <thead>
@@ -516,6 +517,12 @@ foreach ($caracteristicas as $clave => $valor) {
     </div>
 
 
+        <div style="text-align:center; margin-top:20px;">
+            <button id="descargarPDF" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
+                Descargar PDF
+            </button>
+        </div>
+    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -608,6 +615,7 @@ foreach ($caracteristicas as $clave => $valor) {
     }
 });
     </script>
+    
     <script>
 
 $(document).ready(function () {
@@ -667,7 +675,45 @@ categoria.caracteristicas.forEach(carac => {
   });
 </script>
 
+<!-- ...otros scripts... -->
 
+<?php if (!empty($reporteCategorias) && $totalCategorias > 0): ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const labels = <?= json_encode(array_column($reporteCategorias, 'nombre_categoria')) ?>;
+    const data = <?= json_encode(array_column($reporteCategorias, 'cantidad')) ?>;
+    function generarColores(n) {
+      const colores = [];
+      for (let i = 0; i < n; i++) {
+        const hue = Math.round((360 / n) * i);
+        colores.push(`hsl(${hue}, 70%, 60%)`);
+      }
+      return colores;
+    }
+    const colores = generarColores(labels.length);
+    const ctx = document.getElementById('graficoPastel').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: colores,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { display: true, position: 'bottom' },
+          title: { display: true, text: 'Distribución de Productos por Categoría' }
+        }
+      }
+    });
+  });
+</script>
+<?php endif; ?>
   </body>
 
   </html>

@@ -49,13 +49,13 @@ input, select, button{
 }
 
 .modal-content {
-    padding: 20px;
+    padding: 30px;
     background: #fff;
     width: 700px;
     max-width: 98vw;
     margin: auto;
-    display: flex;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    border-radius: 12px;
 }
 
 .modal-content form{
@@ -72,11 +72,29 @@ input, select, button{
 
 .grupo-form{
     display: flex;
+    width: 100%;
+    gap: 16px;
 }
 
-.grupo-form input{
-    width: 50%;
+.grupo-interno {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-width: 0;
     margin-right: 10px;
+    margin-left: 10px;
+}
+
+.grupo-interno label {
+    margin-bottom: 4px;
+}
+
+.grupo-interno input,
+.grupo-interno select {
+    width: 100%;
+}
+
+.grupo-interno span {
     margin-left: 10px;
 }
 
@@ -113,7 +131,6 @@ input, select, button{
 
 .form-select{
     margin-right: 10px;
-    margin-left: 10px;
 }
 
 select{
@@ -222,6 +239,3 @@ select option[value=""] [disabled]{
     padding: 8px 24px;
     font-weight: 600;
 }
-
-
-
