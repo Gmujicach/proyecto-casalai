@@ -32,7 +32,7 @@
                         <span id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
-                        <label for="rango">Proveedor</label>
+                        <label for="proveedor">Proveedor</label>
                         <select class="form-select" name="proveedor" id="proveedor">
                             <option value='disabled' disabled selected>Seleccione un Proveedor</option>
                             <?php
@@ -263,14 +263,7 @@
         </div>
     </div>
 </div>
-		<div class="table-container">
-						
-						<div class="row">
-							<div class="col">
-								<button class="btn" name="" type="button" id="pdfrepecion" name="pdfrecepcion"><a href="?pagina=pdfrecepcion">GENERAR REPORTE</a></button>
-							</div>
-						</div>
-		</div>
+	
 		<?php include 'footer.php'; ?>
 	
 <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">

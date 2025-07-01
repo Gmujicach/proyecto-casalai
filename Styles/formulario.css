@@ -94,10 +94,6 @@ input, select, button{
     width: 100%;
 }
 
-.grupo-interno span {
-    margin-left: 10px;
-}
-
 .envolver-form{
     position: relative;
     margin-right: 10px;
