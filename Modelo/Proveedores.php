@@ -155,6 +155,18 @@ class Proveedores extends BD {
         }
     }
 
+public function obtenerReporteSuministroProveedores() {
+    $sql = "SELECT p.nombre_proveedor, SUM(dp.cantidad) AS cantidad
+            FROM tbl_proveedores p
+            JOIN tbl_recepcion_productos r ON p.id_proveedor = r.id_proveedor
+            JOIN tbl_detalle_recepcion_productos dp ON r.id_recepcion = dp.id_recepcion
+            GROUP BY p.id_proveedor, p.nombre_proveedor
+            ORDER BY cantidad DESC
+            LIMIT 10";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
     public function obtenerProveedorPorId($id_proveedor) {
         return $this->obtProveedorPorId($id_proveedor);
     }

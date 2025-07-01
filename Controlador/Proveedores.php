@@ -141,6 +141,10 @@ function getproveedores() {
     return $proveedor->getproveedores();
 }
 
+$proveedorModel = new Proveedores();
+$reporteSuministroProveedores = $proveedorModel->obtenerReporteSuministroProveedores();
+$totalSuministrado = array_sum(array_column($reporteSuministroProveedores, 'cantidad'));
+
 function obtenerProductosConBajoStock() {
     $producto = new Producto();
     return $producto->obtenerProductosConBajoStock();

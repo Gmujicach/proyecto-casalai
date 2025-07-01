@@ -193,9 +193,10 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
     </table>
 </div>
 
+
 <div class="contenedor-tabla">
     <h3>Lista de Productos Con Bajo Stock</h3>
-    <table class="tabla"class="tablaConsultas" id="">
+    <table class="tabla" class="tablaConsultas" id="">
         <thead>
             <tr>
                 <th>Acción</th>
@@ -207,52 +208,102 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($productos as $producto): ?>
+            <?php if (empty($productos)): ?>
                 <tr>
-                    <td>
-                        <ul>
-                            <div>
-                                <button class="btn-pedido" 
-                                    id="btnPedidoProducto"
-                                    data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
-                                    data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
-                                    data-modelo="<?php echo htmlspecialchars($producto['nombre_modelo']); ?>"
-                                    data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
-                                    data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
-                                >Realizar Pedido
-                                </button>
-                            </div>
-                        </ul>
-                    </td>
-                    <td>
-                        <span class="campo-numeros">
-                          <?php echo htmlspecialchars($producto['id_producto']); ?>
-                        </span>
-                    </td>
-                    <td>
-                        <span class="campo-nombres">
-                          <?php echo htmlspecialchars($producto['nombre_producto']); ?>
-                        </span>
-                    </td>
-                    <td>
-                        <span class="campo-nombres">
-                          <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
-                        </span>
-                    </td>
-                    <td>
-                        <span class="campo-stock-actual-negativo">
-                          <?php echo htmlspecialchars($producto['stock']); ?>
-                        </span>
-                    </td>
-                    <td>
-                        <span class="campo-stock-minimo">
-                          <?php echo htmlspecialchars($producto['stock_minimo']); ?>
-                        </span>
-                    </td>
+                    <td colspan="6" style="text-align:center;">No hay productos con bajo stock.</td>
                 </tr>
-            <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach ($productos as $producto): ?>
+                    <tr>
+                        <td>
+                            <ul>
+                                <div>
+                                    <button class="btn-pedido" 
+                                        id="btnPedidoProducto"
+                                        data-id="<?php echo htmlspecialchars($producto['id_producto']); ?>"
+                                        data-nombre="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
+                                        data-modelo="<?php echo htmlspecialchars($producto['nombre_modelo']); ?>"
+                                        data-stockactual="<?php echo htmlspecialchars($producto['stock']); ?>"
+                                        data-stockminimo="<?php echo htmlspecialchars($producto['stock_minimo']); ?>"
+                                    >Realizar Pedido
+                                    </button>
+                                </div>
+                            </ul>
+                        </td>
+                        <td>
+                            <span class="campo-numeros">
+                              <?php echo htmlspecialchars($producto['id_producto']); ?>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="campo-nombres">
+                              <?php echo htmlspecialchars($producto['nombre_producto']); ?>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="campo-nombres">
+                              <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="campo-stock-actual-negativo">
+                              <?php echo htmlspecialchars($producto['stock']); ?>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="campo-stock-minimo">
+                              <?php echo htmlspecialchars($producto['stock_minimo']); ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
+</div>
+
+<!-- Reporte estadístico de productos suministrados por proveedor -->
+<div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+    <h2 style="text-align:center;">Top 10 Proveedores por Productos Suministrados</h2>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+        <div style="flex:1; min-width:320px;">
+            <canvas id="graficoSuministroProveedores" width="400" height="260"></canvas>
+        </div>
+        <div style="flex:1; min-width:320px;">
+            <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
+                <thead>
+                    <tr>
+                        <th>Proveedor</th>
+                        <th>Cantidad Suministrada</th>
+                        <th>Porcentaje (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($reporteSuministroProveedores as $prov): 
+                        $porcentaje = $totalSuministrado > 0 ? round(($prov['cantidad'] / $totalSuministrado) * 100, 2) : 0;
+                    ?>
+                        <tr>
+                            <td><?= htmlspecialchars($prov['nombre_proveedor']) ?></td>
+                            <td><?= $prov['cantidad'] ?></td>
+                            <td><?= $porcentaje ?>%</td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th><?= $totalSuministrado ?></th>
+                        <th>100%</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <div style="text-align:center; margin-top:20px;">
+                <button id="descargarPDFProveedores" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
+                    Descargar Reporte de Suministro
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade modal-modificar" id="modificarProveedorModal" tabindex="-1" role="dialog"
@@ -419,6 +470,57 @@ $(document).ready(function() {
         language: {
             url: 'Public/js/es-ES.json'
         }
+    });
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const labelsProveedores = <?= json_encode(array_column($reporteSuministroProveedores, 'nombre_proveedor')) ?>;
+const dataProveedores = <?= json_encode(array_column($reporteSuministroProveedores, 'cantidad')) ?>;
+const ctxProveedores = document.getElementById('graficoSuministroProveedores').getContext('2d');
+new Chart(ctxProveedores, {
+    type: 'bar',
+    data: {
+        labels: labelsProveedores,
+        datasets: [{
+            label: 'Productos suministrados',
+            data: dataProveedores,
+            backgroundColor: 'rgba(39, 174, 96, 0.7)',
+            borderColor: 'rgba(39, 174, 96, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        plugins: {
+            legend: { display: false },
+            title: { display: true, text: 'Top 10 Proveedores por Productos Suministrados' }
+        },
+        scales: {
+            x: { beginAtZero: true }
+        }
+    }
+});
+
+document.getElementById('descargarPDFProveedores').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: 'landscape',
+        unit: 'pt',
+        format: 'a4'
+    });
+
+    const reporte = document.querySelector('.reporte-container');
+    html2canvas(reporte).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const imgWidth = pageWidth - 40;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+        doc.save('Reporte_Suministro_Proveedores.pdf');
     });
 });
 </script>

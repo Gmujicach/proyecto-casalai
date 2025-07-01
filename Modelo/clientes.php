@@ -116,6 +116,19 @@ class cliente extends BD {
         }
     }
 
+    function obtenerReporteComprasClientes() {
+    $db = new cliente();
+    $sql = "SELECT c.nombre, COUNT(d.id_producto) AS cantidad
+FROM tbl_clientes c
+JOIN tbl_despachos ds ON c.id_clientes = ds.id_clientes
+JOIN tbl_despacho_detalle d ON ds.id_despachos = d.id_despacho
+GROUP BY c.id_clientes, c.nombre
+ORDER BY cantidad DESC
+LIMIT 10;";
+    $stmt = $db->conex->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
     public function obtenerclientesPorId($id) {
         return $this->obtClientePorId($id);
     }
