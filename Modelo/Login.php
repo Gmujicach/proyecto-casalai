@@ -57,9 +57,8 @@ FROM
 INNER JOIN 
     tbl_rol r 
 ON 
-    r.id_rol = u.id_rol;
- 
-                          WHERE username = :username");
+    r.id_rol = u.id_rol
+WHERE username = :username");
         $p->bindParam(':username', $this->username);
         $p->execute();
 
@@ -127,21 +126,17 @@ public function registrarUsuarioYCliente($datos) {
             $id_rol_cliente // Usamos el ID numérico del rol Cliente
         ]);
 
-        // Obtener el ID del usuario recién insertado
-        $id_usuario = $this->co->lastInsertId();
-
         // Inserta en tbl_clientes
         $p = $this->cop->prepare("INSERT INTO tbl_clientes 
-                            (nombre, cedula, telefono, direccion, correo, activo, id_usuario)
-                            VALUES (?, ?, ?, ?, ?, ?, ?)");
+                            (nombre, cedula, telefono, direccion, correo, activo)
+                            VALUES (?, ?, ?, ?, ?, ?)");
         $p->execute([
             $datos['nombre'] . ' ' . $datos['apellido'],
             $datos['cedula'],
             $datos['telefono'],
             $datos['direccion'],
             $datos['correo'],
-            1,
-            $id_usuario // Relacionamos el cliente con el usuario
+            1
         ]);
 
         // Confirmar transacción
