@@ -11,55 +11,55 @@ class PDF extends FPDF {
         $this->subtitulo = $subtitulo;
     }
 
-    // Cabecera de página
+    // Cabecera de pagina
     function Header() {
         // Logo
         $image_file = 'IMG/logo.jpg';
         if (file_exists($image_file)) {
             $this->Image($image_file, 10, 10, 30);
         }
-        // Título
+        // Titulo
         $this->SetFont('Arial', 'B', 16);
         $this->Cell(0, 15, $this->titulo, 0, 1, 'C');
-        // Subtítulo
+        // Subtitulo
         if (!empty($this->subtitulo)) {
             $this->SetFont('Arial', 'I', 12);
             $this->Cell(0, 10, $this->subtitulo, 0, 1, 'C');
         }
-        // Fecha de generación
+        // Fecha de generacion
         $this->SetFont('Arial', '', 10);
         $this->Cell(0, 10, 'Generado el: ' . date('d/m/Y H:i:s'), 0, 1, 'R');
-        // Línea separadora
+        // Linea separadora
         $this->Line(10, $this->GetY(), $this->GetPageWidth()-10, $this->GetY());
         $this->Ln(2);
     }
 
-    // Pie de página
+    // Pie de pagina
     function Footer() {
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
-        $this->Cell(0, 10, 'Página ' . $this->PageNo() . '/{nb}', 0, 0, 'C');
+        $this->Cell(0, 10, 'Pagina ' . $this->PageNo() . '/{nb}', 0, 0, 'C');
     }
 
     /**
      * Genera reporte de accesos semanales
      */
     public function generarReporteAccesos($datos) {
-        $this->SetTitle('Reporte de Accesos - Catálogo');
-        $this->titulo = 'Reporte de Accesos al Catálogo';
-        $this->subtitulo = 'Estadísticas semanales de visitas';
+        $this->SetTitle('Reporte de Accesos - Catalogo');
+        $this->titulo = 'Reporte de Accesos al Catalogo';
+        $this->subtitulo = 'Estadisticas semanales de visitas';
         $this->AliasNbPages();
         $this->AddPage();
 
-        // Resumen estadístico
+        // Resumen estadistico
         $this->SetFont('Arial', 'B', 12);
-        $this->Cell(0, 10, 'Resumen Estadístico', 0, 1);
+        $this->Cell(0, 10, 'Resumen Estadistico', 0, 1);
         $this->SetFont('Arial', '', 10);
 
         $this->Cell(60, 8, 'Total de accesos:', 0, 0);
         $this->Cell(0, 8, number_format($datos['total']), 0, 1);
 
-        $this->Cell(60, 8, 'Usuarios únicos:', 0, 0);
+        $this->Cell(60, 8, 'Usuarios unicos:', 0, 0);
         $this->Cell(0, 8, number_format($datos['unicos']), 0, 1);
 
         $this->Cell(60, 8, 'Promedio diario:', 0, 0);
@@ -75,7 +75,7 @@ class PDF extends FPDF {
         $this->SetFillColor(220, 220, 220);
         $this->Cell(30, 8, 'Semana', 1, 0, 'C', 1);
         $this->Cell(40, 8, 'Total Accesos', 1, 0, 'C', 1);
-        $this->Cell(40, 8, 'Usuarios Únicos', 1, 0, 'C', 1);
+        $this->Cell(40, 8, 'Usuarios Unicos', 1, 0, 'C', 1);
         $this->Cell(40, 8, 'Promedio Diario', 1, 1, 'C', 1);
 
         $this->SetFont('Arial', '', 9);
@@ -91,12 +91,12 @@ class PDF extends FPDF {
     }
 
     /**
-     * Genera reporte de usuarios más activos
+     * Genera reporte de usuarios mas activos
      */
     public function generarReporteUsuarios($usuarios) {
-        $this->SetTitle('Reporte de Usuarios Activos - Catálogo');
-        $this->titulo = 'Usuarios Más Activos en el Catálogo';
-        $this->subtitulo = 'Ranking de usuarios con más accesos';
+        $this->SetTitle('Reporte de Usuarios Activos - Catalogo');
+        $this->titulo = 'Usuarios Mas Activos en el Catalogo';
+        $this->subtitulo = 'Ranking de usuarios con mas accesos';
         $this->AliasNbPages();
         $this->AddPage();
 
@@ -109,7 +109,7 @@ class PDF extends FPDF {
         $this->Cell(60, 8, 'Total de accesos analizados:', 0, 0);
         $this->Cell(0, 8, number_format($totalAccesos), 0, 1);
 
-        $this->Cell(60, 8, 'Número de usuarios:', 0, 0);
+        $this->Cell(60, 8, 'Numero de usuarios:', 0, 0);
         $this->Cell(0, 8, count($usuarios), 0, 1);
 
         $this->Ln(8);
