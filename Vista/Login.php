@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Styles/login-darckort.css">
     <script src="Public/js/sweetalert2.js"></script>
-    <title>Iniciar Sesion</title>
+    <title>Iniciar Sesión</title>
   </head>
 
 
@@ -27,14 +27,16 @@
 
           <input type="text" name="accion" id="accion" style="display:none" />
 
-            <h2 class="title">Iniciar Sesion</h2>
+            <h2 class="title">Iniciar Sesión</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" name="username" id="username"  placeholder="Nombre Usuario" required/>
+              <input type="text" name="username" id="username"  placeholder="Nombre de Usuario" required/>
+              <span class="span-value" id="susername"></span>
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
               <input type="password" name="password" id="password"  placeholder="Contraseña" required/>
+              <span class="span-value" id="spassword"></span>
             </div>
             <button class="btn btn-vino w-100" id="acceder" name="acceder">Iniciar Sesion</button>
             <p class="social-text">Siguenos en nuestras Redes Sociales</p>
