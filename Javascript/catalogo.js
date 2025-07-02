@@ -107,6 +107,11 @@ $(document).ready(function () {
     function filtrarPorMarca() {
         const idMarca = $(this).val();
 
+        // Destruir DataTable antes de modificar el DOM
+        if ($.fn.DataTable.isDataTable('#tablaProductos')) {
+            $('#tablaProductos').DataTable().destroy();
+        }
+
         $.ajax({
             url: '?pagina=catalogo',
             type: 'POST',
@@ -115,7 +120,7 @@ $(document).ready(function () {
                 id_marca: idMarca
             },
             beforeSend: function () {
-                $('#tablaProductos').html(`
+                $('#tablaProductos tbody').html(`
                     <tr>
                         <td colspan="6" class="text-center py-4">
                             <div class="spinner-border text-primary" role="status">
@@ -130,18 +135,22 @@ $(document).ready(function () {
                     const data = typeof response === 'object' ? response : JSON.parse(response);
 
                     if (data.status === 'success') {
-                        $('#tablaProductos').html(data.html);
+                        $('#tablaProductos tbody').html(data.html);
                     } else {
-                        mostrarErrorEnTabla(data.message || 'Error al filtrar productos');
+                        $('#tablaProductos tbody').html(data.html || '<tr><td colspan="6" class="text-center py-4">No hay productos</td></tr>');
                     }
                 } catch (e) {
                     console.error('Error parsing response:', e);
-                    mostrarErrorEnTabla('Error al procesar la respuesta');
+                    $('#tablaProductos tbody').html('<tr><td colspan="6" class="text-center py-4">Error al procesar la respuesta</td></tr>');
                 }
+
+                // Volver a inicializar DataTable y el buscador personalizado
+                inicializarDataTableProductos();
             },
             error: function (xhr) {
                 console.error('AJAX Error:', xhr.status, xhr.statusText);
-                mostrarErrorEnTabla('Error de conexión');
+                $('#tablaProductos tbody').html('<tr><td colspan="6" class="text-center py-4">Error de conexión</td></tr>');
+                inicializarDataTableProductos();
             }
         });
     }
@@ -486,17 +495,31 @@ $(document).ready(function () {
                     // Actualizar la interfaz sin recargar
                     const comboCard = $(`.btn-cambiar-estado[data-id-combo="${idCombo}"]`).closest('.combo-card');
                     const estadoBtn = $(`.btn-cambiar-estado[data-id-combo="${idCombo}"]`);
+                    const btnAgregarCombo = comboCard.find('.btn-agregar-combo');
                     const esActivo = data.nuevo_estado;
 
                     // Cambiar clases y apariencia
                     comboCard.toggleClass('disabled-combo', !esActivo);
 
-                    // Actualizar botón
+                    // Actualizar botón de cambiar estado
                     estadoBtn
                         .toggleClass('btn-outline-warning btn-outline-success', esActivo)
                         .toggleClass('btn-outline-success btn-outline-warning', !esActivo)
                         .html(`<i class="bi ${esActivo ? 'bi-eye-slash' : 'bi-eye'}"></i> ${esActivo ? 'Deshabilitar' : 'Habilitar'}`)
                         .data('estado-actual', esActivo ? 1 : 0);
+
+                    // Habilitar o deshabilitar el botón "Agregar Combo"
+                    if (esActivo) {
+                        btnAgregarCombo.prop('disabled', false)
+                            .removeClass('btn-secondary')
+                            .addClass('btn-success')
+                            .html('<i class="bi bi-cart-plus"></i> Agregar Combo');
+                    } else {
+                        btnAgregarCombo.prop('disabled', true)
+                            .removeClass('btn-success')
+                            .addClass('btn-secondary')
+                            .html('<i class="bi bi-cart-plus"></i> Combo no disponible');
+                    }
 
                     // Mostrar notificación
                     Swal.fire({
@@ -919,4 +942,26 @@ $(document).ready(function () {
             </tr>
         `);
     }
+
+    // Inicializar DataTable para la tabla de productos y el buscador personalizado
+    function inicializarDataTableProductos() {
+        const tablaProductosDT = $('#tablaProductos').DataTable({
+            language: {
+                url: 'Public/js/es-ES.json'
+            },
+            responsive: true,
+            columnDefs: [
+                { orderable: false, targets: 0 }
+            ],
+            dom: 'rtip'
+        });
+
+        // Sincronizar el input de búsqueda personalizado con el DataTable
+        $('#searchProduct').off('keyup').on('keyup', function () {
+            tablaProductosDT.search(this.value).draw();
+        });
+    }
+
+    // Inicialización al cargar la página
+    inicializarDataTableProductos();
 });

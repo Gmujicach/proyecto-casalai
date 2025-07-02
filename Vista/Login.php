@@ -41,13 +41,9 @@
             <button class="btn btn-vino w-100" id="acceder" name="acceder">Iniciar Sesion</button>
           </form>
 
-
-
-
-<!-- Agrega este estilo dentro de tu <style> -->
 <style>
   .registrar-form {
-    max-width: 1200px; /* Doble que el login que asume ~400px */
+    max-width: 1200px;
     width: 100%;
     margin: auto;
   }
@@ -72,7 +68,7 @@
     flex: 1 1 45%;
   }
 
-  .input-row .input-field input {
+  .input-row .input-field input, .input-field textarea {
     border: none;
     outline: none;
     background: none;
@@ -86,16 +82,23 @@
     color: #888;
   }
 
-
   .input-row .btn:hover {
     background: #357abd;
+  }
+
+  textarea.form-control {
+    resize: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: none;
+    background: #f0f0f0;
+    margin-bottom: 5px;
   }
 </style>
 
 <form method="post" id="registro-usuario-cliente" class="registrar-form">
   <h2 class="title">Registro</h2>
 
-  <!-- Nombre y Apellido -->
   <div class="input-row">
     <div class="input-field">
       <i class="fas fa-user"></i>
@@ -109,16 +112,19 @@
     </div>
   </div>
 
-  <!-- Usuario -->
   <div class="input-row">
-    <div class="input-field" style="flex:1;">
-      <i class="fas fa-user"></i>
+    <div class="input-field">
+      <i class="fas fa-phone"></i>
       <input type="text" name="nombre_usuario" id="nombre_usuario" placeholder="Nombre de Usuario" maxlength="20" required />
       <span class="span-value" id="snombre_usuario"></span>
     </div>
+    <div class="input-field">
+      <i class="fas fa-envelope"></i>
+      <input type="text" name="cedula" id="cedula" placeholder="Cédula/RIF" maxlength="12" required />
+      <span class="span-value" id="scedula"></span>
+    </div>
   </div>
 
-  <!-- Teléfono y Correo -->
   <div class="input-row">
     <div class="input-field">
       <i class="fas fa-phone"></i>
@@ -132,7 +138,10 @@
     </div>
   </div>
 
-  <!-- Contraseña y Confirmar Contraseña -->
+  <label for="direccion" style="color:#888; font-size:18px;">Dirección</label>
+  <textarea class="form-control" maxlength="100" id="direccion" name="direccion" rows="2" required></textarea>
+  <span class="span-value" id="sdireccion"></span>
+
   <div class="input-row">
     <div class="input-field">
       <i class="fas fa-lock"></i>
@@ -146,7 +155,6 @@
     </div>
   </div>
 
-  <!-- Botón Registrar -->
   <div class="input-row">
     <button type="submit" class="btn btn-vino w-100">Registrar</button>
   </div>

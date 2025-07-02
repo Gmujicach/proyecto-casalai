@@ -90,49 +90,67 @@ ON
 
 
 public function registrarUsuarioYCliente($datos) {
-    
     $this->co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $respuesta = ['status' => 'error', 'mensaje' => ''];
 
     try {
+        // Iniciar transacción
+        $this->co->beginTransaction();
+
         // Verifica si el usuario ya existe
         $p = $this->co->prepare("SELECT COUNT(*) FROM tbl_usuarios WHERE username = ?");
         $p->execute([$datos['nombre_usuario']]);
         if ($p->fetchColumn() > 0) {
-            $respuesta['mensaje'] = "El nombre de usuario ya está en uso. Por favor elige otro.";
-            return $respuesta;
+            throw new Exception("El nombre de usuario ya está en uso. Por favor elige otro.");
         }
 
         // Hashea la contraseña
         $hash = password_hash($datos['clave'], PASSWORD_DEFAULT);
 
+        // ID del rol Cliente (3 REVISAR LA BASE DE DATOS)
+        $id_rol_cliente = 3;
+
         // Inserta en tbl_usuarios
-        $p = $this->co->prepare("INSERT INTO tbl_usuarios (username, password, nombres, apellidos, correo, telefono, id_rol, estatus)
-                           VALUES (?, ?, ?, ?, ?, ?, 'Cliente', 'habilitado')");
+        $p = $this->co->prepare("INSERT INTO tbl_usuarios 
+                            (username, password, nombres, apellidos, correo, telefono, id_rol, estatus)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, 'habilitado')");
         $p->execute([
             $datos['nombre_usuario'],
             $hash,
             $datos['nombre'],
             $datos['apellido'],
             $datos['correo'],
-            $datos['telefono']
+            $datos['telefono'],
+            $id_rol_cliente // Usamos el ID numérico del rol Cliente
         ]);
 
+        // Obtener el ID del usuario recién insertado
+        $id_usuario = $this->co->lastInsertId();
+
         // Inserta en tbl_clientes
-        $p = $this->co->prepare("INSERT INTO tbl_clientes (nombre, cedula, telefono, direccion, correo, activo)
-                           VALUES (?, ?, ?, ?, ?, ?)");
+        $p = $this->co->prepare("INSERT INTO tbl_clientes 
+                            (nombre, cedula, telefono, direccion, correo, activo, id_usuario)
+                            VALUES (?, ?, ?, ?, ?, ?, ?)");
         $p->execute([
             $datos['nombre'] . ' ' . $datos['apellido'],
             $datos['cedula'],
             $datos['telefono'],
             $datos['direccion'],
             $datos['correo'],
-            1
+            1,
+            $id_usuario // Relacionamos el cliente con el usuario
         ]);
+
+        // Confirmar transacción
+        $this->co->commit();
 
         $respuesta['status'] = 'success';
         $respuesta['mensaje'] = 'Usuario y cliente registrados correctamente.';
     } catch (Exception $e) {
+        // Revertir transacción en caso de error
+        if ($this->co->inTransaction()) {
+            $this->co->rollBack();
+        }
         $respuesta['mensaje'] = $e->getMessage();
     }
     return $respuesta;
