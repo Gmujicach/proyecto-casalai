@@ -343,8 +343,7 @@ document.getElementById('descargarPDFDespacho').addEventListener('click', functi
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="titulo-form" id="modalModificarLabel">Modificar Recepción</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        <h5 class="titulo-form" id="modalModificarLabel">Modificar Despacho</h5>
       </div>
       <div class="modal-body">
 <form id="formularioEdicion">
