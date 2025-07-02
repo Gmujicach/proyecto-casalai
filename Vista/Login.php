@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Styles/login-darckort.css">
+    <link rel="stylesheet" href="Styles/formulario.css">
     <script src="Public/js/sweetalert2.js"></script>
     <title>Iniciar Sesión</title>
   </head>
@@ -54,7 +55,8 @@
     border-radius: 20px;
     padding: 0 15px;
     display: flex;
-    align-items: center;
+    flex-direction: column; /* <-- Apila verticalmente */
+    align-items: flex-start; /* <-- Alinea a la izquierda */
   }
 
   .input-row {

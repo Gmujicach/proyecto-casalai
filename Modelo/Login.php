@@ -31,9 +31,12 @@ class Login extends BD
         return $this->password;
     }
 
-        public function __construct() {
+    public function __construct() {
         $conexion = new BD('S');
         $this->co = $conexion->getConexion();
+    
+        $conexion2 = new BD('P');
+        $this->cop = $conexion2->getConexion();
     }
 
     function existe() {
@@ -128,7 +131,7 @@ public function registrarUsuarioYCliente($datos) {
         $id_usuario = $this->co->lastInsertId();
 
         // Inserta en tbl_clientes
-        $p = $this->co->prepare("INSERT INTO tbl_clientes 
+        $p = $this->cop->prepare("INSERT INTO tbl_clientes 
                             (nombre, cedula, telefono, direccion, correo, activo, id_usuario)
                             VALUES (?, ?, ?, ?, ?, ?, ?)");
         $p->execute([
