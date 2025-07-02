@@ -31,15 +31,15 @@
             <h2 class="title">Iniciar Sesión</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" name="username" id="username"  placeholder="Nombre de Usuario" required/>
-              <span class="span-value" id="susername"></span>
+              <input style="margin-top: 15px;" type="text" name="username" id="username"  placeholder="Nombre de Usuario" maxlength="20" required/>
+              <span style="margin-top: 10px;" class="span-value" id="susername"></span>
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" name="password" id="password"  placeholder="Contraseña" required/>
-              <span class="span-value" id="spassword"></span>
+              <input style="margin-top: 15px;" type="password" name="password" id="password"  placeholder="Contraseña" maxlength="15" required/>
+              <span style="margin-top: 10px;" class="span-value" id="spassword"></span>
             </div>
-            <button class="btn btn-vino w-100" id="acceder" name="acceder">Iniciar Sesion</button>
+            <button class="btn btn-vino w-100" id="acceder" name="acceder">Iniciar Sesión</button>
           </form>
 
 <style>
@@ -55,8 +55,8 @@
     border-radius: 20px;
     padding: 0 15px;
     display: flex;
-    flex-direction: column; /* <-- Apila verticalmente */
-    align-items: flex-start; /* <-- Alinea a la izquierda */
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .input-row {

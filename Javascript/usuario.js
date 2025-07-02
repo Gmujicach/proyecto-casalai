@@ -56,6 +56,15 @@ $(document).ready(function () {
     );
   });
 
+  $("#telefono_usuario").on("input", function() {
+      let valor = $(this).val().replace(/\D/g, '');
+      if(valor.length > 4 && valor.length <= 7)
+          valor = valor.slice(0,4) + '-' + valor.slice(4);
+      else if(valor.length > 7)
+          valor = valor.slice(0,4) + '-' + valor.slice(4,7) + '-' + valor.slice(7,11);
+      $(this).val(valor);
+  });
+
   $("#correo_usuario").on("keypress", function (e) {
     validarKeyPress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
   });
