@@ -50,6 +50,10 @@ $(document).ready(function () {
     $(document).on('click', '#registrarRecepcionModal .close', function() {
         $('#registrarRecepcionModal').modal('hide');
     });
+
+    $(document).on('click', '#modalp .close-2', function() {
+        $('#modalp').modal('hide');
+    });
 });
 
 carga_productos();    //boton para levantar modal de productos

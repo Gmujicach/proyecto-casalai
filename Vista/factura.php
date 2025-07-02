@@ -1,4 +1,4 @@
-<?php if ($_SESSION['rango'] == 'Administrador') {?>
+<?php if ($_SESSION['nombre_rol'] == 'Administrador') {?>
 
 <?php require_once 'Modelo/Despacho.php' ; require_once 'Controlador/factura.php' ; ?>
     <!DOCTYPE html>

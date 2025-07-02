@@ -1,4 +1,4 @@
-<?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Cliente' ) { ?>
+<?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Cliente' ) { ?>
 
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
@@ -48,7 +48,7 @@
                             <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
                         </i>
                         <div class="desplegable">
-                            <ul><?php  if($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista'){ ?>
+                            <ul><?php  if($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista'){ ?>
                                 <li><a href="#" class="modificarEstado" 
    data-id="<?php echo htmlspecialchars($dato['id_detalles']); ?>"
    data-factura="<?php echo htmlspecialchars($dato['id_factura']); ?>"

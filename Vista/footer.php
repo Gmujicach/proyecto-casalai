@@ -64,6 +64,9 @@ document.addEventListener("DOMContentLoaded", function () {
   <script src="public/js/jquery.dataTables.min.js"></script>
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatable.js"></script>
+  <script src="Public/js/chart.js"></script>
+<script src="Public/js/html2canvas.min.js"></script>
+<script src="Public/js/jspdf.umd.min.js"></script>
   
   <script src="Public/js/jquery.min.js"></script>
 <script src="Public/js/popper.min.js"></script>

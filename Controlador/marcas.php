@@ -1,7 +1,12 @@
 <?php
 ob_start();
 require_once 'Modelo/marcas.php';
+require_once 'Modelo/Permisos.php';
 
+$id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
+$permisosObj = new Permisos();
+$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('marcas'));
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST['accion'])) {
@@ -104,9 +109,11 @@ function getmarcas() {
     return $marca->getmarcas();
 }
 
+
 $pagina = "marcas";
 if (is_file("Vista/" . $pagina . ".php")) {
     $marcas = getmarcas();
+    // Pasa $permisosUsuario a la vista
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";

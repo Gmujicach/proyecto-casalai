@@ -17,9 +17,12 @@ if (!isset($_SESSION['name'])) {
   <?php include 'header.php'; ?>
 </head>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/BannerCasaLai.png); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-size: cover; background-position: center; background-repeat: no-repeat;">
   <?php include 'NewNavBar.php'; ?>
-
   <?php include 'footer.php'; ?>
+  <script>
+    const sesion = <?php echo json_encode($_SESSION); ?>;
+    console.log('Sesión actual:', sesion);
+</script>
 </body>
 </html>

@@ -105,12 +105,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 }
-
+    $cliente = new cliente();
 function getclientes() {
     $cliente = new cliente();
     return $cliente->getclientes();
 }
-
+$reporteComprasClientes = $cliente->obtenerReporteComprasClientes();
+$totalComprasClientes = array_sum(array_column($reporteComprasClientes, 'cantidad'));
 $pagina = "Clientes";
 if (is_file("Vista/" . $pagina . ".php")) {
 

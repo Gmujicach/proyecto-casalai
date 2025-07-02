@@ -1,4 +1,4 @@
-<?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista') { ?>
+<?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista') { ?>
 
   <!DOCTYPE html>
   <html lang="es">
@@ -325,7 +325,7 @@ foreach ($caracteristicas as $clave => $valor) {
 </div>
 
 <div class="reporte-container" style="max-width: 1000px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
-  <h2 style="text-align: center; margin-bottom: 20px;">Reporte de Productos por Categoría</h2>
+  <h3 style="text-align: center; margin-bottom: 20px; color:#1f66df;">Reporte de Productos por Categoría</h3>
 
   <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 40px;">
     <!-- Gráfica -->
@@ -585,11 +585,15 @@ foreach ($caracteristicas as $clave => $valor) {
         if (categoria) {
           categoria.caracteristicas.forEach(carac => {
             let input = '';
-            if (carac.tipo === 'int' || carac.tipo === 'float') {
-              input = `<input type="number" class="form-control" name="carac[${carac.nombre}]" placeholder="${carac.nombre}" ${carac.tipo === 'int' ? 'step="1"' : 'step="0.01"'} required>`;
-            } else {
-              input = `<input type="text" class="form-control" name="carac[${carac.nombre}]" maxlength="${carac.max}" placeholder="${carac.nombre}" required>`;
-            }
+           if (carac.tipo === 'int' || carac.tipo === 'float') {
+    if (carac.tipo === 'int') {
+        input = `<input type="number" min="1" step="1" class="form-control" name="carac[${carac.nombre}]" placeholder="${carac.nombre}" required>`;
+    } else {
+        input = `<input type="number" min="0.01" step="0.01" class="form-control" name="carac[${carac.nombre}]" placeholder="${carac.nombre}" required>`;
+    }
+} else {
+    input = `<input type="text" class="form-control" name="carac[${carac.nombre}]" maxlength="${carac.max}" placeholder="${carac.nombre}" oninput="soloTextoPermitido(event)"> required>`;
+}
             contenedor.append(`<div class="mb-2"><label>${carac.nombre}</label>${input}</div>`);
           });
         }
@@ -630,11 +634,15 @@ $('#modificarCategoria').on('change', function () {
     if (categoria) {
 categoria.caracteristicas.forEach(carac => {
     let input = '';
-    if (carac.tipo === 'int' || carac.tipo === 'float') {
-        input = `<input type="number" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" placeholder="${carac.nombre}" ${carac.tipo === 'int' ? 'step="1"' : 'step="0.01"'} required>`;
+if (carac.tipo === 'int' || carac.tipo === 'float') {
+    if (carac.tipo === 'int') {
+        input = `<input type="number" min="1" step="1" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" placeholder="${carac.nombre}" required>`;
     } else {
-        input = `<input type="text" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" maxlength="${carac.max}" placeholder="${carac.nombre}" required>`;
+        input = `<input type="number" min="0.01" step="0.01" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" placeholder="${carac.nombre}" required>`;
     }
+} else {
+    input = `<input type="text" class="form-control" name="carac[${carac.nombre}]" id="modificar_${carac.nombre}" maxlength="${carac.max}" placeholder="${carac.nombre}" required>`;
+}
     contenedor.append(`<div class="mb-2 col-md-6"><label>${carac.nombre}</label>${input}</div>`);
 });
     }

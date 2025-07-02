@@ -396,7 +396,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion'])) {
 try {
     $productos = $productosModel->obtenerProductosConMarca();
     $marcas = $productosModel->obtenerMarcas();
-    $esAdmin = isset($_SESSION['rango']) && $_SESSION['rango'] == 'Administrador';
+    $esAdmin = isset($_SESSION['nombre_rol']) && $_SESSION['nombre_rol'] == 'Administrador';
     $combos = $productosModel->obtenerCombosDisponibles($esAdmin);
 } catch (PDOException $e) {
     error_log("Error al cargar datos del catálogo: " . $e->getMessage());

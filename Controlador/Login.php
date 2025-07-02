@@ -17,8 +17,9 @@ if (is_file("Vista/" . $pagina . ".php")) {
                 session_destroy();
                 session_start();
                 $_SESSION['name'] = $m['mensaje'];
-                $_SESSION['rango'] = $m['rango'];
+                $_SESSION['nombre_rol'] = $m['nombre_rol'];
                 $_SESSION['id_usuario'] = $m['id_usuario'];
+                $_SESSION['id_rol'] = $m['id_rol'];
                 header('Location: ?pagina=Dashboard');
                 die();
             } else {

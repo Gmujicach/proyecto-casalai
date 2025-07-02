@@ -135,6 +135,13 @@ function getusuarios() {
     $usuario = new Usuarios();
     return $usuario->getusuarios();
 }
+$usuarioModel = new Usuarios();
+$reporteRoles = $usuarioModel->obtenerReporteRoles();
+$totalRoles = array_sum(array_column($reporteRoles, 'cantidad'));
+foreach ($reporteRoles as &$rol) {
+    $rol['porcentaje'] = $totalRoles > 0 ? round(($rol['cantidad'] / $totalRoles) * 100, 2) : 0;
+}
+unset($rol);
 
 $pagina = "Usuarios";
 if (is_file("Vista/" . $pagina . ".php")) {

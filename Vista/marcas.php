@@ -1,4 +1,6 @@
-<?php if ($_SESSION['rango'] == 'Administrador') { ?>
+
+<?php 
+if (isset($permisosUsuario['consultar']) && $permisosUsuario['consultar']) { ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -42,9 +44,11 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
 
 <div class="contenedor-tabla">
     <div class="space-btn-incluir">
+        <?php if ($permisosUsuario['incluir']): ?>
         <button id="btnIncluirMarca" class="btn-incluir">
             Incluir Marca
         </button>
+        <?php endif; ?>
     </div>
 
     <h3>Lista de Marcas</h3>
@@ -57,12 +61,12 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
                 <th>Nombre</th>
             </tr>
         </thead>
-
         <tbody>
             <?php foreach ($marcas as $marca): ?>
                 <tr data-id="<?php echo $marca['id_marca']; ?>">        
                     <td>
                         <ul>
+                            <?php if ($permisosUsuario['modificar']): ?>
                             <div>
                                 <button class="btn-modificar"
                                 id="btnModificarMarca"
@@ -70,11 +74,14 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
                                 data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
                                 >Modificar</button>
                             </div>
+                            <?php endif; ?>
+                            <?php if ($permisosUsuario['eliminar']): ?>
                             <div>
                                 <button class="btn-eliminar"
                                 data-id="<?php echo $marca['id_marca']; ?>"
                                 >Eliminar</button>
                             </div>
+                            <?php endif; ?>
                         </ul>
                     </td>
                     <td>
@@ -92,6 +99,7 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
         </tbody>
     </table> 
 </div>
+
 
 <div class="modal fade modal-modificar" id="modificarMarcaModal" tabindex="-1" role="dialog" aria-labelledby="modificarMarcaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

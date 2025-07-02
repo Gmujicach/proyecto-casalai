@@ -49,14 +49,47 @@ $(document).on('click', '.btn-modificar', function () {
     $('#modificarProductoForm').on('submit', function(e) {
         e.preventDefault();
         $('#modificar_tabla_categoria').val($('#modificarCategoria').val());
-       
+           let caracteristicasInvalidas = [];
+    $('#caracteristicasCategoria input[type="number"]').each(function() {
+        if (parseFloat($(this).val()) < 0) {
+            caracteristicasInvalidas.push($(this).attr('name'));
+            $(this).addClass('is-invalid');
+        } else {
+            $(this).removeClass('is-invalid');
+        }
+    });
+    let caracteristicasTextoInvalidas = [];
+$('#caracteristicasCategoriaModificar input[type="text"]').each(function() {
+    if (!regexTexto.test($(this).val())) {
+        caracteristicasTextoInvalidas.push($(this).attr('name'));
+        $(this).addClass('is-invalid');
+    } else {
+        $(this).removeClass('is-invalid');
+    }
+});
+if (caracteristicasTextoInvalidas.length > 0) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error en características',
+        text: 'Las características de texto solo pueden contener letras, números, espacios, @, punto y guion.'
+    });
+    return;
+}
+    if (caracteristicasInvalidas.length > 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error en características',
+            text: 'Las características numéricas no pueden tener valores negativos.'
+        });
+        return;
+    }
+
         var formData = new FormData(this);
         formData.append('accion', 'modificar');
     let datos = {};
     for (let [key, value] of formData.entries()) {
         datos[key] = value;
     }
-    alert('Datos enviados al controlador:\n' + JSON.stringify(datos, null, 2));
     console.log('Datos enviados al controlador:\n' + JSON.stringify(datos, null, 2))
        
         $.ajax({
@@ -156,6 +189,15 @@ $(document).on('click', '.btn-modificar', function () {
         $('#registrarProductoModal').modal('show');
     });
 
+    function soloTextoPermitido(e) {
+    // Permite: letras, números, espacio, @, . y -
+    const regex = /^[a-zA-Z0-9@\.\-\s]+$/;
+    let valor = e.target.value;
+    // Si el valor no cumple, elimina el último caracter ingresado
+    if (!regex.test(valor)) {
+        e.target.value = valor.replace(/[^a-zA-Z0-9@\.\-\s]/g, '');
+    }
+}
     $(document).on('click', '#registrarProductoModal .close', function() {
         $('#registrarProductoModal').modal('hide');
     });
@@ -182,6 +224,24 @@ $('#incluirProductoForm').on('submit', function(event) {
 
     // Solo letras, números y espacios
     const regexTexto = /^[a-zA-Z0-9ÁÉÍÓÚáéíóúñÑ\s]+$/;
+    let caracteristicasInvalidas = [];
+    $('#caracteristicasCategoria input[type="number"]').each(function() {
+        if (parseFloat($(this).val()) < 0) {
+            caracteristicasInvalidas.push($(this).attr('name'));
+            $(this).addClass('is-invalid');
+        } else {
+            $(this).removeClass('is-invalid');
+        }
+    });
+
+    if (caracteristicasInvalidas.length > 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error en características',
+            text: 'Las características numéricas no pueden tener valores negativos.'
+        });
+        return;
+    }
 
     if (!regexTexto.test(nombre)) {
         errores.push("El nombre del producto solo puede contener letras, números y espacios.");
@@ -224,6 +284,23 @@ $('#incluirProductoForm').on('submit', function(event) {
     if (seriales.length === 0) {
         errores.push("Debe ingresar el código serial.");
     }
+    let caracteristicasTextoInvalidas = [];
+$('#caracteristicasCategoria input[type="text"]').each(function() {
+    if (!regexTexto.test($(this).val())) {
+        caracteristicasTextoInvalidas.push($(this).attr('name'));
+        $(this).addClass('is-invalid');
+    } else {
+        $(this).removeClass('is-invalid');
+    }
+});
+if (caracteristicasTextoInvalidas.length > 0) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error en características',
+        text: 'Las características de texto solo pueden contener letras, números, espacios, @, punto y guion.'
+    });
+    return;
+}
 
     if (!precioRegex.test(precioInput)) {
     errores.push("El precio debe ser un número válido con hasta 2 decimales.");

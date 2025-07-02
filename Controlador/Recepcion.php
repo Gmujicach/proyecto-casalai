@@ -105,7 +105,19 @@ case 'modificarRecepcion':
     $recepciones = getrecepcion();
     $proveedores = $k->obtenerproveedor();
     $productos = $k->consultarproductos();
+    $totalRecepciones = count($recepciones);
 
+// Total de productos recibidos y agrupados por producto
+$productosRecibidos = [];
+foreach ($recepciones as $r) {
+    $nombre = $r['nombre_producto'];
+    $cantidad = (int)$r['cantidad'];
+    if (!isset($productosRecibidos[$nombre])) {
+        $productosRecibidos[$nombre] = 0;
+    }
+    $productosRecibidos[$nombre] += $cantidad;
+}
+$totalProductosRecibidos = array_sum($productosRecibidos);
     require_once("vista/" . $pagina . ".php");
 
 } else {

@@ -1,5 +1,5 @@
 <?php
-require_once 'Config/config.php';
+require_once __DIR__ . '/../Config/Config.php';
 
 class Usuarios extends BD {
     
@@ -230,7 +230,16 @@ public function modificarUsuario($id_usuario) {
             return false;
         }
     }
-
+public function obtenerReporteRoles() {
+    $sql = "SELECT rol.nombre_rol, COUNT(u.id_usuario) as cantidad
+            FROM tbl_rol rol
+            LEFT JOIN tbl_usuarios u ON rol.id_rol = u.id_rol
+            GROUP BY rol.id_rol, rol.nombre_rol
+            ORDER BY cantidad DESC";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
     
 
 

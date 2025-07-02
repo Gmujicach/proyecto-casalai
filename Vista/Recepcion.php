@@ -1,4 +1,4 @@
-<?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista' ) { ?>
+<?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista' ) { ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -32,6 +32,7 @@
                         <span id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
+                        <label for="proveedor">Proveedor</label>
                         <select class="form-select" name="proveedor" id="proveedor">
                             <option value='disabled' disabled selected>Seleccione un Proveedor</option>
                             <?php
@@ -80,15 +81,16 @@
             </form>
 
             <div class="modal fade" tabindex="-1" role="dialog" id="modalp">
-				<div class="modal-dialog " role="document">
+				<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title">Listado de productos</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-							</button>
+							<h5 class="titulo-form">Listado de productos</h5>
+							<button type="button" class="close-2" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
 						</div>
 						<div class="modal-body">
-							<table class="table table-striped table-hover">
+							<table class="tablaConsultas">
 								<thead class="text-center">
 									<tr>
 										<th style="display:none">Id</th>
@@ -118,61 +120,67 @@
         </button>
     </div>
 
-	<h3>Lista de Recepciones</h3>
 
-	<table class="tablaConsultas" id="tablaConsultas">
-		<thead>
-			<tr>
-				<th>FECHA</th>
-				<th>CORRELATIVO</th>
-				<th>PROVEEDOR</th>
-				<th>PRODUCTO</th>
-				<th>CANTIDAD</th>
-				<th>COSTOS DE INVERSION</th>
-				<th>ACCIÓN</th>
-			</tr>
-		</thead>
+<h3>Lista de Recepciones</h3>
 
-        <tbody>
+<table class="tablaConsultas" id="tablaConsultas">
+    <thead>
+        <tr>
+            <th>FECHA</th>
+            <th>CORRELATIVO</th>
+            <th>PROVEEDOR</th>
+            <th>PRODUCTO</th>
+            <th>CANTIDAD</th>
+            <th>COSTOS DE INVERSION</th>
+            <th>ACCIÓN</th>
+        </tr>
+    </thead>
+    <tbody>
         <?php
-        usort($recepciones, function($a, $b) {
-            if ($a['fecha'] == $b['fecha']) {
-                if ($a['correlativo'] == $b['correlativo']) {
-                    if ($a['nombre_proveedor'] == $b['nombre_proveedor']) {
-                        return strcmp($a['nombre_producto'], $b['nombre_producto']);
+        if (empty($recepciones)): ?>
+            <tr>
+                <td colspan="7" style="text-align:center;">No se han registrado recepciones.</td>
+            </tr>
+        <?php
+        else:
+            usort($recepciones, function($a, $b) {
+                if ($a['fecha'] == $b['fecha']) {
+                    if ($a['correlativo'] == $b['correlativo']) {
+                        if ($a['nombre_proveedor'] == $b['nombre_proveedor']) {
+                            return strcmp($a['nombre_producto'], $b['nombre_producto']);
+                        }
+                        return strcmp($a['nombre_proveedor'], $b['nombre_proveedor']);
                     }
-                    return strcmp($a['nombre'], $b['nombre']);
+                    return strcmp($a['correlativo'], $b['correlativo']);
                 }
-                return strcmp($a['correlativo'], $b['correlativo']);
-            }
-            return strcmp($a['fecha'], $b['fecha']);
-        });
+                return strcmp($a['fecha'], $b['fecha']);
+            });
 
-        $rowspans = [];
-        $dataProductosPorRecepcion = [];
-        foreach ($recepciones as $fila) {
-            $id = $fila['id_recepcion'];
-            if (!isset($dataProductosPorRecepcion[$id])) {
-                $dataProductosPorRecepcion[$id] = [];
+            $rowspans = [];
+            $dataProductosPorRecepcion = [];
+            foreach ($recepciones as $fila) {
+                $id = $fila['id_recepcion'];
+                if (!isset($dataProductosPorRecepcion[$id])) {
+                    $dataProductosPorRecepcion[$id] = [];
+                }
+                $dataProductosPorRecepcion[$id][] = [
+                    'id_producto' => $fila['id_producto'],
+                    'cantidad' => $fila['cantidad'],
+                    'costo' => $fila['costo'],
+                    'iddetalles' => $fila['id_detalle_recepcion_productos'] ?? '',
+                ];
             }
-            $dataProductosPorRecepcion[$id][] = [
-                'id_producto' => $fila['id_producto'],
-                'cantidad' => $fila['cantidad'],
-                'costo' => $fila['costo'],
-                'iddetalles' => $fila['id_detalle_recepcion_productos'] ?? '',
-            ];
-        }
-        foreach ($recepciones as $recepcion) {
-            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
-            if (!isset($rowspans[$key])) {
-                $rowspans[$key] = 1;
-            } else {
-                $rowspans[$key]++;
+            foreach ($recepciones as $recepcion) {
+                $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
+                if (!isset($rowspans[$key])) {
+                    $rowspans[$key] = 1;
+                } else {
+                    $rowspans[$key]++;
+                }
             }
-        }
-        $rendered = [];
-        foreach ($recepciones as $recepcion):
-            $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
+            $rendered = [];
+            foreach ($recepciones as $recepcion):
+                $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
         ?>
         <tr>
             <?php if (!in_array($key, $rendered)): ?>
@@ -203,20 +211,59 @@
                 <?php $rendered[] = $key; ?>
             <?php endif; ?>
         </tr>
-        <?php endforeach; ?>
-        </tbody>
-
-		</table>
+        <?php endforeach;
+        endif; ?>
+    </tbody>
+</table>
 	</div>
 
-		<div class="table-container">
-						
-						<div class="row">
-							<div class="col">
-								<button class="btn" name="" type="button" id="pdfrepecion" name="pdfrecepcion"><a href="?pagina=pdfrecepcion">GENERAR REPORTE</a></button>
-							</div>
-						</div>
-		</div>
+<div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+    <h3 style="text-align:center; color:#1f66df;">Reporte de Recepciones</h3>
+    <p><b>Total de Recepciones:</b> <?= $totalRecepciones ?></p>
+    <p><b>Total de Productos Recibidos:</b> <?= $totalProductosRecibidos ?></p>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+        <div style="flex:1; min-width:220px; text-align:center;">
+            <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
+                <canvas id="graficoProductosRecibidos" width="220" height="220"></canvas>
+            </div>
+        </div>
+        <div style="flex:2; min-width:320px;">
+            <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad Recibida</th>
+                        <th>Porcentaje (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($productosRecibidos as $nombre => $cantidad): 
+                        $porcentaje = $totalProductosRecibidos > 0 ? round(($cantidad / $totalProductosRecibidos) * 100, 2) : 0;
+                    ?>
+                        <tr>
+                            <td><?= htmlspecialchars($nombre) ?></td>
+                            <td><?= $cantidad ?></td>
+                            <td><?= $porcentaje ?>%</td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th><?= $totalProductosRecibidos ?></th>
+                        <th>100%</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <div style="text-align:center; margin-top:20px;">
+                <button id="descargarPDFRecepcion" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
+                    Descargar Reporte de Recepciones
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+	
 		<?php include 'footer.php'; ?>
 	
 <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
@@ -224,7 +271,6 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="titulo-form" id="modalModificarLabel">Modificar Recepción</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
 <form id="formularioEdicion">
@@ -394,7 +440,61 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
+<script src="Public/js/chart.js"></script>
+<script src="Public/js/html2canvas.min.js"></script>
+<script src="Public/js/jspdf.umd.min.js"></script>
+<script>
+const labelsRecepcion = <?= json_encode(array_keys($productosRecibidos)) ?>;
+const dataRecepcion = <?= json_encode(array_values($productosRecibidos)) ?>;
+function generarColores(n) {
+    const colores = [];
+    for (let i = 0; i < n; i++) {
+        const hue = Math.round((360 / n) * i);
+        colores.push(`hsl(${hue}, 70%, 60%)`);
+    }
+    return colores;
+}
+const coloresRecepcion = generarColores(labelsRecepcion.length || 1);
+const ctxRecepcion = document.getElementById('graficoProductosRecibidos').getContext('2d');
+new Chart(ctxRecepcion, {
+    type: 'pie',
+    data: {
+        labels: labelsRecepcion.length ? labelsRecepcion : ['Sin datos'],
+        datasets: [{
+            data: dataRecepcion.length ? dataRecepcion : [1],
+            backgroundColor: coloresRecepcion,
+            borderColor: '#fff',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { display: true, position: 'bottom' },
+            title: { display: true, text: 'Productos más recibidos' }
+        }
+    }
+});
 
+document.getElementById('descargarPDFRecepcion').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'a4'
+    });
+
+    const reporte = document.querySelector('.reporte-container');
+    html2canvas(reporte).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const imgWidth = pageWidth - 40;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+        doc.save('Reporte_Recepciones.pdf');
+    });
+});
+</script>
 </body>
 </html>
 
