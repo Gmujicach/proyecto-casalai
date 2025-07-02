@@ -49,6 +49,7 @@
   .registrar-form {
     max-width: 1200px; /* Doble que el login que asume ~400px */
     width: 100%;
+    margin: auto;
   }
 
   .input-field,
@@ -71,79 +72,85 @@
     flex: 1 1 45%;
   }
 
-  .input-field input,
-  .input-field textarea {
+  .input-row .input-field input {
     border: none;
     outline: none;
     background: none;
     padding: 10px;
     width: 100%;
+    font-size: 1rem;
   }
 
-  textarea.form-control {
-    resize: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    border: none;
-    background: #f0f0f0;
-    margin-bottom: 5px;
+  .input-row .input-field i {
+    margin-right: 8px;
+    color: #888;
+  }
+
+
+  .input-row .btn:hover {
+    background: #357abd;
   }
 </style>
 
 <form method="post" id="registro-usuario-cliente" class="registrar-form">
   <h2 class="title">Registro</h2>
 
-  <div class="input-row">
-    <div class="input-field">
-      <i class="fas fa-user"></i>
-      <input type="text" name="nombre_usuario" id="nombre_usuario" placeholder="Nombre de Usuario" maxlength="20" required />
-    </div>
-    <div class="input-field">
-      <i class="fas fa-envelope"></i>
-      <input type="email" name="correo" id="correo" placeholder="Correo Electrónico" maxlength="50" required />
-    </div>
-  </div>
-
+  <!-- Nombre y Apellido -->
   <div class="input-row">
     <div class="input-field">
       <i class="fas fa-user"></i>
       <input type="text" name="nombre" id="nombre" placeholder="Nombre" maxlength="30" required />
+      <span class="span-value" id="snombre"></span>
     </div>
     <div class="input-field">
       <i class="fas fa-user"></i>
       <input type="text" name="apellido" id="apellido" placeholder="Apellido" maxlength="30" required />
+      <span class="span-value" id="sapellido"></span>
     </div>
   </div>
 
+  <!-- Usuario -->
   <div class="input-row">
-    <div class="input-field">
-      <i class="fas fa-id-card"></i>
-      <input type="text" name="cedula" id="cedula" placeholder="Cédula/RIF" maxlength="12" required />
+    <div class="input-field" style="flex:1;">
+      <i class="fas fa-user"></i>
+      <input type="text" name="nombre_usuario" id="nombre_usuario" placeholder="Nombre de Usuario" maxlength="20" required />
+      <span class="span-value" id="snombre_usuario"></span>
     </div>
+  </div>
+
+  <!-- Teléfono y Correo -->
+  <div class="input-row">
     <div class="input-field">
       <i class="fas fa-phone"></i>
       <input type="text" name="telefono" id="telefono" placeholder="Teléfono" maxlength="13" required />
+      <span class="span-value" id="stelefono_usuario"></span>
+    </div>
+    <div class="input-field">
+      <i class="fas fa-envelope"></i>
+      <input type="email" name="correo" id="correo" placeholder="Correo Electrónico" maxlength="50" required />
+      <span class="span-value" id="scorreo_usuario"></span>
     </div>
   </div>
 
-  <label for="direccion" style="color:#888; font-size:18px; margin-left:10px;">Dirección</label>
-  <textarea class="form-control" maxlength="100" id="direccion" name="direccion" rows="2" required></textarea>
-
+  <!-- Contraseña y Confirmar Contraseña -->
   <div class="input-row">
     <div class="input-field">
       <i class="fas fa-lock"></i>
       <input type="password" name="clave" id="clave" placeholder="Contraseña" maxlength="15" required />
+      <span class="span-value" id="sclave_usuario"></span>
     </div>
     <div class="input-field">
       <i class="fas fa-lock"></i>
       <input type="password" name="clave_confirmar" id="clave_confirmar" placeholder="Confirmar Contraseña" maxlength="15" required />
+      <span class="span-value" id="sclave_confirmar"></span>
     </div>
   </div>
 
+  <!-- Botón Registrar -->
+  <div class="input-row">
+    <button type="submit" class="btn btn-vino w-100">Registrar</button>
+  </div>
   <input type="hidden" name="accion" value="registrar" />
-  <input type="submit" class="btn" value="Registrarse" />
-
-
 </form>
 
         </div>
