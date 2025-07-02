@@ -1,22 +1,26 @@
+<?php
+require_once('Config/Config.php');
+
+// Usar variables locales para evitar conflictos
+$bd_navbar = new BD('S');
+$pdo_navbar = $bd_navbar->getConexion();
+
+$query = "SELECT b.*, m.nombre_modulo, u.nombres 
+          FROM tbl_bitacora b 
+          JOIN tbl_modulos m ON b.id_modulo = m.id_modulo 
+          JOIN tbl_usuarios u ON b.id_usuario = u.id_usuario 
+          ORDER BY b.fecha_hora DESC LIMIT 5";
+$stmt = $pdo_navbar->prepare($query);
+$stmt->execute();
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$notificaciones_count = count($result);
+?>
+
 <aside class="sidebar">
     <div class="headmenu">
         <img src="img/LOGO.png" alt="logo">
         <h2><span>Casa Lai</span></h2>
     </div>
-
-    <?php
-    // Conexión a la base de datos y consulta de notificaciones
-    include('Config/Config.php');
-    
-            // Consulta para obtener las notificaciones recientes de la bitácora
-            $query = "SELECT b.*, m.nombre_modulo, u.nombres 
-                    FROM tbl_bitacora b 
-                    JOIN tbl_modulos m ON b.id_modulo = m.id_modulo 
-                    JOIN tbl_usuarios u ON b.id_usuario = u.id_usuario 
-                    ORDER BY b.fecha_hora DESC LIMIT 5";
-            $result = mysqli_query($conexion, $query);
-            $notificaciones_count = mysqli_num_rows($result);
-            ?>
 
     <div class="campana" onclick="toggleNotification()">
         <img src="IMG/campana.svg" alt="">
@@ -27,12 +31,11 @@
         <h2>Notificaciones <span><?php echo $notificaciones_count; ?></span></h2>
         <?php
         if ($notificaciones_count > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
+            foreach ($result as $row) {
                 $fecha = date('d/m/Y H:i', strtotime($row['fecha_hora']));
                 $accion = $row['accion'];
                 $modulo = $row['nombre_modulo'];
                 $usuario = $row['nombres'];
-                
                 echo '<div class="item-notificacion">';
                 echo '<div class="texto">';
                 echo '<img src="IMG/usuario_circulo.svg" alt="img">';
@@ -54,6 +57,8 @@
 
     <div>
         <ul class="menu-link">
+
+
             <h4><span>Menu Principal</span><div class="menu-separador"></div></h4>
             <li>
                 <a href="?pagina=Dashboard">
@@ -140,7 +145,7 @@
             <li><a href="#"><span class="simbolo"><img src="IMG/circle-user-round.svg" class="icono-svg" />Perfil</span></a></li>
             <li><a href='?pagina=cerrar'><span class="simbolo"><img src="IMG/log-out.svg" class="icono-svg" />Cerrar Sesión</span></a></li>
         </ul>
-
+     
         <div class="user-cuenta">
             <div class="user-perfil">
                 <img src="img/Avatar.png" alt="perfil-img">
