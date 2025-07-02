@@ -1,5 +1,122 @@
 $(document).ready(function(){
 
+        $("#nombre_usuario").on("keypress", function (e) {
+          validarkeypress(/^[a-zA-Z0-9_]*$/, e);
+        });
+        $("#nombre_usuario").on("keyup", function () {
+          validarkeyup(
+            /^[a-zA-Z0-9_]{4,20}$/,
+            $(this),
+            $("#snombre_usuario"),
+            "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*"
+          );
+        });
+
+        $("#nombre").on("keypress", function (e) {
+          validarkeypress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]*$/, e);
+          let nombre = document.getElementById("nombre");
+          nombre.value = space(nombre.value);
+        });
+        $("#nombre").on("keyup", function () {
+          validarkeyup(
+            /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s]{2,30}$/,
+            $(this),
+            $("#snombre"),
+            "*Solo letras, de 2 a 30 caracteres*"
+          );
+        });
+        $("#apellido").on("keypress", function (e) {
+          validarkeypress(/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]*$/, e);
+          let apellido_usuario = document.getElementById("apellido");
+          apellido_usuario.value = space(apellido_usuario.value);
+        });
+        $("#apellido").on("keyup", function () {
+          validarkeyup(
+            /^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/,
+            $(this),
+            $("#sapellido"),
+            "*Solo letras, de 2 a 30 caracteres*"
+          );
+        });
+
+        $("#cedula").on("keypress", function(e){
+            validarkeypress(/^[VEJPG0-9-.\b]*$/, e);
+        });
+
+        $("#cedula").on("keyup", function(){
+            validarkeyup(
+                /^[VEJPG0-9-.\b]{6,12}$/,
+                $(this),
+                $("#scedula"),
+                "*El formato solo permite números y (V,E,J,P,G,-.)*"
+            );
+        });
+
+        $("#telefono").on("keypress", function (e) {
+          validarkeypress(/^[0-9-]*$/, e);
+        });
+
+        $("#telefono").on("keyup", function () {
+          validarkeyup(
+            /^\d{4}-\d{3}-\d{4}$/,
+            $(this),
+            $("#stelefono_usuario"),
+            "*Formato válido: 04XX-XXX-XXXX*"
+          );
+        });
+
+        $("#correo").on("keypress", function (e) {
+          validarkeypress(/^[a-zA-ZñÑ_0-9@,.\b]*$/, e);
+        });
+
+        $("#correo").on("keyup", function () {
+          validarkeyup(
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            $(this),
+            $("#scorreo_usuario"),
+            "*Formato válido: example@gmail.com*"
+          );
+        });
+
+        $("#direccion").on("keypress", function(e){
+            validarkeypress(/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]*$/, e);
+            let direccion = document.getElementById("direccion");
+            direccion.value = space(direccion.value);
+        });
+
+        $("#direccion").on("keyup", function(){
+            validarkeyup(
+                /^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/,
+                $(this),
+                $("#sdireccion"),
+                "*El formato permite letras y números*"
+            );
+        });
+
+        $("#clave").on("keypress", function (e) {
+          validarkeypress(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]*$/, e);
+        });
+        $("#clave").on("keyup", function () {
+          validarkeyup(
+            /^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/,
+            $(this),
+            $("#sclave_usuario"),
+            "*Solo letras y números, de 6 a 15 caracteres*"
+          );
+        });
+
+        $("#clave_confirmar").on("keypress", function (e) {
+          validarkeypress(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]*$/, e);
+        });
+        $("#clave_confirmar").on("keyup", function () {
+          validarkeyup(
+            /^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/,
+            $(this),
+            $("#sclave_confirmar"),
+            "*Solo letras y números, de 6 a 15 caracteres*"
+          );
+        });
+
     // Validación para el formulario de registro de usuario y cliente
     $("#registro-usuario-cliente").on("submit", function(e){
         let valido = true;
@@ -15,104 +132,11 @@ $(document).ready(function(){
             }
         });
 
-        // Validar nombre de usuario (solo letras y números, 3-20 caracteres)
-        let nombre_usuario = $("#nombre_usuario").val();
-        if(!/^[A-Za-z0-9]{3,20}$/.test(nombre_usuario)){
-            valido = false;
-            mensaje = "El nombre de usuario debe tener entre 3 y 20 caracteres, solo letras y números.";
-            $("#nombre_usuario").focus();
-        }
-
-        // Validar nombre y apellido (solo letras y espacios)
-        let nombre = $("#nombre").val();
-        if(!/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{2,30}$/.test(nombre)){
-            valido = false;
-            mensaje = "El nombre solo debe contener letras y espacios.";
-            $("#nombre").focus();
-        }
-        let apellido = $("#apellido").val();
-        if(!/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{2,30}$/.test(apellido)){
-            valido = false;
-            mensaje = "El apellido solo debe contener letras y espacios.";
-            $("#apellido").focus();
-        }
-
-        // Validar cédula (letras y números, 6-12 caracteres)
-        let cedula = $("#cedula").val();
-        if(!/^[0-9]{6,12}$/.test(cedula)){
-            valido = false;
-            mensaje = "La cédula/RIF debe tener entre 6 y 12 caracteres, solo números ";
-            $("#cedula").focus();
-        }
-
-        // Validar teléfono (formato ####-###-####)
-        let telefono = $("#telefono").val();
-        if(!/^\d{4}-\d{3}-\d{4}$/.test(telefono)){
-            valido = false;
-            mensaje = "El teléfono debe tener el formato ####-###-####.";
-            $("#telefono").focus();
-        }
-
-        // Validar correo
-        let correo = $("#correo").val();
-        if(!/^[\w\.-]+@[\w\.-]+\.\w{2,}$/.test(correo)){
-            valido = false;
-            mensaje = "El correo electrónico no es válido.";
-            $("#correo").focus();
-        }
-
-        // Validar dirección (mínimo 5 caracteres)
-        let direccion = $("#direccion").val();
-        if(direccion.length < 5){
-            valido = false;
-            mensaje = "La dirección debe tener al menos 5 caracteres.";
-            $("#direccion").focus();
-        }
-
-        // Validar contraseña (mínimo 3, máximo 15)
-        let clave = $("#clave").val();
-        if(!/^[A-Za-z0-9]{3,15}$/.test(clave)){
-            valido = false;
-            mensaje = "La contraseña debe tener entre 3 y 15 caracteres, solo letras y números.";
-            $("#clave").focus();
-        }
-
-        // Validar confirmación de contraseña
-        let clave_confirmar = $("#clave_confirmar").val();
-        if(clave !== clave_confirmar){
-            valido = false;
-            mensaje = "Las contraseñas no coinciden.";
-            $("#clave_confirmar").focus();
-        }
-
         if(!valido){
             muestraMensaje("error", 4000, "Error de validación", mensaje);
             e.preventDefault();
             return false;
         }
-    });
-
-    // Bloquear caracteres inválidos en cada campo (keypress y keyup)
-    $("#nombre_usuario").on("keypress", function(e){
-        validarkeypress(/^[A-Za-z0-9\b]*$/, e);
-    });
-    $("#nombre").on("keypress", function(e){
-        validarkeypress(/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s\b]*$/, e);
-    });
-    $("#apellido").on("keypress", function(e){
-        validarkeypress(/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s\b]*$/, e);
-    });
-    $("#cedula").on("keypress", function(e){
-        validarkeypress(/^[0-9]*$/, e);
-    });
-    $("#telefono").on("keypress", function(e){
-        validarkeypress(/^[0-9\-]*$/, e);
-    });
-    $("#correo").on("keypress", function(e){
-        validarkeypress(/^[A-Za-z0-9@._\-]*$/, e);
-    });
-    $("#clave, #clave_confirmar").on("keypress", function(e){
-        validarkeypress(/^[A-Za-z0-9]*$/, e);
     });
 
     // Formato automático para teléfono ####-###-####
