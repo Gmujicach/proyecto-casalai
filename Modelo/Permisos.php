@@ -1,57 +1,50 @@
 <?php
 
-require_once 'Config/Config.php';
+require_once __DIR__ . '/../Config/Config.php';
 
 class Permisos extends BD {
-    protected $db;
+    private $conex;
     
-   public function __construct() {
+    public function __construct() {
         $db = new BD('S');
         $this->conex = $db->getConexion();
     }
-    
-    /**
-     * Verifica si un usuario tiene permiso para un módulo específico
-     */
-        public function verificarPermiso($usuarioId, $modulo) {
-            $query = "SELECT COUNT(*) FROM usuarios u
-                    JOIN rol_permiso rp ON u.rol_id = rp.rol_id
-                    JOIN permisos p ON rp.permiso_id = p.id
-                    WHERE u.id = ? AND p.modulo = ?";
-            
-            $stmt = $this->db->prepare($query);
-            $stmt->execute([$usuarioId, $modulo]);
-            return $stmt->fetchColumn() > 0;
+
+    public function getRoles() {
+        $stmt = $this->conex->query("SELECT id_rol, nombre_rol FROM tbl_rol");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getModulos() {
+        $stmt = $this->conex->query("SELECT id_modulo, nombre_modulo FROM tbl_modulos");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+public function getPermisosPorRolModulo() {
+    $stmt = $this->conex->query("SELECT id_rol, id_modulo, accion, estatus FROM tbl_permisos");
+    $permisos = [];
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        if ($row['estatus'] === 'Permitido') {
+            $permisos[$row['id_rol']][$row['id_modulo']][$row['accion']] = true;
         }
-    
-    /**
-     * Obtiene todos los permisos de un usuario
-     */
-    public function obtenerPermisosUsuario($usuarioId) {
-        $query = "SELECT p.modulo FROM usuarios u
-                 JOIN rol_permiso rp ON u.rol_id = rp.rol_id
-                 JOIN permisos p ON rp.permiso_id = p.id
-                 WHERE u.id = ?";
-        
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([$usuarioId]);
-        
-        return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
     }
-    
-    /**
-     * Registra intento de acceso no autorizado
-     */
-    public function registrarIntentoNoAutorizado($usuarioId, $modulo) {
-        $query = "INSERT INTO tbl_bitacora (id_usuario, id_modulo, fecha_hora)
-                 VALUES (?, ?, NOW(), ?)";
-        
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([
-            $usuarioId,
-            $modulo,
-            $_SERVER['REMOTE_ADDR']
-        ]);
+    return $permisos;
+}
+
+public function guardarPermisos($permisosForm, $roles, $modulos, $acciones) {
+    // Borra todos los permisos actuales
+    $this->conex->exec("DELETE FROM tbl_permisos");
+    // Inserta todos los permisos posibles
+    foreach ($roles as $rol) {
+        foreach ($modulos as $modulo) {
+            foreach ($acciones as $accion) {
+                $estatus = (isset($permisosForm[$rol['id_rol']][$modulo['id_modulo']][$accion]) && $permisosForm[$rol['id_rol']][$modulo['id_modulo']][$accion] == 'on')
+                    ? 'Permitido' : 'No Permitido';
+                $stmt = $this->conex->prepare("INSERT INTO tbl_permisos (id_rol, id_modulo, accion, estatus) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$rol['id_rol'], $modulo['id_modulo'], $accion, $estatus]);
+            }
+        }
     }
+}
 }
 ?>
