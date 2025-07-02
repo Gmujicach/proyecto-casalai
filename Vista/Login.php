@@ -15,8 +15,8 @@
 
 
 <div id="mensajes" style="display:none"
-     data-mensaje="<?php echo !empty($mensaje) ? strip_tags($mensaje) : ''; ?>"
-     data-tipo="<?php echo (isset($resultado['status']) && $resultado['status'] == 'success') ? 'success' : 'error'; ?>">
+    data-mensaje="<?php echo !empty($mensaje) ? strip_tags($mensaje) : ''; ?>"
+    data-tipo="<?php echo (isset($resultado['status']) && $resultado['status'] == 'success') ? 'success' : 'error'; ?>">
 </div>
 
   <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
@@ -39,15 +39,6 @@
               <span class="span-value" id="spassword"></span>
             </div>
             <button class="btn btn-vino w-100" id="acceder" name="acceder">Iniciar Sesion</button>
-            <p class="social-text">Siguenos en nuestras Redes Sociales</p>
-            <div class="social-media">
-              <a href="#" class="social-icon">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-google"></i>
-              </a>
-            </div>
           </form>
 
 
