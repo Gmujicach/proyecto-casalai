@@ -175,7 +175,7 @@ $(document).ready(function(){
       
       $("#username").on("keyup",function(){
         validarkeyup(/^[a-zA-Z0-9_]{4,20}$/,$(this),
-        $("#susername"),"Ingrese su usuario");
+        $("#susername"),"*Ingrese su nombre de usuario*");
       });
       
       $("#password").on("keypress",function(e){
@@ -185,7 +185,7 @@ $(document).ready(function(){
       $("#password").on("keyup",function(){
         
         validarkeyup(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/,
-        $(this),$("#spassword"),"Ingrese su contraseña de seguridad");
+        $(this),$("#spassword"),"*Ingrese su contraseña de seguridad*");
       });
       
       
