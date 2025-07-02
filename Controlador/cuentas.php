@@ -1,7 +1,11 @@
 <?php
 ob_start();
 require_once 'Modelo/cuentas.php';
+require_once 'Modelo/Permisos.php';
 
+$id_rol = $_SESSION['id_rol'];
+$permisosObj = new Permisos();
+$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('Cuentas bancarias'));
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if (isset($_POST['accion'])) {
@@ -11,6 +15,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
+        
+        case 'permisos_tiempo_real':
+            header('Content-Type: application/json; charset=utf-8');
+            $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('Cuentas bancarias'));
+            echo json_encode($permisosActualizados);
+            exit;
         case 'registrar':
             header('Content-Type: application/json; charset=utf-8');
             $cuentabanco = new Cuentabanco();

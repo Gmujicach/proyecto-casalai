@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 case 'registrar_compra':
     $factura = new Factura();
     // Aquí se debe obtener el ID del cliente de la sesión
-    $factura->setCliente(1); 
+    $factura->setCliente($_SESSION['id_usuario']); // Obtener de la sesión
     $factura->setFecha(date('Y-m-d H:i:s'));
     $factura->setDescuento(0); // Descuento inicial
     $factura->setEstatus('Borrador'); // Estado inicial de la compra

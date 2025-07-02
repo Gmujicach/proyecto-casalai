@@ -3,24 +3,25 @@ ob_start();
 require_once 'Modelo/PasareladePago.php';
 require_once 'Modelo/cuentas.php';
 require_once 'Modelo/Factura.php';
+require_once 'Modelo/Permisos.php';
+
+$id_rol = $_SESSION['id_rol'];
+$permisosObj = new Permisos();
+$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Pasarela de pagos');
 
 $pasarela = new PasareladePago();
 $cuentaModel = new Cuentabanco();
 $listadocuentas = $cuentaModel->consultarCuentabanco();
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Obtiene la acción enviada en la solicitud POST
-        if (isset($_POST['accion'])) {
-            $accion = $_POST['accion'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
 
-        } else {
-            $accion = '';
-        }
-
-
-
-        // Switch para manejar diferentes acciones
-        switch ($accion) {
+    switch ($accion) {
+        case 'permisos_tiempo_real':
+            header('Content-Type: application/json; charset=utf-8');
+            $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Pasarela de pagos');
+            echo json_encode($permisosActualizados);
+            exit;
             case 'ingresar':
                 // Crear una nueva instancia del modelo Productos
                 $pasarela = new PasareladePago();

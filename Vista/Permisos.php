@@ -69,7 +69,7 @@ $rolesSinSuper = array_values($rolesSinSuper); // Reindexar
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($modulos as $modulo): ?>
+                    <?php foreach ($modulos_permiso as $modulo): ?>
                         <tr>
                             <td><?= htmlspecialchars($modulo['nombre_modulo']) ?></td>
                             <?php foreach (['consultar','incluir','modificar','eliminar'] as $accion): ?>

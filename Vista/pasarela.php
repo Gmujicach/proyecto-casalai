@@ -199,7 +199,6 @@
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatable.js"></script>
   <script src="Javascript/sweetalert2.all.min.js"></script>
-<script src="Javascript/usuario.js"></script>
 <script src="Javascript/validaciones.js"></script>
 <script src="Javascript/pasarela.js"></script>
 <script>

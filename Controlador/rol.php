@@ -1,6 +1,11 @@
 <?php
 ob_start();
 require_once 'Modelo/rol.php';
+require_once 'Modelo/Permisos.php';
+
+$id_rol = $_SESSION['id_rol'];
+$permisosObj = new Permisos();
+$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Roles');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -11,6 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
+                case 'permisos_tiempo_real':
+            header('Content-Type: application/json; charset=utf-8');
+            $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Roles');
+            echo json_encode($permisosActualizados);
+            exit;
         case 'registrar':
             $rol = new Rol();
             $rol->setNombreRol($_POST['nombre_rol']);

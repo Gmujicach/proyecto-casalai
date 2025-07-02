@@ -2,6 +2,11 @@
 ob_start();
 
 require_once 'Modelo/OrdenDespacho.php';
+require_once 'Modelo/Permisos.php';
+
+$id_rol = $_SESSION['id_rol'];
+$permisosObj = new Permisos();
+$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Ordenes de despacho');
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -13,6 +18,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
+                case 'permisos_tiempo_real':
+            header('Content-Type: application/json; charset=utf-8');
+            $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Ordenes de despacho');
+            echo json_encode($permisosActualizados);
+            exit;
+
         case 'ingresar':
             $ordendespacho = new OrdenDespacho();
             $ordendespacho->setCorrelativo($_POST['correlativo']);

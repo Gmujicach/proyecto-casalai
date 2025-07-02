@@ -8,7 +8,7 @@ $permisos = new Permisos();
 $roles = $permisos->getRoles();
 
 // Obtener módulos
-$modulos = $permisos->getModulos();
+$modulos_permiso = $permisos->getModulos();
 
 // Acciones posibles
 $acciones = ['consultar', 'incluir', 'modificar', 'eliminar'];
@@ -17,7 +17,7 @@ $acciones = ['consultar', 'incluir', 'modificar', 'eliminar'];
 $permisosActuales = $permisos->getPermisosPorRolModulo();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardarPermisos'])) {
-    $permisos->guardarPermisos($_POST['permisos'] ?? [], $roles, $modulos, $acciones);
+    $permisos->guardarPermisos($_POST['permisos'] ?? [], $roles, $modulos_permiso, $acciones);
     header("Location: ?pagina=Permisos&ok=1");
     exit;
 }
