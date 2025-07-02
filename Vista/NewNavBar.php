@@ -4,20 +4,52 @@
         <h2><span>Casa Lai</span></h2>
     </div>
 
+    <?php
+    // Conexión a la base de datos y consulta de notificaciones
+    include('Config/Config.php');
+    
+            // Consulta para obtener las notificaciones recientes de la bitácora
+            $query = "SELECT b.*, m.nombre_modulo, u.nombres 
+                    FROM tbl_bitacora b 
+                    JOIN tbl_modulos m ON b.id_modulo = m.id_modulo 
+                    JOIN tbl_usuarios u ON b.id_usuario = u.id_usuario 
+                    ORDER BY b.fecha_hora DESC LIMIT 5";
+            $result = mysqli_query($conexion, $query);
+            $notificaciones_count = mysqli_num_rows($result);
+            ?>
+
     <div class="campana" onclick="toggleNotification()">
         <img src="IMG/campana.svg" alt="">
-        <span class="campana">3</span>
+        <span class="campana"><?php echo $notificaciones_count; ?></span>
     </div>
 
     <div class="notificacion" id="contenedor-notificacion">
-        <h2>Notificaciones <span>3</span></h2>
-        <div class="item-notificacion">
-            <div class="texto">
-                <img src="IMG/usuario_circulo.svg" alt="img">
-                <h4>Diego</h4>
-                <p>Hola, ¿Cómo estás?</p>
-            </div>
-        </div>
+        <h2>Notificaciones <span><?php echo $notificaciones_count; ?></span></h2>
+        <?php
+        if ($notificaciones_count > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $fecha = date('d/m/Y H:i', strtotime($row['fecha_hora']));
+                $accion = $row['accion'];
+                $modulo = $row['nombre_modulo'];
+                $usuario = $row['nombres'];
+                
+                echo '<div class="item-notificacion">';
+                echo '<div class="texto">';
+                echo '<img src="IMG/usuario_circulo.svg" alt="img">';
+                echo '<h4>'.$usuario.'</h4>';
+                echo '<p>'.$accion.' en '.$modulo.'</p>';
+                echo '<small>'.$fecha.'</small>';
+                echo '</div>';
+                echo '</div>';
+            }
+        } else {
+            echo '<div class="item-notificacion">';
+            echo '<div class="texto">';
+            echo '<p>No hay notificaciones recientes</p>';
+            echo '</div>';
+            echo '</div>';
+        }
+        ?>
     </div>
 
     <div>
