@@ -12,7 +12,10 @@ if (!is_file("Modelo/" . $pagina . ".php")) {
 
 require_once("Modelo/" . $pagina . ".php");
 $k = new Recepcion();
-
+require_once 'Modelo/Permisos.php';
+$id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+$permisosObj = new Permisos();
+$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('recepcion'));
 if (is_file("vista/" . $pagina . ".php")) {
     $accion = $_POST['accion'] ?? '';
 
@@ -22,6 +25,13 @@ if (is_file("vista/" . $pagina . ".php")) {
                 $respuesta = $k->listadoproductos();
                 echo json_encode($respuesta);
                 break;
+
+    
+case 'permisos_tiempo_real':
+    header('Content-Type: application/json; charset=utf-8');
+    $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('recepcion'));
+    echo json_encode($permisosActualizados);
+    exit;
 
             case 'registrar':
                 $k->setidproveedor($_POST['proveedor']);

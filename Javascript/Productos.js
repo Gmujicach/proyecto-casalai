@@ -41,7 +41,61 @@ $(document).on('click', '.btn-modificar', function () {
     $('#modificarProductoModal').modal('show');
 });
 
+function verificarPermisosEnTiempoRealProductos() {
+    var datos = new FormData();
+    datos.append('accion', 'permisos_tiempo_real');
+    enviarAjax(datos, function(permisos) {
+        // Si no tiene permiso de consultar
+        if (!permisos.consultar) {
+            $('#tablaConsultas').hide();
+            $('.space-btn-incluir').hide();
+            if ($('#mensaje-permiso').length === 0) {
+                $('.contenedor-tabla').prepend('<div id="mensaje-permiso" style="color:red; text-align:center; margin:20px 0;">No tiene permiso para consultar los registros.</div>');
+            }
+            return;
+        } else {
+            $('#tablaConsultas').show();
+            $('.space-btn-incluir').show();
+            $('#mensaje-permiso').remove();
+        }
 
+        // Mostrar/ocultar botón de incluir
+        if (permisos.incluir) {
+            $('#btnIncluirProducto').show();
+        } else {
+            $('#btnIncluirProducto').hide();
+        }
+
+        // Mostrar/ocultar botones de modificar/eliminar
+        $('.btn-modificar').each(function() {
+            if (permisos.modificar) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $('.btn-eliminar').each(function() {
+            if (permisos.eliminar) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+
+        // Ocultar columna Acciones si ambos permisos son falsos
+        if (!permisos.modificar && !permisos.eliminar) {
+            $('#tablaConsultas th:first-child, #tablaConsultas td:first-child').hide();
+        } else {
+            $('#tablaConsultas th:first-child, #tablaConsultas td:first-child').show();
+        }
+    });
+}
+
+// Llama la función al cargar la página y luego cada 10 segundos
+$(document).ready(function() {
+    verificarPermisosEnTiempoRealProductos();
+    setInterval(verificarPermisosEnTiempoRealProductos, 10000); // 10 segundos
+});
     
     
 
@@ -451,25 +505,25 @@ $('#Precio').on('input', function() {
 });
 
 
-function enviarAjax(datos, callback) {
-    console.log("Enviando datos AJAX: ", datos);
-    $.ajax({
-        url: '', 
-        type: 'POST',
-        contentType: false,
-        data: datos,
-        processData: false,
-        cache: false,
-        success: function (respuesta) {
-            console.log("Respuesta del servidor: ", respuesta); 
-            callback(JSON.parse(respuesta));
-        },
-        error: function () {
-            console.error('Error en la solicitud AJAX');
-            muestraMensaje('Error en la solicitud AJAX');
-        }
-    });
-}
+    function enviarAjax(datos, callback) {
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: datos,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (respuesta) {
+                if (typeof respuesta === "string") {
+                    respuesta = JSON.parse(respuesta);
+                }
+                if(callback) callback(respuesta);
+            },
+            error: function () {
+                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
+            }
+        });
+    }
 function cambiarEstatus(idUsuario) {
     const span = $(`span[onclick*="cambiarEstatus(${idUsuario}"]`);
     const estatusActual = span.text().trim().toLowerCase();

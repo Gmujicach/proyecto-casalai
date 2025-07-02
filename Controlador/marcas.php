@@ -43,6 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ]);
             }
             exit;
+            case 'permisos_tiempo_real':
+    header('Content-Type: application/json; charset=utf-8');
+    // Ejecuta SIEMPRE la consulta en tiempo real
+    $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('marcas'));
+    echo json_encode($permisosActualizados);
+    exit;
 
         case 'obtener_marcas':
             $id_marca = $_POST['id_marca'];

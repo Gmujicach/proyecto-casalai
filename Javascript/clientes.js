@@ -81,7 +81,61 @@ $(document).ready(function () {
             "*Formato válido: example@gmail.com*"
         );
     });
+function verificarPermisosEnTiempoRealClientes() {
+    var datos = new FormData();
+    datos.append('accion', 'permisos_tiempo_real');
+    enviarAjax(datos, function(permisos) {
+        // Si no tiene permiso de consultar
+        if (!permisos.consultar) {
+            $('#tablaConsultas').hide();
+            $('.space-btn-incluir').hide();
+            if ($('#mensaje-permiso').length === 0) {
+                $('.contenedor-tabla').prepend('<div id="mensaje-permiso" style="color:red; text-align:center; margin:20px 0;">No tiene permiso para consultar los registros.</div>');
+            }
+            return;
+        } else {
+            $('#tablaConsultas').show();
+            $('.space-btn-incluir').show();
+            $('#mensaje-permiso').remove();
+        }
 
+        // Mostrar/ocultar botón de incluir
+        if (permisos.incluir) {
+            $('#btnIncluirCliente').show();
+        } else {
+            $('#btnIncluirCliente').hide();
+        }
+
+        // Mostrar/ocultar botones de modificar/eliminar
+        $('.btn-modificar').each(function() {
+            if (permisos.modificar) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $('.btn-eliminar').each(function() {
+            if (permisos.eliminar) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+
+        // Ocultar columna Acciones si ambos permisos son falsos
+        if (!permisos.modificar && !permisos.eliminar) {
+            $('#tablaConsultas th:first-child, #tablaConsultas td:first-child').hide();
+        } else {
+            $('#tablaConsultas th:first-child, #tablaConsultas td:first-child').show();
+        }
+    });
+}
+
+// Llama la función al cargar la página y luego cada 10 segundos
+$(document).ready(function() {
+    verificarPermisosEnTiempoRealClientes();
+    setInterval(verificarPermisosEnTiempoRealClientes, 10000); // 10 segundos
+});
     function validarEnvioCliente(){
         let nombre = document.getElementById("nombre");
         nombre.value = space(nombre.value).trim();

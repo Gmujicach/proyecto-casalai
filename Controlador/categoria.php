@@ -1,7 +1,13 @@
 <?php
 ob_start();
 require_once 'Modelo/categoria.php';
+require_once 'Modelo/Permisos.php';
 
+$id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
+$permisosObj = new Permisos();
+
+$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('Categorias'));
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
@@ -33,6 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'message' => 'Error al registrar la categoria'
                 ]);
             }
+            exit;
+
+            case 'permisos_tiempo_real':
+            header('Content-Type: application/json; charset=utf-8');
+            $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('categorias'));
+            echo json_encode($permisosActualizados);
             exit;
 
         case 'consultar_categorias':

@@ -2,15 +2,16 @@
 ob_start();
 
 require_once 'Modelo/clientes.php';
+require_once 'Modelo/Permisos.php';
 
+$id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
+$permisosObj = new Permisos();
+$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('clientes'));
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtiene la acción enviada en la solicitud POST
-    if (isset($_POST['accion'])) {
-        $accion = $_POST['accion'];
-    } else {
-        $accion = '';
-    }
+    $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
+
 
     switch ($accion) {
         case 'registrar':
@@ -43,7 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ]);
             }
             exit;
-
+        case 'permisos_tiempo_real':
+            header('Content-Type: application/json; charset=utf-8');
+            $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('clientes'));
+            echo json_encode($permisosActualizados);
+            exit;
         case 'obtener_clientes':
             $id = $_POST['id_clientes'];
             if ($id !== null) {

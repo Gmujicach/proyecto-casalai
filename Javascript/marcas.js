@@ -17,7 +17,66 @@ $(document).ready(function () {
             "*El formato permite letras y números*"
         );
     });
+function verificarPermisosEnTiempoReal() {
+    var datos = new FormData();
+    datos.append('accion', 'permisos_tiempo_real');
+    enviarAjax(datos, function(permisos) {
+        console.log(permisos); // Para depuración
 
+        // Dentro de la función verificarPermisosEnTiempoReal, al inicio del callback:
+if (!permisos.consultar) {
+    $('#tablaConsultas').hide();
+    $('.space-btn-incluir').hide();
+    if ($('#mensaje-permiso').length === 0) {
+        $('.contenedor-tabla').prepend('<div id="mensaje-permiso" style="color:red; text-align:center; margin:20px 0;">No tiene permiso para consultar los registros.</div>');
+    }
+    return; // Detener ejecución si no tiene permiso de consultar
+} else {
+    $('#tablaConsultas').show();
+    $('.space-btn-incluir').show();
+    $('#mensaje-permiso').remove();
+}
+        // Mostrar/ocultar botón de incluir
+        if (permisos.incluir) {
+            $('#btnIncluirMarca').show();
+        } else {
+            $('#btnIncluirMarca').hide();
+        }
+
+        // Mostrar/ocultar botones de modificar/eliminar
+        $('.btn-modificar').each(function() {
+            if (permisos.modificar) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $('.btn-eliminar').each(function() {
+            if (permisos.eliminar) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+
+        // Ocultar columna Acciones si ambos permisos son falsos
+        if (!permisos.modificar && !permisos.eliminar) {
+            $('#tablaConsultas th:first-child, #tablaConsultas td:first-child').hide();
+        } else {
+            $('#tablaConsultas th:first-child, #tablaConsultas td:first-child').show();
+        }
+        // Dentro de la función verificarPermisosEnTiempoReal, al inicio del callback:
+
+    });
+
+    
+}
+
+// Llama la función al cargar la página y luego cada 10 segundos
+$(document).ready(function() {
+    verificarPermisosEnTiempoReal();
+    setInterval(verificarPermisosEnTiempoReal, 1000); // 10 segundos
+});
     function validarEnvioMarca(){
         let nombre = document.getElementById("nombre_marca");
         nombre.value = space(nombre.value).trim();

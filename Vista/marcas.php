@@ -42,7 +42,8 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
     </div>
 </div>
 
-<div class="contenedor-tabla">
+
+<div class="contenedor-tabla" style="width:100%; max-width:1200px; margin:0 auto;">
     <div class="space-btn-incluir">
         <?php if ($permisosUsuario['incluir']): ?>
         <button id="btnIncluirMarca" class="btn-incluir">
@@ -52,52 +53,51 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
     </div>
 
     <h3>Lista de Marcas</h3>
-    
-    <table class="tablaConsultas" id="tablaConsultas">
-        <thead>
-            <tr> 
-                <th>Acciones</th>
-                <th>ID</th>
-                <th>Nombre</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($marcas as $marca): ?>
-                <tr data-id="<?php echo $marca['id_marca']; ?>">        
-                    <td>
-                        <ul>
-                            <?php if ($permisosUsuario['modificar']): ?>
-                            <div>
-                                <button class="btn-modificar"
-                                id="btnModificarMarca"
-                                data-id="<?php echo $marca['id_marca']; ?>"
-                                data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>"
-                                >Modificar</button>
-                            </div>
-                            <?php endif; ?>
-                            <?php if ($permisosUsuario['eliminar']): ?>
-                            <div>
-                                <button class="btn-eliminar"
-                                data-id="<?php echo $marca['id_marca']; ?>"
-                                >Eliminar</button>
-                            </div>
-                            <?php endif; ?>
-                        </ul>
-                    </td>
-                    <td>
-                        <span class="campo-numeros">
-                            <?php echo htmlspecialchars($marca['id_marca']); ?>
-                        </span>
-                    </td>
-                    <td>
-                        <span class="campo-nombres">
-                            <?php echo htmlspecialchars($marca['nombre_marca']); ?>
-                        </span>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table> 
+
+    <table class="tablaConsultas" id="tablaConsultas" style="width:100%;">
+     
+<thead>
+    <tr>
+        <th>Acciones</th>
+        <th>ID</th>
+        <th>Nombre</th>
+    </tr>
+</thead>
+<tbody>
+    <?php foreach ($marcas as $marca): ?>
+        <tr data-id="<?php echo $marca['id_marca']; ?>">
+            <td>
+                <ul>
+                    <div>
+                        <button class="btn-modificar" style="display:none"
+                            id="btnModificarMarca"
+                            data-id="<?php echo $marca['id_marca']; ?>"
+                            data-nombre="<?php echo htmlspecialchars($marca['nombre_marca']); ?>">
+                            Modificar
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn-eliminar" style="display:none"
+                            data-id="<?php echo $marca['id_marca']; ?>">
+                            Eliminar
+                        </button>
+                    </div>
+                </ul>
+            </td>
+            <td>
+                <span class="campo-numeros">
+                    <?php echo htmlspecialchars($marca['id_marca']); ?>
+                </span>
+            </td>
+            <td>
+                <span class="campo-nombres">
+                    <?php echo htmlspecialchars($marca['nombre_marca']); ?>
+                </span>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+    </table>
 </div>
 
 
