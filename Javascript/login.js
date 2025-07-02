@@ -170,22 +170,22 @@ $(document).ready(function(){
       
       
       $("#username").on("keypress",function(e){
-        validarkeypress(/^[A-Za-z0-9\b]*$/,e);
+        validarkeypress(/^[a-zA-Z0-9_]*$/,e);
       });
       
       $("#username").on("keyup",function(){
-        validarkeyup(/^[A-Za-z0-9\b]{3,8}$/,$(this),
-        $("#susername"),"El formato debe ser 9999999 ");
+        validarkeyup(/^[a-zA-Z0-9_]{4,20}$/,$(this),
+        $("#susername"),"Ingrese su usuario");
       });
       
       $("#password").on("keypress",function(e){
-        validarkeypress(/^[A-Za-z0-9\b]*$/,e);
+        validarkeypress(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]*$/,e);
       });
       
       $("#password").on("keyup",function(){
         
-        validarkeyup(/^[A-Za-z0-9]{3,15}$/,
-        $(this),$("#spassword"),"Solo letras y numeros entre 3 y 15 caracteres");
+        validarkeyup(/^[A-Za-z0-9\b\u00f1\u00d1\u00E0-\u00FC]{6,15}$/,
+        $(this),$("#spassword"),"Ingrese su contraseña de seguridad");
       });
       
       
