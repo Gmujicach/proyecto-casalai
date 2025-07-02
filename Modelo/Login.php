@@ -57,9 +57,8 @@ FROM
 INNER JOIN 
     tbl_rol r 
 ON 
-    r.id_rol = u.id_rol;
- 
-                          WHERE username = :username");
+    r.id_rol = u.id_rol
+WHERE username = :username");
         $p->bindParam(':username', $this->username);
         $p->execute();
 
