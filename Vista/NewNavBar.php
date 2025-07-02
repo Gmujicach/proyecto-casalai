@@ -32,7 +32,7 @@
                 </a>
             </li>
 
-            <?php if ($_SESSION['rango'] == 'Administrador') { ?>
+            <?php if ($_SESSION['nombre_rol'] == 'Administrador') { ?>
             <h4><span>Administrar Perfiles</span><div class="menu-separador"></div></h4>
             <li>
                 <a href="?pagina=Usuarios">
@@ -44,7 +44,7 @@
             </li>
             <?php } ?>
 
-            <?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista') { ?>
+            <?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista') { ?>
             <h4><span>Administrar Inventario</span><div class="menu-separador"></div></h4>
             <li>
                 <a href="?pagina=Recepcion">
@@ -64,7 +64,7 @@
             </li>
             <?php } ?>
 
-            <?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista') { ?>
+            <?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista') { ?>
             <h4><span>Administrar Productos</span><div class="menu-separador"></div></h4>
             <li><a href="?pagina=marcas"><span class="simbolo"><img src="IMG/package-search.svg" class="icono-svg" />Gestionar Marcas</span></a></li>
             <li><a href="?pagina=modelos"><span class="simbolo"><img src="IMG/package-search.svg" class="icono-svg" />Gestionar Modelos</span></a></li>
@@ -72,17 +72,17 @@
             <li><a href="?pagina=categoria"><span class="simbolo"><img src="IMG/package-search.svg" class="icono-svg" />Gestionar Categorias</span></a></li>
             <?php } ?>
 
-            <?php if ($_SESSION['rango'] == 'Administrador') { ?>
+            <?php if ($_SESSION['nombre_rol'] == 'Administrador') { ?>
             <h4><span>Administrar Proveedores</span><div class="menu-separador"></div></h4>
             <li><a href="?pagina=proveedores"><span class="simbolo"><img src="IMG/truck.svg" class="icono-svg" />Gestionar Proveedores</span></a></li>
             <?php } ?>
 
-            <?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista') { ?>
+            <?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista') { ?>
             <h4><span>Administrar Clientes</span><div class="menu-separador"></div></h4>
             <li><a href="?pagina=clientes"><span class="simbolo"><img src="IMG/users-round.svg" class="icono-svg" />Gestionar Clientes</span></a></li>
             <?php } ?>
 
-            <?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Cliente') { ?>
+            <?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Cliente') { ?>
             <h4><span>Administrar Ventas</span><div class="menu-separador"></div></h4>
             <li><a href="?pagina=catalogo"><span class="simbolo"><img src="IMG/book-open.svg" class="icono-svg" />Gestionar Catálogo</span></a></li>
             <li><a href="?pagina=carrito"><span class="simbolo"><img src="IMG/shopping-cart.svg" class="icono-svg" />Gestionar Carrito de Compras</span></a></li>
@@ -91,13 +91,13 @@
             <li><a href="?pagina=OrdenDespacho"><span class="simbolo"><img src="IMG/list-ordered.svg" class="icono-svg" />Gestionar Ordenes de Despacho</span></a></li>
             <?php } ?>
 
-            <?php if ($_SESSION['rango'] == 'Administrador') { ?>
+            <?php if ($_SESSION['nombre_rol'] == 'Administrador') { ?>
             <h4><span>Administrar Finanzas</span><div class="menu-separador"></div></h4>
             <li><a href="?pagina=cuentas"><span class="simbolo"><img src="IMG/landmark.svg" class="icono-svg" />Gestionar Cuentas Bancarias</span></a></li>
             <li><a href="?pagina=finanza"><span class="simbolo"><img src="IMG/dollar-sign.svg" class="icono-svg" />Gestionar Ingresos y Egresos</span></a></li>
             <?php } ?>
 
-            <?php if ($_SESSION['rango'] == 'Administrador') { ?>
+            <?php if ($_SESSION['nombre_rol'] == 'Administrador') { ?>
                 <h4><span>Administrar Seguridad</span><div class="menu-separador"></div></h4>
                 <li><a href="?pagina=permisos"><span class="simbolo"><img src="IMG/key-round.svg" class="icono-svg" />Gestionar Permisos</span></a></li>
                 <li><a href="?pagina=rol"><span class="simbolo"><img src="IMG/user-round-search.svg" class="icono-svg" />Gestionar Roles</span></a></li>
@@ -114,7 +114,7 @@
                 <img src="img/Avatar.png" alt="perfil-img">
                 <div class="user-detalle">
                     <h3><?php echo htmlspecialchars($_SESSION['name'] ?? 'Invitado'); ?></h3>
-                    <span><?php echo htmlspecialchars($_SESSION['rango'] ?? 'Usuario'); ?></span>
+                    <span><?php echo htmlspecialchars($_SESSION['nombre_rol'] ?? 'Usuario'); ?></span>
                 </div>
             </div>
         </div>

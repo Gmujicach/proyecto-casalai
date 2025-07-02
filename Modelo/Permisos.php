@@ -31,6 +31,36 @@ public function getPermisosPorRolModulo() {
     return $permisos;
 }
 
+
+public function getPermisosUsuarioModulo($id_rol, $nombre_modulo) {
+    // Busca el id_modulo por nombre
+    $stmt = $this->conex->prepare("SELECT id_modulo FROM tbl_modulos WHERE LOWER(nombre_modulo) = LOWER(?) LIMIT 1");
+    $stmt->execute([$nombre_modulo]);
+    $modulo = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$modulo) {
+        return [
+            'consultar' => false,
+            'incluir' => false,
+            'modificar' => false,
+            'eliminar' => false
+        ];
+    }
+    $id_modulo = $modulo['id_modulo'];
+
+    // Obtiene los permisos para ese rol y módulo
+    $stmt = $this->conex->prepare("SELECT accion, estatus FROM tbl_permisos WHERE id_rol = ? AND id_modulo = ?");
+    $stmt->execute([$id_rol, $id_modulo]);
+    $permisos = [
+        'consultar' => false,
+        'incluir' => false,
+        'modificar' => false,
+        'eliminar' => false
+    ];
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $perm) {
+        $permisos[$perm['accion']] = ($perm['estatus'] === 'Permitido');
+    }
+    return $permisos;
+}
 public function guardarPermisos($permisosForm, $roles, $modulos, $acciones) {
     // Borra todos los permisos actuales
     $this->conex->exec("DELETE FROM tbl_permisos");

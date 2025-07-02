@@ -1,4 +1,4 @@
-<?php if ($_SESSION['rango'] == 'Administrador' || $_SESSION['rango'] == 'Almacenista' ) { ?>
+<?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista' ) { ?>
 
 <!DOCTYPE html>
 <html lang="es">

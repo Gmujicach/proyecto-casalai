@@ -8,6 +8,7 @@ class Login extends BD
 
     private $username;
     private $password;
+    private $co;
 
     function set_username($valor)
     {
@@ -30,15 +31,31 @@ class Login extends BD
         return $this->password;
     }
 
+        public function __construct() {
+        $conexion = new BD('S');
+        $this->co = $conexion->getConexion();
+    }
 
     function existe() {
-    $co = $this->getConexion();
-    $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $this->co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $r = array();
     
     try {
         // Consultar el hash de la contraseña almacenada
-        $p = $co->prepare("SELECT id_usuario, rango, username, password FROM tbl_usuarios 
+        $p = $this->co->prepare("SELECT 
+    u.id_usuario, 
+    u.id_rol,
+    r.nombre_rol, 
+    u.username, 
+    u.password 
+FROM 
+    tbl_usuarios u 
+INNER JOIN 
+    tbl_rol r 
+ON 
+    r.id_rol = u.id_rol;
+ 
                           WHERE username = :username");
         $p->bindParam(':username', $this->username);
         $p->execute();
@@ -50,8 +67,10 @@ class Login extends BD
             if (password_verify($this->password, $fila['password'])) {
                 $r['resultado'] = 'existe';
                 $r['mensaje'] = $fila['username'];
-                $r['rango'] = $fila['rango'];
-                $r['id_usuario'] = $fila['id_usuario']; // Opcional: útil para sesiones
+                $r['nombre_rol'] = $fila['nombre_rol'];
+                $r['id_usuario'] = $fila['id_usuario']; 
+                $r['id_rol'] = $fila['id_rol']; // Agregar id_rol al resultado
+                // Opcional: útil para sesiones
             } else {
                 $r['resultado'] = 'noexiste';
                 $r['mensaje'] = "Error en usuario o contraseña!!!";
@@ -71,13 +90,13 @@ class Login extends BD
 
 
 public function registrarUsuarioYCliente($datos) {
-    $co = $this->getConexion();
-    $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $this->co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $respuesta = ['status' => 'error', 'mensaje' => ''];
 
     try {
         // Verifica si el usuario ya existe
-        $p = $co->prepare("SELECT COUNT(*) FROM tbl_usuarios WHERE username = ?");
+        $p = $this->co->prepare("SELECT COUNT(*) FROM tbl_usuarios WHERE username = ?");
         $p->execute([$datos['nombre_usuario']]);
         if ($p->fetchColumn() > 0) {
             $respuesta['mensaje'] = "El nombre de usuario ya está en uso. Por favor elige otro.";
@@ -88,7 +107,7 @@ public function registrarUsuarioYCliente($datos) {
         $hash = password_hash($datos['clave'], PASSWORD_DEFAULT);
 
         // Inserta en tbl_usuarios
-        $p = $co->prepare("INSERT INTO tbl_usuarios (username, password, nombres, apellidos, correo, telefono, rango, estatus)
+        $p = $this->co->prepare("INSERT INTO tbl_usuarios (username, password, nombres, apellidos, correo, telefono, id_rol, estatus)
                            VALUES (?, ?, ?, ?, ?, ?, 'Cliente', 'habilitado')");
         $p->execute([
             $datos['nombre_usuario'],
@@ -100,7 +119,7 @@ public function registrarUsuarioYCliente($datos) {
         ]);
 
         // Inserta en tbl_clientes
-        $p = $co->prepare("INSERT INTO tbl_clientes (nombre, cedula, telefono, direccion, correo, activo)
+        $p = $this->co->prepare("INSERT INTO tbl_clientes (nombre, cedula, telefono, direccion, correo, activo)
                            VALUES (?, ?, ?, ?, ?, ?)");
         $p->execute([
             $datos['nombre'] . ' ' . $datos['apellido'],

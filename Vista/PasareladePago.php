@@ -1,4 +1,4 @@
-<?php if ($_SESSION['rango'] == 'Cliente' ) { ?>
+<?php if ($_SESSION['nombre_rol'] == 'Cliente' ) { ?>
 
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
