@@ -46,7 +46,7 @@ CREATE TABLE `tbl_alertas` (
 CREATE TABLE `tbl_bitacora` (
   `id_bitacora` int(11) NOT NULL,
   `fecha_hora` datetime NOT NULL,
-  `accion` varchar(30) NOT NULL,
+  `accion` varchar(50) NOT NULL,
   `id_modulo` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
