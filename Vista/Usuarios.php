@@ -114,66 +114,70 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    <?php foreach ($usuarios as $usuario): ?>
-                        <tr data-id="<?php echo $usuario['id_usuario']; ?>">
-                            <td>
-                                <ul>
-                                    <div>
-                                        <button class="btn-modificar" data-id="<?php echo $usuario['id_usuario']; ?>"
-                                            data-username="<?php echo htmlspecialchars($usuario['username']); ?>"
-                                            data-nombres="<?php echo htmlspecialchars($usuario['nombres']); ?>"
-                                            data-apellidos="<?php echo htmlspecialchars($usuario['apellidos']); ?>"
-                                            data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
-                                            data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
-                                            data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
-                                            data-rango="<?php echo htmlspecialchars($usuario['id_rol']); ?>">
-                                            Modificar
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button class="btn-eliminar"
-                                            data-id="<?php echo $usuario['id_usuario']; ?>">Eliminar</button>
-                                    </div>
-                                </ul>
-                            </td>
-                            <td>
-                                <span class="campo-nombres">
-                                    <?php echo htmlspecialchars($usuario['nombres']); ?>
-                                    <?php echo htmlspecialchars($usuario['apellidos']); ?>
-                                </span>
-                            </td>
-                            <td>
-                                <span class="campo-correo">
-                                    <?php echo htmlspecialchars($usuario['correo']); ?>
-                                </span>
-                            </td>
-                            <td>
-                                <span class="campo-usuario">
-                                    <?php echo htmlspecialchars($usuario['username']); ?>
-                                </span>
-                            </td>
-                            <td>
-                                <span class="campo-telefono">
-                                    <?php echo htmlspecialchars($usuario['telefono']); ?>
-                                </span>
-                            </td>
-                            <td>
-                                <span class="campo-rango">
-                                    <?php echo htmlspecialchars($usuario['nombre_rol']); ?>
-                                </span>
-                            </td>
-                            <td>
-                                <span
-                                    class="campo-estatus <?php echo ($usuario['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>"
-                                    data-id="<?php echo $usuario['id_usuario']; ?>" style="cursor: pointer;">
-                                    <?php echo htmlspecialchars($usuario['estatus']); ?>
-                                </span>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+    <tbody>
+        <?php foreach ($usuarios as $usuario): ?>
+            <tr data-id="<?php echo $usuario['id_usuario']; ?>">
+                <td>
+                    <ul>
+                        <div>
+                            <?php if (strtolower($usuario['nombre_rol']) !== 'superusuario'): ?>
+                                <button class="btn-modificar" data-id="<?php echo $usuario['id_usuario']; ?>"
+                                    data-username="<?php echo htmlspecialchars($usuario['username']); ?>"
+                                    data-nombres="<?php echo htmlspecialchars($usuario['nombres']); ?>"
+                                    data-apellidos="<?php echo htmlspecialchars($usuario['apellidos']); ?>"
+                                    data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
+                                    data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
+                                    data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
+                                    data-rango="<?php echo htmlspecialchars($usuario['id_rol']); ?>">
+                                    Modificar
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                        <div>
+                            <?php if (strtolower($usuario['nombre_rol']) !== 'superusuario'): ?>
+                                <button class="btn-eliminar"
+                                    data-id="<?php echo $usuario['id_usuario']; ?>">Eliminar</button>
+                            <?php endif; ?>
+                        </div>
+                    </ul>
+                </td>
+                <td>
+                    <span class="campo-nombres">
+                        <?php echo htmlspecialchars($usuario['nombres']); ?>
+                        <?php echo htmlspecialchars($usuario['apellidos']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-correo">
+                        <?php echo htmlspecialchars($usuario['correo']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-usuario">
+                        <?php echo htmlspecialchars($usuario['username']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-telefono">
+                        <?php echo htmlspecialchars($usuario['telefono']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-rango">
+                        <?php echo htmlspecialchars($usuario['nombre_rol']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span
+                        class="campo-estatus <?php echo ($usuario['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>"
+                        data-id="<?php echo $usuario['id_usuario']; ?>" style="cursor: pointer;">
+                        <?php echo htmlspecialchars($usuario['estatus']); ?>
+                    </span>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+         </table>
         </div>
 
         <!-- Reporte estadístico de usuarios por rol -->

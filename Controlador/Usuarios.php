@@ -1,23 +1,45 @@
 <?php
 ob_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once 'Modelo/Usuarios.php';
 require_once 'Modelo/Permisos.php';
 require_once 'Modelo/Bitacora.php';
+<<<<<<< HEAD
 define('MODULO_USUARIO', 1); // Define el ID del módulo de cuentas bancarias
 
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+=======
+$id_rol = $_SESSION['id_rol'];
+
+// Definir constantes para IDs de módulo y acciones
+define('MODULO_USUARIO', 1);
+define('ACCION_CREAR', 1);
+define('ACCION_LEER', 2);
+define('ACCION_ACTUALIZAR', 3);
+define('ACCION_ELIMINAR', 4);
+define('ACCION_CAMBIAR_ESTATUS', 5);
+>>>>>>> 8aea1e870c6a26e6dd939b3d31cc4fa1e97e6211
 
 if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de Usuarios', MODULO_USUARIO, $_SESSION['id_usuario']);
 }
 
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('usuario'));
 
+// Registrar acceso al módulo
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de usuario', MODULO_USUARIO, $_SESSION['id_usuario']);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Obtiene la acción enviada en la solicitud POST
+    $id_usuario_accion = $_SESSION['id_usuario'] ?? null; // Usuario que realiza la acción
+    
     if (isset($_POST['accion'])) {
         $accion = $_POST['accion'];
     } else {
@@ -26,10 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     switch ($accion) {
         case 'permisos_tiempo_real':
-    header('Content-Type: application/json; charset=utf-8');
-    $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('usuario'));
-    echo json_encode($permisosActualizados);
-    exit;
+            header('Content-Type: application/json; charset=utf-8');
+            $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('usuario'));
+            echo json_encode($permisosActualizados);
+            exit;
+
         case 'registrar':
             $usuario = new Usuarios();
             $usuario->setUsername($_POST['nombre_usuario']);
@@ -49,13 +72,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if ($usuario->ingresarUsuario()) {
+<<<<<<< HEAD
                 $usuarioRegistrada = $usuario->obtenerUltimoUsuario();
                 $bitacoraModel->registrarAccion('Registro de usuario: ' . $usuarioRegistrada['nombre_usuario'], MODULO_USUARIO, $_SESSION['id_usuario']);
+=======
+                $usuarioRegistrado = $usuario->obtenerUltimoUsuario();
+                
+                // Registrar en bitácora
+                $bitacoraModel->registrarAccion(
+                    'Creación de usuario: ' . $_POST['nombre_usuario'], 
+                    MODULO_USUARIO, 
+                    $id_usuario_accion,
+                    ACCION_CREAR,
+                    $usuarioRegistrado['id_usuario']
+                );
+>>>>>>> 8aea1e870c6a26e6dd939b3d31cc4fa1e97e6211
                 
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'Usuario registrada correctamente',
-                    'usuario' => $usuarioRegistrada
+                    'message' => 'Usuario registrado correctamente',
+                    'usuario' => $usuarioRegistrado
                 ]);
             } else {
                 echo json_encode([
@@ -69,9 +105,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_usuario = $_POST['id_usuario'];
             if ($id_usuario !== null) {
                 $usuario = new Usuarios();
-                $usuario = $usuario->obtenerUsuarioPorId($id_usuario);
-                if ($usuario !== null) {
-                    echo json_encode($usuario);
+                $usuarioData = $usuario->obtenerUsuarioPorId($id_usuario);
+                
+                // Registrar en bitácora (opcional, ya que es una lectura)
+                $bitacoraModel->registrarAccion(
+                    'Consulta de usuario ID: ' . $id_usuario, 
+                    MODULO_USUARIO, 
+                    $id_usuario_accion,
+                    ACCION_LEER,
+                    $id_usuario
+                );
+                
+                if ($usuarioData !== null) {
+                    echo json_encode($usuarioData);
                 } else {
                     echo json_encode(['status' => 'error', 'message' => 'Usuario no encontrado']);
                 }
@@ -80,26 +126,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             exit;
 
-case 'modificar':
-    $id_usuario = $_POST['id_usuario'];
-    $usuario = new Usuarios();
-    $usuario->setId($id_usuario);
-    $usuario->setUsername($_POST['nombre_usuario']);
-    $usuario->setNombre($_POST['nombre']);
-    $usuario->setApellido($_POST['apellido_usuario']);
-    $usuario->setCorreo($_POST['correo_usuario']);
-    $usuario->setTelefono($_POST['telefono_usuario']);
-    $usuario->setRango($_POST['rango']);
-    
-    // CORRIGE ESTA LÍNEA:
-    if ($usuario->existeUsuario($_POST['nombre_usuario'], $id_usuario)) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'El nombre de usuario ya existe'
-        ]);
-        exit;
-    }
+        case 'modificar':
+            $id_usuario = $_POST['id_usuario'];
+            $usuario = new Usuarios();
+            $usuario->setId($id_usuario);
+            $usuario->setUsername($_POST['nombre_usuario']);
+            $usuario->setNombre($_POST['nombre']);
+            $usuario->setApellido($_POST['apellido_usuario']);
+            $usuario->setCorreo($_POST['correo_usuario']);
+            $usuario->setTelefono($_POST['telefono_usuario']);
+            $usuario->setRango($_POST['rango']);
+            
+            if ($usuario->existeUsuario($_POST['nombre_usuario'], $id_usuario)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'El nombre de usuario ya existe'
+                ]);
+                exit;
+            }
 
+<<<<<<< HEAD
     if ($usuario->modificarUsuario($id_usuario)) {
     // Obtener el usuario actualizado con el nombre del rol
     $usuarioActualizado = $usuario->obtenerUsuarioPorId($id_usuario);
@@ -113,25 +159,61 @@ case 'modificar':
     echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
 }
     exit;
+=======
+            if ($usuario->modificarUsuario($id_usuario)) {
+                $usuarioActualizado = $usuario->obtenerUsuarioPorId($id_usuario);
+                
+                // Registrar en bitácora
+                $bitacoraModel->registrarAccion(
+                    'Actualización de usuario: ' . $_POST['nombre_usuario'], 
+                    MODULO_USUARIO, 
+                    $id_usuario_accion,
+                    ACCION_ACTUALIZAR,
+                    $id_usuario
+                );
+                
+                echo json_encode([
+                    'status' => 'success',
+                    'usuario' => $usuarioActualizado
+                ]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
+            }
+            exit;
+>>>>>>> 8aea1e870c6a26e6dd939b3d31cc4fa1e97e6211
 
         case 'eliminar':
             $id_usuario = $_POST['id_usuario'];
             $usuarioModel = new Usuarios();
+            
+            // Obtener datos del usuario antes de eliminarlo
+            $usuarioAEliminar = $usuarioModel->obtenerUsuarioPorId($id_usuario);
+            
             if ($usuarioModel->eliminarUsuario($id_usuario)) {
+<<<<<<< HEAD
                 $usuarioEliminado = $usuarioModel->obtenerUsuarioPorId($id_usuario);
                 $bitacoraModel->registrarAccion('Eliminación de usuario: ' . $usuarioEliminado['nombre_usuario'], MODULO_USUARIO, $_SESSION['id_usuario']);
+=======
+                // Registrar en bitácora
+                $bitacoraModel->registrarAccion(
+                    'Eliminación de usuario: ' . $usuarioAEliminar['username'], 
+                    MODULO_USUARIO, 
+                    $id_usuario_accion,
+                    ACCION_ELIMINAR,
+                    $id_usuario
+                );
+                
+>>>>>>> 8aea1e870c6a26e6dd939b3d31cc4fa1e97e6211
                 echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
+                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el usuario']);
             }
             exit;
 
-        // Cambiar estatus
         case 'cambiar_estatus':
             $id_usuario = $_POST['id_usuario'];
             $nuevoEstatus = $_POST['nuevo_estatus'];
             
-            // Validación básica
             if (!in_array($nuevoEstatus, ['habilitado', 'inhabilitado'])) {
                 echo json_encode(['status' => 'error', 'message' => 'Estatus no válido']);
                 exit;
@@ -141,6 +223,15 @@ case 'modificar':
             $usuario->setId($id_usuario);
             
             if ($usuario->cambiarEstatus($nuevoEstatus)) {
+                // Registrar en bitácora
+                $bitacoraModel->registrarAccion(
+                    'Cambio de estatus a ' . $nuevoEstatus . ' para usuario ID: ' . $id_usuario, 
+                    MODULO_USUARIO, 
+                    $id_usuario_accion,
+                    ACCION_CAMBIAR_ESTATUS,
+                    $id_usuario
+                );
+                
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
@@ -148,8 +239,8 @@ case 'modificar':
             exit;
         
         default:
-            echo json_encode(['status' => 'error', 'message' => 'Acción no válida'. $accion.'']);
-        exit;
+            echo json_encode(['status' => 'error', 'message' => 'Acción no válida: '. $accion.'']);
+            exit;
     }
 }
 
@@ -157,6 +248,7 @@ function getusuarios() {
     $usuario = new Usuarios();
     return $usuario->getusuarios();
 }
+
 $usuarioModel = new Usuarios();
 $reporteRoles = $usuarioModel->obtenerReporteRoles();
 $totalRoles = array_sum(array_column($reporteRoles, 'cantidad'));
@@ -167,7 +259,6 @@ unset($rol);
 
 $pagina = "Usuarios";
 if (is_file("Vista/" . $pagina . ".php")) {
-
     $usuarios = getusuarios();
     require_once("Vista/" . $pagina . ".php");
 } else {

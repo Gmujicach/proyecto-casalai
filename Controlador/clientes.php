@@ -4,6 +4,7 @@ ob_start();
 require_once 'Modelo/clientes.php';
 require_once 'Modelo/Permisos.php';
 require_once 'Modelo/Bitacora.php';
+<<<<<<< HEAD
 
 
 define('MODULO_CLIENTES', 9); // Define el ID del módulo de categorías
@@ -14,13 +15,20 @@ $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de clientes', MODULO_CLIENTES, $_SESSION['id_usuario']);
 }
+=======
+
+$id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
+define('MODULO_CLIENTE', 1);
+>>>>>>> 8aea1e870c6a26e6dd939b3d31cc4fa1e97e6211
 
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
+
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('clientes'));
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
-
 
     switch ($accion) {
         case 'registrar':
@@ -41,7 +49,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($cliente->ingresarclientes()) {
                 $clienteRegistrado = $cliente->obtenerUltimoCliente();
+<<<<<<< HEAD
                 $bitacoraModel->registrarAccion('Registro de cliente: ' . $clienteRegistrado['nombre'], MODULO_CLIENTES, $_SESSION['id_usuario']);
+=======
+
+                $bitacoraModel->registrarAccion(
+                    'Creación de cliente: ' . $_POST['nombre'], 
+                    MODULO_CLIENTE, 
+                    $_SESSION['id_usuario']
+                );
+
+>>>>>>> 8aea1e870c6a26e6dd939b3d31cc4fa1e97e6211
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Cliente registrado correctamente',
@@ -96,7 +114,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($cliente->modificarclientes($id)) {
                 $clienteModificado = $cliente->obtenerclientesPorId($id);
+<<<<<<< HEAD
                 $bitacoraModel->registrarAccion('Modificación de cliente: ' . $clienteModificado['nombre'], MODULO_CLIENTES, $_SESSION['id_usuario']);
+=======
+
+                $bitacoraModel->registrarAccion(
+                    'Actualización de cliente: ' . $_POST['nombre'], 
+                    MODULO_CLIENTE, 
+                    $_SESSION['id_usuario']
+                );
+
+>>>>>>> 8aea1e870c6a26e6dd939b3d31cc4fa1e97e6211
                 echo json_encode([
                     'status' => 'success',
                     'cliente' => $clienteModificado
@@ -110,10 +138,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['id_clientes'];
             $clientesModel = new cliente();
             if ($clientesModel->eliminarclientes($id)) {
+<<<<<<< HEAD
                 $clienteEliminado = $clientesModel->obtenerclientesPorId($id);
                 $bitacoraModel->registrarAccion('Eliminación de cliente: ' . $clienteEliminado['nombre'], MODULO_CLIENTES, $_SESSION['id_usuario']);
                                 
                 echo json_encode(['status' => 'success', 'message' => 'Cliente eliminado correctamente']);
+=======
+                $bitacoraModel->registrarAccion(
+                    'Eliminación de cliente: (ID: ' . $id . ')', 
+                    MODULO_CLIENTE, 
+                    $_SESSION['id_usuario']
+                );
+
+                echo json_encode(['status' => 'success']);
+>>>>>>> 8aea1e870c6a26e6dd939b3d31cc4fa1e97e6211
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Cliente']);
             }
@@ -133,7 +171,9 @@ $reporteComprasClientes = $cliente->obtenerReporteComprasClientes();
 $totalComprasClientes = array_sum(array_column($reporteComprasClientes, 'cantidad'));
 $pagina = "Clientes";
 if (is_file("Vista/" . $pagina . ".php")) {
-
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de cliente', MODULO_CLIENTE, $_SESSION['id_usuario']);
+    }
     $clientes = getclientes();
     require_once("Vista/" . $pagina . ".php");
 } else {

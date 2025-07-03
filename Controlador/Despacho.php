@@ -15,9 +15,17 @@ define('MODULO_DESPACHO', 3); // Define el ID del módulo de cuentas bancarias
 require_once("Modelo/" . $pagina . ".php");
 $k = new Despacho();
 require_once 'Modelo/Permisos.php';
+<<<<<<< HEAD
 require_once 'Modelo/bitacora.php';
+=======
+require_once 'Modelo/Bitacora.php';
+
+define('MODULO_DESPACHO', 1);
+
+>>>>>>> 8aea1e870c6a26e6dd939b3d31cc4fa1e97e6211
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('despacho'));
 
 if (is_file("vista/" . $pagina . ".php")) {
@@ -133,6 +141,12 @@ foreach ($despachos as $despacho):
 <?php endforeach;            
 
 $tbody = ob_get_clean();
+
+                $bitacoraModel->registrarAccion(
+                    'Creación de despacho: ' . $_POST['correlativo'], 
+                    MODULO_DESPACHO,
+                    $_SESSION['id_usuario']
+                );
 
                 echo json_encode([
                     'resultado' => 'registrar',
@@ -281,6 +295,12 @@ foreach ($despachos as $despacho):
 
                     $tbody = ob_get_clean();
 
+                    $bitacoraModel->registrarAccion(
+                        'Actualización de despacho: ' . $_POST['correlativo'], 
+                        MODULO_DESPACHO,
+                        $_SESSION['id_usuario']
+                    );
+
                     echo json_encode([
                         'status' => 'success',
                         'message' => $respuesta['mensaje'],
@@ -317,7 +337,9 @@ foreach ($despachos as $d) {
 }
 $totalProductosDespachados = array_sum($productosDespachados);
     require_once("vista/" . $pagina . ".php");
-
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de despacho', MODULO_DESPACHO, $_SESSION['id_usuario']);
+    }   
 } else {
     echo "pagina en construccion";
 }

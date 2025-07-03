@@ -3,10 +3,15 @@ ob_start();
 
 require_once 'Modelo/modelos.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
+// Definir constantes para IDs de módulo y acciones
+define('MODULO_MODELOS', 2);
+
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('modelos'));
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -30,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $modelo->setid_marca($_POST['id_marca']);
 
             if ($modelo->existeNombreModelo($_POST['nombre_modelo'])) {
+                
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El modelo ya existe'
@@ -39,6 +45,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($modelo->registrarModelo()) {
                 $modeloRegistrado = $modelo->obtenerUltimoModelo();
+                
+                // Registrar éxito en bitácora
+                if (isset($_SESSION['id_usuario'])) {
+                    $detalle = 'Registro de nuevo modelo: ' . $_POST['nombre_modelo'] . 
+                              ' (ID: ' . $modeloRegistrado['id_modelo'] . 
+                              ', Marca ID: ' . $_POST['id_marca'] . ')';
+                    $bitacoraModel->registrarAccion($detalle, MODULO_MODELOS, $_SESSION['id_usuario']);
+                }
+                
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Modelo registrado correctamente',
@@ -53,13 +68,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         case 'obtener_modelo':
-            $id_modelo = $_POST['id_modelo'] ;
+            $id_modelo = $_POST['id_modelo'];
             if ($id_modelo !== null) {
                 $modelo = new modelo();
-                $modelo = $modelo->obtenerModeloPorId($id);
+                $modelo = $modelo->obtenerModeloPorId($id_modelo);
                 if ($modelo !== null) {
                     echo json_encode($modelo);
                 } else {
+                    // Registrar intento de acceso a modelo no existente
+                    if (isset($_SESSION['id_usuario'])) {
+                        $bitacoraModel->registrarAccion('Intento de acceso a modelo no encontrado (ID: ' . $id_modelo . ')', MODULO_MODELOS, $_SESSION['id_usuario']);
+                    }
+                    
                     echo json_encode(['status' => 'error', 'message' => 'Modelo no encontrado']);
                 }
             } else {
@@ -68,12 +88,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         case 'modificar':
-            $id_modelo= $_POST['id_modelo'];
+            $id_modelo = $_POST['id_modelo'];
             $modelo = new modelo();
             $modelo->setIdModelo($id_modelo);
             $modelo->setnombre_modelo($_POST['nombre_modelo']);
             $modelo->setid_marca($_POST['id_marca']);
+            
             if ($modelo->existeNombreModelo($_POST['nombre_modelo'], $id_modelo)) {
+                // Registrar intento de modificación con nombre duplicado
+                if (isset($_SESSION['id_usuario'])) {
+                    $bitacoraModel->registrarAccion('Intento de modificación fallido (nombre ya existe): ' . $_POST['nombre_modelo'] . ' (ID: ' . $id_modelo . ')', MODULO_MODELOS, $_SESSION['id_usuario']);
+                }
+                
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El modelo ya existe'
@@ -81,30 +107,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit;
             }
 
-if ($modelo->modificarModelo($id_modelo)) {
-    $modeloActualizado = $modelo->obtenerModeloConMarcaPorId($id_modelo);
-    echo json_encode([
-        'status' => 'success',
-        'message' => 'Modelo modificado correctamente',
-        'modelo' => $modeloActualizado
-    ]);
-} else {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Error al modificar el modelo'
-    ]);
-}
+            if ($modelo->modificarModelo($id_modelo)) {
+                $modeloActualizado = $modelo->obtenerModeloConMarcaPorId($id_modelo);
+                
+                // Registrar modificación exitosa
+                if (isset($_SESSION['id_usuario'])) {
+                    $detalle = 'Modificación de modelo: ' . $_POST['nombre_modelo'] . 
+                               ' (ID: ' . $id_modelo . 
+                               ', Nueva marca ID: ' . $_POST['id_marca'] . ')';
+                    $bitacoraModel->registrarAccion($detalle, MODULO_MODELOS, $_SESSION['id_usuario']);
+                }
+                
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'Modelo modificado correctamente',
+                    'modelo' => $modeloActualizado
+                ]);
+            } else {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Error al modificar el modelo'
+                ]);
+            }
             exit;
 
         case 'eliminar':
             $id_modelo = $_POST['id_modelo'];
             $modelo = new modelo();
+            
             if ($modelo->eliminarModelo($id_modelo)) {
+                // Registrar eliminación exitosa
+                if (isset($_SESSION['id_usuario'])) {
+                    $bitacoraModel->registrarAccion('Eliminación de modelo (ID: ' . $id_modelo . ')', 
+                    MODULO_MODELOS, $_SESSION['id_usuario']);
+                }
+                
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el modelo']);
             }
-            break;
+            exit;
 
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
@@ -112,8 +154,6 @@ if ($modelo->modificarModelo($id_modelo)) {
     }
     exit;
 }
-
-
 
 function getModelos() {
     $modelo = new modelo();
@@ -127,9 +167,11 @@ function getmarcas() {
 
 $pagina = "Modelos";
 if (is_file("Vista/" . $pagina . ".php")) {
-
     $modelos = getModelos();
     $marcas = getmarcas();
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de Modelos', MODULO_MODELOS, $_SESSION['id_usuario']);
+    }
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";

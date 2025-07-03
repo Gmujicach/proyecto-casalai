@@ -4,51 +4,71 @@ require_once __DIR__ . '/../Config/config.php';
 class Backup {
     private $bd;
     private $tipo;
-    private $nombreArchivo;
 
     public function __construct($tipo = 'P') {
         $this->bd = new BD($tipo);
         $this->tipo = $tipo;
     }
 
-    // Getters y setters
-    public function getTipo() { return $this->tipo; }
-    public function setTipo($tipo) { $this->tipo = $tipo; }
 
-    public function getNombreArchivo() { return $this->nombreArchivo; }
-    public function setNombreArchivo($nombreArchivo) { $this->nombreArchivo = $nombreArchivo; }
 
-    // Realiza el respaldo de la base de datos y devuelve la ruta del archivo generado
-    public function backup($nombreArchivo) {
-        $this->setNombreArchivo($nombreArchivo);
-        $pdo = $this->bd->getConexion();
-        $dbname = $pdo->query('select database()')->fetchColumn();
 
-        $ruta = __DIR__ . '/BD/backups/' . $nombreArchivo;
-        $config = ($this->tipo === 'S') ? DB_SEGURIDAD : DB_PRINCIPAL;
-        $comando = "mysqldump --user=" . $config['user'] . " --password=" . $config['pass'] . " --host=" . $config['host'] . " $dbname > $ruta";
-        system($comando, $resultado);
+public function generar($nombreArchivo) {
+    $pdo = $this->bd->getConexion();
+    $dbname = $pdo->query('select database()')->fetchColumn();
+    $rutaCarpeta = __DIR__ . '/../DB/backup/';
+    $ruta = $rutaCarpeta . $nombreArchivo;
+    $config = DB_PRINCIPAL;
 
-        return ($resultado === 0) ? $ruta : false;
+    // Verificar y crear carpeta si no existe
+    if (!is_dir($rutaCarpeta)) {
+        if (!mkdir($rutaCarpeta, 0775, true)) {
+            error_log("No se pudo crear la carpeta de backup: $rutaCarpeta");
+            return false;
+        }
+    }
+    // Verificar permisos de escritura
+    if (!is_writable($rutaCarpeta)) {
+        error_log("La carpeta de backup no tiene permisos de escritura: $rutaCarpeta");
+        return false;
     }
 
-    // Restaura la base de datos desde un archivo SQL
-    public function restore($nombreArchivo) {
-        $this->setNombreArchivo($nombreArchivo);
-        $pdo = $this->bd->getConexion();
-        $dbname = $pdo->query('select database()')->fetchColumn();
+$mysqldump = 'C:\\xampp\\mysql\\bin\\mysqldump.exe'; // En Windows
+$opciones = "--databases {$dbname} --add-drop-database --add-drop-table --routines --events --triggers";
+$comando = "\"$mysqldump\" --user=\"{$config['user']}\" --password=\"{$config['pass']}\" --host=\"{$config['host']}\" $opciones > \"$ruta\" 2>&1";
+exec($comando, $output, $resultado);
 
-        $ruta = __DIR__ . '/BD/backups/' . $nombreArchivo;
-        $config = ($this->tipo === 'S') ? DB_SEGURIDAD : DB_PRINCIPAL;
-        $comando = "mysql --user=" . $config['user'] . " --password=" . $config['pass'] . " --host=" . $config['host'] . " $dbname < $ruta";
-        system($comando, $resultado);
-
-        return ($resultado === 0);
+    // Depuración: guardar salida del comando
+    if ($resultado !== 0) {
+        error_log("Error al ejecutar mysqldump: " . implode("\n", $output));
     }
 
-    // Consulta los respaldos existentes en la carpeta Backups
-    public function listarRespaldos() {
-        $ruta = __DIR__ . '/BD/backups/';
+    return ($resultado === 0 && file_exists($ruta) && filesize($ruta) > 0);
+}
+
+
+public function restaurar($nombreArchivo) {
+    $ruta = __DIR__ . '/../DB/backup/' . $nombreArchivo;
+    $config = ($this->tipo === 'S') ? DB_SEGURIDAD : DB_PRINCIPAL;
+
+    // Usa la ruta completa de mysql.exe en Windows
+    $mysql = 'C:\\xampp\\mysql\\bin\\mysql.exe';
+
+    // No pongas el nombre de la base de datos si el archivo contiene CREATE DATABASE
+    $comando = "\"$mysql\" --user=\"{$config['user']}\" --password=\"{$config['pass']}\" --host=\"{$config['host']}\" < \"$ruta\" 2>&1";
+    $output = [];
+    $resultado = 0;
+    exec($comando, $output, $resultado);
+
+    if ($resultado !== 0) {
+        error_log("Error al ejecutar mysql restore: " . implode("\n", $output));
+        return false;
+    }
+    return true;
+}
+
+    public function listar() {
+        $ruta = __DIR__ . '/../DB/backup/';
         $archivos = [];
         if (is_dir($ruta)) {
             $files = scandir($ruta);

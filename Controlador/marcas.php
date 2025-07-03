@@ -2,13 +2,18 @@
 ob_start();
 require_once 'Modelo/marcas.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
-$permisosObj = new Permisos();
-$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('marcas'));
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+define('MODULO_MARCA', 1);
 
+$permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
+
+$permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('marcas'));
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['accion'])) {
         $accion = $_POST['accion'];
     } else {
@@ -31,6 +36,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($marca->registrarMarca()) {
                 $marcaRegistrada = $marca->obtenerUltimaMarca();
+
+                $bitacoraModel->registrarAccion(
+                    'Creación de marca: ' . $_POST['nombre_marca'], 
+                    MODULO_MARCA,
+                    $_SESSION['id_usuario']
+                );
+
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Marca registrada correctamente',
@@ -84,6 +96,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($marca->modificarmarcas($id_marca)) {
                 $marcaActualizada = $marca->obtenermarcasPorId($id_marca);
 
+                $bitacoraModel->registrarAccion(
+                    'Actualización de marca: ' . $_POST['nombre_marca'], 
+                    MODULO_MARCA,
+                    $_SESSION['id_usuario']
+                );
+
                 echo json_encode([
                     'status' => 'success',
                     'marca' => $marcaActualizada
@@ -97,6 +115,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_marca = $_POST['id_marca'];
             $marca = new marca();
             if ($marca->eliminarmarcas($id_marca)) {
+
+                $bitacoraModel->registrarAccion(
+                    'Eliminación de marca: (ID: ' . $id_marca . ')', 
+                    MODULO_MARCA, 
+                    $_SESSION['id_usuario']
+                );
+
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la marca']);
@@ -118,6 +143,9 @@ function getmarcas() {
 
 $pagina = "marcas";
 if (is_file("Vista/" . $pagina . ".php")) {
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de marcas', MODULO_MARCA, $_SESSION['id_usuario']);
+    }   
     $marcas = getmarcas();
     // Pasa $permisosUsuario a la vista
     require_once("Vista/" . $pagina . ".php");

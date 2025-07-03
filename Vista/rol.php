@@ -1,4 +1,4 @@
-<?php if ($_SESSION['nombre_rol'] == 'Administrador') { ?>
+<?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'SuperUsuario' ) { ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -57,38 +57,41 @@
             </tr>
         </thead>
 
-        <tbody>
-            <?php foreach ($roles as $rol): ?>
-                <tr data-id="<?php echo $rol['id_rol']; ?>">
-                    <td>
-                        <ul>
-                            <div>
-                                <button class="btn-modificar"
+
+<tbody>
+    <?php foreach ($roles as $rol): ?>
+        <tr data-id="<?php echo $rol['id_rol']; ?>">
+            <td>
+                <ul>
+                    <?php if (strtolower($rol['nombre_rol']) !== 'superusuario'): ?>
+                        <div>
+                            <button class="btn-modificar"
                                 id="btnModificarRol"
                                 data-id="<?php echo $rol['id_rol']; ?>"
                                 data-nombre="<?php echo htmlspecialchars($rol['nombre_rol']); ?>"
-                                >Modificar</button>
-                            </div>
-                            <div>
-                                <button class="btn-eliminar"
+                            >Modificar</button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
                                 data-id="<?php echo $rol['id_rol']; ?>"
-                                >Eliminar</button>
-                            </div>
-                        </ul>
-                    </td>
-                    <td>
-                        <span class="campo-numeros">
-                            <?php echo htmlspecialchars($rol['id_rol']); ?>
-                        </span>
-                    </td>
-                    <td>
-                        <span class="campo-nombres">
-                            <?php echo htmlspecialchars($rol['nombre_rol']); ?>
-                        </span>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+                            >Eliminar</button>
+                        </div>
+                    <?php endif; ?>
+                </ul>
+            </td>
+            <td>
+                <span class="campo-numeros">
+                    <?php echo htmlspecialchars($rol['id_rol']); ?>
+                </span>
+            </td>
+            <td>
+                <span class="campo-nombres">
+                    <?php echo htmlspecialchars($rol['nombre_rol']); ?>
+                </span>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
     </table> 
 </div>
 

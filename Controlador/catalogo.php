@@ -13,12 +13,7 @@ define('MODULO_CATALOGO', 1);
 
 $productosModel = new Productos();
 $bitacoraModel = new Bitacora();
-$esAdmin = isset($_SESSION['rango']) && $_SESSION['rango'] == 'Administrador';
-
-// Registrar acceso al módulo
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de catálogo', MODULO_CATALOGO, $_SESSION['id_usuario']);
-}
+$esAdmin = isset($_SESSION['nombre_rol']) && $_SESSION['nombre_rol'] == 'Administrador';
 
 // Manejar generación de reportes PDF
 if (isset($_GET['reporte']) && $esAdmin) {
@@ -408,6 +403,9 @@ try {
 // Asignar la página y cargar la vista
 $pagina = "catalogo";
 if (is_file("Vista/" . $pagina . ".php")) {
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de catálogo', MODULO_CATALOGO, $_SESSION['id_usuario']);
+    }
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
