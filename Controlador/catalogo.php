@@ -13,7 +13,7 @@ define('MODULO_CATALOGO', 1);
 
 $productosModel = new Productos();
 $bitacoraModel = new Bitacora();
-$esAdmin = isset($_SESSION['rango']) && $_SESSION['rango'] == 'Administrador';
+$esAdmin = isset($_SESSION['nombre_rol']) && $_SESSION['nombre_rol'] == 'Administrador';
 
 // Registrar acceso al módulo
 if (isset($_SESSION['id_usuario'])) {
