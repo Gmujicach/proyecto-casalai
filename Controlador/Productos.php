@@ -11,11 +11,8 @@ define('MODULO_PRODUCTOS', 6); // Define el ID del módulo de cuentas bancarias
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de Productos', MODULO_PRODUCTOS, $_SESSION['id_usuario']);
-}
-
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('productos'));
 // Verifica si la solicitud se realizó mediante el método POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -57,7 +54,8 @@ case 'ingresar':
             $resultado = $Producto->ingresarProducto($_POST);
             if ($resultado) {
                 $id_producto = $resultado;
-                $bitacoraModel->registrarAccion('Registro de nuevo producto: ' . $resultado['id_producto'], MODULO_PRODUCTOS, $_SESSION['id_usuario']);
+                $bitacoraModel->registrarAccion('Creación de producto: ' . $_POST['nombre_producto'],
+                MODULO_PRODUCTOS, $_SESSION['id_usuario']);
 
                 $respuesta = [
                     'status' => 'success',
@@ -164,7 +162,8 @@ case 'modificar':
                 }
             } else {
                 echo json_encode(['status' => 'success']);
-                $bitacoraModel->registrarAccion('Modificacion de un producto: ' . $resultado['id_producto'], MODULO_PRODUCTOS, $_SESSION['id_usuario']);
+                $bitacoraModel->registrarAccion('Modificación de producto: ' . ($_POST['nombre_producto']),
+                MODULO_PRODUCTOS, $_SESSION['id_usuario']);
 
             }
         } else {
@@ -186,7 +185,11 @@ case 'modificar':
 $response = $producto->eliminarProducto($id_producto);
 if ($response['success']) {
     echo json_encode(['status' => 'success', 'message' => $response['message']]);
-    $bitacoraModel->registrarAccion('Eliminación de un producto: ' . $id_producto, MODULO_PRODUCTOS, $_SESSION['id_usuario']);
+                $bitacoraModel->registrarAccion(
+                    'Eliminación de marca: (ID: ' . $id_producto . ')', 
+                    MODULO_PRODUCTOS, 
+                    $_SESSION['id_usuario']
+                );
 } else {
     echo json_encode(['status' => 'error', 'message' => $response['message']]);
 }
@@ -207,8 +210,11 @@ if ($response['success']) {
             
             if ($producto->cambiarEstatus($nuevoEstatus)) {
                 echo json_encode(['status' => 'success']);
-                $bitacoraModel->registrarAccion('Cambio de estatus del producto: ' . $id . ' a ' . $nuevoEstatus, MODULO_PRODUCTOS, $_SESSION['id_usuario']);
-            } else {
+                $bitacoraModel->registrarAccion(
+                    'Cambio de estatus a ' . $nuevoEstatus . ' para producto: ' . $id, 
+                    MODULO_PRODUCTOS, 
+                    $_SESSION['id_usuario']
+                );            } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
             }
             break;
@@ -268,6 +274,10 @@ if (empty($categoriasDinamicas)) {
 $pagina = "Productos";
 // Verifica si el archivo de vista existe
 if (is_file("Vista/" . $pagina . ".php")) {
+    
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Productos', MODULO_PRODUCTOS, $_SESSION['id_usuario']);
+}
     // Obtiene los modelos y productos
     $modelos = obtenerModelos();
     $productos = obtenerProductos();
