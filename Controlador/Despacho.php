@@ -15,7 +15,7 @@ $k = new Despacho();
 require_once 'Modelo/Permisos.php';
 require_once 'Modelo/Bitacora.php';
 
-define('MODULO_DESPACHO', 1);
+define('MODULO_DESPACHO', 3);
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 $permisosObj = new Permisos();
