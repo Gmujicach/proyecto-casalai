@@ -6,7 +6,7 @@ require_once 'Modelo/Bitacora.php';
 
 $id_rol = $_SESSION['id_rol'];
 
-define('MODULO_CUENTA_BANCARIA', 1);
+define('MODULO_CUENTA_BANCARIA', 15);
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('Cuentas bancarias'));
