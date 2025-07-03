@@ -1,3 +1,4 @@
+<?php
 // Base de Datos Principal "casalai"
 define('DB_PRINCIPAL', [
     'host' => 'localhost',
