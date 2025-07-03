@@ -7,9 +7,6 @@ require_once 'Modelo/Bitacora.php';
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
 define('MODULO_MARCA', 1);
-define('ACCION_CREAR', 1);
-define('ACCION_ACTUALIZAR', 3);
-define('ACCION_ELIMINAR', 4);
 
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
@@ -17,7 +14,6 @@ $bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('marcas'));
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     if (isset($_POST['accion'])) {
         $accion = $_POST['accion'];
     } else {
@@ -43,10 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $bitacoraModel->registrarAccion(
                     'Creación de marca: ' . $_POST['nombre_marca'], 
-                    MODULO_MARCA, 
-                    $id_usuario_accion,
-                    ACCION_CREAR,
-                    $marcaRegistrada['id_usuario']
+                    MODULO_MARCA,
+                    $_SESSION['id_usuario']
                 );
 
                 echo json_encode([
@@ -104,10 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $bitacoraModel->registrarAccion(
                     'Actualización de marca: ' . $_POST['nombre_marca'], 
-                    MODULO_MARCA, 
-                    $id_usuario_accion,
-                    ACCION_ACTUALIZAR,
-                    $marcaActualizada['id_usuario']
+                    MODULO_MARCA,
+                    $_SESSION['id_usuario']
                 );
 
                 echo json_encode([
@@ -125,11 +117,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($marca->eliminarmarcas($id_marca)) {
 
                 $bitacoraModel->registrarAccion(
-                    'Eliminación de marca: ' . $marca['nombre_marca'], 
+                    'Eliminación de marca: (ID: ' . $id_marca . ')', 
                     MODULO_MARCA, 
-                    $id_usuario_accion,
-                    ACCION_ELIMINAR,
-                    $id_cuenta
+                    $_SESSION['id_usuario']
                 );
 
                 echo json_encode(['status' => 'success']);
