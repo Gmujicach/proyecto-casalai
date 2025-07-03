@@ -2,11 +2,24 @@
 ob_start();
 require_once 'Modelo/marcas.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
+define('MODULO_MARCA', 1);
+define('ACCION_CREAR', 1);
+define('ACCION_ACTUALIZAR', 3);
+define('ACCION_ELIMINAR', 4);
+
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
+
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('marcas'));
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de marcas', MODULO_MARCA, $_SESSION['id_usuario']);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST['accion'])) {
@@ -31,6 +44,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($marca->registrarMarca()) {
                 $marcaRegistrada = $marca->obtenerUltimaMarca();
+
+                $bitacoraModel->registrarAccion(
+                    'Creación de marca: ' . $_POST['nombre_marca'], 
+                    MODULO_MARCA, 
+                    $id_usuario_accion,
+                    ACCION_CREAR,
+                    $marcaRegistrada['id_usuario']
+                );
+
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Marca registrada correctamente',
@@ -84,6 +106,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($marca->modificarmarcas($id_marca)) {
                 $marcaActualizada = $marca->obtenermarcasPorId($id_marca);
 
+                $bitacoraModel->registrarAccion(
+                    'Actualización de marca: ' . $_POST['nombre_marca'], 
+                    MODULO_MARCA, 
+                    $id_usuario_accion,
+                    ACCION_ACTUALIZAR,
+                    $marcaActualizada['id_usuario']
+                );
+
                 echo json_encode([
                     'status' => 'success',
                     'marca' => $marcaActualizada
@@ -97,6 +127,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_marca = $_POST['id_marca'];
             $marca = new marca();
             if ($marca->eliminarmarcas($id_marca)) {
+
+                $bitacoraModel->registrarAccion(
+                    'Eliminación de marca: ' . $marca['nombre_marca'], 
+                    MODULO_MARCA, 
+                    $id_usuario_accion,
+                    ACCION_ELIMINAR,
+                    $id_cuenta
+                );
+
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la marca']);

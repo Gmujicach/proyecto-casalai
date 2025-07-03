@@ -8,7 +8,6 @@ $id_rol = $_SESSION['id_rol'];
 
 define('MODULO_CUENTA_BANCARIA', 1);
 define('ACCION_CREAR', 1);
-define('ACCION_LEER', 2);
 define('ACCION_ACTUALIZAR', 3);
 define('ACCION_ELIMINAR', 4);
 define('ACCION_CAMBIAR_ESTATUS', 5);
@@ -129,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'Actualización de cuenta bancaria: ' . $_POST['nombre_banco'], 
                     MODULO_CUENTA_BANCARIA, 
                     $id_usuario_accion,
-                    ACCION_CREAR,
+                    ACCION_ACTUALIZAR,
                     $cuentabancoActualizada['id_usuario']
                 );
 
