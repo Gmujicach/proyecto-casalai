@@ -3,7 +3,15 @@ ob_start();
 
 require_once 'Modelo/Usuarios.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+define('MODULO_USUARIO', 1); // Define el ID del módulo de cuentas bancarias
+
+
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Usuarios', MODULO_USUARIO, $_SESSION['id_usuario']);
+}
 
 $permisosObj = new Permisos();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('usuario'));
@@ -42,6 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($usuario->ingresarUsuario()) {
                 $usuarioRegistrada = $usuario->obtenerUltimoUsuario();
+                $bitacoraModel->registrarAccion('Registro de usuario: ' . $usuarioRegistrada['nombre_usuario'], MODULO_USUARIO, $_SESSION['id_usuario']);
+                
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Usuario registrada correctamente',
@@ -94,6 +104,7 @@ case 'modificar':
     // Obtener el usuario actualizado con el nombre del rol
     $usuarioActualizado = $usuario->obtenerUsuarioPorId($id_usuario);
     // Si tu método obtenerUsuarioPorId no hace el JOIN con tbl_rol, cámbialo para que lo haga
+    $bitacoraModel->registrarAccion('Modificación de usuario: ' . $usuarioActualizado['nombre_usuario'], MODULO_USUARIO, $_SESSION['id_usuario']);
     echo json_encode([
         'status' => 'success',
         'usuario' => $usuarioActualizado
@@ -107,6 +118,8 @@ case 'modificar':
             $id_usuario = $_POST['id_usuario'];
             $usuarioModel = new Usuarios();
             if ($usuarioModel->eliminarUsuario($id_usuario)) {
+                $usuarioEliminado = $usuarioModel->obtenerUsuarioPorId($id_usuario);
+                $bitacoraModel->registrarAccion('Eliminación de usuario: ' . $usuarioEliminado['nombre_usuario'], MODULO_USUARIO, $_SESSION['id_usuario']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);

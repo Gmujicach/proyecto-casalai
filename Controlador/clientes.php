@@ -3,8 +3,17 @@ ob_start();
 
 require_once 'Modelo/clientes.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+
+
+define('MODULO_CLIENTES', 9); // Define el ID del módulo de categorías
+
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de clientes', MODULO_CLIENTES, $_SESSION['id_usuario']);
+}
 
 $permisosObj = new Permisos();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('clientes'));
@@ -32,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($cliente->ingresarclientes()) {
                 $clienteRegistrado = $cliente->obtenerUltimoCliente();
+                $bitacoraModel->registrarAccion('Registro de cliente: ' . $clienteRegistrado['nombre'], MODULO_CLIENTES, $_SESSION['id_usuario']);
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Cliente registrado correctamente',
@@ -86,6 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($cliente->modificarclientes($id)) {
                 $clienteModificado = $cliente->obtenerclientesPorId($id);
+                $bitacoraModel->registrarAccion('Modificación de cliente: ' . $clienteModificado['nombre'], MODULO_CLIENTES, $_SESSION['id_usuario']);
                 echo json_encode([
                     'status' => 'success',
                     'cliente' => $clienteModificado
@@ -99,7 +110,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['id_clientes'];
             $clientesModel = new cliente();
             if ($clientesModel->eliminarclientes($id)) {
-                echo json_encode(['status' => 'success']);
+                $clienteEliminado = $clientesModel->obtenerclientesPorId($id);
+                $bitacoraModel->registrarAccion('Eliminación de cliente: ' . $clienteEliminado['nombre'], MODULO_CLIENTES, $_SESSION['id_usuario']);
+                                
+                echo json_encode(['status' => 'success', 'message' => 'Cliente eliminado correctamente']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Cliente']);
             }

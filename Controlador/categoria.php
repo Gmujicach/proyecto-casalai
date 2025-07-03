@@ -2,6 +2,9 @@
 ob_start();
 require_once 'Modelo/categoria.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+
+define('MODULO_CATEGORIA', 7); // Define el ID del módulo de categorías
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
@@ -28,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($categoria->registrarCategoria($caracteristicas)) {
                 $categoriaRegistrado = $categoria->obtenerUltimoCategoria();
+                $bitacoraModel->registrarAccion('Registro de nueva categoria'.$categoriaRegistrado, MODULO_CATEGORIA, $_SESSION['id_usuario']);
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Categoria registrada correctamente',
@@ -86,6 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($categoria->modificarCategoria($id_categoria, $nuevo_nombre, $caracteristicas)) {
                 $categoriaActualizada = $categoria->obtenerCategoriaPorId($id_categoria);
+                $bitacoraModel->registrarAccion('Modificacion de una categoria'.$categoriaActualizada, MODULO_CATEGORIA, $_SESSION['id_usuario']);
+
 
                 echo json_encode([
                     'status' => 'success',
@@ -100,6 +106,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_categoria = $_POST['id_categoria'];
             $categoria = new Categoria();
             $resultado = $categoria->eliminarCategoria($id_categoria);
+                $bitacoraModel->registrarAccion('Eliminacion de una categoria'.$resultado, MODULO_CATEGORIA, $_SESSION['id_usuario']);
+
             if (is_array($resultado) && isset($resultado['status']) && $resultado['status'] === 'error') {
                 echo json_encode(['status' => 'error', 'message' => $resultado['mensaje']]);
             } else {

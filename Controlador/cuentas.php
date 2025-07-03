@@ -2,8 +2,14 @@
 ob_start();
 require_once 'Modelo/cuentas.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+define('MODULO_CUENTAS_BANCARIAS', 15); // Define el ID del módulo de cuentas bancarias
 
 $id_rol = $_SESSION['id_rol'];
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Cuentas Bancarias', MODULO_CUENTAS_BANCARIAS, $_SESSION['id_usuario']);
+}
 $permisosObj = new Permisos();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('Cuentas bancarias'));
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -40,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($cuentabanco->registrarCuentabanco()) {
                 $cuentaRegistrada = $cuentabanco->obtenerUltimaCuenta();
+                $bitacoraModel->registrarAccion('Registro de cuenta bancaria: ' . $cuentaRegistrada['nombre_banco'], MODULO_CUENTAS_BANCARIAS, $_SESSION['id_usuario']);
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Cuenta registrada correctamente',
@@ -99,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
                 $cuentabancoActualizada = $cuentabanco->obtenerCuentaPorId($id_cuenta);
+                $bitacoraModel->registrarAccion('Modificación de cuenta bancaria: ' . $cuentabancoActualizada['nombre_banco'], MODULO_CUENTAS_BANCARIAS, $_SESSION['id_usuario']);
 
                 echo json_encode([
                     'status' => 'success',
@@ -114,6 +122,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco = new Cuentabanco();
 
             if ($cuentabanco->eliminarCuentabanco($id_cuenta)) {
+                $cuentaEliminada = $cuentabanco->obtenerCuentaPorId($id_cuenta);
+                $bitacoraModel->registrarAccion('Eliminación de cuenta bancaria: ' . $cuentaEliminada['nombre_banco'], MODULO_CUENTAS_BANCARIAS, $_SESSION['id_usuario']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la cuenta']);
@@ -133,6 +143,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco->setIdCuenta($id_cuenta);
             
             if ($cuentabanco->cambiarEstado($nuevoEstado)) {
+                $cuentaActualizada = $cuentabanco->obtenerCuentaPorId($id_cuenta);
+                $bitacoraModel->registrarAccion('Cambio de estado de cuenta bancaria: ' . $cuentaActualizada['nombre_banco'] . ' a ' . $nuevoEstado, MODULO_CUENTAS_BANCARIAS, $_SESSION['id_usuario']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estado']);

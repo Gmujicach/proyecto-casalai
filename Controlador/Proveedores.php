@@ -4,8 +4,14 @@ ob_start();
 require_once 'Modelo/Proveedores.php';
 require_once 'Modelo/Productos.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+define('MODULO_PROVEEDORES', 8); // Define el ID del módulo de proveedores
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Proveedores', MODULO_PROVEEDORES, $_SESSION['id_usuario']);
+}
 
 $permisosObj = new Permisos();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('proveedores'));
@@ -45,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($proveedor->registrarProveedor()) {
                 $proveedorRegistrado = $proveedor->obtenerUltimoProveedor();
+                $bitacoraModel->registrarAccion('Registro de proveedor: ' . $proveedorRegistrado['nombre'], MODULO_PROVEEDORES, $_SESSION['id_usuario']);
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Proveedor registrado correctamente',
@@ -99,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             if ($proveedor->modificarProveedor($id_proveedor)) {
                 $proveedorActualizado = $proveedor->obtenerProveedorPorId($id_proveedor);
+                $bitacoraModel->registrarAccion('Modificación de proveedor: ' . $proveedorActualizado['nombre'], MODULO_PROVEEDORES, $_SESSION['id_usuario']);
 
                 echo json_encode([
                     'status' => 'success',
@@ -117,6 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $proveedor = new Proveedores();
             if ($proveedor->eliminarProveedor($id_proveedor)) {
+                $bitacoraModel->registrarAccion('Eliminación de proveedor con ID: ' . $id_proveedor, MODULO_PROVEEDORES, $_SESSION['id_usuario']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Proveedor']);
@@ -135,6 +144,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $proveedor = new Proveedores();
             $proveedor->setIdProveedor($id_proveedor);
             if ($proveedor->cambiarEstatus($nuevoEstatus)) {
+                $proveedorActualizado = $proveedor->obtenerProveedorPorId($id_proveedor);
+                $bitacoraModel->registrarAccion('Cambio de estatus del proveedor: ' . $proveedorActualizado['nombre'] . ' a ' . $nuevoEstatus, MODULO_PROVEEDORES, $_SESSION['id_usuario']);
+                if ($nuevoEstatus === 'habilitado') {
+                    $estatusMensaje = 'habilitado';
+                } else {
+                    $estatusMensaje = 'inhabilitado';
+                }
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus del Proveedor']);
