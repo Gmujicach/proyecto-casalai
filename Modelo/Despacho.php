@@ -1,5 +1,5 @@
 <?php
-require_once 'Config/config.php';
+require_once 'Config/Config.php';
 
 class Despacho extends BD{
     private $idcliente;

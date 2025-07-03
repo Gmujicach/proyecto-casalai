@@ -1,5 +1,5 @@
 <?php
-require_once 'Config/config.php';
+require_once 'Config/Config.php';
 
 class Finanza extends BD {
     private $id_finanzas;

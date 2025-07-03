@@ -244,8 +244,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion'])) {
                 ]);
                 
             } catch (Exception $e) {
-                error_log("Error en cambiar_estado_combo: " . $e->getMessage());
-                echo json_encode([
+                    echo json_encode([
                     'status' => 'error',
                     'message' => $e->getMessage()
                 ]);
@@ -372,8 +371,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion'])) {
                     'productos_agregados' => count($detalles)
                 ]);
             } catch (Exception $e) {
-                error_log("Error en agregar_combo_al_carrito: " . $e->getMessage());
-                echo json_encode([
+               echo json_encode([
                     'status' => 'error',
                     'message' => $e->getMessage()
                 ]);
@@ -381,7 +379,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion'])) {
             exit;
         }
     } catch (Exception $e) {
-        error_log("Error en la solicitud AJAX: " . $e->getMessage());
         echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
     }
     exit;
@@ -394,7 +391,6 @@ try {
     $esAdmin = isset($_SESSION['nombre_rol']) && $_SESSION['nombre_rol'] == 'Administrador';
     $combos = $productosModel->obtenerCombosDisponibles($esAdmin);
 } catch (PDOException $e) {
-    error_log("Error al cargar datos del catálogo: " . $e->getMessage());
     $productos = [];
     $marcas = [];
     $combos = [];
