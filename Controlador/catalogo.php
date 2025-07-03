@@ -9,7 +9,7 @@ require_once 'Modelo/Bitacora.php';
 require_once 'Librerias/pdf.php'; // Para generación de PDFs
 
 // Definir constantes para IDs de módulo
-define('MODULO_CATALOGO', 1);
+define('MODULO_CATALOGO', 10);
 
 $productosModel = new Productos();
 $bitacoraModel = new Bitacora();
