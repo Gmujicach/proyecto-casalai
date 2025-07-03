@@ -8,9 +8,6 @@ require_once 'Modelo/Bitacora.php';
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
 define('MODULO_CLIENTE', 1);
-define('ACCION_CREAR', 1);
-define('ACCION_ACTUALIZAR', 3);
-define('ACCION_ELIMINAR', 4);
 
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
@@ -43,9 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $bitacoraModel->registrarAccion(
                     'Creación de cliente: ' . $_POST['nombre'], 
                     MODULO_CLIENTE, 
-                    $id_usuario_accion,
-                    ACCION_CREAR,
-                    $clienteRegistrado['id_usuario']
+                    $_SESSION['id_usuario']
                 );
 
                 echo json_encode([
@@ -106,9 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $bitacoraModel->registrarAccion(
                     'Actualización de cliente: ' . $_POST['nombre'], 
                     MODULO_CLIENTE, 
-                    $id_usuario_accion,
-                    ACCION_ACTUALIZAR,
-                    $clienteModificado['id_usuario']
+                    $_SESSION['id_usuario']
                 );
 
                 echo json_encode([
@@ -125,11 +118,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $clientesModel = new cliente();
             if ($clientesModel->eliminarclientes($id)) {
                 $bitacoraModel->registrarAccion(
-                    'Eliminación de cliente: ' . $clientesModel['nombre'], 
+                    'Eliminación de cliente: (ID: ' . $id . ')', 
                     MODULO_CLIENTE, 
-                    $id_usuario_accion,
-                    ACCION_ELIMINAR,
-                    $id
+                    $_SESSION['id_usuario']
                 );
 
                 echo json_encode(['status' => 'success']);
