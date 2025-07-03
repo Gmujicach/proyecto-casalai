@@ -6,7 +6,7 @@ require_once 'Modelo/bitacora.php';
 
 $id_rol = $_SESSION['id_rol'];
 
-define('MODULO_CUENTA_BANCARIA', 1);
+define('MODULO_CUENTA_BANCARIA', 15);
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('Cuentas bancarias'));
@@ -111,7 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($cuentabanco->modificarCuentabanco($id_cuenta)) {
                 $cuentabancoActualizada = $cuentabanco->obtenerCuentaPorId($id_cuenta);
-                $bitacoraModel->registrarAccion('Modificación de cuenta bancaria: ' . $cuentabancoActualizada['nombre_banco'], MODULO_CUENTA_BANCARIA, $_SESSION['id_usuario']);
 
                 $bitacoraModel->registrarAccion(
                     'Actualización de cuenta bancaria: ' . $_POST['nombre_banco'], 
@@ -161,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($cuentabanco->cambiarEstado($nuevoEstado)) {
 
                 $bitacoraModel->registrarAccion(
-                    'Cambio de estatus a ' . $nuevoEstado . ' para cuenta: ' . $id_cuenta, 
+                    'Cambio de estatus a ' . $nuevoEstado . ' para cuenta bancaria: ' . $id_cuenta, 
                     MODULO_CUENTA_BANCARIA, 
                     $_SESSION['id_usuario']
                 );

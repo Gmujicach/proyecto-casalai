@@ -9,21 +9,11 @@ require_once 'Modelo/Bitacora.php';
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
 // Definir constantes para IDs de módulo y acciones
-define('MODULO_PROVEEDORES', 2); // Cambiar según tu estructura de módulos
-define('ACCION_CREAR', 1);
-define('ACCION_LEER', 2);
-define('ACCION_ACTUALIZAR', 3);
-define('ACCION_ELIMINAR', 4);
-define('ACCION_CAMBIAR_ESTATUS', 5);
+define('MODULO_PROVEEDORES', 8); // Cambiar según tu estructura de módulos
 
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('proveedores'));
-
-// Registrar acceso al módulo
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de proveedores', MODULO_PROVEEDORES, $_SESSION['id_usuario']);
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_usuario_accion = $_SESSION['id_usuario'] ?? null; // Usuario que realiza la acción
@@ -68,9 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $bitacoraModel->registrarAccion(
                     'Creación de proveedor: ' . $_POST['nombre_proveedor'], 
                     MODULO_PROVEEDORES, 
-                    $id_usuario_accion,
-                    ACCION_CREAR,
-                    $proveedorRegistrado['id_proveedor']
+                    $_SESSION['id_usuario']
                 );
                 
                 echo json_encode([
@@ -91,15 +79,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($id_proveedor !== null) {
                 $proveedor = new Proveedores();
                 $proveedorData = $proveedor->obtenerProveedorPorId($id_proveedor);
-                
-                // Registrar en bitácora (opcional, ya que es una lectura)
-                $bitacoraModel->registrarAccion(
-                    'Consulta de proveedor ID: ' . $id_proveedor, 
-                    MODULO_PROVEEDORES, 
-                    $id_usuario_accion,
-                    ACCION_LEER,
-                    $id_proveedor
-                );
                 
                 if ($proveedorData !== null) {
                     echo json_encode($proveedorData);
@@ -142,9 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $bitacoraModel->registrarAccion(
                     'Actualización de proveedor: ' . $_POST['nombre_proveedor'], 
                     MODULO_PROVEEDORES, 
-                    $id_usuario_accion,
-                    ACCION_ACTUALIZAR,
-                    $id_proveedor
+                    $_SESSION['id_usuario']
                 );
 
                 echo json_encode([
@@ -170,11 +147,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($proveedor->eliminarProveedor($id_proveedor)) {
                 // Registrar en bitácora
                 $bitacoraModel->registrarAccion(
-                    'Eliminación de proveedor: ' . $proveedorAEliminar['nombre'], 
+                    'Eliminación de cuenta: (ID: ' . $id_proveedor . ')', 
                     MODULO_PROVEEDORES, 
-                    $id_usuario_accion,
-                    ACCION_ELIMINAR,
-                    $id_proveedor
+                    $_SESSION['id_usuario']
                 );
                 
                 echo json_encode(['status' => 'success']);
@@ -200,9 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $bitacoraModel->registrarAccion(
                     'Cambio de estado a ' . $nuevoEstatus . ' para proveedor ID: ' . $id_proveedor, 
                     MODULO_PROVEEDORES, 
-                    $id_usuario_accion,
-                    ACCION_CAMBIAR_ESTATUS,
-                    $id_proveedor
+                    $_SESSION['id_usuario']
                 );
                 
                 echo json_encode(['status' => 'success']);
@@ -233,6 +206,9 @@ function obtenerProductosConBajoStock() {
 
 $pagina = "Proveedores";
 if (is_file("Vista/" . $pagina . ".php")) {
+    if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de proveedores', MODULO_PROVEEDORES, $_SESSION['id_usuario']);
+}
     $proveedores = getproveedores();
     $productos = obtenerProductosConBajoStock();
     require_once("Vista/" . $pagina . ".php");

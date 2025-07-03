@@ -6,7 +6,7 @@ require_once 'Modelo/Bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
-define('MODULO_MARCA', 1);
+define('MODULO_MARCA', 4);
 
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
