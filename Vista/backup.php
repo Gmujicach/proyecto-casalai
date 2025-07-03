@@ -53,6 +53,7 @@
 <script>
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
+        order: [[0, 'desc']], // Ordena la primera columna de forma descendente
         language: {
             url: 'Public/js/es-ES.json'
         }

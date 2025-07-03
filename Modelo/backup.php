@@ -33,11 +33,10 @@ public function generar($nombreArchivo) {
         return false;
     }
 
-    $mysqldump = 'C:\\xampp\\mysql\\bin\\mysqldump.exe'; // En Windows
-    // $mysqldump = 'mysqldump'; // En Linux
-
-    $comando = "\"$mysqldump\" --user=\"{$config['user']}\" --password=\"{$config['pass']}\" --host=\"{$config['host']}\" {$dbname} > \"$ruta\" 2>&1";
-    exec($comando, $output, $resultado);
+$mysqldump = 'C:\\xampp\\mysql\\bin\\mysqldump.exe'; // En Windows
+$opciones = "--databases {$dbname} --add-drop-database --add-drop-table --routines --events --triggers";
+$comando = "\"$mysqldump\" --user=\"{$config['user']}\" --password=\"{$config['pass']}\" --host=\"{$config['host']}\" $opciones > \"$ruta\" 2>&1";
+exec($comando, $output, $resultado);
 
     // Depuración: guardar salida del comando
     if ($resultado !== 0) {
@@ -47,16 +46,16 @@ public function generar($nombreArchivo) {
     return ($resultado === 0 && file_exists($ruta) && filesize($ruta) > 0);
 }
 
+
 public function restaurar($nombreArchivo) {
-    $pdo = $this->bd->getConexion();
-    $dbname = $pdo->query('select database()')->fetchColumn();
     $ruta = __DIR__ . '/../DB/backup/' . $nombreArchivo;
     $config = ($this->tipo === 'S') ? DB_SEGURIDAD : DB_PRINCIPAL;
 
-    $mysql = 'mysql';
-    // $mysql = 'C:\\xampp\\mysql\\bin\\mysql.exe'; // Si es necesario
+    // Usa la ruta completa de mysql.exe en Windows
+    $mysql = 'C:\\xampp\\mysql\\bin\\mysql.exe';
 
-    $comando = "$mysql --user=\"{$config['user']}\" --password=\"{$config['pass']}\" --host=\"{$config['host']}\" {$dbname} < \"$ruta\" 2>&1";
+    // No pongas el nombre de la base de datos si el archivo contiene CREATE DATABASE
+    $comando = "\"$mysql\" --user=\"{$config['user']}\" --password=\"{$config['pass']}\" --host=\"{$config['host']}\" < \"$ruta\" 2>&1";
     $output = [];
     $resultado = 0;
     exec($comando, $output, $resultado);
