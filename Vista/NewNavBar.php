@@ -206,6 +206,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
         }
     }
     ?>
+    <li><a href='?pagina=backup'><span class="simbolo"><img src="IMG/circle-user-round.svg" class="icono-svg" />Generar Respaldo</span></a></li>
     <!-- Cuenta y cerrar sesión -->
     <h4><span>Cuenta</span><div class="menu-separador"></div></h4>
     <li><a href="#"><span class="simbolo"><img src="IMG/circle-user-round.svg" class="icono-svg" />Perfil</span></a></li>
