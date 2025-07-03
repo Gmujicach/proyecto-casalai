@@ -103,29 +103,74 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
     </li>
 
     <?php
+    // SUPERUSUARIO: ve todos los módulos con títulos
+    if ($nombre_rol == 'SuperUsuario') {
+        // Perfiles
+        echo '<h4><span>Administrar Perfiles</span><div class="menu-separador"></div></h4>';
+        echo '<li><a href="?pagina=Usuarios"><span class="simbolo"><img src="IMG/users-round.svg" class="icono-svg" />Gestionar Usuario</span></a></li>';
+
+        // Inventario
+        echo '<h4><span>Administrar Inventario</span><div class="menu-separador"></div></h4>';
+        echo '<li><a href="?pagina=Recepcion"><span class="simbolo"><img src="IMG/package-open.svg" class="icono-svg" />Gestionar Recepcion</span></a></li>';
+        echo '<li><a href="?pagina=despacho"><span class="simbolo"><img src="IMG/package-check.svg" class="icono-svg" />Gestionar Despacho</span></a></li>';
+
+        // Productos
+        echo '<h4><span>Administrar Productos</span><div class="menu-separador"></div></h4>';
+        echo '<li><a href="?pagina=marcas"><span class="simbolo"><img src="IMG/package-search.svg" class="icono-svg" />Gestionar Marcas</span></a></li>';
+        echo '<li><a href="?pagina=modelos"><span class="simbolo"><img src="IMG/package-search.svg" class="icono-svg" />Gestionar Modelos</span></a></li>';
+        echo '<li><a href="?pagina=Productos"><span class="simbolo"><img src="IMG/package-search.svg" class="icono-svg" />Gestionar Productos</span></a></li>';
+        echo '<li><a href="?pagina=categoria"><span class="simbolo"><img src="IMG/package-search.svg" class="icono-svg" />Gestionar Categorias</span></a></li>';
+
+        // Proveedores
+        echo '<h4><span>Administrar Proveedores</span><div class="menu-separador"></div></h4>';
+        echo '<li><a href="?pagina=proveedores"><span class="simbolo"><img src="IMG/truck.svg" class="icono-svg" />Gestionar Proveedores</span></a></li>';
+
+        // Clientes
+        echo '<h4><span>Administrar Clientes</span><div class="menu-separador"></div></h4>';
+        echo '<li><a href="?pagina=clientes"><span class="simbolo"><img src="IMG/users-round.svg" class="icono-svg" />Gestionar Clientes</span></a></li>';
+
+        // Ventas
+        echo '<h4><span>Administrar Ventas</span><div class="menu-separador"></div></h4>';
+        echo '<li><a href="?pagina=catalogo"><span class="simbolo"><img src="IMG/book-open.svg" class="icono-svg" />Gestionar Catálogo</span></a></li>';
+        echo '<li><a href="?pagina=carrito"><span class="simbolo"><img src="IMG/shopping-cart.svg" class="icono-svg" />Gestionar Carrito de Compras</span></a></li>';
+        echo '<li><a href="?pagina=pasarela"><span class="simbolo"><img src="IMG/credit-card.svg" class="icono-svg" />Gestionar Pasarela de Pagos</span></a></li>';
+        echo '<li><a href="?pagina=gestionarFactura"><span class="simbolo"><img src="IMG/receipt-text.svg" class="icono-svg" />Gestionar Pre-Factura</span></a></li>';
+        echo '<li><a href="?pagina=OrdenDespacho"><span class="simbolo"><img src="IMG/list-ordered.svg" class="icono-svg" />Gestionar Ordenes de Despacho</span></a></li>';
+
+        // Finanzas
+        echo '<h4><span>Administrar Finanzas</span><div class="menu-separador"></div></h4>';
+        echo '<li><a href="?pagina=cuentas"><span class="simbolo"><img src="IMG/landmark.svg" class="icono-svg" />Gestionar Cuentas Bancarias</span></a></li>';
+        echo '<li><a href="?pagina=finanza"><span class="simbolo"><img src="IMG/dollar-sign.svg" class="icono-svg" />Gestionar Ingresos y Egresos</span></a></li>';
+
+        // Seguridad
+        echo '<h4><span>Administrar Seguridad</span><div class="menu-separador"></div></h4>';
+        echo '<li><a href="?pagina=permisos"><span class="simbolo"><img src="IMG/key-round.svg" class="icono-svg" />Gestionar Permisos</span></a></li>';
+        echo '<li><a href="?pagina=rol"><span class="simbolo"><img src="IMG/user-round-search.svg" class="icono-svg" />Gestionar Roles</span></a></li>';
+        echo '<li><a href="?pagina=bitacora"><span class="simbolo"><img src="IMG/notebook.svg" class="icono-svg" />Gestionar Bitácora</span></a></li>';
+    }
     // CLIENTE: solo puede ver catálogo, carrito, pasarela, prefactura
-    if ($nombre_rol == 'Cliente') {
+    else if ($nombre_rol == 'Cliente') {
         $cliente_modulos = ['Catalogo', 'carrito', 'pasarela', 'gestionarFactura'];
         foreach ($cliente_modulos as $mod) {
-            if ($permisosConsulta[$mod]) {
+            if (!empty($permisosConsulta[$mod])) {
                 echo '<li><a href="'.$modulos[$mod][2].'"><span class="simbolo"><img src="'.$modulos[$mod][1].'" class="icono-svg" />'.$modulos[$mod][0].'</span></a></li>';
             }
         }
     } else {
         // ADMINISTRAR PERFILES (solo Admin y SuperUsuario)
-        if (in_array($nombre_rol, ['Administrador', 'SuperUsuario']) && $permisosConsulta['Usuario']) {
+        if (in_array($nombre_rol, ['Administrador', 'SuperUsuario']) && !empty($permisosConsulta['Usuario'])) {
             echo '<h4><span>Administrar Perfiles</span><div class="menu-separador"></div></h4>';
             echo '<li><a href="?pagina=Usuarios"><span class="simbolo"><img src="IMG/users-round.svg" class="icono-svg" />Gestionar Usuario</span></a></li>';
         }
 
         // ADMINISTRAR INVENTARIO (Admin y Almacenista)
         if (in_array($nombre_rol, ['Administrador', 'Almacenista'])) {
-            if ($permisosConsulta['Recepcion'] || $permisosConsulta['Despacho']) {
+            if (!empty($permisosConsulta['Recepcion']) || !empty($permisosConsulta['Despacho'])) {
                 echo '<h4><span>Administrar Inventario</span><div class="menu-separador"></div></h4>';
-                if ($permisosConsulta['Recepcion']) {
+                if (!empty($permisosConsulta['Recepcion'])) {
                     echo '<li><a href="?pagina=Recepcion"><span class="simbolo"><img src="IMG/package-open.svg" class="icono-svg" />Gestionar Recepcion</span></a></li>';
                 }
-                if ($permisosConsulta['Despacho']) {
+                if (!empty($permisosConsulta['Despacho'])) {
                     echo '<li><a href="?pagina=despacho"><span class="simbolo"><img src="IMG/package-check.svg" class="icono-svg" />Gestionar Despacho</span></a></li>';
                 }
             }
@@ -136,12 +181,12 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
             $productos = ['Marcas', 'Modelos', 'Productos', 'Categorias'];
             $hayProductos = false;
             foreach ($productos as $mod) {
-                if ($permisosConsulta[$mod]) $hayProductos = true;
+                if (!empty($permisosConsulta[$mod])) $hayProductos = true;
             }
             if ($hayProductos) {
                 echo '<h4><span>Administrar Productos</span><div class="menu-separador"></div></h4>';
                 foreach ($productos as $mod) {
-                    if ($permisosConsulta[$mod]) {
+                    if (!empty($permisosConsulta[$mod])) {
                         echo '<li><a href="'.$modulos[$mod][2].'"><span class="simbolo"><img src="'.$modulos[$mod][1].'" class="icono-svg" />'.$modulos[$mod][0].'</span></a></li>';
                     }
                 }
@@ -149,13 +194,13 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
         }
 
         // ADMINISTRAR PROVEEDORES (solo Admin)
-        if ($nombre_rol == 'Administrador' && $permisosConsulta['Proveedores']) {
+        if ($nombre_rol == 'Administrador' && !empty($permisosConsulta['Proveedores'])) {
             echo '<h4><span>Administrar Proveedores</span><div class="menu-separador"></div></h4>';
             echo '<li><a href="?pagina=proveedores"><span class="simbolo"><img src="IMG/truck.svg" class="icono-svg" />Gestionar Proveedores</span></a></li>';
         }
 
         // ADMINISTRAR CLIENTES (Admin y Almacenista)
-        if (in_array($nombre_rol, ['Administrador', 'Almacenista']) && $permisosConsulta['Clientes']) {
+        if (in_array($nombre_rol, ['Administrador', 'Almacenista']) && !empty($permisosConsulta['Clientes'])) {
             echo '<h4><span>Administrar Clientes</span><div class="menu-separador"></div></h4>';
             echo '<li><a href="?pagina=clientes"><span class="simbolo"><img src="IMG/users-round.svg" class="icono-svg" />Gestionar Clientes</span></a></li>';
         }
@@ -165,40 +210,38 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
             $ventas = ['Catalogo', 'carrito', 'pasarela', 'gestionarFactura', 'Ordenes de despacho'];
             $hayVentas = false;
             foreach ($ventas as $mod) {
-                if ($permisosConsulta[$mod]) $hayVentas = true;
+                if (!empty($permisosConsulta[$mod])) $hayVentas = true;
             }
             if ($hayVentas) {
                 echo '<h4><span>Administrar Ventas</span><div class="menu-separador"></div></h4>';
                 foreach ($ventas as $mod) {
-                    if ($permisosConsulta[$mod]) {
+                    if (!empty($permisosConsulta[$mod])) {
                         echo '<li><a href="'.$modulos[$mod][2].'"><span class="simbolo"><img src="'.$modulos[$mod][1].'" class="icono-svg" />'.$modulos[$mod][0].'</span></a></li>';
                     }
                 }
             }
         }
-
-        // ADMINISTRAR FINANZAS (solo Admin)
-        if ($nombre_rol == 'Administrador' && ($permisosConsulta['Cuentas bancarias'] || $permisosConsulta['finanza'])) {
+// ADMINISTRAR FINANZAS (solo Admin)
+        if ($nombre_rol == 'Administrador' && (!empty($permisosConsulta['Cuentas bancarias']) || !empty($permisosConsulta['finanza']))) {
             echo '<h4><span>Administrar Finanzas</span><div class="menu-separador"></div></h4>';
-            if ($permisosConsulta['Cuentas bancarias']) {
+            if (!empty($permisosConsulta['Cuentas bancarias'])) {
                 echo '<li><a href="?pagina=cuentas"><span class="simbolo"><img src="IMG/landmark.svg" class="icono-svg" />Gestionar Cuentas Bancarias</span></a></li>';
             }
-            if ($permisosConsulta['finanza']) {
+            if (!empty($permisosConsulta['finanza'])) {
                 echo '<li><a href="?pagina=finanza"><span class="simbolo"><img src="IMG/dollar-sign.svg" class="icono-svg" />Gestionar Ingresos y Egresos</span></a></li>';
             }
         }
-
         // ADMINISTRAR SEGURIDAD (solo Admin y SuperUsuario)
         if (in_array($nombre_rol, ['Administrador', 'SuperUsuario'])) {
             $seguridad = ['permisos', 'Roles', 'bitacora'];
             $haySeguridad = false;
             foreach ($seguridad as $mod) {
-                if ($permisosConsulta[$mod]) $haySeguridad = true;
+                if (!empty($permisosConsulta[$mod])) $haySeguridad = true;
             }
             if ($haySeguridad) {
                 echo '<h4><span>Administrar Seguridad</span><div class="menu-separador"></div></h4>';
                 foreach ($seguridad as $mod) {
-                    if ($permisosConsulta[$mod]) {
+                    if (!empty($permisosConsulta[$mod])) {
                         echo '<li><a href="'.$modulos[$mod][2].'"><span class="simbolo"><img src="'.$modulos[$mod][1].'" class="icono-svg" />'.$modulos[$mod][0].'</span></a></li>';
                     }
                 }
@@ -206,7 +249,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
         }
     }
     ?>
-    <li><a href='?pagina=backup'><span class="simbolo"><img src="IMG/files.svg" class="icono-svg" />Gestionar Respaldo</span></a></li>
+        <li><a href='?pagina=backup'><span class="simbolo"><img src="IMG/files.svg" class="icono-svg" />Gestionar Respaldo</span></a></li>
     <!-- Cuenta y cerrar sesión -->
     <h4><span>Cuenta</span><div class="menu-separador"></div></h4>
     <li><a href="#"><span class="simbolo"><img src="IMG/circle-user-round.svg" class="icono-svg" />Perfil</span></a></li>
