@@ -1,12 +1,26 @@
 <?php
 ob_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once 'Modelo/Usuarios.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
+// Definir constantes para IDs de módulo
+define('MODULO_USUARIO', 1);
+
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('usuario'));
+
+
+// Registrar acceso al módulo
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de usuario', MODULO_USUARIO, $_SESSION['id_usuario']);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtiene la acción enviada en la solicitud POST
