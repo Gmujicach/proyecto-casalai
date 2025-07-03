@@ -14,6 +14,7 @@ define('ACCION_ELIMINAR', 4);
 define('ACCION_CAMBIAR_ESTATUS', 5);
 
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('Cuentas bancarias'));
 
 if (isset($_SESSION['id_usuario'])) {
