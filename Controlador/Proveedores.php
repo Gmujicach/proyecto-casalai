@@ -4,12 +4,30 @@ ob_start();
 require_once 'Modelo/Proveedores.php';
 require_once 'Modelo/Productos.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
+// Definir constantes para IDs de módulo y acciones
+define('MODULO_PROVEEDORES', 2); // Cambiar según tu estructura de módulos
+define('ACCION_CREAR', 1);
+define('ACCION_LEER', 2);
+define('ACCION_ACTUALIZAR', 3);
+define('ACCION_ELIMINAR', 4);
+define('ACCION_CAMBIAR_ESTATUS', 5);
+
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('proveedores'));
+
+// Registrar acceso al módulo
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de proveedores', MODULO_PROVEEDORES, $_SESSION['id_usuario']);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id_usuario_accion = $_SESSION['id_usuario'] ?? null; // Usuario que realiza la acción
+    
     if (isset($_POST['accion'])) {
         $accion = $_POST['accion'];
     } else {
@@ -17,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
-                case 'permisos_tiempo_real':
+        case 'permisos_tiempo_real':
             header('Content-Type: application/json; charset=utf-8');
             $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('proveedores'));
             echo json_encode($permisosActualizados);
@@ -45,6 +63,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($proveedor->registrarProveedor()) {
                 $proveedorRegistrado = $proveedor->obtenerUltimoProveedor();
+                
+                // Registrar en bitácora
+                $bitacoraModel->registrarAccion(
+                    'Creación de proveedor: ' . $_POST['nombre_proveedor'], 
+                    MODULO_PROVEEDORES, 
+                    $id_usuario_accion,
+                    ACCION_CREAR,
+                    $proveedorRegistrado['id_proveedor']
+                );
+                
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Proveedor registrado correctamente',
@@ -62,9 +90,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_proveedor = $_POST['id_proveedor'];
             if ($id_proveedor !== null) {
                 $proveedor = new Proveedores();
-                $proveedor = $proveedor->obtenerProveedorPorId($id_proveedor);
-                if ($proveedor !== null) {
-                    echo json_encode($proveedor);
+                $proveedorData = $proveedor->obtenerProveedorPorId($id_proveedor);
+                
+                // Registrar en bitácora (opcional, ya que es una lectura)
+                $bitacoraModel->registrarAccion(
+                    'Consulta de proveedor ID: ' . $id_proveedor, 
+                    MODULO_PROVEEDORES, 
+                    $id_usuario_accion,
+                    ACCION_LEER,
+                    $id_proveedor
+                );
+                
+                if ($proveedorData !== null) {
+                    echo json_encode($proveedorData);
                 } else {
                     echo json_encode(['status' => 'error', 'message' => 'Proveedor no encontrado']);
                 }
@@ -99,6 +137,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             if ($proveedor->modificarProveedor($id_proveedor)) {
                 $proveedorActualizado = $proveedor->obtenerProveedorPorId($id_proveedor);
+                
+                // Registrar en bitácora
+                $bitacoraModel->registrarAccion(
+                    'Actualización de proveedor: ' . $_POST['nombre_proveedor'], 
+                    MODULO_PROVEEDORES, 
+                    $id_usuario_accion,
+                    ACCION_ACTUALIZAR,
+                    $id_proveedor
+                );
 
                 echo json_encode([
                     'status' => 'success',
@@ -115,8 +162,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo json_encode(['status' => 'error', 'message' => 'ID del Proveedor no proporcionado']);
                 exit;
             }
+            
             $proveedor = new Proveedores();
+            // Obtener datos del proveedor antes de eliminarlo
+            $proveedorAEliminar = $proveedor->obtenerProveedorPorId($id_proveedor);
+            
             if ($proveedor->eliminarProveedor($id_proveedor)) {
+                // Registrar en bitácora
+                $bitacoraModel->registrarAccion(
+                    'Eliminación de proveedor: ' . $proveedorAEliminar['nombre'], 
+                    MODULO_PROVEEDORES, 
+                    $id_usuario_accion,
+                    ACCION_ELIMINAR,
+                    $id_proveedor
+                );
+                
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Proveedor']);
@@ -134,7 +194,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $proveedor = new Proveedores();
             $proveedor->setIdProveedor($id_proveedor);
+            
             if ($proveedor->cambiarEstatus($nuevoEstatus)) {
+                // Registrar en bitácora
+                $bitacoraModel->registrarAccion(
+                    'Cambio de estado a ' . $nuevoEstatus . ' para proveedor ID: ' . $id_proveedor, 
+                    MODULO_PROVEEDORES, 
+                    $id_usuario_accion,
+                    ACCION_CAMBIAR_ESTATUS,
+                    $id_proveedor
+                );
+                
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus del Proveedor']);
@@ -143,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         default:
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
-        break;
+            break;
     }
 }
 
@@ -163,7 +233,6 @@ function obtenerProductosConBajoStock() {
 
 $pagina = "Proveedores";
 if (is_file("Vista/" . $pagina . ".php")) {
-
     $proveedores = getproveedores();
     $productos = obtenerProductosConBajoStock();
     require_once("Vista/" . $pagina . ".php");
