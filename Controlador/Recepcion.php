@@ -13,8 +13,14 @@ if (!is_file("Modelo/" . $pagina . ".php")) {
 require_once("Modelo/" . $pagina . ".php");
 $k = new Recepcion();
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+
+define('MODULO_RECEPCION', 1);
+
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
+
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('recepcion'));
 if (is_file("vista/" . $pagina . ".php")) {
     $accion = $_POST['accion'] ?? '';
@@ -41,6 +47,13 @@ case 'permisos_tiempo_real':
                     $_POST['cantidad'],
                     $_POST['costo']
                 );
+
+                $bitacoraModel->registrarAccion(
+                    'Creación de despacho: ' . $_POST['correlativo'], 
+                    MODULO_DESPACHO,
+                    $_SESSION['id_usuario']
+                );
+                
                 echo json_encode($respuesta);
                 break;
 
