@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($respaldos as $respaldo): ?>
+            <?php foreach ($backups as $respaldo): ?>
             <tr>
                 <td><?= htmlspecialchars($respaldo) ?></td>
                 <td>
