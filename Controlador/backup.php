@@ -1,33 +1,74 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/../Modelo/backup.php';
 
-// Enrutamiento para AJAX
 if (isset($_GET['accion'])) {
-    $tipo = $_POST['tipo'] ?? $_GET['tipo'] ?? 'P';
-    $backup = new Backup($tipo);
 
     if ($_GET['accion'] === 'generar') {
-        $nombreArchivo = 'backup_' . strtolower($tipo) . '_' . date('Ymd_His') . '.sql';
-        $archivo = $backup->generar($nombreArchivo);
-        echo json_encode(['success' => $archivo !== false, 'archivo' => $archivo]);
+        $backup = new Backup();
+        $nombreArchivo = 'backup_principal_' . date('Ymd_His') . '.sql';
+        $ok = $backup->generar($nombreArchivo);
+        $ruta = realpath(__DIR__ . '/../DB/backup/' . $nombreArchivo);
+        header('Content-Type: application/json');
+        if ($ok && file_exists($ruta)) {
+            echo json_encode(['success' => true, 'archivo' => $nombreArchivo]);
+        } else {
+            // Lee el último error del log si existe
+            $logFile = __DIR__ . '/../DB/backup/backup_debug.log';
+            $logMsg = '';
+            if (file_exists($logFile)) {
+                $logMsg = file_get_contents($logFile);
+            }
+            echo json_encode([
+                'success' => false,
+                'error' => 'Error al generar el respaldo.',
+                'debug' => $logMsg
+            ]);
+        }
         exit;
+    }
+
+    // ... resto del código igual ...
+
+
+    if ($_GET['accion'] === 'descargar') {
+        $archivo = $_GET['archivo'] ?? '';
+        $ruta = realpath(__DIR__ . '/../DB/backup/' . $archivo);
+        if ($archivo && file_exists($ruta)) {
+            header('Content-Type: application/sql');
+            header('Content-Disposition: attachment; filename="' . basename($archivo) . '"');
+            header('Content-Length: ' . filesize($ruta));
+            readfile($ruta);
+            exit;
+        } else {
+            echo "Archivo no encontrado";
+            exit;
+        }
     }
 
     if ($_GET['accion'] === 'restaurar') {
-        $archivo = $_POST['archivo'] ?? $_GET['archivo'] ?? '';
-        $ok = $backup->restaurar($archivo);
-        echo json_encode(['success' => $ok]);
-        exit;
-    }
-
-    if ($_GET['accion'] === 'consultar') {
-        $archivos = $backup->listar();
-        echo json_encode($archivos);
+        $archivo = $_GET['archivo'] ?? '';
+        $ruta = realpath(__DIR__ . '/../DB/backup/' . $archivo);
+        header('Content-Type: application/json');
+        if ($archivo && file_exists($ruta)) {
+            $backup = new Backup();
+            $ok = $backup->restaurar($archivo);
+            if ($ok) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Error al restaurar']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Archivo no encontrado']);
+        }
         exit;
     }
 }
 
-// Renderizado de la vista (para acceso normal)
+// Renderizado de la vista
 $pagina = "backup";
 if (is_file("Vista/" . $pagina . ".php")) {
     $backup = new Backup();
