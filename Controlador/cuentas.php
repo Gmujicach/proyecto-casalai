@@ -16,10 +16,6 @@ $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('Cuentas bancarias'));
 
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de cuentas bancarias', MODULO_CUENTA_BANCARIA, $_SESSION['id_usuario']);
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_usuario_accion = $_SESSION['id_usuario'] ?? null;
     
@@ -202,7 +198,9 @@ function consultarCuentabanco() {
 
 $pagina = "cuentas";
 if (is_file("Vista/" . $pagina . ".php")) {
-
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de cuentas bancarias', MODULO_CUENTA_BANCARIA, $_SESSION['id_usuario']);
+    }
     $cuentabancos = consultarCuentabanco();
     require_once("Vista/" . $pagina . ".php");
 } else {

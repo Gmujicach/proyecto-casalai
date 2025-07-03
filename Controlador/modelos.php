@@ -9,15 +9,13 @@ $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
 // Definir constantes para IDs de módulo y acciones
 define('MODULO_MODELOS', 2); // Cambiar según tu estructura de módulos
+define('ACCION_CREAR', 1);
+define('ACCION_ACTUALIZAR', 3);
+define('ACCION_ELIMINAR', 4);
 
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('modelos'));
-
-// Registrar acceso al módulo
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de Modelos', MODULO_MODELOS, $_SESSION['id_usuario']);
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['accion'])) {
@@ -40,10 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $modelo->setid_marca($_POST['id_marca']);
 
             if ($modelo->existeNombreModelo($_POST['nombre_modelo'])) {
-                // Registrar intento fallido en bitácora
-                if (isset($_SESSION['id_usuario'])) {
-                    $bitacoraModel->registrarAccion('Intento de registro de modelo fallido (nombre ya existe): ' . $_POST['nombre_modelo'], MODULO_MODELOS, $_SESSION['id_usuario']);
-                }
                 
                 echo json_encode([
                     'status' => 'error',
@@ -69,11 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'modelo' => $modeloRegistrado
                 ]);
             } else {
-                // Registrar error en bitácora
-                if (isset($_SESSION['id_usuario'])) {
-                    $bitacoraModel->registrarAccion('Error al registrar modelo: ' . $_POST['nombre_modelo'], MODULO_MODELOS, $_SESSION['id_usuario']);
-                }
-                
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'Error al registrar el modelo'
@@ -138,11 +127,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'modelo' => $modeloActualizado
                 ]);
             } else {
-                // Registrar error en modificación
-                if (isset($_SESSION['id_usuario'])) {
-                    $bitacoraModel->registrarAccion('Error al modificar modelo (ID: ' . $id_modelo . ')', MODULO_MODELOS, $_SESSION['id_usuario']);
-                }
-                
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'Error al modificar el modelo'
@@ -162,21 +146,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 echo json_encode(['status' => 'success']);
             } else {
-                // Registrar error en eliminación
-                if (isset($_SESSION['id_usuario'])) {
-                    $bitacoraModel->registrarAccion('Error al eliminar modelo (ID: ' . $id_modelo . ')', MODULO_MODELOS, $_SESSION['id_usuario']);
-                }
-                
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el modelo']);
             }
             exit;
 
         default:
-            // Registrar acción no válida
-            if (isset($_SESSION['id_usuario'])) {
-                $bitacoraModel->registrarAccion('Intento de acción no válida en módulo Modelos', MODULO_MODELOS, $_SESSION['id_usuario']);
-            }
-            
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
             break;
     }
@@ -197,6 +171,9 @@ $pagina = "Modelos";
 if (is_file("Vista/" . $pagina . ".php")) {
     $modelos = getModelos();
     $marcas = getmarcas();
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de Modelos', MODULO_MODELOS, $_SESSION['id_usuario']);
+    }
     require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";

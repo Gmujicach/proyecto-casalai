@@ -3,15 +3,22 @@ ob_start();
 
 require_once 'Modelo/clientes.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
+define('MODULO_CLIENTE', 1);
+define('ACCION_CREAR', 1);
+define('ACCION_ACTUALIZAR', 3);
+define('ACCION_ELIMINAR', 4);
+
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
+
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('clientes'));
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
-
 
     switch ($accion) {
         case 'registrar':
@@ -32,6 +39,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($cliente->ingresarclientes()) {
                 $clienteRegistrado = $cliente->obtenerUltimoCliente();
+
+                $bitacoraModel->registrarAccion(
+                    'Creación de cliente: ' . $_POST['nombre'], 
+                    MODULO_CLIENTE, 
+                    $id_usuario_accion,
+                    ACCION_CREAR,
+                    $clienteRegistrado['id_usuario']
+                );
+
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Cliente registrado correctamente',
@@ -86,6 +102,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($cliente->modificarclientes($id)) {
                 $clienteModificado = $cliente->obtenerclientesPorId($id);
+
+                $bitacoraModel->registrarAccion(
+                    'Actualización de cliente: ' . $_POST['nombre'], 
+                    MODULO_CLIENTE, 
+                    $id_usuario_accion,
+                    ACCION_ACTUALIZAR,
+                    $clienteModificado['id_usuario']
+                );
+
                 echo json_encode([
                     'status' => 'success',
                     'cliente' => $clienteModificado
@@ -99,6 +124,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['id_clientes'];
             $clientesModel = new cliente();
             if ($clientesModel->eliminarclientes($id)) {
+                $bitacoraModel->registrarAccion(
+                    'Eliminación de cliente: ' . $clientesModel['nombre'], 
+                    MODULO_CLIENTE, 
+                    $id_usuario_accion,
+                    ACCION_ELIMINAR,
+                    $id
+                );
+
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el Cliente']);
@@ -119,7 +152,9 @@ $reporteComprasClientes = $cliente->obtenerReporteComprasClientes();
 $totalComprasClientes = array_sum(array_column($reporteComprasClientes, 'cantidad'));
 $pagina = "Clientes";
 if (is_file("Vista/" . $pagina . ".php")) {
-
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de cliente', MODULO_CLIENTE, $_SESSION['id_usuario']);
+    }
     $clientes = getclientes();
     require_once("Vista/" . $pagina . ".php");
 } else {

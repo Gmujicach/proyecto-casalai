@@ -16,10 +16,6 @@ $bitacoraModel = new Bitacora();
 
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('marcas'));
 
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de marcas', MODULO_MARCA, $_SESSION['id_usuario']);
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST['accion'])) {
@@ -157,6 +153,9 @@ function getmarcas() {
 
 $pagina = "marcas";
 if (is_file("Vista/" . $pagina . ".php")) {
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de marcas', MODULO_MARCA, $_SESSION['id_usuario']);
+    }   
     $marcas = getmarcas();
     // Pasa $permisosUsuario a la vista
     require_once("Vista/" . $pagina . ".php");
