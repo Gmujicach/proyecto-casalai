@@ -62,10 +62,11 @@ public function getPermisosUsuarioModulo($id_rol, $nombre_modulo) {
     return $permisos;
 }
 public function guardarPermisos($permisosForm, $roles, $modulos, $acciones) {
-    // Borra todos los permisos actuales
-    $this->conex->exec("DELETE FROM tbl_permisos");
-    // Inserta todos los permisos posibles
+    // Borra todos los permisos actuales EXCEPTO los del SuperUsuario (id_rol = 6)
+    $this->conex->exec("DELETE FROM tbl_permisos WHERE id_rol <> 6");
+    // Inserta todos los permisos posibles, EXCEPTO para el SuperUsuario
     foreach ($roles as $rol) {
+        if ($rol['id_rol'] == 6) continue; // Saltar SuperUsuario
         foreach ($modulos as $modulo) {
             foreach ($acciones as $accion) {
                 $estatus = (isset($permisosForm[$rol['id_rol']][$modulo['id_modulo']][$accion]) && $permisosForm[$rol['id_rol']][$modulo['id_modulo']][$accion] == 'on')
