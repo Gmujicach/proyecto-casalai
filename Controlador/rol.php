@@ -7,11 +7,8 @@ define('MODULO_ROLES', 18); // Define el ID del módulo de roles
 
 $id_rol = $_SESSION['id_rol'];
 
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de Roles', MODULO_ROLES, $_SESSION['id_usuario']);
-}
-
 $permisosObj = new Permisos();
+$bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Roles');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -45,7 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($rol->registrarRol()) {
                 $rolRegistrado = $rol->obtenerUltimoRol();
-                $bitacoraModel->registrarAccion('Registro de rol: ' . $rolRegistrado['nombre_rol'], MODULO_ROLES, $_SESSION['id_usuario']);
+                $bitacoraModel->registrarAccion('Registro de rol: ' . $_POST['nombre_rol'],
+                MODULO_ROLES, $_SESSION['id_usuario']);
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Rol registrado correctamente',
@@ -99,7 +97,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             if ($rol->modificarRol($id_rol)) {
                 $rolActualizado = $rol->obtenerRolPorId($id_rol);
-                $bitacoraModel->registrarAccion('Modificación de rol: ' . $rolActualizado['nombre_rol'], MODULO_ROLES, $_SESSION['id_usuario']);
+                $bitacoraModel->registrarAccion('Modificación de rol: ' . $_POST['nombre_rol'],
+                MODULO_ROLES, $_SESSION['id_usuario']);
 
                 echo json_encode([
                     'status' => 'success',
@@ -116,7 +115,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($rol->eliminarRol($id_rol)) {
                 $rolEliminado = $rol->obtenerRolPorId($id_rol);
-                $bitacoraModel->registrarAccion('Eliminación de rol: ' . $rolEliminado['nombre_rol'], MODULO_ROLES, $_SESSION['id_usuario']);
+                $bitacoraModel->registrarAccion('Eliminación de rol: (ID: ' . $id_rol . ')',
+                MODULO_ROLES, $_SESSION['id_usuario']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el rol']);
@@ -136,6 +136,9 @@ function consultarRoles() {
 
 $pagina = "rol";
 if (is_file("Vista/" . $pagina . ".php")) {
+    if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Roles', MODULO_ROLES, $_SESSION['id_usuario']);
+}
     $roles = consultarRoles();
     require_once("Vista/" . $pagina . ".php");
 } else {
