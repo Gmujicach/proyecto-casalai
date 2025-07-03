@@ -9,6 +9,8 @@ if (!is_file("Modelo/" . $pagina . ".php")) {
     echo "Falta definir la clase " . $pagina;
     exit;
 }
+define('MODULO_DESPACHO', 3); // Define el ID del módulo de cuentas bancarias
+
 
 require_once("Modelo/" . $pagina . ".php");
 $k = new Despacho();
@@ -38,6 +40,8 @@ if (is_file("vista/" . $pagina . ".php")) {
                 $productos = $_POST['producto'] ?? [];
                 $cantidades = $_POST['cantidad'] ?? [];
                 $respuesta = $k->registrar($productos, $cantidades);
+                $bitacoraModel->registrarAccion('Registro de despacho: ' . $respuesta['id_producto'], MODULO_DESPACHO, $_SESSION['id_usuario']);
+
 
                 // Obtener la lista actualizada de despachos
                 $despachos = $respuesta['despachos'] ?? getdespacho();

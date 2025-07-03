@@ -14,10 +14,10 @@ require_once("Modelo/" . $pagina . ".php");
 $k = new Recepcion();
 require_once 'Modelo/Permisos.php';
 require_once 'Modelo/Bitacora.php';
-
-define('MODULO_RECEPCION', 1);
+define('MODULO_RECEPCION', 2); // Define el ID del módulo de cuentas bancarias
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 
@@ -49,12 +49,15 @@ case 'permisos_tiempo_real':
                 );
 
                 $bitacoraModel->registrarAccion(
-                    'Creación de despacho: ' . $_POST['correlativo'], 
+                    'Creación de recepción: ' . $_POST['correlativo'], 
                     MODULO_DESPACHO,
                     $_SESSION['id_usuario']
                 );
                 
                 echo json_encode($respuesta);
+                
+
+
                 break;
 
             case 'buscar':
@@ -102,6 +105,7 @@ case 'modificarRecepcion':
             $iddetalle
         );
         if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificarRecepcion') {
+            $bitacoraModel->registrarAccion('Modificación de Recepción: ' . $respuesta['correlativo'], MODULO_RECEPCION, $_SESSION['id_usuario']);
             echo json_encode([
                 'status' => 'success',
                 'message' => $respuesta['mensaje']
@@ -143,6 +147,9 @@ foreach ($recepciones as $r) {
 $totalProductosRecibidos = array_sum($productosRecibidos);
     require_once("vista/" . $pagina . ".php");
 
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Recepcion', MODULO_RECEPCION, $_SESSION['id_usuario']);
+}
 } else {
     echo "pagina en construccion";
 }

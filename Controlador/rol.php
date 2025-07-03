@@ -2,8 +2,15 @@
 ob_start();
 require_once 'Modelo/rol.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+define('MODULO_ROLES', 18); // Define el ID del módulo de roles
 
 $id_rol = $_SESSION['id_rol'];
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Roles', MODULO_ROLES, $_SESSION['id_usuario']);
+}
+
 $permisosObj = new Permisos();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Roles');
 
@@ -26,6 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $rol->setNombreRol($_POST['nombre_rol']);
 
             if ($rol->existeNombreRol($_POST['nombre_rol'])) {
+
+                
+
                 echo json_encode([
                     'status' => 'error',
                     'message' => 'El nombre del rol ya existe'
@@ -35,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($rol->registrarRol()) {
                 $rolRegistrado = $rol->obtenerUltimoRol();
+                $bitacoraModel->registrarAccion('Registro de rol: ' . $rolRegistrado['nombre_rol'], MODULO_ROLES, $_SESSION['id_usuario']);
                 echo json_encode([
                     'status' => 'success',
                     'message' => 'Rol registrado correctamente',
@@ -88,6 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             if ($rol->modificarRol($id_rol)) {
                 $rolActualizado = $rol->obtenerRolPorId($id_rol);
+                $bitacoraModel->registrarAccion('Modificación de rol: ' . $rolActualizado['nombre_rol'], MODULO_ROLES, $_SESSION['id_usuario']);
 
                 echo json_encode([
                     'status' => 'success',
@@ -103,6 +115,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $rol = new Rol();
 
             if ($rol->eliminarRol($id_rol)) {
+                $rolEliminado = $rol->obtenerRolPorId($id_rol);
+                $bitacoraModel->registrarAccion('Eliminación de rol: ' . $rolEliminado['nombre_rol'], MODULO_ROLES, $_SESSION['id_usuario']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el rol']);
