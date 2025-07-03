@@ -4,51 +4,59 @@ require_once __DIR__ . '/../Config/config.php';
 class Backup {
     private $bd;
     private $tipo;
-    private $nombreArchivo;
 
     public function __construct($tipo = 'P') {
         $this->bd = new BD($tipo);
         $this->tipo = $tipo;
     }
 
-    // Getters y setters
-    public function getTipo() { return $this->tipo; }
-    public function setTipo($tipo) { $this->tipo = $tipo; }
-
-    public function getNombreArchivo() { return $this->nombreArchivo; }
-    public function setNombreArchivo($nombreArchivo) { $this->nombreArchivo = $nombreArchivo; }
-
-    // Realiza el respaldo de la base de datos y devuelve la ruta del archivo generado
-    public function backup($nombreArchivo) {
-        $this->setNombreArchivo($nombreArchivo);
+    public function generar($nombreArchivo) {
         $pdo = $this->bd->getConexion();
         $dbname = $pdo->query('select database()')->fetchColumn();
-
-        $ruta = __DIR__ . '/BD/backups/' . $nombreArchivo;
+        $ruta = __DIR__ . '/../DB/backup/' . $nombreArchivo;
         $config = ($this->tipo === 'S') ? DB_SEGURIDAD : DB_PRINCIPAL;
-        $comando = "mysqldump --user=" . $config['user'] . " --password=" . $config['pass'] . " --host=" . $config['host'] . " $dbname > $ruta";
-        system($comando, $resultado);
 
-        return ($resultado === 0) ? $ruta : false;
+        // Intenta usar mysqldump con ruta absoluta si es necesario
+        $mysqldump = 'mysqldump';
+        // Si estás en Windows y mysqldump no está en el PATH, pon la ruta completa, por ejemplo:
+        // $mysqldump = 'C:\\xampp\\mysql\\bin\\mysqldump.exe';
+
+        $comando = "$mysqldump --user=\"{$config['user']}\" --password=\"{$config['pass']}\" --host=\"{$config['host']}\" {$dbname} > \"$ruta\" 2>&1";
+        $output = [];
+        $resultado = 0;
+        exec($comando, $output, $resultado);
+
+        if ($resultado !== 0) {
+            error_log("Error al ejecutar mysqldump: " . implode("\n", $output));
+            return false;
+        }
+        return $nombreArchivo;
     }
 
-    // Restaura la base de datos desde un archivo SQL
-    public function restore($nombreArchivo) {
-        $this->setNombreArchivo($nombreArchivo);
+    public function restaurar($nombreArchivo) {
         $pdo = $this->bd->getConexion();
         $dbname = $pdo->query('select database()')->fetchColumn();
-
-        $ruta = __DIR__ . '/BD/backups/' . $nombreArchivo;
+        $ruta = __DIR__ . '/../DB/backup/' . $nombreArchivo;
         $config = ($this->tipo === 'S') ? DB_SEGURIDAD : DB_PRINCIPAL;
-        $comando = "mysql --user=" . $config['user'] . " --password=" . $config['pass'] . " --host=" . $config['host'] . " $dbname < $ruta";
-        system($comando, $resultado);
 
-        return ($resultado === 0);
+        $mysql = 'mysql';
+        // Si estás en Windows y mysql no está en el PATH, pon la ruta completa, por ejemplo:
+        // $mysql = 'C:\\xampp\\mysql\\bin\\mysql.exe';
+
+        $comando = "$mysql --user=\"{$config['user']}\" --password=\"{$config['pass']}\" --host=\"{$config['host']}\" {$dbname} < \"$ruta\" 2>&1";
+        $output = [];
+        $resultado = 0;
+        exec($comando, $output, $resultado);
+
+        if ($resultado !== 0) {
+            error_log("Error al ejecutar mysql restore: " . implode("\n", $output));
+            return false;
+        }
+        return true;
     }
 
-    // Consulta los respaldos existentes en la carpeta Backups
-    public function listarRespaldos() {
-        $ruta = __DIR__ . '/BD/backups/';
+    public function listar() {
+        $ruta = __DIR__ . '/../DB/backup/';
         $archivos = [];
         if (is_dir($ruta)) {
             $files = scandir($ruta);
