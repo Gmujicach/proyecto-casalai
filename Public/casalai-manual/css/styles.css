@@ -1,0 +1,23 @@
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-image: url("../img/fondo.jpg");
+    background-attachment: fixed;
+    font-size: 1.1rem;
+}
+
+.tarjeta {
+    max-width: 900px;
+
+    @media (min-width: 500px) {
+        margin: 20px auto;
+    }
+}
+
+h1,
+h2,
+h3 {
+    margin-top: 30px;
+}
