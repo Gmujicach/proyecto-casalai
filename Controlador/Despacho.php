@@ -9,7 +9,6 @@ if (!is_file("Modelo/" . $pagina . ".php")) {
     echo "Falta definir la clase " . $pagina;
     exit;
 }
-define('MODULO_DESPACHO', 3); // Define el ID del módulo de cuentas bancarias
 
 require_once("Modelo/" . $pagina . ".php");
 $k = new Despacho();
