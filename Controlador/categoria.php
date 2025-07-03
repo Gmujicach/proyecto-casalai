@@ -7,10 +7,6 @@ require_once 'Modelo/Bitacora.php';
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
 define('MODULO_CATEGORIA', 1);
-define('ACCION_CREAR', 1);
-define('ACCION_ACTUALIZAR', 3);
-define('ACCION_ELIMINAR', 4);
-define('ACCION_CAMBIAR_ESTATUS', 5);
 
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
@@ -40,9 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $bitacoraModel->registrarAccion(
                     'Creación de categoria: ' . $_POST['nombre_categoria'], 
                     MODULO_CATEGORIA, 
-                    $id_usuario_accion,
-                    ACCION_CREAR,
-                    $categoriaRegistrado['id_usuario']
+                    $_SESSION['id_usuario']
                 );
 
                 echo json_encode([
@@ -103,13 +97,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($categoria->modificarCategoria($id_categoria, $nuevo_nombre, $caracteristicas)) {
                 $categoriaActualizada = $categoria->obtenerCategoriaPorId($id_categoria);
+                $bitacoraModel->registrarAccion('Modificacion de una categoria'.$categoriaActualizada, MODULO_CATEGORIA, $_SESSION['id_usuario']);
+
 
                 $bitacoraModel->registrarAccion(
                     'Actualización de categoria: ' . $_POST['nombre_categoria'], 
                     MODULO_CATEGORIA, 
-                    $id_usuario_accion,
-                    ACCION_ACTUALIZAR,
-                    $categoriaActualizada['id_usuario']
+                    $_SESSION['id_usuario']
                 );
 
                 echo json_encode([
@@ -125,13 +119,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_categoria = $_POST['id_categoria'];
             $categoria = new Categoria();
             $resultado = $categoria->eliminarCategoria($id_categoria);
+                $bitacoraModel->registrarAccion('Eliminacion de una categoria'.$resultado, MODULO_CATEGORIA, $_SESSION['id_usuario']);
+
             if (is_array($resultado) && isset($resultado['status']) && $resultado['status'] === 'error') {
                 $bitacoraModel->registrarAccion(
-                    'Eliminación de categoria: ' . $resultado['nombre_categoria'], 
+                    'Eliminación de categoria: (ID: ' . $id_categoria . ')', 
                     MODULO_CATEGORIA, 
-                    $id_usuario_accion,
-                    ACCION_ELIMINAR,
-                    $id_categoria
+                    $_SESSION['id_usuario']
                 );
                 echo json_encode(['status' => 'error', 'message' => $resultado['mensaje']]);
             } else {

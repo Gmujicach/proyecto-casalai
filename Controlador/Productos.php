@@ -5,7 +5,15 @@ ob_start();
 // Importa los modelos necesarios
 require_once 'Modelo/Productos.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+
+define('MODULO_PRODUCTOS', 6); // Define el ID del módulo de cuentas bancarias
+
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Productos', MODULO_PRODUCTOS, $_SESSION['id_usuario']);
+}
 
 $permisosObj = new Permisos();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('productos'));
@@ -49,6 +57,8 @@ case 'ingresar':
             $resultado = $Producto->ingresarProducto($_POST);
             if ($resultado) {
                 $id_producto = $resultado;
+                $bitacoraModel->registrarAccion('Registro de nuevo producto: ' . $resultado['id_producto'], MODULO_PRODUCTOS, $_SESSION['id_usuario']);
+
                 $respuesta = [
                     'status' => 'success',
                     'id_producto' => $id_producto
@@ -68,6 +78,7 @@ case 'ingresar':
                     if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_destino)) {
                         $respuesta['imagen'] = $nombre_nuevo;
                         $respuesta['mensaje'] = "Producto registrado e imagen guardada correctamente.";
+                        
                     } else {
                         $respuesta['imagen'] = null;
                         $respuesta['mensaje'] = "Producto registrado, pero error al guardar la imagen.";
@@ -153,6 +164,8 @@ case 'modificar':
                 }
             } else {
                 echo json_encode(['status' => 'success']);
+                $bitacoraModel->registrarAccion('Modificacion de un producto: ' . $resultado['id_producto'], MODULO_PRODUCTOS, $_SESSION['id_usuario']);
+
             }
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
@@ -173,6 +186,7 @@ case 'modificar':
 $response = $producto->eliminarProducto($id_producto);
 if ($response['success']) {
     echo json_encode(['status' => 'success', 'message' => $response['message']]);
+    $bitacoraModel->registrarAccion('Eliminación de un producto: ' . $id_producto, MODULO_PRODUCTOS, $_SESSION['id_usuario']);
 } else {
     echo json_encode(['status' => 'error', 'message' => $response['message']]);
 }
@@ -193,6 +207,7 @@ if ($response['success']) {
             
             if ($producto->cambiarEstatus($nuevoEstatus)) {
                 echo json_encode(['status' => 'success']);
+                $bitacoraModel->registrarAccion('Cambio de estatus del producto: ' . $id . ' a ' . $nuevoEstatus, MODULO_PRODUCTOS, $_SESSION['id_usuario']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
             }

@@ -4,8 +4,15 @@ require_once 'Modelo/PasareladePago.php';
 require_once 'Modelo/cuentas.php';
 require_once 'Modelo/Factura.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+define('MODULO_PASARELA_PAGOS', 16); // Define el ID
 
 $id_rol = $_SESSION['id_rol'];
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Pasarela de pagos', MODULO_PASARELA_PAGOS, $_SESSION['id_usuario']);
+}
+
 $permisosObj = new Permisos();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Pasarela de pagos');
 
@@ -46,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Si ambas validaciones pasan, se intenta ingresar el producto
                 else {
                     if ($pasarela->pasarelaTransaccion('Ingresar')) {
+                         $bitacoraModel->registrarAccion('Registro de referencia bancaria: ' . $pasarela['referencia'], MODULO_PASARELA_PAGOS, $_SESSION['id_usuario']);
                         echo json_encode(['status' => 'success']);
                     } else {
                         echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el producto']);
@@ -66,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($pasarela->pasarelaTransaccion('Modificar')) {
         $pagoActualizado = $pasarela->obtenerPagoPorId($id);
+        $bitacoraModel->registrarAccion('Modificación de referencia bancaria: ' . $pagoActualizado['referencia'], MODULO_PASARELA_PAGOS, $_SESSION['id_usuario']);
         echo json_encode(['status' => 'success', 'pago' => $pagoActualizado]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Error al modificar el producto']);
@@ -87,6 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($pasarela->pasarelaTransaccion('Procesar')) {
         $pagoActualizado = $pasarela->obtenerPagoPorId($id);
+        $bitacoraModel->registrarAccion('Cambio de estatus de referencia bancaria: ' . $pagoActualizado['referencia'], MODULO_PASARELA_PAGOS, $_SESSION['id_usuario']);
         echo json_encode(['status' => 'success', 'pago' => $pagoActualizado]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);
@@ -97,6 +107,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $id = $_POST['id_detalles'];
                 $pasarela->setIdDetalles($id);
                 if ($pasarela->pasarelaTransaccion('Eliminar')) {
+                    $pagoEliminado = $pasarela->obtenerPagoPorId($id);
+                    $bitacoraModel->registrarAccion('Eliminación de referencia bancaria: ' . $pagoEliminado['referencia'], MODULO_PASARELA_PAGOS, $_SESSION['id_usuario']);
                     echo json_encode(['status' => 'success']);
                 } else {
                     echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);

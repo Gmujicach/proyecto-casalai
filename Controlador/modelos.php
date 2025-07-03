@@ -8,10 +8,7 @@ require_once 'Modelo/Bitacora.php';
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
 // Definir constantes para IDs de módulo y acciones
-define('MODULO_MODELOS', 2); // Cambiar según tu estructura de módulos
-define('ACCION_CREAR', 1);
-define('ACCION_ACTUALIZAR', 3);
-define('ACCION_ELIMINAR', 4);
+define('MODULO_MODELOS', 2);
 
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
@@ -141,7 +138,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($modelo->eliminarModelo($id_modelo)) {
                 // Registrar eliminación exitosa
                 if (isset($_SESSION['id_usuario'])) {
-                    $bitacoraModel->registrarAccion('Eliminación de modelo (ID: ' . $id_modelo . ')', MODULO_MODELOS, $_SESSION['id_usuario']);
+                    $bitacoraModel->registrarAccion('Eliminación de modelo (ID: ' . $id_modelo . ')', 
+                    MODULO_MODELOS, $_SESSION['id_usuario']);
                 }
                 
                 echo json_encode(['status' => 'success']);

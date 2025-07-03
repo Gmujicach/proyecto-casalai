@@ -104,7 +104,7 @@ class marca extends BD {
         $stmt->bindParam(':id_marca', $id_marca);
         
         $result = $stmt->execute();
-        //$this->conex = null;
+        $this->conex = null;
         return $result;
     }
 

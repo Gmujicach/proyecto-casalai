@@ -3,8 +3,15 @@ ob_start();
 
 require_once 'Modelo/OrdenDespacho.php';
 require_once 'Modelo/Permisos.php';
+require_once 'Modelo/Bitacora.php';
+define('MODULO_ORDEN_DESPACHO', 14); // Define el ID del módulo de cuentas bancarias
+
 
 $id_rol = $_SESSION['id_rol'];
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Orden de Despacho', MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
+}
 $permisosObj = new Permisos();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Ordenes de despacho');
 
@@ -36,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo json_encode(['status' => 'error', 'message' => 'Este correlativo ya existe']);
             } else {
                 if ($ordendespacho->ingresarOrdenDespacho()) {
+                    $bitacoraModel->registrarAccion('Registro de orden de despacho: ' . $_POST['correlativo'], MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
                     echo json_encode(['status' => 'success', 'message' => 'Orden ingresada correctamente']);
 
                     exit;
@@ -80,6 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $ordendespacho->setFactura($_POST['factura']);
             $ordendespacho->setCorrelativo($_POST['correlativo']);
             if ($ordendespacho->modificarOrdenDespacho($id)) {
+                $bitacoraModel->registrarAccion('Modificación de orden de despacho: ' . $_POST['correlativo'], MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
@@ -90,6 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['id'];
             $ordendespachoModel = new OrdenDespacho();
             if ($ordendespachoModel->eliminarOrdenDespacho($id)) {
+                $bitacoraModel->registrarAccion('Eliminación de orden de despacho: ' . $id, MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
@@ -116,6 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $ordendespacho->setId($id);
             
             if ($ordendespacho->cambiarEstatus($nuevoEstatus)) {
+                $bitacoraModel->registrarAccion('Cambio de estatus de orden de despacho: ' . $id . ' a ' . $nuevoEstatus, MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
                 echo json_encode(['status' => 'success']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Error al cambiar el estatus']);

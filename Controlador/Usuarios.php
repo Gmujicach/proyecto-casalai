@@ -7,15 +7,14 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once 'Modelo/Usuarios.php';
 require_once 'Modelo/Permisos.php';
 require_once 'Modelo/Bitacora.php';
-$id_rol = $_SESSION['id_rol'];
+define('MODULO_USUARIO', 1); // Define el ID del módulo de cuentas bancarias
 
-// Definir constantes para IDs de módulo y acciones
-define('MODULO_USUARIO', 1);
-define('ACCION_CREAR', 1);
-define('ACCION_LEER', 2);
-define('ACCION_ACTUALIZAR', 3);
-define('ACCION_ELIMINAR', 4);
-define('ACCION_CAMBIAR_ESTATUS', 5);
+
+$id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
+
+if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Usuarios', MODULO_USUARIO, $_SESSION['id_usuario']);
+}
 
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
