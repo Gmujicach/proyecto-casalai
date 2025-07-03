@@ -97,8 +97,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($categoria->modificarCategoria($id_categoria, $nuevo_nombre, $caracteristicas)) {
                 $categoriaActualizada = $categoria->obtenerCategoriaPorId($id_categoria);
-                $bitacoraModel->registrarAccion('Modificacion de una categoria'.$categoriaActualizada, MODULO_CATEGORIA, $_SESSION['id_usuario']);
-
 
                 $bitacoraModel->registrarAccion(
                     'Actualización de categoria: ' . $_POST['nombre_categoria'], 
@@ -119,7 +117,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id_categoria = $_POST['id_categoria'];
             $categoria = new Categoria();
             $resultado = $categoria->eliminarCategoria($id_categoria);
-                $bitacoraModel->registrarAccion('Eliminacion de una categoria'.$resultado, MODULO_CATEGORIA, $_SESSION['id_usuario']);
 
             if (is_array($resultado) && isset($resultado['status']) && $resultado['status'] === 'error') {
                 $bitacoraModel->registrarAccion(
