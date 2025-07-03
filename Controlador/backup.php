@@ -1,35 +1,35 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/../Modelo/backup.php';
 
 if (isset($_GET['accion'])) {
 
-    if ($_GET['accion'] === 'generar') {
-        $backup = new Backup();
-        $nombreArchivo = 'backup_principal_' . date('Ymd_His') . '.sql';
-        $ok = $backup->generar($nombreArchivo);
-        $ruta = realpath(__DIR__ . '/../DB/backup/' . $nombreArchivo);
-        header('Content-Type: application/json');
-        if ($ok && file_exists($ruta)) {
-            echo json_encode(['success' => true, 'archivo' => $nombreArchivo]);
-        } else {
-            // Lee el último error del log si existe
-            $logFile = __DIR__ . '/../DB/backup/backup_debug.log';
-            $logMsg = '';
-            if (file_exists($logFile)) {
-                $logMsg = file_get_contents($logFile);
-            }
-            echo json_encode([
-                'success' => false,
-                'error' => 'Error al generar el respaldo.',
-                'debug' => $logMsg
-            ]);
+if ($_GET['accion'] === 'generar') {
+    $tipo = isset($_GET['tipo']) && $_GET['tipo'] === 'S' ? 'S' : 'P';
+    $backup = new Backup($tipo);
+    $nombreArchivo = 'backup_' . ($tipo === 'S' ? 'seguridad' : 'principal') . '_' . date('Ymd_His') . '.sql';
+    $ok = $backup->generar($nombreArchivo);
+    $ruta = realpath(__DIR__ . '/../DB/backup/' . $nombreArchivo);
+    header('Content-Type: application/json');
+    if ($ok && file_exists($ruta)) {
+        echo json_encode(['success' => true, 'archivo' => $nombreArchivo]);
+    } else {
+        $logFile = __DIR__ . '/../DB/backup/backup_debug.log';
+        $logMsg = '';
+        if (file_exists($logFile)) {
+            $logMsg = file_get_contents($logFile);
         }
-        exit;
+        echo json_encode([
+            'success' => false,
+            'error' => 'Error al generar el respaldo.',
+            'debug' => $logMsg
+        ]);
     }
+    exit;
+}
 
     // ... resto del código igual ...
 

@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
+    
+
     // Restaurar el último respaldo disponible
     document.getElementById('btn-restaurar-ultimo').addEventListener('click', function (e) {
         e.preventDefault();
