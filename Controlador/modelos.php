@@ -8,7 +8,7 @@ require_once 'Modelo/Bitacora.php';
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
 // Definir constantes para IDs de módulo y acciones
-define('MODULO_MODELOS', 2);
+define('MODULO_MODELOS', 5);
 
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
@@ -75,11 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($modelo !== null) {
                     echo json_encode($modelo);
                 } else {
-                    // Registrar intento de acceso a modelo no existente
-                    if (isset($_SESSION['id_usuario'])) {
-                        $bitacoraModel->registrarAccion('Intento de acceso a modelo no encontrado (ID: ' . $id_modelo . ')', MODULO_MODELOS, $_SESSION['id_usuario']);
-                    }
-                    
                     echo json_encode(['status' => 'error', 'message' => 'Modelo no encontrado']);
                 }
             } else {
@@ -95,10 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $modelo->setid_marca($_POST['id_marca']);
             
             if ($modelo->existeNombreModelo($_POST['nombre_modelo'], $id_modelo)) {
-                // Registrar intento de modificación con nombre duplicado
-                if (isset($_SESSION['id_usuario'])) {
-                    $bitacoraModel->registrarAccion('Intento de modificación fallido (nombre ya existe): ' . $_POST['nombre_modelo'] . ' (ID: ' . $id_modelo . ')', MODULO_MODELOS, $_SESSION['id_usuario']);
-                }
                 
                 echo json_encode([
                     'status' => 'error',
