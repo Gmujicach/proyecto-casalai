@@ -160,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($cuentabanco->cambiarEstado($nuevoEstado)) {
 
                 $bitacoraModel->registrarAccion(
-                    'Cambio de estatus a ' . $nuevoEstado . ' para cuenta: ' . $id_cuenta, 
+                    'Cambio de estatus a ' . $nuevoEstado . ' para cuenta bancaria: ' . $id_cuenta, 
                     MODULO_CUENTA_BANCARIA, 
                     $_SESSION['id_usuario']
                 );

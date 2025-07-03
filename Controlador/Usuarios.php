@@ -12,18 +12,9 @@ define('MODULO_USUARIO', 1); // Define el ID del módulo de cuentas bancarias
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de Usuarios', MODULO_USUARIO, $_SESSION['id_usuario']);
-}
-
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('usuario'));
-
-// Registrar acceso al módulo
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de usuario', MODULO_USUARIO, $_SESSION['id_usuario']);
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_usuario_accion = $_SESSION['id_usuario'] ?? null; // Usuario que realiza la acción
@@ -66,9 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $bitacoraModel->registrarAccion(
                     'Creación de usuario: ' . $_POST['nombre_usuario'], 
                     MODULO_USUARIO, 
-                    $id_usuario_accion,
-                    ACCION_CREAR,
-                    $usuarioRegistrado['id_usuario']
+                    $_SESSION['id_usuario']
                 );
                 
                 echo json_encode([
@@ -89,15 +78,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($id_usuario !== null) {
                 $usuario = new Usuarios();
                 $usuarioData = $usuario->obtenerUsuarioPorId($id_usuario);
-                
-                // Registrar en bitácora (opcional, ya que es una lectura)
-                $bitacoraModel->registrarAccion(
-                    'Consulta de usuario ID: ' . $id_usuario, 
-                    MODULO_USUARIO, 
-                    $id_usuario_accion,
-                    ACCION_LEER,
-                    $id_usuario
-                );
                 
                 if ($usuarioData !== null) {
                     echo json_encode($usuarioData);
@@ -135,9 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $bitacoraModel->registrarAccion(
                     'Actualización de usuario: ' . $_POST['nombre_usuario'], 
                     MODULO_USUARIO, 
-                    $id_usuario_accion,
-                    ACCION_ACTUALIZAR,
-                    $id_usuario
+                    $_SESSION['id_usuario']
                 );
                 
                 echo json_encode([
@@ -159,11 +137,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($usuarioModel->eliminarUsuario($id_usuario)) {
                 // Registrar en bitácora
                 $bitacoraModel->registrarAccion(
-                    'Eliminación de usuario: ' . $usuarioAEliminar['username'], 
+                    'Eliminación de cuenta: (ID: ' . $id_usuario . ')', 
                     MODULO_USUARIO, 
-                    $id_usuario_accion,
-                    ACCION_ELIMINAR,
-                    $id_usuario
+                    $_SESSION['id_usuario']
                 );
                 
                 echo json_encode(['status' => 'success']);
@@ -189,9 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $bitacoraModel->registrarAccion(
                     'Cambio de estatus a ' . $nuevoEstatus . ' para usuario ID: ' . $id_usuario, 
                     MODULO_USUARIO, 
-                    $id_usuario_accion,
-                    ACCION_CAMBIAR_ESTATUS,
-                    $id_usuario
+                    $_SESSION['id_usuario']
                 );
                 
                 echo json_encode(['status' => 'success']);
@@ -221,6 +195,9 @@ unset($rol);
 
 $pagina = "Usuarios";
 if (is_file("Vista/" . $pagina . ".php")) {
+    if (isset($_SESSION['id_usuario'])) {
+    $bitacoraModel->registrarAccion('Acceso al módulo de Usuarios', MODULO_USUARIO, $_SESSION['id_usuario']);
+}
     $usuarios = getusuarios();
     require_once("Vista/" . $pagina . ".php");
 } else {
