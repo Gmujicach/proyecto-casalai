@@ -1,4 +1,4 @@
-<?php if ($_SESSION['nombre_rol'] == 'Administrador') { ?>
+<?php if ($_SESSION['nombre_rol'] == 'Administrador' || (isset($_SESSION['nombre_rol']) && $_SESSION['nombre_rol'] === 'SuperUsuario')) { ?>
 
 <!DOCTYPE html>
 <html lang="es">

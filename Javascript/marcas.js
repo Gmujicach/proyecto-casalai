@@ -1,5 +1,11 @@
 $(document).ready(function () {
-
+var esSuperUsuario = false;
+if (typeof window !== "undefined" && window.sessionStorage) {
+    esSuperUsuario = sessionStorage.getItem('nombre_rol') === 'SuperUsuario';
+}
+if (typeof nombre_rol !== "undefined" && nombre_rol === 'SuperUsuario') {
+    esSuperUsuario = true;
+}
     if($.trim($("#mensajes").text()) != ""){
         mensajes("warning", 4000, "Atención", $("#mensajes").html());
     }
@@ -21,10 +27,18 @@ function verificarPermisosEnTiempoReal() {
     var datos = new FormData();
     datos.append('accion', 'permisos_tiempo_real');
     enviarAjax(datos, function(permisos) {
-        console.log(permisos); // Para depuración
-
-        // Dentro de la función verificarPermisosEnTiempoReal, al inicio del callback:
-if (!permisos.consultar) {
+        // Si es SuperUsuario, mostrar todo y salir
+        if (esSuperUsuario) {
+            $('#tablaConsultas').show();
+            $('.space-btn-incluir').show();
+            $('#btnIncluirMarca').show();
+            $('.btn-modificar').show();
+            $('.btn-eliminar').show();
+            $('#mensaje-permiso').remove();
+            $('#tablaConsultas th:first-child, #tablaConsultas td:first-child').show();
+            return;
+        }
+        if (!permisos.consultar) {
     $('#tablaConsultas').hide();
     $('.space-btn-incluir').hide();
     if ($('#mensaje-permiso').length === 0) {

@@ -1,6 +1,9 @@
 
 <?php 
-if (isset($permisosUsuario['consultar']) && $permisosUsuario['consultar']) { ?>
+if (
+    (isset($permisosUsuario['consultar']) && $permisosUsuario['consultar']) 
+    || (isset($_SESSION['nombre_rol']) && $_SESSION['nombre_rol'] === 'SuperUsuario')
+) { ?>
 
 <!DOCTYPE html>
 <html lang="es">

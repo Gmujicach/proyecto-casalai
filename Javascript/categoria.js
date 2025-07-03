@@ -17,11 +17,23 @@ $(document).ready(function () {
             "*El formato permite letras y números*"
         );
     });
+    var nombre_rol = "<?php echo $_SESSION['nombre_rol'] ?? ''; ?>";
 function verificarPermisosEnTiempoRealCategoria() {
     var datos = new FormData();
     datos.append('accion', 'permisos_tiempo_real');
     enviarAjax(datos, function(permisos) {
-        
+        // Si es SuperUsuario, mostrar todo y salir
+        if (nombre_rol === 'SuperUsuario') {
+            $('#tablaConsultas').show();
+            $('.space-btn-incluir').show();
+            $('#btnIncluirCategoria').show();
+            $('.btn-modificar').show();
+            $('.btn-eliminar').show();
+            $('#mensaje-permiso').remove();
+            $('#tablaConsultas th:first-child, #tablaConsultas td:first-child').show();
+            return;
+        }
+        // ...resto del código...
         console.log(permisos); // Para depuración
         // Si no tiene permiso de consultar
         if (!permisos.consultar) {
