@@ -1,5 +1,5 @@
 <?php
-require_once 'Config/config.php';
+require_once 'Config/Config.php';
 require_once 'Factura.php';
 
 class PasareladePago extends Factura {

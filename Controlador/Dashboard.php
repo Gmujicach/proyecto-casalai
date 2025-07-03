@@ -1,5 +1,5 @@
 <?php
-error_log($_SESSION['id_usuario']);
+
 if(is_file('Vista/'.$pagina.'.php')){
     require_once ('Vista/'.$pagina.'.php');  //si la pagina existe se carga su vista correspondiente
 }else{
