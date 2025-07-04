@@ -1,4 +1,4 @@
-<?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'SuperUsuario') {?>
+<?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Cliente' || $_SESSION['nombre_rol'] == 'SuperUsuario') {?>
 
 <?php require_once 'Modelo/Despacho.php' ; require_once 'Controlador/factura.php' ; ?>
     <!DOCTYPE html>

@@ -113,14 +113,19 @@ for ($i = 0; $i < $cap; $i++) {
 
 public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle)
 {
-    $d = array();
+    $d = [];
 
     try {
         $co = $this->getConexion();
         $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $co->beginTransaction();
 
-        // Actualizar la recepción principal
+        // Validación básica
+        if (empty($idRecepcion) || !is_array($idproducto) || !is_array($cantidad) || !is_array($costo)) {
+            throw new Exception("Datos de entrada inválidos");
+        }
+
+        // Actualizar cabecera de recepción
         $sqlRecepcion = "UPDATE tbl_recepcion_productos 
                          SET id_proveedor = :idproveedor, fecha = :fecha, correlativo = :correlativo 
                          WHERE id_recepcion = :idRecepcion";
@@ -131,111 +136,109 @@ public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetal
         $stmt->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
         $stmt->execute();
 
-        // Obtener los detalles actuales
+        // Obtener IDs actuales de detalles
         $sqlExistentes = "SELECT id_detalle_recepcion_productos FROM tbl_detalle_recepcion_productos WHERE id_recepcion = :idRecepcion";
         $stmt = $co->prepare($sqlExistentes);
         $stmt->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
         $stmt->execute();
         $detallesExistentes = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-        // Detectar detalles que deben ser eliminados
         $idsConservados = array_filter($iddetalle);
         $idsEliminar = array_diff($detallesExistentes, $idsConservados);
 
+        // Eliminar egresos y detalles que ya no están
+        if (!empty($idsEliminar)) {
+            $in = implode(',', array_fill(0, count($idsEliminar), '?'));
 
-if (!empty($idsEliminar)) {
-    $in = implode(',', array_fill(0, count($idsEliminar), '?'));
-    // Elimina egresos asociados
-    $sqlDeleteEgresos = "DELETE FROM tbl_ingresos_egresos WHERE id_detalle_recepcion_productos IN ($in)";
-    $stmt = $co->prepare($sqlDeleteEgresos);
-    foreach (array_values($idsEliminar) as $k => $id) {
-        $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
-    }
-    $stmt->execute();
+            $sqlDeleteEgresos = "DELETE FROM tbl_ingresos_egresos WHERE id_detalle_recepcion_productos IN ($in)";
+            $stmt = $co->prepare($sqlDeleteEgresos);
+            foreach (array_values($idsEliminar) as $k => $id) {
+                $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
+            }
+            $stmt->execute();
 
-    // Elimina detalles
-    $sqlDelete = "DELETE FROM tbl_detalle_recepcion_productos WHERE id_detalle_recepcion_productos IN ($in)";
-    $stmt = $co->prepare($sqlDelete);
-    foreach (array_values($idsEliminar) as $k => $id) {
-        $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
-    }
-    $stmt->execute();
-}
+            $sqlDeleteDetalles = "DELETE FROM tbl_detalle_recepcion_productos WHERE id_detalle_recepcion_productos IN ($in)";
+            $stmt = $co->prepare($sqlDeleteDetalles);
+            foreach (array_values($idsEliminar) as $k => $id) {
+                $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
+            }
+            $stmt->execute();
+        }
 
-        // Insertar o actualizar productos
-        $cap = count($idproducto);
-        $descripcion = "Compra: ";
-        $monto_total = 0;
+        // Insertar o actualizar detalles y egresos
+        for ($i = 0; $i < count($idproducto); $i++) {
+            $idProd = (int)$idproducto[$i];
+            $cant = (int)$cantidad[$i];
+            $cost = (float)$costo[$i];
+            $idDet = $iddetalle[$i] ?? null;
 
-for ($i = 0; $i < $cap; $i++) {
-    if (!empty($iddetalle[$i])) {
-        // Producto existente → actualizar detalle
-        $sqlUpdate = "UPDATE tbl_detalle_recepcion_productos 
-                      SET id_producto = :idproducto, cantidad = :cantidad, costo = :costo 
-                      WHERE id_detalle_recepcion_productos = :iddetalle";
-        $stmt = $co->prepare($sqlUpdate);
-        $stmt->bindParam(':idproducto', $idproducto[$i], PDO::PARAM_INT);
-        $stmt->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
-        $stmt->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
-        $stmt->bindParam(':iddetalle', $iddetalle[$i], PDO::PARAM_INT);
-        $stmt->execute();
+            // Obtener nombre del producto
+            $stmtNombre = $co->prepare("SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?");
+            $stmtNombre->execute([$idProd]);
+            $nombreProducto = $stmtNombre->fetchColumn();
+            if (!$nombreProducto) {
+                throw new Exception("Producto no encontrado con ID $idProd");
+            }
 
-        // Actualizar egreso existente
-        $sqlNombre = "SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?";
-        $stmtNombre = $co->prepare($sqlNombre);
-        $stmtNombre->execute([$idproducto[$i]]);
-        $nombreProducto = $stmtNombre->fetchColumn();
+            $descripcion = "Compra: {$nombreProducto} (x{$cant})";
+            $monto_total = $cant * $cost;
 
-        $descripcion = "Compra: {$nombreProducto} (x{$cantidad[$i]})";
-        $monto_total = $costo[$i] * $cantidad[$i];
+            if (!empty($idDet)) {
+                // Actualizar detalle existente
+                $sqlUpdateDetalle = "UPDATE tbl_detalle_recepcion_productos 
+                                     SET id_producto = ?, cantidad = ?, costo = ? 
+                                     WHERE id_detalle_recepcion_productos = ?";
+                $stmt = $co->prepare($sqlUpdateDetalle);
+                $stmt->execute([$idProd, $cant, $cost, $idDet]);
 
-        $sqlEgreso = "UPDATE tbl_ingresos_egresos 
-                      SET monto = ?, descripcion = ?, fecha = ?, estado = 1 
-                      WHERE id_detalle_recepcion_productos = ?";
-        $stmtEgreso = $co->prepare($sqlEgreso);
-        $stmtEgreso->execute([$monto_total, $descripcion, $this->fecha, $iddetalle[$i]]);
-    } else {
-        // Producto nuevo → insertar detalle
-        $sqlInsert = "INSERT INTO tbl_detalle_recepcion_productos (id_recepcion, id_producto, cantidad, costo) 
-                      VALUES (:idRecepcion, :idproducto, :cantidad, :costo)";
-        $stmt = $co->prepare($sqlInsert);
-        $stmt->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
-        $stmt->bindParam(':idproducto', $idproducto[$i], PDO::PARAM_INT);
-        $stmt->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
-        $stmt->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
-        $stmt->execute();
+                // Actualizar egreso asociado
+                $sqlUpdateEgreso = "UPDATE tbl_ingresos_egresos 
+                                    SET monto = ?, descripcion = ?, fecha = ?, estado = 1 
+                                    WHERE id_detalle_recepcion_productos = ?";
+                $stmt = $co->prepare($sqlUpdateEgreso);
+                $stmt->execute([$monto_total, $descripcion, $this->fecha, $idDet]);
 
-        $idDetalle = $co->lastInsertId();
+            } else {
+                // Insertar nuevo detalle
+                $sqlInsertDetalle = "INSERT INTO tbl_detalle_recepcion_productos 
+                                     (id_recepcion, id_producto, cantidad, costo) 
+                                     VALUES (?, ?, ?, ?)";
+                $stmt = $co->prepare($sqlInsertDetalle);
+                $stmt->execute([$idRecepcion, $idProd, $cant, $cost]);
 
-        // Insertar egreso para este detalle
-        $sqlNombre = "SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?";
-        $stmtNombre = $co->prepare($sqlNombre);
-        $stmtNombre->execute([$idproducto[$i]]);
-        $nombreProducto = $stmtNombre->fetchColumn();
+                $nuevoIdDetalle = $co->lastInsertId();
 
-        $descripcion = "Compra: {$nombreProducto} (x{$cantidad[$i]})";
-        $monto_total = $costo[$i] * $cantidad[$i];
+                // Insertar nuevo egreso
+                $sqlInsertEgreso = "INSERT INTO tbl_ingresos_egresos 
+                                    (tipo, monto, descripcion, fecha, estado, id_detalle_recepcion_productos) 
+                                    VALUES ('egreso', ?, ?, ?, 1, ?)";
+                $stmt = $co->prepare($sqlInsertEgreso);
+                $stmt->execute([$monto_total, $descripcion, $this->fecha, $nuevoIdDetalle]);
+            }
+        }
 
-        $sqlEgreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_detalle_recepcion_productos)
-                      VALUES ('egreso', ?, ?, ?, 1, ?)";
-        $stmtEgreso = $co->prepare($sqlEgreso);
-        $stmtEgreso->execute([$monto_total, $descripcion, $this->fecha, $idDetalle]);
-    }
-}
+        // Confirmar transacción
         $co->commit();
         $d['resultado'] = 'modificarRecepcion';
-        $d['mensaje'] = 'Se modificó la recepción y sus productos correctamente, y el egreso fue actualizado.';
+        $d['mensaje'] = 'Recepción modificada correctamente.';
 
-    } catch (Exception $e) {
+    } catch (PDOException $pdoEx) {
         if ($co->inTransaction()) {
             $co->rollBack();
         }
         $d['resultado'] = 'error';
-        $d['mensaje'] = $e->getMessage();
+        $d['mensaje'] = 'Error de base de datos: ' . $pdoEx->getMessage();
+    } catch (Exception $ex) {
+        if ($co->inTransaction()) {
+            $co->rollBack();
+        }
+        $d['resultado'] = 'error';
+        $d['mensaje'] = 'Excepción: ' . $ex->getMessage();
     }
 
     return $d;
 }
+
 
 	
 	

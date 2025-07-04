@@ -50,7 +50,7 @@ case 'permisos_tiempo_real':
 
                 $bitacoraModel->registrarAccion(
                     'Creación de recepción: ' . $_POST['correlativo'], 
-                    MODULO_DESPACHO,
+                    MODULO_RECEPCION,
                     $_SESSION['id_usuario']
                 );
                 
@@ -86,40 +86,68 @@ case 'permisos_tiempo_real':
                 break;
 
 case 'modificarRecepcion':
-    $idRecepcion = $_POST['id_recepcion'] ?? null;
-    $idproducto = $_POST['productos'] ?? [];
-    $cantidad = $_POST['cantidades'] ?? [];
-    $costo = $_POST['costos'] ?? [];   
-    $iddetalle = $_POST['iddetalles'] ?? [];
+    try {
+        $idRecepcion = $_POST['id_recepcion'] ?? null;
+        $idproducto = $_POST['productos'] ?? [];
+        $cantidad   = $_POST['cantidades'] ?? [];
+        $costo      = $_POST['costos'] ?? [];
+        $iddetalle  = $_POST['iddetalles'] ?? [];
 
-    $k->setidproveedor($_POST['proveedor']);
-    $k->setcorrelativo($_POST['correlativo']);
-    $k->setfecha($_POST['fecha']);
+        if (!$idRecepcion) {
+            throw new Exception('ID de recepción faltante o inválido');
+        }
 
-    if ($idRecepcion) {
-        $respuesta = $k->modificar(
-            $idRecepcion,
-            $idproducto,
-            $cantidad,
-            $costo,
-            $iddetalle
-        );
+        if (
+            count($idproducto) !== count($cantidad) ||
+            count($idproducto) !== count($costo) ||
+            count($idproducto) !== count($iddetalle)
+        ) {
+            throw new Exception('La cantidad de productos, costos, cantidades o ID de detalles no coincide');
+        }
+
+        if (empty($_POST['proveedor']) || empty($_POST['correlativo']) || empty($_POST['fecha'])) {
+            throw new Exception('Faltan campos obligatorios (proveedor, correlativo o fecha)');
+        }
+
+        $k->setidproveedor($_POST['proveedor']);
+        $k->setcorrelativo($_POST['correlativo']);
+        $k->setfecha($_POST['fecha']);
+
+        $respuesta = $k->modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle);
+
         if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificarRecepcion') {
-            $bitacoraModel->registrarAccion('Modificación de Recepción: ' . $respuesta['correlativo'], MODULO_RECEPCION, $_SESSION['id_usuario']);
+            // ✅ Aquí agregamos la respuesta JSON esperada
+            $bitacoraModel->registrarAccion(
+                'Modificación de Recepción: ' . $_POST['correlativo'],
+                MODULO_RECEPCION,
+                $_SESSION['id_usuario']
+            );
+
             echo json_encode([
                 'status' => 'success',
-                'message' => $respuesta['mensaje']
+                'message' => $respuesta['mensaje'] ?? 'Recepción modificada exitosamente.'
             ]);
         } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => $respuesta['mensaje'] ?? 'Error al modificar la recepción'
-            ]);
+            throw new Exception($respuesta['mensaje'] ?? 'Error desconocido al modificar la recepción');
         }
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'ID de recepción faltante']);
+
+    } catch (Exception $e) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Error al modificar la recepción: ' . $e->getMessage(),
+            'debug' => [
+                'id_recepcion' => $idRecepcion ?? null,
+                'productos' => $idproducto,
+                'cantidades' => $cantidad,
+                'costos' => $costo,
+                'iddetalles' => $iddetalle,
+                'POST' => $_POST
+            ]
+        ]);
     }
     break;
+
+
 
             default:
                 echo json_encode(['status' => 'error', 'message' => 'Acción no válida '.$accion.'']);

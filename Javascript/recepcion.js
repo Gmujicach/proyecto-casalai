@@ -1,46 +1,73 @@
 $(document).ready(function () {
-    $(document).on('submit', '#formularioEdicion', function(e) {
-        e.preventDefault();
+$(document).on('submit', '#formularioEdicion', function (e) {
+    e.preventDefault();
 
-        var formData = new FormData(this);
-        formData.append('accion', 'modificarRecepcion');
+    var formData = new FormData(this);
+    formData.append('accion', 'modificarRecepcion');
 
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function(response) {
-                try {
-                    response = typeof response === "object" ? response : JSON.parse(response);
-                } catch (e) {
-                    Swal.fire('Error', 'Respuesta inesperada del servidor', 'error');
-                    return;
-                }
+    $.ajax({
+        url: '',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (response) {
+            console.log("Respuesta del servidor (raw):", response);
 
-                if (response.status === 'success') {
-                    $('#modalModificar').modal('hide');
-                    setTimeout(function() {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Modificado',
-                            text: response.message
-                        }).then(() => {
-                            location.reload();
-                        });
-                    }, 500);
-                } else {
-                    Swal.fire('Error', response.message, 'error');
-                }
-            },
-            error: function() {
-                Swal.fire('Error', 'Error al modificar la recepción.', 'error');
+            try {
+                // Intentar parsear respuesta JSON si es string
+                response = typeof response === "object" ? response : JSON.parse(response);
+            } catch (err) {
+                console.error("Error al parsear JSON:", err, "Respuesta recibida:", response);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Respuesta',
+                    text: 'La respuesta del servidor no es válida. Revisa la consola para más detalles.'
+                });
+                return;
             }
-        });
+
+            if (response.status === 'success') {
+                $('#modalModificar').modal('hide');
+                setTimeout(function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: response.message || 'Recepción modificada correctamente.'
+                    }).then(() => {
+                        location.reload();
+                    });
+                }, 500);
+            } else {
+                console.warn("Error desde el backend:", response);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error en la modificación',
+                    text: response.message || 'Ocurrió un error al modificar. Revisa la consola.'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error AJAX:");
+            console.error("Estado:", status);
+            console.error("Código HTTP:", xhr.status);
+            console.error("Mensaje:", error);
+            console.error("Respuesta del servidor:", xhr.responseText);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de red o servidor',
+                html: `
+                    <b>Código HTTP:</b> ${xhr.status}<br>
+                    <b>Estado:</b> ${status}<br>
+                    <b>Mensaje:</b> ${error}
+                `
+            });
+        }
     });
-    
+});
+
     $('#btnIncluirRecepcion').on('click', function() {
         $('#f')[0].reset();
         $('#scorrelativo').text('');

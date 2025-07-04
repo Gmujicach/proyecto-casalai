@@ -1,5 +1,5 @@
 <?php include 'header.php'; ?>
-<title>Gestionar Despachos</title>
+<title>Gestionar Facturas</title>
 </head>
 
 <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">

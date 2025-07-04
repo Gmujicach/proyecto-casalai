@@ -21,17 +21,17 @@ $(document).on('submit', '#formularioEdicion', function(e) {
             }
 
             if (response.status === 'success') {
-    $('#modalModificar').modal('hide');
-    $('.modal-backdrop').remove();
-$('body').removeClass('modal-open');
-    if (response.tbody) {
-        $('#tablaConsultas tbody').html(response.tbody);
-    }
-    Swal.fire({
-        icon: 'success',
-        title: 'Modificado',
-        text: response.message
-    });
+                $('#modalModificar').modal('hide');
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open');
+            if (response.tbody) {
+                $('#tablaConsultas tbody').html(response.tbody);
+            }
+            Swal.fire({
+                icon: 'success',
+                title: 'Modificado',
+                text: response.message
+            });
 } else {
     Swal.fire('Error', response.message, 'error');
 }

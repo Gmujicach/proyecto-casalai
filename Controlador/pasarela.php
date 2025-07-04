@@ -6,7 +6,7 @@ require_once 'Modelo/Factura.php';
 require_once 'Modelo/Permisos.php';
 require_once 'Modelo/Bitacora.php';
 define('MODULO_PASARELA_PAGOS', 16); // Define el ID
-
+$bitacoraModel = new Bitacora();
 $id_rol = $_SESSION['id_rol'];
 
 if (isset($_SESSION['id_usuario'])) {

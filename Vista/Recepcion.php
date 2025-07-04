@@ -314,89 +314,108 @@
       </div>
         </form>
     </div>
-  </div>
+  </div>productos
 </div>
 <script>
 const proveedoresDisponibles = <?= json_encode($proveedores) ?>;
 </script>
 	<script>
 const productosDisponibles = <?= json_encode($productos) ?>;
+console.log("Productos disponibles:", productosDisponibles);
 
-$(document).on('click', '.btn-modificar', function (e) {
+$(document).on('click', '.btn-modificar', function(e) {
     e.preventDefault();
+    e.stopPropagation();
 
-    let idRecepcion = $(this).data('idrecepcion');
-    let correlativo = $(this).data('correlativo');
-    let fecha = $(this).data('fecha');
-    let proveedor = $(this).data('proveedor');
-    let productos = $(this).data('productos');
+    const btn = $(this);
+    const idRecepcion = btn.data('idrecepcion');
+    const correlativo = btn.data('correlativo');
+    const fecha = btn.data('fecha');
+    const proveedor = btn.data('proveedor');
+    let productos = btn.data('productos');
 
-    if (typeof productos === "string") {
-        try {
+    // Limpiar el modal
+    $('#modalIdRecepcion').val('');
+    $('#modalCorrelativo').val('');
+    $('#modalFecha').val('');
+    $('#modalProveedor').empty();
+    $('#contenedorDetalles').empty();
+
+    // Parsear productos si es necesario
+    try {
+        if (typeof productos === 'string') {
             productos = JSON.parse(productos);
-        } catch(e) {
-            productos = [];
         }
+    } catch (e) {
+        console.error('Error al parsear productos:', e);
+        productos = [];
     }
-    console.log("Productos para el modal:", productos);
 
     // Llenar campos básicos
     $('#modalIdRecepcion').val(idRecepcion);
     $('#modalCorrelativo').val(correlativo);
     $('#modalFecha').val(fecha);
 
-        // Llenar select de proveedor con opciones
-    let selectProveedor = $('#modalProveedor');
-    selectProveedor.empty();
-    selectProveedor.append('<option value="">Seleccione un proveedor</option>');
-    proveedoresDisponibles.forEach(function(prov) {
+    // Llenar select de proveedor
+    const selectProveedor = $('#modalProveedor');
+    selectProveedor.empty().append('<option value="">Seleccione un proveedor</option>');
+    
+    proveedoresDisponibles.forEach(prov => {
         selectProveedor.append(
-            `<option value="${prov.id_proveedor}">${prov.nombre_proveedor}</option>`
+            $(`<option value="${prov.id_proveedor}">${prov.nombre_proveedor}</option>`)
         );
     });
-
-    // Llenar select de proveedor
+    
     selectProveedor.val(proveedor);
 
-    // Generar HTML de productos existentes
+    // Generar HTML para productos - ESTA ES LA PARTE CLAVE QUE LLENA LOS SELECTS
     let html = '';
-    if (productos && Array.isArray(productos)) {
+    if (Array.isArray(productos) && productos.length) {
         productos.forEach((item, index) => {
             html += `
-                <div class="row mb-2 grupo-producto">
+                <div class="row mb-3 grupo-producto">
                     <div class="col-md-5">
-                        <label>Producto</label>
-                        <select class="form-control" name="productos[]">
+                        <label class="form-label">Producto</label>
+                        <select class="form-select" name="productos[]" required>
+                            <option value="">Seleccione un producto</option>
                             ${productosDisponibles.map(prod => `
-                                <option value="${prod.id_producto}" ${item.id_producto == prod.id_producto ? 'selected' : ''}>
+                                <option value="${prod.id_producto}" 
+                                    ${item.id_producto == prod.id_producto ? 'selected' : ''}>
                                     ${prod.nombre_producto}
                                 </option>
                             `).join('')}
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label>Cantidad</label>
-                        <input type="number" class="form-control" name="cantidades[]" value="${item.cantidad}">
+                    <div class="col-md-2">
+                        <label class="form-label">Cantidad</label>
+                        <input type="number" class="form-control" 
+                               name="cantidades[]" value="${item.cantidad || 1}" 
+                               min="1" required>
                     </div>
                     <div class="col-md-2">
-                        <label>Costo</label>
-                        <input type="number" class="form-control" name="costos[]" value="${item.costo}">
+                        <label class="form-label">Costo</label>
+                        <input type="number" class="form-control" 
+                               name="costos[]" value="${item.costo || 0}" 
+                               min="0" step="0.01" required>
                         <input type="hidden" name="iddetalles[]" value="${item.iddetalles || ''}">
                     </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="button" class="btn btn-danger btn-eliminar-producto">Eliminar Producto</button>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger btn-eliminar-producto">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
                     </div>
                 </div>
             `;
         });
     } else {
-        html = '<p>No se encontraron productos.</p>';
+        html = '<div class="alert alert-info">No se encontraron productos para esta recepción</div>';
     }
 
     $('#contenedorDetalles').html(html);
-
-    // Mostrar modal
-    $('#modalModificar').modal('show');
+    
+    // Mostrar el modal
+    const modal = new bootstrap.Modal(document.getElementById('modalModificar'));
+    modal.show();
 });
 // Función para crear un nuevo bloque vacío de producto
 function crearBloqueProducto(productosDisponibles) {

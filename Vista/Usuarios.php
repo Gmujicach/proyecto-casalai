@@ -168,10 +168,14 @@
                     </span>
                 </td>
                 <td>
+
                     <span
+                        <?php if (strtolower($usuario['nombre_rol']) !== 'superusuario'): ?>
                         class="campo-estatus <?php echo ($usuario['estatus'] == 'habilitado') ? 'habilitado' : 'inhabilitado'; ?>"
                         data-id="<?php echo $usuario['id_usuario']; ?>" style="cursor: pointer;">
                         <?php echo htmlspecialchars($usuario['estatus']); ?>
+
+                            <?php endif; ?>
                     </span>
                 </td>
             </tr>
