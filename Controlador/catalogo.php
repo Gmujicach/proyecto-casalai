@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once 'Modelo/Productos.php';
-require_once 'Modelo/Bitacora.php';
+require_once 'Modelo/bitacora.php';
 require_once 'Librerias/pdf.php'; // Para generación de PDFs
 
 // Definir constantes para IDs de módulo
