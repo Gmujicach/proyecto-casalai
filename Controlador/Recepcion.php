@@ -13,7 +13,7 @@ if (!is_file("Modelo/" . $pagina . ".php")) {
 require_once("Modelo/" . $pagina . ".php");
 $k = new Recepcion();
 require_once 'Modelo/Permisos.php';
-require_once 'Modelo/Bitacora.php';
+require_once 'Modelo/bitacora.php';
 define('MODULO_RECEPCION', 2); // Define el ID del módulo de cuentas bancarias
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
