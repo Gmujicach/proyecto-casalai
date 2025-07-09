@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once 'Modelo/Usuarios.php';
 require_once 'Modelo/Permisos.php';
-require_once 'Modelo/Bitacora.php';
+require_once 'Modelo/bitacora.php';
 define('MODULO_USUARIO', 1); // Define el ID del módulo de cuentas bancarias
 
 
