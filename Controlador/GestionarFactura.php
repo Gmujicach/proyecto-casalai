@@ -7,14 +7,14 @@ if (!is_file("modelo/factura.php")) {
 
 require_once("modelo/factura.php");
 
-if (is_file("vista/GestionarFactura.php")) {
+if (is_file("vista/gestionarfactura.php")) {
     $factura = new Factura();
     
     if (isset($_POST['descargarFactura'])) {
     $id_factura = $_POST['descargarFactura'];
     $factura->setId($id_factura);
     $res = $factura->facturaTransaccion('DescargarFactura');
-    require_once("vista/descargarFactura.php");
+    require_once("vista/descargarfactura.php");
     exit; // para evitar que se ejecute el resto
 }
 
@@ -62,7 +62,7 @@ if (is_file("vista/GestionarFactura.php")) {
 
     
 
-    require_once("vista/GestionarFactura.php");
+    require_once("vista/gestionarfactura.php");
 
 } else {
     echo "Página en construcción";
