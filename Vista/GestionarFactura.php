@@ -38,10 +38,10 @@
 
     <?php include 'footer.php'; ?>
         <!-- Bootstrap JS -->
-    <script src="Javascript/factura.js"></script>
+    <script src="javascript/factura.js"></script>
     <script src='public/bootstrap/js/bootstrap.bundle.min.js'></script>
     <script src='public/bootstrap/css/bootstrap.min.css'></script>
-    <script src="Javascript/validaciones.js"></script>
+    <script src="javascript/validaciones.js"></script>
 
 
 

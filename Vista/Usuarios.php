@@ -362,7 +362,7 @@ document.getElementById('descargarPDFUsuarios').addEventListener('click', functi
 
         <!-- Modal de eliminación -->
         <?php include 'footer.php'; ?>
-        <script src="Javascript/usuario.js"></script>
+        <script src="javascript/usuario.js"></script>
         <script src="public/bootstrap/js/sidebar.js"></script>
         <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="public/js/jquery-3.7.1.min.js"></script>

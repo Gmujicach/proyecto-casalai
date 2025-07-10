@@ -198,9 +198,9 @@
   <script src="public/js/jquery.dataTables.min.js"></script>
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatable.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
-<script src="Javascript/validaciones.js"></script>
-<script src="Javascript/pasarela.js"></script>
+  <script src="javascript/sweetalert2.all.min.js"></script>
+<script src="javascript/validaciones.js"></script>
+<script src="javascript/pasarela.js"></script>
 <script>
   // Este bloque impide el retroceso y redirige al usuario
   (function () {

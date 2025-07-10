@@ -48,8 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-<script src="Javascript/tabla.js"></script>
-<script src="Javascript/new_menu.js"></script>
+<script src="javascript/tabla.js"></script>
+<script src="javascript/new_menu.js"></script>
 
     <!-- Bootstrap JS -->
   <script src='public/bootstrap/js/bootstrap.bundle.min.js'></script>
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatables.min.js"></script>
   <script src="public/js/sweetalert2.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
+  <script src="javascript/sweetalert2.all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="public/js/jquery.dataTables.min.js"></script>
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
@@ -70,4 +70,4 @@ document.addEventListener("DOMContentLoaded", function () {
   
   <script src="public/js/jquery.min.js"></script>
 <script src="public/js/popper.min.js"></script>
-<script src="Javascript/js/bootstrap.min.js"></script>
+<script src="javascript/js/bootstrap.min.js"></script>

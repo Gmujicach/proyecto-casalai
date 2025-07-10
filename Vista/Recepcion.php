@@ -458,7 +458,7 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 
-	<script type="text/javascript" src="Javascript/recepcion.js"></script>
+	<script type="text/javascript" src="javascript/recepcion.js"></script>
 <script src="public/js/chart.js"></script>
 <script src="public/js/html2canvas.min.js"></script>
 <script src="public/js/jspdf.umd.min.js"></script>

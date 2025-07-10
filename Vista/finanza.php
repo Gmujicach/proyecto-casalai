@@ -118,7 +118,7 @@
 <script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/jquery-3.7.1.min.js"></script>
-<script src="Javascript/finanza.js"></script>
+<script src="javascript/finanza.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

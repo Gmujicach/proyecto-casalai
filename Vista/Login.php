@@ -194,7 +194,7 @@
       </div>
     </div>
     <?php include 'footer.php'; ?>
-    <script src="Javascript/darckort-login.js"></script>
-    <script src="Javascript/login.js"></script>
+    <script src="javascript/darckort-login.js"></script>
+    <script src="javascript/login.js"></script>
   </body>
 </html>

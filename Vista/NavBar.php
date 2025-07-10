@@ -44,4 +44,4 @@
 
 <script src="public/js/jquery.min.js"></script>
 <script src="public/js/popper.min.js"></script>
-<script src="Javascript/js/bootstrap.min.js"></script>
+<script src="javascript/js/bootstrap.min.js"></script>

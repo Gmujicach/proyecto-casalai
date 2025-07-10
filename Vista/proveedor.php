@@ -450,7 +450,7 @@ aria-labelledby="PedidoProductoModalLabel" aria-hidden="true">
 </div>
 
 <?php include 'footer.php'; ?>
-<script src="Javascript/proveedor.js"></script>
+<script src="javascript/proveedor.js"></script>
 <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>

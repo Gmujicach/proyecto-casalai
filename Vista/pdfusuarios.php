@@ -52,11 +52,11 @@ if (!isset($_SESSION['name'])) {
 	
 </div> <!-- fin de container -->
 
-<script src="Javascript/sweetalert2.all.min.js"></script>
+<script src="javascript/sweetalert2.all.min.js"></script>
 <script src="public/js/jquery.min.js"></script>
-<script src="Javascript/js/jquery-3.5.1.min.js"></script>
-<script src="Javascript/js/popper.min.js"></script>
-<script src="Javascript/js/boostrap.min.js"></script>
+<script src="javascript/js/jquery-3.5.1.min.js"></script>
+<script src="javascript/js/popper.min.js"></script>
+<script src="javascript/js/boostrap.min.js"></script>
 
 
 </body>

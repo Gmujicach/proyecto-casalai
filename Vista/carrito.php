@@ -96,8 +96,8 @@
     <script src="public/js/jquery.dataTables.min.js"></script>
     <script src="public/js/dataTables.bootstrap5.min.js"></script>
     <script src="public/js/datatable.js"></script>
-    <script src="Javascript/sweetalert2.all.min.js"></script>
-    <script src="Javascript/carrito.js"></script>
+    <script src="javascript/sweetalert2.all.min.js"></script>
+    <script src="javascript/carrito.js"></script>
 </body>
 </html>
 

@@ -180,13 +180,13 @@
 
         </div>
         <!--fin de seccion modal-->
-        <script src="Javascript/factura.js"></script>
+        <script src="javascript/factura.js"></script>
 
 
 
 
         <?php include 'footer.php'; ?>
-        <script src="Javascript/validaciones.js"></script>
+        <script src="javascript/validaciones.js"></script>
     </body>
 
     </html>

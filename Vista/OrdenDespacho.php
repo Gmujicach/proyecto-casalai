@@ -192,10 +192,10 @@
   <script src="public/js/jquery.dataTables.min.js"></script>
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatable.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
-<script src="Javascript/usuario.js"></script>
-<script src="Javascript/validaciones.js"></script>
-<script src="Javascript/ordendespacho.js"></script>
+  <script src="javascript/sweetalert2.all.min.js"></script>
+<script src="javascript/usuario.js"></script>
+<script src="javascript/validaciones.js"></script>
+<script src="javascript/ordendespacho.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>

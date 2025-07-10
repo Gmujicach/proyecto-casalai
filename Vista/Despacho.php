@@ -503,8 +503,8 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 });
 </script>
 
-    <script src="Javascript/despacho.js"></script>
-    <script src="Javascript/validaciones.js"></script>
+    <script src="javascript/despacho.js"></script>
+    <script src="javascript/validaciones.js"></script>
 
 
 </body>

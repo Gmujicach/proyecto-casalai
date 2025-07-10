@@ -237,12 +237,12 @@ aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
 
 </div>
 
-<script src="Javascript/js/jquery.min.js"></script>
-<script src="Javascript/js/jquery-3.5.1.min.js"></script>
+<script src="javascript/js/jquery.min.js"></script>
+<script src="javascript/js/jquery-3.5.1.min.js"></script>
 <script src="public/js/popper.min.js"></script>
-<script src="Javascript/js/bootstrap.min.js"></script>
+<script src="javascript/js/bootstrap.min.js"></script>
 
-<script src="Javascript/cliente.js"></script>
+<script src="javascript/cliente.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>

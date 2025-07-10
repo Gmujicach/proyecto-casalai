@@ -59,7 +59,7 @@
 <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
-<script src="Javascript/bitacora.js"></script>
+<script src="javascript/bitacora.js"></script>
 </body>
 </html>
 

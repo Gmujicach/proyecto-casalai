@@ -158,7 +158,7 @@
 </div>
 
         <?php include 'footer.php'; ?>
-        <script src="Javascript/categoria.js"></script>
+        <script src="javascript/categoria.js"></script>
         <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="public/js/jquery-3.7.1.min.js"></script>
         <script src="public/bootstrap/js/sidebar.js"></script>
