@@ -20,7 +20,7 @@ if (is_file("vista/" . $pagina . ".php")) {
                 $_SESSION['nombre_rol'] = $m['nombre_rol'];
                 $_SESSION['id_usuario'] = $m['id_usuario'];
                 $_SESSION['id_rol'] = $m['id_rol'];
-                header('Location: ?pagina=Dashboard');
+                header('Location: ?pagina=dashboard');
                 die();
             } else {
                 $mensaje = $m['mensaje'];
