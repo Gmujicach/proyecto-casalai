@@ -104,7 +104,7 @@
         }
 
         .fondo {
-            background-image: url(IMG/fondo.jpg);
+            background-image: url(img/fondo.jpg);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -206,7 +206,7 @@
                                                 <?php if (!empty($producto['imagen'])): ?>
                                                     <img src="<?= htmlspecialchars($producto['imagen']) ?>" class="product-image"
                                                         alt="<?= htmlspecialchars($producto['nombre_producto']) ?>"
-                                                        onerror="this.src='IMG/placeholder-product.png'">
+                                                        onerror="this.src='img/placeholder-product.png'">
                                                 <?php else: ?>
                                                     <div class="product-image img-placeholder">
                                                         <i class="bi bi-image"></i>
@@ -292,7 +292,7 @@
                                             ?>
                                                     <img src="<?= htmlspecialchars($producto['imagen']) ?>" class="combo-image <?= $imagenesMostradas == 1 ? 'combo-main-image' : '' ?>"
                                                         alt="<?= htmlspecialchars($producto['nombre_producto']) ?>"
-                                                        onerror="this.src='IMG/placeholder-product.png'">
+                                                        onerror="this.src='img/placeholder-product.png'">
                                             <?php
                                                 endif;
                                             endforeach;

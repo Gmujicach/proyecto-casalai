@@ -14,7 +14,7 @@ class PDF extends FPDF {
     // Cabecera de pagina
     function Header() {
         // Logo
-        $image_file = 'IMG/logo.jpg';
+        $image_file = 'img/logo.jpg';
         if (file_exists($image_file)) {
             $this->Image($image_file, 10, 10, 30);
         }

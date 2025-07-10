@@ -3,7 +3,7 @@
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 <?php include 'newnavbar.php'; ?>
 
 <div class="contenedor-tabla">
@@ -45,7 +45,7 @@
                 <td>
                     <div class="acciones-boton">
                         <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                            <img src="img/more_opcion.svg" alt="Ícono" width="16" height="16">
                         </i>
                         <div class="desplegable">
                             <ul><?php  if($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista'){ ?>

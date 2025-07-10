@@ -24,7 +24,7 @@
   </head>
 
   <body class="fondo"
-    style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
     <?php include 'newnavbar.php'; ?>
 
@@ -190,7 +190,7 @@
           <?php foreach ($productos as $producto): ?>
                             <?php
                 $id = $producto['id_producto'];
-                $ruta_base = 'IMG/productos/';
+                $ruta_base = 'img/productos/';
                 $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
 
                 $ruta_imagen = '';
@@ -248,7 +248,7 @@ foreach ($caracteristicas as $clave => $valor) {
                 if (!empty($ruta_imagen)) {
                   echo '<img src="' . htmlspecialchars($ruta_imagen) . '" alt="Foto del producto" class="foto-producto">';
                 } else {
-                  echo '<img src="IMG/no-disponible.png" alt="No disponible" class="foto-producto">';
+                  echo '<img src="img/no-disponible.png" alt="No disponible" class="foto-producto">';
                 }
                 ?>
               </td>

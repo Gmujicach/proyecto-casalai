@@ -12,7 +12,7 @@
 
 <?php include 'newnavbar.php'; ?>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <div class="contenedor-tabla">
     <h3>Gestión de Respaldos</h3>

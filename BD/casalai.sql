@@ -542,20 +542,20 @@ CREATE TABLE `tbl_productos` (
 --
 
 INSERT INTO `tbl_productos` (`id_producto`, `serial`, `nombre_producto`, `descripcion_producto`, `id_modelo`, `id_categoria`, `stock`, `stock_minimo`, `stock_maximo`, `clausula_garantia`, `precio`, `estado`, `imagen`) VALUES
-(28, '0001', 'Impresora Super', 'Impresora multifuncional con función wifi', 6, 11, 50, 10, 100, 'Garantia Valida hasta los 3 meses ', 1000.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(29, '0002', 'Impresora Maxi', 'Impresora de Punta de fibra de vidrio para oficina', 37, 11, 50, 10, 100, 'Garantía para 1 mes', 1500.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(30, '0003', 'Impresora KING', 'Impresora de Escáner Laser de Ultima Generación', 34, 11, 50, 10, 100, 'Garantía valida en los primeros 365 días', 2000.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(31, '0004', 'Colormedia', 'Tintas multicolor para Impresoras Epson', 16, 12, 20, 10, 50, 'Sin Garantía', 10.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(32, '0005', 'Tinta Arcoiris', 'Tintas de multi color duraderas para impresoras', 23, 12, 20, 5, 50, 'Sin Garantía', 8.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(33, '0006', 'ImpriColor', 'Tintas Profesionales de 4 colores', 26, 12, 30, 10, 70, 'Sin Garantía', 12.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(34, '0007', 'Caja de Color', 'Cartuchos de Tintas para Impresion', 8, 13, 10, 5, 20, 'Garantía de 1 mes de duración', 120.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(35, '0008', 'ColorBox', 'Cartuchos de Tinta Profesional tamaño XL', 49, 13, 7, 5, 20, 'Garantía de 1 mes de duración', 100.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(36, '0009', 'Colors Pandora', 'Cartuchos de Tinta Para Impresoras HP', 9, 13, 10, 5, 25, 'Garantía de 1 mes de duración', 130.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(37, '0010', 'GigaVoltio', 'Protector de Voltaje para uso domestico', 50, 14, 12, 10, 40, 'Garantía de 1 mes de duración', 60.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(38, '0011', 'ProtecVoltorb', 'Protector de Voltaje para Neveras', 76, 14, 16, 5, 20, 'Garantía de 1 mes de duración', 25.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(39, '0012', 'ThunderBolt', 'Protector de Voltaje de uso Empresarial', 52, 14, 7, 3, 15, 'Garantía de 1 mes de duración', 250.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(40, '0013', 'Clips de papel', 'Clips para actividades académicas', 31, 15, 20, 10, 100, 'Garantía de 1 mes de duración', 5.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
-(41, '0014', 'Rema de Papel ', 'Rema de papel de oficina con 200 hojas blancas ', 38, 15, 15, 5, 50, 'Sin Garantia', 3.00, 'habilitado', 'IMG\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg');
+(28, '0001', 'Impresora Super', 'Impresora multifuncional con función wifi', 6, 11, 50, 10, 100, 'Garantia Valida hasta los 3 meses ', 1000.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(29, '0002', 'Impresora Maxi', 'Impresora de Punta de fibra de vidrio para oficina', 37, 11, 50, 10, 100, 'Garantía para 1 mes', 1500.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(30, '0003', 'Impresora KING', 'Impresora de Escáner Laser de Ultima Generación', 34, 11, 50, 10, 100, 'Garantía valida en los primeros 365 días', 2000.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(31, '0004', 'Colormedia', 'Tintas multicolor para Impresoras Epson', 16, 12, 20, 10, 50, 'Sin Garantía', 10.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(32, '0005', 'Tinta Arcoiris', 'Tintas de multi color duraderas para impresoras', 23, 12, 20, 5, 50, 'Sin Garantía', 8.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(33, '0006', 'ImpriColor', 'Tintas Profesionales de 4 colores', 26, 12, 30, 10, 70, 'Sin Garantía', 12.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(34, '0007', 'Caja de Color', 'Cartuchos de Tintas para Impresion', 8, 13, 10, 5, 20, 'Garantía de 1 mes de duración', 120.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(35, '0008', 'ColorBox', 'Cartuchos de Tinta Profesional tamaño XL', 49, 13, 7, 5, 20, 'Garantía de 1 mes de duración', 100.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(36, '0009', 'Colors Pandora', 'Cartuchos de Tinta Para Impresoras HP', 9, 13, 10, 5, 25, 'Garantía de 1 mes de duración', 130.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(37, '0010', 'GigaVoltio', 'Protector de Voltaje para uso domestico', 50, 14, 12, 10, 40, 'Garantía de 1 mes de duración', 60.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(38, '0011', 'ProtecVoltorb', 'Protector de Voltaje para Neveras', 76, 14, 16, 5, 20, 'Garantía de 1 mes de duración', 25.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(39, '0012', 'ThunderBolt', 'Protector de Voltaje de uso Empresarial', 52, 14, 7, 3, 15, 'Garantía de 1 mes de duración', 250.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(40, '0013', 'Clips de papel', 'Clips para actividades académicas', 31, 15, 20, 10, 100, 'Garantía de 1 mes de duración', 5.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg'),
+(41, '0014', 'Rema de Papel ', 'Rema de papel de oficina con 200 hojas blancas ', 38, 15, 15, 5, 50, 'Sin Garantia', 3.00, 'habilitado', 'img\\productos\\lucid_realism_create_an_image_of_a_sleek_silver_and_modern_3D__0.jpg');
 
 -- --------------------------------------------------------
 

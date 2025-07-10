@@ -17,7 +17,7 @@
         }
     </style>
 </head>
-<body class="fondo" style="background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 100vh;">
+<body class="fondo" style="background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 100vh;">
 <?php include 'newnavbar.php'; ?>
 
 <div class="contenedor-tabla">

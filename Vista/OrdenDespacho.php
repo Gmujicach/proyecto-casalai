@@ -9,7 +9,7 @@
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 
 <?php include 'newnavbar.php'; ?>
@@ -121,12 +121,12 @@
                 <td><?php //echo "$inicio-$fin de $totalUsuarios"; ?></td>
                 <td>
                     <a href="?pagina=<?php //echo max(1, $paginaActual - 1); ?>">
-                        <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
+                        <i class="flecha-izquierda"><img src="img/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
                     </a>
                 </td>
                 <td>
                     <a href="?pagina<?php //echo min(ceil($totalUsuarios / $filasPorPagina), $paginaActual + 1); ?>">
-                        <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
+                        <i class="flecha-derecha"><img src="img/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
                     </a>
                 </td>
             </tr>

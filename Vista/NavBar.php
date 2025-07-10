@@ -6,7 +6,7 @@
     <!-- Contenedor para el logo y el nombre -->
     <a class="navbar-brand" href="?pagina=Dashboard" style="display: flex; align-items: center;">
         <!-- Imagen del logo -->
-        <img src="IMG/logotipo.png" alt="Logo" width="60" height="50" style="margin-right: 10px;">
+        <img src="img/logotipo.png" alt="Logo" width="60" height="50" style="margin-right: 10px;">
         
         <!-- Nombre de la página -->
         <h3 style="color: white; margin: 0;">Casa Lai</h3>
