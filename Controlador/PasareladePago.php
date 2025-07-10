@@ -47,7 +47,7 @@ if (isset($_POST['id_factura'])) {
     $monto = $facturaModel->obtenerMontoTotalFactura($idFactura);
 
     // Cargar vista solo si no es AJAX
-    $pagina = "PasareladePago";
+    $pagina = "pasareladepago";
     if (is_file("Vista/" . $pagina . ".php")) {
         require_once("Vista/" . $pagina . ".php");
     } else {

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardarPermisos'])) {
     exit;
 }
 
-$pagina = "Permisos";
+$pagina = "permiso";
 if (is_file("Vista/" . $pagina . ".php")) {
     require_once("Vista/" . $pagina . ".php");
 } else {

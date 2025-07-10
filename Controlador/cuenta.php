@@ -182,7 +182,7 @@ function consultarCuentabanco() {
     return $cuentabanco->consultarCuentabanco();
 }
 
-$pagina = "cuentas";
+$pagina = "cuenta";
 if (is_file("Vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de cuentas bancarias', MODULO_CUENTA_BANCARIA, $_SESSION['id_usuario']);

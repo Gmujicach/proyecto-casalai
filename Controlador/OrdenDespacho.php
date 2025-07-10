@@ -146,7 +146,7 @@ function getordendespacho() {
     return $ordendespacho->getordendespacho();
 }
 
-$pagina = "OrdenDespacho";
+$pagina = "ordendespacho";
 if (is_file("Vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de Orden de Despacho', MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);

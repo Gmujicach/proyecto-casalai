@@ -10,7 +10,7 @@
     <?php include 'header.php'; ?>
 </head>
 
-<?php include 'NewNavBar.php'; ?>
+<?php include 'newnavbar.php'; ?>
 
 <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 

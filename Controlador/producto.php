@@ -271,7 +271,7 @@ if (empty($categoriasDinamicas)) {
     $mostrarFormulario = true;
 }
 // Asigna el nombre de la página
-$pagina = "Productos";
+$pagina = "producto";
 // Verifica si el archivo de vista existe
 if (is_file("Vista/" . $pagina . ".php")) {
     

@@ -5,7 +5,7 @@
 </head>
 <body class="fondo" style="height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-<?php include 'NewNavBar.php'; ?>
+<?php include 'newnavbar.php'; ?>
 
 <!-- CONTENEDOR FLEXIBLE -->
 <div class="contenedor-flex" style="display: flex; justify-content: center; align-items: flex-start; gap: 2rem; padding: 2rem; flex-wrap: wrap;">

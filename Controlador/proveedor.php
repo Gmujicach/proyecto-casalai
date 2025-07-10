@@ -204,7 +204,7 @@ function obtenerProductosConBajoStock() {
     return $producto->obtenerProductosConBajoStock();
 }
 
-$pagina = "Proveedores";
+$pagina = "proveedor";
 if (is_file("Vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de proveedores', MODULO_PROVEEDORES, $_SESSION['id_usuario']);

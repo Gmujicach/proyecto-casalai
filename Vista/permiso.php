@@ -31,7 +31,7 @@
 </head>
 <body class="fondo" style="height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-<?php include 'NewNavBar.php'; ?>
+<?php include 'newnavbar.php'; ?>
 
 <div style="display:flex; flex-direction:column; align-items:center; min-height:70vh;">
     <form method="post" action="" style="background:rgba(255,255,255,0.97); padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08); margin: 30px 0; width: 100%; max-width: 1100px;">

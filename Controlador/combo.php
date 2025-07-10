@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['accion'] === 'crear_combo')
     exit;
 }
 
-$pagina = "combos";
+$pagina = "combo";
 // Verifica si el archivo de vista existe
 if (is_file("Vista/" . $pagina . ".php")) {
     // Incluye el archivo de vista

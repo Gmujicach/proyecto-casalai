@@ -26,7 +26,7 @@
   <body class="fondo"
     style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-    <?php include 'NewNavBar.php'; ?>
+    <?php include 'newnavbar.php'; ?>
 
     <div class="modal fade modal-registrar" id="registrarProductoModal" tabindex="-1" role="dialog"
       aria-labelledby="registrarProductoModalLabel" aria-hidden="true">

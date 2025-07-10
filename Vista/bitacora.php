@@ -18,7 +18,7 @@
     </style>
 </head>
 <body class="fondo" style="background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 100vh;">
-<?php include 'NewNavBar.php'; ?>
+<?php include 'newnavbar.php'; ?>
 
 <div class="contenedor-tabla">
     <h3>Bitácora del Sistema</h3>

@@ -114,7 +114,7 @@
 </head>
 
 <body class="fondo">
-    <?php include 'NewNavBar.php'; ?>
+    <?php include 'newnavbar.php'; ?>
     <br>
 
     <section class="container mt-5">

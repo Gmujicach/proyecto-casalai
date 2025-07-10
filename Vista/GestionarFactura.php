@@ -6,7 +6,7 @@
     <?php require_once("public/modal.php"); ?>
 
 
-    <?php include 'NewNavBar.php'; ?>
+    <?php include 'newnavbar.php'; ?>
 
 
     <div class="container"> <!-- todo el contenido ira dentro de esta etiqueta-->

@@ -156,7 +156,7 @@ function getmarcas() {
     return $marcas->getmarcas();
 }
 
-$pagina = "Modelos";
+$pagina = "modelo";
 if (is_file("Vista/" . $pagina . ".php")) {
     $modelos = getModelos();
     $marcas = getmarcas();

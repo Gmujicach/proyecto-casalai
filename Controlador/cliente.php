@@ -141,7 +141,7 @@ function getclientes() {
 }
 $reporteComprasClientes = $cliente->obtenerReporteComprasClientes();
 $totalComprasClientes = array_sum(array_column($reporteComprasClientes, 'cantidad'));
-$pagina = "Clientes";
+$pagina = "cliente";
 if (is_file("Vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de cliente', MODULO_CLIENTE, $_SESSION['id_usuario']);

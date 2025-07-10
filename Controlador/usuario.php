@@ -193,7 +193,7 @@ foreach ($reporteRoles as &$rol) {
 }
 unset($rol);
 
-$pagina = "Usuarios";
+$pagina = "usuario";
 if (is_file("Vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de Usuarios', MODULO_USUARIO, $_SESSION['id_usuario']);

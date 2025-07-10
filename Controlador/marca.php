@@ -141,7 +141,7 @@ function getmarcas() {
 }
 
 
-$pagina = "marcas";
+$pagina = "marca";
 if (is_file("Vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de marcas', MODULO_MARCA, $_SESSION['id_usuario']);
