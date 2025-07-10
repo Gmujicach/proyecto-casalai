@@ -28,14 +28,50 @@ class Rol extends BD {
     public function registrarRol() {
         return $this->r_Rol();
     }
-    private function r_Rol() {
+private function r_Rol() {
+    try {
+        // 1. Insertar el nuevo rol
         $sql = "INSERT INTO tbl_rol (nombre_rol) VALUES (:nombre_rol)";
-        
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':nombre_rol', $this->nombre_rol);
+        $stmt->execute();
 
-        return $stmt->execute();
+        // 2. Obtener el ID del nuevo rol
+        $id_rol = $this->conex->lastInsertId();
+
+        // 3. Obtener todos los módulos
+        $sqlModulos = "SELECT id_modulo FROM tbl_modulos";
+        $stmtMod = $this->conex->prepare($sqlModulos);
+        $stmtMod->execute();
+        $modulos = $stmtMod->fetchAll(PDO::FETCH_COLUMN);
+
+        // 4. Acciones disponibles
+        $acciones = ['Ingresar', 'Incluir', 'Consultar', 'Modificar', 'Eliminar', 'Reportar'];
+
+        // 5. Insertar permisos como "No Permitido"
+        $sqlPermiso = "INSERT INTO tbl_permisos (id, accion, id_rol, id_modulo, estatus) 
+                       VALUES (:id, :accion, :id_rol, :id_modulo, 'No Permitido')";
+        $stmtPermiso = $this->conex->prepare($sqlPermiso);
+
+        foreach ($modulos as $id_modulo) {
+            foreach ($acciones as $accion) {
+                $stmtPermiso->execute([
+                    ':id' => $id++,
+                    ':accion' => $accion,
+                    ':id_rol' => $id_rol,
+                    ':id_modulo' => $id_modulo
+                ]);
+            }
+        }
+
+        return true;
+
+    } catch (PDOException $e) {
+        echo "Error al registrar el rol y asignar permisos: " . $e->getMessage();
+        return false;
     }
+}
+
 
     public function existeNombreRol($nombre_rol, $excluir_id = null) {
         return $this->existeNomRol($nombre_rol, $excluir_id); 

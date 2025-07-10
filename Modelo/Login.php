@@ -9,6 +9,7 @@ class Login extends BD
     private $username;
     private $password;
     private $co;
+    private $cop;
 
     function set_username($valor)
     {

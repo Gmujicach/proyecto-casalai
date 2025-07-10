@@ -101,9 +101,16 @@ INSERT INTO `tbl_modulos` (`id_modulo`, `nombre_modulo`) VALUES
 (8, 'Proveedores'),
 (9, 'Clientes'),
 (10, 'Catalogo'),
+(11, 'Carrito'),
+(12, 'Pasarela'),
+(13, 'Prefactura'),
 (14, 'Ordenes de despacho'),
 (15, 'Cuentas bancarias'),
-(18, 'Roles');
+(16, 'Finanzas'),
+(17, 'Permisos'),
+(18, 'Roles'),
+(19, 'Bitacora'),
+(20, 'Respaldo');
 
 -- --------------------------------------------------------
 

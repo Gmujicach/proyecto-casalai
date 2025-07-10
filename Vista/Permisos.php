@@ -63,7 +63,7 @@ $rolesSinSuper = array_values($rolesSinSuper); // Reindexar
                 <thead>
                     <tr>
                         <th>Módulo</th>
-                        <?php foreach (['consultar','incluir','modificar','eliminar'] as $accion): ?>
+                        <?php foreach (['ingresar','consultar','incluir','modificar','eliminar','reportar'] as $accion): ?>
                             <th><?= ucfirst($accion) ?></th>
                         <?php endforeach; ?>
                     </tr>
@@ -72,7 +72,7 @@ $rolesSinSuper = array_values($rolesSinSuper); // Reindexar
                     <?php foreach ($modulos_permiso as $modulo): ?>
                         <tr>
                             <td><?= htmlspecialchars($modulo['nombre_modulo']) ?></td>
-                            <?php foreach (['consultar','incluir','modificar','eliminar'] as $accion): ?>
+                            <?php foreach (['ingresar','consultar','incluir','modificar','eliminar','reportar'] as $accion): ?>
                                 <td>
                                     <input type="checkbox"
                                         name="permisos[<?= $rol['id_rol'] ?>][<?= $modulo['id_modulo'] ?>][<?= $accion ?>]"

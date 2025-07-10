@@ -30,7 +30,7 @@ $pdf->SetFont('Arial', '', 10);
 if (!empty($res)) {
     $cliente = $res[0]; // Los datos del cliente se repiten por fila
 
-    $pdf->Cell(50, 5, utf8_decode('CÓDIGO DE FACTURA: ' . $cliente['id_factura']), 0, 1);
+    $pdf->Cell(50, 5, utf8_decode('CÓDIGO DE ORDEN DE COMPRA: ' . $cliente['id_factura']), 0, 1);
     $pdf->Cell(50, 5, utf8_decode('NOMBRE: ' . $cliente['nombre']), 0, 1);
     $pdf->Cell(50, 5, utf8_decode('C.I.: V' . $cliente['cedula']), 0, 1);
     $pdf->Cell(50, 5, utf8_decode('DIRECCIÓN: ' . $cliente['direccion']), 0, 1);
