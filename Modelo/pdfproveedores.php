@@ -7,7 +7,7 @@ use Dompdf\Dompdf; //Declaracion del espacio de trabajo
 //llamda al archivo que contiene la clase
 //datos, en ella posteriormente se colcora el codigo
 //para enlazar a su base de datos
-require_once 'Config/config.php';
+require_once 'config/config.php';
 
 //declaracion de la clase usuarios que hereda de la clase datos
 //la herencia se declara con la palabra extends y no es mas 

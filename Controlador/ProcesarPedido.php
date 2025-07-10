@@ -1,12 +1,12 @@
 <?php
 require_once 'modelo/proveedor.php';
 require_once 'modelo/producto.php';
-require_once 'Config/config.php';
+require_once 'config/config.php';
 
 // Configuración de PHPMailer
-require_once 'Config/PHPMailer/PHPMailer.php';
-require_once 'Config/PHPMailer/Exception.php';
-require_once 'Config/PHPMailer/SMTP.php';
+require_once 'config/PHPMailer/PHPMailer.php';
+require_once 'config/PHPMailer/Exception.php';
+require_once 'config/PHPMailer/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

@@ -1,5 +1,5 @@
 <?php
-require_once 'Config/Config.php';
+require_once 'config/config.php';
 
 class Cuentabanco extends BD {
     private $id_cuenta;

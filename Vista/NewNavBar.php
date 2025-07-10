@@ -1,5 +1,5 @@
 <?php
-require_once('Config/Config.php');
+require_once('config/config.php');
 require_once('modelo/permiso.php');
 
 $id_rol = $_SESSION['id_rol'];
