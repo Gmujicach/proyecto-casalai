@@ -1,7 +1,7 @@
 <?php
 ob_start();
 require_once 'Modelo/rol.php';
-require_once 'Modelo/Permisos.php';
+require_once 'Modelo/permiso.php';
 require_once 'Modelo/bitacora.php';
 define('MODULO_ROLES', 18); // Define el ID del módulo de roles
 

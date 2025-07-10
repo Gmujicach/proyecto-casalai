@@ -1,11 +1,11 @@
 <?php
 
-if (!is_file("modelo/Factura.php")) {
+if (!is_file("modelo/factura.php")) {
     echo "Falta definir la clase Factura";
     exit;
 }
 
-require_once("modelo/Factura.php");
+require_once("modelo/factura.php");
 
 if (is_file("vista/GestionarFactura.php")) {
     $factura = new Factura();

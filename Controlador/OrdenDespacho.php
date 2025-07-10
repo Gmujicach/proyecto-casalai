@@ -1,8 +1,8 @@
 <?php
 ob_start();
 
-require_once 'Modelo/OrdenDespacho.php';
-require_once 'Modelo/Permisos.php';
+require_once 'Modelo/ordendespacho.php';
+require_once 'Modelo/permiso.php';
 require_once 'Modelo/bitacora.php';
 define('MODULO_ORDEN_DESPACHO', 14); // Define el ID del módulo de cuentas bancarias
 

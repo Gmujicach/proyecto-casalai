@@ -12,7 +12,7 @@ if (!is_file("Modelo/" . $pagina . ".php")) {
 
 require_once("Modelo/" . $pagina . ".php");
 $k = new Despacho();
-require_once 'Modelo/Permisos.php';
+require_once 'Modelo/permiso.php';
 require_once 'Modelo/bitacora.php';
 
 define('MODULO_DESPACHO', 3);

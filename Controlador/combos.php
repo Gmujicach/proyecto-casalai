@@ -1,9 +1,9 @@
 <?php
 ob_start();
 //session_start();
-require_once './Modelo/Productos.php';
-require_once './Modelo/Combos.php';
-//require_once './Modelo/productos.php';
+require_once './Modelo/producto.php';
+require_once './Modelo/combo.php';
+//require_once './Modelo/producto.php';
 
 //$productoModel = new Productos();
 //$comboModel = new Combo();

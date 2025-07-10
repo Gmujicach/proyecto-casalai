@@ -3,8 +3,8 @@
 ob_start();
 
 // Importa los modelos necesarios
-require_once 'Modelo/Productos.php';
-require_once 'Modelo/Permisos.php';
+require_once 'Modelo/producto.php';
+require_once 'Modelo/permiso.php';
 require_once 'Modelo/bitacora.php';
 
 define('MODULO_PRODUCTOS', 6); // Define el ID del módulo de cuentas bancarias

@@ -1,9 +1,9 @@
 <?php
 ob_start();
-require_once 'Modelo/PasareladePago.php';
-require_once 'Modelo/cuentas.php';
-require_once 'Modelo/Factura.php';
-require_once 'Modelo/Permisos.php';
+require_once 'Modelo/pasareladepago.php';
+require_once 'Modelo/cuenta.php';
+require_once 'Modelo/factura.php';
+require_once 'Modelo/permiso.php';
 require_once 'Modelo/bitacora.php';
 define('MODULO_PASARELA_PAGOS', 16); // Define el ID
 $bitacoraModel = new Bitacora();

@@ -1,7 +1,7 @@
 <?php
 ob_start();
 require_once 'Modelo/categoria.php';
-require_once 'Modelo/Permisos.php';
+require_once 'Modelo/permiso.php';
 require_once 'Modelo/bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
