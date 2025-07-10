@@ -1,4 +1,4 @@
-// catalogo.js - Controlador principal del módulo de catálogo
+// catalogo.js - controlador principal del módulo de catálogo
 
 $(document).ready(function () {
     // Variables globales

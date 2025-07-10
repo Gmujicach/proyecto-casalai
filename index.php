@@ -18,8 +18,8 @@ if (is_file("modelo/validalogin.php")) {
    }
 }
 
- if(is_file("Controlador/".$pagina.".php")){ 
-    require_once("Controlador/".$pagina.".php");
+ if(is_file("controlador/".$pagina.".php")){ 
+    require_once("controlador/".$pagina.".php");
  }
  else{
     echo "Página en construcción";

@@ -10,7 +10,7 @@ $(document).ready(function(){
             confirmButtonText: 'Sí, anular'
         }).then((result) => {
             if(result.isConfirmed){
-                $.post('Controlador/finanza.php', {accion:'anular', id_finanzas:id}, function(resp){
+                $.post('controlador/finanza.php', {accion:'anular', id_finanzas:id}, function(resp){
                     let r = JSON.parse(resp);
                     if(r.status === 'success'){
                         Swal.fire('Anulado','Registro anulado','success').then(()=>location.reload());

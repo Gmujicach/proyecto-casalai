@@ -317,7 +317,7 @@ foreach ($caracteristicas as $clave => $valor) {
 
 
 <div style="margin-top: 20px; text-align: right;">
-  <form action="Controlador/reporteproducto.php" method="post" target="_blank" style="display:inline;">
+  <form action="controlador/reporteproducto.php" method="post" target="_blank" style="display:inline;">
     <button type="submit" class="btn btn-success">
       Descargar Reporte de Productos por Categoría
     </button>
