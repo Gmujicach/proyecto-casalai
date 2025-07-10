@@ -14,7 +14,7 @@ if (!isset($_SESSION['name'])) {
 
 <html>
 <?php include 'header.php'; ?>
-<link rel="stylesheet" href="Styles/PDF.css">
+<link rel="stylesheet" href="Styles/pdf.css">
 <body>
 
 
