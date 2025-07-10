@@ -8,8 +8,8 @@
     ></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Styles/login-darckort.css">
-    <link rel="stylesheet" href="Styles/formulario.css">
+    <link rel="stylesheet" href="styles/login-darckort.css">
+    <link rel="stylesheet" href="styles/formulario.css">
     <script src="public/js/sweetalert2.js"></script>
     <title>Iniciar Sesión</title>
   </head>

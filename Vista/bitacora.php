@@ -6,7 +6,7 @@
     <title>Bitácora del Sistema</title>
     <link rel="stylesheet" href="public/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/js/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="Styles/tabla_consulta.css">
+    <link rel="stylesheet" href="styles/tabla_consulta.css">
     <?php include 'header.php'; ?>
     <style>
         .contenedor-tabla {

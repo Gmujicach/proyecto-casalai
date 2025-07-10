@@ -2871,7 +2871,7 @@
     var offsetParent = getOffsetParent(data.instance.popper);
     var offsetParentRect = getBoundingClientRect(offsetParent);
 
-    // Styles
+    // styles
     var styles = {
       position: popper.position
     };

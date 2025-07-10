@@ -8,7 +8,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?php include 'header.php'; ?>
-        <link rel="stylesheet" href="Styles/darckort.css">
+        <link rel="stylesheet" href="styles/darckort.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Gestionar Despachos</title>
     </head>
