@@ -62,7 +62,7 @@
                                     <th style="display:none">Cl</th>
                                     <th>Codigo</th>
                                     <th>Nombre</th>
-                                    <th>Modelo</th>
+                                    <th>modelo</th>
                                     <th>Marca</th>
                                     <th>Serial</th>
                                     <th>Costo</th>
@@ -96,7 +96,7 @@
 										<th style="display:none">Id</th>
 										<th>Codigo</th>
 										<th>Nombre</th>
-										<th>Modelo</th>
+										<th>modelo</th>
 										<th>Marca</th>
 										<th>Serial</th>
 									</tr>

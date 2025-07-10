@@ -209,7 +209,7 @@
             <section class="mb-5">
                 <?php plantilla("crud", [
                     "id" => "modelo",
-                    "nombre_singular" => "Modelo",
+                    "nombre_singular" => "modelo",
                     "nombre_plural" => "Modelos",
                     "modificar_ubicacion" => "parte izquierda",
                     "gestionable" => [

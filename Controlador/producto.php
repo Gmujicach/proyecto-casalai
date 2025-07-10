@@ -3,9 +3,9 @@
 ob_start();
 
 // Importa los modelos necesarios
-require_once 'Modelo/producto.php';
-require_once 'Modelo/permiso.php';
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/producto.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 
 define('MODULO_PRODUCTOS', 6); // Define el ID del módulo de cuentas bancarias
 
@@ -36,7 +36,7 @@ case 'ingresar':
     // Asignar valores generales del producto
     $Producto->setNombreP($_POST['nombre_producto']);
     $Producto->setDescripcionP($_POST['descripcion_producto']);
-    $Producto->setIdModelo($_POST['Modelo']);
+    $Producto->setIdModelo($_POST['modelo']);
     $Producto->setStockActual($_POST['Stock_Actual']);
     $Producto->setStockMax($_POST['Stock_Maximo']);
     $Producto->setStockMin($_POST['Stock_Minimo']);
@@ -121,7 +121,7 @@ case 'modificar':
     $Producto->setId($id);
     $Producto->setNombreP($_POST['nombre_producto']);
     $Producto->setDescripcionP($_POST['descripcion_producto']);
-    $Producto->setIdModelo($_POST['Modelo']);
+    $Producto->setIdModelo($_POST['modelo']);
     $Producto->setStockActual($_POST['Stock_Actual']);
     $Producto->setStockMax($_POST['Stock_Maximo']);
     $Producto->setStockMin($_POST['Stock_Minimo']);

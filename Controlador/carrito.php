@@ -1,8 +1,8 @@
 <?php
 ob_start();
-require_once 'Modelo/producto.php';
-require_once 'Modelo/carrito.php';
-require_once 'Modelo/factura.php';
+require_once 'modelo/producto.php';
+require_once 'modelo/carrito.php';
+require_once 'modelo/factura.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accion = $_POST['accion'] ?? '';

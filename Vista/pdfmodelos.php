@@ -23,7 +23,7 @@ if (!isset($_SESSION['name'])) {
 <div class="">
     <div class="row">
 		<div class="col">
-		   <label for="descripcion_mo">Nombre del Modelo</label>
+		   <label for="descripcion_mo">Nombre del modelo</label>
 		   <input class="form-control" type="text" id="descripcion_mo" name="descripcion_mo" />
 		   <span id="sdescripcion_mo"></span>
 		</div>

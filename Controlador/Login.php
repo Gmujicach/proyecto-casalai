@@ -1,9 +1,9 @@
 <?php
-if (!is_file("Modelo/" . $pagina . ".php")) {
+if (!is_file("modelo/" . $pagina . ".php")) {
     echo "Falta el modelo";
     exit;
 }
-require_once("Modelo/" . $pagina . ".php");
+require_once("modelo/" . $pagina . ".php");
 if (is_file("Vista/" . $pagina . ".php")) {
     if (!empty($_POST)) {
         $o = new Login();

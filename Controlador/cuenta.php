@@ -1,8 +1,8 @@
 <?php
 ob_start();
-require_once 'Modelo/cuenta.php';
-require_once 'Modelo/permiso.php';
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/cuenta.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 
 $id_rol = $_SESSION['id_rol'];
 

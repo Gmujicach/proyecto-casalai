@@ -3,7 +3,7 @@
 ob_start();
 
 // Importa los modelos necesarios
-require_once 'Modelo/factura.php';
+require_once 'modelo/factura.php';
 
 // Define los datos de la factura
 $cliente = 3;

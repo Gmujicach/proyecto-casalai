@@ -1,6 +1,6 @@
 <?php
-require_once 'Modelo/proveedor.php';
-require_once 'Modelo/producto.php';
+require_once 'modelo/proveedor.php';
+require_once 'modelo/producto.php';
 require_once 'Config/config.php';
 
 // Configuración de PHPMailer
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['accion'] == 'realizar_pedido
             <table border='1' cellpadding='5' cellspacing='0'>
                 <tr>
                     <th>Producto</th>
-                    <th>Modelo</th>
+                    <th>modelo</th>
                     <th>Cantidad Solicitada</th>
                 </tr>
                 <tr>

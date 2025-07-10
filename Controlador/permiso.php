@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../Modelo/permiso.php';
-require_once __DIR__ . '/../Modelo/usuario.php';
+require_once __DIR__ . '/../modelo/permiso.php';
+require_once __DIR__ . '/../modelo/usuario.php';
 
 $permisos = new Permisos();
 

@@ -72,10 +72,10 @@
                   <small class="form-text text-muted">Breve descripción (máx. 50 caracteres).</small>
                 </div>
                 <br>
-                <!-- Modelo -->
+                <!-- modelo -->
                 <div class="envolver-form">
-                  <label for="Modelo">Modelo</label>
-                  <select class="form-select" id="Modelo" name="Modelo" required>
+                  <label for="modelo">modelo</label>
+                  <select class="form-select" id="modelo" name="modelo" required>
                     <option value="">Seleccione un modelo</option>
                     <?php foreach ($modelos as $modelo): ?>
                       <option value="<?= $modelo['tbl_modelos']; ?>">
@@ -455,9 +455,9 @@ foreach ($caracteristicas as $clave => $valor) {
                   name="descripcion_producto" required>
               </div>
               <div class="form-group">
-                <label for="modificarModelo">Modelo</label>
-                <select class="form-select" id="modificarModelo" name="Modelo" required>
-                  <option value="">Seleccionar Modelo</option>
+                <label for="modificarModelo">modelo</label>
+                <select class="form-select" id="modificarModelo" name="modelo" required>
+                  <option value="">Seleccionar modelo</option>
                   <?php foreach ($modelos as $modelo): ?>
                     <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
                   <?php endforeach; ?>

@@ -19,7 +19,7 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
         <div class="modal-content">
             <form id="registrarModelo" method="POST">
                 <div class="modal-header">
-                    <h5 class="titulo-form" id="registrarModeloModalLabel">Incluir Modelo</h5>
+                    <h5 class="titulo-form" id="registrarModeloModalLabel">Incluir modelo</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -53,7 +53,7 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
 <div class="contenedor-tabla">
     <div class="space-btn-incluir">
         <button id="btnIncluirModelo" class="btn-incluir">
-            Incluir Modelo
+            Incluir modelo
         </button>
     </div>
 
@@ -65,7 +65,7 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
                 <th>Acciones</th>
                 <th>ID</th>
                 <th>Marca</th>
-                <th>Modelo</th>
+                <th>modelo</th>
             </tr>
         </thead>
         <tbody>
@@ -114,7 +114,7 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
         <div class="modal-content">
             <form id="modificarModelo" method="POST">
                 <div class="modal-header">
-                    <h5 class="titulo-form" id="modificarModeloModalLabel">Modificar Modelo</h5>
+                    <h5 class="titulo-form" id="modificarModeloModalLabel">Modificar modelo</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -130,7 +130,7 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="modificar_nombre_modelo">Nombre del Modelo</label>
+                        <label for="modificar_nombre_modelo">Nombre del modelo</label>
                         <input type="text" class="form-control" id="modificar_nombre_modelo" name="nombre_modelo" maxlength="25" required>
                         <span class="span-value-modal" id="smnombre_modelo"></span>
                     </div>

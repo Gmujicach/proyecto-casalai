@@ -1,9 +1,9 @@
 <?php
 ob_start();
 
-require_once 'Modelo/modelo.php';
-require_once 'Modelo/permiso.php';
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/modelo.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'Modelo registrado correctamente',
+                    'message' => 'modelo registrado correctamente',
                     'modelo' => $modeloRegistrado
                 ]);
             } else {
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($modelo !== null) {
                     echo json_encode($modelo);
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Modelo no encontrado']);
+                    echo json_encode(['status' => 'error', 'message' => 'modelo no encontrado']);
                 }
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'ID de modelo no proporcionado']);
@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'Modelo modificado correctamente',
+                    'message' => 'modelo modificado correctamente',
                     'modelo' => $modeloActualizado
                 ]);
             } else {

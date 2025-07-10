@@ -3,7 +3,7 @@ ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/../Modelo/backup.php';
+require_once __DIR__ . '/../modelo/backup.php';
 
 if (isset($_GET['accion'])) {
 

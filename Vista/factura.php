@@ -1,6 +1,6 @@
 <?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Cliente' || $_SESSION['nombre_rol'] == 'SuperUsuario') {?>
 
-<?php require_once 'Modelo/despacho.php' ; require_once 'Controlador/factura.php' ; ?>
+<?php require_once 'modelo/despacho.php' ; require_once 'Controlador/factura.php' ; ?>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -90,7 +90,7 @@
                                     <th>Eliminar</th>
                                     <th style="display:none">Id</th>
                                     <th>Producto</th>
-                                    <th>Modelo</th>
+                                    <th>modelo</th>
                                     <th>Marca</th>
                                     <th>Cantidad Disponible</th>
                                     <th>Cantidad Seleccionada</th>
@@ -162,7 +162,7 @@
                             <tr>
                                 <th style="display:none">Id</th>
                                 <th>Nombre Producto</th>
-                                <th>Modelo</th>
+                                <th>modelo</th>
                                 <th>Marca</th>
                                 <th>Stock Actual</th>
                                 <th>Precio</th>

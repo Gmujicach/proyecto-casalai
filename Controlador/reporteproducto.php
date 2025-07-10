@@ -1,5 +1,5 @@
 <?php
-require_once '../Modelo/producto.php';
+require_once '../modelo/producto.php';
 
 $productoModel = new Productos();
 $datos = $productoModel->obtenerReporteCategorias();

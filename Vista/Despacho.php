@@ -63,7 +63,7 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
                                     <th style="display:none">Cl</th>
                                     <th>Codigo</th>
                                     <th>Nombre</th>
-                                    <th>Modelo</th>
+                                    <th>modelo</th>
                                     <th>Marca</th>
                                     <th>Serial</th>
                                     <th>Cantidad</th>
@@ -96,7 +96,7 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
                             <th style="display:none">Id</th>
                             <th>Código</th>
                             <th>Nombre</th>
-                            <th>Modelo</th>
+                            <th>modelo</th>
                             <th>Marca</th>
                             <th>Serial</th>
                             </tr>

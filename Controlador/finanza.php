@@ -1,6 +1,6 @@
 <?php
 ob_start();
-require_once 'Modelo/finanza.php';
+require_once 'modelo/finanza.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     

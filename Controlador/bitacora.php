@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/bitacora.php';
 define('MODULO_BITACORA', 1);
 $bitacoraModel = new Bitacora();
 

@@ -140,7 +140,7 @@ $(document).ready(function() {
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Modelo registrado correctamente'
+                        text: respuesta.message || respuesta.msg || 'modelo registrado correctamente'
                     });
                     agregarFilaModelo(respuesta.modelo);
                     resetModelo();

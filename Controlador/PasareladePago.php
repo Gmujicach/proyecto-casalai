@@ -1,8 +1,8 @@
 <?php
 ob_start();
-require_once 'Modelo/pasareladepago.php';
-require_once 'Modelo/cuenta.php';
-require_once 'Modelo/factura.php';
+require_once 'modelo/pasareladepago.php';
+require_once 'modelo/cuenta.php';
+require_once 'modelo/factura.php';
 
 // Si se recibe una acción (AJAX), procesarla primero
 if (!empty($_POST['accion'])) {

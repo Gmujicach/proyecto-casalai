@@ -213,7 +213,7 @@ public function facturaConsultar() {
         $contenido = '<div class="w-100">' . $datosCliente . $mensajePago;
         $contenido .= '<div class="table-responsive w-100">';
         $contenido .= '<table class="table table-bordered w-100">';
-        $contenido .= '<thead><tr><th>Producto</th><th>Modelo</th><th>Marca</th><th>Cantidad</th><th>Precio</th></tr></thead><tbody>';
+        $contenido .= '<thead><tr><th>Producto</th><th>modelo</th><th>Marca</th><th>Cantidad</th><th>Precio</th></tr></thead><tbody>';
 
         $total = 0;
         foreach ($items as $item) {

@@ -215,7 +215,7 @@ aria-labelledby="registrarProveedorModalLabel" aria-hidden="true">
                 <th>Acción</th>
                 <th>ID</th>
                 <th>Producto</th>
-                <th>Modelo</th>
+                <th>modelo</th>
                 <th>Stock Actual</th>
                 <th>Stock Mínimo</th>
             </tr>
@@ -421,7 +421,7 @@ aria-labelledby="PedidoProductoModalLabel" aria-hidden="true">
           </div>
 
           <div class="form-group">
-            <label for="modificarModelo">Modelo</label>
+            <label for="modificarModelo">modelo</label>
             <input type="text" maxlength="50" class="form-control" id="modificarModelo" name="modelo" readonly>
           </div>
 
