@@ -73,8 +73,8 @@ $totalIngresos = array_sum(array_column($finanzas['ingresos'], 'monto'));
 $totalEgresos = array_sum(array_column($finanzas['egresos'], 'monto'));
 
 $pagina = "finanza";
-if (is_file("Vista/" . $pagina . ".php")) {
-    require_once("Vista/" . $pagina . ".php");
+if (is_file("vista/" . $pagina . ".php")) {
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

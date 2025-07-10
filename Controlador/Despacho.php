@@ -310,7 +310,7 @@ foreach ($despachos as $despacho):
         exit;
     }
 
-    // Vista inicial
+    // vista inicial
     $despachos = getdespacho();
     $proveedores = $k->obtenercliente();
     $productos = $k->consultarproductos();

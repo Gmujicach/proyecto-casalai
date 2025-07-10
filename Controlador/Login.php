@@ -4,7 +4,7 @@ if (!is_file("modelo/" . $pagina . ".php")) {
     exit;
 }
 require_once("modelo/" . $pagina . ".php");
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     if (!empty($_POST)) {
         $o = new Login();
         $h = $_POST['accion'];
@@ -50,7 +50,7 @@ if (is_file("Vista/" . $pagina . ".php")) {
         }
     }
 
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Falta la vista";
 }

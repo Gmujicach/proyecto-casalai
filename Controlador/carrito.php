@@ -207,11 +207,11 @@ function obtenerMarcas() {
 
 // Cargar vista
 $pagina = "carrito";
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     $productos = obtenerProductos();
     $carritos = obtenerProductosDelCarrito();
     $marcas = obtenerMarcas();
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

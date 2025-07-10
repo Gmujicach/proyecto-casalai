@@ -131,8 +131,8 @@ $datos = $pasarela->pasarelaTransaccion('Consultar');
 
 
 $pagina = "pasarela";
-if (is_file("Vista/" . $pagina . ".php")) {
-    require_once("Vista/" . $pagina . ".php");
+if (is_file("vista/" . $pagina . ".php")) {
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

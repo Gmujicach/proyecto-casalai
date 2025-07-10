@@ -70,10 +70,10 @@ if ($_GET['accion'] === 'generar') {
 
 // Renderizado de la vista
 $pagina = "backup";
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     $backup = new Backup();
     $backups = $backup->listar();
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

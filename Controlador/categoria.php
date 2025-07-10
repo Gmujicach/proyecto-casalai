@@ -142,12 +142,12 @@ function consultarCategorias() {
 }
 
 $pagina = "categoria";
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de categoria', MODULO_CATEGORIA, $_SESSION['id_usuario']);
     }
     $categorias = consultarCategorias();
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

@@ -28,7 +28,7 @@
         <a href="?pagina=clientes">Gestionar Clientes</a>
         <a href="?pagina=Proveedores">Gestionar Proveedores</a>
         <a href="?pagina=GestionarFactura">Gestionar Facturas</a>
-        <a href="Vista/Manual.pdf" target="_blank">Manual Usuario</a>
+        <a href="vista/Manual.pdf" target="_blank">Manual Usuario</a>
     </nav>
 
     <script>

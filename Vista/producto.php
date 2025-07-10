@@ -59,7 +59,7 @@
                   <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*" required>
                   <small class="form-text text-muted">Seleccione una imagen clara del producto (JPG, PNG, etc.).</small>
                   <div id="previewImagen" style="margin-top: 10px;">
-                    <img id="imagenPreview" src="#" alt="Vista previa"
+                    <img id="imagenPreview" src="#" alt="vista previa"
                       style="display: none; max-height: 150px; border-radius: 8px; border: 1px solid #ccc; padding: 5px;">
                   </div>
                 </div>

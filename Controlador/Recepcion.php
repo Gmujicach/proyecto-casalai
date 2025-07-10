@@ -156,7 +156,7 @@ case 'modificarRecepcion':
         exit;
     }
 
-    // Vista inicial
+    // vista inicial
     $recepciones = getrecepcion();
     $proveedores = $k->obtenerproveedor();
     $productos = $k->consultarproductos();

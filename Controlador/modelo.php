@@ -157,13 +157,13 @@ function getmarcas() {
 }
 
 $pagina = "modelo";
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     $modelos = getModelos();
     $marcas = getmarcas();
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de Modelos', MODULO_MODELOS, $_SESSION['id_usuario']);
     }
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

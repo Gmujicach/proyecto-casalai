@@ -273,7 +273,7 @@ if (empty($categoriasDinamicas)) {
 // Asigna el nombre de la página
 $pagina = "producto";
 // Verifica si el archivo de vista existe
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     
 if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de Productos', MODULO_PRODUCTOS, $_SESSION['id_usuario']);
@@ -284,7 +284,7 @@ if (isset($_SESSION['id_usuario'])) {
     // Incluye el archivo de vista
 
 
-        require_once("Vista/" . $pagina . ".php");
+        require_once("vista/" . $pagina . ".php");
 } else {
     // Muestra un mensaje si la página está en construcción
     echo "Página en construcción";

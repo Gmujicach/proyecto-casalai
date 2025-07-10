@@ -33,7 +33,7 @@ require_once('modelo/pdfusuarios.php');
 		  $o->generarPDF();
 	  }
 	  
-	  require_once("Vista/".$pagina.".php"); 
+	  require_once("vista/".$pagina.".php"); 
   }
   else{
 	  echo "pagina en construccion";

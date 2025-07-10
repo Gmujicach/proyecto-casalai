@@ -398,11 +398,11 @@ try {
 
 // Asignar la página y cargar la vista
 $pagina = "catalogo";
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de catálogo', MODULO_CATALOGO, $_SESSION['id_usuario']);
     }
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }
