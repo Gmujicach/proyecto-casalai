@@ -8,9 +8,9 @@
     ></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Styles/login-darckort.css">
-    <link rel="stylesheet" href="Styles/formulario.css">
-    <script src="Public/js/sweetalert2.js"></script>
+    <link rel="stylesheet" href="styles/login-darckort.css">
+    <link rel="stylesheet" href="styles/formulario.css">
+    <script src="public/js/sweetalert2.js"></script>
     <title>Iniciar Sesión</title>
   </head>
 
@@ -20,7 +20,7 @@
     data-tipo="<?php echo (isset($resultado['status']) && $resultado['status'] == 'success') ? 'success' : 'error'; ?>">
 </div>
 
-  <body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+  <body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
     <div class="container">
       <div class="forms-container">
         <div class="inicio-registro">
@@ -194,7 +194,7 @@
       </div>
     </div>
     <?php include 'footer.php'; ?>
-    <script src="Javascript/darckort-login.js"></script>
-    <script src="Javascript/login.js"></script>
+    <script src="javascript/darckort-login.js"></script>
+    <script src="javascript/login.js"></script>
   </body>
 </html>

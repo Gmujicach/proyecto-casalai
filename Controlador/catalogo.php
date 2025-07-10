@@ -4,8 +4,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once 'Modelo/Productos.php';
-require_once 'Modelo/Bitacora.php';
+require_once 'modelo/producto.php';
+require_once 'modelo/bitacora.php';
 require_once 'Librerias/pdf.php'; // Para generación de PDFs
 
 // Definir constantes para IDs de módulo
@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion'])) {
                     if (!empty($producto['imagen'])) {
                         $html .= '<img src="' . htmlspecialchars($producto['imagen']) . '" class="product-image"
                                     alt="' . htmlspecialchars($producto['nombre_producto']) . '"
-                                    onerror="this.src=\'IMG/placeholder-product.png\'">';
+                                    onerror="this.src=\'img/placeholder-product.png\'">';
                     } else {
                         $html .= '<div class="product-image img-placeholder">
                                     <i class="bi bi-image"></i>
@@ -398,11 +398,11 @@ try {
 
 // Asignar la página y cargar la vista
 $pagina = "catalogo";
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de catálogo', MODULO_CATALOGO, $_SESSION['id_usuario']);
     }
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

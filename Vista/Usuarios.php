@@ -11,9 +11,9 @@
     </head>
 
     <body class="fondo"
-        style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-        <?php include 'NewNavBar.php'; ?>
+        <?php include 'newnavbar.php'; ?>
 
         <div class="modal fade modal-registrar" id="registrarUsuarioModal" tabindex="-1" role="dialog"
             aria-labelledby="registrarUsuarioModalLabel" aria-hidden="true">
@@ -362,7 +362,7 @@ document.getElementById('descargarPDFUsuarios').addEventListener('click', functi
 
         <!-- Modal de eliminación -->
         <?php include 'footer.php'; ?>
-        <script src="Javascript/usuario.js"></script>
+        <script src="javascript/usuario.js"></script>
         <script src="public/bootstrap/js/sidebar.js"></script>
         <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="public/js/jquery-3.7.1.min.js"></script>
@@ -373,7 +373,7 @@ document.getElementById('descargarPDFUsuarios').addEventListener('click', functi
             $(document).ready(function () {
                 $('#tablaConsultas').DataTable({
                     language: {
-                        url: 'Public/js/es-ES.json'
+                        url: 'public/js/es-ES.json'
                     }
                 });
             });

@@ -10,9 +10,9 @@
     <title>Gestionar Recepcion</title>
 </head>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-<?php include 'NewNavBar.php'; ?>
+<?php include 'newnavbar.php'; ?>
 
 <div class="modal fade modal-registrar" id="registrarRecepcionModal" tabindex="-1" role="dialog" aria-labelledby="registrarRecepcionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -62,7 +62,7 @@
                                     <th style="display:none">Cl</th>
                                     <th>Codigo</th>
                                     <th>Nombre</th>
-                                    <th>Modelo</th>
+                                    <th>modelo</th>
                                     <th>Marca</th>
                                     <th>Serial</th>
                                     <th>Costo</th>
@@ -96,7 +96,7 @@
 										<th style="display:none">Id</th>
 										<th>Codigo</th>
 										<th>Nombre</th>
-										<th>Modelo</th>
+										<th>modelo</th>
 										<th>Marca</th>
 										<th>Serial</th>
 									</tr>
@@ -458,10 +458,10 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 
-	<script type="text/javascript" src="Javascript/recepcion.js"></script>
-<script src="Public/js/chart.js"></script>
-<script src="Public/js/html2canvas.min.js"></script>
-<script src="Public/js/jspdf.umd.min.js"></script>
+	<script type="text/javascript" src="javascript/recepcion.js"></script>
+<script src="public/js/chart.js"></script>
+<script src="public/js/html2canvas.min.js"></script>
+<script src="public/js/jspdf.umd.min.js"></script>
 <script>
 const labelsRecepcion = <?= json_encode(array_keys($productosRecibidos)) ?>;
 const dataRecepcion = <?= json_encode(array_values($productosRecibidos)) ?>;

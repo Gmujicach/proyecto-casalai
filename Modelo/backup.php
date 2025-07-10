@@ -16,7 +16,7 @@ class Backup {
 public function generar($nombreArchivo) {
     $pdo = $this->bd->getConexion();
     $dbname = $pdo->query('select database()')->fetchColumn();
-    $rutaCarpeta = __DIR__ . '/../DB/backup/';
+    $rutaCarpeta = __DIR__ . '/../db/backup/';
     $ruta = $rutaCarpeta . $nombreArchivo;
     $config = DB_PRINCIPAL;
 
@@ -48,7 +48,7 @@ exec($comando, $output, $resultado);
 
 
 public function restaurar($nombreArchivo) {
-    $ruta = __DIR__ . '/../DB/backup/' . $nombreArchivo;
+    $ruta = __DIR__ . '/../db/backup/' . $nombreArchivo;
     $config = ($this->tipo === 'S') ? DB_SEGURIDAD : DB_PRINCIPAL;
 
     // Usa la ruta completa de mysql.exe en Windows
@@ -68,7 +68,7 @@ public function restaurar($nombreArchivo) {
 }
 
     public function listar() {
-        $ruta = __DIR__ . '/../DB/backup/';
+        $ruta = __DIR__ . '/../db/backup/';
         $archivos = [];
         if (is_dir($ruta)) {
             $files = scandir($ruta);

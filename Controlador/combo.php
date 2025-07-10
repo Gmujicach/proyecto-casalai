@@ -1,9 +1,9 @@
 <?php
 ob_start();
 //session_start();
-require_once './Modelo/Productos.php';
-require_once './Modelo/Combos.php';
-//require_once './Modelo/productos.php';
+require_once './modelo/producto.php';
+require_once './modelo/combo.php';
+//require_once './modelo/producto.php';
 
 //$productoModel = new Productos();
 //$comboModel = new Combo();
@@ -49,11 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['accion'] === 'crear_combo')
     exit;
 }
 
-$pagina = "combos";
+$pagina = "combo";
 // Verifica si el archivo de vista existe
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     // Incluye el archivo de vista
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     // Muestra un mensaje si la página está en construcción
     echo "Página en construcción";

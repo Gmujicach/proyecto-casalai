@@ -1,10 +1,10 @@
 <?php
-if (!is_file("Modelo/" . $pagina . ".php")) {
+if (!is_file("modelo/" . $pagina . ".php")) {
     echo "Falta el modelo";
     exit;
 }
-require_once("Modelo/" . $pagina . ".php");
-if (is_file("Vista/" . $pagina . ".php")) {
+require_once("modelo/" . $pagina . ".php");
+if (is_file("vista/" . $pagina . ".php")) {
     if (!empty($_POST)) {
         $o = new Login();
         $h = $_POST['accion'];
@@ -20,7 +20,7 @@ if (is_file("Vista/" . $pagina . ".php")) {
                 $_SESSION['nombre_rol'] = $m['nombre_rol'];
                 $_SESSION['id_usuario'] = $m['id_usuario'];
                 $_SESSION['id_rol'] = $m['id_rol'];
-                header('Location: ?pagina=Dashboard');
+                header('Location: ?pagina=dashboard');
                 die();
             } else {
                 $mensaje = $m['mensaje'];
@@ -50,7 +50,7 @@ if (is_file("Vista/" . $pagina . ".php")) {
         }
     }
 
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Falta la vista";
 }

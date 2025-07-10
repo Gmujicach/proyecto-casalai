@@ -3,9 +3,9 @@
 ob_start();
 
 // Importa los modelos necesarios
-require_once 'Modelo/Productos.php';
-require_once 'Modelo/Permisos.php';
-require_once 'Modelo/Bitacora.php';
+require_once 'modelo/producto.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 
 define('MODULO_PRODUCTOS', 6); // Define el ID del módulo de cuentas bancarias
 
@@ -36,7 +36,7 @@ case 'ingresar':
     // Asignar valores generales del producto
     $Producto->setNombreP($_POST['nombre_producto']);
     $Producto->setDescripcionP($_POST['descripcion_producto']);
-    $Producto->setIdModelo($_POST['Modelo']);
+    $Producto->setIdModelo($_POST['modelo']);
     $Producto->setStockActual($_POST['Stock_Actual']);
     $Producto->setStockMax($_POST['Stock_Maximo']);
     $Producto->setStockMin($_POST['Stock_Minimo']);
@@ -64,7 +64,7 @@ case 'ingresar':
 
                 // Procesar imagen (si existe)
                 if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
-                    $directorio = "IMG/Productos/";
+                    $directorio = "img/productos/";
                     if (!is_dir($directorio)) {
                         mkdir($directorio, 0755, true);
                     }
@@ -121,7 +121,7 @@ case 'modificar':
     $Producto->setId($id);
     $Producto->setNombreP($_POST['nombre_producto']);
     $Producto->setDescripcionP($_POST['descripcion_producto']);
-    $Producto->setIdModelo($_POST['Modelo']);
+    $Producto->setIdModelo($_POST['modelo']);
     $Producto->setStockActual($_POST['Stock_Actual']);
     $Producto->setStockMax($_POST['Stock_Maximo']);
     $Producto->setStockMin($_POST['Stock_Minimo']);
@@ -138,7 +138,7 @@ case 'modificar':
         if ($Producto->modificarProducto($id, $_POST)) {
             // Procesar imagen (si existe)
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
-                $directorio = "IMG/Productos/";
+                $directorio = "img/productos/";
                 if (!is_dir($directorio)) {
                     mkdir($directorio, 0755, true);
                 }
@@ -271,9 +271,9 @@ if (empty($categoriasDinamicas)) {
     $mostrarFormulario = true;
 }
 // Asigna el nombre de la página
-$pagina = "Productos";
+$pagina = "producto";
 // Verifica si el archivo de vista existe
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     
 if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de Productos', MODULO_PRODUCTOS, $_SESSION['id_usuario']);
@@ -284,7 +284,7 @@ if (isset($_SESSION['id_usuario'])) {
     // Incluye el archivo de vista
 
 
-        require_once("Vista/" . $pagina . ".php");
+        require_once("vista/" . $pagina . ".php");
 } else {
     // Muestra un mensaje si la página está en construcción
     echo "Página en construcción";

@@ -10,8 +10,8 @@
     <?php include 'header.php'; ?>
 </head>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
-<?php include 'NewNavBar.php'; ?>
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<?php include 'newnavbar.php'; ?>
 
 
 <div class="contenedor-tabla">
@@ -118,7 +118,7 @@
 <script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/jquery-3.7.1.min.js"></script>
-<script src="Javascript/finanza.js"></script>
+<script src="javascript/finanza.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

@@ -1,4 +1,4 @@
-// catalogo.js - Controlador principal del módulo de catálogo
+// catalogo.js - controlador principal del módulo de catálogo
 
 $(document).ready(function () {
     // Variables globales
@@ -300,7 +300,7 @@ $(document).ready(function () {
                             background: '#f8f9fa',
                             backdrop: `
                                 rgba(0,0,0,0.4)
-                                url("/Public/img/cart.gif")
+                                url("/public/img/cart.gif")
                                 center top
                                 no-repeat
                             `
@@ -947,7 +947,7 @@ $(document).ready(function () {
     function inicializarDataTableProductos() {
         const tablaProductosDT = $('#tablaProductos').DataTable({
             language: {
-                url: 'Public/js/es-ES.json'
+                url: 'public/js/es-ES.json'
             },
             responsive: true,
             columnDefs: [

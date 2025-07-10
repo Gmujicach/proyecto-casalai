@@ -24,9 +24,9 @@
   </head>
 
   <body class="fondo"
-    style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-    <?php include 'NewNavBar.php'; ?>
+    <?php include 'newnavbar.php'; ?>
 
     <div class="modal fade modal-registrar" id="registrarProductoModal" tabindex="-1" role="dialog"
       aria-labelledby="registrarProductoModalLabel" aria-hidden="true">
@@ -59,7 +59,7 @@
                   <input type="file" class="form-control" name="imagen" id="imagen" accept="image/*" required>
                   <small class="form-text text-muted">Seleccione una imagen clara del producto (JPG, PNG, etc.).</small>
                   <div id="previewImagen" style="margin-top: 10px;">
-                    <img id="imagenPreview" src="#" alt="Vista previa"
+                    <img id="imagenPreview" src="#" alt="vista previa"
                       style="display: none; max-height: 150px; border-radius: 8px; border: 1px solid #ccc; padding: 5px;">
                   </div>
                 </div>
@@ -72,10 +72,10 @@
                   <small class="form-text text-muted">Breve descripción (máx. 50 caracteres).</small>
                 </div>
                 <br>
-                <!-- Modelo -->
+                <!-- modelo -->
                 <div class="envolver-form">
-                  <label for="Modelo">Modelo</label>
-                  <select class="form-select" id="Modelo" name="Modelo" required>
+                  <label for="modelo">modelo</label>
+                  <select class="form-select" id="modelo" name="modelo" required>
                     <option value="">Seleccione un modelo</option>
                     <?php foreach ($modelos as $modelo): ?>
                       <option value="<?= $modelo['tbl_modelos']; ?>">
@@ -190,7 +190,7 @@
           <?php foreach ($productos as $producto): ?>
                             <?php
                 $id = $producto['id_producto'];
-                $ruta_base = 'IMG/Productos/';
+                $ruta_base = 'img/productos/';
                 $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
 
                 $ruta_imagen = '';
@@ -248,7 +248,7 @@ foreach ($caracteristicas as $clave => $valor) {
                 if (!empty($ruta_imagen)) {
                   echo '<img src="' . htmlspecialchars($ruta_imagen) . '" alt="Foto del producto" class="foto-producto">';
                 } else {
-                  echo '<img src="IMG/no-disponible.png" alt="No disponible" class="foto-producto">';
+                  echo '<img src="img/no-disponible.png" alt="No disponible" class="foto-producto">';
                 }
                 ?>
               </td>
@@ -317,7 +317,7 @@ foreach ($caracteristicas as $clave => $valor) {
 
 
 <div style="margin-top: 20px; text-align: right;">
-  <form action="Controlador/ReporteProductos.php" method="post" target="_blank" style="display:inline;">
+  <form action="controlador/reporteproducto.php" method="post" target="_blank" style="display:inline;">
     <button type="submit" class="btn btn-success">
       Descargar Reporte de Productos por Categoría
     </button>
@@ -455,9 +455,9 @@ foreach ($caracteristicas as $clave => $valor) {
                   name="descripcion_producto" required>
               </div>
               <div class="form-group">
-                <label for="modificarModelo">Modelo</label>
-                <select class="form-select" id="modificarModelo" name="Modelo" required>
-                  <option value="">Seleccionar Modelo</option>
+                <label for="modificarModelo">modelo</label>
+                <select class="form-select" id="modificarModelo" name="modelo" required>
+                  <option value="">Seleccionar modelo</option>
                   <?php foreach ($modelos as $modelo): ?>
                     <option value="<?php echo $modelo['tbl_modelos']; ?>"><?php echo $modelo['nombre_modelo']; ?></option>
                   <?php endforeach; ?>
@@ -555,9 +555,9 @@ foreach ($caracteristicas as $clave => $valor) {
     <script src="public/bootstrap/js/sidebar.js"></script>
     <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="public/js/jquery-3.7.1.min.js"></script>
-    <script src="Javascript/sweetalert2.all.min.js"></script>
-    <script src="Javascript/Productos.js"></script>
-    <script src="Javascript/validaciones.js"></script>
+    <script src="javascript/sweetalert2.all.min.js"></script>
+    <script src="javascript/producto.js"></script>
+    <script src="javascript/validaciones.js"></script>
     <script src="public/js/jquery.dataTables.min.js"></script>
     <script src="public/js/dataTables.bootstrap5.min.js"></script>
     <script src="public/js/datatable.js"></script>
@@ -568,7 +568,7 @@ foreach ($caracteristicas as $clave => $valor) {
       $(document).ready(function () {
         $('#tablaConsultas').DataTable({
           language: {
-            url: 'Public/js/es-ES.json'
+            url: 'public/js/es-ES.json'
           }
         });
       });

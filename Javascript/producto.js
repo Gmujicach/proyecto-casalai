@@ -266,7 +266,7 @@ $('#incluirProductoForm').on('submit', function(event) {
 
     const nombre = $('#nombre_producto').val().trim();
     const descripcion = $('#descripcion_producto').val().trim();
-    const modelo = $('#Modelo').val();
+    const modelo = $('#modelo').val();
     const stockActual = parseInt($('#Stock_Actual').val());
     const stockMinimo = parseInt($('#Stock_Minimo').val());
     const stockMaximo = parseInt($('#Stock_Maximo').val());

@@ -1,9 +1,9 @@
 <?php
 ob_start();
 
-require_once 'Modelo/clientes.php';
-require_once 'Modelo/Permisos.php';
-require_once 'Modelo/Bitacora.php';
+require_once 'modelo/cliente.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
@@ -141,13 +141,13 @@ function getclientes() {
 }
 $reporteComprasClientes = $cliente->obtenerReporteComprasClientes();
 $totalComprasClientes = array_sum(array_column($reporteComprasClientes, 'cantidad'));
-$pagina = "Clientes";
-if (is_file("Vista/" . $pagina . ".php")) {
+$pagina = "cliente";
+if (is_file("vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de cliente', MODULO_CLIENTE, $_SESSION['id_usuario']);
     }
     $clientes = getclientes();
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

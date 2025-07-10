@@ -5,15 +5,15 @@ function getrecepcion() {
     return $recepcion->getrecepcion();
 }
 
-if (!is_file("Modelo/" . $pagina . ".php")) {
+if (!is_file("modelo/" . $pagina . ".php")) {
     echo "Falta definir la clase " . $pagina;
     exit;
 }
 
-require_once("Modelo/" . $pagina . ".php");
+require_once("modelo/" . $pagina . ".php");
 $k = new Recepcion();
-require_once 'Modelo/Permisos.php';
-require_once 'Modelo/Bitacora.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 define('MODULO_RECEPCION', 2); // Define el ID del módulo de cuentas bancarias
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
@@ -156,7 +156,7 @@ case 'modificarRecepcion':
         exit;
     }
 
-    // Vista inicial
+    // vista inicial
     $recepciones = getrecepcion();
     $proveedores = $k->obtenerproveedor();
     $productos = $k->consultarproductos();

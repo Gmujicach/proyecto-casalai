@@ -1,12 +1,12 @@
 <?php
-require_once 'Modelo/Proveedores.php';
-require_once 'Modelo/Productos.php';
-require_once 'Config/config.php';
+require_once 'modelo/proveedor.php';
+require_once 'modelo/producto.php';
+require_once 'config/config.php';
 
 // Configuración de PHPMailer
-require_once 'Config/PHPMailer/PHPMailer.php';
-require_once 'Config/PHPMailer/Exception.php';
-require_once 'Config/PHPMailer/SMTP.php';
+require_once 'config/PHPMailer/PHPMailer.php';
+require_once 'config/PHPMailer/Exception.php';
+require_once 'config/PHPMailer/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['accion'] == 'realizar_pedido
             <table border='1' cellpadding='5' cellspacing='0'>
                 <tr>
                     <th>Producto</th>
-                    <th>Modelo</th>
+                    <th>modelo</th>
                     <th>Cantidad Solicitada</th>
                 </tr>
                 <tr>
@@ -78,12 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['accion'] == 'realizar_pedido
         // Redirigir con mensaje de éxito
         session_start();
         $_SESSION['mensaje'] = "Pedido realizado correctamente y notificación enviada al proveedor.";
-        header('Location: ../Vista/Proveedores.php');
+        header('Location: ../vista/proveedor.php');
     } catch (Exception $e) {
         // En caso de error
         session_start();
         $_SESSION['error'] = "Error al procesar el pedido: " . $e->getMessage();
-        header('Location: ../Vista/Proveedores.php');
+        header('Location: ../vista/proveedor.php');
     }
     exit();
 }

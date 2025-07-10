@@ -1,8 +1,8 @@
 <?php
 ob_start();
-require_once 'Modelo/rol.php';
-require_once 'Modelo/Permisos.php';
-require_once 'Modelo/Bitacora.php';
+require_once 'modelo/rol.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 define('MODULO_ROLES', 18); // Define el ID del módulo de roles
 
 $id_rol = $_SESSION['id_rol'];
@@ -135,12 +135,12 @@ function consultarRoles() {
 }
 
 $pagina = "rol";
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de Roles', MODULO_ROLES, $_SESSION['id_usuario']);
 }
     $roles = consultarRoles();
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

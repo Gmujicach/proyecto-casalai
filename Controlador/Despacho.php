@@ -5,15 +5,15 @@ function getdespacho() {
     return $despacho->getdespacho();
 }
 
-if (!is_file("Modelo/" . $pagina . ".php")) {
+if (!is_file("modelo/" . $pagina . ".php")) {
     echo "Falta definir la clase " . $pagina;
     exit;
 }
 
-require_once("Modelo/" . $pagina . ".php");
+require_once("modelo/" . $pagina . ".php");
 $k = new Despacho();
-require_once 'Modelo/Permisos.php';
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 
 define('MODULO_DESPACHO', 3);
 
@@ -310,7 +310,7 @@ foreach ($despachos as $despacho):
         exit;
     }
 
-    // Vista inicial
+    // vista inicial
     $despachos = getdespacho();
     $proveedores = $k->obtenercliente();
     $productos = $k->consultarproductos();

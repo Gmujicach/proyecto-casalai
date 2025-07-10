@@ -1,6 +1,6 @@
 <?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Cliente' || $_SESSION['nombre_rol'] == 'SuperUsuario') {?>
 
-<?php require_once 'Modelo/Despacho.php' ; require_once 'Controlador/factura.php' ; ?>
+<?php require_once 'modelo/despacho.php' ; require_once 'controlador/factura.php' ; ?>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -8,7 +8,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?php include 'header.php'; ?>
-        <link rel="stylesheet" href="Styles/darckort.css">
+        <link rel="stylesheet" href="styles/darckort.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Gestionar Despachos</title>
     </head>
@@ -90,7 +90,7 @@
                                     <th>Eliminar</th>
                                     <th style="display:none">Id</th>
                                     <th>Producto</th>
-                                    <th>Modelo</th>
+                                    <th>modelo</th>
                                     <th>Marca</th>
                                     <th>Cantidad Disponible</th>
                                     <th>Cantidad Seleccionada</th>
@@ -162,7 +162,7 @@
                             <tr>
                                 <th style="display:none">Id</th>
                                 <th>Nombre Producto</th>
-                                <th>Modelo</th>
+                                <th>modelo</th>
                                 <th>Marca</th>
                                 <th>Stock Actual</th>
                                 <th>Precio</th>
@@ -180,13 +180,13 @@
 
         </div>
         <!--fin de seccion modal-->
-        <script src="Javascript/factura.js"></script>
+        <script src="javascript/factura.js"></script>
 
 
 
 
         <?php include 'footer.php'; ?>
-        <script src="Javascript/validaciones.js"></script>
+        <script src="javascript/validaciones.js"></script>
     </body>
 
     </html>

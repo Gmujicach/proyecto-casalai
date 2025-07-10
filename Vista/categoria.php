@@ -26,9 +26,9 @@
     </head>
 
     <body class="fondo"
-        style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-        <?php include 'NewNavBar.php'; ?>
+        <?php include 'newnavbar.php'; ?>
 
         <div class="modal fade modal-registrar" id="registrarCategoriaModal" tabindex="-1" role="dialog"
             aria-labelledby="registrarCategoriaModalLabel" aria-hidden="true">
@@ -158,7 +158,7 @@
 </div>
 
         <?php include 'footer.php'; ?>
-        <script src="Javascript/categoria.js"></script>
+        <script src="javascript/categoria.js"></script>
         <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="public/js/jquery-3.7.1.min.js"></script>
         <script src="public/bootstrap/js/sidebar.js"></script>
@@ -169,7 +169,7 @@
             $(document).ready(function () {
                 $('#tablaConsultas').DataTable({
                     language: {
-                        url: 'Public/js/es-ES.json'
+                        url: 'public/js/es-ES.json'
                     }
                 });
             });

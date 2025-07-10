@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Config/Config.php';
+require_once __DIR__ . '/../Config/config.php';
 
 class Productos extends BD{
     private $conex;

@@ -10,9 +10,9 @@
     <?php include 'header.php'; ?>
 </head>
 
-<?php include 'NewNavBar.php'; ?>
+<?php include 'newnavbar.php'; ?>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <div class="modal fade modal-registrar" id="registrarCuentaModal" tabindex="-1" role="dialog" 
 aria-labelledby="registrarCuentaModalLabel" aria-hidden="true">
@@ -204,7 +204,7 @@ aria-labelledby="modificarCuentaModalLabel" aria-hidden="true">
 <?php include 'footer.php'; ?>
 <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/jquery-3.7.1.min.js"></script>
-<script src="Javascript/cuentas.js"></script>
+<script src="javascript/cuenta.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>
@@ -212,7 +212,7 @@ aria-labelledby="modificarCuentaModalLabel" aria-hidden="true">
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
         language: {
-            url: 'Public/js/es-ES.json'
+            url: 'public/js/es-ES.json'
         }
     });
 });

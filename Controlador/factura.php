@@ -1,12 +1,12 @@
 <?php
 
-if (!is_file("modelo/Factura.php")) {
+if (!is_file("modelo/factura.php")) {
  
     echo "Falta definir la clase " . $pagina;
     exit;
 }
 
-require_once("modelo/Factura.php");
+require_once("modelo/factura.php");
 if (is_file("vista/factura.php")) {
 
     if (!empty($_POST)) {

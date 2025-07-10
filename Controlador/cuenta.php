@@ -1,8 +1,8 @@
 <?php
 ob_start();
-require_once 'Modelo/cuentas.php';
-require_once 'Modelo/Permisos.php';
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/cuenta.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 
 $id_rol = $_SESSION['id_rol'];
 
@@ -182,13 +182,13 @@ function consultarCuentabanco() {
     return $cuentabanco->consultarCuentabanco();
 }
 
-$pagina = "cuentas";
-if (is_file("Vista/" . $pagina . ".php")) {
+$pagina = "cuenta";
+if (is_file("vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de cuentas bancarias', MODULO_CUENTA_BANCARIA, $_SESSION['id_usuario']);
     }
     $cuentabancos = consultarCuentabanco();
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

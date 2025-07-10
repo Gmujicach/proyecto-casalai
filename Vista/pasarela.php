@@ -3,8 +3,8 @@
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
-<?php include 'NewNavBar.php'; ?>
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<?php include 'newnavbar.php'; ?>
 
 <div class="contenedor-tabla">
     <h3>LISTA DE PAGOS DE PAGOS REALIZADOS</h3>
@@ -45,7 +45,7 @@
                 <td>
                     <div class="acciones-boton">
                         <i class="vertical">
-                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
+                            <img src="img/more_opcion.svg" alt="Ícono" width="16" height="16">
                         </i>
                         <div class="desplegable">
                             <ul><?php  if($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista'){ ?>
@@ -198,9 +198,9 @@
   <script src="public/js/jquery.dataTables.min.js"></script>
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatable.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
-<script src="Javascript/validaciones.js"></script>
-<script src="Javascript/pasarela.js"></script>
+  <script src="javascript/sweetalert2.all.min.js"></script>
+<script src="javascript/validaciones.js"></script>
+<script src="javascript/pasarela.js"></script>
 <script>
   // Este bloque impide el retroceso y redirige al usuario
   (function () {
@@ -251,7 +251,7 @@
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
         language: {
-            url: 'Public/js/es-ES.json'
+            url: 'public/js/es-ES.json'
         }
     });
 });

@@ -104,7 +104,7 @@
         }
 
         .fondo {
-            background-image: url(IMG/FONDO.jpg);
+            background-image: url(img/fondo.jpg);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -114,7 +114,7 @@
 </head>
 
 <body class="fondo">
-    <?php include 'NewNavBar.php'; ?>
+    <?php include 'newnavbar.php'; ?>
     <br>
 
     <section class="container mt-5">
@@ -206,7 +206,7 @@
                                                 <?php if (!empty($producto['imagen'])): ?>
                                                     <img src="<?= htmlspecialchars($producto['imagen']) ?>" class="product-image"
                                                         alt="<?= htmlspecialchars($producto['nombre_producto']) ?>"
-                                                        onerror="this.src='IMG/placeholder-product.png'">
+                                                        onerror="this.src='img/placeholder-product.png'">
                                                 <?php else: ?>
                                                     <div class="product-image img-placeholder">
                                                         <i class="bi bi-image"></i>
@@ -292,7 +292,7 @@
                                             ?>
                                                     <img src="<?= htmlspecialchars($producto['imagen']) ?>" class="combo-image <?= $imagenesMostradas == 1 ? 'combo-main-image' : '' ?>"
                                                         alt="<?= htmlspecialchars($producto['nombre_producto']) ?>"
-                                                        onerror="this.src='IMG/placeholder-product.png'">
+                                                        onerror="this.src='img/placeholder-product.png'">
                                             <?php
                                                 endif;
                                             endforeach;
@@ -569,12 +569,12 @@
         </div>
     </section>
 
-    <script src="Public/js/jquery-3.7.1.min.js"></script>
+    <script src="public/js/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="Javascript/sweetalert2.all.min.js"></script>
-    <script src="Javascript/catalogo.js"></script>
-    <script src="Public/js/jquery.dataTables.min.js"></script>
-    <script src="Public/js/dataTables.bootstrap5.min.js"></script>
+    <script src="javascript/sweetalert2.all.min.js"></script>
+    <script src="javascript/catalogo.js"></script>
+    <script src="public/js/jquery.dataTables.min.js"></script>
+    <script src="public/js/dataTables.bootstrap5.min.js"></script>
 </body>
 
 </html>

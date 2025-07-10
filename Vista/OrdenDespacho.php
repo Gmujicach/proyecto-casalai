@@ -9,10 +9,10 @@
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 
-<?php include 'NewNavBar.php'; ?>
+<?php include 'newnavbar.php'; ?>
 
 
 <!-- Botón para abrir el modal de registro de orden de despacho -->
@@ -121,12 +121,12 @@
                 <td><?php //echo "$inicio-$fin de $totalUsuarios"; ?></td>
                 <td>
                     <a href="?pagina=<?php //echo max(1, $paginaActual - 1); ?>">
-                        <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
+                        <i class="flecha-izquierda"><img src="img/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
                     </a>
                 </td>
                 <td>
                     <a href="?pagina<?php //echo min(ceil($totalUsuarios / $filasPorPagina), $paginaActual + 1); ?>">
-                        <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
+                        <i class="flecha-derecha"><img src="img/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
                     </a>
                 </td>
             </tr>
@@ -192,10 +192,10 @@
   <script src="public/js/jquery.dataTables.min.js"></script>
   <script src="public/js/dataTables.bootstrap5.min.js"></script>
   <script src="public/js/datatable.js"></script>
-  <script src="Javascript/sweetalert2.all.min.js"></script>
-<script src="Javascript/usuario.js"></script>
-<script src="Javascript/validaciones.js"></script>
-<script src="Javascript/ordendespacho.js"></script>
+  <script src="javascript/sweetalert2.all.min.js"></script>
+<script src="javascript/usuario.js"></script>
+<script src="javascript/validaciones.js"></script>
+<script src="javascript/ordendespacho.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>
@@ -203,7 +203,7 @@
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
         language: {
-            url: 'Public/js/es-ES.json'
+            url: 'public/js/es-ES.json'
         }
     });
 });

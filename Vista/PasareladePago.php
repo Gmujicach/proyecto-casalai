@@ -3,9 +3,9 @@
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
-<body class="fondo" style="height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body class="fondo" style="height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-<?php include 'NewNavBar.php'; ?>
+<?php include 'newnavbar.php'; ?>
 
 <!-- CONTENEDOR FLEXIBLE -->
 <div class="contenedor-flex" style="display: flex; justify-content: center; align-items: flex-start; gap: 2rem; padding: 2rem; flex-wrap: wrap;">
@@ -93,10 +93,10 @@
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>
-<script src="Javascript/sweetalert2.all.min.js"></script>
-<script src="Javascript/usuario.js"></script>
-<script src="Javascript/validaciones.js"></script>
-<script src="Javascript/pagos.js"></script>
+<script src="javascript/sweetalert2.all.min.js"></script>
+<script src="javascript/usuario.js"></script>
+<script src="javascript/validaciones.js"></script>
+<script src="javascript/pago.js"></script>
 
 <script>
   document.getElementById('cuenta').addEventListener('change', function () {
