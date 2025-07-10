@@ -53,7 +53,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
 
 <aside class="sidebar">
     <div class="headmenu">
-        <img src="img/LOGO.png" alt="logo">
+        <img src="img/logo.png" alt="logo">
         <h2><span>Casa Lai</span></h2>
     </div>
 
@@ -307,7 +307,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
 </ul>
         <div class="user-cuenta">
             <div class="user-perfil">
-                <img src="img/Avatar.png" alt="perfil-img">
+                <img src="img/avatar.png" alt="perfil-img">
                 <div class="user-detalle">
                     <h3><?php echo htmlspecialchars($_SESSION['name'] ?? 'Invitado'); ?></h3>
                     <span><?php echo htmlspecialchars($_SESSION['nombre_rol'] ?? 'Usuario'); ?></span>

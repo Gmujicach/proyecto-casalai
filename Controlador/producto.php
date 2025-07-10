@@ -64,7 +64,7 @@ case 'ingresar':
 
                 // Procesar imagen (si existe)
                 if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
-                    $directorio = "IMG/Productos/";
+                    $directorio = "IMG/productos/";
                     if (!is_dir($directorio)) {
                         mkdir($directorio, 0755, true);
                     }
@@ -138,7 +138,7 @@ case 'modificar':
         if ($Producto->modificarProducto($id, $_POST)) {
             // Procesar imagen (si existe)
             if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
-                $directorio = "IMG/Productos/";
+                $directorio = "IMG/productos/";
                 if (!is_dir($directorio)) {
                     mkdir($directorio, 0755, true);
                 }

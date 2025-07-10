@@ -17,7 +17,7 @@ if (!isset($_SESSION['name'])) {
   <?php include 'header.php'; ?>
 </head>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">  <?php include 'newnavbar.php'; ?>
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">  <?php include 'newnavbar.php'; ?>
   <?php include 'footer.php'; ?>
   <script>
     const sesion = <?php echo json_encode($_SESSION); ?>;

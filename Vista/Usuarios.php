@@ -11,7 +11,7 @@
     </head>
 
     <body class="fondo"
-        style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
         <?php include 'newnavbar.php'; ?>
 

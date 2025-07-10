@@ -2,7 +2,7 @@
 <title>Gestionar Facturas</title>
 </head>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/FONDO.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
     <?php require_once("public/modal.php"); ?>
 
 

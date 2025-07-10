@@ -104,7 +104,7 @@
         }
 
         .fondo {
-            background-image: url(IMG/FONDO.jpg);
+            background-image: url(IMG/fondo.jpg);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
