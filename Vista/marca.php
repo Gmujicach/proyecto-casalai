@@ -132,7 +132,7 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
 <?php include 'footer.php'; ?>
 <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/jquery-3.7.1.min.js"></script>
-<script src="Javascript/marcas.js"></script>
+<script src="Javascript/marca.js"></script>
 
 <script src="public/bootstrap/js/sidebar.js"></script>
 

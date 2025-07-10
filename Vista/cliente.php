@@ -242,7 +242,7 @@ aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
 <script src="public/js/popper.min.js"></script>
 <script src="Javascript/js/bootstrap.min.js"></script>
 
-<script src="Javascript/clientes.js"></script>
+<script src="Javascript/cliente.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>

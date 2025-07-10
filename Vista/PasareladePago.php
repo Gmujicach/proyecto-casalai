@@ -96,7 +96,7 @@
 <script src="Javascript/sweetalert2.all.min.js"></script>
 <script src="Javascript/usuario.js"></script>
 <script src="Javascript/validaciones.js"></script>
-<script src="Javascript/pagos.js"></script>
+<script src="Javascript/pago.js"></script>
 
 <script>
   document.getElementById('cuenta').addEventListener('change', function () {

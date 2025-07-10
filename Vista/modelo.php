@@ -145,7 +145,7 @@ aria-labelledby="registrarModeloModalLabel" aria-hidden="true">
 
 <?php include 'footer.php'; ?>
 
-<script src="Javascript/modelos.js"></script>
+<script src="Javascript/modelo.js"></script>
 <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="public/bootstrap/js/sidebar.js"></script>
