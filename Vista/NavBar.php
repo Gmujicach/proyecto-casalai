@@ -42,6 +42,6 @@
         });
     </script>
 
-<script src="Public/js/jquery.min.js"></script>
-<script src="Public/js/popper.min.js"></script>
+<script src="public/js/jquery.min.js"></script>
+<script src="public/js/popper.min.js"></script>
 <script src="Javascript/js/bootstrap.min.js"></script>

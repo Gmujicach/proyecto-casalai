@@ -96,7 +96,7 @@ const toType = obj => {
 };
 /**
  * --------------------------------------------------------------------------
- * Public Util Api
+ * public Util Api
  * --------------------------------------------------------------------------
  */
 
@@ -818,7 +818,7 @@ class Alert extends BaseComponent {
   // Getters
   static get NAME() {
     return NAME$c;
-  } // Public
+  } // public
 
 
   close(element) {
@@ -922,7 +922,7 @@ class Button extends BaseComponent {
   // Getters
   static get NAME() {
     return NAME$b;
-  } // Public
+  } // public
 
 
   toggle() {
@@ -1147,7 +1147,7 @@ class Carousel extends BaseComponent {
 
   static get NAME() {
     return NAME$a;
-  } // Public
+  } // public
 
 
   next() {
@@ -1664,7 +1664,7 @@ class Collapse extends BaseComponent {
 
   static get NAME() {
     return NAME$9;
-  } // Public
+  } // public
 
 
   toggle() {
@@ -2029,7 +2029,7 @@ class Dropdown extends BaseComponent {
 
   static get NAME() {
     return NAME$8;
-  } // Public
+  } // public
 
 
   toggle() {
@@ -2714,7 +2714,7 @@ class Modal extends BaseComponent {
 
   static get NAME() {
     return NAME$6;
-  } // Public
+  } // public
 
 
   toggle(relatedTarget) {
@@ -3144,7 +3144,7 @@ class Offcanvas extends BaseComponent {
 
   static get Default() {
     return Default$4;
-  } // Public
+  } // public
 
 
   toggle(relatedTarget) {
@@ -3578,7 +3578,7 @@ class Tooltip extends BaseComponent {
 
   static get DefaultType() {
     return DefaultType$3;
-  } // Public
+  } // public
 
 
   enable() {
@@ -4358,7 +4358,7 @@ class ScrollSpy extends BaseComponent {
 
   static get NAME() {
     return NAME$2;
-  } // Public
+  } // public
 
 
   refresh() {
@@ -4582,7 +4582,7 @@ class Tab extends BaseComponent {
   // Getters
   static get NAME() {
     return NAME$1;
-  } // Public
+  } // public
 
 
   show() {
@@ -4805,7 +4805,7 @@ class Toast extends BaseComponent {
 
   static get NAME() {
     return NAME;
-  } // Public
+  } // public
 
 
   show() {

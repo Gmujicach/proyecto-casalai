@@ -300,7 +300,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
 <?php endif; ?>
 
     <h4><span>Solicitar Ayuda</span><div class='menu-separador'></div></h4>;
-    <li><a href="Public/casalai-manual/index.php"><span class="simbolo"><img src="IMG/user-round-search.svg" class="icono-svg" />Manual de Usuarios</span></a></li>;
+    <li><a href="public/casalai-manual/index.php"><span class="simbolo"><img src="IMG/user-round-search.svg" class="icono-svg" />Manual de Usuarios</span></a></li>;
     <h4><span>Cuenta</span><div class="menu-separador"></div></h4>
     <li><a href="#"><span class="simbolo"><img src="IMG/circle-user-round.svg" class="icono-svg" />Perfil</span></a></li>
     <li><a href='?pagina=cerrar'><span class="simbolo"><img src="IMG/log-out.svg" class="icono-svg" />Cerrar Sesión</span></a></li>

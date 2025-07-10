@@ -459,9 +459,9 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 	<script type="text/javascript" src="Javascript/recepcion.js"></script>
-<script src="Public/js/chart.js"></script>
-<script src="Public/js/html2canvas.min.js"></script>
-<script src="Public/js/jspdf.umd.min.js"></script>
+<script src="public/js/chart.js"></script>
+<script src="public/js/html2canvas.min.js"></script>
+<script src="public/js/jspdf.umd.min.js"></script>
 <script>
 const labelsRecepcion = <?= json_encode(array_keys($productosRecibidos)) ?>;
 const dataRecepcion = <?= json_encode(array_values($productosRecibidos)) ?>;

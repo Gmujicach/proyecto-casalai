@@ -90,7 +90,7 @@
   };
 
   /**
-   * Public Util API
+   * public Util API
    */
 
   const getUID = prefix => {
@@ -665,7 +665,7 @@
       Data.set(this._element, this.constructor.DATA_KEY, this);
     }
 
-    // Public
+    // public
     dispose() {
       Data.remove(this._element, this.constructor.DATA_KEY);
       EventHandler.off(this._element, this.constructor.EVENT_KEY);
@@ -848,7 +848,7 @@
       return NAME$f;
     }
 
-    // Public
+    // public
     close() {
       const closeEvent = EventHandler.trigger(this._element, EVENT_CLOSE);
       if (closeEvent.defaultPrevented) {
@@ -923,7 +923,7 @@
       return NAME$e;
     }
 
-    // Public
+    // public
     toggle() {
       // Toggle class and sync the `aria-pressed` attribute with the return value of the `.toggle()` method
       this._element.setAttribute('aria-pressed', this._element.classList.toggle(CLASS_NAME_ACTIVE$3));
@@ -1019,7 +1019,7 @@
       return NAME$d;
     }
 
-    // Public
+    // public
     dispose() {
       EventHandler.off(this._element, EVENT_KEY$9);
     }
@@ -1175,7 +1175,7 @@
       return NAME$c;
     }
 
-    // Public
+    // public
     next() {
       this._slide(ORDER_NEXT);
     }
@@ -1527,7 +1527,7 @@
       return NAME$b;
     }
 
-    // Public
+    // public
     toggle() {
       if (this._isShown()) {
         this.hide();
@@ -3612,7 +3612,7 @@
       return NAME$a;
     }
 
-    // Public
+    // public
     toggle() {
       return this._isShown() ? this.hide() : this.show();
     }
@@ -3944,7 +3944,7 @@
       return NAME$9;
     }
 
-    // Public
+    // public
     show(callback) {
       if (!this._config.isVisible) {
         execute(callback);
@@ -4065,7 +4065,7 @@
       return NAME$8;
     }
 
-    // Public
+    // public
     activate() {
       if (this._isActive) {
         return;
@@ -4137,7 +4137,7 @@
       this._element = document.body;
     }
 
-    // Public
+    // public
     getWidth() {
       // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth#usage_notes
       const documentWidth = document.documentElement.clientWidth;
@@ -4282,7 +4282,7 @@
       return NAME$7;
     }
 
-    // Public
+    // public
     toggle(relatedTarget) {
       return this._isShown ? this.hide() : this.show(relatedTarget);
     }
@@ -4581,7 +4581,7 @@
       return NAME$6;
     }
 
-    // Public
+    // public
     toggle(relatedTarget) {
       return this._isShown ? this.hide() : this.show(relatedTarget);
     }
@@ -4899,7 +4899,7 @@
       return NAME$5;
     }
 
-    // Public
+    // public
     getContent() {
       return Object.values(this._config.content).map(config => this._resolvePossibleFunction(config)).filter(Boolean);
     }
@@ -5096,7 +5096,7 @@
       return NAME$4;
     }
 
-    // Public
+    // public
     enable() {
       this._isEnabled = true;
     }
@@ -5648,7 +5648,7 @@
       return NAME$2;
     }
 
-    // Public
+    // public
     refresh() {
       this._initializeTargetsAndObservables();
       this._maybeEnableSmoothScroll();
@@ -5895,7 +5895,7 @@
       return NAME$1;
     }
 
-    // Public
+    // public
     show() {
       // Shows this elem and deactivate the active sibling if exists
       const innerElem = this._element;
@@ -6161,7 +6161,7 @@
       return NAME;
     }
 
-    // Public
+    // public
     show() {
       const showEvent = EventHandler.trigger(this._element, EVENT_SHOW);
       if (showEvent.defaultPrevented) {

@@ -69,7 +69,7 @@ protected $CreationDate;       // document creation date
 protected $PDFVersion;         // PDF version number
 
 /*******************************************************************************
-*                               Public methods                                 *
+*                               public methods                                 *
 *******************************************************************************/
 
 function __construct($orientation='P', $unit='mm', $size='A4')

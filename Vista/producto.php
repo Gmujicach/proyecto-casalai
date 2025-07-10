@@ -568,7 +568,7 @@ foreach ($caracteristicas as $clave => $valor) {
       $(document).ready(function () {
         $('#tablaConsultas').DataTable({
           language: {
-            url: 'Public/js/es-ES.json'
+            url: 'public/js/es-ES.json'
           }
         });
       });

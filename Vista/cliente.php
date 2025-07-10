@@ -239,7 +239,7 @@ aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
 
 <script src="Javascript/js/jquery.min.js"></script>
 <script src="Javascript/js/jquery-3.5.1.min.js"></script>
-<script src="Public/js/popper.min.js"></script>
+<script src="public/js/popper.min.js"></script>
 <script src="Javascript/js/bootstrap.min.js"></script>
 
 <script src="Javascript/clientes.js"></script>
@@ -250,7 +250,7 @@ aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
         language: {
-            url: 'Public/js/es-ES.json'
+            url: 'public/js/es-ES.json'
         },
         columnDefs: [
             { orderable: false, targets: 5 } // Deshabilitar ordenamiento para columna de acciones

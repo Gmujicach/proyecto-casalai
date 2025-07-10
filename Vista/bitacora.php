@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Bitácora del Sistema</title>
-    <link rel="stylesheet" href="Public/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="Public/js/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="public/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="public/js/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="Styles/tabla_consulta.css">
     <?php include 'header.php'; ?>
     <style>
@@ -55,10 +55,10 @@
 </div>
 
 <?php include 'footer.php'; ?>
-<script src="Public/js/jquery-3.7.1.min.js"></script>
-<script src="Public/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="Public/js/jquery.dataTables.min.js"></script>
-<script src="Public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="Javascript/bitacora.js"></script>
 </body>
 </html>

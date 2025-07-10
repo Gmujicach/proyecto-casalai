@@ -19,9 +19,9 @@ $data = json_encode(array_column($datos, "stock"));
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte Estadístico con Chart.js</title>
-    <script src="Public/js/chart.js"></script>
-    <script src="Public/js/jspdf.umd.min.js"></script>
-    <script src="Public/js/html2canvas.min.js"></script>
+    <script src="public/js/chart.js"></script>
+    <script src="public/js/jspdf.umd.min.js"></script>
+    <script src="public/js/html2canvas.min.js"></script>
 
     <style>
         body {

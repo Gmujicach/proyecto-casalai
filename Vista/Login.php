@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Styles/login-darckort.css">
     <link rel="stylesheet" href="Styles/formulario.css">
-    <script src="Public/js/sweetalert2.js"></script>
+    <script src="public/js/sweetalert2.js"></script>
     <title>Iniciar Sesión</title>
   </head>
 

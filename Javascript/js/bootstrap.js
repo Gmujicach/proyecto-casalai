@@ -138,7 +138,7 @@
   }
   /**
    * --------------------------------------------------------------------------
-   * Public Util Api
+   * public Util Api
    * --------------------------------------------------------------------------
    */
 
@@ -296,7 +296,7 @@
 
     var _proto = Alert.prototype;
 
-    // Public
+    // public
     _proto.close = function close(element) {
       var rootElement = this._element;
 
@@ -466,7 +466,7 @@
 
     var _proto = Button.prototype;
 
-    // Public
+    // public
     _proto.toggle = function toggle() {
       var triggerChangeEvent = true;
       var addAriaPressed = true;
@@ -731,7 +731,7 @@
 
     var _proto = Carousel.prototype;
 
-    // Public
+    // public
     _proto.next = function next() {
       if (!this._isSliding) {
         this._slide(Direction.NEXT);
@@ -1303,7 +1303,7 @@
 
     var _proto = Collapse.prototype;
 
-    // Public
+    // public
     _proto.toggle = function toggle() {
       if ($(this._element).hasClass(ClassName$3.SHOW)) {
         this.hide();
@@ -1677,7 +1677,7 @@
 
     var _proto = Dropdown.prototype;
 
-    // Public
+    // public
     _proto.toggle = function toggle() {
       if (this._element.disabled || $(this._element).hasClass(ClassName$4.DISABLED)) {
         return;
@@ -2190,7 +2190,7 @@
 
     var _proto = Modal.prototype;
 
-    // Public
+    // public
     _proto.toggle = function toggle(relatedTarget) {
       return this._isShown ? this.hide() : this.show(relatedTarget);
     };
@@ -2951,7 +2951,7 @@
 
     var _proto = Tooltip.prototype;
 
-    // Public
+    // public
     _proto.enable = function enable() {
       this._isEnabled = true;
     };
@@ -3820,7 +3820,7 @@
 
     var _proto = ScrollSpy.prototype;
 
-    // Public
+    // public
     _proto.refresh = function refresh() {
       var _this2 = this;
 
@@ -4099,7 +4099,7 @@
 
     var _proto = Tab.prototype;
 
-    // Public
+    // public
     _proto.show = function show() {
       var _this = this;
 
@@ -4339,7 +4339,7 @@
 
     var _proto = Toast.prototype;
 
-    // Public
+    // public
     _proto.show = function show() {
       var _this = this;
 
