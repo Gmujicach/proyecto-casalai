@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Config/config.php';
+require_once __DIR__ . '/../config/config.php';
 
 class Backup {
     private $bd;
@@ -23,13 +23,11 @@ public function generar($nombreArchivo) {
     // Verificar y crear carpeta si no existe
     if (!is_dir($rutaCarpeta)) {
         if (!mkdir($rutaCarpeta, 0775, true)) {
-            error_log("No se pudo crear la carpeta de backup: $rutaCarpeta");
             return false;
         }
     }
     // Verificar permisos de escritura
     if (!is_writable($rutaCarpeta)) {
-        error_log("La carpeta de backup no tiene permisos de escritura: $rutaCarpeta");
         return false;
     }
 
@@ -40,7 +38,7 @@ exec($comando, $output, $resultado);
 
     // Depuración: guardar salida del comando
     if ($resultado !== 0) {
-        error_log("Error al ejecutar mysqldump: " . implode("\n", $output));
+        return false;
     }
 
     return ($resultado === 0 && file_exists($ruta) && filesize($ruta) > 0);
@@ -61,7 +59,6 @@ public function restaurar($nombreArchivo) {
     exec($comando, $output, $resultado);
 
     if ($resultado !== 0) {
-        error_log("Error al ejecutar mysql restore: " . implode("\n", $output));
         return false;
     }
     return true;

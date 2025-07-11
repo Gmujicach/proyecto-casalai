@@ -65,8 +65,7 @@ class marca extends BD {
             $this->conex = null;
             return $marca ? $marca : null;
         } catch (PDOException $e) {
-            error_log("Error al obtener la última marca: " . $e->getMessage());
-            $this->conex = null;
+           $this->conex = null;
             return null;
         }
     }

@@ -128,8 +128,7 @@ class OrdenDespacho extends BD {
             
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Error al cambiar estatus: " . $e->getMessage());
-            return false;
+           return false;
         }
     }
 

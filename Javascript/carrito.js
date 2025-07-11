@@ -74,7 +74,7 @@ document.getElementById('registrar-compra').addEventListener('click', function (
                         showConfirmButton: false
                     }).then(() => {
                                             // Redireccionar después de éxito
-                    window.location.href = '?pagina=gestionarFactura';
+                    window.location.href = '?pagina=gestionarfactura';
                     });
                 } else {
                     Swal.fire({

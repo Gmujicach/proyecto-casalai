@@ -100,7 +100,6 @@ private function r_Rol() {
             $this->conex = null;
             return $rol ? $rol : null;
         } catch (PDOException $e) {
-            error_log("Error al obtener el último rol: " . $e->getMessage());
             $this->conex = null;
             return null;
         }

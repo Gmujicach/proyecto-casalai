@@ -26,7 +26,7 @@ $('#formularioPago').on('submit', function(event) {
                 // Bloque para evitar retroceso
                 history.pushState(null, '', location.href);
                 window.addEventListener('popstate', function () {
-                    window.location.href = '?pagina=GestionarFactura';
+                    window.location.href = '?pagina=gestionarfactura';
                 });
 
             } else {

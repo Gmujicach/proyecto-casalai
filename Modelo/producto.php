@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Config/config.php';
+require_once __DIR__ . '/../config/config.php';
 
 class Productos extends BD{
     private $conex;
@@ -268,7 +268,6 @@ public function ingresarProducto($datosCategoria) {
         if (!$stmt->execute()) {
             $errorInfo = $stmt->errorInfo();
             $this->conex->rollBack();
-            error_log("Error SQL al insertar producto: " . $errorInfo[2]);
             throw new Exception("Error SQL al insertar producto: " . $errorInfo[2]);
         }
 
@@ -292,7 +291,6 @@ public function ingresarProducto($datosCategoria) {
             if (!$stmtCat->execute()) {
                 $errorInfo = $stmtCat->errorInfo();
                 $this->conex->rollBack();
-                error_log("Error SQL al insertar características: " . $errorInfo[2]);
                 throw new Exception("Error SQL al insertar características: " . $errorInfo[2]);
             }
         }
@@ -302,7 +300,6 @@ public function ingresarProducto($datosCategoria) {
 
     } catch (Exception $e) {
         $this->conex->rollBack();
-        error_log("Error al ingresar producto: " . $e->getMessage());
         throw new Exception("Error al ingresar producto: " . $e->getMessage());
     }
 }
@@ -562,7 +559,6 @@ JOIN
             
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Error al cambiar estatus: " . $e->getMessage());
             return false;
         }
     }
@@ -682,8 +678,7 @@ public function agregarProductoAlCarrito($id_cliente, $id_producto, $cantidad = 
             return $stmt->execute();
         }
     } catch (Exception $e) {
-        error_log("Error en agregarProductoAlCarrito: " . $e->getMessage());
-        return false;
+       return false;
     }
 }
 
@@ -744,7 +739,6 @@ public function agregarComboAlCarrito($id_cliente, $id_combo) {
         
     } catch (Exception $e) {
         $this->conex->rollBack();
-        error_log("Error en agregarComboAlCarrito: " . $e->getMessage());
         throw $e;
     }
 }

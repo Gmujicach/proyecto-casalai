@@ -210,7 +210,6 @@ private function pagoProcesar() {
             
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Error al cambiar estatus: " . $e->getMessage());
             return false;
         }
     }

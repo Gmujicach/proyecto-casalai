@@ -1,5 +1,5 @@
 <?php 
-$pagina = "Login"; 
+$pagina = "login"; 
 
 
 
