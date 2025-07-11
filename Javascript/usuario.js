@@ -36,11 +36,24 @@ $(document).ready(function () {
   });
   $("#nombre_usuario").on("keyup", function () {
     validarKeyUp(
-      /^[a-zA-Z0-9_]{4,20}$/,
+      /^[a-zA-Z0-9_]{4,15}$/,
       $(this),
       $("#snombre_usuario"),
-      "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*"
+      "*El usuario debe tener entre 4 y 15 caracteres alfanuméricos*"
     );
+  });
+
+  $("#cedula").on("keypress", function(e){
+      validarKeyPress(/^[0-9]*$/, e);
+  });
+
+  $("#cedula").on("keyup", function(){
+      validarKeyUp(
+          /^[0-9]{7,8}$/,
+          $(this),
+          $("#scedula"),
+          "*El formato solo permite números*"
+      );
   });
 
   $("#telefono_usuario").on("keypress", function (e) {
@@ -189,13 +202,23 @@ $(document).ready(function() {
     nombre_usuario.val(space(nombre_usuario.val()).trim());
     if (
       validarKeyUp(
-        /^[a-zA-Z0-9_]{4,20}$/,
+        /^[a-zA-Z0-9_]{4,15}$/,
         nombre_usuario,
         $("#snombre_usuario"),
-        "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*"
+        "*El usuario debe tener entre 4 y 15 caracteres alfanuméricos*"
       ) == 0
     ) {
       valido = false;
+    }
+
+    else if(validarKeyUp(
+        /^[0-9]{7,8}$/,
+        $("#cedula"),
+        $("#scedula"),
+        "*El formato solo permite números*"
+    )==0){
+        mensajes('error',4000,'Verifique el número de cédula','El formato solo permite números');
+        return false;
     }
 
     let telefono_usuario = $("#telefono_usuario");
@@ -286,6 +309,7 @@ function agregarFilaUsuario(usuario) {
                     data-username="${usuario.username}"
                     data-nombres="${usuario.nombres}"
                     data-apellidos="${usuario.apellidos}"
+                    data-cedula="${usuario.cedula}"
                     data-correo="${usuario.correo}"
                     data-telefono="${usuario.telefono}"
                     data-clave=""
@@ -301,10 +325,11 @@ function agregarFilaUsuario(usuario) {
             </div>
         </ul>`,
       `<span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>`,
+      `<span class="campo-cedula">${usuario.cedula}</span>`,
       `<span class="campo-correo">${usuario.correo}</span>`,
       `<span class="campo-usuario">${usuario.username}</span>`,
       `<span class="campo-telefono">${usuario.telefono}</span>`,
-      `<span class="campo-rango">${usuario.nombre_rol}</span>`, // <--- Aquí
+      `<span class="campo-rango">${usuario.nombre_rol}</span>`,
       `<span class="campo-estatus habilitado" data-id="${usuario.id_usuario}" style="cursor: pointer;">
             habilitado
         </span>`,
@@ -320,6 +345,8 @@ function agregarFilaUsuario(usuario) {
     $("#sapellido").text("");
     $("#nombre_usuario").val("");
     $("#snombre_usuario").text("");
+    $("#cedula").val("");
+    $("#scedula").text("");
     $("#telefono_usuario").val("");
     $("#stelefono_usuario").text("");
     $("#correo_usuario").val("");
@@ -335,6 +362,7 @@ function agregarFilaUsuario(usuario) {
     $("#snombre").text("");
     $("#sapellido").text("");
     $("#snombre_usuario").text("");
+    $("#scedula").text("");
     $("#scorreo_usuario").text("");
     $("#stelefono_usuario").text("");
     $("#sclave_usuario").text("");
@@ -424,11 +452,24 @@ function agregarFilaUsuario(usuario) {
   });
   $("#modificarnombre_usuario").on("keyup", function () {
     validarKeyUp(
-      /^[a-zA-Z0-9_]{4,20}$/,
+      /^[a-zA-Z0-9_]{4,15}$/,
       $(this),
       $("#smodificarnombre_usuario"),
-      "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*"
+      "*El usuario debe tener entre 4 y 15 caracteres alfanuméricos*"
     );
+  });
+
+  $("#modificarcedula").on("keypress", function(e){
+      validarKeyPress(/^[0-9]*$/, e);
+  });
+
+  $("#modificarcedula").on("keyup", function(){
+      validarKeyUp(
+          /^[0-9]{7,8}$/,
+          $(this),
+          $("#smodificarcedula"),
+          "*El formato solo permite números*"
+      );
   });
 
   $("#modificartelefono_usuario").on("keypress", function (e) {
@@ -462,6 +503,7 @@ function agregarFilaUsuario(usuario) {
     $("#modificarnombre_usuario").val($(this).data("username"));
     $("#modificarnombre").val($(this).data("nombres"));
     $("#modificarapellido_usuario").val($(this).data("apellidos"));
+    $('#modificarcedula').val($(this).data('cedula'));
     $("#modificarcorreo_usuario").val($(this).data("correo"));
     $("#modificartelefono_usuario").val($(this).data("telefono"));
     $("#modificar_rango").val($(this).data("rango"));
@@ -469,6 +511,7 @@ function agregarFilaUsuario(usuario) {
     $("#smodificarnombre_usuario").text("");
     $("#smodificarnombre").text("");
     $("#smodificarapellido_usuario").text("");
+    $("#smodificarcedula").text("");
     $("#smodificarcorreo_usuario").text("");
     $("#smodificartelefono_usuario").text("");
     $("#modificar_usuario_modal").modal("show");
@@ -481,6 +524,7 @@ function agregarFilaUsuario(usuario) {
       username: $("#modificarnombre_usuario").val(),
       nombres: $("#modificarnombre").val(),
       apellidos: $("#modificarapellido_usuario").val(),
+      cedula: $('#modificarcedula').val(),
       correo: $("#modificarcorreo_usuario").val(),
       telefono: $("#modificartelefono_usuario").val(),
       rango: $("#rango").val(),
@@ -497,6 +541,9 @@ function agregarFilaUsuario(usuario) {
     }
     if (!/^[a-zA-ZÁÉÍÓÚÑáéíóúüÜ\s]{2,30}$/.test(datos.apellidos)) {
       errores.push("Apellidos: solo letras, de 2 a 30 caracteres.");
+    }
+    if (!/^[0-9]{7,8}$/.test(datos.cedula)) {
+        errores.push("El formato solo permite números.");
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo)) {
       errores.push("Formato correcto: example@gmail.com.");
@@ -539,6 +586,7 @@ if (fila.length) {
                 data-username="${usuario.username}"
                 data-nombres="${usuario.nombres}"
                 data-apellidos="${usuario.apellidos}"
+                data-cedula="${usuario.cedula}"
                 data-correo="${usuario.correo}"
                 data-telefono="${usuario.telefono}"
                 data-clave=""
@@ -554,6 +602,7 @@ if (fila.length) {
         </div>
     </ul>`,
     `<span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>`,
+    `<span class="campo-cedula">${usuario.cedula}</span>`,
     `<span class="campo-correo">${usuario.correo}</span>`,
     `<span class="campo-usuario">${usuario.username}</span>`,
     `<span class="campo-telefono">${usuario.telefono}</span>`,
@@ -571,6 +620,7 @@ if (fila.length) {
   botonModificar.data("username", usuario.username);
   botonModificar.data("nombres", usuario.nombres);
   botonModificar.data("apellidos", usuario.apellidos);
+  botonModificar.data("cedula", usuario.cedula);
   botonModificar.data("correo", usuario.correo);
   botonModificar.data("telefono", usuario.telefono);
   botonModificar.data("rango", usuario.id_rol);

@@ -12,6 +12,7 @@ class Usuarios extends BD {
     private $tableusuarios = 'tbl_usuarios';
     private $nombre;
     private $apellido;
+    private $cedula;
     private $correo;
     private $telefono;
     private $estatus=1;
@@ -92,6 +93,12 @@ class Usuarios extends BD {
     public function getCorreo() {
         return $this->correo;
     }
+    public function getCedula() {
+        return $this->cedula;
+    }
+    public function setCedula($cedula) {
+        $this->cedula = $cedula;
+    }
     public function setCorreo($correo) {
         $this->correo = $correo;
     }
@@ -117,11 +124,12 @@ class Usuarios extends BD {
 public function ingresarUsuario() {
     $claveEncriptada = password_hash($this->clave, PASSWORD_BCRYPT);
 
-    $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `id_rol`, `correo`, `nombres`, `apellidos`, `telefono`)
-            VALUES (:username, :clave, :id_rol, :correo, :nombres, :apellidos, :telefono)";
+    $sql = "INSERT INTO tbl_usuarios (`username`, `password`, `cedula`, `id_rol`, `correo`, `nombres`, `apellidos`, `telefono`)
+            VALUES (:username, :clave, :cedula, :id_rol, :correo, :nombres, :apellidos, :telefono)";
     $stmt = $this->conex->prepare($sql);
     $stmt->bindParam(':username', $this->username);
     $stmt->bindParam(':clave', $claveEncriptada);
+    $stmt->bindParam(':cedula', $this->cedula);
     $stmt->bindParam(':id_rol', $this->id_rol);
     $stmt->bindParam(':correo', $this->correo);
     $stmt->bindParam(':nombres', $this->nombre);
@@ -185,7 +193,8 @@ public function modificarUsuario($id_usuario) {
     $claveEncriptada = !empty($this->clave) ? password_hash($this->clave, PASSWORD_BCRYPT) : null;
 
     $sql = "UPDATE tbl_usuarios SET 
-                username = :username, 
+                username = :username,
+                cedula = :cedula, 
                 id_rol = :id_rol,
                 nombres = :nombre,
                 apellidos = :apellido,
@@ -199,6 +208,7 @@ public function modificarUsuario($id_usuario) {
     if (!empty($this->clave)) {
         $stmt->bindParam(':clave', $claveEncriptada);
     }
+    $stmt->bindParam(':cedula', $this->cedula);
     $stmt->bindParam(':id_rol', $this->id_rol);
     $stmt->bindParam(':nombre', $this->nombre);
     $stmt->bindParam(':apellido', $this->apellido);

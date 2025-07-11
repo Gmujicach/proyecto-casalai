@@ -117,12 +117,12 @@
   <div class="input-row">
     <div class="input-field">
       <i class="fas fa-phone"></i>
-      <input type="text" name="nombre_usuario" id="nombre_usuario" placeholder="Nombre de Usuario" maxlength="20" required />
+      <input type="text" name="nombre_usuario" id="nombre_usuario" placeholder="Nombre de Usuario" maxlength="15" required />
       <span class="span-value" id="snombre_usuario"></span>
     </div>
     <div class="input-field">
       <i class="fas fa-envelope"></i>
-      <input type="text" name="cedula" id="cedula" placeholder="Cédula/RIF" maxlength="12" required />
+      <input type="text" name="cedula" id="cedula" placeholder="Cédula" maxlength="8" required />
       <span class="span-value" id="scedula"></span>
     </div>
   </div>

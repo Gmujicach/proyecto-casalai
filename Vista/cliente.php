@@ -33,8 +33,8 @@ aria-labelledby="registrarClienteModalLabel" aria-hidden="true">
                     </div>
 
                     <div class="envolver-form">
-                        <label for="cedula_o_rif">Cedula o RIF</label>
-                        <input class="control-form" placeholder="Cedula/Rif" maxlength="12" type="text" id="cedula" name="cedula" required>
+                        <label for="cedula">Número de cédula</label>
+                        <input class="control-form" placeholder="Cédula" maxlength="8" type="text" id="cedula" name="cedula" required>
                         <span class="span-value" id="scedula"></span>
                     </div>
 
@@ -205,7 +205,7 @@ aria-labelledby="modificar_clientes_modal_label" aria-hidden="true">
                     </div>
                     <div class="form-group">
                         <label for="modificarcedula">Cédula</label>
-                        <input type="text" class="form-control" id="modificarcedula" name="cedula" maxlength="12" required>
+                        <input type="text" class="form-control" id="modificarcedula" name="cedula" maxlength="8" required>
                         <span class="span-value-modal" id="smodificarcedula"></span>
                     </div>
                     <div class="form-group">
