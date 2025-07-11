@@ -110,8 +110,7 @@ class cliente extends BD {
             $this->conex = null;
             return $cliente ? $cliente : null;
         } catch (PDOException $e) {
-            error_log("Error al obtener el último cliente: " . $e->getMessage());
-            $this->conex = null;
+           $this->conex = null;
             return null;
         }
     }

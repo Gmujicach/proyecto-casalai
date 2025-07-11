@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Config/config.php';
+require_once __DIR__ . '/../config/config.php';
 
 class Usuarios extends BD {
     
@@ -162,7 +162,6 @@ public function ingresarUsuario() {
             $this->conex = null;
             return $usuario ? $usuario : null;
         } catch (PDOException $e) {
-            error_log("Error al obtener la última cuenta: " . $e->getMessage());
             $this->conex = null;
             return null;
         }
@@ -226,8 +225,7 @@ public function modificarUsuario($id_usuario) {
             
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Error al cambiar estatus: " . $e->getMessage());
-            return false;
+return false;
         }
     }
 public function obtenerReporteRoles() {

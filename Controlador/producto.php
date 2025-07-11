@@ -253,10 +253,6 @@ foreach ($reporteCategorias as &$cat) {
     $cat['porcentaje'] = $totalCategorias > 0 ? round(($cat['cantidad'] / $totalCategorias) * 100, 2) : 0;
 }
 unset($cat);
-// DEPURACIÓN: Mostrar datos en el log y en pantalla (solo para desarrollo)
-error_log("DEBUG - reporteCategorias: " . print_r($reporteCategorias, true));
-error_log("DEBUG - totalCategorias: " . $totalCategorias);
-
 if (isset($_GET['debug']) && $_GET['debug'] == 1) {
     echo "<pre style='background:#eee;padding:10px;'>";
     echo "reporteCategorias:\n";

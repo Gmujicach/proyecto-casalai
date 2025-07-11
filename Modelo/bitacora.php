@@ -20,7 +20,7 @@ class Bitacora extends BD {
             $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Error al registrar en bitácora: " . $e->getMessage());
+           
             return false;
         }
     }
@@ -42,7 +42,7 @@ class Bitacora extends BD {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Error al obtener registros detallados: " . $e->getMessage());
+            gestionarfactura("Error al obtener registros detallados: " . $e->getMessage());
             return [];
         }
     }

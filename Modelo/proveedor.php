@@ -149,7 +149,7 @@ class Proveedores extends BD {
             $this->conex = null;
             return $proveedor ? $proveedor : null;
         } catch (PDOException $e) {
-            error_log("Error al obtener el último proveedor: " . $e->getMessage());
+            gestionarfactura("Error al obtener el último proveedor: " . $e->getMessage());
             $this->conex = null;
             return null;
         }
@@ -237,7 +237,7 @@ public function obtenerReporteSuministroProveedores() {
             
             return $stmt->execute();
         } catch (PDOException $e) {
-            error_log("Error al cambiar estatus: " . $e->getMessage());
+            gestionarfactura("Error al cambiar estatus: " . $e->getMessage());
             return false;
         }
     }

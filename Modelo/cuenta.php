@@ -110,7 +110,6 @@ class Cuentabanco extends BD {
             $this->db = null;
             return $cuenta ? $cuenta : null;
         } catch (PDOException $e) {
-            error_log("Error al obtener la última cuenta: " . $e->getMessage());
             $this->db = null;
             return null;
         }
@@ -228,8 +227,7 @@ class Cuentabanco extends BD {
             $this->db = null;
             return $result;
         } catch (PDOException $e) {
-            error_log("Error al cambiar estado: " . $e->getMessage());
-            $this->db = null;
+           $this->db = null;
             return false;
         }
     }

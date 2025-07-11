@@ -55,7 +55,7 @@ if (isset($_POST['id_factura'])) {
     }
 } else {
     // 🔁 Si no viene con POST id_factura (por ejemplo al retroceder), redirigir
-    header("Location: ?pagina=GestionarFactura");
+    header("Location: ?pagina=gestionarfactura");
     exit;
 }
 

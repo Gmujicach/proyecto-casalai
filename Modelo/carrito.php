@@ -114,8 +114,7 @@ class Carrito extends BD{
             return true;
         } catch (PDOException $e) {
             $this->conex->rollBack();
-            error_log("Error al agregar combo al carrito: " . $e->getMessage());
-            return false;
+           return false;
         }
     }
 
@@ -126,7 +125,6 @@ public function registrarCompra($id_carrito, $id_cliente, $productos)
         // Validar que todos los productos estén completos antes de iniciar la transacción
         foreach ($productos as $detalle) {
             if (empty($detalle['id_producto']) || empty($detalle['cantidad']) || !is_numeric($detalle['cantidad'])) {
-                error_log("Producto con datos incompletos o inválidos: " . json_encode($detalle));
                 throw new Exception("Uno o más productos tienen datos incompletos o inválidos.");
             }
         }
@@ -170,7 +168,6 @@ public function registrarCompra($id_carrito, $id_cliente, $productos)
         return true;
     } catch (Exception $e) {
     $this->conex->rollBack();
-    error_log("Error al registrar compra: " . $e->getMessage());
     return ['error' => $e->getMessage()];
 }
 
