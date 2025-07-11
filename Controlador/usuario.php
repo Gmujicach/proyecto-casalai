@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario->setClave($_POST['clave_usuario']);
             $usuario->setNombre($_POST['nombre']);
             $usuario->setApellido($_POST['apellido_usuario']);
+            $usuario->setCedula($_POST['cedula']);
             $usuario->setCorreo($_POST['correo_usuario']);
             $usuario->setTelefono($_POST['telefono_usuario']);
             $usuario->setRango($_POST['rango']);
@@ -96,6 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usuario->setUsername($_POST['nombre_usuario']);
             $usuario->setNombre($_POST['nombre']);
             $usuario->setApellido($_POST['apellido_usuario']);
+            $usuario->setCedula($_POST['cedula']);
             $usuario->setCorreo($_POST['correo_usuario']);
             $usuario->setTelefono($_POST['telefono_usuario']);
             $usuario->setRango($_POST['rango']);

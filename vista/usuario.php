@@ -49,6 +49,11 @@
                                 <span class="span-value" id="snombre_usuario"></span>
                             </div>
                             <div class="envolver-form">
+                                <label for="cedula">Número de cédula</label>
+                                <input class="control-form" placeholder="Cédula" maxlength="8" type="text" id="cedula" name="cedula" required>
+                                <span class="span-value" id="scedula"></span>
+                            </div>
+                            <div class="envolver-form">
                                 <label for="telefono_usuario">Número de Teléfono</label>
                                 <input type="text" placeholder="Teléfono" class="control-form" id="telefono_usuario"
                                     name="telefono_usuario" maxlength="13" required>
@@ -106,9 +111,10 @@
                     <tr>
                         <th>Acciones</th>
                         <th>Nombre y Apellido</th>
+                        <th>Cédula</th>
                         <th>Correo</th>
                         <th>Usuario</th>
-                        <th>Telefono</th>
+                        <th>Teléfono</th>
                         <th>Rol</th>
                         <th>Estatus</th>
                     </tr>
@@ -125,6 +131,7 @@
                                     data-username="<?php echo htmlspecialchars($usuario['username']); ?>"
                                     data-nombres="<?php echo htmlspecialchars($usuario['nombres']); ?>"
                                     data-apellidos="<?php echo htmlspecialchars($usuario['apellidos']); ?>"
+                                    data-cedula="<?php echo htmlspecialchars($usuario['cedula']); ?>"
                                     data-correo="<?php echo htmlspecialchars($usuario['correo']); ?>"
                                     data-telefono="<?php echo htmlspecialchars($usuario['telefono']); ?>"
                                     data-clave="<?php echo htmlspecialchars($usuario['password']); ?>"
@@ -148,17 +155,22 @@
                     </span>
                 </td>
                 <td>
-                    <span class="campo-correo">
+                    <span class="campo-rif-correo">
+                        <?php echo htmlspecialchars($usuario['cedula']); ?>
+                    </span>
+                </td>
+                <td>
+                    <span class="campo-rif-correo">
                         <?php echo htmlspecialchars($usuario['correo']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="campo-usuario">
+                    <span class="campo-nombres">
                         <?php echo htmlspecialchars($usuario['username']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="campo-telefono">
+                    <span class="campo-numeros">
                         <?php echo htmlspecialchars($usuario['telefono']); ?>
                     </span>
                 </td>
@@ -325,6 +337,11 @@ document.getElementById('descargarPDFUsuarios').addEventListener('click', functi
                                 <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario"
                                     maxlength="20" required>
                                 <span class="span-value-modal" id="smodificarnombre_usuario"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="modificarcedula">Cédula</label>
+                                <input type="text" class="form-control" id="modificarcedula" name="cedula" maxlength="8" required>
+                                <span class="span-value-modal" id="smodificarcedula"></span>
                             </div>
                             <div class="form-group">
                                 <label for="modificartelefono_usuario">Telefono</label>
