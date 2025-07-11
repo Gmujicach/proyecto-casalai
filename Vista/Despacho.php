@@ -12,7 +12,7 @@
 
 <?php include 'newnavbar.php'; ?>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <div class="modal fade modal-registrar" id="registrarDespachoModal" tabindex="-1" role="dialog" 
 aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
@@ -503,8 +503,8 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 });
 </script>
 
-    <script src="javascript/despacho.js"></script>
-    <script src="javascript/validaciones.js"></script>
+    <script src="Javascript/despacho.js"></script>
+    <script src="Javascript/validaciones.js"></script>
 
 
 </body>

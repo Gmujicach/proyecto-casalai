@@ -3,7 +3,7 @@
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
-<body class="fondo" style="height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body class="fondo" style="height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <?php include 'newnavbar.php'; ?>
 
@@ -87,16 +87,16 @@
 
 <!-- FOOTER -->
 <?php include 'footer.php'; ?>
-<script src="public/bootstrap/js/sidebar.js"></script>
-<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="public/js/jquery-3.7.1.min.js"></script>
-<script src="public/js/jquery.dataTables.min.js"></script>
-<script src="public/js/dataTables.bootstrap5.min.js"></script>
-<script src="public/js/datatable.js"></script>
-<script src="javascript/sweetalert2.all.min.js"></script>
-<script src="javascript/usuario.js"></script>
-<script src="javascript/validaciones.js"></script>
-<script src="javascript/pago.js"></script>
+<script src="Public/bootstrap/js/sidebar.js"></script>
+<script src="Public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="Public/js/jquery-3.7.1.min.js"></script>
+<script src="Public/js/jquery.dataTables.min.js"></script>
+<script src="Public/js/dataTables.bootstrap5.min.js"></script>
+<script src="Public/js/datatable.js"></script>
+<script src="Javascript/sweetalert2.all.min.js"></script>
+<script src="Javascript/usuario.js"></script>
+<script src="Javascript/validaciones.js"></script>
+<script src="Javascript/pago.js"></script>
 
 <script>
   document.getElementById('cuenta').addEventListener('change', function () {

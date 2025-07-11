@@ -8,8 +8,8 @@ $pagina = "Login";
  }
 
 $rango = "";
-if (is_file("modelo/validalogin.php")) {
-   require_once("modelo/validalogin.php");
+if (is_file("Modelo/validalogin.php")) {
+   require_once("Modelo/validalogin.php");
    $v = new validalogin();
    if ($pagina == 'cerrar') {
       $v->destruyesesion();
@@ -18,8 +18,8 @@ if (is_file("modelo/validalogin.php")) {
    }
 }
 
- if(is_file("controlador/".$pagina.".php")){ 
-    require_once("controlador/".$pagina.".php");
+ if(is_file("Controlador/".$pagina.".php")){ 
+    require_once("Controlador/".$pagina.".php");
  }
  else{
     echo "Página en construcción";

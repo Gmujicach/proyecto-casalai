@@ -1,8 +1,8 @@
 <?php
 ob_start();
-require_once 'modelo/producto.php';
-require_once 'modelo/carrito.php';
-require_once 'modelo/factura.php';
+require_once 'Modelo/producto.php';
+require_once 'Modelo/carrito.php';
+require_once 'Modelo/factura.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accion = $_POST['accion'] ?? '';
@@ -207,11 +207,11 @@ function obtenerMarcas() {
 
 // Cargar vista
 $pagina = "carrito";
-if (is_file("vista/" . $pagina . ".php")) {
+if (is_file("Vista/" . $pagina . ".php")) {
     $productos = obtenerProductos();
     $carritos = obtenerProductosDelCarrito();
     $marcas = obtenerMarcas();
-    require_once("vista/" . $pagina . ".php");
+    require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

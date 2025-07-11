@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" href="img/logo.png">
+    <link rel="icon" href="IMG/logo.png">
     <title>Manual de Usuario - Casa Lai.Ca</title>
 </head>
 
@@ -16,7 +16,7 @@
     <main class="tarjeta card p-5">
         <header class="d-flex justify-content-between align-items-center border-bottom py-4">
             <h1 class="fw-bold">Manual de Usuario</h1>
-            <img style="height: 85px;" src="img/logo-lg.png">
+            <img style="height: 85px;" src="IMG/logo-lg.png">
         </header>
 
         <section class="mb-5">

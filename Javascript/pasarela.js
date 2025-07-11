@@ -234,7 +234,7 @@ function actualizarFilaPago(pago) {
                 pago.observaciones,
                 `<div class="acciones-boton">
                     <i class="vertical">
-                        <img src="img/more_opcion.svg" alt="Ícono" width="16" height="16">
+                        <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
                     </i>
                     <div class="desplegable">
                         <ul>

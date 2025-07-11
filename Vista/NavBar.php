@@ -6,7 +6,7 @@
     <!-- Contenedor para el logo y el nombre -->
     <a class="navbar-brand" href="?pagina=Dashboard" style="display: flex; align-items: center;">
         <!-- Imagen del logo -->
-        <img src="img/logotipo.png" alt="Logo" width="60" height="50" style="margin-right: 10px;">
+        <img src="IMG/logotipo.png" alt="Logo" width="60" height="50" style="margin-right: 10px;">
         
         <!-- Nombre de la página -->
         <h3 style="color: white; margin: 0;">Casa Lai</h3>
@@ -28,7 +28,7 @@
         <a href="?pagina=clientes">Gestionar Clientes</a>
         <a href="?pagina=Proveedores">Gestionar Proveedores</a>
         <a href="?pagina=GestionarFactura">Gestionar Facturas</a>
-        <a href="vista/Manual.pdf" target="_blank">Manual Usuario</a>
+        <a href="Vista/Manual.pdf" target="_blank">Manual Usuario</a>
     </nav>
 
     <script>
@@ -42,6 +42,6 @@
         });
     </script>
 
-<script src="public/js/jquery.min.js"></script>
-<script src="public/js/popper.min.js"></script>
-<script src="javascript/js/bootstrap.min.js"></script>
+<script src="Public/js/jquery.min.js"></script>
+<script src="Public/js/popper.min.js"></script>
+<script src="Javascript/js/bootstrap.min.js"></script>

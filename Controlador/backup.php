@@ -3,7 +3,7 @@ ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/../modelo/backup.php';
+require_once __DIR__ . '/../Modelo/backup.php';
 
 if (isset($_GET['accion'])) {
 
@@ -70,10 +70,10 @@ if ($_GET['accion'] === 'generar') {
 
 // Renderizado de la vista
 $pagina = "backup";
-if (is_file("vista/" . $pagina . ".php")) {
+if (is_file("Vista/" . $pagina . ".php")) {
     $backup = new Backup();
     $backups = $backup->listar();
-    require_once("vista/" . $pagina . ".php");
+    require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

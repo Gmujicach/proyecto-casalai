@@ -3,7 +3,7 @@
   <title>Gestionar Orden de Despacho</title>
   <?php include 'header.php'; ?>
 </head>
-<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 <?php include 'newnavbar.php'; ?>
 
 <div class="contenedor-tabla">
@@ -45,7 +45,7 @@
                 <td>
                     <div class="acciones-boton">
                         <i class="vertical">
-                            <img src="img/more_opcion.svg" alt="Ícono" width="16" height="16">
+                            <img src="IMG/more_opcion.svg" alt="Ícono" width="16" height="16">
                         </i>
                         <div class="desplegable">
                             <ul><?php  if($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista'){ ?>
@@ -192,15 +192,15 @@
 
 
 <?php include 'footer.php'; ?>
-<script src="public/bootstrap/js/sidebar.js"></script>
-  <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="public/js/jquery-3.7.1.min.js"></script>
-  <script src="public/js/jquery.dataTables.min.js"></script>
-  <script src="public/js/dataTables.bootstrap5.min.js"></script>
-  <script src="public/js/datatable.js"></script>
-  <script src="javascript/sweetalert2.all.min.js"></script>
-<script src="javascript/validaciones.js"></script>
-<script src="javascript/pasarela.js"></script>
+<script src="Public/bootstrap/js/sidebar.js"></script>
+  <script src="Public/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="Public/js/jquery-3.7.1.min.js"></script>
+  <script src="Public/js/jquery.dataTables.min.js"></script>
+  <script src="Public/js/dataTables.bootstrap5.min.js"></script>
+  <script src="Public/js/datatable.js"></script>
+  <script src="Javascript/sweetalert2.all.min.js"></script>
+<script src="Javascript/validaciones.js"></script>
+<script src="Javascript/pasarela.js"></script>
 <script>
   // Este bloque impide el retroceso y redirige al usuario
   (function () {
@@ -244,14 +244,14 @@
     // Ejecutar automáticamente al cargar la página
     document.addEventListener('DOMContentLoaded', aplicarClasesEstatus);
 </script>
-<script src="public/js/jquery.dataTables.min.js"></script>
-<script src="public/js/dataTables.bootstrap5.min.js"></script>
-<script src="public/js/datatable.js"></script>
+<script src="Public/js/jquery.dataTables.min.js"></script>
+<script src="Public/js/dataTables.bootstrap5.min.js"></script>
+<script src="Public/js/datatable.js"></script>
 <script>
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
         language: {
-            url: 'public/js/es-ES.json'
+            url: 'Public/js/es-ES.json'
         }
     });
 });

@@ -1,10 +1,10 @@
 <?php
 ob_start();
 
-require_once 'modelo/proveedor.php';
-require_once 'modelo/producto.php';
-require_once 'modelo/permiso.php';
-require_once 'modelo/bitacora.php';
+require_once 'Modelo/proveedor.php';
+require_once 'Modelo/producto.php';
+require_once 'Modelo/permiso.php';
+require_once 'Modelo/bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
@@ -205,13 +205,13 @@ function obtenerProductosConBajoStock() {
 }
 
 $pagina = "proveedor";
-if (is_file("vista/" . $pagina . ".php")) {
+if (is_file("Vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de proveedores', MODULO_PROVEEDORES, $_SESSION['id_usuario']);
 }
     $proveedores = getproveedores();
     $productos = obtenerProductosConBajoStock();
-    require_once("vista/" . $pagina . ".php");
+    require_once("Vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

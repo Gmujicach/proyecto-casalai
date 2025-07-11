@@ -56,7 +56,7 @@ class Paginador extends BD {
         $html .= '<td>';
         if ($this->paginaActual > 1) {
             $html .= '<a href="'.$urlBase.'?pagina='.($this->paginaActual - 1).$queryString.'">
-                <i class="flecha-izquierda"><img src="img/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
+                <i class="flecha-izquierda"><img src="IMG/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
             </a>';
         }
         $html .= '</td>';
@@ -65,7 +65,7 @@ class Paginador extends BD {
         $html .= '<td>';
         if ($this->paginaActual < $this->totalPaginas) {
             $html .= '<a href="'.$urlBase.'?pagina='.($this->paginaActual + 1).$queryString.'">
-                <i class="flecha-derecha"><img src="img/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
+                <i class="flecha-derecha"><img src="IMG/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
             </a>';
         }
         $html .= '</td>';

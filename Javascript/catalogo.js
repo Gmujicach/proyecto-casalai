@@ -300,7 +300,7 @@ $(document).ready(function () {
                             background: '#f8f9fa',
                             backdrop: `
                                 rgba(0,0,0,0.4)
-                                url("/public/img/cart.gif")
+                                url("/Public/IMG/cart.gif")
                                 center top
                                 no-repeat
                             `
@@ -947,7 +947,7 @@ $(document).ready(function () {
     function inicializarDataTableProductos() {
         const tablaProductosDT = $('#tablaProductos').DataTable({
             language: {
-                url: 'public/js/es-ES.json'
+                url: 'Public/js/es-ES.json'
             },
             responsive: true,
             columnDefs: [
