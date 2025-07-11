@@ -2,8 +2,8 @@
 <title>Gestionar Facturas</title>
 </head>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
-    <?php require_once("Public/modal.php"); ?>
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <?php require_once("public/modal.php"); ?>
 
 
     <?php include 'newnavbar.php'; ?>
@@ -38,10 +38,10 @@
 
     <?php include 'footer.php'; ?>
         <!-- Bootstrap JS -->
-    <script src="Javascript/factura.js"></script>
-    <script src='Public/bootstrap/js/bootstrap.bundle.min.js'></script>
-    <script src='Public/bootstrap/css/bootstrap.min.css'></script>
-    <script src="Javascript/validaciones.js"></script>
+    <script src="javascript/factura.js"></script>
+    <script src='public/bootstrap/js/bootstrap.bundle.min.js'></script>
+    <script src='public/bootstrap/css/bootstrap.min.css'></script>
+    <script src="javascript/validaciones.js"></script>
 
 
 

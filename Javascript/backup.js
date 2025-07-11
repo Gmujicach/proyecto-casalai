@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Descargar respaldo actual (genera y descarga)
     document.getElementById('btn-backup-principal').addEventListener('click', function (e) {
         e.preventDefault();
-        fetch('Controlador/backup.php?accion=generar')
+        fetch('controlador/backup.php?accion=generar')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location = 'Controlador/backup.php?accion=descargar&archivo=' + encodeURIComponent(data.archivo);
+                    window.location = 'controlador/backup.php?accion=descargar&archivo=' + encodeURIComponent(data.archivo);
                 } else {
                     alert('Error al generar respaldo');
                 }
@@ -29,14 +29,14 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('btn-restaurar-ultimo').addEventListener('click', function (e) {
         e.preventDefault();
         if (confirm('¿Seguro que deseas restaurar el último respaldo?')) {
-            fetch('Controlador/backup.php?accion=consultar')
+            fetch('controlador/backup.php?accion=consultar')
                 .then(response => response.json())
                 .then(data => {
                     if (data.length > 0) {
                         // Ordena por nombre descendente (el más reciente primero)
                         data.sort().reverse();
                         let ultimo = data[0];
-                        fetch('Controlador/backup.php?accion=restaurar&archivo=' + encodeURIComponent(ultimo))
+                        fetch('controlador/backup.php?accion=restaurar&archivo=' + encodeURIComponent(ultimo))
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Actualiza la tabla de respaldos (si usas AJAX para listar)
     function actualizarTablaRespaldos() {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'Controlador/backup.php?accion=consultar', true);
+        xhr.open('GET', 'controlador/backup.php?accion=consultar', true);
         xhr.onload = function () {
             if (xhr.status === 200) {
                 let data = JSON.parse(xhr.responseText);
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.querySelectorAll('.btn-descargar').forEach(btn => {
     btn.onclick = function (e) {
         e.preventDefault();
-        window.location = 'Controlador/backup.php?accion=descargar&archivo=' + encodeURIComponent(this.dataset.archivo);
+        window.location = 'controlador/backup.php?accion=descargar&archivo=' + encodeURIComponent(this.dataset.archivo);
     };
 });
 
@@ -93,7 +93,7 @@ document.querySelectorAll('.btn-descargar').forEach(btn => {
             btn.onclick = function (e) {
                 e.preventDefault();
                 if (confirm('¿Seguro que deseas restaurar este respaldo?')) {
-                    fetch('Controlador/backup.php?accion=restaurar&archivo=' + encodeURIComponent(this.dataset.archivo))
+                    fetch('controlador/backup.php?accion=restaurar&archivo=' + encodeURIComponent(this.dataset.archivo))
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
@@ -111,7 +111,7 @@ document.querySelectorAll('.btn-descargar').forEach(btn => {
     // Generar respaldo principal
     document.getElementById('btn-backup-principal').addEventListener('click', function (e) {
         e.preventDefault();
-        fetch('Controlador/backup.php?accion=generar&tipo=P')
+        fetch('controlador/backup.php?accion=generar&tipo=P')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -126,7 +126,7 @@ document.querySelectorAll('.btn-descargar').forEach(btn => {
     // Generar respaldo seguridad
     document.getElementById('btn-backup-seguridad').addEventListener('click', function (e) {
         e.preventDefault();
-        fetch('Controlador/backup.php?accion=generar&tipo=S')
+        fetch('controlador/backup.php?accion=generar&tipo=S')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {

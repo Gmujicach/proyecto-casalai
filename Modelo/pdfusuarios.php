@@ -58,7 +58,7 @@ class rusuarios extends BD{
 			
 			$fila = $resultado->fetchAll(PDO::FETCH_BOTH);
 			
-			$logoPath = 'IMG/logonew.png'; // Asegúrate de que la ruta sea correcta
+			$logoPath = 'img/logonew.png'; // Asegúrate de que la ruta sea correcta
 			$logo = base64_encode(file_get_contents($logoPath));
 			
 			//aqui es donde comienza el cambio, debido a que se va a armar una variable en memoria

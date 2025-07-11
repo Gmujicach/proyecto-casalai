@@ -24,7 +24,7 @@
   </head>
 
   <body class="fondo"
-    style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
     <?php include 'newnavbar.php'; ?>
 
@@ -190,7 +190,7 @@
           <?php foreach ($productos as $producto): ?>
                             <?php
                 $id = $producto['id_producto'];
-                $ruta_base = 'IMG/Productos/';
+                $ruta_base = 'img/productos/';
                 $extensiones = ['png', 'jpg', 'jpeg', 'webp'];
 
                 $ruta_imagen = '';
@@ -248,7 +248,7 @@ foreach ($caracteristicas as $clave => $valor) {
                 if (!empty($ruta_imagen)) {
                   echo '<img src="' . htmlspecialchars($ruta_imagen) . '" alt="Foto del producto" class="foto-producto">';
                 } else {
-                  echo '<img src="IMG/no-disponible.png" alt="No disponible" class="foto-producto">';
+                  echo '<img src="img/no-disponible.png" alt="No disponible" class="foto-producto">';
                 }
                 ?>
               </td>
@@ -317,7 +317,7 @@ foreach ($caracteristicas as $clave => $valor) {
 
 
 <div style="margin-top: 20px; text-align: right;">
-  <form action="Controlador/reporteproducto.php" method="post" target="_blank" style="display:inline;">
+  <form action="controlador/reporteproducto.php" method="post" target="_blank" style="display:inline;">
     <button type="submit" class="btn btn-success">
       Descargar Reporte de Productos por Categoría
     </button>
@@ -552,15 +552,15 @@ foreach ($caracteristicas as $clave => $valor) {
 
 
 
-    <script src="Public/bootstrap/js/sidebar.js"></script>
-    <script src="Public/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="Public/js/jquery-3.7.1.min.js"></script>
-    <script src="Javascript/sweetalert2.all.min.js"></script>
-    <script src="Javascript/producto.js"></script>
-    <script src="Javascript/validaciones.js"></script>
-    <script src="Public/js/jquery.dataTables.min.js"></script>
-    <script src="Public/js/dataTables.bootstrap5.min.js"></script>
-    <script src="Public/js/datatable.js"></script>
+    <script src="public/bootstrap/js/sidebar.js"></script>
+    <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="public/js/jquery-3.7.1.min.js"></script>
+    <script src="javascript/sweetalert2.all.min.js"></script>
+    <script src="javascript/producto.js"></script>
+    <script src="javascript/validaciones.js"></script>
+    <script src="public/js/jquery.dataTables.min.js"></script>
+    <script src="public/js/dataTables.bootstrap5.min.js"></script>
+    <script src="public/js/datatable.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -568,7 +568,7 @@ foreach ($caracteristicas as $clave => $valor) {
       $(document).ready(function () {
         $('#tablaConsultas').DataTable({
           language: {
-            url: 'Public/js/es-ES.json'
+            url: 'public/js/es-ES.json'
           }
         });
       });

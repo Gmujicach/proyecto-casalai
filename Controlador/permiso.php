@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../Modelo/permiso.php';
-require_once __DIR__ . '/../Modelo/usuario.php';
+require_once __DIR__ . '/../modelo/permiso.php';
+require_once __DIR__ . '/../modelo/usuario.php';
 
 $permisos = new Permisos();
 
@@ -23,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardarPermisos'])) {
 }
 
 $pagina = "permiso";
-if (is_file("Vista/" . $pagina . ".php")) {
-    require_once("Vista/" . $pagina . ".php");
+if (is_file("vista/" . $pagina . ".php")) {
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

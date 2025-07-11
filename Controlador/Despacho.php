@@ -5,15 +5,15 @@ function getdespacho() {
     return $despacho->getdespacho();
 }
 
-if (!is_file("Modelo/" . $pagina . ".php")) {
+if (!is_file("modelo/" . $pagina . ".php")) {
     echo "Falta definir la clase " . $pagina;
     exit;
 }
 
-require_once("Modelo/" . $pagina . ".php");
+require_once("modelo/" . $pagina . ".php");
 $k = new Despacho();
-require_once 'Modelo/permiso.php';
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 
 define('MODULO_DESPACHO', 3);
 
@@ -22,7 +22,7 @@ $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('despacho'));
 
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     $accion = $_POST['accion'] ?? '';
 
     if (!empty($_POST)) {
@@ -328,7 +328,7 @@ foreach ($despachos as $d) {
     $productosDespachados[$nombre] += $cantidad;
 }
 $totalProductosDespachados = array_sum($productosDespachados);
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de despacho', MODULO_DESPACHO, $_SESSION['id_usuario']);
     }   

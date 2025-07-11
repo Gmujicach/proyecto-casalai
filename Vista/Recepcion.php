@@ -10,7 +10,7 @@
     <title>Gestionar Recepcion</title>
 </head>
 
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <?php include 'newnavbar.php'; ?>
 
@@ -458,10 +458,10 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 
-	<script type="text/javascript" src="Javascript/recepcion.js"></script>
-<script src="Public/js/chart.js"></script>
-<script src="Public/js/html2canvas.min.js"></script>
-<script src="Public/js/jspdf.umd.min.js"></script>
+	<script type="text/javascript" src="javascript/recepcion.js"></script>
+<script src="public/js/chart.js"></script>
+<script src="public/js/html2canvas.min.js"></script>
+<script src="public/js/jspdf.umd.min.js"></script>
 <script>
 const labelsRecepcion = <?= json_encode(array_keys($productosRecibidos)) ?>;
 const dataRecepcion = <?= json_encode(array_values($productosRecibidos)) ?>;

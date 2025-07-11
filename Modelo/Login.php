@@ -1,6 +1,6 @@
 <?php
 
-require_once('Config/Config.php');
+require_once('config/config.php');
 
 class Login extends BD
 {

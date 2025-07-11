@@ -12,7 +12,7 @@ if (
     <title>Gestionar Marcas</title>
     <?php include 'header.php'; ?>
 </head>
-<body  class="fondo" style=" height: 100vh; background-image: url(IMG/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <?php include 'newnavbar.php'; ?>
 
@@ -130,20 +130,20 @@ aria-labelledby="registrarMarcaModalLabel" aria-hidden="true">
 </div>
 
 <?php include 'footer.php'; ?>
-<script src="Public/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="Public/js/jquery-3.7.1.min.js"></script>
-<script src="Javascript/marca.js"></script>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
+<script src="javascript/marca.js"></script>
 
-<script src="Public/bootstrap/js/sidebar.js"></script>
+<script src="public/bootstrap/js/sidebar.js"></script>
 
-<script src="Public/js/jquery.dataTables.min.js"></script>
-<script src="Public/js/dataTables.bootstrap5.min.js"></script>
-<script src="Public/js/datatable.js"></script>
+<script src="public/js/jquery.dataTables.min.js"></script>
+<script src="public/js/dataTables.bootstrap5.min.js"></script>
+<script src="public/js/datatable.js"></script>
 <script>
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
         language: {
-            url: 'Public/js/es-ES.json'
+            url: 'public/js/es-ES.json'
         }
     });
 });

@@ -1,10 +1,10 @@
 <?php
 ob_start();
-require_once 'Modelo/pasareladepago.php';
-require_once 'Modelo/cuenta.php';
-require_once 'Modelo/factura.php';
-require_once 'Modelo/permiso.php';
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/pasareladepago.php';
+require_once 'modelo/cuenta.php';
+require_once 'modelo/factura.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 define('MODULO_PASARELA_PAGOS', 16); // Define el ID
 $bitacoraModel = new Bitacora();
 $id_rol = $_SESSION['id_rol'];
@@ -131,8 +131,8 @@ $datos = $pasarela->pasarelaTransaccion('Consultar');
 
 
 $pagina = "pasarela";
-if (is_file("Vista/" . $pagina . ".php")) {
-    require_once("Vista/" . $pagina . ".php");
+if (is_file("vista/" . $pagina . ".php")) {
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

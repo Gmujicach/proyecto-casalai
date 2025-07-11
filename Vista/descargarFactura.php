@@ -1,6 +1,6 @@
 <?php
 ob_start(); // Iniciar buffer de salida
-require('Public/fpdf/fpdf.php');
+require('public/fpdf/fpdf.php');
 
 class PDF extends FPDF {
     function Header() {

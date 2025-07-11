@@ -3,7 +3,7 @@
 ob_start();
 
 // Importa los modelos necesarios
-require_once 'Modelo/factura.php';
+require_once 'modelo/factura.php';
 
 // Define los datos de la factura
 $cliente = 3;
@@ -57,8 +57,8 @@ $res = $factura->consultarFacturaReciente();
 $pagina = "descargarFactura";
 
 // Verifica si el archivo de vista existe
-if (is_file("Vista/" . $pagina . ".php")) {
-    require_once("Vista/" . $pagina . ".php");
+if (is_file("vista/" . $pagina . ".php")) {
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

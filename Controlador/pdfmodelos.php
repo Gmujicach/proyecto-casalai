@@ -4,7 +4,7 @@
 
 
 //lo primero que se debe hacer es verificar al igual que en la vista es que exista el archivo
-if (!is_file("Modelo/".$pagina.".php")){
+if (!is_file("modelo/".$pagina.".php")){
 	//alli pregunte que si no es archivo se niega con !
 	//si no existe envio mensaje y me salgo
 	echo "Falta definir la clase ".$pagina;
@@ -14,10 +14,10 @@ else{
 //llamda al archivo que contiene la clase
 //rusuarios, en ella estara el codigo que me premitira
 //generar el reporte haciando uso de la libreria DOMPDF
-require_once('Modelo/pdfmodelos.php');
+require_once('modelo/pdfmodelos.php');
 }
   
-  if(is_file("Vista/".$pagina.".php")){
+  if(is_file("vista/".$pagina.".php")){
 	  
 	  //bien si estamos aca es porque existe la vista y la clase
 	  //por lo que lo primero que debemos hace es realizar una instancia de la clase
@@ -34,7 +34,7 @@ require_once('Modelo/pdfmodelos.php');
 		  $o->generarPDF();
 	  }
 	  
-	  require_once("Vista/".$pagina.".php"); 
+	  require_once("vista/".$pagina.".php"); 
   }
   else{
 	  echo "pagina en construccion";

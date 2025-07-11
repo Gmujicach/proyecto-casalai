@@ -5,15 +5,15 @@ function getrecepcion() {
     return $recepcion->getrecepcion();
 }
 
-if (!is_file("Modelo/" . $pagina . ".php")) {
+if (!is_file("modelo/" . $pagina . ".php")) {
     echo "Falta definir la clase " . $pagina;
     exit;
 }
 
-require_once("Modelo/" . $pagina . ".php");
+require_once("modelo/" . $pagina . ".php");
 $k = new Recepcion();
-require_once 'Modelo/permiso.php';
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 define('MODULO_RECEPCION', 2); // Define el ID del módulo de cuentas bancarias
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
@@ -22,7 +22,7 @@ $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('recepcion'));
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     $accion = $_POST['accion'] ?? '';
 
     if (!empty($_POST)) {
@@ -173,7 +173,7 @@ foreach ($recepciones as $r) {
     $productosRecibidos[$nombre] += $cantidad;
 }
 $totalProductosRecibidos = array_sum($productosRecibidos);
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 
 if (isset($_SESSION['id_usuario'])) {
     $bitacoraModel->registrarAccion('Acceso al módulo de Recepcion', MODULO_RECEPCION, $_SESSION['id_usuario']);

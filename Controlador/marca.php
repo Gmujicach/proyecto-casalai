@@ -1,8 +1,8 @@
 <?php
 ob_start();
-require_once 'Modelo/marca.php';
-require_once 'Modelo/permiso.php';
-require_once 'Modelo/bitacora.php';
+require_once 'modelo/marca.php';
+require_once 'modelo/permiso.php';
+require_once 'modelo/bitacora.php';
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
@@ -142,13 +142,13 @@ function getmarcas() {
 
 
 $pagina = "marca";
-if (is_file("Vista/" . $pagina . ".php")) {
+if (is_file("vista/" . $pagina . ".php")) {
     if (isset($_SESSION['id_usuario'])) {
         $bitacoraModel->registrarAccion('Acceso al módulo de marcas', MODULO_MARCA, $_SESSION['id_usuario']);
     }   
     $marcas = getmarcas();
     // Pasa $permisosUsuario a la vista
-    require_once("Vista/" . $pagina . ".php");
+    require_once("vista/" . $pagina . ".php");
 } else {
     echo "Página en construcción";
 }

@@ -1,8 +1,8 @@
 <?php
 ob_start();
-require_once 'Modelo/pasareladepago.php';
-require_once 'Modelo/cuenta.php';
-require_once 'Modelo/factura.php';
+require_once 'modelo/pasareladepago.php';
+require_once 'modelo/cuenta.php';
+require_once 'modelo/factura.php';
 
 // Si se recibe una acción (AJAX), procesarla primero
 if (!empty($_POST['accion'])) {
@@ -48,8 +48,8 @@ if (isset($_POST['id_factura'])) {
 
     // Cargar vista solo si no es AJAX
     $pagina = "pasareladepago";
-    if (is_file("Vista/" . $pagina . ".php")) {
-        require_once("Vista/" . $pagina . ".php");
+    if (is_file("vista/" . $pagina . ".php")) {
+        require_once("vista/" . $pagina . ".php");
     } else {
         echo "Página en construcción";
     }

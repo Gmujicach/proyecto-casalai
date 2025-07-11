@@ -1,13 +1,13 @@
 <?php
 
-if (!is_file("Modelo/factura.php")) {
+if (!is_file("modelo/factura.php")) {
  
     echo "Falta definir la clase " . $pagina;
     exit;
 }
 
-require_once("Modelo/factura.php");
-if (is_file("Vista/factura.php")) {
+require_once("modelo/factura.php");
+if (is_file("vista/factura.php")) {
 
     if (!empty($_POST)) {
 
@@ -23,7 +23,7 @@ if (is_file("Vista/factura.php")) {
         exit;
     }
 
-    require_once("Vista/factura.php");
+    require_once("vista/factura.php");
 } else {
     echo "pagina en construccion";
 }
