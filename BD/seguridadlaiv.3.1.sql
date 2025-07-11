@@ -436,7 +436,7 @@ INSERT INTO `tbl_rol` (`id_rol`, `nombre_rol`) VALUES
 CREATE TABLE `tbl_usuarios` (
   `id_usuario` int(11) NOT NULL,
   `username` varchar(15) DEFAULT NULL,
-  `password` varchar(15) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `cedula` varchar(8) DEFAULT NULL,
   `id_rol` int(11) NOT NULL,
   `correo` varchar(50) DEFAULT NULL,

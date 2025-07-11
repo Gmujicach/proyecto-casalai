@@ -40,11 +40,11 @@ $(document).ready(function(){
         });
 
         $("#cedula").on("keypress", function(e){
-            validarKeyPress(/^[0-9]*$/, e);
+            validarkeypress(/^[0-9]*$/, e);
         });
 
         $("#cedula").on("keyup", function(){
-            validarKeyUp(
+            validarkeyup(
                 /^[0-9]{7,8}$/,
                 $(this),
                 $("#scedula"),
@@ -219,7 +219,7 @@ $(document).ready(function(){
       }	
       else if(validarkeyup(/^[A-Za-z0-9]{6,15}$/,
         $("#password"),$("#spassword"),"Solo letras y numeros entre 6 y 15 caracteres")==0){
-         muestraMensaje("error",4000,"ERROR!","El password debe tener mínimo 3 dígitos y máximo 15");
+          muestraMensaje("error",4000,"ERROR!","El password debe tener mínimo 6 dígitos y máximo 15");
         return false;
       }
       
