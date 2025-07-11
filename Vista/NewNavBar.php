@@ -23,17 +23,19 @@ $modulos = [
     'gestionarfactura' => ['Gestionar Pre-Factura', 'img/receipt-text.svg', '?pagina=gestionarfactura'],
     'Ordenes de despacho' => ['Gestionar Ordenes de Despacho', 'img/list-ordered.svg', '?pagina=ordendespacho'],
     'Cuentas bancarias' => ['Gestionar Cuentas Bancarias', 'img/landmark.svg', '?pagina=cuenta'],
-    'finanza' => ['Gestionar Ingresos y Egresos', 'img/dollar-sign.svg', '?pagina=finanza'],
+    'Finanzas' => ['Gestionar Ingresos y Egresos', 'img/dollar-sign.svg', '?pagina=finanza'],
     'permisos' => ['Gestionar Permisos', 'img/key-round.svg', '?pagina=permiso'],
     'Roles' => ['Gestionar Roles', 'img/user-round-search.svg', '?pagina=rol'],
     'bitacora' => ['Gestionar Bitácora', 'img/notebook.svg', '?pagina=bitacora'],
 ];
 
+// Obtener permisos para cada módulo
 $permisosConsulta = [];
 foreach ($modulos as $moduloBD => $info) {
     $permisosConsulta[$moduloBD] = $permisosObj->getPermisosUsuarioModulo($id_rol, $moduloBD)['ingresar'] ?? false;
 }
 
+// Si es SuperUsuario, tiene todos los permisos
 if ($nombre_rol === 'SuperUsuario') {
     foreach ($permisosConsulta as &$permiso) $permiso = true;
     unset($permiso);
@@ -99,9 +101,13 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
             'Administrar Proveedores' => ['Proveedores'],
             'Administrar Clientes' => ['Clientes'],
             'Administrar Ventas' => ['Catalogo', 'carrito', 'pasarela', 'gestionarfactura', 'Ordenes de despacho'],
-            'Administrar Finanzas' => ['Cuentas bancarias', 'finanza'],
             'Administrar Seguridad' => ['permisos', 'Roles', 'bitacora'],
         ];
+
+        // Añadir sección de Finanzas solo para Administrador y SuperUsuario
+        if (in_array($nombre_rol, ['Administrador', 'SuperUsuario'])) {
+            $secciones['Administrar Finanzas'] = ['Cuentas bancarias', 'Finanzas'];
+        }
 
         foreach ($secciones as $titulo => $mods) {
             $hayModulo = false;
@@ -111,6 +117,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
                     break;
                 }
             }
+            
             if ($hayModulo) {
                 echo '<h4><span>' . $titulo . '</span><div class="menu-separador"></div></h4>';
                 foreach ($mods as $mod) {
@@ -120,7 +127,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
                 }
             }
         }
-
+        
         if (in_array($nombre_rol, ['Administrador', 'SuperUsuario', 'Cliente'])) {
             echo '<h4><span>Solicitar Ayuda</span><div class="menu-separador"></div></h4>';
             echo '<li><a href="public/casalai-manual/index.php"><span class="simbolo"><img src="img/user-round-search.svg" class="icono-svg" />Manual de Usuarios</span></a></li>';
