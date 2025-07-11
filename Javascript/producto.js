@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    // Al abrir el modal de modificar, carga los datos del producto y sus características
+const regexTexto = /^[a-zA-Z0-9ÁÉÍÓÚáéíóúñÑ\s]+$/;
+
 $(document).on('click', '.btn-modificar', function () {
     // 1. Datos generales
     $('#modificarIdProducto').val(this.dataset.id);
@@ -277,7 +278,7 @@ $('#incluirProductoForm').on('submit', function(event) {
     const precioRegex = /^\d+(\.\d{0,2})?$/;
 
     // Solo letras, números y espacios
-    const regexTexto = /^[a-zA-Z0-9ÁÉÍÓÚáéíóúñÑ\s]+$/;
+
     let caracteristicasInvalidas = [];
     $('#caracteristicasCategoria input[type="number"]').each(function() {
         if (parseFloat($(this).val()) < 0) {

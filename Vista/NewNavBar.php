@@ -31,7 +31,7 @@ $modulos = [
 
 $permisosConsulta = [];
 foreach ($modulos as $moduloBD => $info) {
-    $permisosConsulta[$moduloBD] = $permisosObj->getPermisosUsuarioModulo($id_rol, $moduloBD)['consultar'] ?? false;
+    $permisosConsulta[$moduloBD] = $permisosObj->getPermisosUsuarioModulo($id_rol, $moduloBD)['ingresar'] ?? false;
 }
 
 if ($nombre_rol === 'SuperUsuario') {

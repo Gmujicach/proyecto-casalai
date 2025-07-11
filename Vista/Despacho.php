@@ -282,9 +282,9 @@ $totalProductosDespachados = array_sum($productosDespachados);
 </div>
 
 <!-- Scripts para gráfica y PDF -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="public/js/chart.js"></script>
+<script src="public/js/html2canvas.min.js"></script>
+<script src="public/js/jspdf.umd.min.js"></script>
 <script>
 const labelsDespacho = <?= json_encode(array_keys($productosDespachados)) ?>;
 const dataDespacho = <?= json_encode(array_values($productosDespachados)) ?>;
