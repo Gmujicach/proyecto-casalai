@@ -160,17 +160,17 @@
                     </span>
                 </td>
                 <td>
-                    <span class="campo-correo">
+                    <span class="campo-rif-correo">
                         <?php echo htmlspecialchars($usuario['correo']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="campo-usuario">
+                    <span class="campo-nombres">
                         <?php echo htmlspecialchars($usuario['username']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="campo-telefono">
+                    <span class="campo-numeros">
                         <?php echo htmlspecialchars($usuario['telefono']); ?>
                     </span>
                 </td>

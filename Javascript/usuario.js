@@ -326,9 +326,9 @@ function agregarFilaUsuario(usuario) {
         </ul>`,
       `<span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>`,
       `<span class="campo-cedula">${usuario.cedula}</span>`,
-      `<span class="campo-correo">${usuario.correo}</span>`,
-      `<span class="campo-usuario">${usuario.username}</span>`,
-      `<span class="campo-telefono">${usuario.telefono}</span>`,
+      `<span class="campo-rif-correo">${usuario.correo}</span>`,
+      `<span class="campo-nombres">${usuario.username}</span>`,
+      `<span class="campo-numeros">${usuario.telefono}</span>`,
       `<span class="campo-rango">${usuario.nombre_rol}</span>`,
       `<span class="campo-estatus habilitado" data-id="${usuario.id_usuario}" style="cursor: pointer;">
             habilitado
@@ -603,9 +603,9 @@ if (fila.length) {
     </ul>`,
     `<span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>`,
     `<span class="campo-cedula">${usuario.cedula}</span>`,
-    `<span class="campo-correo">${usuario.correo}</span>`,
-    `<span class="campo-usuario">${usuario.username}</span>`,
-    `<span class="campo-telefono">${usuario.telefono}</span>`,
+    `<span class="campo-rif-correo">${usuario.correo}</span>`,
+    `<span class="campo-nombres">${usuario.username}</span>`,
+    `<span class="campo-numeros">${usuario.telefono}</span>`,
     `<span class="campo-rango">${usuario.nombre_rol}</span>`,
     `<span class="campo-estatus ${
       usuario.estatus === "habilitado" ? "habilitado" : "inhabilitado"
