@@ -141,7 +141,7 @@
   </div>
 
   <label for="direccion" style="color:#888; font-size:18px;">Dirección</label>
-  <textarea class="form-control" maxlength="100" id="direccion" name="direccion" rows="2" required></textarea>
+    <textarea class="form-control" maxlength="100" id="direccion" name="direccion" rows="2" required></textarea>
   <span class="span-value" id="sdireccion"></span>
 
   <div class="input-row">
