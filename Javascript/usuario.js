@@ -325,7 +325,7 @@ function agregarFilaUsuario(usuario) {
             </div>
         </ul>`,
       `<span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>`,
-      `<span class="campo-cedula">${usuario.cedula}</span>`,
+      `<span class="campo-rif-correo">${usuario.cedula}</span>`,
       `<span class="campo-rif-correo">${usuario.correo}</span>`,
       `<span class="campo-nombres">${usuario.username}</span>`,
       `<span class="campo-numeros">${usuario.telefono}</span>`,
@@ -341,7 +341,7 @@ function agregarFilaUsuario(usuario) {
   function resetUsuario() {
     $("#nombre").val("");
     $("#snombre").text("");
-    $("#apellido").val("");
+    $("#apellido_usuario").val("");
     $("#sapellido").text("");
     $("#nombre_usuario").val("");
     $("#snombre_usuario").text("");
@@ -602,7 +602,7 @@ if (fila.length) {
         </div>
     </ul>`,
     `<span class="campo-nombres">${usuario.nombres} ${usuario.apellidos}</span>`,
-    `<span class="campo-cedula">${usuario.cedula}</span>`,
+    `<span class="campo-rif-correo">${usuario.cedula}</span>`,
     `<span class="campo-rif-correo">${usuario.correo}</span>`,
     `<span class="campo-nombres">${usuario.username}</span>`,
     `<span class="campo-numeros">${usuario.telefono}</span>`,
