@@ -12,9 +12,11 @@ class Bitacora extends BD {
     // Registrar acción en la bitácora
     public function registrarAccion($accion, $id_modulo, $id_usuario) {
         try {
+            $fecha_hora = date('D-j-M-Y-h:i:s A');
             $sql = "INSERT INTO tbl_bitacora (fecha_hora, accion, id_modulo, id_usuario) 
                     VALUES (NOW(), :accion, :id_modulo, :id_usuario)";
             $stmt = $this->conex->prepare($sql);
+            $stmt->bindParam(':fecha_hora', $fecha_hora, PDO::PARAM_STR);
             $stmt->bindParam(':accion', $accion, PDO::PARAM_STR);
             $stmt->bindParam(':id_modulo', $id_modulo, PDO::PARAM_INT);
             $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
