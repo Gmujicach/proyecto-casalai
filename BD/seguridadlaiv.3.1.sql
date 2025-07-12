@@ -45,7 +45,7 @@ CREATE TABLE `tbl_alertas` (
 
 CREATE TABLE `tbl_bitacora` (
   `id_bitacora` int(11) NOT NULL,
-  `fecha_hora` datetime NOT NULL,
+  `fecha_hora` text NOT NULL,
   `accion` varchar(50) NOT NULL,
   `id_modulo` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
