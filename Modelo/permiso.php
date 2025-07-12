@@ -39,12 +39,10 @@ public function getPermisosUsuarioModulo($id_rol, $nombre_modulo) {
     $modulo = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$modulo) {
         return [
-            'ingresar' => false,
             'consultar' => false,
             'incluir' => false,
             'modificar' => false,
-            'eliminar' => false,
-            'reportar' => false
+            'eliminar' => false
         ];
     }
     $id_modulo = $modulo['id_modulo'];
@@ -53,12 +51,10 @@ public function getPermisosUsuarioModulo($id_rol, $nombre_modulo) {
     $stmt = $this->conex->prepare("SELECT accion, estatus FROM tbl_permisos WHERE id_rol = ? AND id_modulo = ?");
     $stmt->execute([$id_rol, $id_modulo]);
     $permisos = [
-        'ingresar' => false,
         'consultar' => false,
         'incluir' => false,
         'modificar' => false,
-        'eliminar' => false,
-        'reportar' => false
+        'eliminar' => false
     ];
     foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $perm) {
         $permisos[$perm['accion']] = ($perm['estatus'] === 'Permitido');

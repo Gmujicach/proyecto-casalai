@@ -340,7 +340,7 @@
                         "reporte_boton" => "Compras",
                         "gestionable" => [
                             "Nombre del cliente",
-                            "Cedula/RIF",
+                            "Cedula",
                             "Dirección",
                             "Teléfono",
                             "Correo",

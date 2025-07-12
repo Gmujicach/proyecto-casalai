@@ -21,15 +21,15 @@ $(document).ready(function () {
     });
 
     $("#cedula").on("keypress", function(e){
-        validarKeyPress(/^[0-9]*$/, e);
+        validarKeyPress(/^[VEJPG0-9-.\b]*$/, e);
     });
 
     $("#cedula").on("keyup", function(){
         validarKeyUp(
-            /^[0-9]{7,8}$/,
+            /^[VEJPG0-9-.\b]{6,12}$/,
             $(this),
             $("#scedula"),
-            "*El formato solo permite números*"
+            "*El formato solo permite números y (V,E,J,P,G,-.)*"
         );
     });
 
@@ -153,12 +153,12 @@ $(document).ready(function() {
             return false;
         }
         else if(validarKeyUp(
-            /^[0-9]{7,8}$/,
+            /^[VEJPG0-9-.\b]{6,12}$/,
             $("#cedula"),
             $("#scedula"),
-            "*El formato solo permite números*"
+            "*El formato solo permite números y (V,E,J,P,G,-.)*"
         )==0){
-            mensajes('error',4000,'Verifique el número de cédula','El formato solo permite números');
+            mensajes('error',4000,'Verifique el número de Cedula','El formato solo permite números y (V,E,J,P,G,-.)');
             return false;
         }
         else if(validarKeyUp(
@@ -348,15 +348,15 @@ $(document).ready(function() {
     });
 
     $("#modificarcedula").on("keypress", function(e){
-        validarKeyPress(/^[0-9]*$/, e);
+        validarKeyPress(/^[VEJPG0-9-.\b]*$/, e);
     });
 
     $("#modificarcedula").on("keyup", function(){
         validarKeyUp(
-            /^[0-9]{7,8}$/,
+            /^[VEJPG0-9-.\b]{6,12}$/,
             $(this),
             $("#smodificarcedula"),
-            "*El formato solo permite números*"
+            "*El formato solo permite números y (V,E,J,P,G,-.)*"
         );
     });
 
@@ -414,8 +414,8 @@ $(document).ready(function() {
         if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ\s\b]{2,100}$/.test(datos.nombre)) {
             errores.push("El nombre debe tener solo letras.");
         }
-        if (!/^[0-9]{7,8}$/.test(datos.cedula)) {
-            errores.push("El formato solo permite números.");
+        if (!/^[VEJPG0-9-.\b]*$/.test(datos.cedula)) {
+            errores.push("El formato solo permite números y (V,E,J,P,G,-.)");
         }
         if (!/^[a-zA-ZÁÉÍÓÚñÑáéíóúüÜ0-9,-\s\b]{2,100}$/.test(datos.direccion)) {
             errores.push("El formato permite letras y números.");

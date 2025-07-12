@@ -115,14 +115,13 @@ public function registrarUsuarioYCliente($datos) {
 
         // Inserta en tbl_usuarios
         $p = $this->co->prepare("INSERT INTO tbl_usuarios 
-                            (username, password, nombres, apellidos, cedula, correo, telefono, id_rol, estatus)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'habilitado')");
+                            (username, password, nombres, apellidos, correo, telefono, id_rol, estatus)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, 'habilitado')");
         $p->execute([
             $datos['nombre_usuario'],
             $hash,
             $datos['nombre'],
             $datos['apellido'],
-            $datos['cedula'],
             $datos['correo'],
             $datos['telefono'],
             $id_rol_cliente // Usamos el ID numérico del rol Cliente

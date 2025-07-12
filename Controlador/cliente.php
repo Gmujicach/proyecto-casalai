@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($cliente->existeNumeroCedula($_POST['cedula'])) {
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'El número de cedula/RIF ya existe'
+                    'message' => 'El número de Cedula ya existe'
                 ]);
                 exit;
             }
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($cliente->existeNumeroCedula($_POST['cedula'], $id)) {
                 echo json_encode([
                     'status' => 'error',
-                    'message' => 'El número de cedula/RIF ya existe'
+                    'message' => 'El número de Cedula ya existe'
                 ]);
                 exit;
             }

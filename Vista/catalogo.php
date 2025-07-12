@@ -570,7 +570,7 @@
     </section>
 
     <script src="public/js/jquery-3.7.1.min.js"></script>
-    <script src="javascript/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="javascript/sweetalert2.all.min.js"></script>
     <script src="javascript/catalogo.js"></script>
     <script src="public/js/jquery.dataTables.min.js"></script>

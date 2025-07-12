@@ -243,16 +243,14 @@ foreach ($caracteristicas as $clave => $valor) {
                 <?php echo htmlspecialchars($producto['id_producto']); ?>
               </td>
               <td>
-                                                <?php if (!empty($producto['imagen'])): ?>
-                                                    <img src="<?= htmlspecialchars($producto['imagen']) ?>" class="foto-producto"
-                                                        alt="<?= htmlspecialchars($producto['nombre_producto']) ?>"
-                                                        onerror="this.src='img/placeholder-product.png'">
-                                                <?php else: ?>
-                                                    <div class="foto-producto img-placeholder">
-                                                        <i class="bi bi-image"></i>
-                                                    </div>
-                                                <?php endif; ?>
+<?php
 
+                if (!empty($ruta_imagen)) {
+                  echo '<img src="' . htmlspecialchars($ruta_imagen) . '" alt="Foto del producto" class="foto-producto">';
+                } else {
+                  echo '<img src="img/no-disponible.png" alt="No disponible" class="foto-producto">';
+                }
+                ?>
               </td>
 
               <td>
@@ -563,9 +561,8 @@ foreach ($caracteristicas as $clave => $valor) {
     <script src="public/js/jquery.dataTables.min.js"></script>
     <script src="public/js/dataTables.bootstrap5.min.js"></script>
     <script src="public/js/datatable.js"></script>
-    <script src="public/js/chart.js"></script>
-<script src="public/js/html2canvas.min.js"></script>
-<script src="public/js/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
       $(document).ready(function () {

@@ -42,23 +42,31 @@
                                     <span class="span-value" id="sapellido"></span>
                                 </div>
                             </div>
-                            <div class="envolver-form">
-                                <label for="nombre">Nombre de Usuario</label>
-                                <input type="text" placeholder="Usuario" class="control-form" id="nombre_usuario"
-                                    name="nombre_usuario" maxlength="20" required>
-                                <span class="span-value" id="snombre_usuario"></span>
-                            </div>
-                            <div class="envolver-form">
-                                <label for="cedula">Número de cédula</label>
-                                <input class="control-form" placeholder="Cédula" maxlength="8" type="text" id="cedula" name="cedula" required>
-                                <span class="span-value" id="scedula"></span>
-                            </div>
+                            <div class="grupo-form">
+                                <div class="grupo-interno">
+                        <div class="envolver-form">
+                        <label for="cedula_o_rif">Cedula</label>
+                        <input class="control-form" placeholder="Cedula" maxlength="12" type="text" id="cedula" name="cedula" required>
+                        <span class="span-value" id="scedula"></span>
+                    </div>                                    
+                                </div>
+                                <div class="grupo-interno">
                             <div class="envolver-form">
                                 <label for="telefono_usuario">Número de Teléfono</label>
                                 <input type="text" placeholder="Teléfono" class="control-form" id="telefono_usuario"
                                     name="telefono_usuario" maxlength="13" required>
                                 <span class="span-value" id="stelefono_usuario"></span>
                             </div>
+                                </div>
+
+                            </div>
+                            <div class="envolver-form">
+                                <label for="nombre">Nombre de Usuario</label>
+                                <input type="text" placeholder="Usuario" class="control-form" id="nombre_usuario"
+                                    name="nombre_usuario" maxlength="20" required>
+                                <span class="span-value" id="snombre_usuario"></span>
+                            </div>
+
                             <div class="envolver-form">
                                 <label for="correo_usuario">Correo Electrónico</label>
                                 <input type="text" placeholder="ejemplo@gmail.com" class="control-form" id="correo_usuario"
@@ -111,10 +119,9 @@
                     <tr>
                         <th>Acciones</th>
                         <th>Nombre y Apellido</th>
-                        <th>Cédula</th>
                         <th>Correo</th>
                         <th>Usuario</th>
-                        <th>Teléfono</th>
+                        <th>Telefono</th>
                         <th>Rol</th>
                         <th>Estatus</th>
                     </tr>
@@ -155,22 +162,17 @@
                     </span>
                 </td>
                 <td>
-                    <span class="campo-rif-correo">
-                        <?php echo htmlspecialchars($usuario['cedula']); ?>
-                    </span>
-                </td>
-                <td>
-                    <span class="campo-rif-correo">
+                    <span class="campo-correo">
                         <?php echo htmlspecialchars($usuario['correo']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="campo-nombres">
+                    <span class="campo-usuario">
                         <?php echo htmlspecialchars($usuario['username']); ?>
                     </span>
                 </td>
                 <td>
-                    <span class="campo-numeros">
+                    <span class="campo-telefono">
                         <?php echo htmlspecialchars($usuario['telefono']); ?>
                     </span>
                 </td>
@@ -332,16 +334,16 @@ document.getElementById('descargarPDFUsuarios').addEventListener('click', functi
                                     name="apellido_usuario" maxlength="30" required>
                                 <span class="span-value-modal" id="smodificarapellido_usuario"></span>
                             </div>
+                    <div class="form-group">
+                        <label for="modificarcedula">Cédula</label>
+                        <input type="text" class="form-control" id="modificarcedula" name="cedula" maxlength="12" required>
+                        <span class="span-value-modal" id="smodificarcedula"></span>
+                    </div>
                             <div class="form-group">
                                 <label for="modificarnombre_usuario">Usuario</label>
                                 <input type="text" class="form-control" id="modificarnombre_usuario" name="nombre_usuario"
                                     maxlength="20" required>
                                 <span class="span-value-modal" id="smodificarnombre_usuario"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="modificarcedula">Cédula</label>
-                                <input type="text" class="form-control" id="modificarcedula" name="cedula" maxlength="8" required>
-                                <span class="span-value-modal" id="smodificarcedula"></span>
                             </div>
                             <div class="form-group">
                                 <label for="modificartelefono_usuario">Telefono</label>

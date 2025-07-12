@@ -5,7 +5,7 @@ $(document).ready(function(){
         });
         $("#nombre_usuario").on("keyup", function () {
           validarkeyup(
-            /^[a-zA-Z0-9_]{4,15}$/,
+            /^[a-zA-Z0-9_]{4,20}$/,
             $(this),
             $("#snombre_usuario"),
             "*El usuario debe tener entre 4 y 20 caracteres alfanuméricos*"
@@ -40,15 +40,15 @@ $(document).ready(function(){
         });
 
         $("#cedula").on("keypress", function(e){
-            validarkeypress(/^[0-9]*$/, e);
+            validarkeypress(/^[VEJPG0-9-.\b]*$/, e);
         });
 
         $("#cedula").on("keyup", function(){
             validarkeyup(
-                /^[0-9]{7,8}$/,
+                /^[VEJPG0-9-.\b]{6,12}$/,
                 $(this),
                 $("#scedula"),
-                "*El formato solo permite números*"
+                "*El formato solo permite números y (V,E,J,P,G,-.)*"
             );
         });
 
@@ -174,7 +174,7 @@ $(document).ready(function(){
       });
       
       $("#username").on("keyup",function(){
-        validarkeyup(/^[a-zA-Z0-9_]{4,15}$/,$(this),
+        validarkeyup(/^[a-zA-Z0-9_]{4,20}$/,$(this),
         $("#susername"),"*Ingrese su nombre de usuario*");
       });
       
@@ -212,14 +212,14 @@ $(document).ready(function(){
     //Validación de todos los campos antes del envio
     function validarenvio(){
       
-      if(validarkeyup(/^[A-Za-z0-9]{4,15}$/,$("#username"),
-        $("#susername"),"El formato debe ser entre 4 y 15 dígitos")==0){
+      if(validarkeyup(/^[A-Za-z0-9]{3,8}$/,$("#username"),
+        $("#susername"),"El formato debe ser entre 3 y 8 dígitos")==0){
           muestraMensaje("error",4000,"ERROR!","El username debe tener mínimo 3 dígitos y máximo 8");
         return false;					
       }	
-      else if(validarkeyup(/^[A-Za-z0-9]{6,15}$/,
-        $("#password"),$("#spassword"),"Solo letras y numeros entre 6 y 15 caracteres")==0){
-          muestraMensaje("error",4000,"ERROR!","El password debe tener mínimo 6 dígitos y máximo 15");
+      else if(validarkeyup(/^[A-Za-z0-9]{3,15}$/,
+        $("#password"),$("#spassword"),"Solo letras y numeros entre 3 y 15 caracteres")==0){
+         muestraMensaje("error",4000,"ERROR!","El password debe tener mínimo 3 dígitos y máximo 15");
         return false;
       }
       
