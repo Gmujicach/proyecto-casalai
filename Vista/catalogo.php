@@ -219,7 +219,16 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge <?= $producto['stock'] > 0 ? 'bg-success' : 'bg-danger' ?> stock-badge">
+                                            <?php
+                                            
+                                            $stockClass = 'bg-success';
+                                            if ($producto['stock'] < 5) {
+                                                $stockClass = 'bg-danger';
+                                            } elseif ($producto['stock'] < 10) {
+                                                $stockClass = 'bg-warning'; 
+                                            }
+                                            ?>
+                                            <span class="badge <?= $stockClass ?> stock-badge">
                                                 <?= htmlspecialchars($producto['stock']) ?>
                                             </span>
                                         </td>
