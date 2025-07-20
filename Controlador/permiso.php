@@ -11,7 +11,7 @@ $roles = $permisos->getRoles();
 $modulos_permiso = $permisos->getModulos();
 
 // Acciones posibles
-$acciones = ['consultar', 'incluir', 'modificar', 'eliminar'];
+$acciones = ['ingresar','consultar', 'incluir', 'modificar', 'eliminar'];
 
 // Obtener permisos actuales (por rol y módulo)
 $permisosActuales = $permisos->getPermisosPorRolModulo();

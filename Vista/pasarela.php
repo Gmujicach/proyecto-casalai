@@ -43,37 +43,23 @@
                 <td><?php echo htmlspecialchars($dato['observaciones']); ?></td>
 
                 <td>
-                    <div class="acciones-boton">
-                        <i class="vertical">
-                            <img src="img/more_opcion.svg" alt="Ícono" width="16" height="16">
-                        </i>
-                        <div class="desplegable">
-                            <ul><?php  if($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista'){ ?>
-                                <li><a href="#" class="modificarEstado" 
+                    <div>
+
+  <?php  if($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista'){ ?>
+    <button class="btn btn-primary modificarEstado" 
    data-id="<?php echo htmlspecialchars($dato['id_detalles']); ?>"
    data-factura="<?php echo htmlspecialchars($dato['id_factura']); ?>"
    data-estatus="Pago No Encontrado"
    data-observaciones="Pago no verificado aún">
    Cambiar Estatus
-</a>
-<?php }; ?>
-</li>
-<?php if (!($dato["estatus"] === "Pago Procesado")){ ?>
-<li>
-  <a href="#"
-   class="modificar"
-   data-id="<?php echo $dato['id_detalles']; ?>"
-   data-cuenta="<?php echo htmlspecialchars($dato['id_cuenta']); ?>"
-   data-referencia="<?php echo htmlspecialchars($dato['referencia']); ?>"
-   data-fecha="<?php echo htmlspecialchars($dato['fecha']); ?>"
-   data-tipo="<?php echo htmlspecialchars($dato['tipo']); ?>"
-   data-factura="<?php echo htmlspecialchars($dato['id_factura']); ?>">
-   Modificar
-</a>
-</li>
+  </button>
 <?php }; ?>
 
-                            </ul>
+<?php if (!($dato["estatus"] === "Pago Procesado")){ ?>
+
+<?php }; ?>
+
+
                         </div>
                     </div>
                 </td>
@@ -83,69 +69,6 @@
     </table>
 </div>
 
-<!-- Modal de modificación -->
-<div class="modal fade" id="modificarPago" tabindex="-1" role="dialog" aria-labelledby="modificarPagoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content shadow-lg rounded-4">
-      <form id="modificarPagoForm" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="accion" value="modificar">
-        <input type="hidden" name="id_detalles" id="modificarIdDetalles">
-        
-
-        <div class="modal-header bg-primary text-white rounded-top">
-          <h5 class="modal-title" id="modificarPagoLabel">Modificar Pago</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-
-        <div class="modal-body p-4">
-          <div class="mb-3">
-            <label for="modificarCuenta" class="form-label">Cuenta a la cual pagó</label>
-            <select class="form-select" id="modificarCuenta" name="cuenta" required>
-              <option value="" disabled selected>Seleccione una cuenta</option>
-              <?php foreach ($listadocuentas as $cuenta): ?>
-                <option value="<?php echo $cuenta['id_cuenta']; ?>">
-                  <?php echo $cuenta['nombre_banco'] . " - " . $cuenta['numero_cuenta']; ?>
-                </option>
-              <?php endforeach; ?>
-            </select>
-            <div class="form-text text-danger" id="scuenta"></div>
-          </div>
-
-          <div class="mb-3">
-            <label for="modificarReferencia" class="form-label">Referencia</label>
-            <input type="text" class="form-control" id="modificarReferencia" name="referencia" placeholder="Número de referencia" required>
-            <div class="form-text text-danger" id="sreferencia"></div>
-          </div>
-
-          <div class="mb-3">
-            <label for="modificarFecha" class="form-label">Fecha de pago</label>
-            <input type="date" class="form-control" id="modificarFecha" name="fecha" required>
-            <div class="form-text text-danger" id="sfecha"></div>
-          </div>
-
-          <div class="mb-3">
-            <label for="modificarTipo" class="form-label">Tipo de pago</label>
-            <select id="modificarTipo" name="tipo" class="form-select" required>
-              <option value="" disabled selected>Seleccionar</option>
-              <option value="Transferencia">Transferencia</option>
-              <option value="Pago móvil">Pago móvil</option>
-              <option value="Depósito">Depósito</option>
-              <option value="Otro">Otro</option>
-            </select>
-            <div class="form-text text-danger" id="stipo"></div>
-          </div>
-
-          <input type="hidden" name="id_factura" id="modificarFactura" value="">
-        </div>
-
-        <div class="modal-footer bg-light border-top">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button class="btn btn-primary" type="submit">Guardar Cambios</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 
 <!-- Modal para modificar estatus y observaciones -->
 <div class="modal fade" id="modificarEstadoModal" tabindex="-1" aria-labelledby="modificarEstadoLabel" aria-hidden="true">

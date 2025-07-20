@@ -20,7 +20,7 @@ $modulos = [
     'Catalogo' => ['Gestionar Catálogo', 'img/book-open.svg', '?pagina=catalogo'],
     'carrito' => ['Gestionar Carrito de Compras', 'img/shopping-cart.svg', '?pagina=carrito'],
     'pasarela' => ['Gestionar Pasarela de Pagos', 'img/credit-card.svg', '?pagina=pasarela'],
-    'gestionarfactura' => ['Gestionar Pre-Factura', 'img/receipt-text.svg', '?pagina=gestionarfactura'],
+    'Prefactura' => ['Gestionar Pre-Factura', 'img/receipt-text.svg', '?pagina=gestionarfactura'],
     'Ordenes de despacho' => ['Gestionar Ordenes de Despacho', 'img/list-ordered.svg', '?pagina=ordendespacho'],
     'Cuentas bancarias' => ['Gestionar Cuentas Bancarias', 'img/landmark.svg', '?pagina=cuenta'],
     'Finanzas' => ['Gestionar Ingresos y Egresos', 'img/dollar-sign.svg', '?pagina=finanza'],
@@ -98,7 +98,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
             'Administrar Productos' => ['Marcas', 'Modelos', 'Productos', 'Categorias'],
             'Administrar Proveedores' => ['Proveedores'],
             'Administrar Clientes' => ['Clientes'],
-            'Administrar Ventas' => ['Catalogo', 'carrito', 'pasarela', 'gestionarfactura', 'Ordenes de despacho'],
+            'Administrar Ventas' => ['Catalogo', 'carrito', 'pasarela', 'Prefactura', 'Ordenes de despacho'],
             'Administrar Finanzas' => ['Cuentas bancarias', 'Finanzas'],
             'Administrar Seguridad' => ['permisos', 'Roles', 'bitacora'],
         ];

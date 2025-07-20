@@ -52,7 +52,8 @@ class Login extends BD
     u.id_rol,
     r.nombre_rol, 
     u.username, 
-    u.password 
+    u.password,
+    u.cedula
 FROM 
     tbl_usuarios u 
 INNER JOIN 
@@ -72,8 +73,8 @@ WHERE username = :username");
                 $r['mensaje'] = $fila['username'];
                 $r['nombre_rol'] = $fila['nombre_rol'];
                 $r['id_usuario'] = $fila['id_usuario']; 
-                $r['id_rol'] = $fila['id_rol']; // Agregar id_rol al resultado
-                // Opcional: útil para sesiones
+                $r['id_rol'] = $fila['id_rol']; 
+                $r['cedula'] = $fila['cedula'];
             } else {
                 $r['resultado'] = 'noexiste';
                 $r['mensaje'] = "Error en usuario o contraseña!!!";
