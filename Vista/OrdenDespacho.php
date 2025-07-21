@@ -86,55 +86,31 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                 <td><span class="campo-fecha"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
                 <td><span class="campo-factura"><?php echo htmlspecialchars($orden['activo']); ?></span></td>
                 <td>
-        <div class="acciones-boton">
-
-                    <button href="#" class="btn  btn-primary btn-modificar modificar" 
-                        data-id="<?php echo $orden['id_orden_despachos']; ?>" 
-                        data-fecha="<?php echo $orden['fecha_despacho']; ?>"
-                        data-correlativo="<?php echo $orden['correlativo']; ?>"
-                        data-factura="<?php echo $orden['id_factura']; ?>"
-                        data-bs-toggle="modal" 
-                        data-bs-target="#modificar_orden_modal">Modificar
-                    </button>
-<button href="#" class="eliminar btn-eliminar btn btn-danger" data-id="<?php echo $orden['id_orden_despachos']; ?>">Eliminar</button></li>
-                </ul>
-            </div>
-        </div>
-    </td>
-</tr>
-
-        <?php endforeach; ?>
-        </tbody>
-        <!-- <tfoot>
-            <tr>
-                <td>Filas por Página: 
-                    <select id="filasPorPagina" onchange="cambiarFilasPorPagina(this.value)">
-                        <option value="10" selected>10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </td>
-                <td><?php //echo "$inicio-$fin de $totalUsuarios"; ?></td>
-                <td>
-                    <a href="?pagina=<?php //echo max(1, $paginaActual - 1); ?>">
-                        <i class="flecha-izquierda"><img src="img/flecha_izquierda.svg" alt="Anterior" width="16" height="16"></i>
-                    </a>
-                </td>
-                <td>
-                    <a href="?pagina<?php //echo min(ceil($totalUsuarios / $filasPorPagina), $paginaActual + 1); ?>">
-                        <i class="flecha-derecha"><img src="img/flecha_derecha.svg" alt="Siguiente" width="16" height="16"></i>
-                    </a>
+                    <ul>
+                        <div>
+                            <button href="#" class="btn  btn-primary btn-modificar modificar" 
+                                data-id="<?php echo $orden['id_orden_despachos']; ?>" 
+                                data-fecha="<?php echo $orden['fecha_despacho']; ?>"
+                                data-correlativo="<?php echo $orden['correlativo']; ?>"
+                                data-factura="<?php echo $orden['id_factura']; ?>"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#modificar_orden_modal">Modificar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
+                            data-id="<?php echo $orden['id_orden_despachos']; ?>"
+                            >Eliminar</button></li>
+                        </div>
+                    </ul>
                 </td>
             </tr>
-        </tfoot> -->
+            <?php endforeach; ?>
+        </tbody>
     </table>
+</div>
 
-
-
-
-<!-- Modal de modificación -->
-    <!-- Modal de modificación de orden de despacho -->
+<!-- Modal de modificación de orden de despacho -->
 <div class="modal fade" id="modificar_orden_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_orden_modal_label" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
