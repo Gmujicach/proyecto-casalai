@@ -316,6 +316,35 @@ foreach ($caracteristicas as $clave => $valor) {
     </div>
 
 
+<!-- Formulario de parámetros para el reporte -->
+<div class="reporte-parametros" style="margin-bottom: 30px; text-align:center;">
+  <form id="formParametrosReporte" class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+    <label for="tipoReporte">Tipo de reporte:</label>
+    <select id="tipoReporte" name="tipoReporte" class="form-select" style="width:200px;">
+      <option value="por_categoria">Cantidad por Categoría</option>
+      <option value="por_categoria_especifica">Cantidad de una Categoría</option>
+      <option value="precios">Precios de Productos</option>
+    </select>
+
+    <label for="categoriaSeleccionada" id="labelCategoria" style="display:none;">Categoría:</label>
+    <select id="categoriaSeleccionada" name="categoriaSeleccionada" class="form-select" style="width:200px; display:none;">
+      <option value="">Seleccione</option>
+      <?php foreach ($categoriasDinamicas as $cat): ?>
+        <option value="<?= htmlspecialchars($cat['nombre_categoria']) ?>"><?= htmlspecialchars($cat['nombre_categoria']) ?></option>
+      <?php endforeach; ?>
+    </select>
+
+    <label for="tipoGrafica">Tipo de gráfica:</label>
+    <select id="tipoGrafica" name="tipoGrafica" class="form-select" style="width:200px;">
+      <option value="pie">Pastel</option>
+      <option value="bar">Barras</option>
+      <option value="doughnut">Dona</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">Generar</button>
+  </form>
+</div>
+
 <div style="margin-top: 20px; text-align: right;">
   <form action="controlador/reporteproducto.php" method="post" target="_blank" style="display:inline;">
     <button type="submit" class="btn btn-success">
@@ -330,7 +359,7 @@ foreach ($caracteristicas as $clave => $valor) {
   <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 40px;">
     <!-- Gráfica -->
     <div style="flex: 1; min-width: 300px; text-align: center;">
-      <canvas id="graficoPastel" width="300" height="300"></canvas>
+<canvas id="graficoPastel" width="300" height="300"></canvas>
     </div>
 
     <!-- Tabla -->
@@ -375,46 +404,68 @@ foreach ($caracteristicas as $clave => $valor) {
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    const labels = <?= json_encode(array_column($reporteCategorias ?? [], 'nombre_categoria')) ?>;
-    const data = <?= json_encode(array_column($reporteCategorias ?? [], 'cantidad')) ?>;
+let grafico = null;
 
-    function generarColores(n) {
-      const colores = [];
-      for (let i = 0; i < n; i++) {
-        const hue = Math.round((360 / n) * i);
-        colores.push(`hsl(${hue}, 70%, 60%)`);
-      }
-      return colores;
-    }
-
-    const colores = generarColores(labels.length || 1);
+function renderGrafica(labels, data, tipo) {
     const ctx = document.getElementById('graficoPastel').getContext('2d');
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: labels.length ? labels : ['Sin datos'],
-        datasets: [{
-          data: data.length ? data : [1],
-          backgroundColor: colores,
-          borderColor: '#fff',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        plugins: {
-          legend: {
-            display: true,
-            position: 'bottom'
-          },
-          title: {
-            display: true,
-            text: 'Distribución de Productos por Categoría'
-          }
+    if (grafico) grafico.destroy();
+    grafico = new Chart(ctx, {
+        type: tipo,
+        data: {
+            labels: labels.length ? labels : ['Sin datos'],
+            datasets: [{
+                data: data.length ? data : [1],
+                backgroundColor: labels.map((_, i) => `hsl(${(360 / labels.length) * i}, 70%, 60%)`),
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: true, position: 'bottom' },
+                title: { display: true, text: 'Reporte de Productos' }
+            }
         }
-      }
     });
-  </script>
-</div>
+}
+
+$('#tipoReporte').on('change', function() {
+    if ($(this).val() === 'por_categoria_especifica') {
+        $('#categoriaSeleccionada').show();
+        $('#labelCategoria').show();
+    } else {
+        $('#categoriaSeleccionada').hide();
+        $('#labelCategoria').hide();
+    }
+});
+
+$('#formParametrosReporte').on('submit', function(e) {
+    e.preventDefault();
+    const tipoReporte = $('#tipoReporte').val();
+    const categoria = $('#categoriaSeleccionada').val();
+    const tipoGrafica = $('#tipoGrafica').val();
+
+    $.ajax({
+        url: '', // misma página/controlador
+        type: 'POST',
+        data: {
+            accion: 'reporte_parametrizado',
+            tipoReporte: tipoReporte,
+            categoriaSeleccionada: categoria
+        },
+        dataType: 'json',
+        success: function(res) {
+            renderGrafica(res.labels, res.data, tipoGrafica);
+        }
+    });
+});
+
+// Inicializa la gráfica con el reporte por categoría y tipo pastel
+$(document).ready(function() {
+    $('#formParametrosReporte').trigger('submit');
+});
+</script>
+  
     <!-- Modal de modificación -->
     <div class="modal fade modal-modificar" id="modificarProductoModal" tabindex="-1" role="dialog"
       aria-labelledby="modificarProductoModalLabel" aria-hidden="true">
@@ -556,14 +607,13 @@ foreach ($caracteristicas as $clave => $valor) {
     <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="public/js/jquery-3.7.1.min.js"></script>
     <script src="javascript/sweetalert2.all.min.js"></script>
-    <script src="javascript/producto.js"></script>
     <script src="javascript/validaciones.js"></script>
     <script src="public/js/jquery.dataTables.min.js"></script>
     <script src="public/js/dataTables.bootstrap5.min.js"></script>
     <script src="public/js/datatable.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+ <script src="javascript/producto.js"></script>
     <script>
       $(document).ready(function () {
         $('#tablaConsultas').DataTable({

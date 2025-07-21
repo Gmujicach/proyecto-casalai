@@ -51,7 +51,7 @@
                             <option value="" disabled selected>Seleccionar Factura</option>
                             <?php foreach ($facturas as $factura): ?>
                                 <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
-                                    <?php echo htmlspecialchars($factura['fecha']); ?>
+                                    <?php echo htmlspecialchars('Factura #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

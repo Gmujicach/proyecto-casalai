@@ -219,6 +219,33 @@ if ($response['success']) {
             }
             break;
 
+            case 'reporte_parametrizado':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['accion'] === 'reporte_parametrizado') {
+    $tipoReporte = $_POST['tipoReporte'];
+    $categoria = $_POST['categoriaSeleccionada'] ?? '';
+    $productoModel = new Productos();
+
+    if ($tipoReporte === 'por_categoria') {
+        $datos = $productoModel->obtenerReporteCategorias();
+        $labels = array_column($datos, 'nombre_categoria');
+        $data = array_column($datos, 'cantidad');
+    } elseif ($tipoReporte === 'por_categoria_especifica' && $categoria) {
+        $datos = $productoModel->obtenerProductosPorCategoria($categoria);
+        $labels = array_column($datos, 'nombre_producto');
+        $data = array_column($datos, 'stock');
+    } elseif ($tipoReporte === 'precios') {
+        $datos = $productoModel->obtenerProductosConPrecios();
+        $labels = array_column($datos, 'nombre_producto');
+        $data = array_column($datos, 'precio');
+    } else {
+        $labels = [];
+        $data = [];
+    }
+    echo json_encode(['labels' => $labels, 'data' => $data]);
+    exit;
+}
+            break;
+
         default:
             // Respuesta de error si la acción no es válida
             echo json_encode(['status' => 'error', 'message' => 'Acción no válida']);
@@ -228,7 +255,8 @@ if ($response['success']) {
     exit;
 }
 
-// Función para obtener modelos
+
+
 function obtenerModelos() {
     $ModelosModel = new Productos();
     return $ModelosModel->obtenerModelos();

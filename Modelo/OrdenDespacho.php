@@ -56,7 +56,11 @@ class OrdenDespacho extends BD {
     // Método para obtener las facturas disponibles
 
     public function obtenerFacturasDisponibles() {
-    $sql = "SELECT id_factura, fecha, cliente FROM tbl_facturas WHERE estatus = 'Borrador'";
+    $sql = "SELECT f.id_factura, f.fecha, c.nombre
+FROM tbl_facturas f
+INNER JOIN tbl_clientes c ON f.cliente = c.id_clientes
+WHERE f.estatus = 'Borrador';
+";
     $stmt = $this->conex->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
