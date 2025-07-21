@@ -259,7 +259,7 @@ foreach ($caracteristicas as $clave => $valor) {
                 </span>
                 <span class="campo-correo">
                   <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
-                </span>
+              </span>
               </td>
               <td>
                 <span class="campo-nombres">
@@ -318,153 +318,40 @@ foreach ($caracteristicas as $clave => $valor) {
 
 <!-- Formulario de parámetros para el reporte -->
 <div class="reporte-parametros" style="margin-bottom: 30px; text-align:center;">
-  <form id="formParametrosReporte" class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+  <div class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
     <label for="tipoReporte">Tipo de reporte:</label>
-    <select id="tipoReporte" name="tipoReporte" class="form-select" style="width:200px;">
+    <select id="tipoReporte" class="form-select" style="width:200px;">
       <option value="por_categoria">Cantidad por Categoría</option>
-      <option value="por_categoria_especifica">Cantidad de una Categoría</option>
-      <option value="precios">Precios de Productos</option>
-    </select>
-
-    <label for="categoriaSeleccionada" id="labelCategoria" style="display:none;">Categoría:</label>
-    <select id="categoriaSeleccionada" name="categoriaSeleccionada" class="form-select" style="width:200px; display:none;">
-      <option value="">Seleccione</option>
-      <?php foreach ($categoriasDinamicas as $cat): ?>
-        <option value="<?= htmlspecialchars($cat['nombre_categoria']) ?>"><?= htmlspecialchars($cat['nombre_categoria']) ?></option>
-      <?php endforeach; ?>
+      <option value="porcentaje_valor">% Valor en Categoría</option>
+      <option value="comparacion_precio_cantidad">Comparación Precio vs Cantidad</option>
     </select>
 
     <label for="tipoGrafica">Tipo de gráfica:</label>
-    <select id="tipoGrafica" name="tipoGrafica" class="form-select" style="width:200px;">
-      <option value="pie">Pastel</option>
+    <select id="tipoGrafica" class="form-select" style="width:200px;">
       <option value="bar">Barras</option>
-      <option value="doughnut">Dona</option>
+      <option value="pie">Pastel</option>
+      <option value="line">Líneas</option>
     </select>
 
-    <button type="submit" class="btn btn-primary">Generar</button>
-  </form>
+    <button id="generarReporteBtn" class="btn btn-primary">Generar</button>
+    <button id="descargarPDF" class="btn btn-success">Descargar PDF</button>
+  </div>
 </div>
 
-<div style="margin-top: 20px; text-align: right;">
-  <form action="controlador/reporteproducto.php" method="post" target="_blank" style="display:inline;">
-    <button type="submit" class="btn btn-success">
-      Descargar Reporte de Productos por Categoría
-    </button>
-  </form>
-</div>
-
+<!-- Contenedor del Reporte -->
 <div class="reporte-container" style="max-width: 1000px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
-  <h3 style="text-align: center; margin-bottom: 20px; color:#1f66df;">Reporte de Productos por Categoría</h3>
-
-  <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 40px;">
+  <h3 id="tituloReporte" style="text-align: center; margin-bottom: 20px; color:#1f66df;">Reporte de Productos</h3>
+  <div style="display: flex; flex-direction: column; gap: 30px;">
     <!-- Gráfica -->
-    <div style="flex: 1; min-width: 300px; text-align: center;">
-<canvas id="graficoPastel" width="300" height="300"></canvas>
+    <div style="text-align: center;">
+      <canvas id="graficoReporte" width="400" height="400"></canvas>
     </div>
-
-    <!-- Tabla -->
-    <div style="flex: 1; min-width: 300px;">
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>Categoría</th>
-            <th>Cantidad</th>
-            <th>Porcentaje (%)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php if (!empty($reporteCategorias)): ?>
-            <?php foreach ($reporteCategorias as $cat): ?>
-              <tr>
-                <td><?= htmlspecialchars($cat['nombre_categoria']) ?></td>
-                <td><?= $cat['cantidad'] ?></td>
-                <td><?= $cat['porcentaje'] ?>%</td>
-              </tr>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <tr><td colspan="3" style="text-align:center;">No hay datos</td></tr>
-          <?php endif; ?>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>Total</th>
-            <th><?= $totalCategorias ?></th>
-            <th>100%</th>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+    <!-- Tabla de Datos -->
+    <div id="tablaReporte"></div>
   </div>
+</div>
 
-  <div style="text-align:center; margin-top:30px;">
-    <button id="descargarPDF" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
-      Descargar PDF
-    </button>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-let grafico = null;
-
-function renderGrafica(labels, data, tipo) {
-    const ctx = document.getElementById('graficoPastel').getContext('2d');
-    if (grafico) grafico.destroy();
-    grafico = new Chart(ctx, {
-        type: tipo,
-        data: {
-            labels: labels.length ? labels : ['Sin datos'],
-            datasets: [{
-                data: data.length ? data : [1],
-                backgroundColor: labels.map((_, i) => `hsl(${(360 / labels.length) * i}, 70%, 60%)`),
-                borderColor: '#fff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            plugins: {
-                legend: { display: true, position: 'bottom' },
-                title: { display: true, text: 'Reporte de Productos' }
-            }
-        }
-    });
-}
-
-$('#tipoReporte').on('change', function() {
-    if ($(this).val() === 'por_categoria_especifica') {
-        $('#categoriaSeleccionada').show();
-        $('#labelCategoria').show();
-    } else {
-        $('#categoriaSeleccionada').hide();
-        $('#labelCategoria').hide();
-    }
-});
-
-$('#formParametrosReporte').on('submit', function(e) {
-    e.preventDefault();
-    const tipoReporte = $('#tipoReporte').val();
-    const categoria = $('#categoriaSeleccionada').val();
-    const tipoGrafica = $('#tipoGrafica').val();
-
-    $.ajax({
-        url: '', // misma página/controlador
-        type: 'POST',
-        data: {
-            accion: 'reporte_parametrizado',
-            tipoReporte: tipoReporte,
-            categoriaSeleccionada: categoria
-        },
-        dataType: 'json',
-        success: function(res) {
-            renderGrafica(res.labels, res.data, tipoGrafica);
-        }
-    });
-});
-
-// Inicializa la gráfica con el reporte por categoría y tipo pastel
-$(document).ready(function() {
-    $('#formParametrosReporte').trigger('submit');
-});
-</script>
   
     <!-- Modal de modificación -->
     <div class="modal fade modal-modificar" id="modificarProductoModal" tabindex="-1" role="dialog"
@@ -568,38 +455,10 @@ $(document).ready(function() {
     </div>
 
 
-        <div style="text-align:center; margin-top:20px;">
-            <button id="descargarPDF" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
-                Descargar PDF
-            </button>
-        </div>
     </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-
-<script>
-  document.getElementById('descargarPDF').addEventListener('click', function () {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'pt',
-      format: 'a4'
-    });
-
-    const reporte = document.querySelector('.reporte-container');
-    html2canvas(reporte).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const imgWidth = pageWidth - 40;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-
-      doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
-      doc.save('Reporte_Productos_Categorias.pdf');
-    });
-  });
-</script>
 
 
 
@@ -614,6 +473,351 @@ $(document).ready(function() {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
  <script src="javascript/producto.js"></script>
+
+<script>
+// Variables globales
+let dataTableInstance = null;
+let chartInstances = []; // Para almacenar múltiples instancias de gráficos
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar DataTable con manejo de re-inicialización
+  if ($.fn.DataTable.isDataTable('#tablaConsultas')) {
+    $('#tablaConsultas').DataTable().destroy();
+  }
+  
+  dataTableInstance = $('#tablaConsultas').DataTable({
+    language: {
+      url: 'public/js/es-ES.json'
+    },
+    destroy: true // Permite reinicialización
+  });
+
+  // Elementos del DOM
+  const generarBtn = document.getElementById('generarReporteBtn');
+  const tipoReporteSelect = document.getElementById('tipoReporte');
+  const tipoGraficaSelect = document.getElementById('tipoGrafica');
+  const graficoContainer = document.getElementById('graficoContainer'); // Nuevo contenedor para múltiples gráficos
+  const tituloReporte = document.getElementById('tituloReporte');
+  const tablaReporte = document.getElementById('tablaReporte');
+
+  // Función mejorada para obtener datos con depuración
+  function getProductosData() {
+    try {
+      // Opción 1: Desde DataTables
+      if (dataTableInstance) {
+        const data = dataTableInstance.rows().data().toArray().map((row, index) => {
+          const $row = $(row);
+          
+          // Función auxiliar para parsear números con validación
+          const parseNumber = (text, isFloat = false) => {
+            const num = isFloat ? 
+              parseFloat(text.replace(/[^0-9.,]/g, '').replace(',', '.')) : 
+              parseInt(text.replace(/[^0-9]/g, ''));
+            return isNaN(num) ? 0 : num;
+          };
+          
+          const producto = {
+            id: $row[1],
+            nombre: $($row[3]).find('.campo-nombres').text().trim(),
+            categoria: $row[9],
+            precio: parseNumber($($row[10]).find('.precio').text(), true),
+            cantidad: parseNumber($row[5], false)
+          };
+          
+          // Depuración: Mostrar tipo de datos en consola
+          console.log(`[Depuración] Producto ${index+1}:`, {
+            datos: producto,
+            tipos: {
+              id: typeof producto.id,
+              nombre: typeof producto.nombre,
+              categoria: typeof producto.categoria,
+              precio: typeof producto.precio,
+              cantidad: typeof producto.cantidad
+            }
+          });
+          
+          return producto;
+        });
+        
+        console.log('[Depuración] Resumen de datos obtenidos:', data);
+        return data;
+      }
+      
+      // Opción 2: Desde el DOM (fallback)
+      console.warn('Usando datos del DOM como fallback');
+      const productos = [];
+      document.querySelectorAll('#tablaConsultas tbody tr').forEach((row, index) => {
+        const celdas = row.querySelectorAll('td');
+        productos.push({
+          id: celdas[1].textContent.trim(),
+          nombre: celdas[3].querySelector('.campo-nombres').textContent.trim(),
+          categoria: celdas[9].textContent.trim(),
+          precio: parseFloat(celdas[10].querySelector('.precio').textContent.replace(/[^0-9.]/g, '')),
+          cantidad: parseInt(celdas[5].textContent.trim())
+        });
+        
+        // Depuración: Mostrar tipo de datos en consola
+        console.log(`[Depuración] Producto ${index+1} (DOM):`, {
+          datos: productos[productos.length-1],
+          tipos: {
+            id: typeof productos[productos.length-1].id,
+            nombre: typeof productos[productos.length-1].nombre,
+            categoria: typeof productos[productos.length-1].categoria,
+            precio: typeof productos[productos.length-1].precio,
+            cantidad: typeof productos[productos.length-1].cantidad
+          }
+        });
+      });
+      return productos;
+    } catch (error) {
+      console.error('Error obteniendo datos:', error);
+      return [];
+    }
+  }
+
+  // Función para generar el reporte de precio por categoría (modificada según lo solicitado)
+  function generarReportePrecioPorCategoria(productos) {
+    try {
+      // Limpiar contenedores anteriores
+      graficoContainer.innerHTML = '';
+      tablaReporte.innerHTML = '';
+      
+      // Destruir gráficos anteriores
+      chartInstances.forEach(chart => chart.destroy());
+      chartInstances = [];
+      
+      // Agrupar productos por categoría
+      const productosPorCategoria = {};
+      productos.forEach(producto => {
+        if (!productosPorCategoria[producto.categoria]) {
+          productosPorCategoria[producto.categoria] = [];
+        }
+        productosPorCategoria[producto.categoria].push(producto);
+      });
+      
+      // Crear un gráfico por categoría
+      Object.keys(productosPorCategoria).forEach(categoria => {
+        const productosCategoria = productosPorCategoria[categoria];
+        
+        // Crear contenedor para esta categoría
+        const categoriaDiv = document.createElement('div');
+        categoriaDiv.className = 'categoria-container mb-5 p-3 border rounded';
+        
+        const tituloCategoria = document.createElement('h4');
+        tituloCategoria.className = 'text-center mb-3';
+        tituloCategoria.textContent = `Precios en ${categoria}`;
+        categoriaDiv.appendChild(tituloCategoria);
+        
+        // Crear canvas para el gráfico
+        const canvas = document.createElement('canvas');
+        canvas.height = 300;
+        categoriaDiv.appendChild(canvas);
+        
+        // Crear tabla de productos
+        const tablaHTML = `
+          <div class="table-responsive mt-3">
+            <table class="table table-bordered table-sm">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${productosCategoria.map(p => `
+                  <tr>
+                    <td>${p.nombre}</td>
+                    <td>$${p.precio.toFixed(2)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        categoriaDiv.innerHTML += tablaHTML;
+        
+        // Agregar al contenedor principal
+        graficoContainer.appendChild(categoriaDiv);
+        
+        // Crear gráfico
+        const ctx = canvas.getContext('2d');
+        const chart = new Chart(ctx, {
+          type: tipoGraficaSelect.value || 'bar',
+          data: {
+            labels: productosCategoria.map(p => p.nombre),
+            datasets: [{
+              label: `Precios en ${categoria}`,
+              data: productosCategoria.map(p => p.precio),
+              backgroundColor: generarColores(productosCategoria.length)
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: `Precios en ${categoria}`,
+                font: { size: 16 }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Precio (USD)'
+                }
+              }
+            }
+          }
+        });
+        
+        chartInstances.push(chart);
+      });
+      
+      tituloReporte.textContent = 'Precio de Productos por Categoría';
+      
+    } catch (error) {
+      console.error('Error generando reporte por categoría:', error);
+      Swal.fire('Error', 'No se pudo generar el reporte por categoría', 'error');
+    }
+  }
+
+  // Función para generar el reporte
+  function generarReporte() {
+    try {
+      const productos = getProductosData();
+      console.log('Datos obtenidos para reporte:', productos);
+      
+      if (productos.length === 0) {
+        console.error('No hay datos para generar el reporte');
+        Swal.fire('Advertencia', 'No hay datos para generar el reporte', 'warning');
+        return;
+      }
+
+      const tipoReporte = tipoReporteSelect.value;
+      const tipoGrafica = tipoGraficaSelect.value;
+
+      // Procesar según el tipo de reporte
+      if (tipoReporte === 'porcentaje_valor') {
+        // Reporte modificado: Precio por categoría (lo solicitado)
+        generarReportePrecioPorCategoria(productos);
+      } else {
+        // Mantener los otros tipos de reporte sin cambios
+        let labels = [];
+        let datasets = [];
+        let titulo = '';
+
+        switch (tipoReporte) {
+          case 'por_categoria':
+            const categorias = {};
+            productos.forEach(p => categorias[p.categoria] = (categorias[p.categoria] || 0) + 1);
+            
+            labels = Object.keys(categorias);
+            datasets = [{
+              label: 'Cantidad',
+              data: Object.values(categorias),
+              backgroundColor: generarColores(labels.length)
+            }];
+            titulo = 'Productos por Categoría';
+            generarTablaReporte(labels, Object.values(categorias), ['Categoría', 'Cantidad']);
+            break;
+
+          case 'comparacion_precio_cantidad':
+            labels = productos.map(p => p.nombre);
+            datasets = [
+              {
+                label: 'Precio (USD)',
+                data: productos.map(p => p.precio),
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                yAxisID: 'y'
+              },
+              {
+                label: 'Cantidad',
+                data: productos.map(p => p.cantidad),
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                yAxisID: 'y1'
+              }
+            ];
+            titulo = 'Comparación Precio vs Cantidad';
+            generarTablaReporte(
+              productos.map(p => p.nombre),
+              productos.map(p => `${p.precio.toFixed(2)} USD | ${p.cantidad} u`),
+              ['Producto', 'Precio | Cantidad']
+            );
+            break;
+        }
+
+        // Actualizar título y gráfico (solo para reportes que no son por categoría)
+        tituloReporte.textContent = titulo;
+        
+        // Crear gráfico único
+        if (chartInstances.length > 0) {
+          chartInstances.forEach(chart => chart.destroy());
+          chartInstances = [];
+        }
+        
+        const ctx = document.getElementById('graficoReporte').getContext('2d');
+        const chart = new Chart(ctx, {
+          type: tipoGrafica,
+          data: { labels, datasets },
+          options: {
+            responsive: true,
+            plugins: { title: { display: true, text: titulo } },
+            scales: tipoReporte === 'comparacion_precio_cantidad' ? {
+              y: { type: 'linear', display: true, position: 'left' },
+              y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false } }
+            } : {}
+          }
+        });
+        
+        chartInstances.push(chart);
+      }
+
+    } catch (error) {
+      console.error('Error generando reporte:', error);
+      Swal.fire('Error', 'No se pudo generar el reporte', 'error');
+    }
+  }
+
+  // Función para generar la tabla de resultados (sin cambios)
+  function generarTablaReporte(labels, data, headers) {
+    let html = `
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead><tr><th>${headers[0]}</th><th>${headers[1]}</th></tr></thead>
+          <tbody>
+    `;
+    
+    labels.forEach((label, i) => {
+      html += `<tr><td>${label}</td><td>${data[i]}</td></tr>`;
+    });
+    
+    html += `</tbody></table></div>`;
+    tablaReporte.innerHTML = html;
+  }
+
+  // Generar colores dinámicos (sin cambios)
+  function generarColores(n) {
+    return Array.from({length: n}, (_, i) => `hsl(${(360 / n) * i}, 70%, 60%)`);
+  }
+
+  // Configurar eventos (sin cambios)
+  generarBtn.addEventListener('click', generarReporte);
+  document.getElementById('descargarPDF').addEventListener('click', function() {
+    const { jsPDF } = window.jspdf;
+    new jsPDF()
+      .html(document.querySelector('.reporte-container'), {
+        callback: pdf => pdf.save('Reporte.pdf'),
+        margin: 10,
+        html2canvas: { scale: 0.75 }
+      });
+  });
+
+  // Generar reporte inicial
+  generarReporte();
+});
+</script>
     <script>
       $(document).ready(function () {
         $('#tablaConsultas').DataTable({
@@ -700,78 +904,7 @@ if (carac.tipo === 'int' || carac.tipo === 'float') {
 });
 
     </script>
-<script>
-  document.getElementById('descargarPDF').addEventListener('click', function () {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'pt',
-      format: 'a4'
-    });
 
-    const reporte = document.querySelector('.reporte-container');
-    html2canvas(reporte).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      const imgWidth = pageWidth - 40;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-
-      let y = 20;
-      if (imgHeight > pageHeight) {
-        const pages = Math.ceil(imgHeight / pageHeight);
-        for (let i = 0; i < pages; i++) {
-          if (i > 0) doc.addPage();
-          doc.addImage(imgData, 'PNG', 20, y - i * pageHeight, imgWidth, imgHeight);
-        }
-      } else {
-        doc.addImage(imgData, 'PNG', 20, y, imgWidth, imgHeight);
-      }
-
-      doc.save('Reporte_Productos_Categorias.pdf');
-    });
-  });
-</script>
-
-<!-- ...otros scripts... -->
-
-<?php if (!empty($reporteCategorias) && $totalCategorias > 0): ?>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const labels = <?= json_encode(array_column($reporteCategorias, 'nombre_categoria')) ?>;
-    const data = <?= json_encode(array_column($reporteCategorias, 'cantidad')) ?>;
-    function generarColores(n) {
-      const colores = [];
-      for (let i = 0; i < n; i++) {
-        const hue = Math.round((360 / n) * i);
-        colores.push(`hsl(${hue}, 70%, 60%)`);
-      }
-      return colores;
-    }
-    const colores = generarColores(labels.length);
-    const ctx = document.getElementById('graficoPastel').getContext('2d');
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: labels,
-        datasets: [{
-          data: data,
-          backgroundColor: colores,
-          borderColor: '#fff',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        plugins: {
-          legend: { display: true, position: 'bottom' },
-          title: { display: true, text: 'Distribución de Productos por Categoría' }
-        }
-      }
-    });
-  });
-</script>
-<?php endif; ?>
   </body>
 
   </html>
