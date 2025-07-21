@@ -1,4 +1,9 @@
 $(document).ready(function () {
+
+    $(document).on('click', '#registrarOrdenModal .close', function() {
+        $('#registrarOrdenModal').modal('hide');
+    });
+
     $(document).on('click', '.modificar', function (e) {
         e.preventDefault(); // Evita que el enlace haga scroll o recargue
     
