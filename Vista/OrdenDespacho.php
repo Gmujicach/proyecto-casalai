@@ -112,47 +112,44 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
 
 <!-- Modal de modificación de orden de despacho -->
 <div class="modal fade" id="modificar_orden_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_orden_modal_label" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <form id="modificarorden" method="POST">
-      <input type="hidden" name="accion" value="modificar">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modificar_orden_modal_label">Modificar Orden de Despacho</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <form id="modificarorden" method="POST">
+        <input type="hidden" name="accion" value="modificar">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modificar_orden_modal_label">Modificar Orden de Despacho</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modificar_id_orden" name="id_despachos">
+                <div class="form-group">
+                    <label for="modificar_fecha">Fecha</label>
+                    <input type="date" class="form-control" id="modificar_fecha" name="fecha_despacho" required>
+                </div>
+                <div class="form-group">
+                    <label for="modificar_correlativo">Correlativo</label>
+                    <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" required>
+                </div>
+                <div class="form-group">
+                    <label for="modificar_factura">Factura</label>
+                    <select name="factura" id="modificar_factura" class="form-control">
+                    <?php foreach ($facturas as $factura): ?>
+                        <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
+                        <?php echo htmlspecialchars($factura['fecha']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Modificar</button>
+            </div>
+        </form>
         </div>
-
-        <div class="modal-body">
-          <input type="hidden" id="modificar_id_orden" name="id_despachos">
-          <div class="form-group">
-            <label for="modificar_fecha">Fecha</label>
-            <input type="date" class="form-control" id="modificar_fecha" name="fecha_despacho" required>
-          </div>
-          <div class="form-group">
-            <label for="modificar_correlativo">Correlativo</label>
-            <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" required>
-          </div>
-          <div class="form-group">
-            <label for="modificar_factura">Factura</label>
-            <select name="factura" id="modificar_factura" class="form-control">
-              <?php foreach ($facturas as $factura): ?>
-                <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
-                  <?php echo htmlspecialchars($factura['fecha']); ?>
-                </option>
-              <?php endforeach; ?>
-            </select>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Modificar</button>
-        </div>
-      </form>
     </div>
-  </div>
-</div>
 </div>
 
 
@@ -160,18 +157,15 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
 <?php include 'footer.php'; ?>
 
 <script src="public/bootstrap/js/sidebar.js"></script>
-  <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="public/js/jquery-3.7.1.min.js"></script>
-  <script src="public/js/jquery.dataTables.min.js"></script>
-  <script src="public/js/dataTables.bootstrap5.min.js"></script>
-  <script src="public/js/datatable.js"></script>
-  <script src="javascript/sweetalert2.all.min.js"></script>
-<script src="javascript/usuario.js"></script>
-<script src="javascript/validaciones.js"></script>
-<script src="javascript/ordendespacho.js"></script>
+<script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="public/js/jquery-3.7.1.min.js"></script>
 <script src="public/js/jquery.dataTables.min.js"></script>
 <script src="public/js/dataTables.bootstrap5.min.js"></script>
 <script src="public/js/datatable.js"></script>
+<script src="javascript/sweetalert2.all.min.js"></script>
+<script src="javascript/usuario.js"></script>
+<script src="javascript/validaciones.js"></script>
+<script src="javascript/ordendespacho.js"></script>
 <script>
 $(document).ready(function() {
     $('#tablaConsultas').DataTable({
