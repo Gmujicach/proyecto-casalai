@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-07-2025 a las 05:02:50
+-- Tiempo de generación: 22-07-2025 a las 01:09:28
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `seguridadlai`
 --
-CREATE DATABASE IF NOT EXISTS `seguridadlai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `seguridadlai`;
 
 -- --------------------------------------------------------
 
@@ -435,13 +433,13 @@ INSERT INTO `tbl_rol` (`id_rol`, `nombre_rol`) VALUES
 
 CREATE TABLE `tbl_usuarios` (
   `id_usuario` int(11) NOT NULL,
-  `username` varchar(15) DEFAULT NULL,
+  `username` varchar(20) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `cedula` varchar(8) DEFAULT NULL,
   `id_rol` int(11) NOT NULL,
   `correo` varchar(50) DEFAULT NULL,
-  `nombres` varchar(20) DEFAULT NULL,
-  `apellidos` varchar(20) DEFAULT NULL,
+  `nombres` varchar(50) DEFAULT NULL,
+  `apellidos` varchar(50) DEFAULT NULL,
   `telefono` varchar(15) DEFAULT NULL,
   `estatus` enum('habilitado','inhabilitado') NOT NULL DEFAULT 'habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -531,7 +529,7 @@ ALTER TABLE `tbl_bitacora`
 -- AUTO_INCREMENT de la tabla `tbl_modulos`
 --
 ALTER TABLE `tbl_modulos`
-  MODIFY `id_modulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_modulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_permisos`
@@ -555,7 +553,7 @@ ALTER TABLE `tbl_rol`
 -- AUTO_INCREMENT de la tabla `tbl_usuarios`
 --
 ALTER TABLE `tbl_usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas

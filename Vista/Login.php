@@ -104,12 +104,12 @@
   <div class="input-row">
     <div class="input-field">
       <i class="fas fa-user"></i>
-      <input type="text" name="nombre" id="nombre" placeholder="Nombre" maxlength="30" required />
+      <input type="text" name="nombre" id="nombre" placeholder="Nombre" maxlength="50" required />
       <span class="span-value" id="snombre"></span>
     </div>
     <div class="input-field">
       <i class="fas fa-user"></i>
-      <input type="text" name="apellido" id="apellido" placeholder="Apellido" maxlength="30" required />
+      <input type="text" name="apellido" id="apellido" placeholder="Apellido" maxlength="50" required />
       <span class="span-value" id="sapellido"></span>
     </div>
   </div>
@@ -122,7 +122,7 @@
     </div>
     <div class="input-field">
       <i class="fas fa-envelope"></i>
-      <input type="text" name="cedula" id="cedula" placeholder="Cédula/RIF" maxlength="12" required />
+      <input type="text" name="cedula" id="cedula" placeholder="Cédula" maxlength="8" required />
       <span class="span-value" id="scedula"></span>
     </div>
   </div>
