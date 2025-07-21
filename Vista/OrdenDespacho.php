@@ -6,25 +6,18 @@
 <head>
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestionar Orden de Despacho</title>
-  <?php include 'header.php'; ?>
+    <?php include 'header.php'; ?>
+    <title>Gestionar Orden de Despacho</title>
 </head>
-<body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
+<<body class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <?php include 'newnavbar.php'; ?>
 
-
-<!-- Botón para abrir el modal de registro de orden de despacho -->
-<div class="space-btn-incluir">
-    <button id="btnIncluirOrden" class="btn-incluir">
-        Incluir Orden de Despacho
-    </button>
-</div>
-
 <!-- Modal para registrar orden de despacho -->
-<div class="modal fade modal-registrar" id="registrarOrdenModal" tabindex="-1" role="dialog" aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade modal-registrar" id="registrarOrdenModal" tabindex="-1" role="dialog"
+aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="incluirordendepacho" method="POST">
                 <div class="modal-header">
@@ -68,7 +61,13 @@
 </div>
 
 <div class="contenedor-tabla">
-    <h3>LISTA DE ORDENES</h3>
+    <div class="space-btn-incluir">
+        <button id="btnIncluirOrden" class="btn-incluir">
+            Incluir Orden de Despacho
+        </button>
+    </div>
+
+    <h3>LISTA DE ORDENES DE DESPACHO</h3>
 
     <table class="tablaConsultas" id="tablaConsultas">
         <thead>
@@ -76,7 +75,6 @@
                 <th>Correlativo</th>
                 <th>Fecha</th>
                 <th>Factura</th>
-                <th>Ver Mas</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -84,11 +82,10 @@
         <tbody>
         <?php foreach ($ordendespacho as $orden): ?>
             <tr>
-    <td><span class="campo-correlativo"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
-    <td><span class="campo-fecha"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
-    <td><span class="campo-factura"><?php echo htmlspecialchars($orden['activo']); ?></span></td>
-    <td><span><a href="#" class="">Ver Mas</a></span></td>
-    <td>
+                <td><span class="campo-correlativo"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
+                <td><span class="campo-fecha"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
+                <td><span class="campo-factura"><?php echo htmlspecialchars($orden['activo']); ?></span></td>
+                <td>
         <div class="acciones-boton">
 
                     <button href="#" class="btn  btn-primary btn-modificar modificar" 
