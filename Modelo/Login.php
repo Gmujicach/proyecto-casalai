@@ -116,11 +116,12 @@ public function registrarUsuarioYCliente($datos) {
 
         // Inserta en tbl_usuarios
         $p = $this->co->prepare("INSERT INTO tbl_usuarios 
-                            (username, password, nombres, apellidos, correo, telefono, id_rol, estatus)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, 'habilitado')");
+                            (username, password, cedula, nombres, apellidos, correo, telefono, id_rol, estatus)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'habilitado')");
         $p->execute([
             $datos['nombre_usuario'],
             $hash,
+            $datos['cedula'],
             $datos['nombre'],
             $datos['apellido'],
             $datos['correo'],
