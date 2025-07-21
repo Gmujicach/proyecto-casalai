@@ -257,9 +257,7 @@ foreach ($caracteristicas as $clave => $valor) {
                 <span class="campo-nombres">
                   <?php echo htmlspecialchars($producto['nombre_producto']); ?>
                 </span>
-                <span class="campo-correo">
-                  <?php echo htmlspecialchars($producto['nombre_modelo']); ?>
-              </span>
+
               </td>
               <td>
                 <span class="campo-nombres">
@@ -331,6 +329,8 @@ foreach ($caracteristicas as $clave => $valor) {
       <option value="bar">Barras</option>
       <option value="pie">Pastel</option>
       <option value="line">Líneas</option>
+      <option value="doughnut">Rosca</option>
+      <option value="polarArea">Área Polar</option>
     </select>
 
     <button id="generarReporteBtn" class="btn btn-primary">Generar</button>
@@ -341,6 +341,7 @@ foreach ($caracteristicas as $clave => $valor) {
 <!-- Contenedor del Reporte -->
 <div class="reporte-container" style="max-width: 1000px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
   <h3 id="tituloReporte" style="text-align: center; margin-bottom: 20px; color:#1f66df;">Reporte de Productos</h3>
+  <div id="graficoContainer"></div>
   <div style="display: flex; flex-direction: column; gap: 30px;">
     <!-- Gráfica -->
     <div style="text-align: center;">
@@ -517,12 +518,35 @@ document.addEventListener('DOMContentLoaded', function() {
           };
           
           const producto = {
-            id: $row[1],
-            nombre: $($row[3]).find('.campo-nombres').text().trim(),
-            categoria: $row[9],
-            precio: parseNumber($($row[10]).find('.precio').text(), true),
-            cantidad: parseNumber($row[5], false)
-          };
+  id: stripHTML($row[1]),
+  nombre: extractNombre($row[3]),
+  categoria: stripHTML($row[9]),
+  precio: extractPrecio($row[10]),
+  cantidad: parseNumber(stripHTML($row[5]), false)
+};
+
+// Función para quitar etiquetas HTML y obtener solo texto
+function stripHTML(html) {
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  return temp.textContent.trim();
+}
+
+// Extrae el nombre del producto del HTML de la celda
+function extractNombre(html) {
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  const span = temp.querySelector('.campo-nombres');
+  return span ? span.textContent.trim() : temp.textContent.trim();
+}
+
+// Extrae el precio del HTML de la celda
+function extractPrecio(html) {
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  const span = temp.querySelector('.precio');
+  return span ? parseFloat(span.textContent.replace(/[^0-9.]/g, '')) : 0;
+}
           
           // Depuración: Mostrar tipo de datos en consola
           console.log(`[Depuración] Producto ${index+1}:`, {
@@ -575,113 +599,123 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Función para generar el reporte de precio por categoría (modificada según lo solicitado)
-  function generarReportePrecioPorCategoria(productos) {
-    try {
-      // Limpiar contenedores anteriores
-      graficoContainer.innerHTML = '';
-      tablaReporte.innerHTML = '';
-      
-      // Destruir gráficos anteriores
-      chartInstances.forEach(chart => chart.destroy());
-      chartInstances = [];
-      
-      // Agrupar productos por categoría
-      const productosPorCategoria = {};
-      productos.forEach(producto => {
-        if (!productosPorCategoria[producto.categoria]) {
-          productosPorCategoria[producto.categoria] = [];
-        }
-        productosPorCategoria[producto.categoria].push(producto);
-      });
-      
-      // Crear un gráfico por categoría
-      Object.keys(productosPorCategoria).forEach(categoria => {
-        const productosCategoria = productosPorCategoria[categoria];
-        
-        // Crear contenedor para esta categoría
-        const categoriaDiv = document.createElement('div');
-        categoriaDiv.className = 'categoria-container mb-5 p-3 border rounded';
-        
-        const tituloCategoria = document.createElement('h4');
-        tituloCategoria.className = 'text-center mb-3';
-        tituloCategoria.textContent = `Precios en ${categoria}`;
-        categoriaDiv.appendChild(tituloCategoria);
-        
-        // Crear canvas para el gráfico
-        const canvas = document.createElement('canvas');
-        canvas.height = 300;
-        categoriaDiv.appendChild(canvas);
-        
-        // Crear tabla de productos
-        const tablaHTML = `
-          <div class="table-responsive mt-3">
-            <table class="table table-bordered table-sm">
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${productosCategoria.map(p => `
-                  <tr>
-                    <td>${p.nombre}</td>
-                    <td>$${p.precio.toFixed(2)}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
-        `;
-        categoriaDiv.innerHTML += tablaHTML;
-        
-        // Agregar al contenedor principal
-        graficoContainer.appendChild(categoriaDiv);
-        
-        // Crear gráfico
-        const ctx = canvas.getContext('2d');
-        const chart = new Chart(ctx, {
-          type: tipoGraficaSelect.value || 'bar',
-          data: {
-            labels: productosCategoria.map(p => p.nombre),
-            datasets: [{
-              label: `Precios en ${categoria}`,
-              data: productosCategoria.map(p => p.precio),
-              backgroundColor: generarColores(productosCategoria.length)
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              title: {
-                display: true,
-                text: `Precios en ${categoria}`,
-                font: { size: 16 }
-              }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Precio (USD)'
-                }
-              }
-            }
+ function generarReportePrecioPorCategoria(productos) {
+  try {
+    // Limpiar contenedores anteriores
+    graficoContainer.innerHTML = '';
+    tablaReporte.innerHTML = '';
+    chartInstances.forEach(chart => chart.destroy());
+    chartInstances = [];
+
+    // Agrupar productos por categoría
+    const productosPorCategoria = {};
+    productos.forEach(producto => {
+      if (!productosPorCategoria[producto.categoria]) {
+        productosPorCategoria[producto.categoria] = [];
+      }
+      productosPorCategoria[producto.categoria].push(producto);
+    });
+
+Object.entries(productosPorCategoria).forEach(([categoria, productosCategoria]) => {
+  const categoriaDiv = document.createElement('div');
+  categoriaDiv.className = 'categoria-container mb-5 p-3 border rounded';
+
+  const tituloCategoria = document.createElement('h4');
+  tituloCategoria.className = 'text-center mb-3';
+  tituloCategoria.textContent = `% Valor Total por Producto - Categoría: ${categoria}`;
+  categoriaDiv.appendChild(tituloCategoria);
+
+  // Generar colores únicos para cada producto
+  const colores = generarColores(productosCategoria.length);
+// Calcular valores totales y porcentajes
+const valores = productosCategoria.map(p => p.precio * p.cantidad);
+const totalCategoria = valores.reduce((a, b) => a + b, 0);
+const porcentajes = valores.map(v => totalCategoria > 0 ? (v / totalCategoria) * 100 : 0);
+const canvas = document.createElement('canvas');
+canvas.width = 600;
+canvas.height = 300;
+canvas.style.display = 'block';
+canvas.style.margin = '0 auto';
+categoriaDiv.appendChild(canvas);
+
+// Crear tabla informativa
+const tablaHTML = `
+  <div class="table-responsive mt-3">
+    <table class="table table-bordered table-sm">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Valor Total</th>
+          <th>Porcentaje</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${productosCategoria.map((p, idx) => `
+          <tr>
+            <td>
+              <span style="display:inline-block;width:16px;height:16px;background:${colores[idx]};border-radius:3px;margin-right:6px;"></span>
+              ${p.nombre}
+            </td>
+            <td>$${(p.precio * p.cantidad).toFixed(2)}</td>
+            <td>${porcentajes[idx].toFixed(2)}%</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </div>
+`;
+const tablaWrapper = document.createElement('div');
+tablaWrapper.innerHTML = tablaHTML;
+categoriaDiv.appendChild(tablaWrapper);
+
+graficoContainer.appendChild(categoriaDiv);
+
+// Crear gráfico tipo pie/doughnut
+const ctx = canvas.getContext('2d');
+if (!ctx) {
+  console.error('No se pudo obtener el contexto del canvas');
+  return;
+}
+
+const chart = new Chart(ctx, {
+  type: tipoGraficaSelect.value || 'doughnut',
+  data: {
+    labels: productosCategoria.map(p => p.nombre),
+    datasets: [{
+      data: valores,
+      backgroundColor: colores,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: {
+        display: true,
+        text: `% Valor Total por Producto en ${categoria}`,
+        font: { size: 16 }
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed;
+            const percentage = (value / totalCategoria) * 100;
+            return `${context.label}: $${value.toFixed(2)} (${percentage.toFixed(2)}%)`;
           }
-        });
-        
-        chartInstances.push(chart);
-      });
-      
-      tituloReporte.textContent = 'Precio de Productos por Categoría';
-      
-    } catch (error) {
-      console.error('Error generando reporte por categoría:', error);
-      Swal.fire('Error', 'No se pudo generar el reporte por categoría', 'error');
+        }
+      }
     }
   }
+});
+      chartInstances.push(chart);
+    });
+
+    tituloReporte.textContent = '% Valor Total por Categoría';
+
+  } catch (error) {
+    console.error('Error generando reporte por categoría:', error);
+    Swal.fire('Error', 'No se pudo generar el reporte por categoría', 'error');
+  }
+}
 
   // Función para generar el reporte
   function generarReporte() {
@@ -742,7 +776,7 @@ document.addEventListener('DOMContentLoaded', function() {
             titulo = 'Comparación Precio vs Cantidad';
             generarTablaReporte(
               productos.map(p => p.nombre),
-              productos.map(p => `${p.precio.toFixed(2)} USD | ${p.cantidad} u`),
+              productos.map(p => `${p.precio.toFixed(2)} USD | ${p.cantidad} Unidades`),
               ['Producto', 'Precio | Cantidad']
             );
             break;
