@@ -27,6 +27,7 @@ $modulos = [
     'permisos' => ['Gestionar Permisos', 'img/key-round.svg', '?pagina=permiso'],
     'Roles' => ['Gestionar Roles', 'img/user-round-search.svg', '?pagina=rol'],
     'bitacora' => ['Gestionar Bitácora', 'img/notebook.svg', '?pagina=bitacora'],
+    'Respaldo' => ['Gestionar Respaldo', 'img/files.svg', '?pagina=backup'],
 ];
 
 $permisosConsulta = [];
@@ -82,7 +83,46 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
     </div>
 
     <ul class="menu-link">
-        <h4><span>Menu Principal</span><div class="menu-separador"></div></h4>
+
+
+        <?php
+
+        if (in_array($nombre_rol, ['Cliente'])) {
+            $modulos = [
+    'Catalogo' => ['Catálogo', 'img/book-open.svg', '?pagina=catalogo'],
+    'carrito' => ['Carrito de Compras', 'img/shopping-cart.svg', '?pagina=carrito'],
+    'pasarela' => ['Pasarela de Pagos', 'img/credit-card.svg', '?pagina=pasarela'],
+    'Prefactura' => ['Pre-Factura', 'img/receipt-text.svg', '?pagina=gestionarfactura'],
+];
+
+$permisosConsulta = [];
+foreach ($modulos as $moduloBD => $info) {
+    $permisosConsulta[$moduloBD] = $permisosObj->getPermisosUsuarioModulo($id_rol, $moduloBD)['ingresar'] ?? false;
+}
+        $secciones = [
+            'Mis Compras' => ['Catalogo', 'carrito', 'pasarela', 'Prefactura', 'Ordenes de despacho'],
+        ];
+
+        foreach ($secciones as $titulo => $mods) {
+            $hayModulo = false;
+            foreach ($mods as $mod) {
+                if (!empty($permisosConsulta[$mod])) {
+                    $hayModulo = true;
+                    break;
+                }
+            }
+            if ($hayModulo) {
+                echo '<h4><span>' . $titulo . '</span><div class="menu-separador"></div></h4>';
+                foreach ($mods as $mod) {
+                    if (!empty($permisosConsulta[$mod])) {
+                        echo '<li><a href="' . $modulos[$mod][2] . '"><span class="simbolo"><img src="' . $modulos[$mod][1] . '" class="icono-svg" />' . $modulos[$mod][0] . '</span></a></li>';
+                    }
+                }
+            }
+        }
+        }else{
+            ?>
+                    <h4><span>Menu Principal</span><div class="menu-separador"></div></h4>
         <li>
             <a href="?pagina=dashboard">
                 <span class="simbolo">
@@ -91,7 +131,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
             </a>
         </li>
 
-        <?php
+       <?php
         $secciones = [
             'Administrar Perfiles' => ['Usuario'],
             'Administrar Inventario' => ['Recepcion', 'Despacho'],
@@ -100,7 +140,7 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
             'Administrar Clientes' => ['Clientes'],
             'Administrar Ventas' => ['Catalogo', 'carrito', 'pasarela', 'Prefactura', 'Ordenes de despacho'],
             'Administrar Finanzas' => ['Cuentas bancarias', 'Finanzas'],
-            'Administrar Seguridad' => ['permisos', 'Roles', 'bitacora'],
+            'Administrar Seguridad' => ['permisos', 'Roles', 'bitacora', 'Respaldo'],
         ];
 
         foreach ($secciones as $titulo => $mods) {
@@ -126,9 +166,10 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
             echo '<li><a href="public/casalai-manual/index.php"><span class="simbolo"><img src="img/user-round-search.svg" class="icono-svg" />Manual de Usuarios</span></a></li>';
         }
 
-        if (in_array($nombre_rol, ['Administrador', 'SuperUsuario'])) {
+        if (in_array($nombre_rol, ['SuperUsuario'])) {
             echo '<li><a href="?pagina=backup"><span class="simbolo"><img src="img/files.svg" class="icono-svg" />Gestionar Respaldo</span></a></li>';
         }
+         }
         ?>
 
         <h4><span>Cuenta</span><div class="menu-separador"></div></h4>

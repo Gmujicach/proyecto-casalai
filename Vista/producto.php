@@ -696,11 +696,12 @@ const chart = new Chart(ctx, {
       },
       tooltip: {
         callbacks: {
-          label: function(context) {
-            const value = context.parsed;
-            const percentage = (value / totalCategoria) * 100;
-            return `${context.label}: $${value.toFixed(2)} (${percentage.toFixed(2)}%)`;
-          }
+label: function(context) {
+  const value = typeof context.raw === 'number' ? context.raw : 0;
+  const percentage = totalCategoria > 0 ? (value / totalCategoria) * 100 : 0;
+  return `${context.label}: $${value.toFixed(2)} (${percentage.toFixed(2)}%)`;
+}
+
         }
       }
     }
@@ -728,6 +729,7 @@ const chart = new Chart(ctx, {
         Swal.fire('Advertencia', 'No hay datos para generar el reporte', 'warning');
         return;
       }
+      $('#graficoContainer').empty(); // Borra todos los divs y canvas anteriores
 
       const tipoReporte = tipoReporteSelect.value;
       const tipoGrafica = tipoGraficaSelect.value;
@@ -735,6 +737,7 @@ const chart = new Chart(ctx, {
       // Procesar según el tipo de reporte
       if (tipoReporte === 'porcentaje_valor') {
         // Reporte modificado: Precio por categoría (lo solicitado)
+        $('#graficoContainer').empty(); // Borra todos los divs y canvas anteriores
         generarReportePrecioPorCategoria(productos);
       } else {
         // Mantener los otros tipos de reporte sin cambios
@@ -745,6 +748,8 @@ const chart = new Chart(ctx, {
         switch (tipoReporte) {
           case 'por_categoria':
             const categorias = {};
+            $('#graficoContainer').empty(); // Borra todos los divs y canvas anteriores
+
             productos.forEach(p => categorias[p.categoria] = (categorias[p.categoria] || 0) + 1);
             
             labels = Object.keys(categorias);
@@ -758,6 +763,8 @@ const chart = new Chart(ctx, {
             break;
 
           case 'comparacion_precio_cantidad':
+            $('#graficoContainer').empty(); // Borra todos los divs y canvas anteriores
+
             labels = productos.map(p => p.nombre);
             datasets = [
               {

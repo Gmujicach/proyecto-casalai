@@ -63,8 +63,7 @@
         <tr data-id="<?php echo $rol['id_rol']; ?>">
             <td>
                 <ul>
-                    <?php if (strtolower($rol['nombre_rol']) !== 'superusuario'): ?>
-                        <div>
+                    <?php if (strtolower($rol['nombre_rol']) !== 'superusuario' && strtolower($rol['nombre_rol']) !== 'administrador' && strtolower($rol['nombre_rol']) !== 'cliente'): ?><div>
                             <button class="btn-modificar"
                                 id="btnModificarRol"
                                 data-id="<?php echo $rol['id_rol']; ?>"
