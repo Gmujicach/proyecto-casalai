@@ -474,7 +474,9 @@ foreach ($caracteristicas as $clave => $valor) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
  <script src="javascript/producto.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script>
 // Variables globales
 let dataTableInstance = null;
@@ -844,16 +846,70 @@ label: function(context) {
   }
 
   // Configurar eventos (sin cambios)
-  generarBtn.addEventListener('click', generarReporte);
-  document.getElementById('descargarPDF').addEventListener('click', function() {
+generarBtn.addEventListener('click', generarReporte);
+
+document.getElementById('descargarPDF').addEventListener('click', function () {
+    Swal.fire({
+        title: 'Generando PDF...',
+        html: '<strong>Por favor espera mientras se genera el reporte</strong>',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+        width: '500px',
+        padding: '2em',
+    });
+
     const { jsPDF } = window.jspdf;
-    new jsPDF()
-      .html(document.querySelector('.reporte-container'), {
-        callback: pdf => pdf.save('Reporte.pdf'),
-        margin: 10,
-        html2canvas: { scale: 0.75 }
-      });
-  });
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'a4'
+    });
+
+    const bloques = document.querySelectorAll('.categoria-container');
+    let y = 40;
+
+    if (bloques.length > 0) {
+        let procesados = 0;
+
+        bloques.forEach((bloque, idx) => {
+            html2canvas(bloque, { scale: 2, useCORS: true }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const imgWidth = pageWidth - 40;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+
+                if (y + imgHeight > doc.internal.pageSize.getHeight()) {
+                    doc.addPage();
+                    y = 40;
+                }
+
+                doc.addImage(imgData, 'PNG', 20, y, imgWidth, imgHeight);
+                y += imgHeight + 30;
+
+                procesados++;
+                if (procesados === bloques.length) {
+                    Swal.close();
+                    doc.save('Reporte_Productos.pdf');
+                }
+            });
+        });
+    } else {
+        const reporte = document.querySelector('.reporte-container');
+        html2canvas(reporte, { scale: 2, useCORS: true }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const imgWidth = pageWidth - 40;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+
+            doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+            Swal.close();
+            doc.save('Reporte_Productos.pdf');
+        });
+    }
+});
 
   // Generar reporte inicial
   generarReporte();
