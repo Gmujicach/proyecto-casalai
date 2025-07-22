@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-07-2025 a las 01:09:46
+-- Tiempo de generación: 23-07-2025 a las 00:39:38
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `casalai`
 --
+CREATE DATABASE IF NOT EXISTS `casalai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `casalai`;
 
 -- --------------------------------------------------------
 
@@ -153,7 +155,7 @@ CREATE TABLE `tbl_carrito` (
 --
 
 INSERT INTO `tbl_carrito` (`id_carrito`, `id_cliente`, `fecha_creacion`) VALUES
-(10, 9, '2025-07-21 22:37:46');
+(10, 11, '2025-07-11 16:50:50');
 
 -- --------------------------------------------------------
 
@@ -200,12 +202,22 @@ INSERT INTO `tbl_categoria` (`id_categoria`, `nombre_categoria`) VALUES
 CREATE TABLE `tbl_clientes` (
   `id_clientes` int(11) NOT NULL,
   `nombre` varchar(255) DEFAULT NULL,
-  `cedula` varchar(8) DEFAULT NULL,
+  `cedula` varchar(20) DEFAULT NULL,
   `direccion` text DEFAULT NULL,
-  `telefono` varchar(15) DEFAULT NULL,
-  `correo` varchar(50) DEFAULT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
+  `correo` varchar(255) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_clientes`
+--
+
+INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `telefono`, `correo`, `activo`) VALUES
+(10, 'Gabriel Mujica', '29958676', 'mi casa', '0424-678-8765', 'fhhggjjkkkj@gmail.com', 1),
+(11, 'Edith Urdaneta', '10844463', 'Los Horcones', '0416-747-4336', 'urdavedith.pnfi@gmail.com', 1),
+(12, 'Diego Lopez', '31766917', 'Venezuela estado Zulia\r\nMaracaibo', '0414-575-3363', 'diego0510lopez@gmail.com', 1),
+(13, 'Diego Lopez', '5322432', '', '0414-575-3363', 'diego0510lopez@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -304,6 +316,13 @@ CREATE TABLE `tbl_detalles_pago` (
   `estatus` varchar(20) NOT NULL DEFAULT 'En Proceso'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_detalles_pago`
+--
+
+INSERT INTO `tbl_detalles_pago` (`id_detalles`, `id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`, `estatus`) VALUES
+(22, 33, 9, 'Pago verificado ', 'Depósito', 'yyyy', '2025-07-31', 'Pago Procesado');
+
 -- --------------------------------------------------------
 
 --
@@ -332,6 +351,13 @@ CREATE TABLE `tbl_facturas` (
   `estatus` varchar(20) NOT NULL DEFAULT 'Borrador'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_facturas`
+--
+
+INSERT INTO `tbl_facturas` (`id_factura`, `fecha`, `cliente`, `descuento`, `estatus`) VALUES
+(33, '2025-07-11', 11, 0, 'Borrador');
+
 -- --------------------------------------------------------
 
 --
@@ -344,6 +370,13 @@ CREATE TABLE `tbl_factura_detalle` (
   `id_producto` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_factura_detalle`
+--
+
+INSERT INTO `tbl_factura_detalle` (`id`, `factura_id`, `id_producto`, `cantidad`) VALUES
+(21, 33, 28, 1);
 
 -- --------------------------------------------------------
 
@@ -602,37 +635,6 @@ CREATE TABLE `tbl_recepcion_productos` (
   `correlativo` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tbl_usuarios`
---
-
-CREATE TABLE `tbl_usuarios` (
-  `id_usuario` int(11) NOT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `rango` varchar(20) NOT NULL,
-  `correo` varchar(50) DEFAULT NULL,
-  `nombres` varchar(20) DEFAULT NULL,
-  `apellidos` varchar(20) DEFAULT NULL,
-  `telefono` varchar(15) DEFAULT NULL,
-  `estatus` enum('habilitado','inhabilitado') DEFAULT 'habilitado'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tbl_usuarios`
---
-
-INSERT INTO `tbl_usuarios` (`id_usuario`, `username`, `password`, `rango`, `correo`, `nombres`, `apellidos`, `telefono`, `estatus`) VALUES
-(1, 'Admin', '$2y$10$j9dHxGq5aIkAqaZdE.NJg.zpV0HTTcER970QIVMUKjNLw/9R1N1Du', 'Administrador', 'ejemplo@gmail.com', 'Administrador', 'Administrador', '04145753363', 'habilitado'),
-(2, 'Despachador', '$2y$10$dgqa0ji1of1FxPQAu3DvI.Y.3MANE2DlQHF8uVTVKEbCJEqNiw/Oe', 'Almacenista', 'ejemplo@gmail.com', 'Despachador', 'Despachador', '04145753363', 'habilitado'),
-(3, 'Cliente', '$2y$10$n/ZpQkW4BaeFZiDzFDYLWuRbrBXvv8sokEeM9zQ7iK5DcjMEsFPly', 'Cliente', 'ejemplo@gmail.com', 'Cliente', 'Cliente', '04145753363', 'habilitado'),
-(4, 'DALV', '$2y$10$vnkAofAen/wh4.GnHKkDkO63/s8kUmUfyI44/e5Y2DlEg.43xymMS', 'usuario', 'EJEMPLO@GMAIL.COM', 'Diego', 'Lopez', '04145753363', 'habilitado'),
-(5, 'Test', '$2y$10$PshH1iu9D6LxHqT//KlmB.ciWfUN5MMkmSuWDIpb52f9/MW2qulFi', 'usuario', 'testcorreo@gmail.com', 'Pueba', 'Test', '04125248965', 'habilitado'),
-(6, 'Darckort', '$2y$10$dyYy8O8xoZ.9vYP.vW.EluSRrhsAhsJ2c3Kcv88yI6ilkg4WJ73qi', 'usuario', 'darckortgame@gmail.com', 'Braynt', 'Medina', '04261504714', 'habilitado'),
-(7, 'DDDD', '12345', 'Administrador', 'diego0510lopez@gmail.com', 'Diego', 'Lopez', '04241587101', 'habilitado');
-
 --
 -- Índices para tablas volcadas
 --
@@ -816,12 +818,6 @@ ALTER TABLE `tbl_recepcion_productos`
   ADD KEY `fk_recepcion_proveedor` (`id_proveedor`);
 
 --
--- Indices de la tabla `tbl_usuarios`
---
-ALTER TABLE `tbl_usuarios`
-  ADD PRIMARY KEY (`id_usuario`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -877,7 +873,7 @@ ALTER TABLE `tbl_categoria`
 -- AUTO_INCREMENT de la tabla `tbl_clientes`
 --
 ALTER TABLE `tbl_clientes`
-  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1002;
+  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_combo`
@@ -913,7 +909,7 @@ ALTER TABLE `tbl_despacho_detalle`
 -- AUTO_INCREMENT de la tabla `tbl_detalles_pago`
 --
 ALTER TABLE `tbl_detalles_pago`
-  MODIFY `id_detalles` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_detalles` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_detalle_recepcion_productos`
@@ -925,13 +921,13 @@ ALTER TABLE `tbl_detalle_recepcion_productos`
 -- AUTO_INCREMENT de la tabla `tbl_facturas`
 --
 ALTER TABLE `tbl_facturas`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_factura_detalle`
 --
 ALTER TABLE `tbl_factura_detalle`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_ingresos_egresos`
@@ -968,12 +964,6 @@ ALTER TABLE `tbl_proveedores`
 --
 ALTER TABLE `tbl_recepcion_productos`
   MODIFY `id_recepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT de la tabla `tbl_usuarios`
---
-ALTER TABLE `tbl_usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
