@@ -202,10 +202,10 @@ INSERT INTO `tbl_categoria` (`id_categoria`, `nombre_categoria`) VALUES
 CREATE TABLE `tbl_clientes` (
   `id_clientes` int(11) NOT NULL,
   `nombre` varchar(255) DEFAULT NULL,
-  `cedula` varchar(20) DEFAULT NULL,
+  `cedula` varchar(8) DEFAULT NULL,
   `direccion` text DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `correo` varchar(255) DEFAULT NULL,
+  `telefono` varchar(15) DEFAULT NULL,
+  `correo` varchar(50) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

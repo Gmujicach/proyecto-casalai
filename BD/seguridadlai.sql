@@ -724,13 +724,13 @@ INSERT INTO `tbl_rol` (`id_rol`, `nombre_rol`) VALUES
 
 CREATE TABLE `tbl_usuarios` (
   `id_usuario` int(11) NOT NULL,
-  `username` varchar(15) DEFAULT NULL,
+  `username` varchar(20) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `cedula` varchar(8) DEFAULT NULL,
   `id_rol` int(11) NOT NULL,
   `correo` varchar(50) DEFAULT NULL,
-  `nombres` varchar(20) DEFAULT NULL,
-  `apellidos` varchar(20) DEFAULT NULL,
+  `nombres` varchar(50) DEFAULT NULL,
+  `apellidos` varchar(50) DEFAULT NULL,
   `telefono` varchar(15) DEFAULT NULL,
   `estatus` enum('habilitado','inhabilitado') NOT NULL DEFAULT 'habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
