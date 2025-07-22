@@ -29,14 +29,14 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                 <div class="modal-body">
                     <input type="hidden" name="accion" value="ingresar">
                     <div class="envolver-form">
+                        <label for="correlativo">Correlativo</label>
+                        <input type="text" class="control-form" id="correlativo" name="correlativo" maxlength="10" required>
+                        <span class="span-value" id="scorrelativo"></span>
+                    </div>
+                    <div class="envolver-form">
                         <label for="fecha">Fecha</label>
                         <input type="date" class="control-form" id="fecha" name="fecha" required>
                         <span class="span-value" id="sfecha"></span>
-                    </div>
-                    <div class="envolver-form">
-                        <label for="correlativo">Correlativo</label>
-                        <input type="text" class="control-form" id="correlativo" name="correlativo" required>
-                        <span class="span-value" id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="factura">Factura</label>
@@ -88,13 +88,12 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                 <td>
                     <ul>
                         <div>
-                            <button href="#" class="btn  btn-primary btn-modificar modificar" 
+                            <button class="btn-modificar"
                                 data-id="<?php echo $orden['id_orden_despachos']; ?>" 
                                 data-fecha="<?php echo $orden['fecha_despacho']; ?>"
                                 data-correlativo="<?php echo $orden['correlativo']; ?>"
                                 data-factura="<?php echo $orden['id_factura']; ?>"
-                                data-bs-toggle="modal" 
-                                data-bs-target="#modificar_orden_modal">Modificar
+                                >Modificar
                             </button>
                         </div>
                         <div>

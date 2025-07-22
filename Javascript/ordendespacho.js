@@ -1,5 +1,68 @@
 $(document).ready(function () {
 
+    if($.trim($("#mensajes").text()) != ""){
+        mensajes("warning", 4000, "Atención", $("#mensajes").html());
+    }
+
+    $("#correlativo").on("keypress",function(e){
+        validarkeypress(/^[0-9-\b]*$/,e);
+    });
+    
+    $("#correlativo").on("keyup",function(){
+        validarkeyup(/^[0-9-\b]{4,10}$/,$(this),
+        $("#scorrelativo"),"Se permite de 4 a 10 carácteres");
+        if ($("#correlativo").val().length <= 9) {
+			var datos = new FormData();
+			datos.append('accion', 'buscar');
+			datos.append('correlativo', $(this).val());
+			enviaAjax(datos);
+		}
+    });
+
+    function validarEnvioOrden(){
+        if(validarKeyUp(
+            /^[0-9-\b]{4,10}$/,
+            $("#correlativo"),
+            $("#scorrelativo"),
+            "*El correlativo debe tener solo números*"
+        )==0){
+            mensajes('error',4000,'Verifique el correlativo','Debe tener solo números');
+            return false;
+        }
+        return true;
+    }
+
+    function agregarFilaOrden(orden) {
+        const tabla = $('#tablaConsultas').DataTable();
+        const nuevaFila = [
+            `<span class="campo-numeros">${orden.id_cuenta}</span>`,
+            `<span class="campo-nombres">${orden.nombre_banco}</span>`,
+            `<span class="campo-factura">${orden.numero_cuenta}</span>`,
+            `<ul>
+                <div>
+                    <button class="btn-modificar"
+                        id="btnModificarCuenta"
+                        data-id="${cuenta.id_cuenta}"
+                        data-nombre="${cuenta.nombre_banco}"
+                        data-numero="${cuenta.numero_cuenta}"
+                        data-rif="${cuenta.rif_cuenta}"
+                        data-telefono="${cuenta.telefono_cuenta}"
+                        data-correo="${cuenta.correo_cuenta}">
+                        Modificar
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-eliminar"
+                        data-id="${cuenta.id_cuenta}">
+                        Eliminar
+                    </button>
+                </div>
+            </ul>`
+        ];
+        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
+        $(rowNode).attr('data-id', cuenta.id_cuenta);
+    }
+
     $(document).on('click', '#registrarOrdenModal .close', function() {
         $('#registrarOrdenModal').modal('hide');
     });
@@ -150,9 +213,56 @@ $(document).ready(function () {
             }
         });
     });
+
+    function mensajes(icono, tiempo, titulo, mensaje){
+        Swal.fire({
+            icon: icono,
+            timer: tiempo,
+            title: titulo,
+            text: mensaje,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        });
+    }
+
+    function validarkeypress(er, e) {
+        key = e.keyCode;
+        tecla = String.fromCharCode(key);
+        a = er.test(tecla);
+
+        if (!a) {
+            e.preventDefault();
+        }
+    }
+
+    function validarkeyup(er, etiqueta, etiquetamensaje, mensaje) {
+        a = er.test(etiqueta.val());
+
+        if (a) {
+            etiquetamensaje.text("");
+            return 1;
+        } else {
+            etiquetamensaje.text(mensaje);
+            return 0;
+        }
+    }
+
+    function space(str) {
+        const regex = /\s{2,}/g;
+        var str = str.replace(regex, ' ');
+        return str;
+    }
+    
+    function muestraMensaje(mensaje) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: mensaje
+        });
+    }
 });
 
-
+/*
 function enviarAjax(datos, callback) {
     console.log("Enviando datos AJAX: ", datos);
     $.ajax({
@@ -180,91 +290,5 @@ function muestraMensaje(mensaje) {
         text: mensaje
     });
 }
-/*const URL_CONTROLADOR = 'controladores/despachos.controlador.php';
-    /*Función para cambiar estatus
-    function cambiarEstatus(idOrden) {
-        const span = $(`span[onclick*="cambiarEstatus(${idOrden}"]`);
-        const estatusActual = span.text().trim().toLowerCase();
-        const nuevoEstatus = estatusActual === 'habilitado' ? 'inhabilitado' : 'habilitado';
 
-        span.addClass('cambiando');
-
-        $.ajax({
-            url: URL_CONTROLADOR,
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                accion: 'cambiar_estatus',
-                id_despachos: idOrden,
-                nuevo_estatus: nuevoEstatus
-            },
-            success: function(data) {
-                span.removeClass('cambiando');
-
-                if (data.status === 'success') {
-                    span.text(nuevoEstatus);
-                    span.removeClass('habilitado inhabilitado').addClass(nuevoEstatus);
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Estatus actualizado!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                } else {
-                    span.text(estatusActual);
-                    span.removeClass('habilitado inhabilitado').addClass(estatusActual);
-                    Swal.fire('Error', data.message || 'Error al cambiar el estatus', 'error');
-                }
-            },
-            error: function(xhr, status, error) {
-                span.removeClass('cambiando');
-                span.text(estatusActual);
-                span.removeClass('habilitado inhabilitado').addClass(estatusActual);
-                Swal.fire('Error', 'Error en la conexión', 'error');
-            }
-        });
-    }
-
-    // Función auxiliar AJAX
-    function enviarAjax(datos, callback) {
-        $.ajax({
-            url: URL_CONTROLADOR,
-            type: 'POST',
-            contentType: false,
-            data: datos,
-            processData: false,
-            cache: false,
-            success: function (respuesta) {
-                callback(JSON.parse(respuesta));
-            },
-            error: function () {
-                muestraMensaje('Error en la solicitud AJAX');
-            }
-        });
-    }
-
-    // Mostrar mensajes con SweetAlert
-    function muestraMensaje(mensaje) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: mensaje
-        });
-    }
-
-    // Paginación
-    $(document).on('click', '.flecha-izquierda, .flecha-derecha', function(e) {
-        e.preventDefault();
-        const url = $(this).closest('a').attr('href');
-        if(url) {
-            window.location.href = url;
-        }
-    });
-
-    $('#filasPorPagina').change(function() {
-        const url = new URL(window.location.href);
-        url.searchParams.set('filas', this.value);
-        url.searchParams.set('pagina', 1);
-        window.location.href = url.toString();
-    });*/
+*/

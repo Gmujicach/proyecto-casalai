@@ -80,16 +80,16 @@ carga_productos();    //boton para levantar modal de productos
 
     $("#descripcion").on("keypress", function (e) {
         validarkeypress(/^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]*$/, e);
-      });
+    });
     
-      $("#descripcion").on("keyup", function () {
+    $("#descripcion").on("keyup", function () {
         validarkeyup(
-          /^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]{1,200}$/,
-          $(this),
-          $("#sdescripcion"),
-          "No debe estar vacío y se permite un máximo 200 carácteres"
+            /^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]{1,200}$/,
+            $(this),
+            $("#sdescripcion"),
+            "No debe estar vacío y se permite un máximo 200 carácteres"
         );
-      });
+    });
     
     //evento keyup de input codigoproducto
     $("#codigoproducto").on("keyup",function(){
@@ -103,7 +103,7 @@ carga_productos();    //boton para levantar modal de productos
     
     //evento click de boton registrar
     $("#registrar").on("click",function(){
-         if (validarenvio()){
+        if (validarenvio()){
             if(verificaproductos()){
             $('#accion').val('registrar');
     
@@ -118,10 +118,7 @@ carga_productos();    //boton para levantar modal de productos
                 } else{
                 muestraMensaje("info",4000,"Debe colocar algun producto");
             }
-          } 
-           
-            
-        
+        }
     });
         
         
@@ -180,7 +177,7 @@ $(document).ready(function() {
     verificarPermisosEnTiempoRealRecepcion();
     setInterval(verificarPermisosEnTiempoRealRecepcion, 10000); // 10 segundos
 });
-   function enviarAjax(datos, callback) {
+    function enviarAjax(datos, callback) {
         $.ajax({
             url: '',
             type: 'POST',
@@ -209,7 +206,6 @@ $(document).ready(function() {
         else if(validarkeyup(/^[0-9]{4,10}$/,$("#correlativo"),
             $("#scorrelativo"),"Se permite de 4 a 10 carácteres")==0){
             muestraMensaje("info",4000,"el correlativo debe coincidir con el formato");
-                           
             return false;					
         } else if (
             validarkeyup(
@@ -223,8 +219,7 @@ $(document).ready(function() {
                 "error",
                 4000,
                 "ERROR!",
-               
-                    "No debe estar vacío, ni contener más de 200 carácteres"
+                "No debe estar vacío, ni contener más de 200 carácteres"
             );
             return false;
         }
@@ -244,12 +239,12 @@ $(document).ready(function() {
     //function para saber si selecciono algun productos
     function verificaproductos(){
         var existe = false;
-       
+    
         if($("#recepcion1 tr").length > 0){
             existe = true;
             
         }
-      
+    
         return existe;
     }
     function borrar(){
