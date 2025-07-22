@@ -113,7 +113,7 @@ $(document).ready(function () {
     $(document).on('click', '#registrarOrdenModal .close', function() {
         $('#registrarOrdenModal').modal('hide');
     });
-
+/*
     $(document).on('click', '.modificar', function (e) {
         e.preventDefault(); // Evita que el enlace haga scroll o recargue
     
@@ -260,7 +260,7 @@ $(document).ready(function () {
             }
         });
     });
-
+*/
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
             icon: icono,
@@ -309,7 +309,7 @@ $(document).ready(function () {
     }
 });
 
-/*
+
 function enviarAjax(datos, callback) {
     console.log("Enviando datos AJAX: ", datos);
     $.ajax({
@@ -329,7 +329,7 @@ function enviarAjax(datos, callback) {
         }
     });
 }
-
+/*
 function muestraMensaje(mensaje) {
     Swal.fire({
         icon: 'error',
