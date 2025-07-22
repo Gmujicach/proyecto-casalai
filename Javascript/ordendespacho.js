@@ -35,33 +35,80 @@ $(document).ready(function () {
     function agregarFilaOrden(orden) {
         const tabla = $('#tablaConsultas').DataTable();
         const nuevaFila = [
-            `<span class="campo-numeros">${orden.id_cuenta}</span>`,
-            `<span class="campo-nombres">${orden.nombre_banco}</span>`,
-            `<span class="campo-factura">${orden.numero_cuenta}</span>`,
+            `<span class="campo-numeros">${orden.correlativo}</span>`,
+            `<span class="campo-nombres">${orden.fecha_despacho}</span>`,
+            `<span class="campo-factura">${orden.activo}</span>`,
             `<ul>
                 <div>
                     <button class="btn-modificar"
                         id="btnModificarCuenta"
-                        data-id="${cuenta.id_cuenta}"
-                        data-nombre="${cuenta.nombre_banco}"
-                        data-numero="${cuenta.numero_cuenta}"
-                        data-rif="${cuenta.rif_cuenta}"
-                        data-telefono="${cuenta.telefono_cuenta}"
-                        data-correo="${cuenta.correo_cuenta}">
+                        data-id="${orden.id_orden_despachos}"
+                        data-fecha="${orden.fecha_despacho}"
+                        data-correlativo="${orden.correlativo}"
+                        data-factura="${orden.id_factura}">
                         Modificar
                     </button>
                 </div>
                 <div>
                     <button class="btn-eliminar"
-                        data-id="${cuenta.id_cuenta}">
+                        data-id="${cuenta.id_orden_despachos}">
                         Eliminar
                     </button>
                 </div>
             </ul>`
         ];
         const rowNode = tabla.row.add(nuevaFila).draw(false).node();
-        $(rowNode).attr('data-id', cuenta.id_cuenta);
+        $(rowNode).attr('data-id', orden.id_orden_despachos);
     }
+
+    function resetOrden() {
+        $('#correlativo').val('');
+        $('#fecha').val('');
+        $('#factura').val('');
+        $('#scorrelativo').text('');
+        $('#sfecha').text('');
+        $('#sfactura').text('');
+    }
+
+    $('#btnIncluirOrden').on('click', function() {
+        $('#incluirordendepacho')[0].reset();
+        $('#scorrelativo').text('');
+        $('#sfecha').text('');
+        $('#sfactura').text('');
+        $('#registrarCuentaModal').modal('show');
+    });
+
+    $('#registrarOrden').on('submit', function(e) {
+        e.preventDefault();
+
+        if(validarEnvioCuenta()){
+            var datos = {
+                correlativo: $("#correlativo").val(),
+                fecha: $("#fecha").val(),
+                factura: $("#factura").val(),
+                accion: "incluir"
+            };
+            enviarAjax(datos, function(respuesta){
+                if(respuesta.status === "success" || respuesta.resultado === "success"){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: respuesta.message || respuesta.msg || 'Orden registrada correctamente'
+                    });
+                    if(respuesta.status === "success" && respuesta.cuenta){
+                        agregarFilaOrden(respuesta.orden);
+                        resetOrden();
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la orden'
+                    });
+                }
+            });
+        }
+    });
 
     $(document).on('click', '#registrarOrdenModal .close', function() {
         $('#registrarOrdenModal').modal('hide');
