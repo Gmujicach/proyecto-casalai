@@ -41,7 +41,7 @@ $(document).ready(function () {
             `<ul>
                 <div>
                     <button class="btn-modificar"
-                        id="btnModificarCuenta"
+                        id="btnModificarOrden"
                         data-id="${orden.id_orden_despachos}"
                         data-fecha="${orden.fecha_despacho}"
                         data-correlativo="${orden.correlativo}"
@@ -71,31 +71,31 @@ $(document).ready(function () {
     }
 
     $('#btnIncluirOrden').on('click', function() {
-        $('#incluirordendepacho')[0].reset();
+        $('#ingresarOrdenDepacho')[0].reset();
         $('#scorrelativo').text('');
         $('#sfecha').text('');
         $('#sfactura').text('');
-        $('#registrarCuentaModal').modal('show');
+        $('#registrarOrdenModal').modal('show');
     });
 
-    $('#registrarOrden').on('submit', function(e) {
+    $('#ingresarOrdenDepacho').on('submit', function(e) {
         e.preventDefault();
 
-        if(validarEnvioCuenta()){
+        if(validarEnvioOrden()){
             var datos = {
                 correlativo: $("#correlativo").val(),
                 fecha: $("#fecha").val(),
                 factura: $("#factura").val(),
-                accion: "incluir"
+                accion: "ingresar"
             };
             enviarAjax(datos, function(respuesta){
                 if(respuesta.status === "success" || respuesta.resultado === "success"){
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Orden registrada correctamente'
+                        text: respuesta.message || respuesta.msg || 'Orden de despacho registrada correctamente'
                     });
-                    if(respuesta.status === "success" && respuesta.cuenta){
+                    if(respuesta.status === "success" && respuesta.orden){
                         agregarFilaOrden(respuesta.orden);
                         resetOrden();
                     }
@@ -103,7 +103,7 @@ $(document).ready(function () {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la orden'
+                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la orden de despacho'
                     });
                 }
             });

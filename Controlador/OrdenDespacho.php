@@ -43,11 +43,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($ordendespacho->ingresarOrdenDespacho()) {
                     $bitacoraModel->registrarAccion('Registro de orden de despacho: ' . $_POST['correlativo'],
                     MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
-                    echo json_encode(['status' => 'success', 'message' => 'Orden ingresada correctamente']);
-
+                    
+                    echo json_encode([
+                        'status' => 'success',
+                        'message' => 'Orden de despacho registrada correctamente',
+                        'orden' => $ordenRegistrada
+                    ]);
                     exit;
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar la orden de despacho']);
+                    echo json_encode(['status' => 'error', 'message' => 'Error al registrar la orden de despacho']);
                 }
             }
             break;

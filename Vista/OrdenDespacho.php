@@ -19,7 +19,7 @@
 aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="incluirordendepacho" method="POST">
+            <form id="ingresarOrdenDepacho" method="POST">
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarOrdenModalLabel">Incluir Orden de Despacho</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
