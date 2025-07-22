@@ -100,7 +100,7 @@ foreach ($modulos as $moduloBD => $info) {
     $permisosConsulta[$moduloBD] = $permisosObj->getPermisosUsuarioModulo($id_rol, $moduloBD)['ingresar'] ?? false;
 }
         $secciones = [
-            'Mis Compras' => ['Catalogo', 'carrito', 'pasarela', 'Prefactura', 'Ordenes de despacho'],
+            'Compras' => ['Catalogo', 'carrito', 'pasarela', 'Prefactura', 'Ordenes de despacho'],
         ];
 
         foreach ($secciones as $titulo => $mods) {
