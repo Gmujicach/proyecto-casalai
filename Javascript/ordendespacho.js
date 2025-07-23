@@ -75,14 +75,14 @@ $(document).ready(function () {
     }
 
     $('#btnIncluirOrden').on('click', function() {
-        $('#ingresarOrdenDepacho')[0].reset();
+        $('#ingresarOrdenDespacho')[0].reset();
         $('#scorrelativo').text('');
         $('#sfecha').text('');
         $('#sfactura').text('');
         $('#registrarOrdenModal').modal('show');
     });
 
-    $('#ingresarOrdenDepacho').on('submit', function(e) {
+    $('#ingresarOrdenDespacho').on('submit', function(e) {
         e.preventDefault();
 
         if(validarEnvioOrden()){
@@ -205,61 +205,6 @@ $(document).ready(function () {
         });
     }
 
-    
-
-
-   
-    $('#incluirordendepacho').on('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                try {
-                    const data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            title: 'Éxito',
-                            text: 'Orden de Despacho ingresada exitosamente',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.message || 'Error al registrar la orden de despacho',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    }
-                } catch (e) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Error al procesar la respuesta del servidor',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Error en la solicitud AJAX: ' + error,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        });
-    });
-*/
-/*
     function enviarAjax(datos, callback) {
         let esFormData = (typeof datos === "object" && typeof datos.append === "function");
         $.ajax({
