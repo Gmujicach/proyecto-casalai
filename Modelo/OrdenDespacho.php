@@ -94,20 +94,18 @@ class OrdenDespacho extends BD {
     }
 
     public function obtenerUltimaOrden() {
-        return $this->obtUltimaOrden(); 
+        return $this->obtUltimaOrden();
     }
+
     private function obtUltimaOrden() {
-        try {
-            $sql = "SELECT * FROM tbl_orden_despachos ORDER BY id_orden_despachos DESC LIMIT 1";
-            $stmt = $this->conex->prepare($sql);
-            $stmt->execute();
-            $orden = $stmt->fetch(PDO::FETCH_ASSOC);
-            $this->conex = null;
-            return $orden ? $orden : null;
-        } catch (PDOException $e) {
-            $this->conex = null;
-            return null;
-        }
+        $sql = "SELECT o.id_orden_despachos, o.id_factura, o.fecha_despacho, o.activo
+                FROM tbl_orden_despachos o
+                ORDER BY o.id_orden_despachos DESC LIMIT 1";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute();
+        $orden = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->conex = null;
+        return $orden ? $orden : null;
     }
 
     // Método para obtener una orden de despacho por su ID
