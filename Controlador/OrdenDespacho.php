@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
 
             case 'obtenerOrden':
-                $id = $_POST['id'] ?? null; // Usa 'id' para que coincida con el JS
+                $id = $_POST['id_despachos'] ?? null; // Usa 'id' para que coincida con el JS
             
                 if ($id !== null) {
                     $ordenModel = new OrdenDespacho();
@@ -84,33 +84,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
             
 
-        case 'modificar':
-            $id = $_POST['id_despachos'];
-            $ordendespacho = new OrdenDespacho();
-            $ordendespacho->setId($id);
-            $ordendespacho->setFecha($_POST['fecha_despacho']);
-            $ordendespacho->setFactura($_POST['factura']);
-            $ordendespacho->setCorrelativo($_POST['correlativo']);
-            if ($ordendespacho->modificarOrdenDespacho($id)) {
-                $bitacoraModel->registrarAccion('Modificación de orden de despacho: ' . $_POST['correlativo'],
-                MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
-            }
-            break;
+case 'modificar':
+    $id = isset($_POST['id_despachos']) ? $_POST['id_despachos'] : null;
+    if ($id === null) {
+        echo json_encode(['status' => 'error', 'message' => 'ID no proporcionado']);
+        exit;
+    }
+    $ordendespacho = new OrdenDespacho();
+    $ordendespacho->setId($id);
+    $ordendespacho->setFecha($_POST['fecha_despacho']);
+    $ordendespacho->setFactura($_POST['factura']);
+    $ordendespacho->setCorrelativo($_POST['correlativo']);
+    if ($ordendespacho->modificarOrdenDespacho($id)) {
+        $bitacoraModel->registrarAccion('Modificación de orden de despacho: ' . $_POST['correlativo'],
+        MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
+    $ordenActualizada = $ordendespacho->obtenerOrdenPorId($id); // Debes tener este método
+    echo json_encode(['status' => 'success', 'orden' => $ordenActualizada]);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Error al modificar la orden de despacho']);
+}
+    break;
 
-        case 'eliminar':
-            $id = $_POST['id'];
-            $ordendespachoModel = new OrdenDespacho();
-            if ($ordendespachoModel->eliminarOrdenDespacho($id)) {
-                $bitacoraModel->registrarAccion('Eliminación de orden de despacho: (ID: ' . $id . ')',
-                MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
-            }
-            break;
+case 'eliminar':
+    $id = isset($_POST['id']);
+    $ordendespachoModel = new OrdenDespacho();
+    if ($ordendespachoModel->eliminarOrdenDespacho($id)) {
+        $bitacoraModel->registrarAccion('Eliminación de orden de despacho: (ID: ' . $id . ')',
+        MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la orden de despacho']);
+    }
+    break;
 
         default:
         echo json_encode(['status' => 'error', 'message' => 'Acción no válida', 'accion' => $accion]);

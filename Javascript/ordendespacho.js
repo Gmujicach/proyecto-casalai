@@ -9,13 +9,13 @@ $(document).ready(function () {
     });
     
     $("#correlativo").on("keyup",function(){
-        validarkeyup(/^[0-9-\b]{4,10}$/,$(this),
+        validarKeyUp(/^[0-9-\b]{4,10}$/,$(this),
         $("#scorrelativo"),"Se permite de 4 a 10 carácteres");
         if ($("#correlativo").val().length <= 9) {
 			var datos = new FormData();
 			datos.append('accion', 'buscar');
 			datos.append('correlativo', $(this).val());
-			enviaAjax(datos);
+			enviarAjax(datos);
 		}
     });
 
@@ -41,7 +41,7 @@ $(document).ready(function () {
                 <td>
                     <ul>
                         <div>
-                            <button class="btn-modificar"
+                            <button class="btn-modificar modificar"
                                 id="btnModificarOrden"
                                 data-id="${orden.id_orden_despachos}"
                                 data-fecha="${orden.fecha_despacho}"
@@ -111,7 +111,7 @@ $(document).ready(function () {
     $(document).on('click', '#registrarOrdenModal .close', function() {
         $('#registrarOrdenModal').modal('hide');
     });
-/*
+
     $(document).on('click', '.modificar', function (e) {
         e.preventDefault(); // Evita que el enlace haga scroll o recargue
     
@@ -144,27 +144,29 @@ $(document).ready(function () {
             cache: false,
             data: formData,
             success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                response = JSON.parse(response); 
-                if (response.status === 'success') {
-                    $('#modificarProductoModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: 'El producto se ha modificado correctamente'
-                    }).then(function() {
-                        location.reload();
-                    });
-                } else {
-                    muestraMensaje(response.message);
-                }
-            },
+    response = JSON.parse(response);
+    console.log('Respuesta recibida para modificar:', response);
+    if (response.status === 'success' && response.orden) {
+        $('#modificarProductoModal').modal('hide');
+        Swal.fire({
+            icon: 'success',
+            title: 'Modificado',
+            text: 'El producto se ha modificado correctamente'
+        }).then(function() {
+            modificarFilaOrden(response.orden);
+            resetOrden();
+        });
+    } else {
+        muestraMensaje(response.message || 'No se recibió la orden modificada');
+    }
+},
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Error al modificar el producto:', textStatus, errorThrown);
                 muestraMensaje('Error al modificar el producto.');
             }
         });
     });
+
 
     $(document).on('click', '.eliminar', function (e) {
         e.preventDefault();
@@ -187,7 +189,7 @@ $(document).ready(function () {
                 var datos = new FormData();
                 datos.append('accion', 'eliminar');
                 datos.append('id', id);
-                
+                mostrarDatosFormData(datos);
                 enviarAjax(datos, function (respuesta) {
                     if (respuesta.status === 'success') {
                         Swal.fire(
@@ -195,7 +197,7 @@ $(document).ready(function () {
                             'La orden de despacho ha sido eliminada.',
                             'success'
                         ).then(function() {
-                            location.reload(); 
+                            eliminarFilaOrden(id);
                         });
                     } else {
                         muestraMensaje(respuesta.message);
@@ -205,24 +207,78 @@ $(document).ready(function () {
         });
     }
 
-    function enviarAjax(datos, callback) {
-        let esFormData = (typeof datos === "object" && typeof datos.append === "function");
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: datos,
-            processData: !esFormData ? true : false,
-            contentType: !esFormData ? 'application/x-www-form-urlencoded; charset=UTF-8' : false,
-            dataType: 'json',
-            success: function (respuesta) {
-                if(callback) callback(respuesta);
-            },
-            error: function () {
-                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
-            }
-        });
+
+function agregarFilaOrden(orden) {
+    const nuevaFila = `
+        <tr data-id="${orden.id_orden_despachos}">
+            <td><span class="campo-correlativo">${orden.correlativo}</span></td>
+            <td><span class="campo-fecha">${orden.fecha_despacho}</span></td>
+            <td><span class="campo-factura">${orden.activo}</span></td>
+            <td>
+                <ul>
+                    <div>
+                        <button class="btn-modificar"
+                            data-id="${orden.id_orden_despachos}"
+                            data-fecha="${orden.fecha_despacho}"
+                            data-correlativo="${orden.correlativo}"
+                            data-factura="${orden.id_factura}">
+                            Modificar
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn-eliminar"
+                            data-id="${orden.id_orden_despachos}">
+                            Eliminar
+                        </button>
+                    </div>
+                </ul>
+            </td>
+        </tr>
+    `;
+    const tabla = $('#tablaConsultas').DataTable();
+    tabla.row.add($(nuevaFila)).draw(false);
+    tabla.page('last').draw('page');
+}
+
+function modificarFilaOrden(orden) {
+    const tabla = $('#tablaConsultas').DataTable();
+    const fila = tabla.row($(`tr[data-id="${orden.id_orden_despachos}"]`));
+    if (fila.length) {
+        const nuevaFila = `
+            <tr data-id="${orden.id_orden_despachos}">
+                <td><span class="campo-correlativo">${orden.correlativo}</span></td>
+                <td><span class="campo-fecha">${orden.fecha_despacho}</span></td>
+                <td><span class="campo-factura">${orden.activo}</span></td>
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                data-id="${orden.id_orden_despachos}"
+                                data-fecha="${orden.fecha_despacho}"
+                                data-correlativo="${orden.correlativo}"
+                                data-factura="${orden.id_factura}">
+                                Modificar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
+                                data-id="${orden.id_orden_despachos}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+            </tr>
+        `;
+        fila.remove();
+        tabla.row.add($(nuevaFila)).draw(false);
     }
-*/
+}
+function eliminarFilaOrden(id) {
+    const tabla = $('#tablaConsultas').DataTable();
+    tabla.row($(`tr[data-id="${id}"]`)).remove().draw(false);
+}
+
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
             icon: icono,
@@ -244,7 +300,7 @@ $(document).ready(function () {
         }
     }
 
-    function validarkeyup(er, etiqueta, etiquetamensaje, mensaje) {
+    function validarKeyUp(er, etiqueta, etiquetamensaje, mensaje) {
         a = er.test(etiqueta.val());
 
         if (a) {
@@ -270,6 +326,12 @@ $(document).ready(function () {
         });
     }
 
+    function mostrarDatosFormData(formData) {
+    console.log('Datos enviados en FormData:');
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+}
     function enviarAjax(datos, callback) {
         console.log("Enviando datos AJAX: ", datos);
         $.ajax({

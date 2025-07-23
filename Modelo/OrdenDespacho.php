@@ -98,7 +98,7 @@ class OrdenDespacho extends BD {
     }
 
     private function obtUltimaOrden() {
-        $sql = "SELECT o.id_orden_despachos, o.id_factura, o.fecha_despacho, o.activo
+        $sql = "SELECT o.id_orden_despachos,o.correlativo, o.id_factura, o.fecha_despacho, o.activo
                 FROM tbl_orden_despachos o
                 ORDER BY o.id_orden_despachos DESC LIMIT 1";
         $stmt = $this->conex->prepare($sql);
@@ -150,6 +150,8 @@ class OrdenDespacho extends BD {
             return false;
         }
     }
+
+    
 
     public function getordendespacho() {
         // Punto de depuración: Iniciando getmarcas
