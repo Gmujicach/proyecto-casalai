@@ -916,14 +916,6 @@ document.getElementById('descargarPDF').addEventListener('click', function () {
 });
 </script>
     <script>
-      $(document).ready(function () {
-        $('#tablaConsultas').DataTable({
-          language: {
-            url: 'public/js/es-ES.json'
-          }
-        });
-      });
-
       const categoriasDinamicas = <?php echo json_encode($categoriasDinamicas); ?>;
 
       $('#Categoria').on('change', function () {
