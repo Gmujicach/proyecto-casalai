@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
-                case 'permisos_tiempo_real':
+        case 'permisos_tiempo_real':
             header('Content-Type: application/json; charset=utf-8');
             $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Ordenes de despacho');
             echo json_encode($permisosActualizados);
@@ -37,17 +37,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // Validar que el correlativo no exista
             if (!$ordendespacho->validarCorrelativo()) {
-
                 echo json_encode(['status' => 'error', 'message' => 'Este correlativo ya existe']);
             } else {
                 if ($ordendespacho->ingresarOrdenDespacho()) {
+                    $ordenRegistrada = $ordendespacho->obtenerUltimaOrden();
+
+                    echo json_encode([
+                        'status' => 'success',
+                        'message' => 'Orden de despacho registrada correctamente',
+                        'orden' => $ordenRegistrada
+                    ]);
+
                     $bitacoraModel->registrarAccion('Registro de orden de despacho: ' . $_POST['correlativo'],
                     MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
-                    echo json_encode(['status' => 'success', 'message' => 'Orden ingresada correctamente']);
-
                     exit;
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar la orden de despacho']);
+                    echo json_encode(['status' => 'error', 'message' => 'Error al registrar la orden de despacho']);
                 }
             }
             break;

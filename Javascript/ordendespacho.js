@@ -33,32 +33,36 @@ $(document).ready(function () {
     }
 
     function agregarFilaOrden(orden) {
+        const nuevaFila = `
+            <tr data-id="${orden.id_orden_despachos}">
+                <td><span class="campo-numeros">${orden.correlativo}</span></td>
+                <td><span class="campo-nombres">${orden.fecha_despacho}</span></td>
+                <td><span class="campo-factura">${orden.activo}</span></td>
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                id="btnModificarOrden"
+                                data-id="${orden.id_orden_despachos}"
+                                data-fecha="${orden.fecha_despacho}"
+                                data-correlativo="${orden.correlativo}"
+                                data-factura="${orden.id_factura}">
+                                Modificar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
+                                data-id="${cuenta.id_orden_despachos}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+            </tr>
+        `;
         const tabla = $('#tablaConsultas').DataTable();
-        const nuevaFila = [
-            `<span class="campo-numeros">${orden.correlativo}</span>`,
-            `<span class="campo-nombres">${orden.fecha_despacho}</span>`,
-            `<span class="campo-factura">${orden.activo}</span>`,
-            `<ul>
-                <div>
-                    <button class="btn-modificar"
-                        id="btnModificarCuenta"
-                        data-id="${orden.id_orden_despachos}"
-                        data-fecha="${orden.fecha_despacho}"
-                        data-correlativo="${orden.correlativo}"
-                        data-factura="${orden.id_factura}">
-                        Modificar
-                    </button>
-                </div>
-                <div>
-                    <button class="btn-eliminar"
-                        data-id="${cuenta.id_orden_despachos}">
-                        Eliminar
-                    </button>
-                </div>
-            </ul>`
-        ];
-        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
-        $(rowNode).attr('data-id', orden.id_orden_despachos);
+        tabla.row.add($(nuevaFila)).draw(false);
+        tabla.page('last').draw('page');
     }
 
     function resetOrden() {
@@ -71,39 +75,33 @@ $(document).ready(function () {
     }
 
     $('#btnIncluirOrden').on('click', function() {
-        $('#incluirordendepacho')[0].reset();
+        $('#ingresarOrdenDespacho')[0].reset();
         $('#scorrelativo').text('');
         $('#sfecha').text('');
         $('#sfactura').text('');
-        $('#registrarCuentaModal').modal('show');
+        $('#registrarOrdenModal').modal('show');
     });
 
-    $('#registrarOrden').on('submit', function(e) {
+    $('#ingresarOrdenDespacho').on('submit', function(e) {
         e.preventDefault();
 
-        if(validarEnvioCuenta()){
-            var datos = {
-                correlativo: $("#correlativo").val(),
-                fecha: $("#fecha").val(),
-                factura: $("#factura").val(),
-                accion: "incluir"
-            };
+        if(validarEnvioOrden()){
+            var datos = new FormData(this);
+            datos.append("accion", "ingresar");
             enviarAjax(datos, function(respuesta){
                 if(respuesta.status === "success" || respuesta.resultado === "success"){
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Orden registrada correctamente'
+                        text: respuesta.message || 'Orden de despacho registrada correctamente'
                     });
-                    if(respuesta.status === "success" && respuesta.cuenta){
-                        agregarFilaOrden(respuesta.orden);
-                        resetOrden();
-                    }
+                    agregarFilaOrden(respuesta.orden);
+                    resetOrden();
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la orden'
+                        text: respuesta.message || 'No se pudo registrar la orden de despacho'
                     });
                 }
             });
@@ -207,59 +205,23 @@ $(document).ready(function () {
         });
     }
 
-    
-
-
-   
-    $('#incluirordendepacho').on('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
+    function enviarAjax(datos, callback) {
+        let esFormData = (typeof datos === "object" && typeof datos.append === "function");
         $.ajax({
             url: '',
             type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                try {
-                    const data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            title: 'Éxito',
-                            text: 'Orden de Despacho ingresada exitosamente',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.message || 'Error al registrar la orden de despacho',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    }
-                } catch (e) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Error al procesar la respuesta del servidor',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar'
-                    });
-                }
+            data: datos,
+            processData: !esFormData ? true : false,
+            contentType: !esFormData ? 'application/x-www-form-urlencoded; charset=UTF-8' : false,
+            dataType: 'json',
+            success: function (respuesta) {
+                if(callback) callback(respuesta);
             },
-            error: function(xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Error en la solicitud AJAX: ' + error,
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
+            error: function () {
+                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
             }
         });
-    });
+    }
 */
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
@@ -307,35 +269,24 @@ $(document).ready(function () {
             text: mensaje
         });
     }
+
+    function enviarAjax(datos, callback) {
+        console.log("Enviando datos AJAX: ", datos);
+        $.ajax({
+            url: '', 
+            type: 'POST',
+            contentType: false,
+            data: datos,
+            processData: false,
+            cache: false,
+            success: function (respuesta) {
+                console.log("Respuesta del servidor: ", respuesta); 
+                callback(JSON.parse(respuesta));
+            },
+            error: function () {
+                console.error('Error en la solicitud AJAX');
+                muestraMensaje('Error en la solicitud AJAX');
+            }
+        });
+    }
 });
-
-
-function enviarAjax(datos, callback) {
-    console.log("Enviando datos AJAX: ", datos);
-    $.ajax({
-        url: '', 
-        type: 'POST',
-        contentType: false,
-        data: datos,
-        processData: false,
-        cache: false,
-        success: function (respuesta) {
-            console.log("Respuesta del servidor: ", respuesta); 
-            callback(JSON.parse(respuesta));
-        },
-        error: function () {
-            console.error('Error en la solicitud AJAX');
-            muestraMensaje('Error en la solicitud AJAX');
-        }
-    });
-}
-/*
-function muestraMensaje(mensaje) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje
-    });
-}
-
-*/

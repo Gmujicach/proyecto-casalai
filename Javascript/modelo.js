@@ -206,38 +206,37 @@ $(document).ready(function() {
                     // Actualizar la fila en la tabla con el mismo formato
                 let modelo = respuesta.modelo; // El backend debe retornar el modelo actualizado
                 let fila = $(`tr[data-id="${modelo.id_modelo}"]`);
-const nuevaFila = [
-    `<ul>
-        <div>
-            <button class="btn-modificar"
-                data-id="${modelo.id_modelo}"
-                data-marcaid="${modelo.id_marca}"
-                data-nombre="${modelo.nombre_modelo}">
-                Modificar
-            </button>
-            <button class="btn-eliminar"
-                data-id="${modelo.id_modelo}">
-                Eliminar
-            </button>
-        </div>
-    </ul>`,
-    `<span class="campo-numeros">${modelo.id_modelo}</span>`,
-    `<span class="campo-nombres">${modelo.nombre_marca}</span>`,
-    `<span class="campo-nombres">${modelo.nombre_modelo}</span>`
-];
-const tabla = $('#tablaConsultas').DataTable();
-const page = tabla.page();
-fila = tabla.row(`tr[data-id="${modelo.id_modelo}"]`);
-if (fila.length) {
-    fila.data(nuevaFila).draw(false);
-    tabla.page(page).draw(false);
+                const nuevaFila = [
+                    `<ul>
+                        <div>
+                            <button class="btn-modificar"
+                                data-id="${modelo.id_modelo}"
+                                data-marcaid="${modelo.id_marca}"
+                                data-nombre="${modelo.nombre_modelo}">
+                                Modificar
+                            </button>
+                            <button class="btn-eliminar"
+                                data-id="${modelo.id_modelo}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>`,
+                    `<span class="campo-numeros">${modelo.id_modelo}</span>`,
+                    `<span class="campo-nombres">${modelo.nombre_marca}</span>`,
+                    `<span class="campo-nombres">${modelo.nombre_modelo}</span>`
+                ];
+                const tabla = $('#tablaConsultas').DataTable();
+                const page = tabla.page();
+                fila = tabla.row(`tr[data-id="${modelo.id_modelo}"]`);
+                if (fila.length) {
+                    fila.data(nuevaFila).draw(false);
+                    tabla.page(page).draw(false);
 
-    const filaNode = fila.node();
-    const botonModificar = $(filaNode).find(".btn-modificar");
-    botonModificar.data("marcaid", modelo.id_marca);
-    botonModificar.data("nombre", modelo.nombre_modelo);
-}
-                
+                    const filaNode = fila.node();
+                    const botonModificar = $(filaNode).find(".btn-modificar");
+                    botonModificar.data("marcaid", modelo.id_marca);
+                    botonModificar.data("nombre", modelo.nombre_modelo);
+                }
             } else {
                 Swal.fire({
                     icon: 'error',
