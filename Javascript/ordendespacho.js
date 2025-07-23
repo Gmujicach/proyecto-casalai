@@ -33,32 +33,36 @@ $(document).ready(function () {
     }
 
     function agregarFilaOrden(orden) {
+        const nuevaFila = `
+            <tr data-id="${orden.id_orden_despachos}">
+                <td><span class="campo-numeros">${orden.correlativo}</span></td>
+                <td><span class="campo-nombres">${orden.fecha_despacho}</span></td>
+                <td><span class="campo-factura">${orden.activo}</span></td>
+                <td>
+                    <ul>
+                        <div>
+                            <button class="btn-modificar"
+                                id="btnModificarOrden"
+                                data-id="${orden.id_orden_despachos}"
+                                data-fecha="${orden.fecha_despacho}"
+                                data-correlativo="${orden.correlativo}"
+                                data-factura="${orden.id_factura}">
+                                Modificar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
+                                data-id="${cuenta.id_orden_despachos}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>
+                </td>
+            </tr>
+        `;
         const tabla = $('#tablaConsultas').DataTable();
-        const nuevaFila = [
-            `<span class="campo-numeros">${orden.correlativo}</span>`,
-            `<span class="campo-nombres">${orden.fecha_despacho}</span>`,
-            `<span class="campo-factura">${orden.activo}</span>`,
-            `<ul>
-                <div>
-                    <button class="btn-modificar"
-                        id="btnModificarOrden"
-                        data-id="${orden.id_orden_despachos}"
-                        data-fecha="${orden.fecha_despacho}"
-                        data-correlativo="${orden.correlativo}"
-                        data-factura="${orden.id_factura}">
-                        Modificar
-                    </button>
-                </div>
-                <div>
-                    <button class="btn-eliminar"
-                        data-id="${cuenta.id_orden_despachos}">
-                        Eliminar
-                    </button>
-                </div>
-            </ul>`
-        ];
-        const rowNode = tabla.row.add(nuevaFila).draw(false).node();
-        $(rowNode).attr('data-id', orden.id_orden_despachos);
+        tabla.row.add($(nuevaFila)).draw(false);
+        tabla.page('last').draw('page');
     }
 
     function resetOrden() {
@@ -77,60 +81,27 @@ $(document).ready(function () {
         $('#sfactura').text('');
         $('#registrarOrdenModal').modal('show');
     });
-/*
-    $('#ingresarOrdenDepacho').on('submit', function(e) {
-        e.preventDefault();
-        if(validarEnvioOrden()){
-            var datos = new FormData(this);
-            datos.append("accion", "ingresar");
-            enviarAjax(datos, function(respuesta){
-                if(respuesta.status === "success"){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Éxito',
-                        text: respuesta.message || 'Orden de despacho registrada correctamente'
-                    });
-                    if(respuesta.orden){
-                        agregarFilaOrden(respuesta.orden);
-                        resetOrden();
-                    }
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: respuesta.message || 'No se pudo registrar la orden de despacho'
-                    });
-                }
-            });
-        }
-    });
-*/
+
     $('#ingresarOrdenDepacho').on('submit', function(e) {
         e.preventDefault();
 
         if(validarEnvioOrden()){
-            var datos = {
-                correlativo: $("#correlativo").val(),
-                fecha: $("#fecha").val(),
-                factura: $("#factura").val(),
-                accion: "ingresar"
-            };
+            var datos = new FormData(this);
+            datos.append("accion", "ingresar");
             enviarAjax(datos, function(respuesta){
                 if(respuesta.status === "success" || respuesta.resultado === "success"){
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
-                        text: respuesta.message || respuesta.msg || 'Orden de despacho registrada correctamente'
+                        text: respuesta.message || 'Orden de despacho registrada correctamente'
                     });
-                    if(respuesta.status === "success" && respuesta.orden){
-                        agregarFilaOrden(respuesta.orden);
-                        resetOrden();
-                    }
+                    agregarFilaOrden(respuesta.orden);
+                    resetOrden();
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: respuesta.message || respuesta.msg || 'No se pudo registrar la orden de despacho'
+                        text: respuesta.message || 'No se pudo registrar la orden de despacho'
                     });
                 }
             });
