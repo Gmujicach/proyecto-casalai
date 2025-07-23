@@ -37,18 +37,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // Validar que el correlativo no exista
             if (!$ordendespacho->validarCorrelativo()) {
-
                 echo json_encode(['status' => 'error', 'message' => 'Este correlativo ya existe']);
             } else {
                 if ($ordendespacho->ingresarOrdenDespacho()) {
-                    $bitacoraModel->registrarAccion('Registro de orden de despacho: ' . $_POST['correlativo'],
-                    MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
-                    
+                    $ordenRegistrada = $ordendespacho->obtenerUltimaOrden();
+
                     echo json_encode([
                         'status' => 'success',
                         'message' => 'Orden de despacho registrada correctamente',
                         'orden' => $ordenRegistrada
                     ]);
+
+                    $bitacoraModel->registrarAccion('Registro de orden de despacho: ' . $_POST['correlativo'],
+                    MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
                     exit;
                 } else {
                     echo json_encode(['status' => 'error', 'message' => 'Error al registrar la orden de despacho']);

@@ -77,7 +77,34 @@ $(document).ready(function () {
         $('#sfactura').text('');
         $('#registrarOrdenModal').modal('show');
     });
-
+/*
+    $('#ingresarOrdenDepacho').on('submit', function(e) {
+        e.preventDefault();
+        if(validarEnvioOrden()){
+            var datos = new FormData(this);
+            datos.append("accion", "ingresar");
+            enviarAjax(datos, function(respuesta){
+                if(respuesta.status === "success"){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: respuesta.message || 'Orden de despacho registrada correctamente'
+                    });
+                    if(respuesta.orden){
+                        agregarFilaOrden(respuesta.orden);
+                        resetOrden();
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: respuesta.message || 'No se pudo registrar la orden de despacho'
+                    });
+                }
+            });
+        }
+    });
+*/
     $('#ingresarOrdenDepacho').on('submit', function(e) {
         e.preventDefault();
 
@@ -261,6 +288,25 @@ $(document).ready(function () {
         });
     });
 */
+/*
+    function enviarAjax(datos, callback) {
+        let esFormData = (typeof datos === "object" && typeof datos.append === "function");
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: datos,
+            processData: !esFormData ? true : false,
+            contentType: !esFormData ? 'application/x-www-form-urlencoded; charset=UTF-8' : false,
+            dataType: 'json',
+            success: function (respuesta) {
+                if(callback) callback(respuesta);
+            },
+            error: function () {
+                Swal.fire('Error', 'Error en la solicitud AJAX', 'error');
+            }
+        });
+    }
+*/
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
             icon: icono,
@@ -307,35 +353,24 @@ $(document).ready(function () {
             text: mensaje
         });
     }
+
+    function enviarAjax(datos, callback) {
+        console.log("Enviando datos AJAX: ", datos);
+        $.ajax({
+            url: '', 
+            type: 'POST',
+            contentType: false,
+            data: datos,
+            processData: false,
+            cache: false,
+            success: function (respuesta) {
+                console.log("Respuesta del servidor: ", respuesta); 
+                callback(JSON.parse(respuesta));
+            },
+            error: function () {
+                console.error('Error en la solicitud AJAX');
+                muestraMensaje('Error en la solicitud AJAX');
+            }
+        });
+    }
 });
-
-
-function enviarAjax(datos, callback) {
-    console.log("Enviando datos AJAX: ", datos);
-    $.ajax({
-        url: '', 
-        type: 'POST',
-        contentType: false,
-        data: datos,
-        processData: false,
-        cache: false,
-        success: function (respuesta) {
-            console.log("Respuesta del servidor: ", respuesta); 
-            callback(JSON.parse(respuesta));
-        },
-        error: function () {
-            console.error('Error en la solicitud AJAX');
-            muestraMensaje('Error en la solicitud AJAX');
-        }
-    });
-}
-/*
-function muestraMensaje(mensaje) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: mensaje
-    });
-}
-
-*/
