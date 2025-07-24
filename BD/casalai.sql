@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-07-2025 a las 02:51:58
+-- Tiempo de generación: 24-07-2025 a las 04:27:35
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -153,7 +153,8 @@ CREATE TABLE `tbl_carrito` (
 --
 
 INSERT INTO `tbl_carrito` (`id_carrito`, `id_cliente`, `fecha_creacion`) VALUES
-(10, 11, '2025-07-11 16:50:50');
+(10, 11, '2025-07-11 16:50:50'),
+(11, 17, '2025-07-22 22:55:43');
 
 -- --------------------------------------------------------
 
@@ -216,7 +217,7 @@ INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `tel
 (11, 'Edith Urdaneta', '10844463', 'Los Horcones', '0416-747-4336', 'urdavedith.pnfi@gmail.com', 1),
 (12, 'Diego Lopez', '31766917', 'Venezuela estado Zulia\r\nMaracaibo', '0414-575-3363', 'diego0510lopez@gmail.com', 1),
 (13, 'Diego Lopez', '5322432', '', '0414-575-3363', 'diego0510lopez@gmail.com', 1),
-(14, 'Braynt Medina', '28406324', 'calle 3 entre carrera 5 y 2', '0426-150-4714', 'darckortgame@gmail.com', 1);
+(15, 'Angel Gomez', '30052004', 'Colombia', '0424-158-7101', 'ejemplo2000@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -552,6 +553,13 @@ CREATE TABLE `tbl_orden_despachos` (
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_orden_despachos`
+--
+
+INSERT INTO `tbl_orden_despachos` (`id_orden_despachos`, `id_factura`, `fecha_despacho`, `correlativo`, `activo`) VALUES
+(1, 33, '2025-07-23', '0245685265', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -854,13 +862,13 @@ ALTER TABLE `cat_tintas`
 -- AUTO_INCREMENT de la tabla `tbl_carrito`
 --
 ALTER TABLE `tbl_carrito`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_carritodetalle`
 --
 ALTER TABLE `tbl_carritodetalle`
-  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_categoria`
@@ -872,7 +880,7 @@ ALTER TABLE `tbl_categoria`
 -- AUTO_INCREMENT de la tabla `tbl_clientes`
 --
 ALTER TABLE `tbl_clientes`
-  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_combo`
@@ -920,7 +928,7 @@ ALTER TABLE `tbl_detalle_recepcion_productos`
 -- AUTO_INCREMENT de la tabla `tbl_facturas`
 --
 ALTER TABLE `tbl_facturas`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_factura_detalle`
@@ -945,6 +953,12 @@ ALTER TABLE `tbl_marcas`
 --
 ALTER TABLE `tbl_modelos`
   MODIFY `id_modelo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+
+--
+-- AUTO_INCREMENT de la tabla `tbl_orden_despachos`
+--
+ALTER TABLE `tbl_orden_despachos`
+  MODIFY `id_orden_despachos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_productos`

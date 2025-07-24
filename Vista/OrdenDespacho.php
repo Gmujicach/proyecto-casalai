@@ -30,7 +30,7 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                     <input type="hidden" name="accion" value="ingresar">
                     <div class="envolver-form">
                         <label for="correlativo">Correlativo</label>
-                        <input type="text" class="control-form" id="correlativo" name="correlativo" placeholder="012345" maxlength="10" required>
+                        <input type="text" class="control-form" id="correlativo" name="correlativo" placeholder="0123456789" maxlength="10" required>
                         <span class="span-value" id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
