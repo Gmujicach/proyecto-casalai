@@ -21,10 +21,47 @@ $(document).ready(function () {
 		}
     });
 
+    // Validación en tiempo real para fecha: no permitir fechas futuras
+    $("#fecha").on("change keyup", function() {
+        let fechaInput = $(this).val();
+        let hoy = new Date();
+        let fechaIngresada = new Date(fechaInput);
+
+        // Normaliza la fecha de hoy para comparar solo año-mes-día
+        hoy.setHours(0,0,0,0);
+
+        if (fechaInput === "") {
+            $("#sfecha").text("Debe ingresar una fecha");
+        } else if (fechaIngresada > hoy) {
+            $("#sfecha").text("No se permite una fecha futura");
+            $(this).addClass("input-error");
+        } else {
+            $("#sfecha").text("");
+            $(this).removeClass("input-error");
+        }
+    });
+
+    // Select de factura: solo permite seleccionar una opción válida (no vacío)
+    $("#factura").on("change", function() {
+        validarKeyUp(
+            /^.+$/,
+            $(this),
+            $("#sfactura"),
+            "Debe seleccionar una factura"
+        );
+    });
+
     function validarEnvioOrden(){
         let correlativo = document.getElementById("correlativo");
         correlativo.value = space(correlativo.value).trim();
         
+        let fecha = $("#fecha").val();
+        let hoy = new Date();
+        let fechaIngresada = new Date(fecha);
+        hoy.setHours(0,0,0,0);
+
+        //let factura = $("#factura").val();
+
         if(validarKeyUp(
             /^[0-9]{4,10}$/,
             $("#correlativo"),
@@ -32,6 +69,28 @@ $(document).ready(function () {
             "*El correlativo debe tener solo números*"
         )==0){
             mensajes('error',4000,'Verifique el correlativo','Debe tener solo números');
+            return false;
+        }
+
+        if (fecha === "") {
+            $("#sfecha").text("Debe ingresar una fecha");
+            mensajes('error', 4000, 'Verifique la fecha', 'Debe ingresar una fecha');
+            return false;
+        } else if (fechaIngresada > hoy) {
+            $("#sfecha").text("No se permite una fecha futura");
+            mensajes('error', 4000, 'Verifique la fecha', 'No se permite una fecha futura');
+            return false;
+        } else {
+            $("#sfecha").text("");
+        }
+
+        if (validarKeyUp(
+            /^.+$/,
+            $("#factura"),
+            $("#sfactura"),
+            "Debe seleccionar una factura"
+        ) == 0) {
+            mensajes('error', 4000, 'Verifique la factura', 'Debe seleccionar una factura');
             return false;
         }
         return true;
