@@ -235,3 +235,35 @@ select option[value=""] [disabled]{
     padding: 8px 24px;
     font-weight: 600;
 }
+
+/* Estilos para el select personalizado */
+.envolver-form {
+    margin-bottom: 15px;
+}
+
+#buscarCliente {
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#cliente {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#cliente option {
+    padding: 8px;
+    display: none; /* Ocultar todas las opciones inicialmente */
+}
+
+#cliente option[value="disabled"] {
+    display: block; /* Mostrar siempre el placeholder */
+    color: #999;
+}

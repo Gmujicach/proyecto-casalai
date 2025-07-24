@@ -72,6 +72,34 @@ $(document).ready(function () {
         });
     });
 
+    if ($('.select2-cliente').length > 0) {
+    $('.select2-cliente').select2({
+        placeholder: "Buscar cliente por nombre o cédula",
+        allowClear: true,
+        language: {
+            noResults: function () {
+                return "No se encontraron clientes";
+            }
+        },
+        matcher: function (params, data) {
+            if ($.trim(params.term) === '') {
+                return data;
+            }
+            if (typeof data.text === 'undefined') {
+                return null;
+            }
+            if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) > -1) {
+                return data;
+            }
+            if ($(data.element).data('cedula') && 
+                $(data.element).data('cedula').toString().indexOf(params.term) > -1) {
+                return data;
+            }
+            return null;
+        }
+    });
+}
+
     // Evento click para el botón de incluir despacho
     $('#btnIncluirDespacho').on('click', function() {
         $('#f')[0].reset();
@@ -135,6 +163,33 @@ $(document).ready(function () {
             }
         });
     });	
+
+    $(document).ready(function() {
+    // Función para filtrar clientes
+    $('#buscarCliente').on('keyup', function() {
+        var searchText = $(this).val().toLowerCase();
+        
+        $('#cliente option').each(function() {
+            var optionText = $(this).text().toLowerCase();
+            var matches = optionText.includes(searchText);
+            $(this).toggle(matches);
+        });
+        
+        // Mostrar el placeholder si está vacío
+        if (searchText === '') {
+            $('#cliente option[value="disabled"]').show();
+        } else {
+            $('#cliente option[value="disabled"]').hide();
+        }
+    });
+
+    // Asegurar que el placeholder sea seleccionable
+    $('#cliente').on('change', function() {
+        if ($(this).val() === 'disabled') {
+            $(this).val('');
+        }
+    });
+});
     
     // Evento click para el botón registrar
     $("#registrar").on("click", function(){
