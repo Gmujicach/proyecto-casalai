@@ -5,12 +5,14 @@ $(document).ready(function () {
     }
 
     $("#correlativo").on("keypress",function(e){
-        validarkeypress(/^[0-9-\b]*$/,e);
+        validarkeypress(/^[0-9]*$/,e);
+        let correlativo = document.getElementById("correlativo");
+        correlativo.value = space(correlativo.value);
     });
     
     $("#correlativo").on("keyup",function(){
-        validarKeyUp(/^[0-9-\b]{4,10}$/,$(this),
-        $("#scorrelativo"),"Se permite de 4 a 10 carácteres");
+        validarKeyUp(/^[0-9]{4,10}$/,$(this),
+        $("#scorrelativo"),"Se permite de 4 a 10 dígitos");
         if ($("#correlativo").val().length <= 9) {
 			var datos = new FormData();
 			datos.append('accion', 'buscar');
@@ -20,8 +22,11 @@ $(document).ready(function () {
     });
 
     function validarEnvioOrden(){
+        let correlativo = document.getElementById("correlativo");
+        correlativo.value = space(correlativo.value).trim();
+        
         if(validarKeyUp(
-            /^[0-9-\b]{4,10}$/,
+            /^[0-9]{4,10}$/,
             $("#correlativo"),
             $("#scorrelativo"),
             "*El correlativo debe tener solo números*"
@@ -37,22 +42,22 @@ $(document).ready(function () {
             <tr data-id="${orden.id_orden_despachos}">
                 <td><span class="campo-numeros">${orden.correlativo}</span></td>
                 <td><span class="campo-nombres">${orden.fecha_despacho}</span></td>
-                <td><span class="campo-factura">${orden.activo}</span></td>
+                <td><span class="campo-numeros">${orden.activo}</span></td>
                 <td>
                     <ul>
                         <div>
-                            <button class="btn-modificar modificar"
+                            <button class="btn-modificar"
                                 id="btnModificarOrden"
                                 data-id="${orden.id_orden_despachos}"
-                                data-fecha="${orden.fecha_despacho}"
                                 data-correlativo="${orden.correlativo}"
+                                data-fecha="${orden.fecha_despacho}"
                                 data-factura="${orden.id_factura}">
                                 Modificar
                             </button>
                         </div>
                         <div>
                             <button class="btn-eliminar"
-                                data-id="${cuenta.id_orden_despachos}">
+                                data-id="${orden.id_orden_despachos}">
                                 Eliminar
                             </button>
                         </div>
@@ -112,7 +117,34 @@ $(document).ready(function () {
         $('#registrarOrdenModal').modal('hide');
     });
 
-    $(document).on('click', '.modificar', function (e) {
+    $("#modificar_correlativo").on("keypress",function(e){
+        validarkeypress(/^[0-9-\b]*$/,e);
+        let correlativo = document.getElementById("correlativo");
+        correlativo.value = space(correlativo.value);
+    });
+    
+    $("#modificar_correlativo").on("keyup",function(){
+        validarKeyUp(/^[0-9-\b]{4,10}$/,$(this),
+        $("#smcorrelativo"),"Se permite de 4 a 10 dígitos");
+        if ($("#modificar_correlativo").val().length <= 9) {
+			var datos = new FormData();
+			datos.append('accion', 'buscar');
+			datos.append('correlativo', $(this).val());
+			enviarAjax(datos);
+		}
+    });
+
+    function llenarSelectFacturasModal(idSeleccionada) {
+        let select = $('#modificar_factura');
+        select.empty();
+        select.append('<option value="">Seleccione una factura</option>');
+        window.facturasDisponibles.forEach(function(orden) {
+            let selected = orden.id_factura == idSeleccionada ? 'selected' : '';
+            select.append(`<option value="${orden.id_factura}" ${selected}>${orden.factura}</option>`);
+        });
+    }
+
+    $(document).on('click', '.btn-modificar', function (e) {
         e.preventDefault(); // Evita que el enlace haga scroll o recargue
     
         var boton = $(this);
@@ -124,51 +156,92 @@ $(document).ready(function () {
         $('#modificar_factura').val(boton.data('factura'));
     
         // Mostrar el modal
-        $('#modificar_orden_modal').modal('show');
+        $('#modificarOrdenModal').modal('show');
     });
-    
 
-    $('#modificarorden').on('submit', function(e) {
+    $(document).on('click', '.btn-modificar', function () {
+        $('#modificar_id_orden').val($(this).data('id'));
+        $('#modificar_correlativo').val($(this).data('correlativo'));
+        $('#modificar_fecha').val($(this).data('fecha'));
+        llenarSelectFacturasModal($(this).data('factura'));
+        $('#smcorrelativo').text('');
+        $('#smfecha').text('');
+        $('#smfactura').text('');
+        $('#modificarOrdenModal').modal('show');
+    });
+
+    $('#modificarOrden').on('submit', function(e) {
         e.preventDefault();
 
-       
-        var formData = new FormData(this);
-        formData.append('accion', 'modificar');
+        let correlativo = $("#modificar_correlativo").val().trim();
+        let fecha = $("#modificar_fecha").val().trim();
+        let idFactura = $("#modificar_factura").val();
+        let factura = $("#modificar_factura option:selected").text();
 
-       
-        $.ajax({
-            url: '', 
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            cache: false,
-            data: formData,
-            success: function(response) {
-    response = JSON.parse(response);
-    console.log('Respuesta recibida para modificar:', response);
-    if (response.status === 'success' && response.orden) {
-        $('#modificarProductoModal').modal('hide');
-        Swal.fire({
-            icon: 'success',
-            title: 'Modificado',
-            text: 'El producto se ha modificado correctamente'
-        }).then(function() {
-            modificarFilaOrden(response.orden);
-            resetOrden();
-        });
-    } else {
-        muestraMensaje(response.message || 'No se recibió la orden modificada');
-    }
-},
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error al modificar el producto:', textStatus, errorThrown);
-                muestraMensaje('Error al modificar el producto.');
+        if(!/^[0-9]{4,10}$/.test(correlativo)){
+            Swal.fire('Error', 'Verifique el correlativo','Debe tener solo números');
+            return;
+        }
+
+        var datos = new FormData(this);
+        datos.append('accion', 'modificar');
+        enviarAjax(datos, function(respuesta){
+            if(respuesta.status === "success" || respuesta.resultado === "success"){
+                $('#modificarOrdenModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Modificado',
+                        text: 'La orden de despacho se ha modificado correctamente'
+                    });
+                    // Actualizar la fila en la tabla con el mismo formato
+                let orden = respuesta.orden; // El backend debe retornar el modelo actualizado
+                let fila = $(`tr[data-id="${orden.id_orden_despachos}"]`);
+                const nuevaFila = [
+                    `<span class="campo-correlativo">${orden.correlativo}</span>`,
+                    `<span class="campo-fecha">${orden.fecha_despacho}</span>`,
+                    `<span class="campo-factura">${orden.activo}</span>`,
+                    `<ul>
+                        <div>
+                            <button class="btn-modificar"
+                                data-id="${orden.id_orden_despachos}"
+                                data-correlativo="${orden.correlativo}"
+                                data-fecha="${orden.fecha_despacho}"
+                                data-factura="${orden.id_factura}">
+                                Modificar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn-eliminar"
+                                data-id="${orden.id_orden_despachos}">
+                                Eliminar
+                            </button>
+                        </div>
+                    </ul>`
+                ];
+                const tabla = $('#tablaConsultas').DataTable();
+                const page = tabla.page();
+                fila = tabla.row(`tr[data-id="${orden.id_orden_despachos}"]`);
+                if (fila.length) {
+                    fila.data(nuevaFila).draw(false);
+                    tabla.page(page).draw(false);
+
+                    const filaNode = fila.node();
+                    const botonModificar = $(filaNode).find(".btn-modificar");
+                    botonModificar.data("correlativo", orden.correlativo);
+                    botonModificar.data("fecha", orden.fecha_despacho);
+                    botonModificar.data("factura", orden.id_factura);
+                }
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: respuesta.message || 'No se pudo modificar la orden de despacho'
+                });
             }
         });
     });
 
-
-    $(document).on('click', '.eliminar', function (e) {
+    $(document).on('click', '.btn-eliminar', function (e) {
         e.preventDefault();
         const id = $(this).data('id');
         eliminarOrdenDespacho(id);
@@ -207,77 +280,10 @@ $(document).ready(function () {
         });
     }
 
-
-function agregarFilaOrden(orden) {
-    const nuevaFila = `
-        <tr data-id="${orden.id_orden_despachos}">
-            <td><span class="campo-correlativo">${orden.correlativo}</span></td>
-            <td><span class="campo-fecha">${orden.fecha_despacho}</span></td>
-            <td><span class="campo-factura">${orden.activo}</span></td>
-            <td>
-                <ul>
-                    <div>
-                        <button class="btn-modificar"
-                            data-id="${orden.id_orden_despachos}"
-                            data-fecha="${orden.fecha_despacho}"
-                            data-correlativo="${orden.correlativo}"
-                            data-factura="${orden.id_factura}">
-                            Modificar
-                        </button>
-                    </div>
-                    <div>
-                        <button class="btn-eliminar"
-                            data-id="${orden.id_orden_despachos}">
-                            Eliminar
-                        </button>
-                    </div>
-                </ul>
-            </td>
-        </tr>
-    `;
-    const tabla = $('#tablaConsultas').DataTable();
-    tabla.row.add($(nuevaFila)).draw(false);
-    tabla.page('last').draw('page');
-}
-
-function modificarFilaOrden(orden) {
-    const tabla = $('#tablaConsultas').DataTable();
-    const fila = tabla.row($(`tr[data-id="${orden.id_orden_despachos}"]`));
-    if (fila.length) {
-        const nuevaFila = `
-            <tr data-id="${orden.id_orden_despachos}">
-                <td><span class="campo-correlativo">${orden.correlativo}</span></td>
-                <td><span class="campo-fecha">${orden.fecha_despacho}</span></td>
-                <td><span class="campo-factura">${orden.activo}</span></td>
-                <td>
-                    <ul>
-                        <div>
-                            <button class="btn-modificar"
-                                data-id="${orden.id_orden_despachos}"
-                                data-fecha="${orden.fecha_despacho}"
-                                data-correlativo="${orden.correlativo}"
-                                data-factura="${orden.id_factura}">
-                                Modificar
-                            </button>
-                        </div>
-                        <div>
-                            <button class="btn-eliminar"
-                                data-id="${orden.id_orden_despachos}">
-                                Eliminar
-                            </button>
-                        </div>
-                    </ul>
-                </td>
-            </tr>
-        `;
-        fila.remove();
-        tabla.row.add($(nuevaFila)).draw(false);
+    function eliminarFilaOrden(id) {
+        const tabla = $('#tablaConsultas').DataTable();
+        tabla.row($(`tr[data-id="${id}"]`)).remove().draw(false);
     }
-}
-function eliminarFilaOrden(id) {
-    const tabla = $('#tablaConsultas').DataTable();
-    tabla.row($(`tr[data-id="${id}"]`)).remove().draw(false);
-}
 
     function mensajes(icono, tiempo, titulo, mensaje){
         Swal.fire({
@@ -327,11 +333,12 @@ function eliminarFilaOrden(id) {
     }
 
     function mostrarDatosFormData(formData) {
-    console.log('Datos enviados en FormData:');
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
+        console.log('Datos enviados en FormData:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
     }
-}
+
     function enviarAjax(datos, callback) {
         console.log("Enviando datos AJAX: ", datos);
         $.ajax({

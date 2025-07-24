@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 echo json_encode([
                     'status' => 'success',
-                    'message' => 'modelo modificado correctamente',
+                    'message' => 'Modelo modificado correctamente',
                     'modelo' => $modeloActualizado
                 ]);
             } else {

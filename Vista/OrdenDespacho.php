@@ -30,7 +30,7 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                     <input type="hidden" name="accion" value="ingresar">
                     <div class="envolver-form">
                         <label for="correlativo">Correlativo</label>
-                        <input type="text" class="control-form" id="correlativo" name="correlativo" maxlength="10" required>
+                        <input type="text" class="control-form" id="correlativo" name="correlativo" placeholder="012345" maxlength="10" required>
                         <span class="span-value" id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
@@ -82,9 +82,9 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
         <tbody>
         <?php foreach ($ordendespacho as $orden): ?>
             <tr>
-                <td><span class="campo-correlativo"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
-                <td><span class="campo-fecha"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
-                <td><span class="campo-factura"><?php echo htmlspecialchars($orden['activo']); ?></span></td>
+                <td><span class="campo-numeros"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
+                <td><span class="campo-nombres"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
+                <td><span class="campo-numeros"><?php echo htmlspecialchars($orden['activo']); ?></span></td>
                 <td>
                     <ul>
                         <div>
@@ -110,13 +110,14 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
 </div>
 
 <!-- Modal de modificación de orden de despacho -->
-<div class="modal fade" id="modificar_orden_modal" tabindex="-1" role="dialog" aria-labelledby="modificar_orden_modal_label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade modal-modificar" id="modificarOrdenModal" tabindex="-1" role="dialog" 
+aria-labelledby="modificarOrdenModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-        <form id="modificarorden" method="POST">
+        <form id="modificarOrden" method="POST">
         <input type="hidden" name="accion" value="modificar">
             <div class="modal-header">
-            <h5 class="modal-title" id="modificar_orden_modal_label">Modificar Orden de Despacho</h5>
+            <h5 class="titulo-form" id="modificarOrdenModalLabel">Modificar Orden de Despacho</h5>
             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -124,12 +125,14 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
             <div class="modal-body">
                 <input type="hidden" id="modificar_id_orden" name="id_despachos">
                 <div class="form-group">
-                    <label for="modificar_fecha">Fecha</label>
-                    <input type="date" class="form-control" id="modificar_fecha" name="fecha_despacho" required>
-                </div>
-                <div class="form-group">
                     <label for="modificar_correlativo">Correlativo</label>
                     <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" required>
+                    <span class="span-value" id="smcorrelativo"></span>
+                </div>
+                <div class="form-group">
+                    <label for="modificar_fecha">Fecha</label>
+                    <input type="date" class="form-control" id="modificar_fecha" name="fecha" required>
+                    <span class="span-value" id="smfecha"></span>
                 </div>
                 <div class="form-group">
                     <label for="modificar_factura">Factura</label>
@@ -140,10 +143,10 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                         </option>
                     <?php endforeach; ?>
                     </select>
+                    <span class="span-value" id="smfactura"></span>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="submit" class="btn btn-primary">Modificar</button>
             </div>
         </form>
