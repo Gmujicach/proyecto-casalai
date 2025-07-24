@@ -37,7 +37,7 @@ class Usuarios extends BD {
     public function setActivo($activo) { $this->activo = $activo; }
 
     public function getUsuario() { return $this->usuarios; }
-    public function setUsuario($usuario) { $this->usuario = $usuario; }
+    public function setUsuario($usuario) { $this->usuarios = $usuario; }
 
     public function getEstatus() { return $this->estatus; }
     public function setEstatus($estatus) { $this->estatus = $estatus; }

@@ -388,7 +388,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion'])) {
 try {
     $productos = $productosModel->obtenerProductosConMarca();
     $marcas = $productosModel->obtenerMarcas();
-    $esAdmin = isset($_SESSION['nombre_rol']) && $_SESSION['nombre_rol'] == 'Administrador';
+    $esAdmin = isset($_SESSION['nombre_rol']) && 
+           ($_SESSION['nombre_rol'] == 'Administrador' || 
+            $_SESSION['nombre_rol'] == 'SuperUsuario');
     $combos = $productosModel->obtenerCombosDisponibles($esAdmin);
 } catch (PDOException $e) {
     $productos = [];

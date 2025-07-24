@@ -4,7 +4,7 @@
     Modificar <?= $nombre_singular ?>
 </h3>
 
-<p>En la <strong><?= $modificar_ubicacion ?></strong> de una <strong><?= $nombre_singular ?></strong> encontrara
+<p>En la <strong><?= $modificar_ubicacion ?></strong> de <strong><?= $nombre_singular ?></strong> encontrara
     el
     boton
     <strong>Modificar</strong>:
