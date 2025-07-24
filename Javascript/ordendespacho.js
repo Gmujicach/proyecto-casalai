@@ -144,21 +144,6 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on('click', '.btn-modificar', function (e) {
-        e.preventDefault(); // Evita que el enlace haga scroll o recargue
-    
-        var boton = $(this);
-    
-        // Llenar los campos del modal con los datos del botón
-        $('#modificar_id_orden').val(boton.data('id'));
-        $('#modificar_fecha').val(boton.data('fecha'));
-        $('#modificar_correlativo').val(boton.data('correlativo'));
-        $('#modificar_factura').val(boton.data('factura'));
-    
-        // Mostrar el modal
-        $('#modificarOrdenModal').modal('show');
-    });
-
     $(document).on('click', '.btn-modificar', function () {
         $('#modificar_id_orden').val($(this).data('id'));
         $('#modificar_correlativo').val($(this).data('correlativo'));
