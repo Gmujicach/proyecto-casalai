@@ -34,7 +34,8 @@ aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
                     </div>
                     <div class="envolver-form">
                         <label for="cliente">Cliente (Buscar por nombre o cédula)</label>
-                        <select class="form-select select2-cliente" name="cliente" id="cliente" style="width: 100%;">
+                        <input type="text" id="buscarCliente" placeholder="Escriba para buscar..." class="control-form">
+                        <select class="form-select" name="cliente" id="cliente" style="width: 100%;" size="5">
                             <option value='disabled' disabled selected>Seleccione el Cliente</option>
                             <?php
                             foreach ($proveedores as $proveedor) {
@@ -43,7 +44,7 @@ aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
                             } ?>
                         </select>
                     </div>
-        
+                            
                     <div class="envolver-form">
                         <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
                         <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
@@ -589,6 +590,15 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 <?php include 'footer.php'; ?>
+
+<!-- jQuery primero -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 CSS y JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Tus scripts -->
 <script src="javascript/comprafisica.js"></script>
 <script src="javascript/validaciones.js"></script>
 
