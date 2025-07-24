@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-07-2025 a las 00:39:38
+-- Tiempo de generación: 24-07-2025 a las 02:51:58
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `casalai`
 --
-CREATE DATABASE IF NOT EXISTS `casalai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `casalai`;
 
 -- --------------------------------------------------------
 
@@ -217,7 +215,8 @@ INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `tel
 (10, 'Gabriel Mujica', '29958676', 'mi casa', '0424-678-8765', 'fhhggjjkkkj@gmail.com', 1),
 (11, 'Edith Urdaneta', '10844463', 'Los Horcones', '0416-747-4336', 'urdavedith.pnfi@gmail.com', 1),
 (12, 'Diego Lopez', '31766917', 'Venezuela estado Zulia\r\nMaracaibo', '0414-575-3363', 'diego0510lopez@gmail.com', 1),
-(13, 'Diego Lopez', '5322432', '', '0414-575-3363', 'diego0510lopez@gmail.com', 1);
+(13, 'Diego Lopez', '5322432', '', '0414-575-3363', 'diego0510lopez@gmail.com', 1),
+(14, 'Braynt Medina', '28406324', 'calle 3 entre carrera 5 y 2', '0426-150-4714', 'darckortgame@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -873,7 +872,7 @@ ALTER TABLE `tbl_categoria`
 -- AUTO_INCREMENT de la tabla `tbl_clientes`
 --
 ALTER TABLE `tbl_clientes`
-  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_combo`
