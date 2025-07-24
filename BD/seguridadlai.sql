@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-07-2025 a las 00:40:04
+-- Tiempo de generación: 24-07-2025 a las 02:52:17
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `seguridadlai`
 --
-CREATE DATABASE IF NOT EXISTS `seguridadlai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `seguridadlai`;
 
 -- --------------------------------------------------------
 
@@ -748,7 +746,8 @@ INSERT INTO `tbl_usuarios` (`id_usuario`, `username`, `password`, `cedula`, `id_
 (9, 'CasaLai', '$2y$10$KXRg/AUD.9Y7KubEvzy71e5dDR1GvGNy23XegAYwLjYWOBdcxzqx2', '30456789', 6, 'diego0510lopez@gmail.com', 'Casa', 'Lai', '0414-575-3363', 'habilitado'),
 (10, 'Gmujica', '$2y$10$iZNeKonr6qr.P109rwgEFOCc7Y.0E47sD/88YfB.Jyx6niGpf4CQi', '29958676', 3, 'fhhggjjkkkj@gmail.com', 'Gabriel', 'Mujica', '0424-678-8765', 'habilitado'),
 (11, 'edithu', '$2y$10$YfEtJDHi9CNZR1Xpx7J9Ze8CMx3g99o1dJ3h.RRZPXqlJjxWbT5Fi', '10844463', 3, 'urdavedith.pnfi@gmail.com', 'Edith', 'Urdaneta', '0416-747-4336', 'habilitado'),
-(15, 'Pato', '$2y$10$2OgFNgMxHcDgqjCvfCHsVOYLkc6Qq3QqSalImRPOaP51loMFpFHsa', '5322432', 1, 'diego0510lopez@gmail.com', 'Diego', 'Lopez', '0414-575-3363', 'habilitado');
+(15, 'Pato', '$2y$10$2OgFNgMxHcDgqjCvfCHsVOYLkc6Qq3QqSalImRPOaP51loMFpFHsa', '5322432', 1, 'diego0510lopez@gmail.com', 'Diego', 'Lopez', '0414-575-3363', 'habilitado'),
+(16, 'Darckort', '$2y$10$1xavkBCftrr0QLclZTk77eduhFhvGa3uWiuCva2qHKMQ/otwoGYaa', '28406324', 6, 'darckortgame@gmail.com', 'Braynt', 'Medina', '0426-150-4714', 'habilitado');
 
 --
 -- Índices para tablas volcadas
@@ -847,7 +846,7 @@ ALTER TABLE `tbl_rol`
 -- AUTO_INCREMENT de la tabla `tbl_usuarios`
 --
 ALTER TABLE `tbl_usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas
