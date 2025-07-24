@@ -167,6 +167,16 @@ aria-labelledby="modificarOrdenModalLabel" aria-hidden="true">
 <script src="javascript/sweetalert2.all.min.js"></script>
 <script src="javascript/usuario.js"></script>
 <script src="javascript/validaciones.js"></script>
+<script>
+window.facturasDisponibles = <?php
+echo json_encode(array_map(function($factura) {
+    return [
+        'id_factura' => $factura['id_factura'],
+        'factura' => 'Factura #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']
+    ];
+}, $facturas));
+?>;
+</script>
 <script src="javascript/ordendespacho.js"></script>
 <script>
 $(document).ready(function() {
