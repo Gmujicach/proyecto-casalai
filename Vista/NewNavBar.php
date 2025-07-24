@@ -169,6 +169,7 @@ foreach ($modulos as $moduloBD => $info) {
 
         if (in_array($nombre_rol, ['SuperUsuario'])) {
             echo '<li><a href="?pagina=backup"><span class="simbolo"><img src="img/files.svg" class="icono-svg" />Gestionar Respaldo</span></a></li>';
+            echo '<li><a href="?pagina=comprafisica"><span class="simbolo"><img src="img/files.svg" class="icono-svg" />Compra Fisica</span></a></li>';
         }
          }
         ?>

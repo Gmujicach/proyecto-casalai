@@ -271,9 +271,8 @@ $totalProductosDespachados = array_sum($productosDespachados);
 </div>
 </div>
 <!-- Scripts para gráfica y PDF -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 <script>
 const datosOriginales = <?= json_encode($despachos ?? $recepciones) ?>; // Usa la variable PHP correcta
 const tipo = "<?= isset($despachos) ? 'despacho' : 'recepcion' ?>";
@@ -465,6 +464,10 @@ document.addEventListener('DOMContentLoaded', generarReporte);
     </div>
   </div>
 </div>
+<!-- jQuery primero -->
+
+<!-- Select2 CSS y JS (deben ir antes que comprafisica.js) -->
+
 
 	<script>
 const productosDisponibles = <?= json_encode($productos) ?>;
@@ -579,8 +582,6 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 });
 </script>
 
-    <script src="javascript/despacho.js"></script>
-    <script src="javascript/validaciones.js"></script>
 
 
 </body>
@@ -588,7 +589,8 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 <?php include 'footer.php'; ?>
-
+<script src="javascript/comprafisica.js"></script>
+<script src="javascript/validaciones.js"></script>
 
 <?php
 } else {
