@@ -267,7 +267,7 @@ $(document).ready(function () {
                     if (respuesta.status === 'success') {
                         Swal.fire(
                             'Eliminado!',
-                            'La orden de despacho ha sido eliminada.',
+                            'La orden de despacho ha sido Anulada correctamente.',
                             'success'
                         ).then(function() {
                             eliminarFilaOrden(id);

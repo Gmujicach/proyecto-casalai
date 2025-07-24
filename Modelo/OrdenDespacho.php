@@ -131,7 +131,7 @@ class OrdenDespacho extends BD {
 
     // Método para eliminar una orden de despacho
     public function eliminarOrdenDespacho($id) {
-        $sql = "DELETE FROM tbl_orden_despachos WHERE id_orden_despachos = :id";
+        $sql = "UPDATE tbl_orden_despachos SET activo = 0 WHERE id_orden_despachos = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
