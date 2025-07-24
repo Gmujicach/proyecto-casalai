@@ -15,6 +15,7 @@ $modulos = [
     'Modelos' => ['Gestionar Modelos', 'img/package-search.svg', '?pagina=modelo'],
     'Productos' => ['Gestionar Productos', 'img/package-search.svg', '?pagina=producto'],
     'Categorias' => ['Gestionar Categorias', 'img/package-search.svg', '?pagina=categoria'],
+    'comprafisica' => ['Gestionar Compra Fisica', 'img/files.svg', '?pagina=comprafisica'],
     'Proveedores' => ['Gestionar Proveedores', 'img/truck.svg', '?pagina=proveedor'],
     'Clientes' => ['Gestionar Clientes', 'img/users-round.svg', '?pagina=cliente'],
     'Catalogo' => ['Gestionar Catálogo', 'img/book-open.svg', '?pagina=catalogo'],
@@ -138,7 +139,7 @@ foreach ($modulos as $moduloBD => $info) {
             'Administrar Productos' => ['Marcas', 'Modelos', 'Productos', 'Categorias'],
             'Administrar Proveedores' => ['Proveedores'],
             'Administrar Clientes' => ['Clientes'],
-            'Administrar Ventas' => ['Catalogo', 'carrito', 'pasarela', 'Prefactura', 'Ordenes de despacho'],
+            'Administrar Ventas' => ['Catalogo', 'comprafisica', 'carrito', 'pasarela', 'Prefactura', 'Ordenes de despacho'],
             'Administrar Finanzas' => ['Cuentas bancarias', 'Finanzas'],
             'Administrar Seguridad' => ['permisos', 'Roles', 'bitacora', 'Respaldo'],
         ];
@@ -168,6 +169,7 @@ foreach ($modulos as $moduloBD => $info) {
 
         if (in_array($nombre_rol, ['SuperUsuario'])) {
             echo '<li><a href="?pagina=backup"><span class="simbolo"><img src="img/files.svg" class="icono-svg" />Gestionar Respaldo</span></a></li>';
+            echo '<li><a href="?pagina=comprafisica"><span class="simbolo"><img src="img/files.svg" class="icono-svg" />Compra Fisica</span></a></li>';
         }
          }
         ?>
