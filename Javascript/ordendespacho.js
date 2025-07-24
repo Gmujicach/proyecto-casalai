@@ -55,7 +55,7 @@ $(document).ready(function () {
                 <div>
                     <button class="btn-eliminar"
                         data-id="${orden.id_orden_despachos}">
-                        Eliminar
+                        Anular
                     </button>
                 </div>
             </ul>`
@@ -194,7 +194,7 @@ $(document).ready(function () {
                         <div>
                             <button class="btn-eliminar"
                                 data-id="${orden.id_orden_despachos}">
-                                Eliminar
+                                Anular
                             </button>
                         </div>
                     </ul>`
