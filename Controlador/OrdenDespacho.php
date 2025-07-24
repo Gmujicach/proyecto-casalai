@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                     $ordendespacho = new OrdenDespacho();
                     $ordendespacho->setId($id);
-                    $ordendespacho->setFecha($_POST['fecha_despacho']);
+                    $ordendespacho->setFecha($_POST['fecha']);
                     $ordendespacho->setFactura($_POST['factura']);
                     $ordendespacho->setCorrelativo($_POST['correlativo']);
                     if ($ordendespacho->modificarOrdenDespacho($id)) {
