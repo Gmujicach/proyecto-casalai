@@ -233,91 +233,163 @@ foreach ($despachos as $d) {
 $totalProductosDespachados = array_sum($productosDespachados);
 ?>
 
-<!-- Reporte estadístico de Despachos -->
+<div style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+   
+<div class="reporte-parametros" style="margin-bottom: 30px; text-align:center;">
+  <div class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+    <label for="fechaInicio">Fecha inicio:</label>
+    <input type="date" id="fechaInicio" class="form-control" style="width:160px;">
+    <label for="fechaFin">Fecha fin:</label>
+    <input type="date" id="fechaFin" class="form-control" style="width:160px;">
+    <label for="tipoGrafica">Tipo de gráfica:</label>
+    <select id="tipoGrafica" class="form-select" style="width:200px;">
+      <option value="bar">Barras</option>
+      <option value="pie">Pastel</option>
+      <option value="line">Líneas</option>
+      <option value="doughnut">Donas</option>
+      <option value="polarArea">Área Polar</option>
+    </select>
+    <button id="generarReporteBtn" class="btn btn-primary">Generar</button>
+    <button id="descargarPDF" class="btn btn-success">Descargar PDF</button>
+  </div>
+</div>
+
 <div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+    
     <h3 style="text-align:center; color:#1f66df;">Reporte de Despachos</h3>
-    <p><b>Total de Despachos:</b> <?= $totalDespachos ?></p>
-    <p><b>Total de Productos Despachados:</b> <?= $totalProductosDespachados ?></p>
     <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
         <div style="flex:1; min-width:220px; text-align:center;">
             <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
-                <canvas id="graficoProductosDespachados" width="220" height="220"></canvas>
+                <canvas id="graficoReporte" width="400" height="400"></canvas>
             </div>
         </div>
         <div style="flex:2; min-width:320px;">
-            <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad Despachada</th>
-                        <th>Porcentaje (%)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($productosDespachados as $nombre => $cantidad): 
-                        $porcentaje = $totalProductosDespachados > 0 ? round(($cantidad / $totalProductosDespachados) * 100, 2) : 0;
-                    ?>
-                        <tr>
-                            <td><?= htmlspecialchars($nombre) ?></td>
-                            <td><?= $cantidad ?></td>
-                            <td><?= $porcentaje ?>%</td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Total</th>
-                        <th><?= $totalProductosDespachados ?></th>
-                        <th>100%</th>
-                    </tr>
-                </tfoot>
-            </table>
-            <div style="text-align:center; margin-top:20px;">
-                <button id="descargarPDFDespacho" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
-                    Descargar Reporte de Despachos
-                </button>
-            </div>
+            <div id="tablaReporte"></div>
         </div>
     </div>
 </div>
-
+</div>
 <!-- Scripts para gráfica y PDF -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-const labelsDespacho = <?= json_encode(array_keys($productosDespachados)) ?>;
-const dataDespacho = <?= json_encode(array_values($productosDespachados)) ?>;
-function generarColores(n) {
-    const colores = [];
-    for (let i = 0; i < n; i++) {
-        const hue = Math.round((360 / n) * i);
-        colores.push(`hsl(${hue}, 70%, 60%)`);
-    }
-    return colores;
-}
-const coloresDespacho = generarColores(labelsDespacho.length || 1);
-const ctxDespacho = document.getElementById('graficoProductosDespachados').getContext('2d');
-new Chart(ctxDespacho, {
-    type: 'pie',
-    data: {
-        labels: labelsDespacho.length ? labelsDespacho : ['Sin datos'],
-        datasets: [{
-            data: dataDespacho.length ? dataDespacho : [1],
-            backgroundColor: coloresDespacho,
-            borderColor: '#fff',
-            borderWidth: 2
-        }]
-    },
-    options: {
-        plugins: {
-            legend: { display: true, position: 'bottom' },
-            title: { display: true, text: 'Productos más despachados' }
-        }
-    }
-});
+const datosOriginales = <?= json_encode($despachos ?? $recepciones) ?>; // Usa la variable PHP correcta
+const tipo = "<?= isset($despachos) ? 'despacho' : 'recepcion' ?>";
 
-document.getElementById('descargarPDFDespacho').addEventListener('click', function () {
+function filtrarPorFechas(datos, inicio, fin) {
+    return datos.filter(d => {
+        const fecha = tipo === 'despacho' ? d.fecha_despacho : d.fecha;
+        return (!inicio || fecha >= inicio) && (!fin || fecha <= fin);
+    });
+}
+
+function generarColores(n) {
+    return Array.from({length: n}, (_, i) => `hsl(${(360 / n) * i}, 70%, 60%)`);
+}
+
+function generarReporte() {
+    const fechaInicio = document.getElementById('fechaInicio').value;
+    const fechaFin = document.getElementById('fechaFin').value;
+    const tipoGrafica = document.getElementById('tipoGrafica').value;
+
+    // Validación de fechas
+    if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
+        Swal.fire('Error', 'La fecha inicial no puede ser mayor que la fecha final', 'error');
+        return;
+    }
+
+    // Filtrar datos
+    const datosFiltrados = filtrarPorFechas(datosOriginales, fechaInicio, fechaFin);
+
+    // Agrupar productos y sumar cantidades
+    let productosAgrupados = {};
+    let total = 0;
+    if (tipo === 'despacho') {
+        datosFiltrados.forEach(d => {
+            const nombre = d.nombre_producto;
+            const cantidad = parseInt(d.cantidad);
+            productosAgrupados[nombre] = (productosAgrupados[nombre] || 0) + cantidad;
+            total += cantidad;
+        });
+    } else {
+        datosFiltrados.forEach(d => {
+            const nombre = d.nombre_producto;
+            const cantidad = parseInt(d.cantidad);
+            productosAgrupados[nombre] = (productosAgrupados[nombre] || 0) + cantidad;
+            total += cantidad;
+        });
+    }
+
+    // Generar gráfica
+    const labels = Object.keys(productosAgrupados);
+    const data = Object.values(productosAgrupados);
+    const colores = generarColores(labels.length || 1);
+
+    // Actualizar tabla
+    let tablaHtml = `
+        <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Porcentaje (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    labels.forEach((nombre, i) => {
+        const porcentaje = total > 0 ? ((data[i] / total) * 100).toFixed(2) : 0;
+        tablaHtml += `<tr>
+            <td>${nombre}</td>
+            <td>${data[i]}</td>
+            <td>${porcentaje}%</td>
+        </tr>`;
+    });
+    tablaHtml += `
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th>${total}</th>
+                    <th>100%</th>
+                </tr>
+            </tfoot>
+        </table>
+    `;
+    document.getElementById('tablaReporte').innerHTML = tablaHtml;
+
+    // Actualizar gráfica
+    const canvas = document.getElementById('graficoReporte');
+    canvas.width = 400;
+    canvas.height = 400;
+    const ctx = canvas.getContext('2d');
+    if (window.reporteChart) window.reporteChart.destroy();
+    window.reporteChart = new Chart(ctx, {
+        type: tipoGrafica,
+        data: {
+            labels: labels.length ? labels : ['Sin datos'],
+            datasets: [{
+                data: data.length ? data : [1],
+                backgroundColor: colores,
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: true, position: 'bottom' },
+                title: { display: true, text: tipo === 'despacho' ? 'Productos más despachados' : 'Productos más recibidos' }
+            }
+        }
+    });
+}
+
+// Botón generar
+document.getElementById('generarReporteBtn').addEventListener('click', generarReporte);
+
+// Botón descargar PDF
+document.getElementById('descargarPDF').addEventListener('click', function () {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
         orientation: 'portrait',
@@ -326,16 +398,19 @@ document.getElementById('descargarPDFDespacho').addEventListener('click', functi
     });
 
     const reporte = document.querySelector('.reporte-container');
-    html2canvas(reporte).then(canvas => {
+    html2canvas(reporte, { scale: 2 }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
         const pageWidth = doc.internal.pageSize.getWidth();
         const imgWidth = pageWidth - 40;
         const imgHeight = canvas.height * imgWidth / canvas.width;
 
         doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
-        doc.save('Reporte_Despachos.pdf');
+        doc.save(tipo === 'despacho' ? 'Reporte_Despachos.pdf' : 'Reporte_Recepciones.pdf');
     });
 });
+
+// Generar reporte inicial
+document.addEventListener('DOMContentLoaded', generarReporte);
 </script>
 		<?php include 'footer.php'; ?>
 	
