@@ -38,35 +38,31 @@ $(document).ready(function () {
     }
 
     function agregarFilaOrden(orden) {
-        const nuevaFila = `
-            <tr data-id="${orden.id_orden_despachos}">
-                <td><span class="campo-numeros">${orden.correlativo}</span></td>
-                <td><span class="campo-nombres">${orden.fecha_despacho}</span></td>
-                <td><span class="campo-numeros">${orden.activo}</span></td>
-                <td>
-                    <ul>
-                        <div>
-                            <button class="btn-modificar"
-                                id="btnModificarOrden"
-                                data-id="${orden.id_orden_despachos}"
-                                data-correlativo="${orden.correlativo}"
-                                data-fecha="${orden.fecha_despacho}"
-                                data-factura="${orden.id_factura}">
-                                Modificar
-                            </button>
-                        </div>
-                        <div>
-                            <button class="btn-eliminar"
-                                data-id="${orden.id_orden_despachos}">
-                                Eliminar
-                            </button>
-                        </div>
-                    </ul>
-                </td>
-            </tr>
-        `;
+        const nuevaFila = [
+            `<span class="campo-numeros">${orden.correlativo}</span>`,
+            `<span class="campo-nombres">${orden.fecha_despacho}</span>`,
+            `<span class="campo-numeros">${orden.activo}</span>`,
+            `<ul>
+                <div>
+                    <button class="btn-modificar"
+                        data-id="${orden.id_orden_despachos}"
+                        data-correlativo="${orden.correlativo}"
+                        data-fecha="${orden.fecha_despacho}"
+                        data-factura="${orden.id_factura}">
+                        Modificar
+                    </button>
+                </div>
+                <div>
+                    <button class="btn-eliminar"
+                        data-id="${orden.id_orden_despachos}">
+                        Eliminar
+                    </button>
+                </div>
+            </ul>`
+        ];
         const tabla = $('#tablaConsultas').DataTable();
-        tabla.row.add($(nuevaFila)).draw(false);
+        const rowIdx = tabla.row.add(nuevaFila).draw(false).index();
+        $(tabla.row(rowIdx).node()).attr('data-id', orden.id_orden_despachos);
         tabla.page('last').draw('page');
     }
 
@@ -182,9 +178,9 @@ $(document).ready(function () {
                 let orden = respuesta.orden; // El backend debe retornar el modelo actualizado
                 let fila = $(`tr[data-id="${orden.id_orden_despachos}"]`);
                 const nuevaFila = [
-                    `<span class="campo-correlativo">${orden.correlativo}</span>`,
-                    `<span class="campo-fecha">${orden.fecha_despacho}</span>`,
-                    `<span class="campo-factura">${orden.activo}</span>`,
+                    `<span class="campo-numeros">${orden.correlativo}</span>`,
+                    `<span class="campo-nombres">${orden.fecha_despacho}</span>`,
+                    `<span class="campo-numeros">${orden.activo}</span>`,
                     `<ul>
                         <div>
                             <button class="btn-modificar"

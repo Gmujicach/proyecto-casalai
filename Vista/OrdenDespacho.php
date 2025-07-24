@@ -126,7 +126,7 @@ aria-labelledby="modificarOrdenModalLabel" aria-hidden="true">
                 <input type="hidden" id="modificar_id_orden" name="id_despachos">
                 <div class="form-group">
                     <label for="modificar_correlativo">Correlativo</label>
-                    <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" required>
+                    <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" maxlength="10" required>
                     <span class="span-value" id="smcorrelativo"></span>
                 </div>
                 <div class="form-group">
