@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     switch ($accion) {
-                case 'permisos_tiempo_real':
+        case 'permisos_tiempo_real':
             header('Content-Type: application/json; charset=utf-8');
             $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, 'Ordenes de despacho');
             echo json_encode($permisosActualizados);
@@ -37,23 +37,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // Validar que el correlativo no exista
             if (!$ordendespacho->validarCorrelativo()) {
-
                 echo json_encode(['status' => 'error', 'message' => 'Este correlativo ya existe']);
             } else {
                 if ($ordendespacho->ingresarOrdenDespacho()) {
+                    $ordenRegistrada = $ordendespacho->obtenerUltimaOrden();
+
+                    echo json_encode([
+                        'status' => 'success',
+                        'message' => 'Orden de despacho registrada correctamente',
+                        'orden' => $ordenRegistrada
+                    ]);
+
                     $bitacoraModel->registrarAccion('Registro de orden de despacho: ' . $_POST['correlativo'],
                     MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
-                    echo json_encode(['status' => 'success', 'message' => 'Orden ingresada correctamente']);
-
                     exit;
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Error al ingresar la orden de despacho']);
+                    echo json_encode(['status' => 'error', 'message' => 'Error al registrar la orden de despacho']);
                 }
             }
             break;
 
             case 'obtenerOrden':
-                $id = $_POST['id'] ?? null; // Usa 'id' para que coincida con el JS
+                $id = $_POST['id_despachos'] ?? null; // Usa 'id' para que coincida con el JS
             
                 if ($id !== null) {
                     $ordenModel = new OrdenDespacho();
@@ -79,37 +84,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
             
 
-        case 'modificar':
-            $id = $_POST['id_despachos'];
-            $ordendespacho = new OrdenDespacho();
-            $ordendespacho->setId($id);
-            $ordendespacho->setFecha($_POST['fecha_despacho']);
-            $ordendespacho->setFactura($_POST['factura']);
-            $ordendespacho->setCorrelativo($_POST['correlativo']);
-            if ($ordendespacho->modificarOrdenDespacho($id)) {
-                $bitacoraModel->registrarAccion('Modificación de orden de despacho: ' . $_POST['correlativo'],
-                MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al modificar el Usuario']);
-            }
-            break;
+            case 'modificar':
+                $id = isset($_POST['id_despachos']) ? $_POST['id_despachos'] : null;
+                if ($id === null) {
+                    echo json_encode(['status' => 'error', 'message' => 'ID no proporcionado']);
+                    exit;
+                }
+                    $ordendespacho = new OrdenDespacho();
+                    $ordendespacho->setId($id);
+                    $ordendespacho->setFecha($_POST['fecha']);
+                    $ordendespacho->setFactura($_POST['factura']);
+                    $ordendespacho->setCorrelativo($_POST['correlativo']);
+                    if ($ordendespacho->modificarOrdenDespacho($id)) {
+                        $ordenActualizada = $ordendespacho->obtenerOrdenPorId($id);
 
-        case 'eliminar':
-            $id = $_POST['id'];
-            $ordendespachoModel = new OrdenDespacho();
-            if ($ordendespachoModel->eliminarOrdenDespacho($id)) {
-                $bitacoraModel->registrarAccion('Eliminación de orden de despacho: (ID: ' . $id . ')',
-                MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
-                echo json_encode(['status' => 'success']);
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'Error al eliminar el producto']);
-            }
-            break;
+                        echo json_encode([
+                            'status' => 'success',
+                            'message' => 'Orden de despacho modificada correctamente',
+                            'orden' => $ordenActualizada
+                        ]);
 
-        default:
-        echo json_encode(['status' => 'error', 'message' => 'Acción no válida', 'accion' => $accion]);
-        break;
+                        $bitacoraModel->registrarAccion('Modificación de orden de despacho: ' . $_POST['correlativo'],
+                        MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'Error al modificar la orden de despacho']);
+                    }
+                break;
+
+            case 'eliminar':
+               $id = $_POST['id'] ?? null;
+                $ordendespachoModel = new OrdenDespacho();
+                if ($ordendespachoModel->eliminarOrdenDespacho($id)) {
+                    $bitacoraModel->registrarAccion('Eliminación de orden de despacho: (ID: ' . $id . ')',
+                    MODULO_ORDEN_DESPACHO, $_SESSION['id_usuario']);
+                    echo json_encode(['status' => 'success']);
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Error al eliminar la orden de despacho']);
+                }
+                break;
+
+            default:
+                echo json_encode(['status' => 'error', 'message' => 'Acción no válida', 'accion' => $accion]);
+            break;
 
 
         // Cambiar estatus
@@ -137,9 +153,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     exit;
 }
-
-
-
 
 function getordendespacho() {
     $ordendespacho = new OrdenDespacho();

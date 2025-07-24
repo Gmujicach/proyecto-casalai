@@ -563,6 +563,24 @@ JOIN
         }
     }
 
+   
+public function obtenerProductosPorCategoria($nombreCategoria) {
+    $sql = "SELECT p.nombre_producto, p.stock
+            FROM tbl_productos p
+            INNER JOIN tbl_categoria c ON p.id_categoria = c.id_categoria
+            WHERE c.nombre_categoria = :nombre_categoria";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->bindParam(':nombre_categoria', $nombreCategoria);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function obtenerProductosConPrecios() {
+    $sql = "SELECT nombre_producto, precio FROM tbl_productos";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
     //catalogo
     public function obtenerMarcas() {
     $query = "SELECT id_marca, nombre_marca FROM tbl_marcas";

@@ -7,20 +7,20 @@
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'header.php'; ?>
-    <title>Gestionar Despacho</title>
+    <title>Gestionar Compra Fisica</title>
 </head>
 
 <?php include 'newnavbar.php'; ?>
 
 <body class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
-<div class="modal fade modal-registrar" id="registrarDespachoModal" tabindex="-1" role="dialog" 
-aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
+<div class="modal fade modal-registrar" id="registrarCompraFisicaModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="f" method="POST">
                 <div class="modal-header">
-                    <h5 class="titulo-form" id="registrarDespachoModalLabel">Incluir Despacho</h5>
+                    <h5 class="titulo-form" id="registrarCompraFisicaModalLabel">Incluir Compra</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -33,16 +33,18 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
                         <span id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
-                        <label for="cliente">Cliente</label>
-                        <select class="form-select" name="cliente" id="cliente">
+                        <label for="cliente">Cliente (Buscar por nombre o cédula)</label>
+                        <input type="text" id="buscarCliente" placeholder="Escriba para buscar..." class="control-form">
+                        <select class="form-select" name="cliente" id="cliente" style="width: 100%;" size="5">
                             <option value='disabled' disabled selected>Seleccione el Cliente</option>
                             <?php
-                            foreach ($proveedores  as $proveedor) {
-                                echo "<option value='" . $proveedor['id_clientes'] . "'>" . $proveedor['nombre'] . "</option>";
+                            foreach ($proveedores as $proveedor) {
+                                echo "<option value='" . $proveedor['id_clientes'] . "' data-cedula='" . $proveedor['cedula'] . "'>" . 
+                                    htmlspecialchars($proveedor['nombre'] . " - C.I. " . $proveedor['cedula']) . "</option>";
                             } ?>
                         </select>
                     </div>
-        
+                            
                     <div class="envolver-form">
                         <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
                         <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
@@ -120,7 +122,7 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
     </div>
 
 
-<h3>Lista de Despachos</h3>
+<h3>Lista de Compras Físicas en Local</h3>
 <table class="tablaConsultas" id="tablaConsultas">
     <thead>
         <tr>
@@ -270,9 +272,8 @@ $totalProductosDespachados = array_sum($productosDespachados);
 </div>
 </div>
 <!-- Scripts para gráfica y PDF -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 <script>
 const datosOriginales = <?= json_encode($despachos ?? $recepciones) ?>; // Usa la variable PHP correcta
 const tipo = "<?= isset($despachos) ? 'despacho' : 'recepcion' ?>";
@@ -464,6 +465,10 @@ document.addEventListener('DOMContentLoaded', generarReporte);
     </div>
   </div>
 </div>
+<!-- jQuery primero -->
+
+<!-- Select2 CSS y JS (deben ir antes que comprafisica.js) -->
+
 
 	<script>
 const productosDisponibles = <?= json_encode($productos) ?>;
@@ -578,8 +583,6 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 });
 </script>
 
-    <script src="javascript/despacho.js"></script>
-    <script src="javascript/validaciones.js"></script>
 
 
 </body>
@@ -588,6 +591,16 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 <?php include 'footer.php'; ?>
 
+<!-- jQuery primero -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 CSS y JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Tus scripts -->
+<script src="javascript/comprafisica.js"></script>
+<script src="javascript/validaciones.js"></script>
 
 <?php
 } else {

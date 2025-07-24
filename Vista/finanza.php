@@ -69,48 +69,40 @@
         </tbody>
     </table>
 </div>
+<div style="max-width:1200px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
 
-
-<!-- Reporte Estadístico de Ingresos y Egresos -->
-<div class="reporte-container" style="max-width:1100px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-   <div style="flex:1; min-width:480px;">
-    <h4 style="text-align:center; color:#2980b9;">Ingresos vs Egresos por Mes</h4>
-    <canvas id="graficoFinanzas" width="480" height="320"></canvas>
-    <table class="table table-bordered table-striped" style="margin:20px auto 0 auto; width:100%;">
-        <thead>
-            <tr>
-                <th>Mes</th>
-                <th>Ingresos</th>
-                <th>Egresos</th>
-                <th>Balance</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($meses as $mes): ?>
-                <tr>
-                    <td><?= date('F Y', strtotime($mes.'-01')) ?></td>
-                    <td><?= number_format($ingresosPorMes[$mes] ?? 0, 2) ?></td>
-                    <td><?= number_format($egresosPorMes[$mes] ?? 0, 2) ?></td>
-                    <td><?= number_format(($ingresosPorMes[$mes] ?? 0) - ($egresosPorMes[$mes] ?? 0), 2) ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Total</th>
-                <th><?= number_format($totalIngresos,2) ?></th>
-                <th><?= number_format($totalEgresos,2) ?></th>
-                <th><?= number_format($totalIngresos - $totalEgresos,2) ?></th>
-            </tr>
-        </tfoot>
-    </table>
+<div class="reporte-parametros" style="margin-bottom: 30px; text-align:center;">
+  <div class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+    <label for="fechaInicio">Fecha inicio:</label>
+    <input type="date" id="fechaInicio" class="form-control" style="width:160px;">
+    <label for="fechaFin">Fecha fin:</label>
+    <input type="date" id="fechaFin" class="form-control" style="width:160px;">
+    <label for="tipoGrafica">Tipo de gráfica:</label>
+    <select id="tipoGrafica" class="form-select" style="width:200px;">
+      <option value="bar">Barras</option>
+      <option value="line">Líneas</option>
+      <option value="pie">Pastel</option>
+      <option value="doughnut">Donas</option>
+      <option value="polarArea">Área Polar</option>
+    </select>
+    <button id="generarReporteBtn" class="btn btn-primary">Generar</button>
+    <button id="descargarPDF" class="btn btn-success">Descargar PDF</button>
+  </div>
 </div>
+<div class="reporte-container" style="max-width:1200px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+    <h3 style="text-align:center; color:#1f66df;">Reporte de Finanzas</h3>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+        <div style="flex:1; min-width:320px; text-align:center;">
+            <div class="grafica-container" style="max-width:600px; margin:0 auto 24px auto;">
+                <canvas id="graficoFinanzas" width="600" height="400"></canvas>
+            </div>
+        </div>
+        <div style="flex:2; min-width:320px;">
+            <div id="tablaReporte"></div>
+        </div>
     </div>
-    <div style="text-align:center; margin-top:30px;">
-        <button id="descargarPDFFinanzas" class="btn btn-success" style="padding:10px 24px; font-size:16px; border-radius:6px; background:#27ae60; color:#fff; border:none; cursor:pointer;">
-            Descargar Reporte de Finanzas
-        </button>
-    </div>
+</div>
+
 </div>
     </div>
 </div>
@@ -123,46 +115,155 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-const labelsMeses = <?= json_encode(array_map(function($m){ return date('M Y', strtotime($m.'-01')); }, $meses)) ?>;
-const dataIngresos = <?= json_encode(array_values(array_map(function($m) use ($ingresosPorMes){ return isset($ingresosPorMes[$m]) ? (float)$ingresosPorMes[$m] : 0; }, $meses))) ?>;
-const dataEgresos = <?= json_encode(array_values(array_map(function($m) use ($egresosPorMes){ return isset($egresosPorMes[$m]) ? (float)$egresosPorMes[$m] : 0; }, $meses))) ?>;
+const ingresos = <?= json_encode($finanzas['ingresos'] ?? []) ?>;
+const egresos = <?= json_encode($finanzas['egresos'] ?? []) ?>;
 
-const ctxFinanzas = document.getElementById('graficoFinanzas').getContext('2d');
-new Chart(ctxFinanzas, {
-    type: 'bar',
-    data: {
-        labels: labelsMeses,
-        datasets: [
-            {
-                label: 'Ingresos',
-                data: dataIngresos,
-                backgroundColor: 'rgba(39, 174, 96, 0.7)',
-                borderColor: 'rgba(39, 174, 96, 1)',
-                borderWidth: 1
-            },
-            {
-                label: 'Egresos',
-                data: dataEgresos,
-                backgroundColor: 'rgba(231, 76, 60, 0.7)',
-                borderColor: 'rgba(231, 76, 60, 1)',
-                borderWidth: 1
-            }
-        ]
-    },
-    options: {
-        plugins: {
-            legend: { display: true, position: 'top' },
-            title: { display: true, text: 'Ingresos vs Egresos por Mes' }
-        },
-        scales: {
-            x: { beginAtZero: true },
-            y: { beginAtZero: true }
-        }
+function generarColores(n) {
+    return Array.from({length: n}, (_, i) => `hsl(${(360 / n) * i}, 70%, 60%)`);
+}
+
+function filtrarPorFechas(datos, inicio, fin) {
+    return datos.filter(d => {
+        return (!inicio || d.fecha >= inicio) && (!fin || d.fecha <= fin);
+    });
+}
+
+function agruparPorMes(datos) {
+    const agrupado = {};
+    datos.forEach(d => {
+        const mes = d.fecha.substr(0,7); // YYYY-MM
+        if (!agrupado[mes]) agrupado[mes] = 0;
+        agrupado[mes] += parseFloat(d.monto);
+    });
+    return agrupado;
+}
+
+function generarReporte() {
+    const fechaInicio = document.getElementById('fechaInicio').value;
+    const fechaFin = document.getElementById('fechaFin').value;
+    const tipoGrafica = document.getElementById('tipoGrafica').value;
+
+    // Validación de fechas
+    if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
+        Swal.fire('Error', 'La fecha inicial no puede ser mayor que la fecha final', 'error');
+        return;
     }
-});
 
-// Botón PDF (igual que antes)
-document.getElementById('descargarPDFFinanzas').addEventListener('click', function () {
+    // Filtrar datos
+    const ingresosFiltrados = filtrarPorFechas(ingresos, fechaInicio, fechaFin);
+    const egresosFiltrados = filtrarPorFechas(egresos, fechaInicio, fechaFin);
+
+    // Agrupar por mes
+    const ingresosPorMes = agruparPorMes(ingresosFiltrados);
+    const egresosPorMes = agruparPorMes(egresosFiltrados);
+
+    // Unir todos los meses presentes
+    const meses = Array.from(new Set([
+        ...Object.keys(ingresosPorMes),
+        ...Object.keys(egresosPorMes)
+    ])).sort();
+
+    // Datos para la gráfica
+    const labels = meses.map(m => {
+        const [y, mo] = m.split('-');
+        return new Date(y, mo-1).toLocaleString('es-ES', { month: 'short', year: 'numeric' });
+    });
+    const dataIngresos = meses.map(m => ingresosPorMes[m] || 0);
+    const dataEgresos = meses.map(m => egresosPorMes[m] || 0);
+
+    // Gráfica
+    const colores = ['rgba(39, 174, 96, 0.7)', 'rgba(231, 76, 60, 0.7)'];
+    const borderColores = ['rgba(39, 174, 96, 1)', 'rgba(231, 76, 60, 1)'];
+    const canvas = document.getElementById('graficoFinanzas');
+    canvas.width = 600;
+    canvas.height = 400;
+    const ctx = canvas.getContext('2d');
+    if (window.reporteFinanzasChart) window.reporteFinanzasChart.destroy();
+    window.reporteFinanzasChart = new Chart(ctx, {
+        type: tipoGrafica,
+        data: {
+            labels: labels.length ? labels : ['Sin datos'],
+            datasets: [
+                {
+                    label: 'Ingresos',
+                    data: dataIngresos.length ? dataIngresos : [0],
+                    backgroundColor: tipoGrafica === 'line' ? borderColores[0] : colores[0],
+                    borderColor: borderColores[0],
+                    borderWidth: 2,
+                    fill: tipoGrafica === 'line' ? false : true
+                },
+                {
+                    label: 'Egresos',
+                    data: dataEgresos.length ? dataEgresos : [0],
+                    backgroundColor: tipoGrafica === 'line' ? borderColores[1] : colores[1],
+                    borderColor: borderColores[1],
+                    borderWidth: 2,
+                    fill: tipoGrafica === 'line' ? false : true
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                legend: { display: true, position: 'top' },
+                title: { display: true, text: 'Ingresos vs Egresos por Mes' }
+            },
+            scales: {
+                x: { beginAtZero: true },
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Tabla detallada de movimientos
+    let tablaHtml = `
+        <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    // Mostrar ingresos
+    ingresosFiltrados.forEach(ing => {
+        tablaHtml += `<tr>
+            <td style="color:green;">Ingreso</td>
+            <td>${ing.fecha}</td>
+            <td>${parseFloat(ing.monto).toFixed(2)}</td>
+            <td>${ing.descripcion}</td>
+        </tr>`;
+    });
+    // Mostrar egresos
+    egresosFiltrados.forEach(eg => {
+        tablaHtml += `<tr>
+            <td style="color:red;">Egreso</td>
+            <td>${eg.fecha}</td>
+            <td>${parseFloat(eg.monto).toFixed(2)}</td>
+            <td>${eg.descripcion}</td>
+        </tr>`;
+    });
+    tablaHtml += `
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2">Totales</th>
+                    <th style="color:green;">${ingresosFiltrados.reduce((a,b)=>a+parseFloat(b.monto),0).toFixed(2)}</th>
+                    <th style="color:red;">${egresosFiltrados.reduce((a,b)=>a+parseFloat(b.monto),0).toFixed(2)}</th>
+                </tr>
+            </tfoot>
+        </table>
+    `;
+    document.getElementById('tablaReporte').innerHTML = tablaHtml;
+}
+
+// Botón generar
+document.getElementById('generarReporteBtn').addEventListener('click', generarReporte);
+
+// Botón descargar PDF
+document.getElementById('descargarPDF').addEventListener('click', function () {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
         orientation: 'landscape',
@@ -171,7 +272,7 @@ document.getElementById('descargarPDFFinanzas').addEventListener('click', functi
     });
 
     const reporte = document.querySelector('.reporte-container');
-    html2canvas(reporte).then(canvas => {
+    html2canvas(reporte, { scale: 2 }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
         const pageWidth = doc.internal.pageSize.getWidth();
         const imgWidth = pageWidth - 40;
@@ -181,6 +282,9 @@ document.getElementById('descargarPDFFinanzas').addEventListener('click', functi
         doc.save('Reporte_Finanzas.pdf');
     });
 });
+
+// Generar reporte inicial
+document.addEventListener('DOMContentLoaded', generarReporte);
 </script>
 </body>
 </html>

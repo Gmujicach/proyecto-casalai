@@ -43,7 +43,7 @@ class OrdenDespacho extends BD {
         $this->rango = $rango;
     }
 
-        public function getId() {
+    public function getId() {
         return $this->id;
     }
 
@@ -56,16 +56,20 @@ class OrdenDespacho extends BD {
     // Método para obtener las facturas disponibles
 
     public function obtenerFacturasDisponibles() {
-    $sql = "SELECT id_factura, fecha, cliente FROM tbl_facturas WHERE estatus = 'Borrador'";
-    $stmt = $this->conex->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        $sql = "SELECT f.id_factura, f.fecha, c.nombre
+        FROM tbl_facturas f
+        INNER JOIN tbl_clientes c ON f.cliente = c.id_clientes
+        WHERE f.estatus = 'Borrador';
+        ";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
     // Método para validar si el correlativo ya existe
 
-     public function validarCorrelativo() {
+    public function validarCorrelativo() {
         $sql = "SELECT COUNT(*) FROM tbl_orden_despachos WHERE correlativo = :correlativo";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':correlativo', $this->correlativo);
@@ -78,16 +82,31 @@ class OrdenDespacho extends BD {
 
     // Método para ingresar una nueva orden de despacho
     public function ingresarOrdenDespacho() {
-    $sql = "INSERT INTO tbl_orden_despachos (fecha_despacho, id_factura, correlativo, activo)
-            VALUES (:fecha, :factura, :correlativo, :activo)";
-    $stmt = $this->conex->prepare($sql);
-    $stmt->bindParam(':fecha', $this->fecha);
-    $stmt->bindParam(':factura', $this->factura);
-    $stmt->bindParam(':correlativo', $this->correlativo);
-    $stmt->bindParam(':activo', $this->activo, PDO::PARAM_INT);
-    
-    return $stmt->execute();
-}
+        $sql = "INSERT INTO tbl_orden_despachos (fecha_despacho, id_factura, correlativo, activo)
+                VALUES (:fecha, :factura, :correlativo, :activo)";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':fecha', $this->fecha);
+        $stmt->bindParam(':factura', $this->factura);
+        $stmt->bindParam(':correlativo', $this->correlativo);
+        $stmt->bindParam(':activo', $this->activo, PDO::PARAM_INT);
+        
+        return $stmt->execute();
+    }
+
+    public function obtenerUltimaOrden() {
+        return $this->obtUltimaOrden();
+    }
+
+    private function obtUltimaOrden() {
+        $sql = "SELECT o.id_orden_despachos,o.correlativo, o.id_factura, o.fecha_despacho, o.activo
+                FROM tbl_orden_despachos o
+                ORDER BY o.id_orden_despachos DESC LIMIT 1";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->execute();
+        $orden = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->conex = null;
+        return $orden ? $orden : null;
+    }
 
     // Método para obtener una orden de despacho por su ID
     public function obtenerOrdenPorId($id) {
@@ -112,7 +131,7 @@ class OrdenDespacho extends BD {
 
     // Método para eliminar una orden de despacho
     public function eliminarOrdenDespacho($id) {
-        $sql = "DELETE FROM tbl_orden_despachos WHERE id_orden_despachos = :id";
+        $sql = "UPDATE tbl_orden_despachos SET activo = 0 WHERE id_orden_despachos = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
@@ -128,19 +147,18 @@ class OrdenDespacho extends BD {
             
             return $stmt->execute();
         } catch (PDOException $e) {
-           return false;
+            return false;
         }
     }
 
     
-
 
     public function getordendespacho() {
         // Punto de depuración: Iniciando getmarcas
         //echo "Iniciando getmarcas.<br>";
         
         // Primera consulta para obtener datos de marcas
-        $queryordendespacho = 'SELECT * FROM ' . $this->tableordendespacho;
+        $queryordendespacho = 'SELECT * FROM ' . $this->tableordendespacho.' WHERE activo = 1 ORDER BY fecha_despacho DESC';
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";

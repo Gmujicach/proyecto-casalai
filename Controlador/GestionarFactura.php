@@ -53,8 +53,16 @@ if (is_file("vista/gestionarfactura.php")) {
                 break;
 
             default:
+            // Consultar facturas  
+            if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista') {
+              $respuesta = $factura->facturaTransaccion('ConsultarTodas');
+            echo json_encode($respuesta);  
+            }else {
+            $factura->setCedula($_SESSION['cedula']); // Asegurarse de que cedula esté definida
             $respuesta = $factura->facturaTransaccion('Consultar');
             echo json_encode($respuesta);
+            };
+
                 break;
         }
         exit;
