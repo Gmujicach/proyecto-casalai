@@ -41,8 +41,7 @@ $(document).ready(function () {
         }
     });
 
-    // Select de factura: solo permite seleccionar una opción válida (no vacío)
-    $("#factura").on("change keyup blur", function() {
+    $("#factura").on("change blur", function() {
         validarKeyUp(
             /^.+$/,
             $(this),
@@ -59,8 +58,6 @@ $(document).ready(function () {
         let hoy = new Date();
         let fechaIngresada = new Date(fecha);
         hoy.setHours(0,0,0,0);
-
-        //let factura = $("#factura").val();
 
         if(validarKeyUp(
             /^[0-9]{4,10}$/,
@@ -84,15 +81,14 @@ $(document).ready(function () {
             $("#sfecha").text("");
         }
 
-        if(validarKeyUp(
-            /^.+$/,
-            $("#factura"),
-            $("#sfactura"),
-            "Debe seleccionar una factura"
-        )==0){
+        if($("#factura").val() === null || $("#factura").val() === "") {
+            $("#sfactura").text("Debe seleccionar una factura");
             mensajes('error', 4000, 'Verifique la factura', 'Debe seleccionar una factura');
             return false;
+        } else {
+            $("#sfactura").text("");
         }
+
         return true;
     }
 
