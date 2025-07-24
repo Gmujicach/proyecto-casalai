@@ -42,7 +42,7 @@ $(document).ready(function () {
     });
 
     // Select de factura: solo permite seleccionar una opción válida (no vacío)
-    $("#factura").on("change", function() {
+    $("#factura").on("change keyup blur", function() {
         validarKeyUp(
             /^.+$/,
             $(this),
@@ -84,12 +84,12 @@ $(document).ready(function () {
             $("#sfecha").text("");
         }
 
-        if (validarKeyUp(
+        if(validarKeyUp(
             /^.+$/,
             $("#factura"),
             $("#sfactura"),
             "Debe seleccionar una factura"
-        ) == 0) {
+        )==0){
             mensajes('error', 4000, 'Verifique la factura', 'Debe seleccionar una factura');
             return false;
         }
