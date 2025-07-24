@@ -84,7 +84,7 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
             <tr>
                 <td><span class="campo-numeros"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
                 <td><span class="campo-nombres"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
-                <td><span class="campo-numeros"><?php echo htmlspecialchars($orden['activo']); ?></span></td>
+                <td><span class="campo-numeros"><?php echo htmlspecialchars($orden['id_factura']); ?></span></td>
                 <td>
                     <ul>
                         <div>

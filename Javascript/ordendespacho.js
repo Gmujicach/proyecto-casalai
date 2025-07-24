@@ -41,7 +41,7 @@ $(document).ready(function () {
         const nuevaFila = [
             `<span class="campo-numeros">${orden.correlativo}</span>`,
             `<span class="campo-nombres">${orden.fecha_despacho}</span>`,
-            `<span class="campo-numeros">${orden.activo}</span>`,
+            `<span class="campo-numeros">${orden.id_factura}</span>`,
             `<ul>
                 <div>
                     <button class="btn-modificar"
@@ -180,7 +180,7 @@ $(document).ready(function () {
                 const nuevaFila = [
                     `<span class="campo-numeros">${orden.correlativo}</span>`,
                     `<span class="campo-nombres">${orden.fecha_despacho}</span>`,
-                    `<span class="campo-numeros">${orden.activo}</span>`,
+                    `<span class="campo-numeros">${orden.id_factura}</span>`,
                     `<ul>
                         <div>
                             <button class="btn-modificar"

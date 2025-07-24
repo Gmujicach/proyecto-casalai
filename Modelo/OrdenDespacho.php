@@ -158,7 +158,7 @@ class OrdenDespacho extends BD {
         //echo "Iniciando getmarcas.<br>";
         
         // Primera consulta para obtener datos de marcas
-        $queryordendespacho = 'SELECT * FROM ' . $this->tableordendespacho;
+        $queryordendespacho = 'SELECT * FROM ' . $this->tableordendespacho.' WHERE activo = 1 ORDER BY fecha_despacho DESC';
         
         // Punto de depuración: Query de marcas preparada
         //echo "Query de marcas preparada: " . $querymarcas . "<br>";
