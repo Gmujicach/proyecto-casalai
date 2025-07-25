@@ -155,7 +155,7 @@ $(document).ready(function () {
     });
     
     // Evento keyup para buscar producto por código
-    $("#codigoproducto").on("keyup", function(){
+    $("#codigoproducto").on("keyup",function(){
         var codigo = $(this).val();
         $("#listadop tr").each(function(){
             if(codigo == $(this).find("td:eq(1)").text()){
@@ -346,7 +346,7 @@ $(document).ready(function () {
         
         $("#recepcion1 tr").each(function(){
             if(id*1 == $(this).find("td:eq(1)").text()*1){
-                encontro = true;
+                encontro = true
                 var t = $(this).find("td:eq(4)").children();
                 t.val(t.val()*1+1);
                 modificasubtotal(t);
@@ -361,14 +361,26 @@ $(document).ready(function () {
                </td>
                <td style="display:none">
                    <input type="text" name="producto[]" style="display:none"
-                   value="`+ $(linea).find("td:eq(0)").text() + `"/>`+	
-                        $(linea).find("td:eq(0)").text() +
+                   value="`+
+                        $(linea).find("td:eq(0)").text()+
+                   `"/>`+	
+                        $(linea).find("td:eq(0)").text()+
                `</td>
-               <td>`+ $(linea).find("td:eq(1)").text() + `</td>
-               <td>`+ $(linea).find("td:eq(2)").text() + `</td>
-               <td>`+ $(linea).find("td:eq(3)").text() + `</td>
-                <td>`+ $(linea).find("td:eq(4)").text() + `</td>
-               <td>`+ $(linea).find("td:eq(5)").text() + `</td>
+               <td>`+
+                        $(linea).find("td:eq(1)").text()+
+               `</td>
+               <td>`+
+                        $(linea).find("td:eq(2)").text()+
+               `</td>
+               <td>`+
+                        $(linea).find("td:eq(3)").text()+
+               `</td>
+                <td>`+
+                        $(linea).find("td:eq(4)").text()+
+               `</td>
+               <td>`+
+                        $(linea).find("td:eq(5)").text()+
+               `</td>
                 <td>
                     <input type="number" class="numerico" name="cantidad[]" min="1" step="1" value="1" required>
                 </td>
@@ -376,8 +388,9 @@ $(document).ready(function () {
             $("#recepcion1").append(l);
         }
     }
-    
-    // Función para eliminar producto de la tabla
+    //fin de funcion modifica subtotal
+
+    //funcion para eliminar linea de detalle de ventas
     function borrarp(boton){
         $(boton).closest('tr').remove();
     }
