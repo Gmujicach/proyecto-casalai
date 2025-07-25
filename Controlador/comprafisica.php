@@ -1,7 +1,7 @@
 <?php  
 
 function getdespacho() {
-    $despacho = new Despacho();
+    $despacho = new Compra();
     return $despacho->getdespacho();
 }
 
@@ -11,7 +11,7 @@ if (!is_file("modelo/" . $pagina . ".php")) {
 }
 
 require_once("modelo/" . $pagina . ".php");
-$k = new Despacho();
+$k = new Compra();
 require_once 'modelo/permiso.php';
 require_once 'modelo/bitacora.php';
 

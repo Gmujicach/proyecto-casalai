@@ -1,7 +1,7 @@
 <?php
 require_once 'config/config.php';
 
-class Despacho extends BD{
+class Compra extends BD{
     private $idcliente;
     private $correlativo;
     private $desc;
