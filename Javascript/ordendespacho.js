@@ -21,13 +21,18 @@ $(document).ready(function () {
 		}
     });
 
-    // Validación en tiempo real para fecha: no permitir fechas futuras
+    let hoy = new Date();
+    let yyyy = hoy.getFullYear();
+    let mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    let dd = String(hoy.getDate()).padStart(2, '0');
+    let fechaMax = `${yyyy}-${mm}-${dd}`;
+    $("#fecha").attr("max", fechaMax);
+    
     $("#fecha").on("change keyup", function() {
         let fechaInput = $(this).val();
         let hoy = new Date();
         let fechaIngresada = new Date(fechaInput);
 
-        // Normaliza la fecha de hoy para comparar solo año-mes-día
         hoy.setHours(0,0,0,0);
 
         if (fechaInput === "") {
@@ -39,6 +44,18 @@ $(document).ready(function () {
             $("#sfecha").text("");
             $(this).removeClass("input-error");
         }
+    });
+
+    $("#fecha").on("keypress", function(e){ 
+        validarkeypress(/^[0-9]$/i, e); 
+    });
+    $("#fecha").on("keyup", function(){ 
+        validarKeyUp(
+            /^[0-9]$/,
+            $(this),
+            $("#sfecha"),
+            "*Debe ingresar una fecha*"
+        );
     });
 
     $("#factura").on("change blur", function() {
@@ -68,10 +85,12 @@ $(document).ready(function () {
             mensajes('error',4000,'Verifique el correlativo','Debe tener solo números');
             return false;
         }
-
-        if (fecha === "") {
-            $("#sfecha").text("Debe ingresar una fecha");
-            mensajes('error', 4000, 'Verifique la fecha', 'Debe ingresar una fecha');
+        else if(validarKeyUp(
+            $("#fecha"),
+            $("#sfecha"),
+            "*Debe ingresar una fecha*"
+        )==0){
+            mensajes('error',4000,'Verifique la fecha', 'Debe ingresar una fecha');
             return false;
         } else if (fechaIngresada > hoy) {
             $("#sfecha").text("No se permite una fecha futura");
