@@ -1,4 +1,3 @@
-<?php if ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Cliente' || $_SESSION['nombre_rol'] == 'SuperUsuario') { ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -114,7 +113,20 @@
 </head>
 
 <body class="fondo">
-    <?php include 'newnavbar.php'; ?>
+    <?php 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Determinar qué navbar incluir basado en la sesión
+if (isset($_SESSION['nombre_rol']) && !empty($_SESSION['nombre_rol'])) {
+    // Usuario con sesión activa - navbar para usuarios logueados
+    include 'newnavbar.php';
+} else {
+    // Usuario sin sesión - navbar para invitados
+    include 'navbar.php';
+}
+    ?>
     <br>
 
     <section class="container mt-5">
@@ -170,10 +182,21 @@
                                     <i class="bi bi-search"></i>
                                 </button>
                             </div>
+                            <?php 
+                            
+                            if (isset($_SESSION['nombre_rol']) && !empty($_SESSION['nombre_rol'])) {
+
+                            ?>
                             <a href="?pagina=carrito" class="btn btn-primary ms-2">
                                 <i class="bi bi-cart"></i>
                                 <span class="cart-count badge bg-danger d-none">0</span>
                             </a>
+                            <?php } else { ?>
+                                <button class="btn btn-primary ms-2" onclick="MensajeInicio()">
+                                <i class="bi bi-cart"></i>
+                                <span class="cart-count badge bg-danger d-none">0</span>
+                                </button>
+                                <?php }; ?>
                         </div>
                     </div>
                 </div>
@@ -254,15 +277,17 @@
         <!-- Contenido de Combos -->
         <div class="card mb-4" id="combos-content" style="display: none;">
             <div class="card-body">
-                <?php if (!empty($combos)): ?>
-                    <!-- Botón para agregar nuevo combo (solo para admin) -->
-                    <?php if ($esAdmin): ?>
+                
+                <?php if ($esAdmin): ?>
                         <div class="text-end mb-3">
                             <button type="button" class="btn btn-primary" id="nuevo_combo">
                                 <i class="bi bi-plus-circle"></i> Nuevo Combo
                             </button>
                         </div>
                     <?php endif; ?>
+                <?php if (!empty($combos)): ?>
+                    <!-- Botón para agregar nuevo combo (solo para admin) -->
+
 
                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                         <?php foreach ($combos as $combo):
@@ -307,11 +332,12 @@
                                             endforeach;
 
                                             // Rellenar con placeholders si no hay suficientes imágenes
-                                            while ($imagenesMostradas < 4) {
-                                                $imagenesMostradas++;
+                                            while ($imagenesMostradas < 2) {
+                                                
                                                 echo '<div class="combo-image img-placeholder' . ($imagenesMostradas == 1 ? ' combo-main-image' : '') . '">';
-                                                echo '<i class="bi bi-image"></i>';
+                                                
                                                 echo '</div>';
+                                                $imagenesMostradas++;
                                             }
                                             ?>
                                         </div>
@@ -584,10 +610,30 @@
     <script src="javascript/catalogo.js"></script>
     <script src="public/js/jquery.dataTables.min.js"></script>
     <script src="public/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+            function MensajeInicio() {
+        Swal.fire({
+            icon: 'info',
+            title: '¡Hola!',
+            text: 'Para agregar productos al carrito, por favor inicia sesión.',
+            confirmButtonText: 'Iniciar Sesión',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            background: '#f8f9fa',
+            backdrop: `
+                rgba(0,0,0,0.4)
+                url("/public/img/cart.gif")
+                center top
+                no-repeat
+            `
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '?pagina=login';
+            }
+        });
+    }
+    </script>
 </body>
 
 </html>
-<?php } else {
-    header("Location: ?pagina=acceso-denegado");
-    exit;
-} ?>
+

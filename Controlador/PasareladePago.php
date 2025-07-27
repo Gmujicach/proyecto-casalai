@@ -19,16 +19,33 @@ if (!empty($_POST['accion'])) {
             $pasarela->setTipo($_POST['tipo']);
             $pasarela->setFactura($_POST['id_factura']);
             $pasarela->setObservaciones('');
+                $comprobante = null;
+    if (isset($_FILES['comprobante']) && $_FILES['comprobante']['error'] == 0) {
+        $directorio = "img/pagos/";
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0755, true);
+        }
+        $nombre_original = $_FILES['comprobante']['name'];
+        $extension = strtolower(pathinfo($nombre_original, PATHINFO_EXTENSION));
+        $nombre_nuevo = "comprobante_" . time() . "_" . rand(1000,9999) . "." . $extension;
+        $ruta_destino = $directorio . $nombre_nuevo;
 
+        if (move_uploaded_file($_FILES['comprobante']['tmp_name'], $ruta_destino)) {
+            $comprobante = $ruta_destino;
+        }}
+            $pasarela->setComprobante($comprobante);
+            
             if (!$pasarela->validarCodigoReferencia()) {
                 echo json_encode(['status' => 'error', 'message' => 'Este Código Interno ya existe']);
             } else {
                 if ($pasarela->pasarelaTransaccion('Ingresar')) {
                     echo json_encode(['status' => 'success']);
+                    
                 } else {
                     echo json_encode(['status' => 'error', 'message' => 'Error al ingresar el producto']);
                 }
             }
+
             exit;
 
         default:

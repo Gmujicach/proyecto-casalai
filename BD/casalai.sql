@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-07-2025 a las 04:27:35
+-- Tiempo de generación: 27-07-2025 a las 03:56:51
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `casalai`
 --
+CREATE DATABASE IF NOT EXISTS `casalai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `casalai`;
 
 -- --------------------------------------------------------
 
@@ -153,8 +155,7 @@ CREATE TABLE `tbl_carrito` (
 --
 
 INSERT INTO `tbl_carrito` (`id_carrito`, `id_cliente`, `fecha_creacion`) VALUES
-(10, 11, '2025-07-11 16:50:50'),
-(11, 17, '2025-07-22 22:55:43');
+(10, 11, '2025-07-11 16:50:50');
 
 -- --------------------------------------------------------
 
@@ -201,10 +202,10 @@ INSERT INTO `tbl_categoria` (`id_categoria`, `nombre_categoria`) VALUES
 CREATE TABLE `tbl_clientes` (
   `id_clientes` int(11) NOT NULL,
   `nombre` varchar(255) DEFAULT NULL,
-  `cedula` varchar(8) DEFAULT NULL,
+  `cedula` varchar(20) DEFAULT NULL,
   `direccion` text DEFAULT NULL,
-  `telefono` varchar(15) DEFAULT NULL,
-  `correo` varchar(50) DEFAULT NULL,
+  `telefono` varchar(20) DEFAULT NULL,
+  `correo` varchar(255) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -216,8 +217,7 @@ INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `tel
 (10, 'Gabriel Mujica', '29958676', 'mi casa', '0424-678-8765', 'fhhggjjkkkj@gmail.com', 1),
 (11, 'Edith Urdaneta', '10844463', 'Los Horcones', '0416-747-4336', 'urdavedith.pnfi@gmail.com', 1),
 (12, 'Diego Lopez', '31766917', 'Venezuela estado Zulia\r\nMaracaibo', '0414-575-3363', 'diego0510lopez@gmail.com', 1),
-(13, 'Diego Lopez', '5322432', '', '0414-575-3363', 'diego0510lopez@gmail.com', 1),
-(15, 'Angel Gomez', '30052004', 'Colombia', '0424-158-7101', 'ejemplo2000@gmail.com', 1);
+(13, 'Diego Lopez', '5322432', '', '0414-575-3363', 'diego0510lopez@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -259,6 +259,7 @@ CREATE TABLE `tbl_cuentas` (
   `rif_cuenta` varchar(15) NOT NULL,
   `telefono_cuenta` varchar(15) DEFAULT NULL,
   `correo_cuenta` varchar(50) DEFAULT NULL,
+  `metodos` set('Pago Movil','Transferencia') NOT NULL,
   `estado` enum('habilitado','inhabilitado') NOT NULL DEFAULT 'habilitado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -266,11 +267,18 @@ CREATE TABLE `tbl_cuentas` (
 -- Volcado de datos para la tabla `tbl_cuentas`
 --
 
-INSERT INTO `tbl_cuentas` (`id_cuenta`, `nombre_banco`, `numero_cuenta`, `rif_cuenta`, `telefono_cuenta`, `correo_cuenta`, `estado`) VALUES
-(1, 'BNC', '1247862', '143123423442', '24141243241', 'EJEMPLO@GMAIL.COM', 'habilitado'),
-(8, 'Banesco', '1234567890', '0123456789', '0990812808', 'ejemplo@gmail.com', 'habilitado'),
-(9, 'Bancamiga', '1234567890', '0123456789', '0990812808', 'ejemplo@gmail.com68', 'habilitado'),
-(10, 'Venezuela', '87654321', '0123456789', '04141580151', 'ejemplo@gmail.com', 'habilitado');
+INSERT INTO `tbl_cuentas` (`id_cuenta`, `nombre_banco`, `numero_cuenta`, `rif_cuenta`, `telefono_cuenta`, `correo_cuenta`, `metodos`, `estado`) VALUES
+(1, 'BNC', '1247862', '143123423442', '24141243241', 'EJEMPLO@GMAIL.COM', 'Pago Movil,Transferencia', 'habilitado'),
+(8, 'Banesco', '1234567890', '0123456789', '0990812808', 'ejemplo@gmail.com', 'Transferencia', 'habilitado'),
+(9, 'Bancamiga', '1234-5678-90-5857575765', 'J-01234567-8', '0990-812-8088', 'ejemplo@gmail.com68', 'Pago Movil', 'habilitado'),
+(10, 'Venezuela', '87654321', '0123456789', '04141580151', 'ejemplo@gmail.com', 'Pago Movil,Transferencia', 'habilitado'),
+(24, 'Mercantil', '1247-8624-44-4444355559', 'J-12345678-9', '0414-158-0151', 'diego0510lopez@gmail.com', 'Pago Movil,Transferencia', 'habilitado'),
+(25, 'Mercantil', '1247-8624-44-4444355389', 'J-12345678-9', '0414-158-0151', 'diego0510lopez@gmail.com', 'Pago Movil,Transferencia', 'habilitado'),
+(26, 'Mercantil', '1247-8624-56-3452253234', 'J-12345678-9', '0414-158-0151', 'diego0510lopez@gmail.com', 'Pago Movil,Transferencia', 'habilitado'),
+(27, 'Mercantil', '1247-8624-44-4444355554', 'J-12345678-9', '2414-124-3241', 'diego0510lopez@gmail.com', 'Pago Movil,Transferencia', 'habilitado'),
+(28, 'Mercantil', '1247-8624-44-4444355550', 'J-12345678-9', '2414-124-3241', 'diego0510lopez@gmail.com', 'Pago Movil,Transferencia', 'habilitado'),
+(29, 'Mercantil', '1247-8624-44-4444355504', 'J-12345678-9', '2414-124-3241', 'diego0510lopez@gmail.com', 'Pago Movil,Transferencia', 'habilitado'),
+(30, 'Mercantil', '1247-8624-44-4444359550', 'J-12345678-9', '2414-124-3241', 'diego0510lopez@gmail.com', 'Pago Movil,Transferencia', 'habilitado');
 
 -- --------------------------------------------------------
 
@@ -286,6 +294,13 @@ CREATE TABLE `tbl_despachos` (
   `activo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_despachos`
+--
+
+INSERT INTO `tbl_despachos` (`id_despachos`, `id_clientes`, `fecha_despacho`, `correlativo`, `activo`) VALUES
+(3, 12, '2025-07-23', '0002', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -299,6 +314,14 @@ CREATE TABLE `tbl_despacho_detalle` (
   `cantidad` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tbl_despacho_detalle`
+--
+
+INSERT INTO `tbl_despacho_detalle` (`id_detalle`, `id_despacho`, `id_producto`, `cantidad`) VALUES
+(2, 3, 31, 1),
+(3, 3, 32, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -310,18 +333,12 @@ CREATE TABLE `tbl_detalles_pago` (
   `id_factura` int(11) NOT NULL,
   `id_cuenta` int(11) NOT NULL,
   `observaciones` varchar(200) NOT NULL,
-  `tipo` varchar(20) NOT NULL,
   `referencia` varchar(30) NOT NULL,
   `fecha` date NOT NULL,
+  `tipo` varchar(20) NOT NULL,
+  `comprobante` varchar(100) NOT NULL,
   `estatus` varchar(20) NOT NULL DEFAULT 'En Proceso'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tbl_detalles_pago`
---
-
-INSERT INTO `tbl_detalles_pago` (`id_detalles`, `id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`, `estatus`) VALUES
-(22, 33, 9, 'Pago verificado ', 'Depósito', 'yyyy', '2025-07-31', 'Pago Procesado');
 
 -- --------------------------------------------------------
 
@@ -336,6 +353,15 @@ CREATE TABLE `tbl_detalle_recepcion_productos` (
   `costo` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_detalle_recepcion_productos`
+--
+
+INSERT INTO `tbl_detalle_recepcion_productos` (`id_detalle_recepcion_productos`, `id_recepcion`, `id_producto`, `costo`, `cantidad`) VALUES
+(11, 10, 34, 10, 1),
+(12, 10, 33, 20, 2),
+(13, 10, 32, 30, 4);
 
 -- --------------------------------------------------------
 
@@ -394,6 +420,16 @@ CREATE TABLE `tbl_ingresos_egresos` (
   `fecha` date NOT NULL,
   `estado` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_ingresos_egresos`
+--
+
+INSERT INTO `tbl_ingresos_egresos` (`id_finanzas`, `id_despacho`, `id_detalle_recepcion_productos`, `tipo`, `monto`, `descripcion`, `fecha`, `estado`) VALUES
+(7, NULL, 11, 'egreso', 10.00, 'Compra: Caja de Color (x1)', '2025-07-22', 1),
+(8, NULL, 12, 'egreso', 40.00, 'Compra: ImpriColor (x2)', '2025-07-22', 1),
+(9, NULL, 13, 'egreso', 120.00, 'Compra: Tinta Arcoiris (x4)', '2025-07-22', 1),
+(10, 3, NULL, 'ingreso', 18.00, 'Venta: Colormedia (x1), Tinta Arcoiris (x1)', '2025-07-23', 1);
 
 -- --------------------------------------------------------
 
@@ -558,7 +594,9 @@ CREATE TABLE `tbl_orden_despachos` (
 --
 
 INSERT INTO `tbl_orden_despachos` (`id_orden_despachos`, `id_factura`, `fecha_despacho`, `correlativo`, `activo`) VALUES
-(1, 33, '2025-07-23', '0245685265', 1);
+(3, 33, '2025-07-23', '0002', 0),
+(4, 33, '2025-07-23', '0004', 0),
+(5, 33, '2025-07-23', '0006', 0);
 
 -- --------------------------------------------------------
 
@@ -641,6 +679,13 @@ CREATE TABLE `tbl_recepcion_productos` (
   `fecha` date NOT NULL,
   `correlativo` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_recepcion_productos`
+--
+
+INSERT INTO `tbl_recepcion_productos` (`id_recepcion`, `id_proveedor`, `fecha`, `correlativo`) VALUES
+(10, 1, '2025-07-22', '1235');
 
 --
 -- Índices para tablas volcadas
@@ -862,13 +907,13 @@ ALTER TABLE `cat_tintas`
 -- AUTO_INCREMENT de la tabla `tbl_carrito`
 --
 ALTER TABLE `tbl_carrito`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_carritodetalle`
 --
 ALTER TABLE `tbl_carritodetalle`
-  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id_carrito_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_categoria`
@@ -880,7 +925,7 @@ ALTER TABLE `tbl_categoria`
 -- AUTO_INCREMENT de la tabla `tbl_clientes`
 --
 ALTER TABLE `tbl_clientes`
-  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_combo`
@@ -898,19 +943,19 @@ ALTER TABLE `tbl_combo_detalle`
 -- AUTO_INCREMENT de la tabla `tbl_cuentas`
 --
 ALTER TABLE `tbl_cuentas`
-  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_despachos`
 --
 ALTER TABLE `tbl_despachos`
-  MODIFY `id_despachos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_despachos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_despacho_detalle`
 --
 ALTER TABLE `tbl_despacho_detalle`
-  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_detalles_pago`
@@ -922,13 +967,13 @@ ALTER TABLE `tbl_detalles_pago`
 -- AUTO_INCREMENT de la tabla `tbl_detalle_recepcion_productos`
 --
 ALTER TABLE `tbl_detalle_recepcion_productos`
-  MODIFY `id_detalle_recepcion_productos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_detalle_recepcion_productos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_facturas`
 --
 ALTER TABLE `tbl_facturas`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_factura_detalle`
@@ -940,7 +985,7 @@ ALTER TABLE `tbl_factura_detalle`
 -- AUTO_INCREMENT de la tabla `tbl_ingresos_egresos`
 --
 ALTER TABLE `tbl_ingresos_egresos`
-  MODIFY `id_finanzas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_finanzas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_marcas`
@@ -958,7 +1003,7 @@ ALTER TABLE `tbl_modelos`
 -- AUTO_INCREMENT de la tabla `tbl_orden_despachos`
 --
 ALTER TABLE `tbl_orden_despachos`
-  MODIFY `id_orden_despachos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_orden_despachos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_productos`
@@ -976,7 +1021,7 @@ ALTER TABLE `tbl_proveedores`
 -- AUTO_INCREMENT de la tabla `tbl_recepcion_productos`
 --
 ALTER TABLE `tbl_recepcion_productos`
-  MODIFY `id_recepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_recepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas
