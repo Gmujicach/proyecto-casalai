@@ -81,7 +81,7 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
 
         <tbody>
         <?php foreach ($ordendespacho as $orden): ?>
-            <tr>
+            <tr data-id="<?php echo $orden['id_orden_despachos']; ?>">
                 <td><span class="campo-numeros"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
                 <td><span class="campo-nombres"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
                 <td><span class="campo-numeros"><?php echo htmlspecialchars($orden['id_factura']); ?></span></td>

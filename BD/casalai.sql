@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `casalai`
 --
+CREATE DATABASE IF NOT EXISTS `casalai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `casalai`;
 
 -- --------------------------------------------------------
 
@@ -321,7 +323,8 @@ CREATE TABLE `tbl_detalles_pago` (
 --
 
 INSERT INTO `tbl_detalles_pago` (`id_detalles`, `id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`, `estatus`) VALUES
-(22, 33, 9, 'Pago verificado ', 'Depósito', 'yyyy', '2025-07-31', 'Pago Procesado');
+(22, 33, 9, 'Pago verificado ', 'Depósito', 'yyyy', '2025-07-31', 'Pago Procesado'),
+(23, 34, 8, 'Pago verificado ', 'Depósito', 'yyyy', '2025-02-11', 'Pago Procesado');
 
 -- --------------------------------------------------------
 
@@ -356,7 +359,8 @@ CREATE TABLE `tbl_facturas` (
 --
 
 INSERT INTO `tbl_facturas` (`id_factura`, `fecha`, `cliente`, `descuento`, `estatus`) VALUES
-(33, '2025-07-11', 11, 0, 'Borrador');
+(33, '2025-07-11', 11, 0, 'Borrador'),
+(34, '2025-07-22', 10, 0, 'Borrador');
 
 -- --------------------------------------------------------
 

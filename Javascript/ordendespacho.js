@@ -235,7 +235,8 @@ $(document).ready(function () {
         );
     });
 
-    function validarOrden() {
+    function validarOrden(datos) {
+        let errores = [];
         let correlativo = document.getElementById("modificar_correlativo");
         correlativo.value = space(correlativo.value).trim();
 
@@ -244,36 +245,18 @@ $(document).ready(function () {
         let fechaIngresada = new Date(fecha);
         hoy.setHours(0,0,0,0);
 
-        if (validarkeyup(
-            /^[0-9]{4,10}$/,
-            $("#modificar_correlativo"),
-            $("#smcorrelativo"),
-            "*El correlativo debe tener de 4 a 10 dígitos*"
-        ) == 0) {
-            mensajes('error', 'Verifique el correlativo', 'Le faltan dígitos al correlativo');
-            return false;
+        if (!/^[0-9]{4,10}$/.test(datos.correlativo)) {
+            errores.push("El correlativo debe tener de 4 a 10 dígitos.");
         }
-        else if ($("#modificar_fecha").val() === "") {
-            $("#smfecha").text("*Debe ingresar una fecha completa (día, mes y año)*");
-            mensajes('error', 'Verifique la fecha', 'La fecha está vacía, incompleta o no es válida');
-            return false;
+        if (datos.fecha === "") {
+            errores.push("Debe ingresar una fecha completa (día, mes y año).");
         } else if (fechaIngresada > hoy) {
-            $("#smfecha").text("*Solo se permite una fecha actual o una fecha anterior*");
-            mensajes('error', 'Verifique la fecha', 'No se permiten fechas futuras');
-            return false;
-        } else {
-            $("#smfecha").text("");
+            errores.push("Solo se permite una fecha actual o una fecha anterior.");
         }
-
-        if ($("#modificar_factura").val() === null || $("#modificar_factura").val() === "") {
-            $("#smfactura").text("*Debe seleccionar una factura*");
-            mensajes('error', 'Verifique la factura', 'El campo está vacío');
-            return false;
-        } else {
-            $("#smfactura").text("");
+        if (datos.factura === null || datos.factura === "") {
+            errores.push("Debe seleccionar una factura.");
         }
-
-        return true;
+        return errores;
     }
 
     function llenarSelectFacturasModal(idSeleccionada) {
@@ -300,69 +283,88 @@ $(document).ready(function () {
     $('#modificarOrden').on('submit', function(e) {
         e.preventDefault();
 
-        if (!validarOrden()) {
+        const datos = {
+            correlativo: $('#modificar_correlativo').val(),
+            fecha: $('#modificar_fecha').val(),
+            factura: $('#modificar_factura').val()
+        };
+
+        const errores = validarOrden(datos);
+
+        if (errores.length > 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Su modificación no es valida',
+                html: errores.join('<br>')
+            });
             return;
         }
-/*
-        let correlativo = $("#modificar_correlativo").val().trim();
-        let fecha = $("#modificar_fecha").val().trim();
-        let idFactura = $("#modificar_factura").val();
-        let factura = $("#modificar_factura option:selected").text();
-*/
-        var datos = new FormData(this);
-        datos.append('accion', 'modificar');
-        enviarAjax(datos, function(respuesta){
-            if(respuesta.status === "success" || respuesta.resultado === "success"){
-                $('#modificarOrdenModal').modal('hide');
+
+        var formData = new FormData(this);
+        formData.append('accion', 'modificar');
+
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#modificarOrdenModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Modificado',
                         text: 'La orden de despacho se ha modificado correctamente'
                     });
-                    // Actualizar la fila en la tabla con el mismo formato
-                let orden = respuesta.orden; // El backend debe retornar el modelo actualizado
-                let fila = $(`tr[data-id="${orden.id_orden_despachos}"]`);
-                const nuevaFila = [
-                    `<span class="campo-numeros">${orden.correlativo}</span>`,
-                    `<span class="campo-nombres">${orden.fecha_despacho}</span>`,
-                    `<span class="campo-numeros">${orden.id_factura}</span>`,
-                    `<ul>
-                        <div>
-                            <button class="btn-modificar"
-                                data-id="${orden.id_orden_despachos}"
-                                data-correlativo="${orden.correlativo}"
-                                data-fecha="${orden.fecha_despacho}"
-                                data-factura="${orden.id_factura}">
-                                Modificar
-                            </button>
-                        </div>
-                        <div>
-                            <button class="btn-eliminar"
-                                data-id="${orden.id_orden_despachos}">
-                                Anular
-                            </button>
-                        </div>
-                    </ul>`
-                ];
-                const tabla = $('#tablaConsultas').DataTable();
-                const page = tabla.page();
-                fila = tabla.row(`tr[data-id="${orden.id_orden_despachos}"]`);
-                if (fila.length) {
-                    fila.data(nuevaFila).draw(false);
-                    tabla.page(page).draw(false);
 
-                    const filaNode = fila.node();
-                    const botonModificar = $(filaNode).find(".btn-modificar");
-                    botonModificar.data("correlativo", orden.correlativo);
-                    botonModificar.data("fecha", orden.fecha_despacho);
-                    botonModificar.data("factura", orden.id_factura);
+                    const tabla = $("#tablaConsultas").DataTable();
+                    const id = $("#modificar_id_orden").val();
+                    const fila = tabla.row(`tr[data-id="${id}"]`);
+                    const orden = response.orden;
+                
+                    if (fila.length) {
+                        fila.data([
+                            `<span class="campo-numeros">${orden.correlativo}</span>`,
+                            `<span class="campo-nombres">${orden.fecha_despacho}</span>`,
+                            `<span class="campo-numeros">${orden.id_factura}</span>`,
+                            `<ul>
+                                <div>
+                                    <button class="btn-modificar"
+                                        data-id="${orden.id_orden_despachos}"
+                                        data-correlativo="${orden.correlativo}"
+                                        data-fecha="${orden.fecha_despacho}"
+                                        data-factura="${orden.id_factura}">
+                                        Modificar
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="btn-eliminar"
+                                        data-id="${orden.id_orden_despachos}">
+                                        Anular
+                                    </button>
+                                </div>
+                            </ul>`
+                        ]).draw(false);
+
+                        const filaNode = fila.node();
+                        const botonModificar = $(filaNode).find(".btn-modificar");
+                        botonModificar.data("correlativo", orden.correlativo);
+                        botonModificar.data("fecha", orden.fecha_despacho);
+                        botonModificar.data("factura", orden.id_factura);
+                        } 
+                    } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'No se pudo modificar la orden de despacho'
+                    });
                 }
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: respuesta.message || 'No se pudo modificar la orden de despacho'
-                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error al modificar la orden de despacho:', textStatus, errorThrown);
+                muestraMensaje('Error al modificar la orden de despacho.');
             }
         });
     });
