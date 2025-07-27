@@ -262,7 +262,7 @@ $(document).ready(function () {
     function llenarSelectFacturasModal(idSeleccionada) {
         let select = $('#modificar_factura');
         select.empty();
-        select.append('<option value="">Seleccione una factura</option>');
+        select.append('<option value="">Seleccione una orden de compra</option>');
         window.facturasDisponibles.forEach(function(orden) {
             let selected = orden.id_factura == idSeleccionada ? 'selected' : '';
             select.append(`<option value="${orden.id_factura}" ${selected}>${orden.factura}</option>`);

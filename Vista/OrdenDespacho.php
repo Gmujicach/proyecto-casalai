@@ -39,12 +39,12 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                         <span class="span-value" id="sfecha"></span>
                     </div>
                     <div class="envolver-form">
-                        <label for="factura">Factura</label>
+                        <label for="factura">Orden de compra</label>
                         <select name="factura" id="factura" class="form-select">
-                            <option value="" disabled selected>Seleccionar Factura</option>
+                            <option value="" disabled selected>Seleccionar orden de compra</option>
                             <?php foreach ($facturas as $factura): ?>
                                 <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
-                                    <?php echo htmlspecialchars('Factura #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']); ?>
+                                    <?php echo htmlspecialchars('Orden de compra #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -74,7 +74,7 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
             <tr>
                 <th>Correlativo</th>
                 <th>Fecha</th>
-                <th>Factura</th>
+                <th>Orden de compra</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -135,7 +135,7 @@ aria-labelledby="modificarOrdenModalLabel" aria-hidden="true">
                     <span class="span-value" id="smfecha"></span>
                 </div>
                 <div class="form-group">
-                    <label for="modificar_factura">Factura</label>
+                    <label for="modificar_factura">Orden de compra</label>
                     <select name="factura" id="modificar_factura" class="form-control">
                     <?php foreach ($facturas as $factura): ?>
                         <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
@@ -172,7 +172,7 @@ window.facturasDisponibles = <?php
 echo json_encode(array_map(function($factura) {
     return [
         'id_factura' => $factura['id_factura'],
-        'factura' => 'Factura #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']
+        'factura' => 'Orden de compra #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']
     ];
 }, $facturas));
 ?>;
