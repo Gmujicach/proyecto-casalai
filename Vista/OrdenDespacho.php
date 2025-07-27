@@ -19,7 +19,7 @@
 aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="ingresarOrdenDespacho" method="POST">
+            <form id="ingresarOrdenDespacho" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarOrdenModalLabel">Incluir Orden de Despacho</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -30,17 +30,17 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                     <input type="hidden" name="accion" value="ingresar">
                     <div class="envolver-form">
                         <label for="correlativo">Correlativo</label>
-                        <input type="text" class="control-form" id="correlativo" name="correlativo" placeholder="0123456789" maxlength="10" required>
+                        <input type="text" class="control-form" id="correlativo" name="correlativo" placeholder="0123456789" maxlength="10">
                         <span class="span-value" id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="fecha">Fecha</label>
-                        <input type="date" class="control-form" id="fecha" name="fecha" required>
+                        <input type="date" class="control-form" id="fecha" name="fecha">
                         <span class="span-value" id="sfecha"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="factura">Factura</label>
-                        <select name="factura" id="factura" class="form-select" required>
+                        <select name="factura" id="factura" class="form-select">
                             <option value="" disabled selected>Seleccionar Factura</option>
                             <?php foreach ($facturas as $factura): ?>
                                 <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">

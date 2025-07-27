@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     if($.trim($("#mensajes").text()) != ""){
-        mensajes("warning", 4000, "Atención", $("#mensajes").html());
+        mensajes("warning", "Atención", $("#mensajes").html());
     }
 
     $("#correlativo").on("keypress",function(e){
@@ -11,14 +11,12 @@ $(document).ready(function () {
     });
     
     $("#correlativo").on("keyup",function(){
-        validarKeyUp(/^[0-9]{4,10}$/,$(this),
-        $("#scorrelativo"),"Se permite de 4 a 10 dígitos");
-        if ($("#correlativo").val().length <= 9) {
-			var datos = new FormData();
-			datos.append('accion', 'buscar');
-			datos.append('correlativo', $(this).val());
-			enviarAjax(datos);
-		}
+        validarkeyup(
+            /^[0-9]{4,10}$/,
+            $(this),
+            $("#scorrelativo"),
+            "Se permite de 4 a 10 dígitos"
+        );
     });
 
     let hoy = new Date();
@@ -46,20 +44,8 @@ $(document).ready(function () {
         }
     });
 
-    $("#fecha").on("keypress", function(e){ 
-        validarkeypress(/^[0-9]$/i, e); 
-    });
-    $("#fecha").on("keyup", function(){ 
-        validarKeyUp(
-            /^[0-9]$/,
-            $(this),
-            $("#sfecha"),
-            "*Debe ingresar una fecha*"
-        );
-    });
-
     $("#factura").on("change blur", function() {
-        validarKeyUp(
+        validarkeyup(
             /^.+$/,
             $(this),
             $("#sfactura"),
@@ -76,33 +62,34 @@ $(document).ready(function () {
         let fechaIngresada = new Date(fecha);
         hoy.setHours(0,0,0,0);
 
-        if(validarKeyUp(
+        if(validarkeyup(
             /^[0-9]{4,10}$/,
             $("#correlativo"),
             $("#scorrelativo"),
-            "*El correlativo debe tener solo números*"
+            "*El correlativo debe tener de 4 a 10 dígitos*"
         )==0){
-            mensajes('error',4000,'Verifique el correlativo','Debe tener solo números');
+            mensajes('error', 'Verifique el correlativo', 'Le faltan dígitos al correlativo');
             return false;
         }
-        else if(validarKeyUp(
+        else if(validarkeyup(
+            /^.+$/,
             $("#fecha"),
             $("#sfecha"),
-            "*Debe ingresar una fecha*"
+            "*Debe ingresar una fecha completa (día, mes y año)*"
         )==0){
-            mensajes('error',4000,'Verifique la fecha', 'Debe ingresar una fecha');
+            mensajes('error', 'Verifique la fecha', 'La fecha está vacía, incompleta o no es válida');
             return false;
         } else if (fechaIngresada > hoy) {
-            $("#sfecha").text("No se permite una fecha futura");
-            mensajes('error', 4000, 'Verifique la fecha', 'No se permite una fecha futura');
+            $("#sfecha").text("*Solo se permite una fecha actual o una fecha anterior*");
+            mensajes('error', 'Verifique la fecha', 'No se permiten fechas futuras');
             return false;
         } else {
             $("#sfecha").text("");
         }
 
         if($("#factura").val() === null || $("#factura").val() === "") {
-            $("#sfactura").text("Debe seleccionar una factura");
-            mensajes('error', 4000, 'Verifique la factura', 'Debe seleccionar una factura');
+            $("#sfactura").text("*Debe seleccionar una factura*");
+            mensajes('error', 'Verifique la factura', 'El campo esta vacio');
             return false;
         } else {
             $("#sfactura").text("");
@@ -194,7 +181,7 @@ $(document).ready(function () {
     });
     
     $("#modificar_correlativo").on("keyup",function(){
-        validarKeyUp(/^[0-9-\b]{4,10}$/,$(this),
+        validarkeyup(/^[0-9-\b]{4,10}$/,$(this),
         $("#smcorrelativo"),"Se permite de 4 a 10 dígitos");
         if ($("#modificar_correlativo").val().length <= 9) {
 			var datos = new FormData();
@@ -202,6 +189,50 @@ $(document).ready(function () {
 			datos.append('correlativo', $(this).val());
 			enviarAjax(datos);
 		}
+    });
+
+    $("#modificar_correlativo").on("keypress",function(e){
+        validarkeypress(/^[0-9]*$/,e);
+        let correlativo = document.getElementById("modificar_correlativo");
+        correlativo.value = space(correlativo.value);
+    });
+    
+    $("#modificar_correlativo").on("keyup",function(){
+        validarkeyup(
+            /^[0-9]{4,10}$/,
+            $(this),
+            $("#smcorrelativo"),
+            "Se permite de 4 a 10 dígitos"
+        );
+    });
+
+    $("#modificar_fecha").attr("max", fechaMax);
+    
+    $("#modificar_fecha").on("change keyup", function() {
+        let fechaInput = $(this).val();
+        let hoy = new Date();
+        let fechaIngresada = new Date(fechaInput);
+
+        hoy.setHours(0,0,0,0);
+
+        if (fechaInput === "") {
+            $("#smfecha").text("Debe ingresar una fecha");
+        } else if (fechaIngresada > hoy) {
+            $("#smfecha").text("No se permite una fecha futura");
+            $(this).addClass("input-error");
+        } else {
+            $("#smfecha").text("");
+            $(this).removeClass("input-error");
+        }
+    });
+
+    $("#modificar_factura").on("change blur", function() {
+        validarkeyup(
+            /^.+$/,
+            $(this),
+            $("#smfactura"),
+            "Debe seleccionar una factura"
+        );
     });
 
     function llenarSelectFacturasModal(idSeleccionada) {
@@ -340,10 +371,9 @@ $(document).ready(function () {
         tabla.row($(`tr[data-id="${id}"]`)).remove().draw(false);
     }
 
-    function mensajes(icono, tiempo, titulo, mensaje){
+    function mensajes(icono, titulo, mensaje){
         Swal.fire({
             icon: icono,
-            timer: tiempo,
             title: titulo,
             text: mensaje,
             showConfirmButton: true,
@@ -361,7 +391,7 @@ $(document).ready(function () {
         }
     }
 
-    function validarKeyUp(er, etiqueta, etiquetamensaje, mensaje) {
+    function validarkeyup(er, etiqueta, etiquetamensaje, mensaje) {
         a = er.test(etiqueta.val());
 
         if (a) {
