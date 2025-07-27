@@ -110,6 +110,98 @@ aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
                     </div>
                 </div>
             </div>
+            <div class="metodo-pago-container">
+    <label>Método de Pago</label>
+    
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="metodo_pago" id="transferencia" value="transferencia">
+        <label class="form-check-label" for="transferencia">Transferencia Bancaria</label>
+    </div>
+    
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="metodo_pago" id="pago_movil" value="pago_movil">
+        <label class="form-check-label" for="pago_movil">Pago Móvil</label>
+    </div>
+    
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="metodo_pago" id="efectivo" value="efectivo">
+        <label class="form-check-label" for="efectivo">Efectivo</label>
+    </div>
+    
+    <!-- Campos para transferencia -->
+    <div class="metodo-campos" id="campos-transferencia">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="banco">Banco</label>
+                <select name="banco" id="banco" class="form-control">
+                    <option value="">Seleccione un banco</option>
+                    <option value="Banesco">Banesco</option>
+                    <option value="Mercantil">Mercantil</option>
+                    <option value="Venezuela">Banco de Venezuela</option>
+                    <option value="Bancaribe">Bancaribe</option>
+                    <option value="Provincial">Provincial</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="referencia_transferencia">Número de Referencia</label>
+                <input type="text" name="referencia_transferencia" id="referencia_transferencia" placeholder="Ej: 123456789">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="fecha_transferencia">Fecha de Transferencia</label>
+                <input type="date" name="fecha_transferencia" id="fecha_transferencia">
+            </div>
+            <div class="col-md-6">
+                <label for="monto_transferencia">Monto Transferido</label>
+                <input type="number" step="0.01" name="monto_transferencia" id="monto_transferencia" placeholder="Ej: 100.00">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Campos para pago móvil -->
+    <div class="metodo-campos" id="campos-pago_movil">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="telefono_pago_movil">Teléfono</label>
+                <input type="text" name="telefono_pago_movil" id="telefono_pago_movil" placeholder="Ej: 04141234567">
+            </div>
+            <div class="col-md-6">
+                <label for="referencia_pago_movil">Referencia</label>
+                <input type="text" name="referencia_pago_movil" id="referencia_pago_movil" placeholder="Número de referencia">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="banco_pago_movil">Banco</label>
+                <select name="banco_pago_movil" id="banco_pago_movil">
+                    <option value="">Seleccione un banco</option>
+                    <option value="Banesco">Banesco</option>
+                    <option value="Mercantil">Mercantil</option>
+                    <option value="Venezuela">Banco de Venezuela</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="monto_pago_movil">Monto</label>
+                <input type="number" step="0.01" name="monto_pago_movil" id="monto_pago_movil" placeholder="Ej: 100.00">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Campos para efectivo -->
+    <div class="metodo-campos" id="campos-efectivo">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="monto_efectivo">Monto Recibido</label>
+                <input type="number" step="0.01" name="monto_efectivo" id="monto_efectivo" placeholder="Ej: 100.00">
+            </div>
+            <div class="col-md-6">
+                <label for="cambio_efectivo">Cambio</label>
+                <input type="number" step="0.01" name="cambio_efectivo" id="cambio_efectivo" placeholder="Ej: 20.00" readonly>
+            </div>
+        </div>
+    </div>
+</div>
         </div>
     </div>
 </div>

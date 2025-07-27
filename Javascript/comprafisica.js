@@ -452,6 +452,32 @@ $(document).ready(function () {
     }
 });
 
+// Manejo de los métodos de pago
+$(document).on('change', 'input[name="metodo_pago"]', function() {
+    // Ocultar todos los campos primero
+    $('.metodo-campos').removeClass('active');
+    
+    // Mostrar solo los campos del método seleccionado
+    const metodo = $(this).val();
+    $(`#campos-${metodo}`).addClass('active');
+});
+
+// Calcular cambio para efectivo
+$(document).on('input', '#monto_efectivo', function() {
+    // Aquí deberías calcular el total de la compra y restarlo del monto recibido
+    // Por ahora es un ejemplo básico
+    const montoRecibido = parseFloat($(this).val()) || 0;
+    const totalCompra = 100; // Reemplazar con el cálculo real del total
+    const cambio = montoRecibido - totalCompra;
+    
+    $('#cambio_efectivo').val(cambio.toFixed(2));
+});
+
+// También puedes agregar esto al inicio para ocultar todos los campos al cargar
+$(document).ready(function() {
+    $('.metodo-campos').removeClass('active');
+});
+
 // Función para colocar productos en la tabla
 function colocaproducto(linea) {
 var id = $(linea).find("td:eq(0)").text();
