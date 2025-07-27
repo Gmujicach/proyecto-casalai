@@ -114,7 +114,7 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
 aria-labelledby="modificarOrdenModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-        <form id="modificarOrden" method="POST">
+        <form id="modificarOrden" method="POST" novalidate>
         <input type="hidden" name="accion" value="modificar">
             <div class="modal-header">
             <h5 class="titulo-form" id="modificarOrdenModalLabel">Modificar Orden de Despacho</h5>
@@ -126,12 +126,12 @@ aria-labelledby="modificarOrdenModalLabel" aria-hidden="true">
                 <input type="hidden" id="modificar_id_orden" name="id_despachos">
                 <div class="form-group">
                     <label for="modificar_correlativo">Correlativo</label>
-                    <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" maxlength="10" required>
+                    <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" maxlength="10">
                     <span class="span-value" id="smcorrelativo"></span>
                 </div>
                 <div class="form-group">
                     <label for="modificar_fecha">Fecha</label>
-                    <input type="date" class="form-control" id="modificar_fecha" name="fecha" required>
+                    <input type="date" class="form-control" id="modificar_fecha" name="fecha">
                     <span class="span-value" id="smfecha"></span>
                 </div>
                 <div class="form-group">

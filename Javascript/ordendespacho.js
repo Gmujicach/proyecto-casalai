@@ -235,6 +235,47 @@ $(document).ready(function () {
         );
     });
 
+    function validarOrden() {
+        let correlativo = document.getElementById("modificar_correlativo");
+        correlativo.value = space(correlativo.value).trim();
+
+        let fecha = $("#modificar_fecha").val();
+        let hoy = new Date();
+        let fechaIngresada = new Date(fecha);
+        hoy.setHours(0,0,0,0);
+
+        if (validarkeyup(
+            /^[0-9]{4,10}$/,
+            $("#modificar_correlativo"),
+            $("#smcorrelativo"),
+            "*El correlativo debe tener de 4 a 10 dígitos*"
+        ) == 0) {
+            mensajes('error', 'Verifique el correlativo', 'Le faltan dígitos al correlativo');
+            return false;
+        }
+        else if ($("#modificar_fecha").val() === "") {
+            $("#smfecha").text("*Debe ingresar una fecha completa (día, mes y año)*");
+            mensajes('error', 'Verifique la fecha', 'La fecha está vacía, incompleta o no es válida');
+            return false;
+        } else if (fechaIngresada > hoy) {
+            $("#smfecha").text("*Solo se permite una fecha actual o una fecha anterior*");
+            mensajes('error', 'Verifique la fecha', 'No se permiten fechas futuras');
+            return false;
+        } else {
+            $("#smfecha").text("");
+        }
+
+        if ($("#modificar_factura").val() === null || $("#modificar_factura").val() === "") {
+            $("#smfactura").text("*Debe seleccionar una factura*");
+            mensajes('error', 'Verifique la factura', 'El campo está vacío');
+            return false;
+        } else {
+            $("#smfactura").text("");
+        }
+
+        return true;
+    }
+
     function llenarSelectFacturasModal(idSeleccionada) {
         let select = $('#modificar_factura');
         select.empty();
@@ -259,15 +300,14 @@ $(document).ready(function () {
     $('#modificarOrden').on('submit', function(e) {
         e.preventDefault();
 
+        if (!validarOrden()) {
+            return;
+        }
+
         let correlativo = $("#modificar_correlativo").val().trim();
         let fecha = $("#modificar_fecha").val().trim();
         let idFactura = $("#modificar_factura").val();
         let factura = $("#modificar_factura option:selected").text();
-
-        if(!/^[0-9]{4,10}$/.test(correlativo)){
-            Swal.fire('Error', 'Verifique el correlativo','Debe tener solo números');
-            return;
-        }
 
         var datos = new FormData(this);
         datos.append('accion', 'modificar');
