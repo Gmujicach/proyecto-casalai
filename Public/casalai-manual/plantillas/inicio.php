@@ -6,9 +6,7 @@
 
 <section>
     <p>En la <strong>barra lateral</strong>, al hacer clic en <strong>Gestionar <?= $nombre_singular ?></strong> lo
-        llevara a
-        la
-        <strong>Lista de <?= $nombre_plural ?></strong>.
+        llevara a la <strong>Lista de <?= $nombre_plural ?></strong>.
     </p>
 
     <table class="table table-bordered table-striped">

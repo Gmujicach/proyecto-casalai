@@ -4,13 +4,13 @@
     Eliminar <?= $nombre_singular ?>
 </h3>
 
-<p>En la <strong><?= $modificar_ubicacion ?></strong> de una <strong><?= $nombre_singular ?></strong> encontrara
+<p>En la <strong><?= $modificar_ubicacion ?></strong> de la vista <strong><?= $nombre_singular ?></strong> encontrara
     el
     boton
     <strong>Eliminar</strong>:
 </p>
 
-<p><?= renderImagen($id, "eliminar-boton.png") ?></p>
+<p><?= renderImagen($id, "modificar-boton.png") ?></p>
 
 <p>Dar <strong>clic</strong> en <strong>Eliminar</strong> lo llevara a la <strong>siguiente vista</strong>:</p>
 

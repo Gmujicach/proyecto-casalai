@@ -112,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
 
             case 'eliminar':
-               $id = $_POST['id'] ?? null;
+                $id = $_POST['id'] ?? null;
                 $ordendespachoModel = new OrdenDespacho();
                 if ($ordendespachoModel->eliminarOrdenDespacho($id)) {
                     $bitacoraModel->registrarAccion('Eliminación de orden de despacho: (ID: ' . $id . ')',

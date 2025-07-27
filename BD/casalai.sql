@@ -382,7 +382,8 @@ CREATE TABLE `tbl_facturas` (
 --
 
 INSERT INTO `tbl_facturas` (`id_factura`, `fecha`, `cliente`, `descuento`, `estatus`) VALUES
-(33, '2025-07-11', 11, 0, 'Borrador');
+(33, '2025-07-11', 11, 0, 'Borrador'),
+(34, '2025-07-22', 10, 0, 'Borrador');
 
 -- --------------------------------------------------------
 

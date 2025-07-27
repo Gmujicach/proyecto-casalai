@@ -19,7 +19,7 @@
 aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="ingresarOrdenDespacho" method="POST">
+            <form id="ingresarOrdenDespacho" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarOrdenModalLabel">Incluir Orden de Despacho</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -30,21 +30,21 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                     <input type="hidden" name="accion" value="ingresar">
                     <div class="envolver-form">
                         <label for="correlativo">Correlativo</label>
-                        <input type="text" class="control-form" id="correlativo" name="correlativo" placeholder="0123456789" maxlength="10" required>
+                        <input type="text" class="control-form" id="correlativo" name="correlativo" placeholder="0123456789" maxlength="10">
                         <span class="span-value" id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="fecha">Fecha</label>
-                        <input type="date" class="control-form" id="fecha" name="fecha" required>
+                        <input type="date" class="control-form" id="fecha" name="fecha">
                         <span class="span-value" id="sfecha"></span>
                     </div>
                     <div class="envolver-form">
-                        <label for="factura">Factura</label>
-                        <select name="factura" id="factura" class="form-select" required>
-                            <option value="" disabled selected>Seleccionar Factura</option>
+                        <label for="factura">Orden de compra</label>
+                        <select name="factura" id="factura" class="form-select">
+                            <option value="" disabled selected>Seleccionar orden de compra</option>
                             <?php foreach ($facturas as $factura): ?>
                                 <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
-                                    <?php echo htmlspecialchars('Factura #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']); ?>
+                                    <?php echo htmlspecialchars('Orden de compra #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -74,14 +74,14 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
             <tr>
                 <th>Correlativo</th>
                 <th>Fecha</th>
-                <th>Factura</th>
+                <th>Orden de compra</th>
                 <th>Acciones</th>
             </tr>
         </thead>
 
         <tbody>
         <?php foreach ($ordendespacho as $orden): ?>
-            <tr>
+            <tr data-id="<?php echo $orden['id_orden_despachos']; ?>">
                 <td><span class="campo-numeros"><?php echo htmlspecialchars($orden['correlativo']); ?></span></td>
                 <td><span class="campo-nombres"><?php echo htmlspecialchars($orden['fecha_despacho']); ?></span></td>
                 <td><span class="campo-numeros"><?php echo htmlspecialchars($orden['id_factura']); ?></span></td>
@@ -114,7 +114,7 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
 aria-labelledby="modificarOrdenModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-        <form id="modificarOrden" method="POST">
+        <form id="modificarOrden" method="POST" novalidate>
         <input type="hidden" name="accion" value="modificar">
             <div class="modal-header">
             <h5 class="titulo-form" id="modificarOrdenModalLabel">Modificar Orden de Despacho</h5>
@@ -126,16 +126,16 @@ aria-labelledby="modificarOrdenModalLabel" aria-hidden="true">
                 <input type="hidden" id="modificar_id_orden" name="id_despachos">
                 <div class="form-group">
                     <label for="modificar_correlativo">Correlativo</label>
-                    <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" maxlength="10" required>
+                    <input type="text" class="form-control" id="modificar_correlativo" name="correlativo" maxlength="10">
                     <span class="span-value" id="smcorrelativo"></span>
                 </div>
                 <div class="form-group">
                     <label for="modificar_fecha">Fecha</label>
-                    <input type="date" class="form-control" id="modificar_fecha" name="fecha" required>
+                    <input type="date" class="form-control" id="modificar_fecha" name="fecha">
                     <span class="span-value" id="smfecha"></span>
                 </div>
                 <div class="form-group">
-                    <label for="modificar_factura">Factura</label>
+                    <label for="modificar_factura">Orden de compra</label>
                     <select name="factura" id="modificar_factura" class="form-control">
                     <?php foreach ($facturas as $factura): ?>
                         <option value="<?php echo htmlspecialchars($factura['id_factura']); ?>">
@@ -172,7 +172,7 @@ window.facturasDisponibles = <?php
 echo json_encode(array_map(function($factura) {
     return [
         'id_factura' => $factura['id_factura'],
-        'factura' => 'Factura #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']
+        'factura' => 'Orden de compra #'.$factura['id_factura'].' Cliente: '.$factura['nombre'].' Fecha '.$factura['fecha']
     ];
 }, $facturas));
 ?>;

@@ -267,3 +267,111 @@ select option[value=""] [disabled]{
     display: block; /* Mostrar siempre el placeholder */
     color: #999;
 }
+
+/* Estilos para los métodos de pago */
+.metodo-pago-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.metodo-pago-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-check {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.form-check-label {
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+}
+
+.metodo-campos {
+    padding: 12px;
+    background-color: #fff;
+    border-radius: 6px;
+    margin-top: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: none; /* Oculto por defecto */
+}
+
+.metodo-campos.active {
+    display: block; /* Mostrar cuando tenga la clase active */
+}
+
+.metodo-campos label {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.metodo-campos input,
+.metodo-campos select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.metodo-campos input:focus,
+.metodo-campos select:focus {
+    border-color: #5995fd;
+    box-shadow: 0 0 0 2px rgba(89, 149, 253, 0.2);
+}
+
+/* Estilos para las filas dentro de los campos de método */
+.metodo-campos .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.metodo-campos .row:last-child {
+    margin-bottom: 0;
+}
+
+.metodo-campos .col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding: 0 8px;
+}
+
+/* Responsive para pantallas pequeñas */
+@media screen and (max-width: 600px) {
+    .metodo-campos .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    .metodo-campos .row {
+        flex-direction: column;
+    }
+    
+    .metodo-campos input,
+    .metodo-campos select {
+        margin-bottom: 15px;
+    }
+}

@@ -1,4 +1,11 @@
-<?php require_once "utils.php"; ?>
+<?php 
+require_once "utils.php";
+session_start();
+
+// Determinar tipo de usuario basado en la sesión
+$esCliente = isset($_SESSION['nombre_rol']) && $_SESSION['nombre_rol'] == 'Cliente';
+$esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'SuperUsuario');
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -10,6 +17,30 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="img/logo.png">
     <title>Manual de Usuario - Casa Lai.Ca</title>
+    <style>
+        .section-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #0d6efd;
+        }
+        .hidden-section {
+            display: none;
+        }
+        .access-message {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -60,7 +91,7 @@
 
             <p>
                 Puede acceder al resto de opciones a traves de la <strong>barra lateral</strong>. Dependiendo de su
-                <strong>Rol</strong> sera capaz de acceder a uno o más opciones.
+                <strong>Rol</strong> sera capaz de acceder a una o más opciones.
             </p>
 
             <p>
@@ -86,363 +117,473 @@
             <?= renderImagen("dashboard", "cerrar-sesion.png") ?>
         </section>
 
-        <div id="rol-usuario">
-            <h1 class="fw-bold text-decoration-underline">Usuarios</h1>
+        <?php if ($esCliente || $esAdministrador): ?>
+            <!-- SECCIÓN PARA CLIENTES -->
+            <?php if ($esCliente): ?>
+            <div id="rol-usuario" class="section-card">
+                <h2 class="section-title">Sección para Clientes</h2>
+                
+                <h1 class="fw-bold text-decoration-underline">Usuarios</h1>
+                <p>Sera capaz de acceder a las siguientes opciones:</p>
 
-            <p>Sera capaz de acceder a las siguientes opciones:</p>
-
-            <section>
-                <?php
-                $datos = [
-                    "id" => "catalogo",
-                    "nombre_singular" => "Catalogo de productos",
-                    "nombre_plural" => "Catalogo de productos",
-                    "gestionable" => [
-                        "Los productos que desee agregar a su carrito"
-                    ],
-                ];
-
-                plantilla("inicio", $datos);
-                ?>
-
-                <p>A su vez en la <strong>parte superior</strong> encontrara pestañas que le permitiran ir a
-                    <strong>Combos Promocionales</strong>.
-                </p>
-
-                <?= renderImagen("catalogo", "tab.png") ?>
-
-                <p>En esta vista podra ver mas ofertas de productos:</p>
-
-                <?= renderImagen("catalogo", "vista-2.png") ?>
-            </section>
-
-            <section>
-                <h3 class="text-primary-emphasis">Agregar Producto al carrito</h3>
-
-                <p>En cada producto podra presionar el boton <strong>Agregar</strong> en la
-                    <strong>parte izquierda</strong> para agregarlo a su <strong>carrito de
-                        compras</strong>.
-                </p>
-
-                <?= renderImagen("catalogo", "agregar.png") ?>
-            </section>
-        </div>
-
-        <div id="rol-almacenista">
-            <h1 class="fw-bold text-decoration-underline">Almacenista</h1>
-
-            <p>Sera capaz de acceder a las opciones del <strong>Usuario</strong> en conjunto con las siguientes
-                opciones:</p>
-
-            <section>
-                <?php
-                $datos = [
-                    "id" => "recepcion",
-                    "nombre_singular" => "Recepción",
-                    "nombre_plural" => "Recepciones",
-                    "modificar_ubicacion" => "parte derecha",
-                    "modificar_extra" => "Incluso podra <strong>agregar y remover</strong> sus productos si asi lo desea.",
-                    "gestionable" => [
-                        "Fecha",
-                        "Correlación",
-                        "Proveedor",
-                        "Producto",
-                        "Cantidad",
-                        "Costo de inversión",
-                    ],
-                    "instrucciones" => [
-                        "Correlativo del producto",
-                        "Seleccionar un proveedor",
-                        "Seleccionar uno o más productos de la <strong>Lista de Productos</strong>"
-                    ]
-                ];
-
-                plantilla("inicio", $datos);
-                plantilla("incluir", $datos);
-                plantilla("modificar", $datos);
-                ?>
-            </section>
-
-            <section class="mb-5">
-                <?php
-                $datos = [
-                    "id" => "despacho",
-                    "nombre_singular" => "Despacho",
-                    "nombre_plural" => "Despachos",
-                    "modificar_ubicacion" => "parte derecha",
-                    "gestionable" => [
-                        "Fecha",
-                        "Correlación",
-                        "Cliente",
-                        "Producto",
-                        "Cantidad",
-                    ],
-                    "instrucciones" => [
-                        "Correlativo del producto",
-                        "Seleccionar un cliente",
-                        "Seleccionar uno o más productos de la <strong>Lista de Productos</strong>"
-                    ]
-                ];
-
-                plantilla("inicio", $datos);
-                plantilla("incluir", $datos);
-                plantilla("modificar", $datos);
-                plantilla("reporte", $datos);
-                ?>
-            </section>
-
-            <section class="mb-5">
-                <?php plantilla("crud", [
-                    "id" => "marca",
-                    "nombre_singular" => "Marca",
-                    "nombre_plural" => "Marcas",
-                    "modificar_ubicacion" => "parte izquierda",
-                    "gestionable" => [
-                        "Nombre",
-                    ],
-                    "instrucciones" => [
-                        "Nombre de la Marca",
-                    ]
-                ]); ?>
-            </section>
-
-            <section class="mb-5">
-                <?php plantilla("crud", [
-                    "id" => "modelo",
-                    "nombre_singular" => "modelo",
-                    "nombre_plural" => "Modelos",
-                    "modificar_ubicacion" => "parte izquierda",
-                    "gestionable" => [
-                        "Nombre",
-                    ],
-                    "instrucciones" => [
-                        "Seleccionar una marca",
-                        "Nombre del modelo",
-                    ],
-                ]); ?>
-            </section>
-
-            <section class="mb-5">
                 <section>
                     <?php
                     $datos = [
-                        "id" => "producto",
-                        "nombre_singular" => "Producto",
-                        "nombre_plural" => "Productos",
-
+                        "id" => "catalogo",
+                        "nombre_singular" => "Catalogo de productos",
+                        "nombre_plural" => "Catalogo de productos",
                         "gestionable" => [
-                            "Foto del producto",
-                            "Nombre",
-                            "Descripción",
-                            "Stock Actual",
-                            "Stock Max / Stock Min",
-                            "Serial",
-                            "Clausula de garantia",
-                            "Categoria",
-                            "Precio",
-                            "Estado"
+                            "Los productos que desee agregar a su carrito"
+                        ],
+                    ];
+
+                    plantilla("inicio", $datos);
+                    ?>
+
+                    <p>A su vez en la <strong>parte superior</strong> encontrara pestañas que le permitiran ir a
+                        <strong>Combos Promocionales</strong>.
+                    </p>
+
+                    <?= renderImagen("catalogo", "tab.png") ?>
+
+                    <p>En esta vista podra ver mas ofertas de productos:</p>
+
+                    <?= renderImagen("catalogo", "vista-2.png") ?>
+                </section>
+
+                <section>
+                    <h3 class="text-primary-emphasis">Agregar Producto al carrito</h3>
+
+                    <p>En cada producto podra presionar el boton <strong>Agregar</strong> en la
+                        <strong>parte izquierda</strong> para agregarlo a su <strong>carrito de
+                            compras</strong>.
+                    </p>
+
+                    <?= renderImagen("catalogo", "agregar.png") ?>
+                </section>
+                <section>
+                    <h3 class="text-primary-emphasis">Gestionar carrito</h3>
+
+                    <p>En la seccion del carrito de compras podra <strong>Ajustar</strong> la
+                        <strong>cantidad</strong> de productos que desea adquirir <strong>aumentando o disminuyendo</strong> la cantidad, 
+                        asi como <strong>eliminar productos</strong> del carrito o <strong>eliminando todo</strong> el contenido del carrito.
+                    </p>
+
+                    <?= renderImagen("carrito", "carrito.png") ?>
+                </section>
+                <section>
+                    <h3 class="text-primary-emphasis">Prefacturar compra</h3>
+
+                    <p>Una vez elegido los productos que desea adquirir podra presionar el boton <strong>Prefacturar</strong> 
+                        para proceder a generar el pedido de productos <strong>aumentando o disminuyendo</strong> la cantidad, 
+                        asi como <strong>eliminar productos</strong> del carrito o <strong>eliminando todo</strong> el contenido del carrito.
+                    </p>
+
+                    <?= renderImagen("carrito", "prefacturar.png") ?>
+                </section>
+            </div>
+            <?php endif; ?>
+
+            <!-- SECCIÓN PARA ADMINISTRADORES -->
+            <?php if ($esAdministrador): ?>
+            <div id="rol-almacenista" class="section-card">
+                <h2 class="section-title">Sección para Administradores - Almacenista</h2>
+                
+                <h1 class="fw-bold text-decoration-underline">Almacenista</h1>
+                <p>Sera capaz de acceder a las opciones del <strong>Almacenista</strong> en conjunto con las siguientes
+                    opciones:</p>
+
+                <section>
+                    <?php
+                    $datos = [
+                        "id" => "recepcion",
+                        "nombre_singular" => "Recepción",
+                        "nombre_plural" => "Recepciones",
+                        "modificar_ubicacion" => "parte derecha",
+                        "modificar_extra" => "Incluso podra <strong>agregar y remover</strong> sus productos si asi lo desea.",
+                        "gestionable" => [
+                            "Fecha",
+                            "Correlación",
+                            "Proveedor",
+                            "Producto",
+                            "Cantidad",
+                            "Costo de inversión",
                         ],
                         "instrucciones" => [
-                            "Nombre del producto",
-                            "Imagen del producto",
-                            "Descripcion del producto",
-                            "Seleccionar un modelo",
-                            "Seleccionar el Stock Actual, Maximo y Minimo",
-                            "Clausula de garantia",
-                            "Seleccionar una categoria",
-                            "Codigo serial",
-                            "Precio",
-                        ],
+                            "Correlativo del producto",
+                            "Seleccionar un proveedor",
+                            "Seleccionar uno o más productos de la <strong>Lista de Productos</strong>"
+                        ]
                     ];
 
                     plantilla("inicio", $datos);
                     plantilla("incluir", $datos);
+                    plantilla("modificar", $datos);
                     ?>
                 </section>
 
-                <section class="mb-4">
-                    <?php plantilla("estado", $datos); ?>
-                </section>
-
-                <section class="mb-4">
-                    <?php plantilla("reporte", $datos); ?>
-                </section>
-            </section>
-
-            <section class="mb-5">
-                <?php plantilla("crud", [
-                    "id" => "categoria",
-                    "nombre_singular" => "Categoria",
-                    "nombre_plural" => "Categorias",
-                    "modificar_ubicacion" => "parte izquierda",
-                    "modificar_extra" => "Debe haber como minimo una <strong>caracteristica</strong>",
-                    "gestionable" => [
-                        "Nombre",
-                        "Caracteristicas",
-                    ],
-                    "instrucciones" => [
-                        "Nombre de la categoria",
-                        "Insertar al menos una caracteristica",
-                    ],
-                ]); ?>
-            </section>
-        </div>
-
-        <div id="rol-administrador">
-            <h1 class="fw-bold text-decoration-underline">Administradores</h1>
-
-            <p>Sera capaz de acceder a las opciones del <strong>Usuario</strong> y del <strong>Despachador</strong>
-                en conjunto con las siguientes opciones:</p>
-
-            <section class="mb-5">
-                <section>
+                <section class="mb-5">
                     <?php
                     $datos = [
-                        "id" => "provedor",
-                        "nombre_singular" => "Provedor",
-                        "nombre_plural" => "Provedores",
+                        "id" => "despacho",
+                        "nombre_singular" => "Despacho",
+                        "nombre_plural" => "Despachos",
+                        "modificar_ubicacion" => "parte derecha",
+                        "gestionable" => [
+                            "Fecha",
+                            "Correlación",
+                            "Cliente",
+                            "Producto",
+                            "Cantidad",
+                        ],
+                        "instrucciones" => [
+                            "Correlativo del producto",
+                            "Seleccionar un cliente",
+                            "Seleccionar uno o más productos de la <strong>Lista de Productos</strong>"
+                        ]
+                    ];
+
+                    plantilla("inicio", $datos);
+                    plantilla("incluir", $datos);
+                    plantilla("modificar", $datos);
+                    plantilla("reporte", $datos);
+                    ?>
+                </section>
+
+                <section class="mb-5">
+                    <?php plantilla("crud", [
+                        "id" => "marca",
+                        "nombre_singular" => "Marca",
+                        "nombre_plural" => "Marcas",
+                        "modificar_ubicacion" => "parte izquierda",
                         "gestionable" => [
                             "Nombre",
-                            "RIF",
-                            "Nombre del proveedor",
-                            "RIF del representante",
-                            "Correo del proveedor",
-                            "Dirección del proveedor",
-                            "Telefono principal",
-                            "Telefono secundario",
-                            "Observación",
-                            "Estado"
+                        ],
+                        "instrucciones" => [
+                            "Nombre de la Marca",
+                        ]
+                    ]); ?>
+                </section>
+
+                <section class="mb-5">
+                    <?php plantilla("crud", [
+                        "id" => "modelo",
+                        "nombre_singular" => "modelo",
+                        "nombre_plural" => "Modelos",
+                        "modificar_ubicacion" => "parte izquierda",
+                        "gestionable" => [
+                            "Nombre",
+                        ],
+                        "instrucciones" => [
+                            "Seleccionar una marca",
+                            "Nombre del modelo",
+                        ],
+                    ]); ?>
+                </section>
+
+                <section class="mb-5">
+                    <section>
+                        <?php
+                        $datos = [
+                            "id" => "producto",
+                            "nombre_singular" => "Producto",
+                            "nombre_plural" => "Productos",
+
+                            "gestionable" => [
+                                "Foto del producto",
+                                "Nombre",
+                                "Descripción",
+                                "Stock Actual",
+                                "Stock Max / Stock Min",
+                                "Serial",
+                                "Clausula de garantia",
+                                "Categoria",
+                                "Precio",
+                                "Estado"
+                            ],
+                            "instrucciones" => [
+                                "Nombre del producto",
+                                "Imagen del producto",
+                                "Descripcion del producto",
+                                "Seleccionar un modelo",
+                                "Seleccionar el Stock Actual, Maximo y Minimo",
+                                "Clausula de garantia",
+                                "Seleccionar una categoria",
+                                "Codigo serial",
+                                "Precio",
+                            ],
+                        ];
+
+                        plantilla("inicio", $datos);
+                        plantilla("incluir", $datos);
+                        
+                        plantilla("reporte", $datos);
+                        ?>
+                    </section>
+                    <section>
+                        <?php plantilla("modificar", [
+    "id" => "producto",
+    "nombre_singular" => "Producto",
+    "modificar_ubicacion" => "parte izquierda",
+    "modificar_extra" => "Puede actualizar todos los campos incluyendo la imagen del producto"
+]);?>
+                    </section>
+
+                    <section>
+                        <?php plantilla("eliminar", [
+    "id" => "producto",
+    "nombre_singular" => "Producto",
+    "modificar_ubicacion" => "parte izquierda",
+    "modificar_extra" => "Puede eliminar todos los datos del producto, incluyendo la imagen"
+]);?>
+                    </section>
+
+                    <section class="mb-4">
+                        <?php plantilla("estado", $datos); ?>
+                    </section>
+
+                    
+
+                <section class="mb-5">
+                    <?php plantilla("crud", [
+                        "id" => "categoria",
+                        "nombre_singular" => "Categoria",
+                        "nombre_plural" => "Categorias",
+                        "modificar_ubicacion" => "parte izquierda",
+                        "modificar_extra" => "Debe haber como minimo una <strong>caracteristica</strong>",
+                        "gestionable" => [
+                            "Nombre",
+                            "Caracteristicas",
                         ],
                         "instrucciones" => [
                             "Nombre de la categoria",
                             "Insertar al menos una caracteristica",
+                        ],
+                    ]); ?>
+                </section>
+            </div>
+
+            <div id="rol-administrador" class="section-card">
+                <h2 class="section-title">Sección para Administradores</h2>
+                
+                <h1 class="fw-bold text-decoration-underline">Administradores</h1>
+                <p>Sera capaz de acceder a las opciones del <strong>Usuario</strong> y del <strong>Despachador</strong>
+                    en conjunto con las siguientes opciones:</p>
+
+                <section class="mb-5">
+                    <section>
+                        <?php
+                        $datos = [
+                            "id" => "proveedor",
+                            "nombre_singular" => "Proveedor",
+                            "nombre_plural" => "Proveedores",
+                            "modificar_ubicacion" => "parte izquierda",
+                            "gestionable" => [
+                                "Nombre",
+                                "RIF",
+                                "Nombre del proveedor",
+                                "RIF del representante",
+                                "Correo del proveedor",
+                                "Dirección del proveedor",
+                                "Telefono principal",
+                                "Telefono secundario",
+                                "Observación",
+                                "Estado"
+                            ],
+                            "instrucciones" => [
+                                "Nombre del proveedor",
+                                "Rif del proveedor",
+                                "Nombre del representante",
+                                "Rif del representante",
+                                "Correo del proveedor",
+                                "Dirección del proveedor",
+                                "Teléfono principal del proveedor",
+                                "Teléfono secundario del proveedor",
+                                "Observación del proveedor",
+                            ],
+                        ];
+
+                        
+                        
+                        
+                        
+                        ?>
+                    </section>
+                    <section class="mb-4">
+                        <?php 
+                        plantilla("inicio", $datos);
+                        plantilla("incluir", $datos);
+                        plantilla("modificar", $datos);
+                        plantilla("eliminar", $datos);
+                        
+                        
+                        plantilla("estado", $datos); ?>
+                    </section>
+                    
+                
+                </section>
+
+                <section class="mb-5">
+                    <section>
+                        <?php
+                        $datos = [
+                            "id" => "cliente",
+                            "nombre_singular" => "Cliente",
+                            "nombre_plural" => "Clientes",
+                            "modificar_ubicacion" => "parte izquierda",
+                            "reporte_boton" => "Compras",
+                            "gestionable" => [
+                                "Nombre del cliente",
+                                "Cedula/RIF",
+                                "Dirección",
+                                "Teléfono",
+                                "Correo",
+                            ],
+                            "instrucciones" => [
+                                "Nombre completo del cliente",
+                                "Cedula o RIF del cliente",
+                                "Número de teléfono del cliente",
+                                "Dirección del cliente",
+                                "Correo electrónico del cliente",
+                            ],
+                        ];
+
+                        plantilla("crud", $datos);
+                        ?>
+                    </section>
+
+                    <section class="mb-4">
+                        <?php plantilla("reporte", $datos); ?>
+                    </section>
+                </section>
+
+                <section class="mb-5">
+                    <section>
+                        <?php
+                        $datos = [
+                            "id" => "banco",
+                            "nombre_singular" => "Cuenta Bancaria",
+                            "nombre_plural" => "Cuentas Bancarias",
+                            "modificar_ubicacion" => "parte izquierda",
+                            "gestionable" => [
+                                "Nombre del banco",
+                                "Número de cuenta",
+                                "RIF",
+                                "Teléfono",
+                                "Correo",
+                                "Estatus",
+                            ],
+                            "instrucciones" => [
+                                "Nombre del banco",
+                                "Número de cuenta",
+                                "RIF",
+                                "Número de teléfono",
+                                "Correo Electrónico",
+                            ],
+                        ];
+
+                        plantilla("crud", $datos);
+                        ?>
+                    </section>
+
+                    <section class="mb-4">
+                        <?php plantilla("estado", $datos); ?>
+                    </section>
+                </section>
+
+                <section class="mb-5">
+                    <?php
+                    $datos = [
+                        "id" => "usuario",
+                        "nombre_singular" => "Usuario",
+                        "nombre_plural" => "Usuarios",
+                        "modificar_ubicacion" => "parte izquierda",
+                        "gestionable" => [
+                            "Nombre y Apellido",
+                            "Correo",
+                            "Usuario",
+                            "Teléfono",
+                            "Rol",
+                            "Estatus",
+                        ],
+                        "instrucciones" => [
+                            "Nombre de la persona",
+                            "Apellido de la persona",
+                            "Nombre de usuario",
+                            "Número de teléfono",
+                            "Correo electrónico",
+                            "Seleccionar un rol de usuario",
+                            "Contraseña",
+                            "Confirmar su contraseña"
+                        ],
+                    ];
+
+                    plantilla("crud", $datos);
+                    plantilla("reporte", $datos);
+                    ?>
+                </section>
+
+                
+
+                <section class="mb-5">
+                    <?php
+                    $datos = [
+                        "id" => "rol",
+                        "nombre_singular" => "Rol",
+                        "nombre_plural" => "Roles",
+                        "modificar_ubicacion" => "parte izquierda",
+                        "gestionable" => [
+                            "Nombre del rol",
+                        ],
+                        "instrucciones" => [
+                            "Nombre del rol"
+                        ],
+                    ];
+
+                    plantilla("crud", $datos);
+                    
+                    ?>
+                </section>
+
+                <section class="mb-5">
+                    <?php
+                    $datos = [
+                        "id" => "catalogo",
+                        "nombre_singular" => "Catalogo",
+                        "nombre_plural" => "Catalogo",
+                        "modificar_ubicacion" => "parte izquierda",
+                        "gestionable" => [
+                            "Crear combos de productos",
+                            "Disponiblidad de combos",
+                            "Editar los combos",
+                            "Habilitar o deshabilitar combos",
+                        ],
+                        "instrucciones" => [
+                            "Crear combos de productos",
+                            "Disponibilidad de combos",
+                            "Editar los combos",
+                            "Habilitar o deshabilitar combos",
                         ],
                     ];
 
                     plantilla("inicio", $datos);
-                    # plantilla("incluir", $datos);
+                    plantilla("mostrar", $datos);
+                    
+                   
+                    plantilla("reporte", $datos);
                     ?>
                 </section>
 
-                <section class="mb-4">
-                    <?php plantilla("estado", $datos); ?>
-                </section>
-            </section>
-
-            <section class="mb-5">
-                <section>
-                    <?php
-                    $datos = [
-                        "id" => "cliente",
-                        "nombre_singular" => "Cliente",
-                        "nombre_plural" => "Clientes",
-                        "modificar_ubicacion" => "parte izquierda",
-                        "reporte_boton" => "Compras",
-                        "gestionable" => [
-                            "Nombre del cliente",
-                            "Cedula",
-                            "Dirección",
-                            "Teléfono",
-                            "Correo",
-                        ],
-                        "instrucciones" => [
-                            "Nombre de la categoria",
-                            "Insertar al menos una caracteristica",
-                        ],
-                    ];
-
-                    plantilla("crud", $datos);
-                    ?>
-                </section>
-
-                <section class="mb-4">
-                    <?php plantilla("reporte", $datos); ?>
-                </section>
-            </section>
-
-            <section class="mb-5">
-                <section>
-                    <?php
-                    $datos = [
-                        "id" => "banco",
-                        "nombre_singular" => "Cuenta Bancaria",
-                        "nombre_plural" => "Cuentas Bancarias",
-                        "modificar_ubicacion" => "parte izquierda",
-                        "gestionable" => [
-                            "Nombre del banco",
-                            "Número de cuenta",
-                            "RIF",
-                            "Teléfono",
-                            "Correo",
-                            "Estatus",
-                        ],
-                        "instrucciones" => [
-                            "Nombre del banco",
-                            "Número de cuenta",
-                            "RIF",
-                            "Número de teléfono",
-                            "Correo Electrónico",
-                        ],
-                    ];
-
-                    plantilla("crud", $datos);
-                    ?>
-                </section>
-
-                <section class="mb-4">
-                    <?php plantilla("estado", $datos); ?>
-                </section>
-            </section>
-
-            <section class="mb-5">
-                <?php
-                $datos = [
-                    "id" => "usuario",
-                    "nombre_singular" => "Usuario",
-                    "nombre_plural" => "Usuarios",
-                    "modificar_ubicacion" => "parte izquierda",
-                    "gestionable" => [
-                        "Nombre y Apellido",
-                        "Correo",
-                        "Usuario",
-                        "Teléfono",
-                        "Rol",
-                        "Estatus",
-                    ],
-                    "instrucciones" => [
-                        "Nombre de la persona",
-                        "Apellido de la persona",
-                        "Nombre de usuario",
-                        "Número de teléfono",
-                        "Correo electrónico",
-                        "Seleccionar un rol de usuario",
-                        "Contraseña",
-                        "Confirmar su contraseña"
-                    ],
-                ];
-
-                plantilla("crud", $datos);
-                plantilla("reporte", $datos);
-                ?>
-            </section>
-
-            <section class="mb-5">
-                <?php
-                $datos = [
-                    "id" => "rol",
-                    "nombre_singular" => "Rol",
-                    "nombre_plural" => "Roles",
-                    "modificar_ubicacion" => "parte izquierda",
-                    "gestionable" => [
-                        "Nombre",
-                    ],
-                ];
-
-                plantilla("inicio", $datos);
-                ?>
-            </section>
-        </div>
+                
+            </div>
+            <?php endif; ?>
+        <?php else: ?>
+            <div class="alert alert-warning text-center">
+                <h4>Debes iniciar sesión para ver el manual</h4>
+                <p>Por favor, inicia sesión como cliente o administrador para acceder a las instrucciones del sistema.</p>
+                <a href="?pagina=login" class="btn btn-primary">Iniciar Sesión</a>
+            </div>
+        <?php endif; ?>
     </main>
 </body>
-
 </html>

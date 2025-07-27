@@ -1,19 +1,22 @@
 <?php require_once "utils.php"; ?>
 
 <h3 class="text-primary-emphasis" id="incluir-<?= $nombre_singular ?>">
-    Incluir <?= $nombre_singular ?>
+    Mostrar <?= $nombre_singular ?>
 </h3>
 
 <p>
-    En la <strong>parte superior</strong> encontrara el boton <strong>Incluir <?= $nombre_singular ?>.</strong>
+    En la sección <strong>catalogo</strong> encontrará todos los productos disponibles en la tienda.
 </p>
 
-<p><?= renderImagen($id, "incluir-boton.png") ?></p>
+<p><?= renderImagen($id, "vista.png") ?></p>
 
-<p>Al hacer <strong>clic</strong> lo llevara a la <strong>siguiente vista</strong>:</p>
 
-<p><?= renderImagen($id, "incluir-modal.png") ?></p>
+<p>Al hacer <strong>clic</strong> en el botón <strong>Agregar</strong> se desplegara una ventana donde podrá seleccionar la contidad 
+de productos que desea adquirir:</p>
+<p><?= renderImagen($id, "cantidad.png") ?></p>
 
+<p>Al presionar el botón <strong>Agregar al carrito</strong> el producto sera añadido al carrito de compras</p>
+<p><?= renderImagen($id, "agregar-producto-carrito.png") ?></p>
 <p><strong>Deberá introducir los datos indicados:</strong></p>
 
 <ul>
