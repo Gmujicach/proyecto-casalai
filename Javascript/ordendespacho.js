@@ -303,12 +303,12 @@ $(document).ready(function () {
         if (!validarOrden()) {
             return;
         }
-
+/*
         let correlativo = $("#modificar_correlativo").val().trim();
         let fecha = $("#modificar_fecha").val().trim();
         let idFactura = $("#modificar_factura").val();
         let factura = $("#modificar_factura option:selected").text();
-
+*/
         var datos = new FormData(this);
         datos.append('accion', 'modificar');
         enviarAjax(datos, function(respuesta){
