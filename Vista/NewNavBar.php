@@ -4,6 +4,7 @@ require_once('modelo/permiso.php');
 
 $id_rol = $_SESSION['id_rol'];
 $nombre_rol = $_SESSION['nombre_rol'] ?? '';
+$id_usuario = $_SESSION['id_usuario'] ?? 0;
 
 $permisosObj = new Permisos();
 
@@ -41,13 +42,36 @@ if ($nombre_rol === 'SuperUsuario') {
     unset($permiso);
 }
 
-$bd_navbar = new BD('S');
-$pdo_navbar = $bd_navbar->getConexion();
-$query = "SELECT b.*, m.nombre_modulo, u.nombres FROM tbl_bitacora b JOIN tbl_modulos m ON b.id_modulo = m.id_modulo JOIN tbl_usuarios u ON b.id_usuario = u.id_usuario ORDER BY b.fecha_hora DESC LIMIT 5";
-$stmt = $pdo_navbar->prepare($query);
+$bd_seguridad = new BD('S'); // Asumo que 'S' es para seguridad
+$pdo_seguridad = $bd_seguridad->getConexion();
+
+// Conexión a la base de datos de casalai
+$bd_casalai = new BD('C'); // Asumo que 'C' es para casalai (deberás configurar esto)
+$pdo_casalai = $bd_casalai->getConexion();
+
+// Consulta de notificaciones
+$query = "SELECT * FROM tbl_notificaciones 
+          WHERE id_usuario = :id_usuario AND leido = 0
+          ORDER BY fecha_hora DESC LIMIT 5";
+$stmt = $pdo_seguridad->prepare($query);
+$stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$notificaciones_count = is_array($result) ? count($result) : 0;
+$notificaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Procesar notificaciones para obtener más detalles si es necesario
+foreach ($notificaciones as &$notif) {
+    if ($notif['tipo'] == 'pago' && $notif['id_referencia']) {
+        // Obtener detalles del pago desde casalai
+        $query_pago = "SELECT * FROM tbl_detalles_pago WHERE id_detalles = ?";
+        $stmt_pago = $pdo_casalai->prepare($query_pago);
+        $stmt_pago->execute([$notif['id_referencia']]);
+        $notif['detalle_pago'] = $stmt_pago->fetch(PDO::FETCH_ASSOC);
+    }
+    // Puedes añadir más casos para otros tipos de notificaciones
+}
+unset($notif); // Romper la referencia
+
+$notificaciones_count = count($notificaciones);
 ?>
 
 <aside class="sidebar">
@@ -61,27 +85,37 @@ $notificaciones_count = is_array($result) ? count($result) : 0;
         <span class="campana"><?php echo $notificaciones_count; ?></span>
     </div>
 
-    <div class="notificacion" id="contenedor-notificacion">
-        <h2>Notificaciones <span><?php echo $notificaciones_count; ?></span></h2>
-        <?php if ($notificaciones_count > 0): ?>
-            <?php foreach ($result as $row): ?>
-                <div class="item-notificacion">
-                    <div class="texto">
-                        <img src="img/usuario_circulo.svg" alt="img">
-                        <h4><?= htmlspecialchars($row['nombres']) ?></h4>
-                        <p><?= htmlspecialchars($row['accion']) . ' en ' . htmlspecialchars($row['nombre_modulo']) ?></p>
-                        <small><?= date('d/m/Y H:i', strtotime($row['fecha_hora'])) ?></small>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
+   <div class="notificacion" id="contenedor-notificacion">
+    <h2>Notificaciones <span><?php echo $notificaciones_count; ?></span></h2>
+    <?php if ($notificaciones_count > 0): ?>
+        <?php foreach ($notificaciones as $notif): ?>
             <div class="item-notificacion">
                 <div class="texto">
-                    <p>No hay notificaciones recientes</p>
+                    <img src="img/<?php 
+                        echo $notif['tipo'] == 'pago' ? 'credit-card' : 
+                             ($notif['tipo'] == 'factura' ? 'receipt-text' : 
+                              ($notif['tipo'] == 'despacho' ? 'package-check' : 'bell')); 
+                    ?>.svg" alt="img">
+                    <h4><?= htmlspecialchars($notif['titulo']) ?></h4>
+                    <p><?= htmlspecialchars($notif['mensaje']) ?></p>
+                    <?php if ($notif['tipo'] == 'pago' && !empty($notif['detalle_pago'])): ?>
+                        <small>Referencia: <?= htmlspecialchars($notif['detalle_pago']['referencia']) ?></small>
+                    <?php endif; ?>
+                    <small><?= date('d/m/Y H:i', strtotime($notif['fecha_hora'])) ?></small>
                 </div>
+                <button class="marcar-leido" data-id="<?= $notif['id_notificacion'] ?>">
+                    <img src="img/check.svg" alt="Marcar como leído">
+                </button>
             </div>
-        <?php endif; ?>
-    </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="item-notificacion">
+            <div class="texto">
+                <p>No hay notificaciones recientes</p>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
 
     <ul class="menu-link">
 
@@ -188,4 +222,59 @@ foreach ($modulos as $moduloBD => $info) {
             </div>
         </div>
     </div>
+
+    <script>
+// Función para mostrar/ocultar notificaciones
+function toggleNotification() {
+    const notificacion = document.getElementById('contenedor-notificacion');
+    if (notificacion.style.height === '0px' || notificacion.style.height === '') {
+        notificacion.style.height = 'auto';
+        notificacion.style.opacity = '1';
+        notificacion.style.padding = '15px';
+    } else {
+        notificacion.style.height = '0px';
+        notificacion.style.opacity = '0';
+        notificacion.style.padding = '0';
+    }
+}
+
+// Manejar el clic en "Marcar como leído"
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.marcar-leido').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const idNotificacion = this.getAttribute('data-id');
+            
+            fetch('marcar_notificacion.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'id_notificacion=' + idNotificacion
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Eliminar la notificación del DOM
+                    this.closest('.item-notificacion').remove();
+                    // Actualizar el contador
+                    const countElement = document.querySelector('.campana span');
+                    if (countElement) {
+                        const newCount = parseInt(countElement.textContent) - 1;
+                        countElement.textContent = newCount;
+                        if (newCount <= 0) {
+                            countElement.style.display = 'none';
+                        }
+                    }
+                } else {
+                    console.error('Error:', data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+</script>
 </aside>
+
+

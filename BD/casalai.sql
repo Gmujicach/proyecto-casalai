@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-07-2025 a las 03:56:51
+-- Tiempo de generación: 28-07-2025 a las 02:20:58
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `casalai`
 --
-CREATE DATABASE IF NOT EXISTS `casalai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `casalai`;
 
 -- --------------------------------------------------------
 
@@ -217,7 +215,8 @@ INSERT INTO `tbl_clientes` (`id_clientes`, `nombre`, `cedula`, `direccion`, `tel
 (10, 'Gabriel Mujica', '29958676', 'mi casa', '0424-678-8765', 'fhhggjjkkkj@gmail.com', 1),
 (11, 'Edith Urdaneta', '10844463', 'Los Horcones', '0416-747-4336', 'urdavedith.pnfi@gmail.com', 1),
 (12, 'Diego Lopez', '31766917', 'Venezuela estado Zulia\r\nMaracaibo', '0414-575-3363', 'diego0510lopez@gmail.com', 1),
-(13, 'Diego Lopez', '5322432', '', '0414-575-3363', 'diego0510lopez@gmail.com', 1);
+(13, 'Diego Lopez', '5322432', '', '0414-575-3363', 'diego0510lopez@gmail.com', 1),
+(14, 'Juan Lai', '25874668', '', '0412-125-6985', 'juanlai@gmail.com', 1);
 
 -- --------------------------------------------------------
 
@@ -359,9 +358,11 @@ CREATE TABLE `tbl_detalle_recepcion_productos` (
 --
 
 INSERT INTO `tbl_detalle_recepcion_productos` (`id_detalle_recepcion_productos`, `id_recepcion`, `id_producto`, `costo`, `cantidad`) VALUES
-(11, 10, 34, 10, 1),
 (12, 10, 33, 20, 2),
-(13, 10, 32, 30, 4);
+(13, 10, 32, 30, 4),
+(14, 11, 32, 2500, 1),
+(15, 11, 29, 123, 1),
+(16, 11, 28, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -427,10 +428,12 @@ CREATE TABLE `tbl_ingresos_egresos` (
 --
 
 INSERT INTO `tbl_ingresos_egresos` (`id_finanzas`, `id_despacho`, `id_detalle_recepcion_productos`, `tipo`, `monto`, `descripcion`, `fecha`, `estado`) VALUES
-(7, NULL, 11, 'egreso', 10.00, 'Compra: Caja de Color (x1)', '2025-07-22', 1),
 (8, NULL, 12, 'egreso', 40.00, 'Compra: ImpriColor (x2)', '2025-07-22', 1),
 (9, NULL, 13, 'egreso', 120.00, 'Compra: Tinta Arcoiris (x4)', '2025-07-22', 1),
-(10, 3, NULL, 'ingreso', 18.00, 'Venta: Colormedia (x1), Tinta Arcoiris (x1)', '2025-07-23', 1);
+(10, 3, NULL, 'ingreso', 18.00, 'Venta: Colormedia (x1), Tinta Arcoiris (x1)', '2025-07-23', 1),
+(11, NULL, 14, 'egreso', 2500.00, 'Compra: Tinta Arcoiris (x1)', '2025-07-27', 1),
+(12, NULL, 15, 'egreso', 123.00, 'Compra: Impresora Maxi (x1)', '2025-07-27', 1),
+(13, NULL, 16, 'egreso', 1.00, 'Compra: Impresora Super (x1)', '2025-07-27', 1);
 
 -- --------------------------------------------------------
 
@@ -686,7 +689,8 @@ CREATE TABLE `tbl_recepcion_productos` (
 --
 
 INSERT INTO `tbl_recepcion_productos` (`id_recepcion`, `id_proveedor`, `fecha`, `correlativo`) VALUES
-(10, 1, '2025-07-22', '1235');
+(10, 1, '2025-07-22', '1235'),
+(11, 1, '2025-07-27', '00012');
 
 --
 -- Índices para tablas volcadas
@@ -926,7 +930,7 @@ ALTER TABLE `tbl_categoria`
 -- AUTO_INCREMENT de la tabla `tbl_clientes`
 --
 ALTER TABLE `tbl_clientes`
-  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_clientes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_combo`
@@ -968,13 +972,13 @@ ALTER TABLE `tbl_detalles_pago`
 -- AUTO_INCREMENT de la tabla `tbl_detalle_recepcion_productos`
 --
 ALTER TABLE `tbl_detalle_recepcion_productos`
-  MODIFY `id_detalle_recepcion_productos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_detalle_recepcion_productos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_facturas`
 --
 ALTER TABLE `tbl_facturas`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_factura_detalle`
@@ -986,7 +990,7 @@ ALTER TABLE `tbl_factura_detalle`
 -- AUTO_INCREMENT de la tabla `tbl_ingresos_egresos`
 --
 ALTER TABLE `tbl_ingresos_egresos`
-  MODIFY `id_finanzas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_finanzas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `tbl_marcas`
@@ -1022,7 +1026,7 @@ ALTER TABLE `tbl_proveedores`
 -- AUTO_INCREMENT de la tabla `tbl_recepcion_productos`
 --
 ALTER TABLE `tbl_recepcion_productos`
-  MODIFY `id_recepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_recepcion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Restricciones para tablas volcadas
