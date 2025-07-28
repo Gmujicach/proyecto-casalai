@@ -254,7 +254,7 @@ function listadoproductos(){
     return $r;
 }
 	function consultarproductos() {
-    $sql = "SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial
+    $sql = "SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial, p.precio
             FROM tbl_productos AS p 
             INNER JOIN tbl_modelos AS m ON p.id_modelo = m.id_modelo 
             INNER JOIN tbl_marcas AS mar ON m.id_marca = mar.id_marca;";

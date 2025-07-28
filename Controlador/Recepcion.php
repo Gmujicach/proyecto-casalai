@@ -1,5 +1,7 @@
 <?php  
 
+require_once 'modelo/notificacion.php';
+
 function getrecepcion() {
     $recepcion = new Recepcion();
     return $recepcion->getrecepcion();
@@ -18,6 +20,10 @@ define('MODULO_RECEPCION', 2); // Define el ID del módulo de cuentas bancarias
 
 $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 
+$bd_seguridad = new BD('S');
+$pdo_seguridad = $bd_seguridad->getConexion();
+$notificacionModel = new NotificacionModel($pdo_seguridad);
+
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 
@@ -32,12 +38,11 @@ if (is_file("vista/" . $pagina . ".php")) {
                 echo json_encode($respuesta);
                 break;
 
-    
-case 'permisos_tiempo_real':
-    header('Content-Type: application/json; charset=utf-8');
-    $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('recepcion'));
-    echo json_encode($permisosActualizados);
-    exit;
+            case 'permisos_tiempo_real':
+                header('Content-Type: application/json; charset=utf-8');
+                $permisosActualizados = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('recepcion'));
+                echo json_encode($permisosActualizados);
+                exit;
 
             case 'registrar':
                 $k->setidproveedor($_POST['proveedor']);
@@ -48,16 +53,51 @@ case 'permisos_tiempo_real':
                     $_POST['costo']
                 );
 
+                // Registrar en bitácora
                 $bitacoraModel->registrarAccion(
                     'Creación de recepción: ' . $_POST['correlativo'], 
                     MODULO_RECEPCION,
                     $_SESSION['id_usuario']
                 );
                 
-                echo json_encode($respuesta);
+                // Notificar a almacenistas
+                if ($respuesta['resultado'] === 'ok') {
+                    $id_recepcion = $respuesta['id_recepcion']; // Asume que la respuesta incluye el ID
+                    
+                    // Obtener todos los almacenistas (rol 2)
+                    $stmt = $pdo_seguridad->prepare("SELECT id_usuario FROM tbl_usuarios WHERE id_rol = 2");
+                    $stmt->execute();
+                    $almacenistas = $stmt->fetchAll();
+
+                    foreach ($almacenistas as $almacenista) {
+                        $notificacionModel->crear(
+                            $almacenista['id_usuario'],
+                            'inventario',
+                            'Nueva recepción registrada',
+                            "Se ha registrado una nueva recepción #".$_POST['correlativo']." con ".$_POST['cantidad']." unidades",
+                            $id_recepcion,
+                            'media'
+                        );
+                    }
+                    
+                    // Notificar al administrador (rol 1)
+                    $stmt = $pdo_seguridad->prepare("SELECT id_usuario FROM tbl_usuarios WHERE id_rol = 1 LIMIT 1");
+                    $stmt->execute();
+                    $admin = $stmt->fetch();
+                    
+                    if ($admin) {
+                        $notificacionModel->crear(
+                            $admin['id_usuario'],
+                            'inventario',
+                            'Recepción de productos',
+                            "Nueva recepción #".$_POST['correlativo']." registrada por ".$_SESSION['name'],
+                            $id_recepcion,
+                            'baja'
+                        );
+                    }
+                }
                 
-
-
+                echo json_encode($respuesta);
                 break;
 
             case 'buscar':
@@ -86,66 +126,76 @@ case 'permisos_tiempo_real':
                 break;
 
 case 'modificarRecepcion':
-    try {
-        $idRecepcion = $_POST['id_recepcion'] ?? null;
-        $idproducto = $_POST['productos'] ?? [];
-        $cantidad   = $_POST['cantidades'] ?? [];
-        $costo      = $_POST['costos'] ?? [];
-        $iddetalle  = $_POST['iddetalles'] ?? [];
+                try {
+                    $idRecepcion = $_POST['id_recepcion'] ?? null;
+                    $idproducto = $_POST['productos'] ?? [];
+                    $cantidad   = $_POST['cantidades'] ?? [];
+                    $costo      = $_POST['costos'] ?? [];
+                    $iddetalle  = $_POST['iddetalles'] ?? [];
 
-        if (!$idRecepcion) {
-            throw new Exception('ID de recepción faltante o inválido');
-        }
+                    if (!$idRecepcion) {
+                        throw new Exception('ID de recepción faltante o inválido');
+                    }
 
-        if (
-            count($idproducto) !== count($cantidad) ||
-            count($idproducto) !== count($costo) ||
-            count($idproducto) !== count($iddetalle)
-        ) {
-            throw new Exception('La cantidad de productos, costos, cantidades o ID de detalles no coincide');
-        }
+                    if (
+                        count($idproducto) !== count($cantidad) ||
+                        count($idproducto) !== count($costo) ||
+                        count($idproducto) !== count($iddetalle)
+                    ) {
+                        throw new Exception('La cantidad de productos, costos, cantidades o ID de detalles no coincide');
+                    }
 
-        if (empty($_POST['proveedor']) || empty($_POST['correlativo']) || empty($_POST['fecha'])) {
-            throw new Exception('Faltan campos obligatorios (proveedor, correlativo o fecha)');
-        }
+                    if (empty($_POST['proveedor']) || empty($_POST['correlativo']) || empty($_POST['fecha'])) {
+                        throw new Exception('Faltan campos obligatorios (proveedor, correlativo o fecha)');
+                    }
 
-        $k->setidproveedor($_POST['proveedor']);
-        $k->setcorrelativo($_POST['correlativo']);
-        $k->setfecha($_POST['fecha']);
+                    $k->setidproveedor($_POST['proveedor']);
+                    $k->setcorrelativo($_POST['correlativo']);
+                    $k->setfecha($_POST['fecha']);
 
-        $respuesta = $k->modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle);
+                    $respuesta = $k->modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle);
 
-        if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificarRecepcion') {
-            // ✅ Aquí agregamos la respuesta JSON esperada
-            $bitacoraModel->registrarAccion(
-                'Modificación de Recepción: ' . $_POST['correlativo'],
-                MODULO_RECEPCION,
-                $_SESSION['id_usuario']
-            );
+                    if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificarRecepcion') {
+                        // Bitácora
+                        $bitacoraModel->registrarAccion(
+                            'Modificación de Recepción: ' . $_POST['correlativo'],
+                            MODULO_RECEPCION,
+                            $_SESSION['id_usuario']
+                        );
 
-            echo json_encode([
-                'status' => 'success',
-                'message' => $respuesta['mensaje'] ?? 'Recepción modificada exitosamente.'
-            ]);
-        } else {
-            throw new Exception($respuesta['mensaje'] ?? 'Error desconocido al modificar la recepción');
-        }
+                        // Notificación de modificación
+                        $notificacionModel->crear(
+                            $_SESSION['id_usuario'], // Notificar al usuario que hizo la modificación
+                            'inventario',
+                            'Recepción modificada',
+                            "Has modificado la recepción #".$_POST['correlativo'],
+                            $idRecepcion,
+                            'media'
+                        );
 
-    } catch (Exception $e) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Error al modificar la recepción: ' . $e->getMessage(),
-            'debug' => [
-                'id_recepcion' => $idRecepcion ?? null,
-                'productos' => $idproducto,
-                'cantidades' => $cantidad,
-                'costos' => $costo,
-                'iddetalles' => $iddetalle,
-                'POST' => $_POST
-            ]
-        ]);
-    }
-    break;
+                        echo json_encode([
+                            'status' => 'success',
+                            'message' => $respuesta['mensaje'] ?? 'Recepción modificada exitosamente.'
+                        ]);
+                    } else {
+                        throw new Exception($respuesta['mensaje'] ?? 'Error desconocido al modificar la recepción');
+                    }
+
+                } catch (Exception $e) {
+                    echo json_encode([
+                        'status' => 'error',
+                        'message' => 'Error al modificar la recepción: ' . $e->getMessage(),
+                        'debug' => [
+                            'id_recepcion' => $idRecepcion ?? null,
+                            'productos' => $idproducto,
+                            'cantidades' => $cantidad,
+                            'costos' => $costo,
+                            'iddetalles' => $iddetalle,
+                            'POST' => $_POST
+                        ]
+                    ]);
+                }
+                break;
 
 
 
@@ -162,22 +212,22 @@ case 'modificarRecepcion':
     $productos = $k->consultarproductos();
     $totalRecepciones = count($recepciones);
 
-// Total de productos recibidos y agrupados por producto
-$productosRecibidos = [];
-foreach ($recepciones as $r) {
-    $nombre = $r['nombre_producto'];
-    $cantidad = (int)$r['cantidad'];
-    if (!isset($productosRecibidos[$nombre])) {
-        $productosRecibidos[$nombre] = 0;
+    $productosRecibidos = [];
+    foreach ($recepciones as $r) {
+        $nombre = $r['nombre_producto'];
+        $cantidad = (int)$r['cantidad'];
+        if (!isset($productosRecibidos[$nombre])) {
+            $productosRecibidos[$nombre] = 0;
+        }
+        $productosRecibidos[$nombre] += $cantidad;
     }
-    $productosRecibidos[$nombre] += $cantidad;
-}
-$totalProductosRecibidos = array_sum($productosRecibidos);
+    $totalProductosRecibidos = array_sum($productosRecibidos);
+    
     require_once("vista/" . $pagina . ".php");
 
-if (isset($_SESSION['id_usuario'])) {
-    $bitacoraModel->registrarAccion('Acceso al módulo de Recepcion', MODULO_RECEPCION, $_SESSION['id_usuario']);
-}
+    if (isset($_SESSION['id_usuario'])) {
+        $bitacoraModel->registrarAccion('Acceso al módulo de Recepcion', MODULO_RECEPCION, $_SESSION['id_usuario']);
+    }
 } else {
     echo "pagina en construccion";
 }

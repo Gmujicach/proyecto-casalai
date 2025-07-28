@@ -96,6 +96,15 @@ aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
                     </div>
                     <button type="button" id="agregarPago" class="btn btn-secondary" style="margin-top: 10px;">Agregar otro pago</button>
                 </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="envolver-form">
+                            <label><strong>TOTAL DE LA COMPRA:</strong></label>
+                            <input type="text" class="control-form" id="totalCompra" name="totalCompra" readonly style="font-weight: bold; font-size: 1.2rem;">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="modal-footer">
                     <button type="button" class="boton-form" id="registrar" name="registrar">Registrar</button>
                     <button class="boton-reset" type="reset">Reset</button>
@@ -263,7 +272,13 @@ $totalProductosDespachados = array_sum($productosDespachados);
  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 	<script>
-const productosDisponibles = <?= json_encode($productos) ?>;
+const productosDisponibles = <?= json_encode(array_map(function($prod) {
+    return [
+        'id_producto' => $prod['id_producto'],
+        'nombre_producto' => $prod['nombre_producto'],
+        'precio' => $prod['precio'],
+        ];
+}, $productos)) ?>;
 
 $(document).on('click', '.btn-modificar', function (e) {
     e.preventDefault();
