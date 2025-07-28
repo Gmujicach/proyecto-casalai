@@ -207,7 +207,7 @@ function listadoproductos(){
     $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $r = array();
     try{
-        $resultado = $co->query("SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial
+        $resultado = $co->query("SELECT p.id_producto, p.nombre_producto, m.nombre_modelo, mar.nombre_marca, p.serial,p.precio
             FROM tbl_productos AS p 
             INNER JOIN tbl_modelos AS m ON p.id_modelo = m.id_modelo 
             INNER JOIN tbl_marcas AS mar ON m.id_marca = mar.id_marca;");
@@ -224,6 +224,7 @@ function listadoproductos(){
                 $respuesta .= "<td>{$r['nombre_modelo']}</td>";
                 $respuesta .= "<td>{$r['nombre_marca']}</td>";
                 $respuesta .= "<td>{$r['serial']}</td>";
+                $respuesta .= "<td>{$r['precio']}</td>";
                 $respuesta .= "</tr>";
                 $totalFilas++;
             }
@@ -363,6 +364,112 @@ ORDER BY r.correlativo ASC;
     }
 
     return $datos;
+}
+public function registrarCompraFisica($datos)
+{
+    $d = [];
+    $co = $this->getConexion();
+    $co->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    try {
+        $co->beginTransaction();
+
+        // 1️⃣ Insertar despacho
+        $sqlDespacho = "INSERT INTO tbl_despachos (id_clientes, fecha_despacho, correlativo, activo) 
+                        VALUES (:id_cliente, :fecha, :correlativo, 1)";
+        $stmt = $co->prepare($sqlDespacho);
+        $stmt->execute([
+            ':id_cliente' => $datos['cliente'],
+            ':fecha' => date('Y-m-d'),
+            ':correlativo' => $datos['correlativo']
+        ]);
+        $idDespacho = $co->lastInsertId();
+
+        $descripcion = "Venta: ";
+        $monto_total = 0;
+
+        // 2️⃣ Insertar productos en tbl_despacho_detalle
+        foreach ($datos['productos'] as $p) {
+            $sqlDetalle = "INSERT INTO tbl_despacho_detalle (id_despacho, id_producto, cantidad) 
+                           VALUES (:id_despacho, :id_producto, :cantidad)";
+            $stmtDet = $co->prepare($sqlDetalle);
+            $stmtDet->execute([
+                ':id_despacho' => $idDespacho,
+                ':id_producto' => $p['id_producto'],
+                ':cantidad' => $p['cantidad']
+            ]);
+
+            // Calcular total desde BD
+            $stmtPrecio = $co->prepare("SELECT precio, nombre_producto FROM tbl_productos WHERE id_producto = ?");
+            $stmtPrecio->execute([$p['id_producto']]);
+            $prod = $stmtPrecio->fetch(PDO::FETCH_ASSOC);
+            $precio = $prod ? $prod['precio'] : 0;
+            $nombre = $prod ? $prod['nombre_producto'] : '';
+            $descripcion .= "{$nombre} (x{$p['cantidad']}), ";
+            $monto_total += $precio * $p['cantidad'];
+        }
+        $descripcion = rtrim($descripcion, ', ');
+
+        // 3️⃣ Crear factura en tbl_facturas
+        $sqlFactura = "INSERT INTO tbl_facturas (cliente, fecha, descuento, estatus) 
+                       VALUES (:id_cliente, :fecha, 0, 'Pagada')";
+        $stmtFac = $co->prepare($sqlFactura);
+        $stmtFac->execute([
+            ':id_cliente' => $datos['cliente'],
+            ':fecha' => date('Y-m-d')
+        ]);
+        $idFactura = $co->lastInsertId();
+
+        // 4️⃣ Insertar productos en tbl_factura_detalle
+        foreach ($datos['productos'] as $p) {
+            $sqlFacturaDet = "INSERT INTO tbl_factura_detalle (factura_id, id_producto, cantidad) 
+                              VALUES (:id_factura, :id_producto, :cantidad)";
+            $stmtFacDet = $co->prepare($sqlFacturaDet);
+            $stmtFacDet->execute([
+                ':id_factura' => $idFactura,
+                ':id_producto' => $p['id_producto'],
+                ':cantidad' => $p['cantidad']
+            ]);
+        }
+
+        // 5️⃣ Insertar pagos en tbl_detalles_pago
+        if (!empty($datos['pagos'])) {
+            foreach ($datos['pagos'] as $pago) {
+                $sqlPago = "INSERT INTO tbl_detalles_pago (id_factura, id_cuenta, referencia, fecha, tipo, monto, comprobante, estatus, observaciones) 
+                            VALUES (:id_factura, :id_cuenta, :referencia, :fecha, :tipo, :monto, :comprobante, 'Pagado','')";
+                $stmtPago = $co->prepare($sqlPago);
+                $stmtPago->execute([
+                    ':id_factura' => $idFactura,
+                    ':id_cuenta' => $pago['cuenta'],
+                    ':referencia' => $pago['referencia'],
+                    ':fecha' => $pago['fecha'],
+                    ':tipo' => $pago['tipo'],
+                    ':monto' => $pago['monto'],
+                    ':comprobante' => $pago['comprobante'] ?? null
+                ]);
+            }
+        }
+
+        // 6️⃣ Registrar ingreso en tbl_ingresos_egresos
+        $sqlIngreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_despacho)
+                       VALUES ('ingreso', ?, ?, ?, 1, ?)";
+        $stmtIngreso = $co->prepare($sqlIngreso);
+        $stmtIngreso->execute([$monto_total, $descripcion, date('Y-m-d'), $idDespacho]);
+
+        $co->commit();
+        $d['status'] = 'success';
+        $d['message'] = 'Compra registrada correctamente';
+        $d['despachos'] = $this->getdespacho();
+
+    } catch (Exception $e) {
+        if ($co->inTransaction()) {
+            $co->rollBack();
+        }
+        $d['status'] = 'error';
+        $d['message'] = $e->getMessage();
+    }
+
+    return $d;
 }
 
 
