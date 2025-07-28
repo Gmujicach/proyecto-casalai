@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'header.php'; ?>
-    <title>Gestionar Recepcion</title>
+    <title>Gestionar Recepción</title>
 </head>
 
 <body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
@@ -17,7 +17,7 @@
 <div class="modal fade modal-registrar" id="registrarRecepcionModal" tabindex="-1" role="dialog" aria-labelledby="registrarRecepcionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="f" method="POST">
+            <form id="ingresarRecepcion" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarRecepcionModalLabel">Incluir Recepción</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -27,9 +27,9 @@
                 <div class="modal-body">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
-                        <label for="correlativo">Correlativo del producto</label>
-                        <input type="text" placeholder="Correlativo" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
-                        <span id="scorrelativo"></span>
+                        <label for="correlativo">Correlativo</label>
+                        <input type="text" placeholder="0123456789" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
+                        <span class="span-value" id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="proveedor">Proveedor</label>
@@ -40,8 +40,8 @@
                                 echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre_proveedor'] . "</option>";
                             } ?>
                         </select>
+                        <span class="span-value" id="sproveedor"></span>
                     </div>
-        
                     <div class="envolver-form">
                         <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
                         <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
@@ -182,23 +182,21 @@
             foreach ($recepciones as $recepcion):
                 $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
         ?>
-        <tr>
+        <tr data-id="<?php echo $orden['id_recepcion']; ?>">
             <?php if (!in_array($key, $rendered)): ?>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['fecha']) ?></td>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['correlativo']) ?></td>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['nombre_proveedor']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><span class="campo-nombres"><?= htmlspecialchars($recepcion['fecha']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><span class="campo-numeros"><?= htmlspecialchars($recepcion['correlativo']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><span class="campo-nombres"><?= htmlspecialchars($recepcion['nombre_proveedor']) ?></td>
             <?php endif; ?>
 
-            <td><?= htmlspecialchars($recepcion['nombre_producto']) ?></td>
-            <td><?= htmlspecialchars($recepcion['cantidad']) ?></td>
-            <td><?= htmlspecialchars($recepcion['costo']) ?></td>
+            <td><span class="campo-nombres"><?= htmlspecialchars($recepcion['nombre_producto']) ?></td>
+            <td><span class="campo-numeros"><?= htmlspecialchars($recepcion['cantidad']) ?></td>
+            <td><span class="campo-numeros"><?= htmlspecialchars($recepcion['costo']) ?></td>
 
             <?php if (!in_array($key, $rendered)): ?>
                 <td rowspan="<?= $rowspans[$key] ?>">
                     <ul>
                         <button class="btn-modificar"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalModificar"
                             data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
                             data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
                             data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"

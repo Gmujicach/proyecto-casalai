@@ -88,7 +88,7 @@ aria-labelledby="registrarOrdenModalLabel" aria-hidden="true">
                 <td>
                     <ul>
                         <div>
-                            <button class="btn-modificar modificar"
+                            <button class="btn-modificar"
                                 data-id="<?php echo $orden['id_orden_despachos']; ?>" 
                                 data-fecha="<?php echo $orden['fecha_despacho']; ?>"
                                 data-correlativo="<?php echo $orden['correlativo']; ?>"

@@ -44,7 +44,7 @@ $(document).ready(function () {
     });
 
     $("#btnIncluirDespacho").on("click", function () {
-        $("#f")[0].reset();
+        $("#ingresarDespacho")[0].reset();
         $("#scorrelativo").text("");
         $("#registrarDespachoModal").modal("show");
     });
@@ -111,7 +111,7 @@ $(document).ready(function () {
         if (verificaproductos()) {
         $("#accion").val("registrar");
 
-        var datos = new FormData($("#f")[0]);
+        var datos = new FormData($("#ingresarDespacho")[0]);
 
         $("#proveedor").change(function () {
             var valor = $(this).val();

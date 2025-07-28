@@ -42,22 +42,35 @@ case 'permisos_tiempo_real':
             case 'registrar':
                 $k->setidproveedor($_POST['proveedor']);
                 $k->setcorrelativo($_POST['correlativo']);
-                $respuesta = $k->registrar(
-                    $_POST['producto'],
-                    $_POST['cantidad'],
-                    $_POST['costo']
-                );
 
-                $bitacoraModel->registrarAccion(
-                    'Creación de recepción: ' . $_POST['correlativo'], 
-                    MODULO_RECEPCION,
-                    $_SESSION['id_usuario']
-                );
-                
-                echo json_encode($respuesta);
-                
+                // Validar que el correlativo no exista
+                if (!$k->validarCorrelativo()) {
+                    echo json_encode(['status' => 'error', 'message' => 'Este correlativo ya existe']);
+                }  else {
+                    if ($k->registrar()) {
+                        $respuesta = $k(
+                            $_POST['producto'],
+                            $_POST['cantidad'],
+                            $_POST['costo']
+                        );
+                        $recepcionRegistrada = $k->obtenerUltimaOrden();
 
+                        echo json_encode($respuesta)([
+                            'status' => 'success',
+                            'message' => 'Orden de despacho registrada correctamente',
+                            'recepcion' => $recepcionRegistrada
+                        ]);
 
+                        $bitacoraModel->registrarAccion(
+                            'Creación de recepción: ' . $_POST['correlativo'], 
+                            MODULO_RECEPCION,
+                            $_SESSION['id_usuario']
+                        );
+
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'Error al registrar la orden de despacho']);
+                    }
+                }
                 break;
 
             case 'buscar':

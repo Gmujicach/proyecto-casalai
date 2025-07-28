@@ -46,6 +46,17 @@ class Recepcion extends BD{
         $this->correlativo = $correlativo;
     }
 
+    public function validarCorrelativo() {
+        $sql = "SELECT COUNT(*) FROM tbl_recepcion_productos WHERE correlativo = :correlativo";
+        $stmt = $this->conex->prepare($sql);
+        $stmt->bindParam(':correlativo', $this->correlativo);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+    
+        // Retorna true si no existe un producto con el mismo nombre
+        return $count == 0;
+    }
+
 public function registrar($idproducto, $cantidad, $costo) {
     $d = array();
     if (!$this->buscar()) {
@@ -108,6 +119,21 @@ for ($i = 0; $i < $cap; $i++) {
         $d['mensaje'] = 'El número correlativo ya existe!';
     }
     return $d;
+}
+
+public function obtenerUltimaRecepcion() {
+    return $this->obtUltimaRecepcion();
+}
+
+private function obtUltimaRecepcion() {
+    $sql = "SELECT r.id_recepcion, r.correlativo, r.id_factura, r.fecha, r.activo
+            FROM tbl_recepcion r
+            ORDER BY r.id_recepcion DESC LIMIT 1";
+    $stmt = $this->conex->prepare($sql);
+    $stmt->execute();
+    $recepcion = $stmt->fetch(PDO::FETCH_ASSOC);
+    $this->conex = null;
+    return $recepcion ? $recepcion : null;
 }
     
 
