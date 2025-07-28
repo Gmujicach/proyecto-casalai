@@ -8,6 +8,7 @@ class Cuentabanco extends BD {
     private $rif_cuenta;
     private $telefono_cuenta;
     private $correo_cuenta;
+    private $metodos_pago;
     private $estado;
     private $db;
 
@@ -56,7 +57,18 @@ class Cuentabanco extends BD {
     }
     public function setCorreoCuenta($correo_cuenta) { 
         $this->correo_cuenta = $correo_cuenta; 
-    } 
+    }
+    public function getMetodosPago() {
+        return $this->metodos_pago;
+    }
+ public function setMetodosPago($metodos_pago) {
+    if (is_array($metodos_pago)) {
+        $this->metodos_pago = implode(',', $metodos_pago);
+    } else {
+        $this->metodos_pago = $metodos_pago;
+    }
+}
+     
 
     public function getEstado() {
         return $this->estado;
@@ -70,8 +82,8 @@ class Cuentabanco extends BD {
     }
     private function r_cuentabanco() {
         $sql = "INSERT INTO tbl_cuentas 
-        (nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta)
-        VALUES (:nombre_banco, :numero_cuenta, :rif_cuenta, :telefono_cuenta, :correo_cuenta)";
+        (nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta, metodos)
+        VALUES (:nombre_banco, :numero_cuenta, :rif_cuenta, :telefono_cuenta, :correo_cuenta, :metodos)";
         
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':nombre_banco', $this->nombre_banco);
@@ -79,7 +91,7 @@ class Cuentabanco extends BD {
         $stmt->bindParam(':rif_cuenta', $this->rif_cuenta);
         $stmt->bindParam(':telefono_cuenta', $this->telefono_cuenta);
         $stmt->bindParam(':correo_cuenta', $this->correo_cuenta);
-
+        $stmt->bindParam(':metodos', $this->metodos_pago);
         return $stmt->execute();
     }
 
@@ -131,8 +143,7 @@ class Cuentabanco extends BD {
         return $this->c_cuentabanco(); 
     }
     private function c_cuentabanco() {
-        $sql = "SELECT id_cuenta, nombre_banco, numero_cuenta, rif_cuenta, telefono_cuenta, correo_cuenta, estado 
-        FROM tbl_cuentas";
+        $sql = "SELECT * FROM tbl_cuentas";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
@@ -146,7 +157,8 @@ class Cuentabanco extends BD {
     }
     private function m_cuentabanco($id_cuenta) {
         $sql = "UPDATE tbl_cuentas SET nombre_banco = :nombre_banco, numero_cuenta = :numero_cuenta, 
-        rif_cuenta = :rif_cuenta, telefono_cuenta = :telefono_cuenta, correo_cuenta = :correo_cuenta
+        rif_cuenta = :rif_cuenta, telefono_cuenta = :telefono_cuenta, correo_cuenta = :correo_cuenta, 
+        metodos = :metodos
         WHERE id_cuenta = :id_cuenta";
 
         $stmt = $this->db->prepare($sql);
@@ -156,7 +168,7 @@ class Cuentabanco extends BD {
         $stmt->bindParam(':rif_cuenta', $this->rif_cuenta);
         $stmt->bindParam(':telefono_cuenta', $this->telefono_cuenta);
         $stmt->bindParam(':correo_cuenta', $this->correo_cuenta);
-        
+        $stmt->bindParam(':metodos', $this->metodos_pago);
         return $stmt->execute();
     }
 

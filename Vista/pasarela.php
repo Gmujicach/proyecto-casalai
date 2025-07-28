@@ -19,6 +19,7 @@
                 <th>Fecha</th>
                 <th>Estatus</th>
                 <th>Observaciones</th>
+                <th>Comprobante</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -41,8 +42,19 @@
 
                 </td>
                 <td><?php echo htmlspecialchars($dato['observaciones']); ?></td>
-
+<td>
+    <?php
+    if (!empty($dato['comprobante']) && file_exists($dato['comprobante'])) {
+        echo '<a href="' . htmlspecialchars($dato['comprobante']) . '" target="_blank">
+                <img src="' . htmlspecialchars($dato['comprobante']) . '" alt="Comprobante" style="max-width:80px;max-height:80px;border-radius:6px;border:1px solid #ccc;padding:3px;object-fit:contain;background:#fff;">
+              </a>';
+    } else {
+        echo '<img src="img/no-disponible.png" alt="No disponible" style="max-width:80px;max-height:80px;border-radius:6px;border:1px solid #ccc;padding:3px;object-fit:contain;background:#fff;">';
+    }
+    ?>
+</td>
                 <td>
+                  
                     <div>
 
   <?php  if($_SESSION['nombre_rol'] == 'Administrador' || $_SESSION['nombre_rol'] == 'Almacenista'){ ?>

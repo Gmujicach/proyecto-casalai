@@ -11,6 +11,7 @@ class PasareladePago extends Factura {
     private $referencia;    
     private $fecha;
     private $estatus;
+    private $comprobante;
 
 
 public function __construct() {
@@ -89,6 +90,13 @@ public function getEstatus() {
 public function setEstatus($estatus) {
     $this->estatus = $estatus;
 }
+// Comprobante
+public function getComprobante() {
+    return $this->comprobante;
+}
+public function setComprobante($comprobante) {
+    $this->comprobante = $comprobante;
+}
 
 public function validarCodigoReferencia() {
     $sql = "SELECT COUNT(*) FROM tbl_detalles_pago WHERE referencia = :referencia";
@@ -120,15 +128,16 @@ public function validarCodigoReferencia() {
     try {
         // Insertar detalles del pago
         $stmt = $this->getConexion()->prepare("INSERT INTO `tbl_detalles_pago`
-            (`id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`)
-            VALUES (?, ?, ?, ?, ?, ?)");
+            (`id_factura`, `id_cuenta`, `observaciones`, `tipo`, `referencia`, `fecha`, `comprobante`)
+            VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $this->factura,
             $this->cuenta,
             $this->observaciones,
             $this->tipo,
             $this->referencia,
-            $this->fecha
+            $this->fecha,
+            $this->comprobante
         ]);
 
         // Actualizar estatus de la factura a 'Procesada'
@@ -154,6 +163,7 @@ public function validarCodigoReferencia() {
     dp.tipo,
     dp.referencia,
     dp.fecha,
+    dp.comprobante,
     dp.estatus
 FROM tbl_detalles_pago dp
 INNER JOIN tbl_cuentas c ON dp.id_cuenta = c.id_cuenta;";
