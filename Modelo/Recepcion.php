@@ -139,21 +139,26 @@ public function registrar($idproducto, $cantidad, $costo) {
     return $d;
 }
 
-public function obtenerUltimaRecepcion() {
-    return $this->obtUltimaRecepcion();
-}
+    public function obtenerUltimaRecepcion() {
+        return $this->obtUltimaRecepcion();
+    }
 
-private function obtUltimaRecepcion() {
-    $sql = "SELECT r.id_recepcion, r.correlativo, r.id_factura, r.fecha, r.activo
-            FROM tbl_recepcion r
-            ORDER BY r.id_recepcion DESC LIMIT 1";
-    $stmt = $this->conex->prepare($sql);
-    $stmt->execute();
-    $recepcion = $stmt->fetch(PDO::FETCH_ASSOC);
-    $this->conex = null;
-    return $recepcion ? $recepcion : null;
-}
-    
+    private function obtUltimaRecepcion() {
+        $sql = "SELECT d.id_detalle_recepcion_productos,
+        r.id_recepcion, pro.id_producto, pr.id_proveedor,
+        r.fecha, r.correlativo, pr.nombre_proveedor, pro.nombre_producto, d.cantidad, d.costo
+    FROM tbl_recepcion_productos AS r 
+    INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
+    INNER JOIN tbl_proveedores AS pr ON pr.id_proveedor = r.id_proveedor 
+    INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto
+    ORDER BY r.fecha ASC, r.correlativo ASC, pro.nombre_producto ASC
+                ORDER BY r.id_recepcion DESC LIMIT 1";
+        $stmt = $this->getConexion()->prepare($sql);
+        $stmt->execute();
+        $recep = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->conex = null;
+        return $recep : null;
+    }
 
 public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle)
 {
@@ -426,26 +431,6 @@ public function getrecepcion() {
 
     return $recepciones;
 }
-       public function obtenerUltimaRecepcion() {
-        return $this->obtUltimaRecepcion();
-    }
-
-    private function obtUltimaRecepcion() {
-        $sql = "SELECT d.id_detalle_recepcion_productos,
-        r.id_recepcion, pro.id_producto, pr.id_proveedor,
-        r.fecha, r.correlativo, pr.nombre_proveedor, pro.nombre_producto, d.cantidad, d.costo
-    FROM tbl_recepcion_productos AS r 
-    INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
-    INNER JOIN tbl_proveedores AS pr ON pr.id_proveedor = r.id_proveedor 
-    INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto
-    ORDER BY r.fecha ASC, r.correlativo ASC, pro.nombre_producto ASC
-                ORDER BY r.id_recepcion DESC LIMIT 1";
-        $stmt = $this->getConexion()->prepare($sql);
-        $stmt->execute();
-        $orden = $stmt->fetch(PDO::FETCH_ASSOC);
-        $this->conex = null;
-        return $orden ? $orden : null;
-    }
 
 	public function obtenerDetallesPorRecepcion($idRecepcion) {
     $datos = [];
