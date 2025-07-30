@@ -157,9 +157,9 @@ public function registrar($idproducto, $cantidad, $costo) {
         $stmt->execute();
         $recep = $stmt->fetch(PDO::FETCH_ASSOC);
         $this->conex = null;
-        return $recep : null;
+        return $recep ? $recep : null;
     }
-
+    
 public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle)
 {
     $d = [];
