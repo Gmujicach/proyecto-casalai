@@ -28,7 +28,7 @@ $(document).ready(function () {
 
                 if (response.status === 'success') {
                     // Cierra el modal con jQuery (Bootstrap 4)
-                    $('#modalModificar').modal('hide');
+                    $('#modificarRecepcionModal').modal('hide');
 
                     // Quitar manualmente backdrop en caso de quedar atascado
                     $('.modal-backdrop').remove();
