@@ -47,7 +47,20 @@ if (is_file("vista/" . $pagina . ".php")) {
             case 'registrar':
                 $k->setidproveedor($_POST['proveedor']);
                 $k->setcorrelativo($_POST['correlativo']);
+                $respuesta = $k->registrar(
+                    $_POST['producto'],
+                    $_POST['cantidad'],
+                    $_POST['costo']
+                );
 
+                $bitacoraModel->registrarAccion(
+                    'Creación de recepción: ' . $_POST['correlativo'], 
+                    MODULO_RECEPCION,
+                    $_SESSION['id_usuario']
+                );
+                
+                echo json_encode($respuesta);
+/*
                 // Validar que el correlativo no exista
                 if (!$k->validarCorrelativo()) {
                     echo json_encode(['status' => 'error', 'message' => 'Este correlativo ya existe']);
@@ -75,7 +88,8 @@ if (is_file("vista/" . $pagina . ".php")) {
                     } else {
                         echo json_encode(['status' => 'error', 'message' => 'Error al registrar la recepción']);
                     }
-                }
+                }*/
+                
                 break;
 
             case 'buscar':
