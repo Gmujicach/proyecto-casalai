@@ -30,8 +30,7 @@ $(document).ready(function () {
         });
     }
 
-    calcularTotal();
-
+    
     // Evento submit para el formulario de edición
     $(document).on("submit", "#formularioEdicion", function (e) {
         e.preventDefault();
@@ -485,29 +484,99 @@ function colocaproducto(linea) {
     if (!encontro) {
         var l = `
             <tr>
-                <td>
-                    <button type="button" class="btn-eliminar-pr" onclick="borrarp(this)">Eliminar</button>
-                </td>
-                <td style="display:none">
-                    <input type="text" name="producto[]" style="display:none"
-                    value="${$(linea).find("td:eq(0)").text()}"/>
-                    ${$(linea).find("td:eq(0)").text()}
-                </td>
-                <td>${$(linea).find("td:eq(1)").text()}</td>
-                <td>${$(linea).find("td:eq(2)").text()}</td>
-                <td>${$(linea).find("td:eq(3)").text()}</td>
-                <td>${$(linea).find("td:eq(4)").text()}</td>
-                <td>${$(linea).find("td:eq(5)").text()}</td>
+            <td>
+            <button type="button" class="btn-eliminar-pr" onclick="borrarp(this)">Eliminar</button>
+            </td>
+            <td style="display:none">
+                <input type="text" name="producto[]" style="display:none"
+                value="` +
+    $(linea).find("td:eq(0)").text() +
+    `"/>` +
+    $(linea).find("td:eq(0)").text() +
+    `</td>
+            <td>` +
+    $(linea).find("td:eq(1)").text() +
+    `</td>
+            <td>` +
+    $(linea).find("td:eq(2)").text() +
+    `</td>
+            <td>` +
+    $(linea).find("td:eq(3)").text() +
+    `</td>
+                <td>` +
+    $(linea).find("td:eq(4)").text() +
+    `</td>
+            <td>` +
+    $(linea).find("td:eq(5)").text() +
+    `</td>
+                <td>` +
+    $(linea).find("td:eq(6)").text() +
+    `</td>
                 <td>
                     <input type="number" class="numerico" name="cantidad[]" min="1" step="1" value="1" required>
                 </td>
             </tr>`;
-        $("#recepcion1").append(l);
-        calcularTotal(); // Actualizar total después de agregar nuevo producto
-    }
+    $("#recepcion1").append(l);
+    calcularTotal();
+}
+}
+//fin de funcion modifica subtotal
+// Calcula el monto total cada vez que se agregue/elimine/modifique cantidad de productos
+function calcularTotal() {
+    let total = 0;
+    $("#recepcion1 tr").each(function () {
+        const precio = parseFloat($(this).find("td:eq(7)").text()) || 0;
+        const cantidad = parseFloat($(this).find('input[name="cantidad[]"]').val()) || 0;
+        total += precio * cantidad;
+    });
+    $("#monto_total").val(total.toFixed(2));
+    return total;
 }
 
-// Función para eliminar línea de detalle de ventas
+// Recalcula el total al modificar productos/cantidades
+$(document).on('input', 'input[name="cantidad[]"]', calcularTotal);
+$(document).on('DOMNodeInserted DOMNodeRemoved', '#recepcion1', calcularTotal);
+
+// Calcula el cambio cuando el usuario ingresa el monto recibido en efectivo
+$(document).on('change', 'input[id^="monto_"]', function() {
+    // Solo si es efectivo
+    if ($(this).attr('id').includes('efectivo')) {
+        const montoRecibido = parseFloat($(this).val()) || 0;
+        const total = parseFloat($("#monto_total").val()) || 0;
+        const cambio = montoRecibido - total;
+        $("#cambio_efectivo").val(cambio.toFixed(2));
+    }
+});
+// Calcula el cambio considerando todos los pagos realizados
+function calcularCambio() {
+    const montoTotal = parseFloat($("#monto_total").val()) || 0;
+    let sumaPagos = 0;
+    // Suma todos los montos ingresados en los bloques de pago
+    $('input[name^="pagos"][name$="[monto]"]').each(function() {
+        sumaPagos += parseFloat($(this).val()) || 0;
+    });
+    const cambio = sumaPagos - montoTotal;
+    $("#cambio_efectivo").val(cambio > 0 ? cambio.toFixed(2) : "0.00");
+}
+
+// Recalcula el cambio cada vez que se modifica un monto en cualquier pago
+$(document).on('input', 'input[name^="pagos"][name$="[monto]"]', calcularCambio);
+
+// También recalcula el cambio cuando se agrega o elimina un bloque de pago
+$(document).on('DOMNodeInserted DOMNodeRemoved', '#pagos-container', calcularCambio);
+
+// Recalcula el cambio cuando el monto total cambia
+$(document).on('input', '#monto_total', calcularCambio);
+
+// Inicializa el cambio al cargar
+$(document).ready(function() {
+    calcularCambio();
+});
+// Inicializa el total al cargar
+$(document).ready(function() {
+    calcularTotal();
+});
+//funcion para eliminar linea de detalle de ventas
 function borrarp(boton) {
     $(boton).closest("tr").remove();
     calcularTotal();

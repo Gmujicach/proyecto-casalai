@@ -7,6 +7,7 @@ if (!is_file("modelo/factura.php")) {
 }
 
 require_once("modelo/factura.php");
+require_once("modelo/producto.php");
 if (is_file("vista/factura.php")) {
 
     if (!empty($_POST)) {

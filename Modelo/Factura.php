@@ -43,7 +43,25 @@ public function __construct() {
     public function setCantidad($cantidad) { $this->cantidad = $cantidad; }
     public function getCedula() { return $this->cedula; }
     public function setCedula($cedula) { $this->cedula = $cedula; }
+    public function registrar() {
+    $sql = "INSERT INTO tbl_facturas (fecha, cliente, descuento, estatus) 
+            VALUES (?, ?, ?, ?)";
+    $stmt = $this->getConexion()->prepare($sql);
+    $stmt->execute([
+        $this->fecha,
+        $this->cliente,
+        $this->descuento,
+        $this->estatus
+    ]);
+    return $this->getConexion()->lastInsertId();
+}
 
+public function agregarProducto($idFactura, $idProducto, $cantidad) {
+    $sql = "INSERT INTO tbl_factura_detalle (factura_id, id_producto, cantidad) 
+            VALUES (?, ?, ?)";
+    $stmt = $this->getConexion()->prepare($sql);
+    $stmt->execute([$idFactura, $idProducto, $cantidad]);
+}
     // Transacciones
     public function facturaTransaccion($transaccion) {
         switch ($transaccion) {

@@ -14,11 +14,12 @@
 
 <body class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
+<!-- ...código anterior... -->
 <div class="modal fade modal-registrar" id="registrarCompraFisicaModal" tabindex="-1" role="dialog" 
 aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="f" method="POST">
+            <form id="f" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarCompraFisicaModalLabel">Incluir Compra</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -68,13 +69,32 @@ aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
                                     <th>modelo</th>
                                     <th>Marca</th>
                                     <th>Serial</th>
+                                    <th>Precio</th>
                                     <th>Cantidad</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody class="" id="recepcion1">
                             </tbody>
                         </table>
                     </div>
+                    <hr>
+<!-- Monto total y cambio -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <label for="monto_total" class="form-label">Monto total a cancelar</label>
+        <input type="text" id="monto_total" name="monto_total" class="form-control" value="0.00" disabled>
+    </div>
+    <div class="col-md-6">
+        <label for="cambio_efectivo" class="form-label">Cambio</label>
+        <input type="text" id="cambio_efectivo" name="cambio_efectivo" class="form-control" value="0.00" disabled>
+    </div>
+</div>
+                    <!-- PAGOS DINÁMICOS -->
+                    <div id="pagos-container">
+                        <!-- Aquí se agregarán los bloques de pago dinámicamente -->
+                    </div>
+                    <button type="button" id="agregarPago" class="btn btn-secondary" style="margin-top: 10px;">Agregar otro pago</button>
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-6">
@@ -90,7 +110,6 @@ aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
                     <button class="boton-reset" type="reset">Reset</button>
                 </div>
             </form>
-
             <div class="modal fade" tabindex="-1" role="dialog" id="modalp">
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
@@ -110,6 +129,7 @@ aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
                             <th>modelo</th>
                             <th>Marca</th>
                             <th>Serial</th>
+                            <th>Precio</th>
                             </tr>
                         </thead>
                         <tbody class="text-center" id="listadop">
@@ -119,98 +139,10 @@ aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
                     </div>
                 </div>
             </div>
-            <div class="metodo-pago-container">
-    <label>Método de Pago</label>
-    
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="metodo_pago" id="transferencia" value="transferencia">
-        <label class="form-check-label" for="transferencia">Transferencia Bancaria</label>
-    </div>
-    
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="metodo_pago" id="pago_movil" value="pago_movil">
-        <label class="form-check-label" for="pago_movil">Pago Móvil</label>
-    </div>
-    
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="metodo_pago" id="efectivo" value="efectivo">
-        <label class="form-check-label" for="efectivo">Efectivo</label>
-    </div>
-    
-    <!-- Campos para transferencia -->
-    <div class="metodo-campos" id="campos-transferencia">
-        <div class="row">
-            <div class="col-md-6">
-                <label for="banco">Banco</label>
-                <select name="banco" id="banco" class="form-control">
-                    <option value="">Seleccione un banco</option>
-                    <option value="Banesco">Banesco</option>
-                    <option value="Mercantil">Mercantil</option>
-                    <option value="Venezuela">Banco de Venezuela</option>
-                    <option value="Bancaribe">Bancaribe</option>
-                    <option value="Provincial">Provincial</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="referencia_transferencia">Número de Referencia</label>
-                <input type="text" name="referencia_transferencia" id="referencia_transferencia" placeholder="Ej: 123456789">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label for="fecha_transferencia">Fecha de Transferencia</label>
-                <input type="date" name="fecha_transferencia" id="fecha_transferencia">
-            </div>
-            <div class="col-md-6">
-                <label for="monto_transferencia">Monto Transferido</label>
-                <input type="number" step="0.01" name="monto_transferencia" id="monto_transferencia" placeholder="Ej: 100.00">
-            </div>
-        </div>
-    </div>
-    
-    <!-- Campos para pago móvil -->
-    <div class="metodo-campos" id="campos-pago_movil">
-        <div class="row">
-            <div class="col-md-6">
-                <label for="telefono_pago_movil">Teléfono</label>
-                <input type="text" name="telefono_pago_movil" id="telefono_pago_movil" placeholder="Ej: 04141234567">
-            </div>
-            <div class="col-md-6">
-                <label for="referencia_pago_movil">Referencia</label>
-                <input type="text" name="referencia_pago_movil" id="referencia_pago_movil" placeholder="Número de referencia">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label for="banco_pago_movil">Banco</label>
-                <select name="banco_pago_movil" id="banco_pago_movil">
-                    <option value="">Seleccione un banco</option>
-                    <option value="Banesco">Banesco</option>
-                    <option value="Mercantil">Mercantil</option>
-                    <option value="Venezuela">Banco de Venezuela</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="monto_pago_movil">Monto</label>
-                <input type="number" step="0.01" name="monto_pago_movil" id="monto_pago_movil" placeholder="Ej: 100.00">
-            </div>
-        </div>
-    </div>
-    
-    <!-- Campos para efectivo -->
-    <div class="metodo-campos" id="campos-efectivo">
-        <div class="row">
-            <div class="col-md-6">
-                <label for="monto_efectivo">Monto Recibido</label>
-                <input type="number" step="0.01" name="monto_efectivo" id="monto_efectivo" placeholder="Ej: 100.00">
-            </div>
-            <div class="col-md-6">
-                <label for="cambio_efectivo">Cambio</label>
-                <input type="number" step="0.01" name="cambio_efectivo" id="cambio_efectivo" placeholder="Ej: 20.00" readonly>
-            </div>
         </div>
     </div>
 </div>
+
         </div>
     </div>
 </div>
@@ -336,240 +268,8 @@ foreach ($despachos as $d) {
 $totalProductosDespachados = array_sum($productosDespachados);
 ?>
 
-<div style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-   
-<div class="reporte-parametros" style="margin-bottom: 30px; text-align:center;">
-  <div class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
-    <label for="fechaInicio">Fecha inicio:</label>
-    <input type="date" id="fechaInicio" class="form-control" style="width:160px;">
-    <label for="fechaFin">Fecha fin:</label>
-    <input type="date" id="fechaFin" class="form-control" style="width:160px;">
-    <label for="tipoGrafica">Tipo de gráfica:</label>
-    <select id="tipoGrafica" class="form-select" style="width:200px;">
-      <option value="bar">Barras</option>
-      <option value="pie">Pastel</option>
-      <option value="line">Líneas</option>
-      <option value="doughnut">Donas</option>
-      <option value="polarArea">Área Polar</option>
-    </select>
-    <button id="generarReporteBtn" class="btn btn-primary">Generar</button>
-    <button id="descargarPDF" class="btn btn-success">Descargar PDF</button>
-  </div>
-</div>
-
-<div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-    
-    <h3 style="text-align:center; color:#1f66df;">Reporte de Despachos</h3>
-    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
-        <div style="flex:1; min-width:220px; text-align:center;">
-            <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
-                <canvas id="graficoReporte" width="400" height="400"></canvas>
-            </div>
-        </div>
-        <div style="flex:2; min-width:320px;">
-            <div id="tablaReporte"></div>
-        </div>
-    </div>
-</div>
-</div>
 <!-- Scripts para gráfica y PDF -->
  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-<script>
-const datosOriginales = <?= json_encode($despachos ?? $recepciones) ?>; // Usa la variable PHP correcta
-const tipo = "<?= isset($despachos) ? 'despacho' : 'recepcion' ?>";
-
-function filtrarPorFechas(datos, inicio, fin) {
-    return datos.filter(d => {
-        const fecha = tipo === 'despacho' ? d.fecha_despacho : d.fecha;
-        return (!inicio || fecha >= inicio) && (!fin || fecha <= fin);
-    });
-}
-
-function generarColores(n) {
-    return Array.from({length: n}, (_, i) => `hsl(${(360 / n) * i}, 70%, 60%)`);
-}
-
-function generarReporte() {
-    const fechaInicio = document.getElementById('fechaInicio').value;
-    const fechaFin = document.getElementById('fechaFin').value;
-    const tipoGrafica = document.getElementById('tipoGrafica').value;
-
-    // Validación de fechas
-    if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
-        Swal.fire('Error', 'La fecha inicial no puede ser mayor que la fecha final', 'error');
-        return;
-    }
-
-    // Filtrar datos
-    const datosFiltrados = filtrarPorFechas(datosOriginales, fechaInicio, fechaFin);
-
-    // Agrupar productos y sumar cantidades
-    let productosAgrupados = {};
-    let total = 0;
-    if (tipo === 'despacho') {
-        datosFiltrados.forEach(d => {
-            const nombre = d.nombre_producto;
-            const cantidad = parseInt(d.cantidad);
-            productosAgrupados[nombre] = (productosAgrupados[nombre] || 0) + cantidad;
-            total += cantidad;
-        });
-    } else {
-        datosFiltrados.forEach(d => {
-            const nombre = d.nombre_producto;
-            const cantidad = parseInt(d.cantidad);
-            productosAgrupados[nombre] = (productosAgrupados[nombre] || 0) + cantidad;
-            total += cantidad;
-        });
-    }
-
-    // Generar gráfica
-    const labels = Object.keys(productosAgrupados);
-    const data = Object.values(productosAgrupados);
-    const colores = generarColores(labels.length || 1);
-
-    // Actualizar tabla
-    let tablaHtml = `
-        <table class="table table-bordered table-striped" style="margin:0 auto 32px auto; width:100%;">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Porcentaje (%)</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-    labels.forEach((nombre, i) => {
-        const porcentaje = total > 0 ? ((data[i] / total) * 100).toFixed(2) : 0;
-        tablaHtml += `<tr>
-            <td>${nombre}</td>
-            <td>${data[i]}</td>
-            <td>${porcentaje}%</td>
-        </tr>`;
-    });
-    tablaHtml += `
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Total</th>
-                    <th>${total}</th>
-                    <th>100%</th>
-                </tr>
-            </tfoot>
-        </table>
-    `;
-    document.getElementById('tablaReporte').innerHTML = tablaHtml;
-
-    // Actualizar gráfica
-    const canvas = document.getElementById('graficoReporte');
-    canvas.width = 400;
-    canvas.height = 400;
-    const ctx = canvas.getContext('2d');
-    if (window.reporteChart) window.reporteChart.destroy();
-    window.reporteChart = new Chart(ctx, {
-        type: tipoGrafica,
-        data: {
-            labels: labels.length ? labels : ['Sin datos'],
-            datasets: [{
-                data: data.length ? data : [1],
-                backgroundColor: colores,
-                borderColor: '#fff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            plugins: {
-                legend: { display: true, position: 'bottom' },
-                title: { display: true, text: tipo === 'despacho' ? 'Productos más despachados' : 'Productos más recibidos' }
-            }
-        }
-    });
-}
-
-// Botón generar
-document.getElementById('generarReporteBtn').addEventListener('click', generarReporte);
-
-// Botón descargar PDF
-document.getElementById('descargarPDF').addEventListener('click', function () {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({
-        orientation: 'portrait',
-        unit: 'pt',
-        format: 'a4'
-    });
-
-    const reporte = document.querySelector('.reporte-container');
-    html2canvas(reporte, { scale: 2 }).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const imgWidth = pageWidth - 40;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-
-        doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
-        doc.save(tipo === 'despacho' ? 'Reporte_Despachos.pdf' : 'Reporte_Recepciones.pdf');
-    });
-});
-
-// Generar reporte inicial
-document.addEventListener('DOMContentLoaded', generarReporte);
-</script>
-		<?php include 'footer.php'; ?>
-	
-<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="titulo-form" id="modalModificarLabel">Modificar Despacho</h5>
-      </div>
-      <div class="modal-body">
-<form id="formularioEdicion">
-
-			<input type="hidden" name="accion" id="accion" value="modificarRecepcion">
-<input type="hidden" id="modalIdRecepcion" name="id_recepcion">
-
-<div class="form-group">
-    <label>Fecha</label>
-    <input type="date" id="modalFecha" name="fecha" class="form-control">
-</div>
-
-<div class="form-group">
-    <label>Correlativo</label>
-    <input type="text" id="modalCorrelativo" name="correlativo" class="form-control">
-</div>
-
-<div class="form-group">
-    <label>Proveedor</label>
-    <select id="modalProveedor" name="proveedor" class="form-control">
-        <!-- Opciones dinámicas -->
-    </select>
-</div>
-
-<h5>Productos</h5>
-<div id="contenedorDetalles"></div>
-<div class="row mt-3">
-    <div class="col-12">
-        <button type="button" id="btnAgregarProducto" class="btn btn-success w-100">
-            <i class="fas fa-plus-circle"></i> Agregar Producto
-        </button>
-    </div>
-</div>
-
-
-      <div>
-
-      	<div class="modal-footer"></div>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-      </div>
-        </form>
-    </div>
-  </div>
-</div>
-<!-- jQuery primero -->
-
-<!-- Select2 CSS y JS (deben ir antes que comprafisica.js) -->
-
 
 	<script>
 const productosDisponibles = <?= json_encode(array_map(function($prod) {
@@ -700,15 +400,157 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 <!-- jQuery primero -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Select2 CSS y JS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<!-- Tus scripts -->
 <script src="javascript/comprafisica.js"></script>
 <script src="javascript/validaciones.js"></script>
 
+
+<script>
+const cuentas = <?php echo json_encode($listadocuentas); ?>;
+const todosMetodos = ['Pago Movil', 'Transferencia', 'Efectivo']; // Lista de todos los métodos posibles
+
+// Función para filtrar cuentas por método de pago
+function filtrarCuentasPorMetodo(metodo) {
+    return cuentas.filter(cuenta => {
+        const metodosCuenta = cuenta.metodos ? cuenta.metodos.split(',') : [];
+        return metodosCuenta.includes(metodo);
+    });
+}
+
+// Función para crear un bloque de pago
+function crearBloquePago(idx) {
+    return `
+    <div class="bloque-pago" style="border:1px solid #ccc; padding:15px; margin-bottom:15px; border-radius:8px; position:relative;">
+        <button type="button" class="btn btn-danger btn-sm btn-quitar-pago" style="position:absolute;top:8px;right:8px;display:${idx==0?'none':'inline-block'};">Quitar</button>
+        
+        <!-- Primero seleccionar el tipo de pago -->
+        <div class="envolver-form">
+            <label for="tipo_${idx}">Tipo de pago</label>
+            <select class="control-form tipo-pago" name="pagos[${idx}][tipo]" id="tipo_${idx}" required>
+                <option value="" disabled selected>Seleccione</option>
+                ${todosMetodos.map(m => `<option value="${m}">${m}</option>`).join('')}
+            </select>
+        </div>
+        
+        <!-- Luego seleccionar la cuenta (se llena dinámicamente según el tipo) -->
+        <div class="envolver-form">
+            <label for="cuenta_${idx}">Cuenta</label>
+            <select class="control-form cuenta-pago" name="pagos[${idx}][cuenta]" id="cuenta_${idx}" required disabled>
+                <option value="" disabled selected>Primero seleccione un tipo de pago</option>
+            </select>
+        </div>
+        
+        <!-- Campos específicos del pago -->
+        <div class="campos-pago" id="campos_pago_${idx}">
+            <!-- Aquí se insertan los campos según el tipo -->
+        </div>
+    </div>
+    `;
+}
+
+// Función para campos según tipo de pago (igual que antes)
+function camposPorTipo(tipo, idx) {
+    if (tipo === "Pago Movil") {
+        return `
+        <div class="envolver-form">
+            <label for="referencia_${idx}">Referencia</label>
+            <input type="text" class="control-form" name="pagos[${idx}][referencia]" id="referencia_${idx}" required>
+        </div>
+        <div class="envolver-form">
+            <label for="fecha_${idx}">Fecha</label>
+            <input type="date" class="control-form" name="pagos[${idx}][fecha]" id="fecha_${idx}" required>
+        </div>
+        <div class="envolver-form">
+            <label for="comprobante_${idx}">Comprobante (imagen)</label>
+            <input type="file" class="control-form" name="pagos[${idx}][comprobante]" id="comprobante_${idx}" accept="image/*" required>
+        </div>
+                <div class="envolver-form">
+            <label for="monto_${idx}">Monto Recibido</label>
+            <input type="number" step="0.01" class="control-form" name="pagos[${idx}][monto]" id="monto_${idx}" required>
+        </div>
+        `;
+    } else if (tipo === "Transferencia") {
+        return `
+        <div class="envolver-form">
+            <label for="referencia_${idx}">Referencia</label>
+            <input type="text" class="control-form" name="pagos[${idx}][referencia]" id="referencia_${idx}" required>
+        </div>
+        <div class="envolver-form">
+            <label for="fecha_${idx}">Fecha</label>
+            <input type="date" class="control-form" name="pagos[${idx}][fecha]" id="fecha_${idx}" required>
+        </div>
+                <div class="envolver-form">
+            <label for="monto_${idx}">Monto Recibido</label>
+            <input type="number" step="0.01" class="control-form" name="pagos[${idx}][monto]" id="monto_${idx}" required>
+        </div>
+        `;
+    } else if (tipo === "Efectivo") {
+        return `
+        <div class="envolver-form">
+            <label for="monto_${idx}">Monto Recibido</label>
+            <input type="number" step="0.01" class="control-form" name="pagos[${idx}][monto]" id="monto_${idx}" required>
+        </div>
+        `;
+    } else {
+        return '';
+    }
+}
+
+// Inicializar el formulario con un pago
+let pagosCount = 0;
+function agregarPagoBloque() {
+    $('#pagos-container').append(crearBloquePago(pagosCount));
+    pagosCount++;
+}
+agregarPagoBloque();
+
+// Evento para agregar otro pago
+$('#agregarPago').on('click', function() {
+    agregarPagoBloque();
+});
+
+// Evento para quitar un bloque de pago
+$(document).on('click', '.btn-quitar-pago', function() {
+    $(this).closest('.bloque-pago').remove();
+});
+
+// Evento al cambiar el tipo de pago: actualizar cuentas disponibles y mostrar campos
+$(document).on('change', '.tipo-pago', function() {
+    const idx = $(this).attr('id').split('_')[1];
+    const tipoSeleccionado = $(this).val();
+    const $cuentaSelect = $(`#cuenta_${idx}`);
+    
+    if (tipoSeleccionado) {
+        // Filtrar cuentas que tienen este método de pago
+        const cuentasFiltradas = filtrarCuentasPorMetodo(tipoSeleccionado);
+        
+        // Actualizar el select de cuentas
+        $cuentaSelect.empty().prop('disabled', false);
+        $cuentaSelect.append('<option value="" disabled selected>Seleccione una cuenta</option>');
+        
+        cuentasFiltradas.forEach(cuenta => {
+            $cuentaSelect.append(
+                `<option value="${cuenta.id_cuenta}">
+                    ${cuenta.nombre_banco} - ${cuenta.numero_cuenta}
+                </option>`
+            );
+        });
+        
+        // Mostrar campos específicos para este tipo de pago
+        $(`#campos_pago_${idx}`).html(camposPorTipo(tipoSeleccionado, idx));
+    } else {
+        $cuentaSelect.empty().prop('disabled', true);
+        $cuentaSelect.append('<option value="" disabled selected>Primero seleccione un tipo de pago</option>');
+        $(`#campos_pago_${idx}`).empty();
+    }
+});
+
+// Evento al cambiar la cuenta (si necesitas hacer algo cuando se selecciona una cuenta)
+$(document).on('change', '.cuenta-pago', function() {
+    // Aquí puedes agregar lógica adicional si necesitas hacer algo cuando se selecciona una cuenta
+});
+</script>
 <?php
 } else {
     header("Location: ?pagina=acceso-denegado");
