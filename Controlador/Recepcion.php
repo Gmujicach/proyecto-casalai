@@ -58,11 +58,11 @@ if (is_file("vista/" . $pagina . ".php")) {
                             $_POST['cantidad'],
                             $_POST['costo']
                         );
-                        $recepcionRegistrada = $k->obtenerUltimaOrden();
+                        $recepcionRegistrada = $k->obtenerUltimaRecepcion();
 
                         echo json_encode($respuesta)([
                             'status' => 'success',
-                            'message' => 'Orden de despacho registrada correctamente',
+                            'message' => 'Recepción registrada correctamente',
                             'recepcion' => $recepcionRegistrada
                         ]);
 
@@ -73,7 +73,7 @@ if (is_file("vista/" . $pagina . ".php")) {
                         );
 
                     } else {
-                        echo json_encode(['status' => 'error', 'message' => 'Error al registrar la orden de despacho']);
+                        echo json_encode(['status' => 'error', 'message' => 'Error al registrar la recepción']);
                     }
                 }
                 break;
