@@ -1,6 +1,7 @@
 $(document).ready(function () {
 $(document).on('submit', '#formularioEdicion', function (e) {
     e.preventDefault();
+    e.stopPropagation();
 
     var formData = new FormData(this);
     formData.append('accion', 'modificarRecepcion');
@@ -28,25 +29,33 @@ $(document).on('submit', '#formularioEdicion', function (e) {
                 return;
             }
 
-            if (response.status === 'success') {
-                $('#modalModificar').modal('hide');
-                setTimeout(function () {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: response.message || 'Recepción modificada correctamente.'
-                    }).then(() => {
-                        location.reload();
-                    });
-                }, 500);
-            } else {
-                console.warn("Error desde el backend:", response);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error en la modificación',
-                    text: response.message || 'Ocurrió un error al modificar. Revisa la consola.'
-                });
-            }
+if (response.status === 'success') {
+    // Cierra el modal con jQuery (Bootstrap 4)
+    $('#modalModificar').modal('hide');
+
+    // Quitar manualmente backdrop en caso de quedar atascado
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open').css({ 'padding-right': '', 'overflow': '' });
+
+    setTimeout(function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Modificado',
+            text: response.message || 'Recepción modificada correctamente.'
+        }).then(() => {
+            console.log("Recargando tabla de consultas...");
+        });
+    }, 500);
+
+} else {
+    console.warn("Error desde el backend:", response);
+    Swal.fire({
+        icon: 'error',
+        title: 'Error en la modificación',
+        text: response.message || 'Ocurrió un error al modificar. Revisa la consola.'
+    });
+}
+
         },
         error: function (xhr, status, error) {
             console.error("Error AJAX:");
@@ -380,7 +389,8 @@ function muestraMensaje(tipo, tiempo, titulo, mensaje) {
         
         if(!a){
         
-            e.preventDefault();
+    e.preventDefault();
+    e.stopPropagation();
         }
         
         
@@ -403,57 +413,148 @@ function muestraMensaje(tipo, tiempo, titulo, mensaje) {
     
     
     
-    function enviaAjax(datos){
+function enviaAjax(datos) {
+    fetch('', {
+        method: 'POST',
+        body: datos
+    })
+    .then(res => res.text())
+    .then(respuesta => {
+        try {
+            let lee = JSON.parse(respuesta);
+            console.log(lee);
+
+            if (lee.resultado == 'listado') {
+                document.querySelector('#listadop').innerHTML = lee.mensaje;
+
+            } else if (lee.resultado === 'registrar') {
+                muestraMensaje('success', 6000, 'REGISTRAR', lee.mensaje);
+                borrar();
+                cerrarModales(); // 🔹 Cerramos modales y backdrop
+                if (lee.data) insertarFilaTabla(lee.data);
+
+            } else if (lee.resultado === 'modificarRecepcion') {
+                muestraMensaje('success', 6000, 'MODIFICAR', lee.mensaje);
+                cerrarModales(); // 🔹 Cerramos modales y backdrop
+                if (lee.data) actualizarFilaTabla(lee.data);
+
+            } else if (lee.resultado === 'encontro') {
+                muestraMensaje('warning', 6000, 'Atención', lee.mensaje);
+
+            } else if (lee.resultado === 'error') {
+                muestraMensaje('error', 6000, 'Error', lee.mensaje);
+            }
+
+        } catch (e) {
+            console.error("Error en JSON: " + e.message);
+        }
+    })
+    .catch(err => console.error("Error AJAX:", err));
+}
+
+
+// Función mejorada para cerrar modales y eliminar pantallas negras
+function cerrarModales() {
+    // Cerrar todos los modales visibles
+    document.querySelectorAll('.modal.show').forEach(modal => {
+        const bsModal = bootstrap.Modal.getInstance(modal);
+        if (bsModal) {
+            bsModal.hide();
+        } else {
+            // Fallback si no hay instancia
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        }
+    });
+
+    // Eliminar backdrops después de un breve retraso
+    setTimeout(() => {
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+            backdrop.remove();
+        });
         
-        $.ajax({
-            async: true,
-                url: '', //la pagina a donde se envia por estar en mvc, se omite la ruta ya que siempre estaremos en la misma pagina
-                type: 'POST',//tipo de envio 
-                contentType: false,
-                data: datos,
-                processData: false,
-                cache: false,
-                beforeSend: function(){
-                    //pasa antes de enviar pueden colocar un loader
-                    
-                    
-                },
-                timeout:10000, //tiempo maximo de espera por la respuesta del servidor
-                success: function(respuesta) {//si resulto exitosa la transmision
-                    console.log(respuesta); 
-                    try{
-                
-                    var lee = JSON.parse(respuesta);	
-                    console.log(lee.resultado);
-                    
-                    if(lee.resultado=='listado'){
-                        
-                        $('#listadop').html(lee.mensaje);
-                    }
-                    else if(lee.resultado=='registrar'){
-    muestraMensaje('success', 6000, 'REGISTRAR', lee.mensaje);
-    borrar();
-}else if (lee.resultado == "encontro") {		
-                        if (lee.mensaje == 'El numero de correlativo ya existe!') {
-                            muestraMensaje('success', 6000,'Atencion', lee.mensaje);
-                        }		
-                    }else if(lee.resultado=='error'){
-                        muestraMensaje('success', 6000,'Error',lee.mensaje);
-                    }
-                    
-                }
-                catch(e){
-                    console.log("Error en JSON"+e.name+" !!!");
-                }
-                  
-                },
-                complete: function(){
-                
-                }
-                
-            });
-    
-    
-        
-    }
+        // Restaurar estado del body
+        document.body.classList.remove('modal-open');
+        document.body.style.paddingRight = '';
+        document.body.style.overflow = '';
+    }, 150);
+}
+
+// Inicialización de modales
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar todos los modales
+    document.querySelectorAll('.modal').forEach(modal => {
+        new bootstrap.Modal(modal);
+    });
+
+    // Manejar cierre manual
+    document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
+        btn.addEventListener('click', cerrarModales);
+    });
+});
+
+function actualizarFilaTabla(data) {
+    // Buscar el botón que abre el modal de esta recepción
+    let btn = document.querySelector(`.btn-modificar[data-idrecepcion="${data.id_recepcion}"]`);
+    if (!btn) return;
+
+    // Buscar la fila principal
+    let filaPrincipal = btn.closest("tr");
+
+    // Obtener tbody
+    let tbody = filaPrincipal.closest("tbody");
+
+    // Borrar todas las filas relacionadas a esa recepción
+    let filasRelacionadas = tbody.querySelectorAll(`.btn-modificar[data-idrecepcion="${data.id_recepcion}"]`);
+    filasRelacionadas.forEach(b => {
+        let tr = b.closest("tr");
+        tbody.removeChild(tr);
+    });
+
+    // Insertar nuevamente con datos nuevos
+    insertarFilaTabla(data);
+}
+
+
+function insertarFilaTabla(data) {
+    let tabla = document.querySelector("#tablaConsultas tbody");
+
+    data.productos.forEach((prod, index) => {
+        let tr = document.createElement("tr");
+
+        // Solo la primera fila lleva fecha, correlativo y proveedor
+        if (index === 0) {
+            tr.innerHTML = `
+                <td rowspan="${data.productos.length}">${data.fecha}</td>
+                <td rowspan="${data.productos.length}">${data.correlativo}</td>
+                <td rowspan="${data.productos.length}">${data.proveedor}</td>
+                <td>${data.nombre_producto}</td>
+                <td>${prod.cantidad}</td>
+                <td>${prod.costo}</td>
+                <td rowspan="${data.productos.length}">
+                    <button class="btn-modificar"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalModificar"
+                        data-idrecepcion="${data.id_recepcion}"
+                        data-correlativo="${data.correlativo}"
+                        data-fecha="${data.fecha}"
+                        data-proveedor="${data.proveedor}"
+                        data-productos='${JSON.stringify(data.productos)}'>
+                        Modificar
+                    </button>
+                </td>
+            `;
+        } else {
+            tr.innerHTML = `
+                <td>${prod.nombre_producto}</td>
+                <td>${prod.cantidad}</td>
+                <td>${prod.costo}</td>
+            `;
+        }
+
+        tabla.appendChild(tr);
+    });
+}
+
+   
    

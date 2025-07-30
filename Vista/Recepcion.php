@@ -20,7 +20,7 @@
             <form id="f" method="POST">
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarRecepcionModalLabel">Incluir Recepción</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -85,7 +85,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 class="titulo-form">Listado de productos</h5>
-							<button type="button" class="close-2" data-dismiss="modal" aria-label="Cerrar">
+							<button type="button" class="close-2" data-bs-dismiss="modal" aria-label="Cerrar">
                                 <span aria-hidden="true">&times;</span>
                             </button>
 						</div>
@@ -252,7 +252,7 @@
     </div>
 </div>
 </div>
-		<?php include 'footer.php'; ?>
+		
 	
 <div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -302,8 +302,9 @@
       </div>
         </form>
     </div>
-  </div>productos
+  </div>
 </div>
+<?php include 'footer.php'; ?>
 <script>
 const proveedoresDisponibles = <?= json_encode($proveedores) ?>;
 </script>
@@ -404,6 +405,13 @@ $(document).on('click', '.btn-modificar', function(e) {
     // Mostrar el modal
     const modal = new bootstrap.Modal(document.getElementById('modalModificar'));
     modal.show();
+        cerrarModales();
+    
+    setTimeout(() => {
+        const modalElement = document.getElementById('modalModificar');
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    }, 200);
 });
 // Función para crear un nuevo bloque vacío de producto
 function crearBloqueProducto(productosDisponibles) {
@@ -589,6 +597,7 @@ document.getElementById('descargarPDF').addEventListener('click', function () {
 // Generar reporte inicial
 document.addEventListener('DOMContentLoaded', generarReporte);
 </script>
+
 </body>
 </html>
 

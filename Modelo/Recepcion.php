@@ -65,50 +65,69 @@ public function registrar($idproducto, $cantidad, $costo) {
             $idRecepcion = $co->lastInsertId();
             $cap = count($idproducto);
 
-            $descripcion = "Compra: ";
-            $monto_total = 0;
+            $productosArray = [];
 
-// ...dentro del for de registrar...
-for ($i = 0; $i < $cap; $i++) {
-    $sqlDetalle = "INSERT INTO tbl_detalle_recepcion_productos (id_recepcion, id_producto, cantidad, costo) 
-                   VALUES (:idRecepcion, :idProducto, :cantidad, :costo)";
-    $stmtDetalle = $co->prepare($sqlDetalle);
-    $stmtDetalle->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
-    $stmtDetalle->bindParam(':idProducto', $idproducto[$i], PDO::PARAM_INT);
-    $stmtDetalle->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
-    $stmtDetalle->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
-    $stmtDetalle->execute();
+            for ($i = 0; $i < $cap; $i++) {
+                $sqlDetalle = "INSERT INTO tbl_detalle_recepcion_productos (id_recepcion, id_producto, cantidad, costo) 
+                               VALUES (:idRecepcion, :idProducto, :cantidad, :costo)";
+                $stmtDetalle = $co->prepare($sqlDetalle);
+                $stmtDetalle->bindParam(':idRecepcion', $idRecepcion, PDO::PARAM_INT);
+                $stmtDetalle->bindParam(':idProducto', $idproducto[$i], PDO::PARAM_INT);
+                $stmtDetalle->bindParam(':cantidad', $cantidad[$i], PDO::PARAM_INT);
+                $stmtDetalle->bindParam(':costo', $costo[$i], PDO::PARAM_INT);
+                $stmtDetalle->execute();
+                $idDetalle = $co->lastInsertId(); // ✅ ID del detalle recién insertado
 
-    $idDetalle = $co->lastInsertId(); // <--- OBTIENE EL ID DEL DETALLE
+      // Obtener nombre del producto
+                $sqlNombre = "SELECT id_producto FROM tbl_productos WHERE id_producto = ?";
+                $stmtNombre = $co->prepare($sqlNombre);
+                $stmtNombre->execute([$idproducto[$i]]);
+                $idProducto = $stmtNombre->fetchColumn();
 
-    // Obtener nombre del producto
-    $sqlNombre = "SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?";
-    $stmtNombre = $co->prepare($sqlNombre);
-    $stmtNombre->execute([$idproducto[$i]]);
-    $nombreProducto = $stmtNombre->fetchColumn();
+                $sqlNombre = "SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?";
+                $stmtNombre = $co->prepare($sqlNombre);
+                $stmtNombre->execute([$idproducto[$i]]);
+                $nombreProducto = $stmtNombre->fetchColumn();
 
-    $descripcion = "Compra: {$nombreProducto} (x{$cantidad[$i]})";
+                $productosArray[] = [
+                    'id_producto' => $idProducto,
+                    'cantidad' => $cantidad[$i],
+                    'costo' => $costo[$i],
+                    'iddetalles' => $idDetalle
+                ];
 
-    $monto_total = $costo[$i] * $cantidad[$i];
+                $monto_total = $costo[$i] * $cantidad[$i];
+                $descripcion = "Compra: {$nombreProducto} (x{$cantidad[$i]})";
 
-    // Registrar egreso en tbl_ingresos_egresos para este detalle
-    $sqlEgreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_detalle_recepcion_productos)
-                  VALUES ('egreso', ?, ?, ?, 1, ?)";
-    $stmtEgreso = $co->prepare($sqlEgreso);
-    $stmtEgreso->execute([$monto_total, $descripcion, $tiempo, $idDetalle]);
-}
+                // Registrar egreso
+                $sqlEgreso = "INSERT INTO tbl_ingresos_egresos (tipo, monto, descripcion, fecha, estado, id_detalle_recepcion_productos)
+                              VALUES ('egreso', ?, ?, ?, 1, LAST_INSERT_ID())";
+                $stmtEgreso = $co->prepare($sqlEgreso);
+                $stmtEgreso->execute([$monto_total, $descripcion, $tiempo]);
+            }
+
             $d['resultado'] = 'registrar';
-            $d['mensaje'] = 'Se registró la nota de entrada correctamente y el egreso fue registrado.';
+            $d['mensaje'] = 'Se registró la nota de entrada correctamente.';
+            $d['data'] = [
+                'fecha' => $tiempo,
+                'correlativo' => $this->correlativo,
+                'proveedor' => $this->idproveedor,
+                'productos' => $productosArray,
+                'nombre_producto' => $nombreProducto,
+                'id_recepcion' => $idRecepcion
+            ];
+
         } catch (Exception $e) {
             $d['resultado'] = 'error';
             $d['mensaje'] = $e->getMessage();
         }
     } else {
-        $d['resultado'] = 'registrar';
+        $d['resultado'] = 'encontro';
         $d['mensaje'] = 'El número correlativo ya existe!';
     }
     return $d;
 }
+
     
 
 public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle)
@@ -219,8 +238,32 @@ public function modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetal
 
         // Confirmar transacción
         $co->commit();
-        $d['resultado'] = 'modificarRecepcion';
-        $d['mensaje'] = 'Recepción modificada correctamente.';
+        // Después de commit
+$d['resultado'] = 'modificarRecepcion';
+$d['mensaje'] = 'Recepción modificada correctamente.';
+$d['data'] = [
+    'id_recepcion' => $idRecepcion,
+    'fecha' => $this->fecha,
+    'correlativo' => $this->correlativo,
+    'proveedor' => $this->idproveedor,
+    'productos' => [] // Aquí incluyes los productos modificados
+];
+
+$d['data']['productos'] = [];
+foreach ($idproducto as $i => $idProd) {
+    $stmtNombre = $co->prepare("SELECT nombre_producto FROM tbl_productos WHERE id_producto = ?");
+    $stmtNombre->execute([$idProd]);
+    $nombreProdActual = $stmtNombre->fetchColumn();
+
+    $d['data']['productos'][] = [
+        'id_producto' => $idProd,
+        'nombre_producto' => $nombreProdActual,
+        'cantidad' => $cantidad[$i],
+        'costo' => $costo[$i]
+    ];
+}
+
+
 
     } catch (PDOException $pdoEx) {
         if ($co->inTransaction()) {
@@ -358,6 +401,26 @@ public function getrecepcion() {
 
     return $recepciones;
 }
+       public function obtenerUltimaRecepcion() {
+        return $this->obtUltimaRecepcion();
+    }
+
+    private function obtUltimaRecepcion() {
+        $sql = "SELECT d.id_detalle_recepcion_productos,
+        r.id_recepcion, pro.id_producto, pr.id_proveedor,
+        r.fecha, r.correlativo, pr.nombre_proveedor, pro.nombre_producto, d.cantidad, d.costo
+    FROM tbl_recepcion_productos AS r 
+    INNER JOIN tbl_detalle_recepcion_productos AS d ON d.id_recepcion = r.id_recepcion 
+    INNER JOIN tbl_proveedores AS pr ON pr.id_proveedor = r.id_proveedor 
+    INNER JOIN tbl_productos AS pro ON pro.id_producto = d.id_producto
+    ORDER BY r.fecha ASC, r.correlativo ASC, pro.nombre_producto ASC
+                ORDER BY r.id_recepcion DESC LIMIT 1";
+        $stmt = $this->getConexion()->prepare($sql);
+        $stmt->execute();
+        $orden = $stmt->fetch(PDO::FETCH_ASSOC);
+        $this->conex = null;
+        return $orden ? $orden : null;
+    }
 
 	public function obtenerDetallesPorRecepcion($idRecepcion) {
     $datos = [];
