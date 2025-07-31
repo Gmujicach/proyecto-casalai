@@ -19,10 +19,10 @@
 aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="f" method="POST" enctype="multipart/form-data">
+            <form id="f" method="POST" enctype="multipart/form-data" onsubmit="return validarFormularioCompra()">
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarCompraFisicaModalLabel">Incluir Compra</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -115,7 +115,7 @@ aria-labelledby="registrarCompraFisicaModalLabel" aria-hidden="true">
                     <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="titulo-form">Listado de productos</h5>
-                        <button type="button" class="close-2" data-dismiss="modal" aria-label="Cerrar">
+                        <button type="button" class="close-2" data-bs-dismiss="modal" aria-label="Cerrar">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                     </div>
@@ -451,6 +451,12 @@ function crearBloquePago(idx) {
 
 // Función para campos según tipo de pago (igual que antes)
 function camposPorTipo(tipo, idx) {
+    let montoField = `
+        <input type="number" step="0.01" class="control-form" min="0" 
+        name="pagos[${idx}][monto]" id="monto_${idx}" required
+        onkeydown="return validarTeclaMonto(event)">
+    `;
+
     if (tipo === "Pago Movil") {
         return `
         <div class="envolver-form">
@@ -465,9 +471,9 @@ function camposPorTipo(tipo, idx) {
             <label for="comprobante_${idx}">Comprobante (imagen)</label>
             <input type="file" class="control-form" name="pagos[${idx}][comprobante]" id="comprobante_${idx}" accept="image/*" required>
         </div>
-                <div class="envolver-form">
+        <div class="envolver-form">
             <label for="monto_${idx}">Monto Recibido</label>
-            <input type="number" step="0.01" class="control-form" name="pagos[${idx}][monto]" id="monto_${idx}" required>
+            ${montoField}
         </div>
         `;
     } else if (tipo === "Transferencia") {
@@ -480,22 +486,32 @@ function camposPorTipo(tipo, idx) {
             <label for="fecha_${idx}">Fecha</label>
             <input type="date" class="control-form" name="pagos[${idx}][fecha]" id="fecha_${idx}" required>
         </div>
-                <div class="envolver-form">
+        <div class="envolver-form">
             <label for="monto_${idx}">Monto Recibido</label>
-            <input type="number" step="0.01" class="control-form" name="pagos[${idx}][monto]" id="monto_${idx}" required>
+            ${montoField}
         </div>
         `;
     } else if (tipo === "Efectivo") {
         return `
         <div class="envolver-form">
             <label for="monto_${idx}">Monto Recibido</label>
-            <input type="number" step="0.01" class="control-form" name="pagos[${idx}][monto]" id="monto_${idx}" required>
+            ${montoField}
         </div>
         `;
     } else {
         return '';
     }
 }
+
+// 🔹 Función para bloquear signos + y - en montos
+function validarTeclaMonto(e) {
+    // Códigos de teclas para + y -
+    if (e.key === '+' || e.key === '-' || e.keyCode === 187 || e.keyCode === 189) {
+        return false; // Bloquea la entrada
+    }
+    return true; // Permite las demás teclas
+}
+
 
 // Inicializar el formulario con un pago
 let pagosCount = 0;

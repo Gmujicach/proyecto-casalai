@@ -13,6 +13,7 @@ if (!is_file("modelo/" . $pagina . ".php")) {
 require_once("modelo/" . $pagina . ".php");
 $k = new Compra();
 require_once 'modelo/permiso.php';
+require_once 'modelo/ordendespacho.php';
 require_once 'modelo/bitacora.php';
 require_once 'modelo/cuenta.php';
 
@@ -22,6 +23,7 @@ $id_rol = $_SESSION['id_rol']; // Asegúrate de tener este dato en sesión
 $permisosObj = new Permisos();
 $bitacoraModel = new Bitacora();
 $cuentaModel = new Cuentabanco();
+$despacho = new OrdenDespacho();
 $permisosUsuario = $permisosObj->getPermisosUsuarioModulo($id_rol, strtolower('despacho'));
 
 if (is_file("vista/" . $pagina . ".php")) {
@@ -45,10 +47,14 @@ case 'registrar':
     $cambio = $_POST['cambio_efectivo'] ?? 0;
 
     if (!$idCliente || !$correlativo || empty($productos)) {
-        echo json_encode(['status' => 'error', 'message' => 'Faltan datos obligatorios']);
+        echo json_encode(['status' => 'error', 'mensaje' => 'Faltan datos obligatorios']);
         exit;
     }
-
+    $k->setcorrelativo($correlativo);
+                $respuesta = $k->buscar();
+    if ($respuesta) {
+                echo json_encode(['resultado' => 'encontro', 'mensaje' => 'Este correlativo ya existe, por favor, ingrese otro']);
+            } else {
     // 🔹 Setear datos principales en el modelo
     $k->setidcliente($idCliente);
     $k->setcorrelativo($correlativo);
@@ -108,6 +114,7 @@ case 'registrar':
     );
 
     echo json_encode($resultado);
+}
     break;
 
 

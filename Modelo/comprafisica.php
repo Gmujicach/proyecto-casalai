@@ -458,7 +458,8 @@ public function registrarCompraFisica($datos)
 
         $co->commit();
         $d['status'] = 'success';
-        $d['message'] = 'Compra registrada correctamente';
+        $d['resultado'] = 'registrar';
+        $d['mensaje'] = 'Compra registrada correctamente';
         $d['despachos'] = $this->getdespacho();
 
     } catch (Exception $e) {
@@ -466,7 +467,7 @@ public function registrarCompraFisica($datos)
             $co->rollBack();
         }
         $d['status'] = 'error';
-        $d['message'] = $e->getMessage();
+        $d['mensaje'] = $e->getMessage();
     }
 
     return $d;
