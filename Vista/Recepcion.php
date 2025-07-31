@@ -269,15 +269,18 @@ aria-labelledby="modificarRecepcionModalLabel" aria-hidden="true">
                     <input type="hidden" id="modificar_id_recepcion" name="id_recepcion">
                     <div class="form-group">
                         <label>Correlativo</label>
-                        <input type="text" id="modalCorrelativo" name="correlativo" class="form-control">
+                        <input type="text" id="modalCorrelativo" name="correlativo" maxlength="10" class="form-control">
+                        <span class="span-value" id="smcorrelativo"></span>
                     </div>
                     <div class="form-group">
                         <label>Fecha</label>
                         <input type="date" id="modalFecha" name="fecha" class="form-control">
+                        <span class="span-value" id="smfecha"></span>
                     </div>
                     <div class="form-group">
                         <label>Proveedor</label>
                         <select id="modalProveedor" name="proveedor" class="form-control"></select>
+                        <span class="span-value" id="smproveedor"></span>
                     </div>
                     <br>
                     <h5 class="titulo-form">Productos</h5>
