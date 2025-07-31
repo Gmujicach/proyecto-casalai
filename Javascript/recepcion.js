@@ -430,12 +430,12 @@ function enviaAjax(datos) {
             } else if (lee.resultado === 'registrar') {
                 muestraMensaje('success', 6000, 'REGISTRAR', lee.mensaje);
                 borrar();
-                cerrarModales(); // 🔹 Cerramos modales y backdrop
+                 // 🔹 Cerramos modales y backdrop
                 if (lee.data) insertarFilaTabla(lee.data);
 
             } else if (lee.resultado === 'modificarRecepcion') {
                 muestraMensaje('success', 6000, 'MODIFICAR', lee.mensaje);
-                cerrarModales(); // 🔹 Cerramos modales y backdrop
+                 // 🔹 Cerramos modales y backdrop
                 if (lee.data) actualizarFilaTabla(lee.data);
 
             } else if (lee.resultado === 'encontro') {
@@ -453,45 +453,9 @@ function enviaAjax(datos) {
 }
 
 
-// Función mejorada para cerrar modales y eliminar pantallas negras
-function cerrarModales() {
-    // Cerrar todos los modales visibles
-    document.querySelectorAll('.modal.show').forEach(modal => {
-        const bsModal = bootstrap.Modal.getInstance(modal);
-        if (bsModal) {
-            bsModal.hide();
-        } else {
-            // Fallback si no hay instancia
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-        }
-    });
 
-    // Eliminar backdrops después de un breve retraso
-    setTimeout(() => {
-        document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-            backdrop.remove();
-        });
-        
-        // Restaurar estado del body
-        document.body.classList.remove('modal-open');
-        document.body.style.paddingRight = '';
-        document.body.style.overflow = '';
-    }, 150);
-}
 
-// Inicialización de modales
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar todos los modales
-    document.querySelectorAll('.modal').forEach(modal => {
-        new bootstrap.Modal(modal);
-    });
 
-    // Manejar cierre manual
-    document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
-        btn.addEventListener('click', cerrarModales);
-    });
-});
 
 function actualizarFilaTabla(data) {
     // Buscar el botón que abre el modal de esta recepción
