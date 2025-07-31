@@ -31,49 +31,7 @@ $(document).ready(function () {
     }
 
     
-    // Evento submit para el formulario de edición
-    $(document).on("submit", "#formularioEdicion", function (e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-        formData.append("accion", "modificarRecepcion");
-
-        $.ajax({
-            url: "",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
-                try {
-                    response = typeof response === "object" ? response : JSON.parse(response);
-                } catch (e) {
-                    Swal.fire("Error", "Respuesta inesperada del servidor", "error");
-                    return;
-                }
-
-                if (response.status === "success") {
-                    $("#modalModificar").modal("hide");
-                    $(".modal-backdrop").remove();
-                    $("body").removeClass("modal-open");
-                    if (response.tbody) {
-                        $("#tablaConsultas tbody").html(response.tbody);
-                    }
-                    Swal.fire({
-                        icon: "success",
-                        title: "Modificado",
-                        text: response.message,
-                    });
-                } else {
-                    Swal.fire("Error", response.message, "error");
-                }
-            },
-            error: function () {
-                Swal.fire("Error", "Error al modificar la recepción.", "error");
-            },
-        });
-    });
-
+    
     // Evento click para el botón de incluir despacho
     $("#btnIncluirDespacho").on("click", function () {
         $("#f")[0].reset();
@@ -169,7 +127,7 @@ $(document).ready(function () {
 
     // Evento click para el botón registrar
     $("#registrar").on("click", function () {
-        if (validarenvio()) {
+        if (validarFormularioRegistro()) {
             if (verificaproductos()) {
                 $("#accion").val("registrar");
                 var datos = new FormData($("#f")[0]);
@@ -291,43 +249,102 @@ $(document).ready(function () {
     }
 
     // Función para validar el envío del formulario
-    function validarenvio() {
-        var proveedorseleccionado = $("#proveedor").val();
-        if (proveedorseleccionado === null || proveedorseleccionado === "0") {
-            muestraMensaje("info", 4000, "Por favor, seleccione un proveedor!");
-            return false;
-        } else if (
-            validarkeyup(
-                /^[0-9]{4,10}$/,
-                $("#correlativo"),
-                $("#scorrelativo"),
-                "Se permite de 4 a 10 carácteres"
-            ) == 0
-        ) {
-            muestraMensaje(
-                "info",
-                4000,
-                "el correlativo debe coincidir con el formato"
-            );
-            return false;
-        } else if (
-            validarkeyup(
-                /^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]{1,200}$/,
-                $("#descripcion"),
-                $("#sdescripcion"),
-                "No debe contener más de 200 carácteres"
-            ) == 0
-        ) {
-            muestraMensaje(
-                "error",
-                4000,
-                "ERROR!",
-                "No debe estar vacío, ni contener más de 200 carácteres"
-            );
-            return false;
+function validarFormularioRegistro() {
+    let formValido = true;
+    let mensajesError = [];
+
+    // 📌 1. Validar campos obligatorios básicos
+    const camposRequeridos = [
+        {id: 'correlativo', nombre: 'Correlativo'},
+        {id: 'cliente', nombre: 'Cliente'}
+    ];
+
+    camposRequeridos.forEach(campo => {
+        const elemento = document.getElementById(campo.id);
+        if (!elemento || !elemento.value.trim()) {
+            mensajesError.push(`El campo "${campo.nombre}" es obligatorio.`);
+            formValido = false;
         }
-        return true;
+    });
+
+    // 📌 2. Validar que hay al menos un producto en la tabla
+    const filasProductos = document.querySelectorAll("#recepcion1 tr");
+    if (filasProductos.length === 0) {
+        mensajesError.push("Debe agregar al menos un producto a la compra.");
+        formValido = false;
     }
+
+    // 📌 3. Validar pagos (similar a la función original)
+    let montoTotal = parseFloat(document.querySelector("#monto_total").value) || 0;
+    let montoPagado = 0;
+    let pagoCompleto = false;
+
+    document.querySelectorAll(".bloque-pago").forEach((bloque, idx) => {
+        const tipo = bloque.querySelector(`.tipo-pago`)?.value.trim();
+        const cuenta = bloque.querySelector(`.cuenta-pago`)?.value.trim();
+        const referencia = bloque.querySelector(`input[name="pagos[${idx}][referencia]`)?.value.trim();
+        const monto = parseFloat(bloque.querySelector(`input[name="pagos[${idx}][monto]"]`)?.value) || 0;
+        const comprobante = bloque.querySelector(`input[name="pagos[${idx}][comprobante]`);
+
+        // Validar campos según tipo de pago
+        if (tipo) {
+            if (!cuenta) {
+                mensajesError.push(`En el pago ${idx + 1}: Debe seleccionar una cuenta.`);
+                formValido = false;
+            }
+
+            if (monto <= 0) {
+                mensajesError.push(`En el pago ${idx + 1}: El monto debe ser mayor que 0.`);
+                formValido = false;
+            }
+
+            if ((tipo === "Pago Movil" || tipo === "Transferencia") && !referencia) {
+                mensajesError.push(`En el pago ${idx + 1}: La referencia es obligatoria para ${tipo}.`);
+                formValido = false;
+            }
+
+            if (tipo === "Pago Movil" && comprobante && !comprobante.files[0]) {
+                mensajesError.push(`En el pago ${idx + 1}: El comprobante es obligatorio para Pago Móvil.`);
+                formValido = false;
+            }
+
+            montoPagado += monto;
+            
+            if (tipo && cuenta && monto > 0 && (tipo !== "Pago Movil" || comprobante?.files[0])) {
+                if (tipo === "Pago Movil" || tipo === "Transferencia") {
+                    if (referencia) pagoCompleto = true;
+                } else {
+                    pagoCompleto = true;
+                }
+            }
+        }
+    });
+
+    // 📌 4. Validar que monto pagado sea igual o mayor al monto total
+    if (montoPagado < montoTotal) {
+        mensajesError.push(`El monto pagado (${montoPagado.toFixed(2)}) no puede ser menor al monto total (${montoTotal.toFixed(2)}).`);
+        formValido = false;
+    }
+
+    // 📌 5. Validar que exista al menos un pago completo
+    if (!pagoCompleto) {
+        mensajesError.push("Debe existir al menos un pago completo con todos sus campos llenos.");
+        formValido = false;
+    }
+
+    // 📌 6. Mostrar mensajes y cancelar envío si hay errores
+    if (!formValido) {
+        Swal.fire({
+            icon: "error",
+            title: "Validación fallida",
+            html: mensajesError.join("<br>"),
+            confirmButtonText: "Corregir"
+        });
+    }
+
+    return formValido;
+}
+
 
     // Función para cargar productos
     function carga_productos() {
@@ -445,13 +462,10 @@ $(document).ready(function () {
                             .addClass(lee.modalSize);
                     } else if (lee.resultado == "registrar") {
                         muestraMensaje("success", 6000, "REGISTRAR", lee.mensaje);
-                        if (lee.tbody) {
-                            $("#tablaConsultas tbody").html(lee.tbody);
-                        }
-                        borrar();
+                        resetModalCompraFisica();
                     } else if (lee.resultado == "encontro") {
-                        if (lee.mensaje == "El numero de correlativo ya existe!") {
-                            muestraMensaje("success", 6000, "Atencion", lee.mensaje);
+                        if (lee.mensaje == "Este correlativo ya existe, por favor, ingrese otro") {
+                            muestraMensaje("error", 6000, "Atencion", lee.mensaje);
                         }
                     } else if (lee.resultado == "error") {
                         muestraMensaje("success", 6000, "Error", lee.mensaje);
@@ -466,6 +480,37 @@ $(document).ready(function () {
         });
     }
 });
+function resetModalCompraFisica() {
+    // 1️⃣ Cerrar modal
+    $('#registrarCompraFisicaModal').modal('hide');
+
+    // 2️⃣ Resetear formulario
+    const $form = $('#f');
+    $form[0].reset();
+
+    // 3️⃣ Resetear Select2 si lo usas
+    if ($('#cliente').hasClass("select2-hidden-accessible")) {
+        $('#cliente').val(null).trigger('change');
+    }
+
+    // 4️⃣ Limpiar tabla de productos
+    $('#recepcion1').empty();
+
+    // 5️⃣ Reiniciar totales
+    $('#monto_total').val('0.00');
+    $('#cambio_efectivo').val('0.00');
+    $('#totalCompra').val('');
+
+    // 6️⃣ Limpiar pagos dinámicos y volver a crear el primer bloque
+    $('#pagos-container').empty();
+    pagosCount = 0; // Reiniciamos contador
+    agregarPagoBloque();
+
+    // 7️⃣ Remover mensajes de error o validaciones
+    $('#scorrelativo').text('');
+
+    console.log("Modal de Compra Física reseteado correctamente");
+}
 
 // Función para colocar productos en la tabla
 function colocaproducto(linea) {
@@ -577,6 +622,160 @@ $(document).ready(function() {
     calcularTotal();
 });
 //funcion para eliminar linea de detalle de ventas
+
+
+    /**
+     * Valida el formulario completo de compra antes de enviarlo
+     * @returns {boolean} true si el formulario es válido, false si hay errores
+     */
+    function validarFormularioCompra() {
+        // 1. Validar campos básicos obligatorios
+        if (!validarCamposObligatorios()) {
+            return false;
+        }
+
+        // 2. Validar que al menos hay un producto
+        if ($('#recepcion1 tr').length === 0) {
+            Swal.fire('Error', 'Debe agregar al menos un producto', 'error');
+            return false;
+        }
+
+        // 3. Validar montos y pagos
+        if (!validarMontosYPagos()) {
+            return false;
+        }
+
+        // 4. Validar referencias numéricas
+        if (!validarReferenciasNumericas()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Valida que todos los campos obligatorios estén completos
+     */
+    function validarCamposObligatorios() {
+        const camposObligatorios = [
+            { selector: '#correlativo', nombre: 'Correlativo' },
+            { selector: '#cliente', nombre: 'Cliente' }
+        ];
+
+        for (const campo of camposObligatorios) {
+            const valor = $(campo.selector).val().trim();
+            if (!valor || valor === 'disabled') {
+                Swal.fire('Error', `El campo ${campo.nombre} es obligatorio`, 'error');
+                $(campo.selector).focus();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Valida los montos y los pagos
+     */
+    function validarMontosYPagos() {
+        // Obtener monto total de la compra
+        const montoTotal = parseFloat($('#monto_total').val()) || 0;
+        
+        // Validar que el monto total sea mayor que 0
+        if (montoTotal <= 0) {
+            Swal.fire('Error', 'El monto total debe ser mayor a 0', 'error');
+            return false;
+        }
+
+        // Validar cada bloque de pago
+        let totalPagado = 0;
+        let pagosValidos = 0;
+        
+        $('.bloque-pago').each(function(index) {
+            const tipoPago = $(this).find('.tipo-pago').val();
+            const cuenta = $(this).find('.cuenta-pago').val();
+            const monto = parseFloat($(this).find('input[name$="[monto]"]').val()) || 0;
+            
+            // Validar que el pago esté completo
+            if (tipoPago && cuenta && monto > 0) {
+                // Validar que el monto no sea negativo
+                if (monto < 0) {
+                    Swal.fire('Error', `El monto en el pago ${index + 1} no puede ser negativo`, 'error');
+                    $(this).find('input[name$="[monto]"]').focus();
+                    return false;
+                }
+                
+                // Validar referencias para transferencia/pago móvil
+                if (tipoPago !== 'Efectivo') {
+                    const referencia = $(this).find('input[name$="[referencia]"]').val().trim();
+                    if (!referencia) {
+                        Swal.fire('Error', `La referencia en el pago ${index + 1} es obligatoria`, 'error');
+                        $(this).find('input[name$="[referencia]"]').focus();
+                        return false;
+                    }
+                }
+                
+                totalPagado += monto;
+                pagosValidos++;
+            }
+        });
+        
+        // Validar que haya al menos un pago completo
+        if (pagosValidos === 0) {
+            Swal.fire('Error', 'Debe registrar al menos un pago completo', 'error');
+            return false;
+        }
+        
+        // Validar que el total pagado sea suficiente
+        if (totalPagado < montoTotal) {
+            Swal.fire('Error', `El total pagado (${totalPagado.toFixed(2)}) es menor al monto total (${montoTotal.toFixed(2)})`, 'error');
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Valida que las referencias solo contengan números
+     */
+    function validarReferenciasNumericas() {
+        let esValido = true;
+        
+        $('input[name$="[referencia]"]').each(function() {
+            const referencia = $(this).val().trim();
+            if (referencia && !/^\d+$/.test(referencia)) {
+                Swal.fire('Error', 'Las referencias de pago solo pueden contener números', 'error');
+                $(this).focus();
+                esValido = false;
+                return false; // Salir del each
+            }
+        });
+        
+        return esValido;
+    }
+
+    /**
+     * Configura validación para inputs numéricos (no negativos)
+     */
+    function configurarValidacionNumerosPositivos() {
+        // Para inputs de tipo number
+        $('input[type="number"]').on('input', function() {
+            const value = parseFloat($(this).val());
+            if (value < 0) {
+                $(this).val(0);
+            }
+        });
+        
+        // Para inputs de texto que deben ser números
+        $('input.numeric-positive').on('input', function() {
+            $(this).val($(this).val().replace(/[^0-9.]/g, ''));
+            const value = parseFloat($(this).val());
+            if (value < 0) {
+                $(this).val(0);
+            }
+        });
+    }
+    
 function borrarp(boton) {
     $(boton).closest("tr").remove();
     calcularTotal();
