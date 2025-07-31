@@ -7,17 +7,18 @@
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php include 'header.php'; ?>
-    <title>Gestionar Recepcion</title>
+    <title>Gestionar Recepción</title>
 </head>
 
 <body  class="fondo" style=" height: 100vh; background-image: url(img/fondo.jpg); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 <?php include 'newnavbar.php'; ?>
 
-<div class="modal fade modal-registrar" id="registrarRecepcionModal" tabindex="-1" role="dialog" aria-labelledby="registrarRecepcionModalLabel" aria-hidden="true">
+<div class="modal fade modal-registrar" id="registrarRecepcionModal" tabindex="-1" role="dialog" 
+aria-labelledby="registrarRecepcionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="f" method="POST">
+            <form id="ingresarRecepcion" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarRecepcionModalLabel">Incluir Recepción</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
@@ -27,9 +28,9 @@
                 <div class="modal-body">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
-                        <label for="correlativo">Correlativo del producto</label>
-                        <input type="text" placeholder="Correlativo" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
-                        <span id="scorrelativo"></span>
+                        <label for="correlativo">Correlativo</label>
+                        <input type="text" placeholder="0123456789" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
+                        <span class="span-value" id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="proveedor">Proveedor</label>
@@ -40,8 +41,8 @@
                                 echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre_proveedor'] . "</option>";
                             } ?>
                         </select>
+                        <span class="span-value" id="sproveedor"></span>
                     </div>
-        
                     <div class="envolver-form">
                         <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
                         <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
@@ -182,23 +183,21 @@
             foreach ($recepciones as $recepcion):
                 $key = $recepcion['fecha'] . '|' . $recepcion['correlativo'] . '|' . $recepcion['nombre_proveedor'];
         ?>
-        <tr>
+        <tr data-id="<?php echo $orden['id_recepcion']; ?>">
             <?php if (!in_array($key, $rendered)): ?>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['fecha']) ?></td>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['correlativo']) ?></td>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($recepcion['nombre_proveedor']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><span class="campo-nombres"><?= htmlspecialchars($recepcion['fecha']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><span class="campo-numeros"><?= htmlspecialchars($recepcion['correlativo']) ?></td>
+                <td rowspan="<?= $rowspans[$key] ?>"><span class="campo-nombres"><?= htmlspecialchars($recepcion['nombre_proveedor']) ?></td>
             <?php endif; ?>
 
-            <td><?= htmlspecialchars($recepcion['nombre_producto']) ?></td>
-            <td><?= htmlspecialchars($recepcion['cantidad']) ?></td>
-            <td><?= htmlspecialchars($recepcion['costo']) ?></td>
+            <td><span class="campo-nombres"><?= htmlspecialchars($recepcion['nombre_producto']) ?></td>
+            <td><span class="campo-numeros"><?= htmlspecialchars($recepcion['cantidad']) ?></td>
+            <td><span class="campo-numeros"><?= htmlspecialchars($recepcion['costo']) ?></td>
 
             <?php if (!in_array($key, $rendered)): ?>
                 <td rowspan="<?= $rowspans[$key] ?>">
                     <ul>
                         <button class="btn-modificar"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalModificar"
                             data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
                             data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
                             data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
@@ -254,55 +253,50 @@
 </div>
 		
 	
-<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="titulo-form" id="modalModificarLabel">Modificar Recepción</h5>
-      </div>
-      <div class="modal-body">
-<form id="formularioEdicion">
+<div class="modal fade modal-modificar" id="modificarRecepcionModal" tabindex="-1" 
+aria-labelledby="modificarRecepcionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <form id="formularioEdicion" method="POST" novalidate>
+            <input type="hidden" name="accion" id="accion" value="modificarRecepcion">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="modificarRecepcionModalLabel">Modificar Recepción</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="modalIdRecepcion" name="id_recepcion">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="modalFecha" name="fecha" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Correlativo</label>
+                        <input type="text" id="modalCorrelativo" name="correlativo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                            <select id="modalProveedor" name="proveedor" class="form-control">
+                        </select>
+                    </div>
 
-			<input type="hidden" name="accion" id="accion" value="modificarRecepcion">
-<input type="hidden" id="modalIdRecepcion" name="id_recepcion">
-
-<div class="form-group">
-    <label>Fecha</label>
-    <input type="date" id="modalFecha" name="fecha" class="form-control">
-</div>
-
-<div class="form-group">
-    <label>Correlativo</label>
-    <input type="text" id="modalCorrelativo" name="correlativo" class="form-control">
-</div>
-
-<div class="form-group">
-    <label>Proveedor</label>
-    <select id="modalProveedor" name="proveedor" class="form-control">
-        <!-- Opciones dinámicas -->
-    </select>
-</div>
-
-<h5>Productos</h5>
-<div id="contenedorDetalles"></div>
-<div class="row mt-3">
-    <div class="col-12">
-        <button type="button" id="btnAgregarProducto" class="btn btn-success w-100">
-            <i class="fas fa-plus-circle"></i> Agregar Producto
-        </button>
+                    <h5 class="titulo-form">Productos</h5>
+                    <div id="contenedorDetalles"></div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button type="button" id="btnAgregarProducto" class="btn btn-success w-100">
+                                    <i class="fas fa-plus-circle"></i> Agregar Producto
+                                </button>
+                            </div>
+                        </div>
+                    
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Modificar</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-
-      <div>
-
-      	<div class="modal-footer"></div>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-      </div>
-        </form>
-    </div>
-  </div>
 </div>
 <?php include 'footer.php'; ?>
 <script>
@@ -403,12 +397,12 @@ $(document).on('click', '.btn-modificar', function(e) {
     $('#contenedorDetalles').html(html);
     
     // Mostrar el modal
-    const modal = new bootstrap.Modal(document.getElementById('modalModificar'));
+    const modal = new bootstrap.Modal(document.getElementById('modificarRecepcionModal'));
     modal.show();
         cerrarModales();
     
     setTimeout(() => {
-        const modalElement = document.getElementById('modalModificar');
+        const modalElement = document.getElementById('modificarRecepcionModal');
         const modal = new bootstrap.Modal(modalElement);
         modal.show();
     }, 200);

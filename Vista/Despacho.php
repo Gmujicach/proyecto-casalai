@@ -18,7 +18,7 @@
 aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="f" method="POST">
+            <form id="ingresarDespacho" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarDespachoModalLabel">Incluir Despacho</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -28,7 +28,7 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
                 <div class="modal-body">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
-                        <label for="correlativo">Correlativo del producto</label>
+                        <label for="correlativo">Correlativo</label>
                         <input type="text" placeholder="Correlativo" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
                         <span id="scorrelativo"></span>
                     </div>
@@ -41,8 +41,8 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
                                 echo "<option value='" . $proveedor['id_clientes'] . "'>" . $proveedor['nombre'] . "</option>";
                             } ?>
                         </select>
+                        <span id="scliente"></span>
                     </div>
-        
                     <div class="envolver-form">
                         <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
                         <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>

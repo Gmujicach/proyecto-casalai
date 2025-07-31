@@ -53,51 +53,43 @@ if (is_file("vista/" . $pagina . ".php")) {
                     $_POST['costo']
                 );
 
-                // Registrar en bitácora
                 $bitacoraModel->registrarAccion(
                     'Creación de recepción: ' . $_POST['correlativo'], 
                     MODULO_RECEPCION,
                     $_SESSION['id_usuario']
                 );
                 
-                // Notificar a almacenistas
-                if ($respuesta['resultado'] === 'ok') {
-                    $id_recepcion = $respuesta['id_recepcion']; // Asume que la respuesta incluye el ID
-                    
-                    // Obtener todos los almacenistas (rol 2)
-                    $stmt = $pdo_seguridad->prepare("SELECT id_usuario FROM tbl_usuarios WHERE id_rol = 2");
-                    $stmt->execute();
-                    $almacenistas = $stmt->fetchAll();
-
-                    foreach ($almacenistas as $almacenista) {
-                        $notificacionModel->crear(
-                            $almacenista['id_usuario'],
-                            'inventario',
-                            'Nueva recepción registrada',
-                            "Se ha registrado una nueva recepción #".$_POST['correlativo']." con ".$_POST['cantidad']." unidades",
-                            $id_recepcion,
-                            'media'
-                        );
-                    }
-                    
-                    // Notificar al administrador (rol 1)
-                    $stmt = $pdo_seguridad->prepare("SELECT id_usuario FROM tbl_usuarios WHERE id_rol = 1 LIMIT 1");
-                    $stmt->execute();
-                    $admin = $stmt->fetch();
-                    
-                    if ($admin) {
-                        $notificacionModel->crear(
-                            $admin['id_usuario'],
-                            'inventario',
-                            'Recepción de productos',
-                            "Nueva recepción #".$_POST['correlativo']." registrada por ".$_SESSION['name'],
-                            $id_recepcion,
-                            'baja'
-                        );
-                    }
-                }
-                
                 echo json_encode($respuesta);
+/*
+                // Validar que el correlativo no exista
+                if (!$k->validarCorrelativo()) {
+                    echo json_encode(['status' => 'error', 'message' => 'Este correlativo ya existe']);
+                }  else {
+                    if ($k->registrar()) {
+                        $respuesta = $k(
+                            $_POST['producto'],
+                            $_POST['cantidad'],
+                            $_POST['costo']
+                        );
+                        $recepcionRegistrada = $k->obtenerUltimaRecepcion();
+
+                        echo json_encode($respuesta)([
+                            'status' => 'success',
+                            'message' => 'Recepción registrada correctamente',
+                            'recepcion' => $recepcionRegistrada
+                        ]);
+
+                        $bitacoraModel->registrarAccion(
+                            'Creación de recepción: ' . $_POST['correlativo'], 
+                            MODULO_RECEPCION,
+                            $_SESSION['id_usuario']
+                        );
+
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'Error al registrar la recepción']);
+                    }
+                }*/
+                
                 break;
 
             case 'buscar':
