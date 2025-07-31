@@ -1,10 +1,10 @@
 $(document).ready(function () {
-$(document).on('submit', '#formularioEdicion', function (e) {
+$(document).on('submit', '#modificarRecepcion', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
     var formData = new FormData(this);
-    formData.append('accion', 'modificarRecepcion');
+    formData.append('accion', 'modificar');
 
     $.ajax({
         url: '',
@@ -449,7 +449,7 @@ function enviaAjax(datos) {
                  // 🔹 Cerramos modales y backdrop
                 if (lee.data) insertarFilaTabla(lee.data);
 
-            } else if (lee.resultado === 'modificarRecepcion') {
+            } else if (lee.resultado === 'modificar') {
                 muestraMensaje('success', 6000, 'MODIFICAR', lee.mensaje);
                  // 🔹 Cerramos modales y backdrop
                 if (lee.data) actualizarFilaTabla(lee.data);

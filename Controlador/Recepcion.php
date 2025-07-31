@@ -125,7 +125,7 @@ if (is_file("vista/" . $pagina . ".php")) {
                 }
                 break;
 
-case 'modificarRecepcion':
+case 'modificar':
                 try {
                     $idRecepcion = $_POST['id_recepcion'] ?? null;
                     $idproducto = $_POST['productos'] ?? [];
@@ -155,7 +155,7 @@ case 'modificarRecepcion':
 
                     $respuesta = $k->modificar($idRecepcion, $idproducto, $cantidad, $costo, $iddetalle);
 
-                    if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificarRecepcion') {
+                    if (isset($respuesta['resultado']) && $respuesta['resultado'] === 'modificar') {
                         // Bitácora
                         $bitacoraModel->registrarAccion(
                             'Modificación de Recepción: ' . $_POST['correlativo'],

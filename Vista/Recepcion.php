@@ -258,7 +258,7 @@ aria-labelledby="modificarRecepcionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <form id="modificarRecepcion" method="POST" novalidate>
-            <input type="hidden" name="accion" id="accion" value="modificarRecepcion">
+            <input type="hidden" name="accion" id="accion" value="modificar">
                 <div class="modal-header">
                     <h5 class="titulo-form" id="modificarRecepcionModalLabel">Modificar Recepción</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
