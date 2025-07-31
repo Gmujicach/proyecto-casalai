@@ -78,8 +78,9 @@ if (response.status === 'success') {
 });
 
     $('#btnIncluirRecepcion').on('click', function() {
-        $('#f')[0].reset();
+        $('#ingresarRecepcion')[0].reset();
         $('#scorrelativo').text('');
+        $('#sproveedor').text('');
         $('#registrarRecepcionModal').modal('show');
     });
 
@@ -92,6 +93,16 @@ if (response.status === 'success') {
     });
 });
 
+    if($.trim($("#mensajes").text()) != ""){
+        mensajes("warning", "Atención", $("#mensajes").html());
+    }
+
+    function space(str) {
+        const regex = /\s{2,}/g;
+        var str = str.replace(regex, ' ');
+        return str;
+    }
+
 carga_productos();    //boton para levantar modal de productos
     $("#listado").on("click",function(){
         $("#modalp").modal("show");
@@ -99,32 +110,28 @@ carga_productos();    //boton para levantar modal de productos
     
     
     $("#correlativo").on("keypress",function(e){
-        validarkeypress(/^[0-9-\b]*$/,e);
+        validarkeypress(/^[0-9]*$/,e);
+        let correlativo = document.getElementById("correlativo");
+        correlativo.value = space(correlativo.value);
     });
     
     $("#correlativo").on("keyup",function(){
-        validarkeyup(/^[0-9]{4,10}$/,$(this),
-        $("#scorrelativo"),"Se permite de 4 a 10 carácteres");
-        if ($("#correlativo").val().length <= 9) {
-			var datos = new FormData();
-			datos.append('accion', 'buscar');
-			datos.append('correlativo', $(this).val());
-			enviaAjax(datos);
-		}
+        validarkeyup(
+            /^[0-9]{4,10}$/,
+            $(this),
+            $("#scorrelativo"),
+            "Se permite de 4 a 10 dígitos"
+        );
     });
 
-    $("#descripcion").on("keypress", function (e) {
-        validarkeypress(/^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]*$/, e);
-      });
-    
-      $("#descripcion").on("keyup", function () {
+    $("#proveedor").on("change blur", function() {
         validarkeyup(
-          /^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]{1,200}$/,
-          $(this),
-          $("#sdescripcion"),
-          "No debe estar vacío y se permite un máximo 200 carácteres"
+            /^.+$/,
+            $(this),
+            $("#sproveedor"),
+            "Debe seleccionar una factura"
         );
-      });
+    });
     
     //evento keyup de input codigoproducto
     $("#codigoproducto").on("keyup",function(){
@@ -138,11 +145,11 @@ carga_productos();    //boton para levantar modal de productos
     
     //evento click de boton registrar
     $("#registrar").on("click",function(){
-         if (validarenvio()){
+        if (validarenvio()){
             if(verificaproductos()){
             $('#accion').val('registrar');
     
-                var datos = new FormData($('#f')[0]);
+                var datos = new FormData($('#ingresarRecepcion')[0]);
                 
                 $('#proveedor').change(function() {
                     var valor = $(this).val();
@@ -151,12 +158,9 @@ carga_productos();    //boton para levantar modal de productos
     
                 enviaAjax(datos);
                 } else{
-                muestraMensaje("info",4000,"Debe colocar algun producto");
+                mensajes('error', 'Verifique los productos', 'Debe seleccionar algun producto');
             }
-          } 
-           
-            
-        
+        }
     });
         
         function verificarPermisosEnTiempoRealRecepcion() {
@@ -234,33 +238,23 @@ $(document).ready(function() {
         });
     }
     function validarenvio(){
-        
-        var proveedorseleccionado = $("#proveedor").val();
-        if (proveedorseleccionado === null || proveedorseleccionado === "0") {
-            muestraMensaje("info",4000,"Por favor, seleccione un proveedor!"); 
+        let correlativo = document.getElementById("correlativo");
+        correlativo.value = space(correlativo.value).trim();
+
+        if(validarkeyup(
+            /^[0-9]{4,10}$/,
+            $("#correlativo"),
+            $("#scorrelativo"),
+            "*El correlativo debe tener de 4 a 10 dígitos*"
+        )==0){
+            mensajes('error', 'Verifique el correlativo', 'Le faltan dígitos al correlativo');
             return false;
-        }
-        else if(validarkeyup(/^[0-9]{4,10}$/,$("#correlativo"),
-            $("#scorrelativo"),"Se permite de 4 a 10 carácteres")==0){
-            muestraMensaje("info",4000,"el correlativo debe coincidir con el formato");
-                           
-            return false;					
-        } else if (
-            validarkeyup(
-                /^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]{1,200}$/,
-                $("#descripcion"),
-                $("#sdescripcion"),
-                "No debe contener más de 200 carácteres"
-            ) == 0
-        ) {
-            muestraMensaje(
-                "error",
-                4000,
-                "ERROR!",
-               
-                    "No debe estar vacío, ni contener más de 200 carácteres"
-            );
+        } else if($("#proveedor").val() === null || $("#proveedor").val() === "") {
+            $("#sproveedor").text("*Debe seleccionar una proveedor*");
+            mensajes('error', 'Verifique la proveedor', 'El campo esta vacio');
             return false;
+        } else {
+            $("#sproveedor").text("");
         }
         return true;
     }
@@ -278,12 +272,10 @@ $(document).ready(function() {
     //function para saber si selecciono algun productos
     function verificaproductos(){
         var existe = false;
-       
         if($("#recepcion1 tr").length > 0){
             existe = true;
             
         }
-      
         return existe;
     }
     function borrar(){
@@ -291,12 +283,9 @@ $(document).ready(function() {
         $("#proveedor").val("disabled");
         $("#recepcion1 tr").remove();
         $("#descripcion").val('');
-        
-        }
-
+    }
     
 //funcion para colocar los productos
-    
     
     function colocaproducto(linea){
         var id = $(linea).find("td:eq(0)").text();

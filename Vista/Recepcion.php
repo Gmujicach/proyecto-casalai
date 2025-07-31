@@ -17,7 +17,7 @@
 <div class="modal fade modal-registrar" id="registrarRecepcionModal" tabindex="-1" role="dialog" aria-labelledby="registrarRecepcionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="f" method="POST">
+            <form id="ingresarRecepcion" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarRecepcionModalLabel">Incluir Recepción</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
@@ -29,7 +29,7 @@
                     <div class="envolver-form">
                         <label for="correlativo">Correlativo del producto</label>
                         <input type="text" placeholder="Correlativo" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
-                        <span id="scorrelativo"></span>
+                        <span class="span-value" id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="proveedor">Proveedor</label>
@@ -40,6 +40,7 @@
                                 echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre_proveedor'] . "</option>";
                             } ?>
                         </select>
+                        <span class="span-value" id="sproveedor"></span>
                     </div>
         
                     <div class="envolver-form">
