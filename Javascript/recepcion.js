@@ -345,15 +345,46 @@ $(document).ready(function() {
         $(boton).closest('tr').remove();
     }
 
+    function muestraMensaje(tipo, tiempo, titulo, mensaje) {
+        Swal.fire({
+            icon: tipo,
+            title: titulo,
+            text: mensaje,
+            timer: tiempo || 3000
+        });
+    }
 
-function muestraMensaje(tipo, tiempo, titulo, mensaje) {
-    Swal.fire({
-        icon: tipo,
-        title: titulo,
-        text: mensaje,
-        timer: tiempo || 3000
-    });
-}
+    function mensajes(icono, titulo, mensaje){
+        Swal.fire({
+            icon: icono,
+            title: titulo,
+            text: mensaje,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        });
+    }
+
+    function validarkeypress(er, e) {
+        key = e.keyCode;
+        tecla = String.fromCharCode(key);
+        a = er.test(tecla);
+
+        if (!a) {
+            e.preventDefault();
+        }
+    }
+
+    function validarkeyup(er, etiqueta, etiquetamensaje, mensaje) {
+        a = er.test(etiqueta.val());
+
+        if (a) {
+            etiquetamensaje.text("");
+            return 1;
+        } else {
+            etiquetamensaje.text(mensaje);
+            return 0;
+        }
+    }
     
     //Funcion que muestra el modal con un mensaje
     
