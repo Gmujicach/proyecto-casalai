@@ -197,8 +197,6 @@
                 <td rowspan="<?= $rowspans[$key] ?>">
                     <ul>
                         <button class="btn-modificar"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalModificar"
                             data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
                             data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
                             data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
@@ -258,7 +256,7 @@
 aria-labelledby="modificarRecepcionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="formularioEdicion" method="POST" novalidate>
+            <form id="modificarRecepcion" method="POST" novalidate>
             <input type="hidden" name="accion" id="accion" value="modificarRecepcion">
                 <div class="modal-header">
                     <h5 class="titulo-form" id="modificarRecepcionModalLabel">Modificar Recepción</h5>
@@ -267,21 +265,20 @@ aria-labelledby="modificarRecepcionModalLabel" aria-hidden="true">
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="modalIdRecepcion" name="id_recepcion">
-                    <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" id="modalFecha" name="fecha" class="form-control">
-                    </div>
+                    <input type="hidden" id="modificar_id_recepcion" name="id_recepcion">
                     <div class="form-group">
                         <label>Correlativo</label>
                         <input type="text" id="modalCorrelativo" name="correlativo" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Proveedor</label>
-                            <select id="modalProveedor" name="proveedor" class="form-control">
-                        </select>
+                        <label>Fecha</label>
+                        <input type="date" id="modalFecha" name="fecha" class="form-control">
                     </div>
-
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <select id="modalProveedor" name="proveedor" class="form-control"></select>
+                    </div>
+                    <br>
                     <h5 class="titulo-form">Productos</h5>
                     <div id="contenedorDetalles"></div>
                         <div class="row mt-3">
@@ -399,12 +396,12 @@ $(document).on('click', '.btn-modificar', function(e) {
     $('#contenedorDetalles').html(html);
     
     // Mostrar el modal
-    const modal = new bootstrap.Modal(document.getElementById('modalModificar'));
+    const modal = new bootstrap.Modal(document.getElementById('modificarRecepcionModal'));
     modal.show();
         cerrarModales();
     
     setTimeout(() => {
-        const modalElement = document.getElementById('modalModificar');
+        const modalElement = document.getElementById('modificarRecepcionModal');
         const modal = new bootstrap.Modal(modalElement);
         modal.show();
     }, 200);

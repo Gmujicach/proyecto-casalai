@@ -31,7 +31,7 @@ $(document).on('submit', '#formularioEdicion', function (e) {
 
 if (response.status === 'success') {
     // Cierra el modal con jQuery (Bootstrap 4)
-    $('#modalModificar').modal('hide');
+    $('#modificarRecepcionModal').modal('hide');
 
     // Quitar manualmente backdrop en caso de quedar atascado
     $('.modal-backdrop').remove();
@@ -497,8 +497,6 @@ function insertarFilaTabla(data) {
                 <td>${prod.costo}</td>
                 <td rowspan="${data.productos.length}">
                     <button class="btn-modificar"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalModificar"
                         data-idrecepcion="${data.id_recepcion}"
                         data-correlativo="${data.correlativo}"
                         data-fecha="${data.fecha}"
