@@ -22,7 +22,7 @@ $(document).ready(function () {
             }
 
             if (response.status === "success") {
-            $("#modalModificar").modal("hide");
+            $("#modificarDespachoModal").modal("hide");
             $(".modal-backdrop").remove();
             $("body").removeClass("modal-open");
             if (response.tbody) {
