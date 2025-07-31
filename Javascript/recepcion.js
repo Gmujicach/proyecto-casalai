@@ -1,511 +1,97 @@
 $(document).ready(function () {
-    $(document).on('submit', '#formularioEdicion', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+$(document).on('submit', '#formularioEdicion', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
-                console.log("Respuesta del servidor (raw):", response);
+    var formData = new FormData(this);
+    formData.append('accion', 'modificarRecepcion');
 
-                try {
-                    // Intentar parsear respuesta JSON si es string
-                    response = typeof response === "object" ? response : JSON.parse(response);
-                } catch (err) {
-                    console.error("Error al parsear JSON:", err, "Respuesta recibida:", response);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error de Respuesta',
-                        text: 'La respuesta del servidor no es válida. Revisa la consola para más detalles.'
-                    });
-                    return;
-                }
+    $.ajax({
+        url: '',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (response) {
+            console.log("Respuesta del servidor (raw):", response);
 
-                if (response.status === 'success') {
-                    // Cierra el modal con jQuery (Bootstrap 4)
-                    $('#modificarRecepcionModal').modal('hide');
-
-                    // Quitar manualmente backdrop en caso de quedar atascado
-                    $('.modal-backdrop').remove();
-                    $('body').removeClass('modal-open').css({ 'padding-right': '', 'overflow': '' });
-
-                    setTimeout(function () {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Modificado',
-                            text: response.message || 'Recepción modificada correctamente.'
-                        }).then(() => {
-                            console.log("Recargando tabla de consultas...");
-                        });
-                    }, 500);
-
-                } else {
-                    console.warn("Error desde el backend:", response);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error en la modificación',
-                        text: response.message || 'Ocurrió un error al modificar. Revisa la consola.'
-                    });
-                }
-
-            },
-            error: function (xhr, status, error) {
-                console.error("Error AJAX:");
-                console.error("Estado:", status);
-                console.error("Código HTTP:", xhr.status);
-                console.error("Mensaje:", error);
-                console.error("Respuesta del servidor:", xhr.responseText);
-
+            try {
+                // Intentar parsear respuesta JSON si es string
+                response = typeof response === "object" ? response : JSON.parse(response);
+            } catch (err) {
+                console.error("Error al parsear JSON:", err, "Respuesta recibida:", response);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error de red o servidor',
-                    html: `
-                        <b>Código HTTP:</b> ${xhr.status}<br>
-                        <b>Estado:</b> ${status}<br>
-                        <b>Mensaje:</b> ${error}
-                    `
+                    title: 'Error de Respuesta',
+                    text: 'La respuesta del servidor no es válida. Revisa la consola para más detalles.'
                 });
+                return;
             }
+
+if (response.status === 'success') {
+    // Cierra el modal con jQuery (Bootstrap 4)
+    $('#modalModificar').modal('hide');
+
+    // Quitar manualmente backdrop en caso de quedar atascado
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open').css({ 'padding-right': '', 'overflow': '' });
+
+    setTimeout(function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Modificado',
+            text: response.message || 'Recepción modificada correctamente.'
+        }).then(() => {
+            console.log("Recargando tabla de consultas...");
         });
+    }, 500);
+
+} else {
+    console.warn("Error desde el backend:", response);
+    Swal.fire({
+        icon: 'error',
+        title: 'Error en la modificación',
+        text: response.message || 'Ocurrió un error al modificar. Revisa la consola.'
     });
+}
 
-    if($.trim($("#mensajes").text()) != ""){
-        mensajes("warning", "Atención", $("#mensajes").html());
-    }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error AJAX:");
+            console.error("Estado:", status);
+            console.error("Código HTTP:", xhr.status);
+            console.error("Mensaje:", error);
+            console.error("Respuesta del servidor:", xhr.responseText);
 
-    $("#correlativo").on("keypress",function(e){
-        validarkeypress(/^[0-9]*$/,e);
-        let correlativo = document.getElementById("correlativo");
-        correlativo.value = space(correlativo.value);
-    });
-    
-    $("#correlativo").on("keyup",function(){
-        validarkeyup(
-            /^[0-9]{4,10}$/,
-            $(this),
-            $("#scorrelativo"),
-            "Se permite de 4 a 10 dígitos"
-        );
-    });
-
-    $("#proveedor").on("change blur", function() {
-        validarkeyup(
-            /^.+$/,
-            $(this),
-            $("#sproveedor"),
-            "Debe seleccionar una proveedor"
-        );
-    });
-
-    $("#codigoproducto").on("keyup",function(){
-        var codigo = $(this).val();
-        $("#listadop tr").each(function(){
-            if(codigo == $(this).find("td:eq(1)").text()){
-                colocaproducto($(this));
-            }
-        });
-    });
-
-    function validarEnvioRecepcion() {
-        let correlativo = document.getElementById("correlativo");
-        correlativo.value = space(correlativo.value).trim();
-
-        if (validarkeyup(
-            /^[0-9]{4,10}$/,
-            $("#correlativo"),
-            $("#scorrelativo"),
-            "*El correlativo debe tener de 4 a 10 dígitos*"
-        ) == 0) {
-            mensajes('error', 'Verifique el correlativo', 'Le faltan dígitos al correlativo');
-            return false;
-        }
-
-        if ($("#proveedor").val() === null || $("#proveedor").val() === "") {
-            $("#sproveedor").text("*Debe seleccionar un proveedor*");
-            mensajes('error', 'Verifique el proveedor', 'El campo está vacío');
-            return false;
-        } else {
-            $("#sproveedor").text("");
-        }
-
-        // Validación de productos agregados
-        if ($("#recepcion1 tr").length === 0) {
-            mensajes('error', 'Verifique los productos', 'Debe agregar al menos un producto a la recepción');
-            return false;
-        }
-
-        return true;
-    }
-
-    function carga_productos(){
-        var datos = new FormData();
-        datos.append('accion','listado');
-        enviaAjax(datos);
-    }
-
-    function borrar(){
-        $("#correlativo").val('');
-        $("#proveedor").val("disabled");
-        $("#recepcion1 tr").remove();
-        $("#descripcion").val('');
-    }
-
-    function agregarFilaRecepcion(recepcion) {
-        const nuevaFila = [
-            `<span class="campo-numeros">${recepcion.fecha}</span>`,
-            `<span class="campo-numeros">${recepcion.correlativo}</span>`,
-            `<span class="campo-nombres">${recepcion.nombre_proveedor}</span>`,
-            `<span class="campo-nombres">${recepcion.nombre_producto}</span>`,
-            `<span class="campo-numeros">${recepcion.cantidad}</span>`,
-            `<span class="campo-numeros">${recepcion.costo}</span>`,
-            `<ul>
-                <button class="btn-modificar"
-                    data-idrecepcion="${recepcion.id_recepcion}"
-                    data-correlativo="${recepcion.correlativo}"
-                    data-fecha="${recepcion.fecha}"
-                    data-proveedor="${recepcion.id_proveedor}"
-                    data-productos='${JSON.stringify(recepcion.productos)}'>
-                    Modificar
-                </button>
-            </ul>`
-        ];
-        const tabla = $('#tablaConsultas').DataTable();
-        const rowIdx = tabla.row.add(nuevaFila).draw(false).index();
-        $(tabla.row(rowIdx).node()).attr('data-id', recepcion.id_recepcion);
-        tabla.page('last').draw('page');
-    }
-
-    function resetRecepcion() {
-        $('#correlativo').val('');
-        $('#proveedor').val('');
-        $('#scorrelativo').text('');
-        $('#sproveedor').text('');
-        $("#recepcion1 tr").remove();
-    }
-
-    $('#btnIncluirRecepcion').on('click', function() {
-        $('#ingresarRecepcion')[0].reset();
-        $('#scorrelativo').text('');
-        $('#sproveedor').text('');
-        $('#registrarRecepcionModal').modal('show');
-    });
-/*
-    $("#registrar").on("click",function(){
-        if (validarenvio()){
-            if(verificaproductos()){
-            $('#accion').val('registrar');
-    
-                var datos = new FormData($('#ingresarRecepcion')[0]);
-                
-                $('#proveedor').change(function() {
-                    var valor = $(this).val();
-                    datos.append('proveedor', valor); });
-                datos.append("descripcion", $("#descripcion").val());
-    
-                enviaAjax(datos);
-                } else{
-                muestraMensaje("info",4000,"Debe colocar algun producto");
-            }
-        } 
-    });*/
-
-    $('#ingresarRecepcion').on('submit', function(e) {
-        e.preventDefault();
-
-        if(validarEnvioRecepcion()){
-            var datos = new FormData(this);
-            datos.append("accion", "registrar");
-            enviarAjax(datos, function(respuesta){
-                if(respuesta.status === "success" || respuesta.resultado === "success"){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Éxito',
-                        text: respuesta.message || 'Recepción registrada correctamente'
-                    });
-                    agregarFilaRecepcion(respuesta.orden);
-                    resetRecepcion();
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: respuesta.message || 'No se pudo registrar la recepción'
-                    });
-                }
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de red o servidor',
+                html: `
+                    <b>Código HTTP:</b> ${xhr.status}<br>
+                    <b>Estado:</b> ${status}<br>
+                    <b>Mensaje:</b> ${error}
+                `
             });
         }
+    });
+});
+
+    $('#btnIncluirRecepcion').on('click', function() {
+        $('#f')[0].reset();
+        $('#scorrelativo').text('');
+        $('#registrarRecepcionModal').modal('show');
     });
 
     $(document).on('click', '#registrarRecepcionModal .close', function() {
         $('#registrarRecepcionModal').modal('hide');
     });
 
-    $(document).on("click", "#modalp .close-2", function () {
-        $("#modalp").modal("hide");
-    });
-
-    // Carga inicial de productos
-    carga_productos();
-
-    // Evento click para mostrar el modal de productos
-    $("#listado").on("click", function () {
-        $("#modalp").modal("show");
-    });
-
-    function mensajes(icono, titulo, mensaje){
-        Swal.fire({
-            icon: icono,
-            title: titulo,
-            text: mensaje,
-            showConfirmButton: true,
-            confirmButtonText: 'Aceptar',
-        });
-    }
-
-    function validarkeypress(er, e) {
-        key = e.keyCode;
-        tecla = String.fromCharCode(key);
-        a = er.test(tecla);
-
-        if (!a) {
-            e.preventDefault();
-        }
-    }
-
-    function validarkeyup(er, etiqueta, etiquetamensaje, mensaje) {
-        a = er.test(etiqueta.val());
-
-        if (a) {
-            etiquetamensaje.text("");
-            return 1;
-        } else {
-            etiquetamensaje.text(mensaje);
-            return 0;
-        }
-    }
-
-    function space(str) {
-        const regex = /\s{2,}/g;
-        var str = str.replace(regex, ' ');
-        return str;
-    }
-    
-    function muestraMensaje(mensaje) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: mensaje
-        });
-    }
-
-    function mostrarDatosFormData(formData) {
-        console.log('Datos enviados en FormData:');
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
-    }
-
-    /*function enviarAjax(datos, callback) {
-        console.log("Enviando datos AJAX: ", datos);
-        $.ajax({
-            url: '', 
-            type: 'POST',
-            contentType: false,
-            data: datos,
-            processData: false,
-            cache: false,
-            success: function (respuesta) {
-                console.log("Respuesta del servidor: ", respuesta); 
-                callback(JSON.parse(respuesta));
-            },
-            error: function () {
-                console.error('Error en la solicitud AJAX');
-                muestraMensaje('Error en la solicitud AJAX');
-            }
-        });
-    }*/
-
-    function enviaAjax(datos){
-        $.ajax({
-            async: true,
-            url: '',
-            type: 'POST',
-            contentType: false,
-            data: datos,
-            processData: false,
-            cache: false,
-            beforeSend: function(){
-                //pasa antes de enviar pueden colocar un loader
-            },
-            timeout:10000, //tiempo maximo de espera por la respuesta del servidor
-                success: function(respuesta) {//si resulto exitosa la transmision
-                    console.log(respuesta); 
-                    try{
-                        var lee = JSON.parse(respuesta);	
-                        console.log(lee.resultado);
-                        
-                        if(lee.resultado=='listado'){
-                            
-                            $('#listadop').html(lee.mensaje);
-                        }
-                        else if(lee.resultado=='registrar'){
-                            muestraMensaje('success', 6000, 'REGISTRAR', lee.mensaje);
-                            borrar();
-                        }else if (lee.resultado == "encontro") {		
-                            if (lee.mensaje == 'El numero de correlativo ya existe!') {
-                                muestraMensaje('success', 6000,'Atencion', lee.mensaje);
-                            }		
-                        }else if(lee.resultado=='error'){
-                            muestraMensaje('success', 6000,'Error',lee.mensaje);
-                        }
-                    }
-                catch(e){
-                    console.log("Error en JSON"+e.name+" !!!");
-                }
-            },
-            complete: function(){
-            }
-        });
-    }
-
-    /*
-    $(document).on('submit', '#formularioEdicion', function (e) {
-        e.preventDefault();
-
-        var formData = new FormData(this);
-        formData.append('accion', 'modificarRecepcion');
-
-        $.ajax({
-            url: '',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
-                console.log("Respuesta del servidor (raw):", response);
-
-                try {
-                    // Intentar parsear respuesta JSON si es string
-                    response = typeof response === "object" ? response : JSON.parse(response);
-                } catch (err) {
-                    console.error("Error al parsear JSON:", err, "Respuesta recibida:", response);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error de Respuesta',
-                        text: 'La respuesta del servidor no es válida. Revisa la consola para más detalles.'
-                    });
-                    return;
-                }
-
-                if (response.status === 'success') {
-                    $('#modalModificar').modal('hide');
-                    setTimeout(function () {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Modificado',
-                            text: response.message || 'Recepción modificada correctamente.'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    }, 500);
-                } else {
-                    console.warn("Error desde el backend:", response);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error en la modificación',
-                        text: response.message || 'Ocurrió un error al modificar. Revisa la consola.'
-                    });
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("Error AJAX:");
-                console.error("Estado:", status);
-                console.error("Código HTTP:", xhr.status);
-                console.error("Mensaje:", error);
-                console.error("Respuesta del servidor:", xhr.responseText);
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error de red o servidor',
-                    html: `
-                        <b>Código HTTP:</b> ${xhr.status}<br>
-                        <b>Estado:</b> ${status}<br>
-                        <b>Mensaje:</b> ${error}
-                    `
-                });
-            }
-        });
-    });
-
     $(document).on('click', '#modalp .close-2', function() {
         $('#modalp').modal('hide');
     });
-    */
 });
 
-//funcion para colocar los productos
-function colocaproducto(linea){
-    var id = $(linea).find("td:eq(0)").text();
-    var encontro = false;
-    
-    $("#recepcion1 tr").each(function(){
-        if(id*1 == $(this).find("td:eq(1)").text()*1){
-            encontro = true
-            var t = $(this).find("td:eq(4)").children();
-            t.val(t.val()*1+1);
-            modificasubtotal(t);
-        } 
-    });
-    
-    if(!encontro){
-        var l = `
-            <tr>
-                <td>
-                    <button type="button" class="btn-eliminar-pr" onclick="borrarp(this)">Eliminar</button>
-                </td>
-            <td style="display:none">
-                <input type="text" name="producto[]" style="display:none"
-                value="`+
-                        $(linea).find("td:eq(0)").text()+
-                `"/>`+	
-                        $(linea).find("td:eq(0)").text()+
-            `</td>
-            <td>`+
-                        $(linea).find("td:eq(1)").text()+
-            `</td>
-            <td>`+
-                        $(linea).find("td:eq(2)").text()+
-            `</td>
-            <td>`+
-                        $(linea).find("td:eq(3)").text()+
-            `</td>
-                <td>`+
-                        $(linea).find("td:eq(4)").text()+
-            `</td>
-            <td>`+
-                        $(linea).find("td:eq(5)").text()+
-            `</td>
-                <td>
-                    <input type="number" class="numerico" name="costo[]" min="0.01" step="0.01" value="1" required>
-                </td>
-                <td>
-                    <input type="number" class="numerico" name="cantidad[]" min="1" step="1" value="1" required>
-                </td>
-            </tr>`;
-        $("#recepcion1").append(l);
-    }
-}
-
-//funcion para eliminar linea de detalle de ventas
-function borrarp(boton){
-    $(boton).closest('tr').remove();
-}
-/*
 carga_productos();    //boton para levantar modal de productos
     $("#listado").on("click",function(){
         $("#modalp").modal("show");
@@ -540,13 +126,23 @@ carga_productos();    //boton para levantar modal de productos
         );
       });
     
+    //evento keyup de input codigoproducto
+    $("#codigoproducto").on("keyup",function(){
+        var codigo = $(this).val();
+        $("#listadop tr").each(function(){
+            if(codigo == $(this).find("td:eq(1)").text()){
+                colocaproducto($(this));
+            }
+        });
+    });	
+    
     //evento click de boton registrar
     $("#registrar").on("click",function(){
          if (validarenvio()){
             if(verificaproductos()){
             $('#accion').val('registrar');
     
-                var datos = new FormData($('#ingresarRecepcion')[0]);
+                var datos = new FormData($('#f')[0]);
                 
                 $('#proveedor').change(function() {
                     var valor = $(this).val();
@@ -669,7 +265,100 @@ $(document).ready(function() {
         return true;
     }
     
+    function carga_productos(){
+        
+        
+        var datos = new FormData();
+        
+        datos.append('accion','listado'); //le digo que me muestre un listado de aulas
+        
+        enviaAjax(datos);
+    }
+    
+    //function para saber si selecciono algun productos
+    function verificaproductos(){
+        var existe = false;
+       
+        if($("#recepcion1 tr").length > 0){
+            existe = true;
+            
+        }
+      
+        return existe;
+    }
+    function borrar(){
+        $("#correlativo").val('');
+        $("#proveedor").val("disabled");
+        $("#recepcion1 tr").remove();
+        $("#descripcion").val('');
+        
+        }
 
+    
+//funcion para colocar los productos
+    
+    
+    function colocaproducto(linea){
+        var id = $(linea).find("td:eq(0)").text();
+        var encontro = false;
+        
+        $("#recepcion1 tr").each(function(){
+            if(id*1 == $(this).find("td:eq(1)").text()*1){
+                encontro = true
+                var t = $(this).find("td:eq(4)").children();
+                t.val(t.val()*1+1);
+                modificasubtotal(t);
+            } 
+        });
+        
+        if(!encontro){
+            var l = `
+              <tr>
+               <td>
+               <button type="button" class="btn-eliminar-pr" onclick="borrarp(this)">Eliminar</button>
+               </td>
+               <td style="display:none">
+                   <input type="text" name="producto[]" style="display:none"
+                   value="`+
+                        $(linea).find("td:eq(0)").text()+
+                   `"/>`+	
+                        $(linea).find("td:eq(0)").text()+
+               `</td>
+               <td>`+
+                        $(linea).find("td:eq(1)").text()+
+               `</td>
+               <td>`+
+                        $(linea).find("td:eq(2)").text()+
+               `</td>
+               <td>`+
+                        $(linea).find("td:eq(3)").text()+
+               `</td>
+                <td>`+
+                        $(linea).find("td:eq(4)").text()+
+               `</td>
+               <td>`+
+                        $(linea).find("td:eq(5)").text()+
+               `</td>
+                <td>
+                    <input type="number" class="numerico" name="costo[]" min="0.01" step="0.01" value="1" required>
+                </td>
+                <td>
+                    <input type="number" class="numerico" name="cantidad[]" min="1" step="1" value="1" required>
+                </td>
+               </tr>`;
+            $("#recepcion1").append(l);
+        }
+    }
+    
+ 
+    //fin de funcion modifica subtotal
+ 
+
+    
+    //funcion para eliminar linea de detalle de ventas
+    function borrarp(boton){
+        $(boton).closest('tr').remove();
+    }
 
 
 function muestraMensaje(tipo, tiempo, titulo, mensaje) {
@@ -865,4 +554,7 @@ function insertarFilaTabla(data) {
 
         tabla.appendChild(tr);
     });
-}*/
+}
+
+   
+   
