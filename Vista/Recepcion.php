@@ -321,7 +321,7 @@ $(document).on('click', '.btn-modificar', function(e) {
     let productos = btn.data('productos');
 
     // Limpiar el modal
-    $('#modalIdRecepcion').val('');
+    $('#modificar_id_recepcion').val('');
     $('#modalCorrelativo').val('');
     $('#modalFecha').val('');
     $('#modalProveedor').empty();
@@ -338,7 +338,7 @@ $(document).on('click', '.btn-modificar', function(e) {
     }
 
     // Llenar campos básicos
-    $('#modalIdRecepcion').val(idRecepcion);
+    $('#modificar_id_recepcion').val(idRecepcion);
     $('#modalCorrelativo').val(correlativo);
     $('#modalFecha').val(fecha);
 
