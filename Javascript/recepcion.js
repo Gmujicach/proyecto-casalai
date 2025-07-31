@@ -143,23 +143,18 @@ carga_productos();    //boton para levantar modal de productos
         });
     });	
     
-    //evento click de boton registrar
     $("#registrar").on("click",function(){
-        if (validarenvio()){
-            if(verificaproductos()){
+        if (validarenvio() && verificaproductos()) {
             $('#accion').val('registrar');
-    
-                var datos = new FormData($('#ingresarRecepcion')[0]);
-                
-                $('#proveedor').change(function() {
-                    var valor = $(this).val();
-                    datos.append('proveedor', valor); });
-                datos.append("descripcion", $("#descripcion").val());
-    
-                enviaAjax(datos);
-                } else{
-                mensajes('error', 'Verifique los productos', 'Debe seleccionar algun producto');
-            }
+            var datos = new FormData($('#ingresarRecepcion')[0]);
+
+            // Agrega proveedor y descripción al FormData
+            var valorProveedor = $("#proveedor").val();
+            datos.append('proveedor', valorProveedor);
+            datos.append("descripcion", $("#descripcion").val());
+
+            // Envía AJAX
+            enviaAjax(datos);
         }
     });
         
@@ -270,11 +265,12 @@ $(document).ready(function() {
     }
     
     //function para saber si selecciono algun productos
-    function verificaproductos(){
+    function verificaproductos() {
         var existe = false;
-        if($("#recepcion1 tr").length > 0){
+        if ($("#recepcion1 tr").length > 0) {
             existe = true;
-            
+        } else {
+            mensajes('error', 'Verifique los productos', 'Debe seleccionar algun producto');
         }
         return existe;
     }
