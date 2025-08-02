@@ -220,18 +220,19 @@ $(document).ready(function() {
         const tabla = $('#tablaConsultas').DataTable();
         const nuevaFila = [
             `<ul>
-                <div>
-                    <button class="btn-modificar"
-                        id="btnModificarCuenta"
-                        data-id="${cuenta.id_cuenta}"
-                        data-nombre="${cuenta.nombre_banco}"
-                        data-numero="${cuenta.numero_cuenta}"
-                        data-rif="${cuenta.rif_cuenta}"
-                        data-telefono="${cuenta.telefono_cuenta}"
-                        data-correo="${cuenta.correo_cuenta}">
-                        Modificar
-                    </button>
-                </div>
+            <div>
+                <button class="btn-modificar"
+                    id="btnModificarCuenta"
+                    data-id="${cuenta.id_cuenta}"
+                    data-nombre="${cuenta.nombre_banco}"
+                    data-numero="${cuenta.numero_cuenta}"
+                    data-rif="${cuenta.rif_cuenta}"
+                    data-telefono="${cuenta.telefono_cuenta}"
+                    data-correo="${cuenta.correo_cuenta}"
+                    data-metodos="${cuenta.metodos}">
+                    Modificar
+                </button>
+            </div>
                 <div>
                     <button class="btn-eliminar"
                         data-id="${cuenta.id_cuenta}">
@@ -245,6 +246,7 @@ $(document).ready(function() {
             `<span class="campo-rif-correo">${cuenta.rif_cuenta}</span>`,
             `<span class="campo-numeros">${cuenta.telefono_cuenta}</span>`,
             `<span class="campo-rif-correo">${cuenta.correo_cuenta}</span>`,
+            `<span class="campo-rif-correo">${cuenta.metodos}</span>`,
             `<span 
                 class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
                 data-id="${cuenta.id_cuenta}" 
@@ -281,17 +283,19 @@ $(document).ready(function() {
 
     $('#registrarCuenta').on('submit', function(e) {
         e.preventDefault();
-
+    if ($('input[name="metodos_pago[]"]:checked').length === 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error de validación',
+            text: 'Debe seleccionar al menos un método de pago.'
+        });
+        return false;
+    }
         if(validarEnvioCuenta()){
-            var datos = {
-                nombre_banco: $("#nombre_banco").val(),
-                numero_cuenta: $("#numero_cuenta").val(),
-                rif_cuenta: $("#rif_cuenta").val(),
-                telefono_cuenta: $("#telefono_cuenta").val(),
-                correo_cuenta: $("#correo_cuenta").val(),
-                accion: "registrar"
-            };
-            enviarAjax(datos, function(respuesta){
+            var formData = new FormData(this);
+            formData.append('accion', 'registrar');
+        
+            enviarAjax(formData, function(respuesta){
                 if(respuesta.status === "success" || respuesta.resultado === "success"){
                     Swal.fire({
                         icon: 'success',
@@ -477,6 +481,14 @@ $(document).ready(function() {
 
     $('#modificarCuenta').on('submit', function(e) {
         e.preventDefault();
+            if ($('#modificarCuenta input[name="metodos_pago[]"]:checked').length === 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error de validación',
+            text: 'Debe seleccionar al menos un método de pago.'
+        });
+        return false;
+    }
 
         const datos = {
             nombre_banco: $('#modificar_nombre_banco').val(),
@@ -497,8 +509,9 @@ $(document).ready(function() {
             return;
         }
 
-        var formData = new FormData(this);
-        formData.append('accion', 'modificar');
+            var formData = new FormData(this);
+            formData.append('accion', 'modificar');
+   
         $.ajax({
             url: '',
             type: 'POST',
@@ -524,16 +537,17 @@ $(document).ready(function() {
                         fila.data([
                             `<ul>
                                 <div>
-                                    <button class="btn-modificar"
-                                        id="btnModificarCuenta"
-                                        data-id="${cuenta.id_cuenta}"
-                                        data-nombre="${cuenta.nombre_banco}"
-                                        data-numero="${cuenta.numero_cuenta}"
-                                        data-rif="${cuenta.rif_cuenta}"
-                                        data-telefono="${cuenta.telefono_cuenta}"
-                                        data-correo="${cuenta.correo_cuenta}">
-                                        Modificar
-                                    </button>
+                <button class="btn-modificar"
+                    id="btnModificarCuenta"
+                    data-id="${cuenta.id_cuenta}"
+                    data-nombre="${cuenta.nombre_banco}"
+                    data-numero="${cuenta.numero_cuenta}"
+                    data-rif="${cuenta.rif_cuenta}"
+                    data-telefono="${cuenta.telefono_cuenta}"
+                    data-correo="${cuenta.correo_cuenta}"
+                    data-metodos="${cuenta.metodos}">
+                    Modificar
+                </button>
                                 </div>
                                 <div>
                                     <button class="btn-eliminar"
@@ -548,6 +562,7 @@ $(document).ready(function() {
                             `<span class="campo-rif-correo">${cuenta.rif_cuenta}</span>`,
                             `<span class="campo-numeros">${cuenta.telefono_cuenta}</span>`,
                             `<span class="campo-rif-correo">${cuenta.correo_cuenta}</span>`,
+                            `<span class="campo-rif-correo">${cuenta.metodos}</span>`,
                             `<span class="campo-estatus ${cuenta.estado === 'habilitado' ? 'habilitado' : 'inhabilitado'}" 
                                 data-id="${cuenta.id_cuenta}" 
                                 style="cursor: pointer;">

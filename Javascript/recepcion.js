@@ -1,9 +1,10 @@
 $(document).ready(function () {
-$(document).on('submit', '#formularioEdicion', function (e) {
+$(document).on('submit', '#modificarRecepcion', function (e) {
     e.preventDefault();
+    e.stopPropagation();
 
     var formData = new FormData(this);
-    formData.append('accion', 'modificarRecepcion');
+    formData.append('accion', 'modificar');
 
     $.ajax({
         url: '',
@@ -28,25 +29,33 @@ $(document).on('submit', '#formularioEdicion', function (e) {
                 return;
             }
 
-            if (response.status === 'success') {
-                $('#modalModificar').modal('hide');
-                setTimeout(function () {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Modificado',
-                        text: response.message || 'Recepción modificada correctamente.'
-                    }).then(() => {
-                        location.reload();
-                    });
-                }, 500);
-            } else {
-                console.warn("Error desde el backend:", response);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error en la modificación',
-                    text: response.message || 'Ocurrió un error al modificar. Revisa la consola.'
-                });
-            }
+if (response.status === 'success') {
+    // Cierra el modal con jQuery (Bootstrap 4)
+    $('#modificarRecepcionModal').modal('hide');
+
+    // Quitar manualmente backdrop en caso de quedar atascado
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open').css({ 'padding-right': '', 'overflow': '' });
+
+    setTimeout(function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Modificado',
+            text: response.message || 'Recepción modificada correctamente.'
+        }).then(() => {
+            console.log("Recargando tabla de consultas...");
+        });
+    }, 500);
+
+} else {
+    console.warn("Error desde el backend:", response);
+    Swal.fire({
+        icon: 'error',
+        title: 'Error en la modificación',
+        text: response.message || 'Ocurrió un error al modificar. Revisa la consola.'
+    });
+}
+
         },
         error: function (xhr, status, error) {
             console.error("Error AJAX:");
@@ -69,8 +78,9 @@ $(document).on('submit', '#formularioEdicion', function (e) {
 });
 
     $('#btnIncluirRecepcion').on('click', function() {
-        $('#f')[0].reset();
+        $('#ingresarRecepcion')[0].reset();
         $('#scorrelativo').text('');
+        $('#sproveedor').text('');
         $('#registrarRecepcionModal').modal('show');
     });
 
@@ -83,6 +93,16 @@ $(document).on('submit', '#formularioEdicion', function (e) {
     });
 });
 
+    if($.trim($("#mensajes").text()) != ""){
+        mensajes("warning", "Atención", $("#mensajes").html());
+    }
+
+    function space(str) {
+        const regex = /\s{2,}/g;
+        var str = str.replace(regex, ' ');
+        return str;
+    }
+
 carga_productos();    //boton para levantar modal de productos
     $("#listado").on("click",function(){
         $("#modalp").modal("show");
@@ -90,32 +110,28 @@ carga_productos();    //boton para levantar modal de productos
     
     
     $("#correlativo").on("keypress",function(e){
-        validarkeypress(/^[0-9-\b]*$/,e);
+        validarkeypress(/^[0-9]*$/,e);
+        let correlativo = document.getElementById("correlativo");
+        correlativo.value = space(correlativo.value);
     });
     
     $("#correlativo").on("keyup",function(){
-        validarkeyup(/^[0-9]{4,10}$/,$(this),
-        $("#scorrelativo"),"Se permite de 4 a 10 carácteres");
-        if ($("#correlativo").val().length <= 9) {
-			var datos = new FormData();
-			datos.append('accion', 'buscar');
-			datos.append('correlativo', $(this).val());
-			enviaAjax(datos);
-		}
+        validarkeyup(
+            /^[0-9]{4,10}$/,
+            $(this),
+            $("#scorrelativo"),
+            "Se permite de 4 a 10 dígitos"
+        );
     });
 
-    $("#descripcion").on("keypress", function (e) {
-        validarkeypress(/^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]*$/, e);
-      });
-    
-      $("#descripcion").on("keyup", function () {
+    $("#proveedor").on("change blur", function() {
         validarkeyup(
-          /^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]{1,200}$/,
-          $(this),
-          $("#sdescripcion"),
-          "No debe estar vacío y se permite un máximo 200 carácteres"
+            /^.+$/,
+            $(this),
+            $("#sproveedor"),
+            "Debe seleccionar una factura"
         );
-      });
+    });
     
     //evento keyup de input codigoproducto
     $("#codigoproducto").on("keyup",function(){
@@ -127,27 +143,19 @@ carga_productos();    //boton para levantar modal de productos
         });
     });	
     
-    //evento click de boton registrar
     $("#registrar").on("click",function(){
-         if (validarenvio()){
-            if(verificaproductos()){
+        if (validarenvio() && verificaproductos()) {
             $('#accion').val('registrar');
-    
-                var datos = new FormData($('#f')[0]);
-                
-                $('#proveedor').change(function() {
-                    var valor = $(this).val();
-                    datos.append('proveedor', valor); });
-                datos.append("descripcion", $("#descripcion").val());
-    
-                enviaAjax(datos);
-                } else{
-                muestraMensaje("info",4000,"Debe colocar algun producto");
-            }
-          } 
-           
-            
-        
+            var datos = new FormData($('#ingresarRecepcion')[0]);
+
+            // Agrega proveedor y descripción al FormData
+            var valorProveedor = $("#proveedor").val();
+            datos.append('proveedor', valorProveedor);
+            datos.append("descripcion", $("#descripcion").val());
+
+            // Envía AJAX
+            enviaAjax(datos);
+        }
     });
         
         function verificarPermisosEnTiempoRealRecepcion() {
@@ -225,33 +233,23 @@ $(document).ready(function() {
         });
     }
     function validarenvio(){
-        
-        var proveedorseleccionado = $("#proveedor").val();
-        if (proveedorseleccionado === null || proveedorseleccionado === "0") {
-            muestraMensaje("info",4000,"Por favor, seleccione un proveedor!"); 
+        let correlativo = document.getElementById("correlativo");
+        correlativo.value = space(correlativo.value).trim();
+
+        if(validarkeyup(
+            /^[0-9]{4,10}$/,
+            $("#correlativo"),
+            $("#scorrelativo"),
+            "*El correlativo debe tener de 4 a 10 dígitos*"
+        )==0){
+            mensajes('error', 'Verifique el correlativo', 'Le faltan dígitos al correlativo');
             return false;
-        }
-        else if(validarkeyup(/^[0-9]{4,10}$/,$("#correlativo"),
-            $("#scorrelativo"),"Se permite de 4 a 10 carácteres")==0){
-            muestraMensaje("info",4000,"el correlativo debe coincidir con el formato");
-                           
-            return false;					
-        } else if (
-            validarkeyup(
-                /^[A-Za-z0-9,#\b\s\u00f1\u00d1\u00E0-\u00FC-]{1,200}$/,
-                $("#descripcion"),
-                $("#sdescripcion"),
-                "No debe contener más de 200 carácteres"
-            ) == 0
-        ) {
-            muestraMensaje(
-                "error",
-                4000,
-                "ERROR!",
-               
-                    "No debe estar vacío, ni contener más de 200 carácteres"
-            );
+        } else if($("#proveedor").val() === null || $("#proveedor").val() === "") {
+            $("#sproveedor").text("*Debe seleccionar una proveedor*");
+            mensajes('error', 'Verifique la proveedor', 'El campo esta vacio');
             return false;
+        } else {
+            $("#sproveedor").text("");
         }
         return true;
     }
@@ -267,14 +265,13 @@ $(document).ready(function() {
     }
     
     //function para saber si selecciono algun productos
-    function verificaproductos(){
+    function verificaproductos() {
         var existe = false;
-       
-        if($("#recepcion1 tr").length > 0){
+        if ($("#recepcion1 tr").length > 0) {
             existe = true;
-            
+        } else {
+            mensajes('error', 'Verifique los productos', 'Debe seleccionar algun producto');
         }
-      
         return existe;
     }
     function borrar(){
@@ -282,12 +279,9 @@ $(document).ready(function() {
         $("#proveedor").val("disabled");
         $("#recepcion1 tr").remove();
         $("#descripcion").val('');
-        
-        }
-
+    }
     
 //funcion para colocar los productos
-    
     
     function colocaproducto(linea){
         var id = $(linea).find("td:eq(0)").text();
@@ -351,15 +345,46 @@ $(document).ready(function() {
         $(boton).closest('tr').remove();
     }
 
+    function muestraMensaje(tipo, tiempo, titulo, mensaje) {
+        Swal.fire({
+            icon: tipo,
+            title: titulo,
+            text: mensaje,
+            timer: tiempo || 3000
+        });
+    }
 
-function muestraMensaje(tipo, tiempo, titulo, mensaje) {
-    Swal.fire({
-        icon: tipo,
-        title: titulo,
-        text: mensaje,
-        timer: tiempo || 3000
-    });
-}
+    function mensajes(icono, titulo, mensaje){
+        Swal.fire({
+            icon: icono,
+            title: titulo,
+            text: mensaje,
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+        });
+    }
+
+    function validarkeypress(er, e) {
+        key = e.keyCode;
+        tecla = String.fromCharCode(key);
+        a = er.test(tecla);
+
+        if (!a) {
+            e.preventDefault();
+        }
+    }
+
+    function validarkeyup(er, etiqueta, etiquetamensaje, mensaje) {
+        a = er.test(etiqueta.val());
+
+        if (a) {
+            etiquetamensaje.text("");
+            return 1;
+        } else {
+            etiquetamensaje.text(mensaje);
+            return 0;
+        }
+    }
     
     //Funcion que muestra el modal con un mensaje
     
@@ -380,7 +405,8 @@ function muestraMensaje(tipo, tiempo, titulo, mensaje) {
         
         if(!a){
         
-            e.preventDefault();
+    e.preventDefault();
+    e.stopPropagation();
         }
         
         
@@ -403,57 +429,110 @@ function muestraMensaje(tipo, tiempo, titulo, mensaje) {
     
     
     
-    function enviaAjax(datos){
-        
-        $.ajax({
-            async: true,
-                url: '', //la pagina a donde se envia por estar en mvc, se omite la ruta ya que siempre estaremos en la misma pagina
-                type: 'POST',//tipo de envio 
-                contentType: false,
-                data: datos,
-                processData: false,
-                cache: false,
-                beforeSend: function(){
-                    //pasa antes de enviar pueden colocar un loader
-                    
-                    
-                },
-                timeout:10000, //tiempo maximo de espera por la respuesta del servidor
-                success: function(respuesta) {//si resulto exitosa la transmision
-                    console.log(respuesta); 
-                    try{
-                
-                    var lee = JSON.parse(respuesta);	
-                    console.log(lee.resultado);
-                    
-                    if(lee.resultado=='listado'){
-                        
-                        $('#listadop').html(lee.mensaje);
-                    }
-                    else if(lee.resultado=='registrar'){
-    muestraMensaje('success', 6000, 'REGISTRAR', lee.mensaje);
-    borrar();
-}else if (lee.resultado == "encontro") {		
-                        if (lee.mensaje == 'El numero de correlativo ya existe!') {
-                            muestraMensaje('success', 6000,'Atencion', lee.mensaje);
-                        }		
-                    }else if(lee.resultado=='error'){
-                        muestraMensaje('success', 6000,'Error',lee.mensaje);
-                    }
-                    
-                }
-                catch(e){
-                    console.log("Error en JSON"+e.name+" !!!");
-                }
-                  
-                },
-                complete: function(){
-                
-                }
-                
-            });
-    
-    
-        
-    }
+function enviaAjax(datos) {
+    fetch('', {
+        method: 'POST',
+        body: datos
+    })
+    .then(res => res.text())
+    .then(respuesta => {
+        try {
+            let lee = JSON.parse(respuesta);
+            console.log(lee);
+
+            if (lee.resultado == 'listado') {
+                document.querySelector('#listadop').innerHTML = lee.mensaje;
+
+            } else if (lee.resultado === 'registrar') {
+                muestraMensaje('success', 6000, 'REGISTRAR', lee.mensaje);
+                borrar();
+                 // 🔹 Cerramos modales y backdrop
+                if (lee.data) insertarFilaTabla(lee.data);
+
+            } else if (lee.resultado === 'modificar') {
+                muestraMensaje('success', 6000, 'MODIFICAR', lee.mensaje);
+                 // 🔹 Cerramos modales y backdrop
+                if (lee.data) actualizarFilaTabla(lee.data);
+
+            } else if (lee.resultado === 'encontro') {
+                muestraMensaje('warning', 6000, 'Atención', lee.mensaje);
+
+            } else if (lee.resultado === 'error') {
+                muestraMensaje('error', 6000, 'Error', lee.mensaje);
+            }
+
+        } catch (e) {
+            console.error("Error en JSON: " + e.message);
+        }
+    })
+    .catch(err => console.error("Error AJAX:", err));
+}
+
+
+
+
+
+
+function actualizarFilaTabla(data) {
+    // Buscar el botón que abre el modal de esta recepción
+    let btn = document.querySelector(`.btn-modificar[data-idrecepcion="${data.id_recepcion}"]`);
+    if (!btn) return;
+
+    // Buscar la fila principal
+    let filaPrincipal = btn.closest("tr");
+
+    // Obtener tbody
+    let tbody = filaPrincipal.closest("tbody");
+
+    // Borrar todas las filas relacionadas a esa recepción
+    let filasRelacionadas = tbody.querySelectorAll(`.btn-modificar[data-idrecepcion="${data.id_recepcion}"]`);
+    filasRelacionadas.forEach(b => {
+        let tr = b.closest("tr");
+        tbody.removeChild(tr);
+    });
+
+    // Insertar nuevamente con datos nuevos
+    insertarFilaTabla(data);
+}
+
+
+function insertarFilaTabla(data) {
+    let tabla = document.querySelector("#tablaConsultas tbody");
+
+    data.productos.forEach((prod, index) => {
+        let tr = document.createElement("tr");
+
+        // Solo la primera fila lleva fecha, correlativo y proveedor
+        if (index === 0) {
+            tr.innerHTML = `
+                <td rowspan="${data.productos.length}">${data.fecha}</td>
+                <td rowspan="${data.productos.length}">${data.correlativo}</td>
+                <td rowspan="${data.productos.length}">${data.proveedor}</td>
+                <td>${data.nombre_producto}</td>
+                <td>${prod.cantidad}</td>
+                <td>${prod.costo}</td>
+                <td rowspan="${data.productos.length}">
+                    <button class="btn-modificar"
+                        data-idrecepcion="${data.id_recepcion}"
+                        data-correlativo="${data.correlativo}"
+                        data-fecha="${data.fecha}"
+                        data-proveedor="${data.proveedor}"
+                        data-productos='${JSON.stringify(data.productos)}'>
+                        Modificar
+                    </button>
+                </td>
+            `;
+        } else {
+            tr.innerHTML = `
+                <td>${prod.nombre_producto}</td>
+                <td>${prod.cantidad}</td>
+                <td>${prod.costo}</td>
+            `;
+        }
+
+        tabla.appendChild(tr);
+    });
+}
+
+   
    

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-07-2025 a las 02:52:17
+-- Tiempo de generación: 28-07-2025 a las 02:20:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,7 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `seguridadlai`
 --
-
+CREATE DATABASE IF NOT EXISTS `seguridadlai` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `seguridadlai`;
 -- --------------------------------------------------------
 
 --
@@ -46,61 +47,65 @@ CREATE TABLE `tbl_bitacora` (
   `fecha_hora` text NOT NULL,
   `accion` varchar(50) NOT NULL,
   `id_modulo` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL
+  `id_usuario` int(11) NOT NULL,
+  `id_referencia` int(11) DEFAULT NULL,
+  `tipo_notificacion` enum('sistema','pago','orden','inventario','cliente') NOT NULL DEFAULT 'sistema',
+  `leido` tinyint(1) NOT NULL DEFAULT 0,
+  `prioridad` enum('baja','media','alta') NOT NULL DEFAULT 'media'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `tbl_bitacora`
 --
 
-INSERT INTO `tbl_bitacora` (`id_bitacora`, `fecha_hora`, `accion`, `id_modulo`, `id_usuario`) VALUES
-(1, '2025-07-02 00:44:15', 'Acceso al módulo de catálogo', 1, 3),
-(2, '2025-07-02 00:53:21', 'Acceso al módulo de catálogo', 1, 3),
-(3, '2025-07-02 00:58:03', 'Acceso al módulo de catálogo', 1, 3),
-(4, '2025-07-02 00:58:05', 'Acceso al módulo de catálogo', 1, 3),
-(5, '2025-07-02 01:00:03', 'Acceso al módulo de catálogo', 1, 3),
-(6, '2025-07-02 01:24:38', 'Acceso al módulo de catálogo', 1, 3),
-(7, '2025-07-02 01:24:45', 'Acceso al módulo de catálogo', 1, 3),
-(8, '2025-07-02 01:24:53', 'Acceso al módulo de catálogo', 1, 3),
-(9, '2025-07-02 01:25:02', 'Acceso al módulo de catálogo', 1, 3),
-(10, '2025-07-02 01:25:10', 'Acceso al módulo de catálogo', 1, 3),
-(11, '2025-07-02 01:48:58', 'Acceso al módulo de catálogo', 1, 3),
-(12, '2025-07-02 01:49:00', 'Acceso al módulo de catálogo', 1, 3),
-(13, '2025-07-02 01:49:21', 'Acceso al módulo de catálogo', 1, 3),
-(14, '2025-07-02 01:49:21', 'Agregó producto al carrito: Ca', 1, 3),
-(15, '2025-07-02 01:49:31', 'Acceso al módulo de catálogo', 1, 3),
-(16, '2025-07-02 22:28:32', 'Acceso al módulo de catálogo', 1, 9),
-(17, '2025-07-02 22:28:46', 'Acceso al módulo de catálogo', 1, 9),
-(18, '2025-07-02 22:28:46', 'Agregó producto al carrito: Ca', 1, 9),
-(19, '2025-07-11 12:06:04', 'Acceso al módulo de Usuarios', 1, 3),
-(20, '2025-07-11 12:06:38', 'Acceso al módulo de Usuarios', 1, 3),
-(21, '2025-07-11 12:48:27', 'Acceso al módulo de catálogo', 10, 11),
-(22, '2025-07-11 12:49:01', 'Filtrado de productos por marca (Marca ID: 2)', 10, 11),
-(23, '2025-07-11 12:49:37', 'Filtrado de productos por marca', 10, 11),
-(24, '2025-07-11 12:49:48', 'Filtrado de productos por marca (Marca ID: 2)', 10, 11),
-(25, '2025-07-11 12:50:50', 'Agregó producto al carrito: Impresora Super (Canti', 10, 11),
-(26, '2025-07-11 12:53:57', 'Acceso al módulo de catálogo', 10, 11),
-(27, '2025-07-11 12:59:14', 'Acceso al módulo de catálogo', 10, 11),
-(28, '2025-07-11 13:04:39', 'Acceso al módulo de Pasarela de pagos', 16, 11),
-(29, '2025-07-11 13:04:58', 'Acceso al módulo de Pasarela de pagos', 16, 11),
-(30, '2025-07-11 19:16:08', 'Acceso al módulo de Usuarios', 1, 8),
-(31, '2025-07-11 19:16:19', 'Acceso al módulo de Usuarios', 1, 8),
-(32, '2025-07-11 19:18:25', 'Acceso al módulo de cliente', 9, 8),
-(33, '2025-07-11 19:20:06', 'Acceso al módulo de Usuarios', 1, 8),
-(34, '2025-07-11 19:21:33', 'Acceso al módulo de Usuarios', 1, 8),
-(35, '2025-07-11 19:22:17', 'Acceso al módulo de Usuarios', 1, 8),
-(36, '2025-07-11 19:29:25', 'Acceso al módulo de Usuarios', 1, 8),
-(37, '2025-07-11 19:35:23', 'Acceso al módulo de Usuarios', 1, 8),
-(38, '2025-07-11 19:46:14', 'Acceso al módulo de Usuarios', 1, 8),
-(39, '2025-07-11 19:47:16', 'Acceso al módulo de cliente', 9, 8),
-(40, '2025-07-11 19:47:35', 'Acceso al módulo de Usuarios', 1, 8),
-(41, '2025-07-11 19:49:55', 'Acceso al módulo de Usuarios', 1, 8),
-(42, '2025-07-11 19:50:50', 'Acceso al módulo de Usuarios', 1, 8),
-(43, '2025-07-11 20:05:43', 'Acceso al módulo de Usuarios', 1, 8),
-(44, '2025-07-11 20:11:07', 'Acceso al módulo de Usuarios', 1, 8),
-(45, '2025-07-11 20:14:06', 'Acceso al módulo de Usuarios', 1, 8),
-(46, '2025-07-11 20:14:31', 'Creación de usuario: Pato', 1, 8),
-(47, '2025-07-11 20:14:52', 'Acceso al módulo de cliente', 9, 8);
+INSERT INTO `tbl_bitacora` (`id_bitacora`, `fecha_hora`, `accion`, `id_modulo`, `id_usuario`, `id_referencia`, `tipo_notificacion`, `leido`, `prioridad`) VALUES
+(1, '2025-07-02 00:44:15', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(2, '2025-07-02 00:53:21', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(3, '2025-07-02 00:58:03', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(4, '2025-07-02 00:58:05', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(5, '2025-07-02 01:00:03', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(6, '2025-07-02 01:24:38', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(7, '2025-07-02 01:24:45', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(8, '2025-07-02 01:24:53', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(9, '2025-07-02 01:25:02', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(10, '2025-07-02 01:25:10', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(11, '2025-07-02 01:48:58', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(12, '2025-07-02 01:49:00', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(13, '2025-07-02 01:49:21', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(14, '2025-07-02 01:49:21', 'Agregó producto al carrito: Ca', 1, 3, NULL, 'sistema', 0, 'media'),
+(15, '2025-07-02 01:49:31', 'Acceso al módulo de catálogo', 1, 3, NULL, 'sistema', 0, 'media'),
+(16, '2025-07-02 22:28:32', 'Acceso al módulo de catálogo', 1, 9, NULL, 'sistema', 0, 'media'),
+(17, '2025-07-02 22:28:46', 'Acceso al módulo de catálogo', 1, 9, NULL, 'sistema', 0, 'media'),
+(18, '2025-07-02 22:28:46', 'Agregó producto al carrito: Ca', 1, 9, NULL, 'sistema', 0, 'media'),
+(19, '2025-07-11 12:06:04', 'Acceso al módulo de Usuarios', 1, 3, NULL, 'sistema', 0, 'media'),
+(20, '2025-07-11 12:06:38', 'Acceso al módulo de Usuarios', 1, 3, NULL, 'sistema', 0, 'media'),
+(21, '2025-07-11 12:48:27', 'Acceso al módulo de catálogo', 10, 11, NULL, 'sistema', 0, 'media'),
+(22, '2025-07-11 12:49:01', 'Filtrado de productos por marca (Marca ID: 2)', 10, 11, NULL, 'sistema', 0, 'media'),
+(23, '2025-07-11 12:49:37', 'Filtrado de productos por marca', 10, 11, NULL, 'sistema', 0, 'media'),
+(24, '2025-07-11 12:49:48', 'Filtrado de productos por marca (Marca ID: 2)', 10, 11, NULL, 'sistema', 0, 'media'),
+(25, '2025-07-11 12:50:50', 'Agregó producto al carrito: Impresora Super (Canti', 10, 11, NULL, 'sistema', 0, 'media'),
+(26, '2025-07-11 12:53:57', 'Acceso al módulo de catálogo', 10, 11, NULL, 'sistema', 0, 'media'),
+(27, '2025-07-11 12:59:14', 'Acceso al módulo de catálogo', 10, 11, NULL, 'sistema', 0, 'media'),
+(28, '2025-07-11 13:04:39', 'Acceso al módulo de Pasarela de pagos', 16, 11, NULL, 'sistema', 0, 'media'),
+(29, '2025-07-11 13:04:58', 'Acceso al módulo de Pasarela de pagos', 16, 11, NULL, 'sistema', 0, 'media'),
+(30, '2025-07-11 19:16:08', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(31, '2025-07-11 19:16:19', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(32, '2025-07-11 19:18:25', 'Acceso al módulo de cliente', 9, 8, NULL, 'sistema', 0, 'media'),
+(33, '2025-07-11 19:20:06', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(34, '2025-07-11 19:21:33', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(35, '2025-07-11 19:22:17', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(36, '2025-07-11 19:29:25', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(37, '2025-07-11 19:35:23', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(38, '2025-07-11 19:46:14', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(39, '2025-07-11 19:47:16', 'Acceso al módulo de cliente', 9, 8, NULL, 'sistema', 0, 'media'),
+(40, '2025-07-11 19:47:35', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(41, '2025-07-11 19:49:55', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(42, '2025-07-11 19:50:50', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(43, '2025-07-11 20:05:43', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(44, '2025-07-11 20:11:07', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(45, '2025-07-11 20:14:06', 'Acceso al módulo de Usuarios', 1, 8, NULL, 'sistema', 0, 'media'),
+(46, '2025-07-11 20:14:31', 'Creación de usuario: Pato', 1, 8, NULL, 'sistema', 0, 'media'),
+(47, '2025-07-11 20:14:52', 'Acceso al módulo de cliente', 9, 8, NULL, 'sistema', 0, 'media');
 
 -- --------------------------------------------------------
 
@@ -138,6 +143,31 @@ INSERT INTO `tbl_modulos` (`id_modulo`, `nombre_modulo`) VALUES
 (18, 'Roles'),
 (19, 'Bitacora'),
 (20, 'Respaldo');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_notificaciones`
+--
+
+CREATE TABLE `tbl_notificaciones` (
+  `id_notificacion` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `tipo` enum('pago','factura','despacho','sistema') NOT NULL,
+  `titulo` varchar(100) NOT NULL,
+  `mensaje` varchar(255) NOT NULL,
+  `id_referencia` int(11) DEFAULT NULL COMMENT 'ID en la otra base de datos',
+  `fecha_hora` datetime NOT NULL DEFAULT current_timestamp(),
+  `leido` tinyint(1) NOT NULL DEFAULT 0,
+  `prioridad` enum('baja','media','alta') NOT NULL DEFAULT 'media'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tbl_notificaciones`
+--
+
+INSERT INTO `tbl_notificaciones` (`id_notificacion`, `id_usuario`, `tipo`, `titulo`, `mensaje`, `id_referencia`, `fecha_hora`, `leido`, `prioridad`) VALUES
+(1, 17, '', 'Recepción modificada', 'Has modificado la recepción #1235', 10, '2025-07-27 19:27:03', 0, 'media');
 
 -- --------------------------------------------------------
 
@@ -747,7 +777,8 @@ INSERT INTO `tbl_usuarios` (`id_usuario`, `username`, `password`, `cedula`, `id_
 (10, 'Gmujica', '$2y$10$iZNeKonr6qr.P109rwgEFOCc7Y.0E47sD/88YfB.Jyx6niGpf4CQi', '29958676', 3, 'fhhggjjkkkj@gmail.com', 'Gabriel', 'Mujica', '0424-678-8765', 'habilitado'),
 (11, 'edithu', '$2y$10$YfEtJDHi9CNZR1Xpx7J9Ze8CMx3g99o1dJ3h.RRZPXqlJjxWbT5Fi', '10844463', 3, 'urdavedith.pnfi@gmail.com', 'Edith', 'Urdaneta', '0416-747-4336', 'habilitado'),
 (15, 'Pato', '$2y$10$2OgFNgMxHcDgqjCvfCHsVOYLkc6Qq3QqSalImRPOaP51loMFpFHsa', '5322432', 1, 'diego0510lopez@gmail.com', 'Diego', 'Lopez', '0414-575-3363', 'habilitado'),
-(16, 'Darckort', '$2y$10$1xavkBCftrr0QLclZTk77eduhFhvGa3uWiuCva2qHKMQ/otwoGYaa', '28406324', 6, 'darckortgame@gmail.com', 'Braynt', 'Medina', '0426-150-4714', 'habilitado');
+(16, 'Darckort', '$2y$10$1xavkBCftrr0QLclZTk77eduhFhvGa3uWiuCva2qHKMQ/otwoGYaa', '28406324', 6, 'darckortgame@gmail.com', 'Braynt', 'Medina', '0426-150-4714', 'habilitado'),
+(17, 'Juanlai', '$2y$10$NAPB.g70SJM0juLf9jTha.LbRejgTZFWD87GfYgATpp2k./KfciK2', '25874668', 1, 'juanlai@gmail.com', 'Juan', 'Lai', '0412-125-6985', 'habilitado');
 
 --
 -- Índices para tablas volcadas
@@ -773,6 +804,13 @@ ALTER TABLE `tbl_bitacora`
 --
 ALTER TABLE `tbl_modulos`
   ADD PRIMARY KEY (`id_modulo`);
+
+--
+-- Indices de la tabla `tbl_notificaciones`
+--
+ALTER TABLE `tbl_notificaciones`
+  ADD PRIMARY KEY (`id_notificacion`),
+  ADD KEY `id_usuario` (`id_usuario`);
 
 --
 -- Indices de la tabla `tbl_permisos`
@@ -825,6 +863,12 @@ ALTER TABLE `tbl_modulos`
   MODIFY `id_modulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
+-- AUTO_INCREMENT de la tabla `tbl_notificaciones`
+--
+ALTER TABLE `tbl_notificaciones`
+  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `tbl_permisos`
 --
 ALTER TABLE `tbl_permisos`
@@ -846,7 +890,7 @@ ALTER TABLE `tbl_rol`
 -- AUTO_INCREMENT de la tabla `tbl_usuarios`
 --
 ALTER TABLE `tbl_usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Restricciones para tablas volcadas
@@ -864,6 +908,12 @@ ALTER TABLE `tbl_alertas`
 ALTER TABLE `tbl_bitacora`
   ADD CONSTRAINT `tbl_bitacora_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `tbl_bitacora_ibfk_2` FOREIGN KEY (`id_modulo`) REFERENCES `tbl_modulos` (`id_modulo`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `tbl_notificaciones`
+--
+ALTER TABLE `tbl_notificaciones`
+  ADD CONSTRAINT `fk_notif_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `tbl_permisos`

@@ -17,10 +17,10 @@
 <div class="modal fade modal-registrar" id="registrarRecepcionModal" tabindex="-1" role="dialog" aria-labelledby="registrarRecepcionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="f" method="POST">
+            <form id="ingresarRecepcion" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarRecepcionModalLabel">Incluir Recepción</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -29,7 +29,7 @@
                     <div class="envolver-form">
                         <label for="correlativo">Correlativo del producto</label>
                         <input type="text" placeholder="Correlativo" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
-                        <span id="scorrelativo"></span>
+                        <span class="span-value" id="scorrelativo"></span>
                     </div>
                     <div class="envolver-form">
                         <label for="proveedor">Proveedor</label>
@@ -40,6 +40,7 @@
                                 echo "<option value='" . $proveedor['id_proveedor'] . "'>" . $proveedor['nombre_proveedor'] . "</option>";
                             } ?>
                         </select>
+                        <span class="span-value" id="sproveedor"></span>
                     </div>
         
                     <div class="envolver-form">
@@ -85,7 +86,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<h5 class="titulo-form">Listado de productos</h5>
-							<button type="button" class="close-2" data-dismiss="modal" aria-label="Cerrar">
+							<button type="button" class="close-2" data-bs-dismiss="modal" aria-label="Cerrar">
                                 <span aria-hidden="true">&times;</span>
                             </button>
 						</div>
@@ -197,8 +198,6 @@
                 <td rowspan="<?= $rowspans[$key] ?>">
                     <ul>
                         <button class="btn-modificar"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalModificar"
                             data-idrecepcion="<?= htmlspecialchars($recepcion['id_recepcion']) ?>"
                             data-correlativo="<?= htmlspecialchars($recepcion['correlativo']) ?>"
                             data-fecha="<?= htmlspecialchars($recepcion['fecha']) ?>"
@@ -216,94 +215,93 @@
     </tbody>
 </table>
 	</div>
-<div style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-   
-<div class="reporte-parametros" style="margin-bottom: 30px; text-align:center;">
-  <div class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
-    <label for="fechaInicio">Fecha inicio:</label>
-    <input type="date" id="fechaInicio" class="form-control" style="width:160px;">
-    <label for="fechaFin">Fecha fin:</label>
-    <input type="date" id="fechaFin" class="form-control" style="width:160px;">
-    <label for="tipoGrafica">Tipo de gráfica:</label>
-    <select id="tipoGrafica" class="form-select" style="width:200px;">
-      <option value="bar">Barras</option>
-      <option value="pie">Pastel</option>
-      <option value="line">Líneas</option>
-      <option value="doughnut">Donas</option>
-      <option value="polarArea">Área Polar</option>
-    </select>
-    <button id="generarReporteBtn" class="btn btn-primary">Generar</button>
-    <button id="descargarPDF" class="btn btn-success">Descargar PDF</button>
-  </div>
-</div>
 
-<div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-    
-    <h3 style="text-align:center; color:#1f66df;">Reporte de Recepciones</h3>
-    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
-        <div style="flex:1; min-width:220px; text-align:center;">
-            <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
-                <canvas id="graficoReporte" width="400" height="400"></canvas>
+<div style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+
+    <div class="reporte-parametros" style="margin-bottom: 30px; text-align:center;">
+        <div class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+            <label for="fechaInicio">Fecha inicio:</label>
+            <input type="date" id="fechaInicio" class="form-control" style="width:160px;">
+            <label for="fechaFin">Fecha fin:</label>
+            <input type="date" id="fechaFin" class="form-control" style="width:160px;">
+            <label for="tipoGrafica">Tipo de gráfica:</label>
+            <select id="tipoGrafica" class="form-select" style="width:200px;">
+            <option value="bar">Barras</option>
+            <option value="pie">Pastel</option>
+            <option value="line">Líneas</option>
+            <option value="doughnut">Donas</option>
+            <option value="polarArea">Área Polar</option>
+            </select>
+            <button id="generarReporteBtn" class="btn btn-primary">Generar</button>
+            <button id="descargarPDF" class="btn btn-success">Descargar PDF</button>
+        </div>
+    </div>
+
+    <div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+        
+        <h3 style="text-align:center; color:#1f66df;">Reporte de Recepciones</h3>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+            <div style="flex:1; min-width:220px; text-align:center;">
+                <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
+                    <canvas id="graficoReporte" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div style="flex:2; min-width:320px;">
+                <div id="tablaReporte"></div>
             </div>
         </div>
-        <div style="flex:2; min-width:320px;">
-            <div id="tablaReporte"></div>
+    </div>
+</div>
+
+<div class="modal fade modal-modificar" id="modificarRecepcionModal" tabindex="-1" 
+aria-labelledby="modificarRecepcionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <form id="modificarRecepcion" method="POST" novalidate>
+            <input type="hidden" name="accion" id="accion" value="modificar">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="modificarRecepcionModalLabel">Modificar Recepción</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="modificar_id_recepcion" name="id_recepcion">
+                    <div class="form-group">
+                        <label>Correlativo</label>
+                        <input type="text" id="modalCorrelativo" name="correlativo" maxlength="10" class="form-control">
+                        <span class="span-value" id="smcorrelativo"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="modalFecha" name="fecha" class="form-control">
+                        <span class="span-value" id="smfecha"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <select id="modalProveedor" name="proveedor" class="form-control"></select>
+                        <span class="span-value" id="smproveedor"></span>
+                    </div>
+                    <br>
+                    <h5 class="titulo-form">Productos</h5>
+                    <div id="contenedorDetalles"></div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button type="button" id="btnAgregarProducto" class="btn btn-success w-100">
+                                    <i class="fas fa-plus-circle"></i> Agregar Producto
+                                </button>
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Modificar</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-</div>
-		<?php include 'footer.php'; ?>
-	
-<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="titulo-form" id="modalModificarLabel">Modificar Recepción</h5>
-      </div>
-      <div class="modal-body">
-<form id="formularioEdicion">
+<?php include 'footer.php'; ?>
 
-			<input type="hidden" name="accion" id="accion" value="modificarRecepcion">
-<input type="hidden" id="modalIdRecepcion" name="id_recepcion">
-
-<div class="form-group">
-    <label>Fecha</label>
-    <input type="date" id="modalFecha" name="fecha" class="form-control">
-</div>
-
-<div class="form-group">
-    <label>Correlativo</label>
-    <input type="text" id="modalCorrelativo" name="correlativo" class="form-control">
-</div>
-
-<div class="form-group">
-    <label>Proveedor</label>
-    <select id="modalProveedor" name="proveedor" class="form-control">
-        <!-- Opciones dinámicas -->
-    </select>
-</div>
-
-<h5>Productos</h5>
-<div id="contenedorDetalles"></div>
-<div class="row mt-3">
-    <div class="col-12">
-        <button type="button" id="btnAgregarProducto" class="btn btn-success w-100">
-            <i class="fas fa-plus-circle"></i> Agregar Producto
-        </button>
-    </div>
-</div>
-
-
-      <div>
-
-      	<div class="modal-footer"></div>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-      </div>
-        </form>
-    </div>
-  </div>productos
-</div>
 <script>
 const proveedoresDisponibles = <?= json_encode($proveedores) ?>;
 </script>
@@ -323,7 +321,7 @@ $(document).on('click', '.btn-modificar', function(e) {
     let productos = btn.data('productos');
 
     // Limpiar el modal
-    $('#modalIdRecepcion').val('');
+    $('#modificar_id_recepcion').val('');
     $('#modalCorrelativo').val('');
     $('#modalFecha').val('');
     $('#modalProveedor').empty();
@@ -340,7 +338,7 @@ $(document).on('click', '.btn-modificar', function(e) {
     }
 
     // Llenar campos básicos
-    $('#modalIdRecepcion').val(idRecepcion);
+    $('#modificar_id_recepcion').val(idRecepcion);
     $('#modalCorrelativo').val(correlativo);
     $('#modalFecha').val(fecha);
 
@@ -402,8 +400,15 @@ $(document).on('click', '.btn-modificar', function(e) {
     $('#contenedorDetalles').html(html);
     
     // Mostrar el modal
-    const modal = new bootstrap.Modal(document.getElementById('modalModificar'));
+    const modal = new bootstrap.Modal(document.getElementById('modificarRecepcionModal'));
     modal.show();
+        cerrarModales();
+    
+    setTimeout(() => {
+        const modalElement = document.getElementById('modificarRecepcionModal');
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    }, 200);
 });
 // Función para crear un nuevo bloque vacío de producto
 function crearBloqueProducto(productosDisponibles) {
@@ -589,6 +594,7 @@ document.getElementById('descargarPDF').addEventListener('click', function () {
 // Generar reporte inicial
 document.addEventListener('DOMContentLoaded', generarReporte);
 </script>
+
 </body>
 </html>
 

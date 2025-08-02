@@ -18,7 +18,7 @@
 aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form id="f" method="POST">
+            <form id="ingresarDespacho" method="POST" novalidate>
                 <div class="modal-header">
                     <h5 class="titulo-form" id="registrarDespachoModalLabel">Incluir Despacho</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
@@ -28,7 +28,7 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
                 <div class="modal-body">
                     <input type="hidden" name="accion" value="registrar">
                     <div class="envolver-form">
-                        <label for="correlativo">Correlativo del producto</label>
+                        <label for="correlativo">Correlativo</label>
                         <input type="text" placeholder="Correlativo" class="control-form" maxlength="10" id="correlativo" name="correlativo" />
                         <span id="scorrelativo"></span>
                     </div>
@@ -41,8 +41,8 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
                                 echo "<option value='" . $proveedor['id_clientes'] . "'>" . $proveedor['nombre'] . "</option>";
                             } ?>
                         </select>
+                        <span id="scliente"></span>
                     </div>
-        
                     <div class="envolver-form">
                         <input class="" type="text" id="codigoproducto" name="codigoproducto" style="display:none"/>
                         <input class="" type="text" id="idproducto" name="idproducto" style="display:none"/>
@@ -119,103 +119,185 @@ aria-labelledby="registrarDespachoModalLabel" aria-hidden="true">
         </button>
     </div>
 
-
-<h3>Lista de Despachos</h3>
-<table class="tablaConsultas" id="tablaConsultas">
-    <thead>
-        <tr>
-            <th>FECHA</th>
-            <th>CORRELATIVO</th>
-            <th>CLIENTE</th>
-            <th>PRODUCTO</th>
-            <th>CANTIDAD</th>
-            <th>ACCIÓN</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        // Agrupar productos por despacho
-        $productosPorDespacho = [];
-        foreach ($despachos as $fila) {
-            $id = $fila['id_despachos'];
-            if (!isset($productosPorDespacho[$id])) {
-                $productosPorDespacho[$id] = [];
-            }
-            $productosPorDespacho[$id][] = [
-                'id_producto' => $fila['id_producto'],
-                'cantidad' => $fila['cantidad'],
-                'id_detalle' => $fila['id_detalle'] ?? '',
-                // agrega más campos si necesitas
-            ];
-        }
-
-        if (empty($despachos)): ?>
+    <h3>Lista de Despachos</h3>
+    <table class="tablaConsultas" id="tablaConsultas">
+        <thead>
             <tr>
-                <td colspan="6" style="text-align:center;">No se han despachado productos.</td>
+                <th>FECHA</th>
+                <th>CORRELATIVO</th>
+                <th>CLIENTE</th>
+                <th>PRODUCTO</th>
+                <th>CANTIDAD</th>
+                <th>ACCIÓN</th>
             </tr>
-        <?php
-        else:
-            usort($despachos, function($a, $b) {
-                if ($a['fecha_despacho'] == $b['fecha_despacho']) {
-                    if ($a['correlativo'] == $b['correlativo']) {
-                        if ($a['nombre_cliente'] == $b['nombre_cliente']) {
-                            return strcmp($a['nombre_producto'], $b['nombre_producto']);
-                        }
-                        return strcmp($a['nombre_cliente'], $b['nombre_cliente']);
-                    }
-                    return strcmp($a['correlativo'], $b['correlativo']);
+        </thead>
+        <tbody>
+            <?php
+            // Agrupar productos por despacho
+            $productosPorDespacho = [];
+            foreach ($despachos as $fila) {
+                $id = $fila['id_despachos'];
+                if (!isset($productosPorDespacho[$id])) {
+                    $productosPorDespacho[$id] = [];
                 }
-                return strcmp($a['fecha_despacho'], $b['fecha_despacho']);
-            });
-
-            // Agrupar para rowspan
-            $rowspans = [];
-            foreach ($despachos as $despacho) {
-                $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
-                if (!isset($rowspans[$key])) {
-                    $rowspans[$key] = 1;
-                } else {
-                    $rowspans[$key]++;
-                }
+                $productosPorDespacho[$id][] = [
+                    'id_producto' => $fila['id_producto'],
+                    'cantidad' => $fila['cantidad'],
+                    'id_detalle' => $fila['id_detalle'] ?? '',
+                    // agrega más campos si necesitas
+                ];
             }
-            $rendered = [];
-            foreach ($despachos as $despacho):
-                $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
-                $id = $despacho['id_despachos'];
-        ?>
-        <tr>
-            <?php if (!in_array($key, $rendered)): ?>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['fecha_despacho']) ?></td>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['correlativo']) ?></td>
-                <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['nombre_cliente']) ?></td>
-            <?php endif; ?>
 
-            <td><?= htmlspecialchars($despacho['nombre_producto']) ?></td>
-            <td><?= htmlspecialchars($despacho['cantidad']) ?></td>
+            if (empty($despachos)): ?>
+                <tr>
+                    <td colspan="6" style="text-align:center;">No se han despachado productos.</td>
+                </tr>
+            <?php
+            else:
+                usort($despachos, function($a, $b) {
+                    if ($a['fecha_despacho'] == $b['fecha_despacho']) {
+                        if ($a['correlativo'] == $b['correlativo']) {
+                            if ($a['nombre_cliente'] == $b['nombre_cliente']) {
+                                return strcmp($a['nombre_producto'], $b['nombre_producto']);
+                            }
+                            return strcmp($a['nombre_cliente'], $b['nombre_cliente']);
+                        }
+                        return strcmp($a['correlativo'], $b['correlativo']);
+                    }
+                    return strcmp($a['fecha_despacho'], $b['fecha_despacho']);
+                });
 
-            <?php if (!in_array($key, $rendered)): ?>
-                <td rowspan="<?= $rowspans[$key] ?>">
-                    <ul>
-                        <button class="btn-modificar"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalModificar"
-                            data-iddespacho="<?= htmlspecialchars($despacho['id_despachos']) ?>"
-                            data-correlativo="<?= htmlspecialchars($despacho['correlativo']) ?>"
-                            data-fecha="<?= htmlspecialchars($despacho['fecha_despacho']) ?>"
-                            data-cliente="<?= htmlspecialchars($despacho['id_clientes']) ?>"
-                            data-productos='<?= json_encode($productosPorDespacho[$id], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
-                            Modificar
-                        </button>
-                    </ul>
-                </td>
-                <?php $rendered[] = $key; ?>
-            <?php endif; ?>
-        </tr>
-        <?php endforeach;
-        endif; ?>
-    </tbody>
-</table>
-	</div>
+                // Agrupar para rowspan
+                $rowspans = [];
+                foreach ($despachos as $despacho) {
+                    $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
+                    if (!isset($rowspans[$key])) {
+                        $rowspans[$key] = 1;
+                    } else {
+                        $rowspans[$key]++;
+                    }
+                }
+                $rendered = [];
+                foreach ($despachos as $despacho):
+                    $key = $despacho['fecha_despacho'] . '|' . $despacho['correlativo'] . '|' . $despacho['nombre_cliente'];
+                    $id = $despacho['id_despachos'];
+            ?>
+            <tr>
+                <?php if (!in_array($key, $rendered)): ?>
+                    <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['fecha_despacho']) ?></td>
+                    <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['correlativo']) ?></td>
+                    <td rowspan="<?= $rowspans[$key] ?>"><?= htmlspecialchars($despacho['nombre_cliente']) ?></td>
+                <?php endif; ?>
+
+                <td><?= htmlspecialchars($despacho['nombre_producto']) ?></td>
+                <td><?= htmlspecialchars($despacho['cantidad']) ?></td>
+
+                <?php if (!in_array($key, $rendered)): ?>
+                    <td rowspan="<?= $rowspans[$key] ?>">
+                        <ul>
+                            <button class="btn-modificar"
+                                data-iddespacho="<?= htmlspecialchars($despacho['id_despachos']) ?>"
+                                data-correlativo="<?= htmlspecialchars($despacho['correlativo']) ?>"
+                                data-fecha="<?= htmlspecialchars($despacho['fecha_despacho']) ?>"
+                                data-cliente="<?= htmlspecialchars($despacho['id_clientes']) ?>"
+                                data-productos='<?= json_encode($productosPorDespacho[$id], JSON_HEX_APOS | JSON_HEX_QUOT) ?>'>
+                                Modificar
+                            </button>
+                        </ul>
+                    </td>
+                    <?php $rendered[] = $key; ?>
+                <?php endif; ?>
+            </tr>
+            <?php endforeach;
+            endif; ?>
+        </tbody>
+    </table>
+</div>
+
+<div style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+
+    <div class="reporte-parametros" style="margin-bottom: 30px; text-align:center;">
+        <div class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+            <label for="fechaInicio">Fecha inicio:</label>
+            <input type="date" id="fechaInicio" class="form-control" style="width:160px;">
+            <label for="fechaFin">Fecha fin:</label>
+            <input type="date" id="fechaFin" class="form-control" style="width:160px;">
+            <label for="tipoGrafica">Tipo de gráfica:</label>
+            <select id="tipoGrafica" class="form-select" style="width:200px;">
+            <option value="bar">Barras</option>
+            <option value="pie">Pastel</option>
+            <option value="line">Líneas</option>
+            <option value="doughnut">Donas</option>
+            <option value="polarArea">Área Polar</option>
+            </select>
+            <button id="generarReporteBtn" class="btn btn-primary">Generar</button>
+            <button id="descargarPDF" class="btn btn-success">Descargar PDF</button>
+        </div>
+    </div>
+
+    <div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+        
+        <h3 style="text-align:center; color:#1f66df;">Reporte de Despachos</h3>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
+            <div style="flex:1; min-width:220px; text-align:center;">
+                <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
+                    <canvas id="graficoReporte" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div style="flex:2; min-width:320px;">
+                <div id="tablaReporte"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-modificar" id="modificarDespachoModal" tabindex="-1" 
+aria-labelledby="modificarDespachoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <form id="modificarDespacho" method="POST" novalidate>
+            <input type="hidden" name="accion" id="accion" value="modificarRecepcion">
+                <div class="modal-header">
+                    <h5 class="titulo-form" id="modificarDespachoModalLabel">Modificar Despacho</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="modificar_id_despacho" name="id_despacho">
+                    <div class="form-group">
+                        <label>Correlativo</label>
+                        <input type="text" id="modalCorrelativo" name="correlativo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" id="modalFecha" name="fecha" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <select id="modalProveedor" name="proveedor" class="form-control"></select>
+                    </div>
+                    <br>
+                    <h5 class="titulo-form">Productos</h5>
+                    <div id="contenedorDetalles"></div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button type="button" id="btnAgregarProducto" class="btn btn-success w-100">
+                                    <i class="fas fa-plus-circle"></i> Agregar Producto
+                                </button>
+                            </div>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Modificar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php include 'footer.php'; ?>
+
 <?php
 // Calcula totales y agrupación para el reporte
 $totalDespachos = count($despachos);
@@ -233,42 +315,6 @@ foreach ($despachos as $d) {
 $totalProductosDespachados = array_sum($productosDespachados);
 ?>
 
-<div style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-   
-<div class="reporte-parametros" style="margin-bottom: 30px; text-align:center;">
-  <div class="form-inline" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
-    <label for="fechaInicio">Fecha inicio:</label>
-    <input type="date" id="fechaInicio" class="form-control" style="width:160px;">
-    <label for="fechaFin">Fecha fin:</label>
-    <input type="date" id="fechaFin" class="form-control" style="width:160px;">
-    <label for="tipoGrafica">Tipo de gráfica:</label>
-    <select id="tipoGrafica" class="form-select" style="width:200px;">
-      <option value="bar">Barras</option>
-      <option value="pie">Pastel</option>
-      <option value="line">Líneas</option>
-      <option value="doughnut">Donas</option>
-      <option value="polarArea">Área Polar</option>
-    </select>
-    <button id="generarReporteBtn" class="btn btn-primary">Generar</button>
-    <button id="descargarPDF" class="btn btn-success">Descargar PDF</button>
-  </div>
-</div>
-
-<div class="reporte-container" style="max-width:900px; margin:40px auto; background:#fff; padding:32px 24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08);">
-    
-    <h3 style="text-align:center; color:#1f66df;">Reporte de Despachos</h3>
-    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
-        <div style="flex:1; min-width:220px; text-align:center;">
-            <div class="grafica-container" style="max-width:220px; margin:0 auto 24px auto;">
-                <canvas id="graficoReporte" width="400" height="400"></canvas>
-            </div>
-        </div>
-        <div style="flex:2; min-width:320px;">
-            <div id="tablaReporte"></div>
-        </div>
-    </div>
-</div>
-</div>
 <!-- Scripts para gráfica y PDF -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -412,60 +458,8 @@ document.getElementById('descargarPDF').addEventListener('click', function () {
 // Generar reporte inicial
 document.addEventListener('DOMContentLoaded', generarReporte);
 </script>
-		<?php include 'footer.php'; ?>
-	
-<div class="modal fade" id="modalModificar" tabindex="-1" aria-labelledby="modalModificarLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="titulo-form" id="modalModificarLabel">Modificar Despacho</h5>
-      </div>
-      <div class="modal-body">
-<form id="formularioEdicion">
 
-			<input type="hidden" name="accion" id="accion" value="modificarRecepcion">
-<input type="hidden" id="modalIdRecepcion" name="id_recepcion">
-
-<div class="form-group">
-    <label>Fecha</label>
-    <input type="date" id="modalFecha" name="fecha" class="form-control">
-</div>
-
-<div class="form-group">
-    <label>Correlativo</label>
-    <input type="text" id="modalCorrelativo" name="correlativo" class="form-control">
-</div>
-
-<div class="form-group">
-    <label>Proveedor</label>
-    <select id="modalProveedor" name="proveedor" class="form-control">
-        <!-- Opciones dinámicas -->
-    </select>
-</div>
-
-<h5>Productos</h5>
-<div id="contenedorDetalles"></div>
-<div class="row mt-3">
-    <div class="col-12">
-        <button type="button" id="btnAgregarProducto" class="btn btn-success w-100">
-            <i class="fas fa-plus-circle"></i> Agregar Producto
-        </button>
-    </div>
-</div>
-
-
-      <div>
-
-      	<div class="modal-footer"></div>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-      </div>
-        </form>
-    </div>
-  </div>
-</div>
-
-	<script>
+<script>
 const productosDisponibles = <?= json_encode($productos) ?>;
 
 $(document).on('click', '.btn-modificar', function (e) {
@@ -537,7 +531,7 @@ $(document).on('click', '.btn-modificar', function (e) {
     $('#contenedorDetalles').html(html);
 
     // Mostrar modal
-    $('#modalModificar').modal('show');
+    $('#modificarDespachoModal').modal('show');
 });
 
 // Función para crear un nuevo bloque vacío de producto
@@ -583,10 +577,6 @@ $(document).on('click', '.btn-eliminar-producto', function () {
 
 
 </body>
-
-
-
-<?php include 'footer.php'; ?>
 
 
 <?php

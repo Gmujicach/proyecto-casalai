@@ -34,6 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
             $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
             $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
+            // Debe ser así (sin los corchetes en el nombre):
+$cuentabanco->setMetodosPago($_POST['metodos_pago'] ?? []);
 
             if ($cuentabanco->existeNumeroCuenta($_POST['numero_cuenta'])) {
                 echo json_encode([
@@ -100,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cuentabanco->setRifCuenta($_POST['rif_cuenta']);
             $cuentabanco->setTelefonoCuenta($_POST['telefono_cuenta']);
             $cuentabanco->setCorreoCuenta($_POST['correo_cuenta']);
-
+$cuentabanco->setMetodosPago($_POST['metodos_pago'] ?? []);
             if ($cuentabanco->existeNumeroCuenta($_POST['numero_cuenta'], $id_cuenta)) {
                 echo json_encode([
                     'status' => 'error',
