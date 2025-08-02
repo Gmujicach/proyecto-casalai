@@ -6,7 +6,7 @@
 
 <p>El la <strong>Parte inferior</strong> de la vista encontrara una grafica.</p>
 
-<p>Presionar el botón <strong>Descargar Reporte de <?= $reporte_boton ?? $nombre_plural ?></strong> le otorgara
+<p>Presionar el botón <strong>Generar Reporte de <?= $reporte_boton ?? $nombre_plural ?></strong> le otorgara
     un documento <strong>PDF</strong>
     que podra descargar.</p>
 

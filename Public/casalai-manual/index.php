@@ -317,7 +317,7 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                         plantilla("inicio", $datos);
                         plantilla("incluir", $datos);
                         
-                        plantilla("reporte", $datos);
+                        
                         ?>
                     </section>
                     <section>
@@ -340,6 +340,10 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
 
                     <section class="mb-4">
                         <?php plantilla("estado", $datos); ?>
+                    </section>
+
+                    <section>
+                        <?php plantilla("reporte", $datos); ?>
                     </section>
 
                     
@@ -486,8 +490,29 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                         ?>
                     </section>
 
-                    <section class="mb-4">
-                        <?php plantilla("estado", $datos); ?>
+                    <section class="mb-5">
+                    <section>
+                        <?php
+                        $datos = [
+                            "id" => "ingresos y egresos",
+                            "nombre_singular" => "Ingreso y Egreso",
+                            "nombre_plural" => "Ingresos y Egresos",
+                            "modificar_ubicacion" => "parte izquierda",
+                            "gestionable" => [
+                                "Ingresos de la empresa",
+                                "Egresos de la empresa",
+                                "Filtrado por fecha",
+                                "Tipos de gráficos",
+                                "Reportes de ingresos y egresos de la empresa",
+                            ],
+                            "instrucciones" => [
+                                "Seleccionar un rango de fechas",
+                                "Seleccionar un tipo de gráfico",
+                            ],
+                        ];
+                        plantilla("ingresos", $datos);
+                        
+                        ?>
                     </section>
                 </section>
 
@@ -523,7 +548,23 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                     ?>
                 </section>
 
-                
+                <section class="mb-5">
+                    <?php
+                    $datos = [
+                        "id" => "permisos",
+                        "nombre_singular" => "Permiso",
+                        "nombre_plural" => "Permisos",
+                        "modificar_ubicacion" => "parte izquierda",
+                        "gestionable" => [
+                            "Nombre del rol",
+                        ],                        
+                    ];
+
+                    plantilla("inicio", $datos);
+                    plantilla("gestionar", $datos);
+                    
+                    ?>
+                </section>
 
                 <section class="mb-5">
                     <?php
@@ -541,6 +582,44 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                     ];
 
                     plantilla("crud", $datos);
+                    
+                    ?>
+                </section>
+
+                <section class="mb-5">
+                    <?php
+                    $datos = [
+                        "id" => "bitacora",
+                        "nombre_singular" => "Bitacora",
+                        "modificar_ubicacion" => "parte izquierda",
+                        "gestionable" => [
+                            "Lista de acciones",
+                        ],
+                        "instrucciones" => [
+                            "Lista de acciones realizadas por los usuarios",
+                        ],
+                    ];
+
+                    plantilla("listar", $datos);
+                    
+                    ?>
+                </section>
+
+                <section class="mb-5">
+                    <?php
+                    $datos = [
+                        "id" => "respaldo",
+                        "nombre_singular" => "Respaldo",
+                        "modificar_ubicacion" => "parte izquierda",
+                        "gestionable" => [
+                            "Lista de acciones",
+                        ],
+                        "instrucciones" => [
+                            "Lista de acciones realizadas por los usuarios",
+                        ],
+                    ];
+
+                    plantilla("respaldo", $datos);
                     
                     ?>
                 </section>

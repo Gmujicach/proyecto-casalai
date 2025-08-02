@@ -14,7 +14,7 @@ class Bitacora extends BD {
         try {
             $fecha_hora = date('D-j-M-Y-h:i:s A');
             $sql = "INSERT INTO tbl_bitacora (fecha_hora, accion, id_modulo, id_usuario) 
-                    VALUES (NOW(), :accion, :id_modulo, :id_usuario)";
+                    VALUES (:fecha_hora, :accion, :id_modulo, :id_usuario)";
             $stmt = $this->conex->prepare($sql);
             $stmt->bindParam(':fecha_hora', $fecha_hora, PDO::PARAM_STR);
             $stmt->bindParam(':accion', $accion, PDO::PARAM_STR);

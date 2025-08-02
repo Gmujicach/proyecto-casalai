@@ -16,7 +16,7 @@ $bitacoraModel = new Bitacora();
 $esAdmin = isset($_SESSION['nombre_rol']) && $_SESSION['nombre_rol'] == 'Administrador';
 
 // Manejar generación de reportes PDF
-if (isset($_GET['reporte']) && $esAdmin) {
+if (isset($_GET['reporte'])) {
     switch ($_GET['reporte']) {
         case 'accesos_semanales':
             $datosAccesos = $bitacoraModel->obtenerEstadisticasAccesos();
