@@ -186,6 +186,39 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
 
             <!-- SECCIÓN PARA ADMINISTRADORES -->
             <?php if ($esAdministrador): ?>
+            <h2 class="section-title">Sección para Administradores - Usuarios</h2>
+                <section class="mb-5">
+                    <?php
+                    $datos = [
+                        "id" => "usuario",
+                        "nombre_singular" => "Usuario",
+                        "nombre_plural" => "Usuarios",
+                        "modificar_ubicacion" => "parte izquierda",
+                        "gestionable" => [
+                            "Nombre y Apellido",
+                            "Correo",
+                            "Usuario",
+                            "Teléfono",
+                            "Rol",
+                            "Estatus",
+                        ],
+                        "instrucciones" => [
+                            "Nombre de la persona",
+                            "Apellido de la persona",
+                            "Nombre de usuario",
+                            "Número de teléfono",
+                            "Correo electrónico",
+                            "Seleccionar un rol de usuario",
+                            "Contraseña",
+                            "Confirmar su contraseña"
+                        ],
+                    ];
+
+                    plantilla("crud", $datos);
+                    plantilla("reporte", $datos);
+                    ?>
+                </section>
+
             <div id="rol-almacenista" class="section-card">
                 <h2 class="section-title">Sección para Administradores - Almacenista</h2>
                 
@@ -219,6 +252,7 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                     plantilla("inicio", $datos);
                     plantilla("incluir", $datos);
                     plantilla("modificar", $datos);
+                    plantilla("reporte", $datos);
                     ?>
                 </section>
 
@@ -418,10 +452,9 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                         plantilla("inicio", $datos);
                         plantilla("incluir", $datos);
                         plantilla("modificar", $datos);
-                        plantilla("eliminar", $datos);
-                        
-                        
-                        plantilla("estado", $datos); ?>
+                        plantilla("eliminar", $datos);    
+                        plantilla("estado", $datos); 
+                        plantilla("reporte", $datos); ?>
                     </section>
                     
                 
@@ -462,6 +495,58 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                 </section>
 
                 <section class="mb-5">
+                    <section> 
+                    <?php
+                    $datos = [
+                        "id" => "catalogo",
+                        "nombre_singular" => "Catalogo",
+                        "nombre_plural" => "Catalogos",
+                        "modificar_ubicacion" => "parte izquierda",
+                        
+                      
+                    ];
+
+                    plantilla("lista-catalogo", $datos);
+                    
+                    
+                    ?>
+                    </section>
+
+                    
+                </section>
+
+                <section class="mb-5">
+                    <section>
+                    <?php
+                    $datos = [
+                        "id" => "combos",
+                        "nombre_singular" => "Combo",
+                        "nombre_plural" => "Combos",
+                        "modificar_ubicacion" => "parte superior",
+                        "gestionable" => [
+                            "Crear Nuevo Combo", 
+                            "Editar Combo",
+                            "Habilitar o deshabilitar Combo",
+                        ],
+                        "instrucciones" => [
+                            "Nombre del combo",
+                            "Descripcion del combo",
+                            "Productos del combo",
+                        ],
+                    ];
+
+                    plantilla("lista-combo", $datos);
+                    plantilla("crear-combo", $datos);
+                    plantilla("modificar-combos", $datos);
+                    plantilla("habilitar-deshabilitar-combo", $datos);
+                    plantilla("reportes-acceso-catalogo", $datos);
+                    
+                    
+                    ?>
+                    </section>                    
+                </section>
+
+                <section class="mb-5">
                     <section>
                         <?php
                         $datos = [
@@ -487,6 +572,38 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                         ];
 
                         plantilla("crud", $datos);
+                        ?>
+                    </section>
+
+                <section class="mb-5">
+                    <section>
+                        <?php
+                        $datos = [
+                            "id" => "compras fisicas",
+                            "nombre_singular" => "Compra Física",
+                            "nombre_plural" => "Compras Físicas",
+                            "modificar_ubicacion" => "parte izquierda",
+                            "gestionable" => [
+                                "Nombre del banco",
+                                "Número de cuenta",
+                                "RIF",
+                                "Teléfono",
+                                "Correo",
+                                "Estatus",
+                            ],
+                            "instrucciones" => [
+                                "Correlativo del producto",
+                                "Cliente",
+                                "Producto",
+                                "Tipo de pago",
+                                "Cuenta bancaria",
+                                "Cuenta bancaria",
+                            ],
+                        ];
+
+                        plantilla("inicio", $datos);
+                        plantilla("incluir", $datos);
+                        plantilla("pago", $datos);
                         ?>
                     </section>
 
@@ -624,34 +741,7 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                     ?>
                 </section>
 
-                <section class="mb-5">
-                    <?php
-                    $datos = [
-                        "id" => "catalogo",
-                        "nombre_singular" => "Catalogo",
-                        "nombre_plural" => "Catalogo",
-                        "modificar_ubicacion" => "parte izquierda",
-                        "gestionable" => [
-                            "Crear combos de productos",
-                            "Disponiblidad de combos",
-                            "Editar los combos",
-                            "Habilitar o deshabilitar combos",
-                        ],
-                        "instrucciones" => [
-                            "Crear combos de productos",
-                            "Disponibilidad de combos",
-                            "Editar los combos",
-                            "Habilitar o deshabilitar combos",
-                        ],
-                    ];
-
-                    plantilla("inicio", $datos);
-                    plantilla("mostrar", $datos);
-                    
-                   
-                    plantilla("reporte", $datos);
-                    ?>
-                </section>
+                
 
                 
             </div>
