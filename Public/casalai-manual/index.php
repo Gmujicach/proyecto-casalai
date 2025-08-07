@@ -550,6 +550,132 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                     <section>
                         <?php
                         $datos = [
+                            "id" => "compras fisicas",
+                            "nombre_singular" => "Compra Física",
+                            "nombre_plural" => "Compras Físicas",
+                            "modificar_ubicacion" => "parte derecha",
+                            "gestionable" => [
+                                "Nombre del banco",
+                                "Número de cuenta",
+                                "RIF",
+                                "Teléfono",
+                                "Correo",
+                                "Estatus",
+                            ],
+                            "instrucciones" => [
+                                "Correlativo del producto",
+                                "Cliente",
+                                "Producto",
+                                "Tipo de pago",
+                                "Cuenta bancaria",
+                                "Cuenta bancaria",
+                            ],
+                        ];
+
+                        plantilla("inicio", $datos);
+                        plantilla("incluir", $datos);
+                        plantilla("compra-modificar", $datos);
+                        
+                        ?>
+                    </section>
+                    </section>
+
+                    <section class="mb-5">
+                    <section>
+                        <?php
+                        $datos = [
+                            "id" => "carrito de compras",
+                            "nombre_singular" => "Carrito de Compra",
+                            "nombre_plural" => "Carrito de Compras",
+                            "modificar_ubicacion" => "parte derecha",
+                            "gestionable" => [
+                                "Nombre del banco",
+                                "Número de cuenta",
+                                "RIF",
+                                "Teléfono",
+                                "Correo",
+                                "Estatus",
+                            ],
+                            "instrucciones" => [
+                                "Correlativo del producto",
+                                "Cliente",
+                                "Producto",
+                                "Tipo de pago",
+                                "Cuenta bancaria",
+                                "Cuenta bancaria",
+                            ],
+                        ];
+
+                        plantilla("inicio-carrito", $datos);
+                        plantilla("carrito-modificar", $datos);
+                        
+                        
+                        ?>
+                    </section>
+                    </section>
+
+
+                    <section class="mb-5">
+                    <section>
+                        <?php
+                        $datos = [
+                            "id" => "pasarela de pagos",
+                            "nombre_singular" => "Pasarela de Pagos",
+                            "nombre_plural" => "Pasarelas de Pagos",
+                            "modificar_ubicacion" => "parte derecha",
+                            "gestionable" => [
+                                "Nombre del banco",
+                                "Número de cuenta",
+                                "RIF",
+                                "Teléfono",
+                                "Correo",
+                                "Estatus",
+                            ],
+                            "instrucciones" => [
+                                "Correlativo del producto",
+                                "Cliente",
+                                "Producto",
+                                "Tipo de pago",
+                                "Cuenta bancaria",
+                                "Cuenta bancaria",
+                            ],
+                        ];
+
+                        plantilla("inicio-carrito", $datos);
+                        plantilla("carrito-modificar", $datos);
+                        
+                        
+                        ?>
+                    </section>
+                    </section>
+
+
+                    <section class="mb-5">
+                    <?php
+                    $datos = [
+                        "id" => "orden de despacho",
+                        "nombre_singular" => "Orden de Despacho",
+                        "nombre_plural" => "Ordenes de Despachos",
+                        "modificar_ubicacion" => "parte derecha",
+                        "gestionable" => [
+                            
+                        ],
+                        "instrucciones" => [
+                            "Correlativo del despacho",
+                            "Seleccionar una cita",
+                            "Seleccionar la orden de compra"
+                        ]
+                    ];
+
+                    plantilla("inicio", $datos);
+                    plantilla("incluir", $datos);
+                    ?>
+                </section>
+
+                <section class="mb-5">
+                    <section>
+                        <?php
+                        $datos = [
                             "id" => "banco",
                             "nombre_singular" => "Cuenta Bancaria",
                             "nombre_plural" => "Cuentas Bancarias",
@@ -575,37 +701,7 @@ $esAdministrador = isset($_SESSION['nombre_rol']) && ($_SESSION['nombre_rol'] ==
                         ?>
                     </section>
 
-                <section class="mb-5">
-                    <section>
-                        <?php
-                        $datos = [
-                            "id" => "compras fisicas",
-                            "nombre_singular" => "Compra Física",
-                            "nombre_plural" => "Compras Físicas",
-                            "modificar_ubicacion" => "parte izquierda",
-                            "gestionable" => [
-                                "Nombre del banco",
-                                "Número de cuenta",
-                                "RIF",
-                                "Teléfono",
-                                "Correo",
-                                "Estatus",
-                            ],
-                            "instrucciones" => [
-                                "Correlativo del producto",
-                                "Cliente",
-                                "Producto",
-                                "Tipo de pago",
-                                "Cuenta bancaria",
-                                "Cuenta bancaria",
-                            ],
-                        ];
-
-                        plantilla("inicio", $datos);
-                        plantilla("incluir", $datos);
-                        plantilla("pago", $datos);
-                        ?>
-                    </section>
+                
 
                     <section class="mb-5">
                     <section>
