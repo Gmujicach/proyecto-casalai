@@ -34,9 +34,12 @@ class Bitacora extends BD {
                         b.id_bitacora,
                         b.fecha_hora,
                         b.accion,
-                        b.id_modulo,
+                        m.nombre_modulo,
+                        CONCAT(u.nombres, ' ', u.apellidos) AS nombre_usuario,
                         b.id_usuario
                     FROM tbl_bitacora b
+                    INNER JOIN tbl_modulos m ON b.id_modulo = m.id_modulo
+                    INNER JOIN tbl_usuarios u ON b.id_usuario = u.id_usuario
                     ORDER BY b.fecha_hora DESC
                     LIMIT :limit";
             $stmt = $this->conex->prepare($sql);

@@ -29,8 +29,8 @@
                     <th>ID</th>
                     <th>Fecha y Hora</th>
                     <th>Acción</th>
-                    <th>ID Módulo</th>
-                    <th>ID Usuario</th>
+                    <th>Módulo</th>
+                    <th>Usuario</th>
                 </tr>
             </thead>
             <tbody id="tbodyBitacora">
@@ -40,8 +40,8 @@
                             <td><?= htmlspecialchars($registro['id_bitacora']) ?></td>
                             <td><?= htmlspecialchars($registro['fecha_hora']) ?></td>
                             <td><?= htmlspecialchars($registro['accion']) ?></td>
-                            <td><?= htmlspecialchars($registro['id_modulo']) ?></td>
-                            <td><?= htmlspecialchars($registro['id_usuario']) ?></td>
+                            <td><?= htmlspecialchars($registro['nombre_modulo']) ?></td>
+                            <td><?= htmlspecialchars($registro['nombre_usuario']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
