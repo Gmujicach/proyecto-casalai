@@ -26,7 +26,7 @@
         <table class="tablaConsultas table table-striped table-hover align-middle" id="tablaBitacora">
             <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>Nº Registro</th>
                     <th>Fecha y Hora</th>
                     <th>Acción</th>
                     <th>Módulo</th>
